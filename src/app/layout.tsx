@@ -2,7 +2,7 @@ import { FC } from "react";
 import type { Metadata } from "next";
 import { openSans, arimo } from "./fonts";
 import "./globals.css";
-import { Header, Container } from "./(components)";
+import { Header, Container, Footer } from "./(components)";
 
 const fonts = [openSans.variable, arimo.variable];
 
@@ -24,9 +24,10 @@ const RootLayout: FC<Props> = ({ children }) => {
       <body className={`${fonts.join(' ')} antialiased`}>
         <Container>
           <Header />
-          <main>
+          <main className="flex-1 flex">
             {children}
           </main>
+          <Footer />
         </Container>
       </body>
     </html>
