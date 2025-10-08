@@ -1,7 +1,17 @@
+import { FaFacebookF } from "react-icons/fa6";
+import styles from "./styles.module.css";
+
 export const Footer = () => {
   return (
-    <footer className="text-center py-2">
-      <small className="text-gray-500 italic font-arimo">@limefut 2025</small>
+    <footer className={styles.footer}>
+      <div className={styles.socialMedia}>
+        <a href="https://www.facebook.com/profile.php?id=100063787951166">
+          <div className={styles.facebook}>
+            <FaFacebookF className={styles.facebookIcon} />
+          </div>
+        </a>
+      </div>
+      <p className={styles.copyright}>&copy; 2025 Limefut</p>
     </footer>
   );
 };

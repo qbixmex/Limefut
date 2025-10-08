@@ -20,7 +20,7 @@ type Props = Readonly<{ children: React.ReactNode; }>
 
 const RootLayout: FC<Props> = ({ children }) => {
   return (
-    <html lang="en">
+    <html lang="es" suppressHydrationWarning>
       <body className={`${fonts.join(' ')} antialiased`}>
         <Container>
           <Header />

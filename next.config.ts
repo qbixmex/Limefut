@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  "@tailwindcss/postcss": {},
+  devIndicators: false,
 };
 
 export default nextConfig;
