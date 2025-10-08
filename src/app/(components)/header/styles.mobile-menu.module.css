@@ -1,5 +1,9 @@
 @reference "../../globals.css";
 
+.container {
+  @apply md:hidden;
+}
+
 .wrapper {
   @apply absolute top-0 left-0 z-100 w-full h-screen
   bg-radial from-green-800 from-20% to-green-950

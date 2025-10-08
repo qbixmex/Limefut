@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { Menu } from 'lucide-react';
+import Link from 'next/link';
+import { Menu, X as CloseIcon } from 'lucide-react';
 import { links } from "./data";
 import styles from './styles.mobile-menu.module.css';
-import Link from 'next/link';
-import { X as CloseIcon } from 'lucide-react';
 
 export const MobileMenu = () => {
   const [visible, setVisible] = useState(false);
@@ -25,7 +24,7 @@ export const MobileMenu = () => {
   }, [visible]);
 
   return (
-    <div className="md:hidden">
+    <div className={styles.container}>
       {!visible && (
         <button onClick={() => setVisible(true)}>
           <Menu className="text-green-50" />

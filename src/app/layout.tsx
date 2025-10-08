@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { openSans, arimo } from "./fonts";
 import "./globals.css";
 import { Header, Container, Footer } from "./(components)";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const fonts = [openSans.variable, arimo.variable];
 
@@ -23,14 +24,21 @@ const RootLayout: FC<Props> = ({ children }) => {
     <html lang="es" suppressHydrationWarning>
       <body className={`${fonts.join(' ')} antialiased`}>
         <Container>
-          <Header />
-          <main className="flex-1 flex">
-            {children}
-          </main>
-          <Footer />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <main className="flex-1 flex">
+              {children}
+            </main>
+            <Footer />
+          </ThemeProvider>
         </Container>
-      </body>
-    </html>
+      </body >
+    </html >
   );
 };
 
