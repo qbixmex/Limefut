@@ -8,7 +8,7 @@ export type Link = {
 export const links: Link[] = [
   {
     id: "55074de1-5c02-489d-b712-428e234c8a24",
-    url: "/teams",
+    url: "/equipos",
     label: "Equipos",
     position: 1,
   },
@@ -20,7 +20,7 @@ export const links: Link[] = [
   },
   {
     id: "44f528e2-b083-4968-8e29-94e002a61cbb",
-    url: "#",
+    url: "/estadisticas",
     label: "Estadísticas",
     position: 3,
   },
@@ -32,8 +32,14 @@ export const links: Link[] = [
   },
   {
     id: "5b73b4c8-e44e-464e-b7c4-83db499212c3",
-    url: "#",
+    url: "/imagenes",
     label: "Imágenes",
     position: 5,
+  },
+  {
+    id: 'e039fa74-2361-4f81-8128-f3561cec6a6e',
+    url: "/contacto",
+    label: "Contacto",
+    position: 6,
   },
 ];
