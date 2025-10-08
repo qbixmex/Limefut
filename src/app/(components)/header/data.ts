@@ -8,7 +8,7 @@ export type Link = {
 export const links: Link[] = [
   {
     id: "55074de1-5c02-489d-b712-428e234c8a24",
-    url: "#",
+    url: "/teams",
     label: "Equipos",
     position: 1,
   },

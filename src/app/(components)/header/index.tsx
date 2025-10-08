@@ -2,6 +2,7 @@ import Image from "next/image";
 import styles from "./styles.module.css";
 import Link from "next/link";
 import { links } from "./data";
+import { MobileMenu } from "./MobileMenu";
 
 export const Header = () => {
   return (
@@ -31,6 +32,7 @@ export const Header = () => {
             </Link>
           ))}
       </nav>
+      <MobileMenu />
     </header>
   );
 };
