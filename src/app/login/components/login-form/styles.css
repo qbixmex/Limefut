@@ -1,0 +1,24 @@
+@reference '../../../globals.css';
+
+.label {
+  @apply font-semibold text-gray-500 dark:text-gray-400;
+}
+
+.input {
+  @apply border border-primary/50 text-gray-400;
+}
+
+.showHidePassword {
+  @apply absolute top-[6px] right-[10px] z-10 text-primary-foreground;
+}
+
+.submitWrapper {
+  @apply flex lg:justify-end w-full;
+}
+
+.submitButton {
+  @apply
+    w-full lg:w-fit border-primary/50! font-semibold text-green-700
+    hover:text-green-50
+    dark:text-primary/80 hover:dark:text-green-100;
+}

@@ -1,9 +1,8 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import type { Metadata } from "next";
-import { openSans, arimo } from "./fonts";
-import "./globals.css";
-import { Header, Container, Footer } from "./(components)";
-import { ThemeProvider } from "@/components/theme-provider";
+import { openSans, arimo } from "@/app/(public)/fonts";
+import "@/app/globals.css";
+import { Providers } from "./(public)/providers";
 
 const fonts = [openSans.variable, arimo.variable];
 
@@ -17,28 +16,17 @@ export const metadata: Metadata = {
   },
 };
 
-type Props = Readonly<{ children: React.ReactNode; }>
+type Props = Readonly<{ children: ReactNode; }>
 
 const RootLayout: FC<Props> = ({ children }) => {
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${fonts.join(' ')} antialiased`}>
-        <Container>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Header />
-            <main className="flex-1 flex">
-              {children}
-            </main>
-            <Footer />
-          </ThemeProvider>
-        </Container>
-      </body >
-    </html >
+        <Providers>
+          {children}
+        </Providers>
+      </body>
+    </html>
   );
 };
 
