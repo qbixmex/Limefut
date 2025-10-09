@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import PublicLayout from "../(public)/public.layout";
 import { LoginForm } from "./components/login-form";
 import {
@@ -6,8 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { auth } from "@/auth.config";
 
-export const Login = () => {
+export const Login = async () => {
+  const session = await auth();
+
+  if(session?.user) {
+    redirect('/admin/dashboard');
+  }
+
   return (
     <PublicLayout>
       <section className="flex-1 rounded p-5 flex flex-col item-center justify-center">

@@ -1,0 +1,10 @@
+@reference "../../../globals.css";
+
+.container {
+ @apply
+    w-full
+    flex flex-col gap-5 min-h-screen
+    lg:mx-auto
+    lg:max-w-[1024px]
+    xl:max-w-[80%];
+}

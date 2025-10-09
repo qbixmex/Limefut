@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from 'zod';
-import './styles.css';
-
 import {
   Form,
   FormControl,
@@ -19,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeClosed } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { handleLoginCredentials } from '@/app/(auth)/handleLoginCredentials';
+import './styles.css';
 
 const loginSchema = z.object({
   email: z.string()
@@ -38,8 +37,8 @@ export const LoginForm = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'qbixmex@gmail.com',
+      password: 'secret_password',
     }
   });
 
@@ -92,6 +91,7 @@ export const LoginForm = () => {
                     className="input"
                   />
                   <button
+                    type="button"
                     onClick={() => setPasswordVisible(prev => !prev)}
                     className={cn('showHidePassword', {
                       'hidden': field.value.length === 0,
