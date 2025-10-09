@@ -5,10 +5,8 @@ import { type AdapterUser } from 'next-auth/adapters';
 import z from "zod";
 import prisma from "./lib/prisma";
 import bcrypt from 'bcryptjs';
-import { PrismaAdapter } from "@auth/prisma-adapter";
 
 export const authConfig: NextAuthConfig = {
-  adapter: PrismaAdapter(prisma),
   pages: {
     signIn: '/login',
     signOut: '/logout',
