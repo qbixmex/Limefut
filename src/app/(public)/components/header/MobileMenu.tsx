@@ -24,10 +24,10 @@ export const MobileMenu = () => {
   }, [visible]);
 
   return (
-    <div className={styles.container}>
+    <>
       {!visible && (
         <button onClick={() => setVisible(true)}>
-          <Menu className="text-green-50" />
+          <Menu className="md:hidden size-5 text-green-50" />
         </button>
       )}
 
@@ -56,7 +56,7 @@ export const MobileMenu = () => {
           </button>
         </section>
       )}
-    </div>
+    </>
   );
 };
 

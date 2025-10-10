@@ -3,15 +3,20 @@ import { DesktopMenu } from "./DesktopMenu";
 import { ThemeSwitcher } from "../theme/ThemeSwitcher";
 import { Logo } from "../logo/Logo";
 import styles from "./styles.module.css";
+import { SignInOut } from "./sign-in-out";
+import { auth } from "@/auth.config";
 
-export const Header = () => {
+export const Header = async () => {
+  const session = await auth();
+
   return (
     <header className={styles.header}>
       <Logo />
       <DesktopMenu />
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4 lg:gap-2">
         <ThemeSwitcher />
         <MobileMenu />
+        <SignInOut session={session} />
       </div>
     </header>
   );

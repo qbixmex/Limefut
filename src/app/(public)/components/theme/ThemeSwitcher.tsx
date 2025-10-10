@@ -17,17 +17,17 @@ export const ThemeSwitcher = () => {
   }
 
   return (
-    <div>
+    <>
       {theme === "light" ? (
         <button onClick={() => setTheme("dark")}>
-          <Moon size={20} className="text-green-50" />
+          <Moon className="size-5 text-green-50" />
         </button>
       ) : (
         <button onClick={() => setTheme("light")}>
-          <Sun size={20} className="text-green-50" />
+          <Sun className="size-5 text-green-50" />
         </button>
       )}
-    </div>
+    </>
   );
 };
 
