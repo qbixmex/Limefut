@@ -1,6 +1,6 @@
 import { MobileMenu } from "./MobileMenu";
 import { DesktopMenu } from "./DesktopMenu";
-import { ThemeSwitcher } from "../theme/ThemeSwitcher";
+import { ThemeSwitcher } from "@/shared/theme/ThemeSwitcher";
 import { Logo } from "../logo/Logo";
 import styles from "./styles.module.css";
 import { SignInOut } from "./sign-in-out";

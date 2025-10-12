@@ -31,11 +31,11 @@ const navMain: NavItem[] = [
     subItems: [
       {
         label: "Lista",
-        url: "#",
+        url: "/admin/users",
       },
       {
         label: "Crear",
-        url: "#",
+        url: "/admin/users/create",
       },
     ],
   },
