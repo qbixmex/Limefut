@@ -14,6 +14,83 @@ const buttonVariants = cva(
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "bg-background border border-primary bg-transparent shadow-xs hover:bg-primary hover:text-white dark:bg-input/30 dark:text-primary-foreground dark:border-primary dark:hover:bg-input/50 dark:hover:bg-primary dark:hover:text-white",
+        "outline-primary": [
+          // Light Mode
+          "border",
+          "bg-transparent",
+          "border-blue-900",
+          "text-blue-900",
+          "shadow-xs",
+          "hover:border-blue-500",
+          "hover:bg-blue-500",
+          "hover:text-white",
+          // Dark Mode
+          "dark:hover:text-blue-50",
+          "dark:text-blue-500",
+          "dark:border-blue-500",
+          "dark:hover:bg-blue-500",
+        ],
+        "outline-secondary": [
+          // Light Mode
+          "font-semibold",
+          "border",
+          "border-gray-300",
+          "bg-transparent",
+          "shadow-xs",
+          "hover:bg-gray-300",
+          "hover:text-white",
+          // Dark Mode
+          "dark:text-gray-500",
+          "dark:border-gray-500",
+          "dark:hover:border-gray-600",
+          "dark:hover:bg-gray-800",
+          "dark:hover:text-gray-200",
+        ],
+        "outline-warning": [
+          // Light Mode
+          "bg-transparent",
+          "border",
+          "border-orange-500",
+          "shadow-xs",
+          "hover:bg-orange-500",
+          "hover:text-white",
+          // Dark Mode
+          "dark:bg-input/30",
+          "dark:text-orange-500",
+          "dark:border-orange-500",
+          "dark:hover:bg-orange-500",
+          "dark:hover:text-orange-50",
+        ],
+        "outline-success": [
+          // Light Mode
+          "bg-transparent",
+          "border",
+          "border-emerald-500",
+          "text-emerald-800",
+          "shadow-xs",
+          "hover:bg-orange-500",
+          "hover:text-orange-50",
+          // Dark Mode
+          "dark:border-emerald-500",
+          "dark:text-emerald-500",
+          "dark:hover:bg-emerald-600",
+          "dark:hover:text-white",
+        ],
+        "outline-danger": [
+          // Light Mode
+          "bg-transparent",
+          "border",
+          "border-pink-500",
+          "text-pink-800",
+          "shadow-xs",
+          "hover:bg-orange-500",
+          "hover:text-orange-50",
+          // Dark Mode
+          "dark:border-pink-500",
+          "dark:text-pink-500",
+          "dark:hover:bg-pink-600",
+          "dark:hover:text-white",
+        ],
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
