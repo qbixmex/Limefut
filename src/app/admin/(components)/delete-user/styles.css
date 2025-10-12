@@ -1,0 +1,21 @@
+.cancel-btn {
+  border-color: var(--color-gray-600);
+  background-color: color-mix(in srgb, var(--color-gray-600) 10%, transparent);
+  color: var(--color-gray-600);
+  &:hover {
+    border-color: var(--color-gray-500);
+    background-color: var(--color-gray-800);
+    color: var(--color-gray-50);
+  }
+}
+
+.delete-btn {
+  color: var(--color-pink-50);
+  border-color: var(--color-pink-600);
+  background-color: var(--color-pink-600);
+  &:hover {
+    color: var(--color-pink-100);
+    border-color: var(--color-pink-500);
+    background-color: var(--color-pink-800);
+  }
+}
