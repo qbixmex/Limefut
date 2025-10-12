@@ -12,7 +12,6 @@ import { fetchUserAction } from "../../(actions)/fetchUserAction";
 import { redirect } from "next/navigation";
 import { User } from "@/root/next-auth";
 import { Session } from "next-auth";
-import { toast } from "sonner";
 
 type Props = Readonly<{
   params: Promise<{
@@ -26,8 +25,7 @@ export const EditUser: FC<Props> = async ({ params }) => {
   const response = await fetchUserAction(userId, session?.user.roles ?? null);
 
   if (!response.ok) {
-    toast.error(response.message);
-    redirect("/admin/users");
+    redirect(`/admin/users?error=${encodeURIComponent(response.message)}`);
   }
 
   return (
