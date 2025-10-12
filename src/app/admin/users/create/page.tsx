@@ -5,6 +5,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { UserForm } from "../(components)/userForm";
+import { Session } from "next-auth";
 import { auth } from "@/auth.config";
 
 export const CreateUser = async () => {
@@ -18,7 +19,7 @@ export const CreateUser = async () => {
             <CardTitle>Crear Usuario</CardTitle>
           </CardHeader>
           <CardContent>
-            <UserForm session={session} />
+            <UserForm session={session as Session} />
           </CardContent>
         </Card>
       </div>
