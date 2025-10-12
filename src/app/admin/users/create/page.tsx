@@ -7,9 +7,15 @@ import {
 import { UserForm } from "../(components)/userForm";
 import { Session } from "next-auth";
 import { auth } from "@/auth.config";
+import { redirect } from "next/navigation";
 
 export const CreateUser = async () => {
   const session = await auth();
+
+  if (!session?.user.roles.includes('admin')) {
+    const message = '¡ No tienes permisos administrativos para crear usuarios !';
+    redirect(`/admin/users?error=${encodeURIComponent(message)}`);
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
