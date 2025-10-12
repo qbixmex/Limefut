@@ -22,32 +22,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { DeleteResource } from "../(components)/delete-resource";
+import { fetchUsersAction } from "./(actions)";
 
-const users = [
-  {
-    id: '2ea39b30-ea30-4bcc-82c2-f42ba68b42e9',
-    name: "Daniel González Briseño",
-    email: "qbixmex@gmail.com",
-    type: "admin",
-    active: true,
-  },
-  {
-    id: '1b2b3243-159b-48e1-a9fb-c871cec0134e',
-    name: "Moises Rodriguez Ramirez",
-    email: "moy@gmail.com",
-    type: "admin",
-    active: true,
-  },
-  {
-    id: '438d90d3-f7c1-48c6-b0fd-dd308cdc6cfc',
-    name: "Alejandro Cordoba Perez",
-    email: "alex@gmail.com",
-    type: "user",
-    active: false,
-  },
-];
+export const UsersPage = async () => {
+  const response = await fetchUsersAction();
+  const users = response.users;
 
-export const UsersPage = () => {
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
@@ -57,11 +37,11 @@ export const UsersPage = () => {
             <div>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="outline-primary" size="icon">
-                    <Link href="/admin/users/create">
+                  <Link href="/admin/users/create">
+                    <Button variant="outline-primary" size="icon">
                       <File />
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">
                   <p>crear</p>
@@ -70,48 +50,58 @@ export const UsersPage = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[250px]">Nombre</TableHead>
-                  <TableHead className="w-[200px]">Email</TableHead>
-                  <TableHead className="w-[100px]">Tipo</TableHead>
-                  <TableHead className="w-[100px] text-center">Activo</TableHead>
-                  <TableHead>Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {users.map(({ id, name, email, type, active }) => (
-                  <TableRow key={id}>
-                    <TableCell>{name}</TableCell>
-                    <TableCell>{email}</TableCell>
-                    <TableCell>
-                      {(type === 'admin' && 'Administrador') || (type === 'user' && 'Usuario')}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant={active ? 'outline-success' : 'outline-secondary'}>
-                        {active ? <Check /> : <CircleOff />}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="flex gap-3">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant="outline-warning" size="icon">
-                            <Link href={`/admin/users/${id}`}>
-                              <Pencil />
-                            </Link>
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="left">
-                          <p>editar</p>
-                        </TooltipContent>
-                      </Tooltip>
-                      <DeleteResource label="usuario" resourceId={id} />
-                    </TableCell>
+            {users && users.length > 0 ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[250px]">Nombre</TableHead>
+                    <TableHead className="w-[200px]">Nombre de Usuario</TableHead>
+                    <TableHead className="w-[250px]">Email</TableHead>
+                    <TableHead className="w-[120px]">Roles</TableHead>
+                    <TableHead className="w-[100px] text-center">Activo</TableHead>
+                    <TableHead>Acciones</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.name}</TableCell>
+                      <TableCell>{user.username}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell className="flex gap-2">
+                        {user.roles.map((role) => (
+                          <Badge key={role} variant="outline-secondary">{role}</Badge>
+                        ))}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant={user.isActive ? 'outline-success' : 'outline-secondary'}>
+                          {user.isActive ? <Check /> : <CircleOff />}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="flex gap-3">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button variant="outline-warning" size="icon">
+                              <Link href={`/admin/users/${user.id}`}>
+                                <Pencil />
+                              </Link>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent side="left">
+                            <p>editar</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        <DeleteResource label="usuario" resourceId={user.id} />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <div className="bg-sky-600 p-5 rounded">
+                <p className="text-center text-xl font-bold">Todavía no hay usuarios creados</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

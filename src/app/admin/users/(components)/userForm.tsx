@@ -1,6 +1,6 @@
 'use client';
 
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -36,7 +36,7 @@ import { Session } from 'next-auth';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronsUpDown, Eye, EyeClosed } from 'lucide-react';
 import { Role } from '@/shared/interfaces';
 
 const roles = [
@@ -50,6 +50,8 @@ type Props = Readonly<{
 
 export const UserForm: FC<Props> = ({ session }) => {
   const route = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
   const form = useForm<z.infer<typeof createUserSchema>>({
     resolver: zodResolver(createUserSchema),
@@ -82,8 +84,6 @@ export const UserForm: FC<Props> = ({ session }) => {
       formData,
       session?.user.roles ?? null
     );
-
-    console.log(response);
 
     if (!response.ok) {
       toast.error(response.message);
@@ -193,7 +193,23 @@ export const UserForm: FC<Props> = ({ session }) => {
                     Contraseña
                   </FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        {...field}
+                      />
+                      {
+                        field.value.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(prev => !prev)}
+                            className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-600 hover:text-gray-400"
+                          >
+                            {showPassword ? <Eye size={16} /> : <EyeClosed size={16} />}
+                          </button>
+                        )
+                      }
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -210,7 +226,23 @@ export const UserForm: FC<Props> = ({ session }) => {
                     Contraseña
                   </FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <div className="relative">
+                      <Input
+                        type={showPasswordConfirmation ? "text" : "password"}
+                        {...field}
+                      />
+                      {
+                        field.value.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setShowPasswordConfirmation(prev => !prev)}
+                            className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-600 hover:text-gray-400"
+                          >
+                            {showPasswordConfirmation ? <Eye size={16} /> : <EyeClosed size={16} />}
+                          </button>
+                        )
+                      }
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
