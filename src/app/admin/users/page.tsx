@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { DeleteResource } from "../(components)/delete-resource";
+import { DeleteUser } from "../(components)/delete-user";
 import { fetchUsersAction } from "./(actions)";
 
 export const UsersPage = async () => {
@@ -91,7 +91,7 @@ export const UsersPage = async () => {
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        <DeleteResource label="usuario" resourceId={user.id} />
+                        <DeleteUser userId={user.id} />
                       </TableCell>
                     </TableRow>
                   ))}

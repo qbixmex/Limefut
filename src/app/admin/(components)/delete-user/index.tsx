@@ -16,13 +16,19 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import "./styles.css";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { toast } from "sonner";
+import { deleteUserAction } from "../../users/(actions)";
 
 type Props = Readonly<{
-  label: string;
-  resourceId: string;
+  userId: string;
 }>;
 
-export const DeleteResource: FC<Props> = ({ label, resourceId }) => {
+export const DeleteUser: FC<Props> = ({ userId }) => {
+  const onDeleteUser = async (userId: string) => {
+    const response = await deleteUserAction(userId);
+    toast.success(response.message);
+  };
+
   return (
     <AlertDialog>
       <Tooltip>
@@ -39,7 +45,7 @@ export const DeleteResource: FC<Props> = ({ label, resourceId }) => {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿ Estas seguro de eliminar el {label} ?</AlertDialogTitle>
+          <AlertDialogTitle>¿ Estas seguro de eliminar el usuario ?</AlertDialogTitle>
           <AlertDialogDescription>
             Esta acción no se puede deshacer y será eliminado permanentemente de la base de datos.
           </AlertDialogDescription>
@@ -48,7 +54,7 @@ export const DeleteResource: FC<Props> = ({ label, resourceId }) => {
           <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
           <AlertDialogAction
             className="delete-btn"
-            onClick={() => console.log(`Eliminar recurso con ID: ${resourceId}`)}
+            onClick={() => onDeleteUser(userId)}
           >
             eliminar
           </AlertDialogAction>
@@ -58,4 +64,4 @@ export const DeleteResource: FC<Props> = ({ label, resourceId }) => {
   );
 };
 
-export default DeleteResource;
+export default DeleteUser;
