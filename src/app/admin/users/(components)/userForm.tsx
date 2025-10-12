@@ -29,15 +29,17 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from '@/components/ui/input';
 import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { createUserSchema } from '@/shared/schemas';
+import { createUserSchema, editUserSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createUserAction } from '../(actions)';
 import { Session } from 'next-auth';
+import { type User } from '@/root/next-auth';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, Eye, EyeClosed } from 'lucide-react';
 import { Role } from '@/shared/interfaces';
+import { updateUserAction } from '../(actions)/updateUserAction';
 
 const roles = [
   { value: "user", label: "Usuario" },
@@ -45,55 +47,84 @@ const roles = [
 ];
 
 type Props = Readonly<{
-  session: Session | null;
+  session: Session;
+  user?: User;
 }>;
 
-export const UserForm: FC<Props> = ({ session }) => {
+export const UserForm: FC<Props> = ({ session, user }) => {
   const route = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
-  const form = useForm<z.infer<typeof createUserSchema>>({
-    resolver: zodResolver(createUserSchema),
+  const formSchema = !user ? createUserSchema : editUserSchema;
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      username: '',
-      email: '',
-      imageUrl: '',
+      name: user?.name ?? '',
+      username: user?.username ?? '',
+      email: user?.email ?? '',
+      imageUrl: user?.imageUrl ?? '',
       password: '',
       passwordConfirmation: '',
-      roles: ['user'],
-      isActive: false,
+      roles: (user?.roles && (user?.roles as string[]).length > 0)
+        ? user.roles.map((role) => role as Role)
+        : ['user'],
+      isActive: user?.isActive ?? false,
     }
   });
 
-  const onSubmit = async (data: z.infer<typeof createUserSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
 
-    formData.append('name', data.name);
+    formData.append('name', data.name as string);
     if (data.username) formData.append('username', data.username);
-    formData.append('email', data.email);
+    formData.append('email', data.email as string);
     if (data.imageUrl) formData.append('imageUrl', data.imageUrl);
-    formData.append('password', data.password);
-    formData.append('passwordConfirmation', data.passwordConfirmation);
+    formData.append('password', data.password as string);
+    formData.append('passwordConfirmation', data.passwordConfirmation as string);
     formData.append('roles', JSON.stringify(data.roles));
     formData.append('isActive', String(data.isActive ?? false));
 
     // Create user
-    const response = await createUserAction(
-      formData,
-      session?.user.roles ?? null
-    );
+    if (!user) {
+      const response = await createUserAction(
+        formData,
+        session?.user.roles ?? null
+      );
 
-    if (!response.ok) {
-      toast.error(response.message);
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
+
+      if (response.ok) {
+        toast.success(response.message);
+        form.reset();
+        route.replace("/admin/users");
+        return;
+      }
       return;
     }
 
-    if (response.ok) {
-      toast.success(response.message);
-      form.reset();
-      route.replace("/admin/users");
+    if (user) {
+      const response = await updateUserAction({
+        formData,
+        userId: user.id,
+        userRoles: session.user.roles,
+        authenticatedUserId: session?.user.id,
+      });
+
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
+
+      if (response.ok) {
+        toast.success(response.message);
+        route.replace("/admin/users");
+        return;
+      }
       return;
     }
   };
@@ -116,7 +147,7 @@ export const UserForm: FC<Props> = ({ session }) => {
                     Nombre
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -134,7 +165,7 @@ export const UserForm: FC<Props> = ({ session }) => {
                     Nombre de usuario
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -155,7 +186,7 @@ export const UserForm: FC<Props> = ({ session }) => {
                     Correo Electrónico
                   </FormLabel>
                   <FormControl>
-                    <Input type="email" {...field} />
+                    <Input type="email" {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -199,7 +230,7 @@ export const UserForm: FC<Props> = ({ session }) => {
                         {...field}
                       />
                       {
-                        field.value.length > 0 && (
+                        (field.value as string).length > 0 && (
                           <button
                             type="button"
                             onClick={() => setShowPassword(prev => !prev)}
@@ -232,7 +263,7 @@ export const UserForm: FC<Props> = ({ session }) => {
                         {...field}
                       />
                       {
-                        field.value.length > 0 && (
+                        (field.value as string).length > 0 && (
                           <button
                             type="button"
                             onClick={() => setShowPasswordConfirmation(prev => !prev)}
@@ -268,8 +299,8 @@ export const UserForm: FC<Props> = ({ session }) => {
                           role="combobox"
                           className="w-[200px] justify-between"
                         >
-                          {(field.value?.length > 0)
-                            ? `${field.value.length} rol${field.value.length < 2 ? '' : 'es'} seleccionado${field.value.length < 2 ? '' : 's'}`
+                          {((field.value as string[]).length > 0)
+                            ? `${(field.value as string[]).length} rol${(field.value as string[]).length < 2 ? '' : 'es'} seleccionado${(field.value as string[]).length < 2 ? '' : 's'}`
                             : "Seleccione un rol"}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
@@ -310,9 +341,9 @@ export const UserForm: FC<Props> = ({ session }) => {
                       </PopoverContent>
                     </Popover>
                   </FormControl>
-                  {field.value?.length > 0 && (
+                  {(field.value as string[]).length > 0 && (
                     <div className="flex gap-1 mt-1">
-                      {field.value.map((roleValue) => {
+                      {(field.value as string[]).map((roleValue) => {
                         const role = roles.find(r => r.value === roleValue);
                         return (
                           <Badge key={roleValue} variant="secondary" className="text-xs">
@@ -364,7 +395,7 @@ export const UserForm: FC<Props> = ({ session }) => {
             variant="outline-primary"
             size="lg"
           >
-            crear
+            { !user ? 'crear' : 'actualizar' }
           </Button>
         </div>
       </form>

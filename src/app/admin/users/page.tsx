@@ -81,11 +81,11 @@ export const UsersPage = async () => {
                       <TableCell className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Button variant="outline-warning" size="icon">
-                              <Link href={`/admin/users/${user.id}`}>
+                            <Link href={`/admin/users/edit/${user.id}`}>
+                              <Button variant="outline-warning" size="icon">
                                 <Pencil />
-                              </Link>
-                            </Button>
+                              </Button>
+                            </Link>
                           </TooltipTrigger>
                           <TooltipContent side="left">
                             <p>editar</p>
