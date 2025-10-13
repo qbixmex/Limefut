@@ -44,7 +44,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
       >
         {user.username && (
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-medium">
+            <span className="truncate font-medium text-green-50">
               {user.username ?? user.name?.split(" ").at(0)}
             </span>
           </div>
@@ -56,7 +56,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
           />
           <AvatarFallback className="rounded-lg">{(user.name as string).at(0)}</AvatarFallback>
         </Avatar>
-        <ChevronsUpDown className="ml-auto size-4" />
+        <ChevronsUpDown className="ml-auto size-4 stroke-green-50" />
       </button>
 
       {isOpen && (
