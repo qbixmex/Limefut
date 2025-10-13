@@ -35,4 +35,4 @@ export const slugify = (name: string): string => {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-") // replace non-alphanumeric characters with dashes
     .replace(/^-+|-+$/g, ""); // remove leading and trailing dashes
-}
+};
