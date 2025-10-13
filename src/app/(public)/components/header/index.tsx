@@ -14,9 +14,9 @@ export const Header = async () => {
       <Logo />
       <DesktopMenu />
       <div className="flex items-center gap-4 lg:gap-2">
-        <ThemeSwitcher />
         <MobileMenu />
         <SignInOut session={session} />
+        <ThemeSwitcher className="text-green-50" />
       </div>
     </header>
   );

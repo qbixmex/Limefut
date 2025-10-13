@@ -100,7 +100,7 @@ export const AppSidebar: FC<Props> = ({ ...props }) => {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/admin/dashboard">
-                <div className="bg-primary-foreground flex aspect-square size-8 items-center justify-center rounded">
+                <div className="bg-green-600 dark:bg-primary-foreground flex aspect-square size-8 items-center justify-center rounded">
                   <Image
                     src="/limefut-logo-white.webp"
                     width={72}
@@ -110,7 +110,9 @@ export const AppSidebar: FC<Props> = ({ ...props }) => {
                   />
                 </div>
                 <div className="leading-none">
-                  <span className="text-lg text-primary/80">Limefut</span>
+                  <span className="text-lg font-bold text-green-800 dark:text-primary/80">
+                    Limefut
+                  </span>
                 </div>
               </Link>
             </SidebarMenuButton>

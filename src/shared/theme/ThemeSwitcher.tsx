@@ -1,10 +1,15 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { cn } from "../../lib/utils";
 
-export const ThemeSwitcher = () => {
+type Props = Readonly<{
+  className?: string;
+}>;
+
+export const ThemeSwitcher: FC<Props> = ({ className }) => {
   const { setTheme, theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -20,11 +25,11 @@ export const ThemeSwitcher = () => {
     <>
       {theme === "light" ? (
         <button onClick={() => setTheme("dark")}>
-          <Moon className="size-5 text-green-50" />
+          <Moon className={cn('size-5', className)} />
         </button>
       ) : (
         <button onClick={() => setTheme("light")}>
-          <Sun className="size-5 text-green-50" />
+          <Sun className={cn('size-5', className)} />
         </button>
       )}
     </>

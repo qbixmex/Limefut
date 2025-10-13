@@ -1,7 +1,6 @@
 import { FC, ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
-import { NavUser } from "@/components/nav-user";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -12,6 +11,7 @@ import type { Metadata } from "next";
 import { auth } from "@/auth.config";
 import { Breadcrumbs } from "./(components)/breadcrumbs";
 import { ThemeSwitcher } from "@/shared/theme/ThemeSwitcher";
+import { NavUser } from '@/components/nav-user';
 
 export const metadata: Metadata = {
   title: "Limefut - Admin",
