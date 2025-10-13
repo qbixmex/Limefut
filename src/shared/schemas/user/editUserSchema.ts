@@ -1,5 +1,14 @@
 import z from "zod";
 
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 1; // 1MB
+const ACCEPTED_FILE_TYPES = [
+  'image/png',
+  'image/jpeg',
+  'image/jpg',
+  'image/gif',
+  'image/webp',
+];
+
 export const editUserSchema = z.object({
   name: z.string()
     .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
@@ -16,11 +25,11 @@ export const editUserSchema = z.object({
       { message: '¡ Formato incorrecto del correo electrónico !' }
     )
     .nullish(),
-  imageUrl: z.string()
-    .min(5, { message: '¡ El url de la imagen debe ser mayor a 5 caracteres !' })
-    .max(255, { message: '¡ El url de la imagen debe ser menor a 255 caracteres !' })
-    .optional()
-    .or(z.literal('')),
+  image: z
+    .instanceof(File, { message: "La imagen debe ser un archivo" })
+    .refine((file) => file.size <= MAX_UPLOAD_SIZE, 'El tamaño máximo de la imagen deber ser menor a 1MB')
+    .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), `El tipo de archivo debe ser uno de los siguientes: ${ACCEPTED_FILE_TYPES.join(', ')}`)
+    .nullish(),
   password: z.string()
     .min(8, { message: '¡ La contraseña debe ser por lo menos de 8 caracteres!' })
     .optional()

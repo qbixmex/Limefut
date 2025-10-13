@@ -6,6 +6,8 @@ import { Role } from '@/root/src/shared/interfaces';
 import { editUserSchema } from "@/root/src/shared/schemas";
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';
+import deleteImage from './deleteImageAction';
+import uploadImage from './uploadImageAction';
 
 type Options = {
   formData: FormData;
@@ -46,7 +48,7 @@ export const updateUserAction = async ({
     name: formData.get('name') as string,
     username: formData.get('username') ?? '',
     email: formData.get('email') as string,
-    imageUrl: formData.get('imageUrl') ?? '',
+    image: formData.get('image') ?? '',
     password: formData.get('password') as string,
     passwordConfirmation: formData.get('passwordConfirmation') as string,
     roles: JSON.parse(formData.get('roles') as string),
@@ -66,6 +68,8 @@ export const updateUserAction = async ({
       user: null,
     };
   }
+
+  const { image, ...userToSave } = userVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -89,13 +93,12 @@ export const updateUserAction = async ({
         const updatedUser = await transaction.user.update({
           where: { id: userId },
           data: {
-            name: userVerified.data.name,
-            username: userVerified.data.username,
-            email: userVerified.data.email as string,
-            imageUrl: userVerified.data.imageUrl,
+            name: userToSave.name,
+            username: userToSave.username,
+            email: userToSave.email as string,
             password: hashedPassword,
-            roles: userVerified.data.roles as Role[],
-            isActive: userVerified.data.isActive,
+            roles: userToSave.roles as Role[],
+            isActive: userToSave.isActive,
           },
           select: {
             id: true,
@@ -103,42 +106,41 @@ export const updateUserAction = async ({
             username: true,
             email: true,
             imageUrl: true,
+            imagePublicID: true,
             roles: true,
             isActive: true,
           }
         });
 
-        // TODO Image Handling
-        /* 
-          if (image) {
-            // Delete previous image from cloudinary.
-            if (updatedUser.imagePublicID) {
-              const cloudinaryResponse = await deleteImage(updatedUser.imagePublicID);
-              if (!cloudinaryResponse.ok) {
-                throw new Error('Error deleting image from cloudinary');
-              }
+        if (image) {
+          // Delete previous image from cloudinary.
+          if (updatedUser.imagePublicID) {
+            const cloudinaryResponse = await deleteImage(updatedUser.imagePublicID);
+            if (!cloudinaryResponse.ok) {
+              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
             }
-
-            // Upload Image to third-party storage (cloudinary).
-            const imageUploaded = await uploadImage(image, 'users');
-
-            if (!imageUploaded) {
-              throw new Error('Error uploading image to cloudinary');
-            }
-
-            // Update user with new image.
-            await transaction.user.update({
-              where: { id: userId },
-              data: {
-                imageURL: imageUploaded.secureUrl,
-                imagePublicID: imageUploaded.publicId,
-              },
-            });
-
-            // Update event object to return.
-            updatedUser.imageURL = imageUploaded.secureUrl;
           }
-        */
+
+          // Upload Image to third-party storage (cloudinary).
+          const imageUploaded = await uploadImage(image, 'users');
+
+          if (!imageUploaded) {
+            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+          }
+
+          // Update image data to database.
+          await transaction.user.update({
+            where: { id: userId },
+            data: {
+              imageUrl: imageUploaded.secureUrl,
+              imagePublicID: imageUploaded.publicId,
+            },
+          });
+
+          // Update event object to return.
+          updatedUser.imageUrl = imageUploaded.secureUrl;
+        }
+
 
         // Revalidate Cache
         revalidatePath('/admin/users');

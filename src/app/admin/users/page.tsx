@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -18,6 +19,7 @@ import {
   CircleOff,
   File,
   Pencil,
+  User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -59,6 +61,7 @@ export const UsersPage = async () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="w-[100px]">Imagen</TableHead>
                       <TableHead className="w-[250px]">Nombre</TableHead>
                       <TableHead className="w-[200px]">Nombre de Usuario</TableHead>
                       <TableHead className="w-[250px]">Email</TableHead>
@@ -70,36 +73,57 @@ export const UsersPage = async () => {
                   <TableBody>
                     {users.map((user) => (
                       <TableRow key={user.id}>
+                        <TableCell>
+                          {
+                            !user.imageUrl ? (
+                              <div>
+                                <User />
+                              </div>
+                            ) : (
+                              <Image
+                                src={user.imageUrl}
+                                alt={`${user.name} profile picture`}
+                                width={75}
+                                height={75}
+                                className="size-18 rounded-xl object-cover"
+                              />
+                            )
+                          }
+                        </TableCell>
                         <TableCell>{user.name}</TableCell>
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.email}</TableCell>
-                        <TableCell className="flex gap-2">
-                          {user.roles.map((role) => (
-                            <Badge key={role} variant="outline-secondary">{role}</Badge>
-                          ))}
+                        <TableCell>
+                          <div className="flex gap-2">
+                            {user.roles.map((role) => (
+                              <Badge key={role} variant="outline-secondary">{role}</Badge>
+                            ))}
+                          </div>
                         </TableCell>
                         <TableCell className="text-center">
                           <Badge variant={user.isActive ? 'outline-success' : 'outline-secondary'}>
                             {user.isActive ? <Check /> : <CircleOff />}
                           </Badge>
                         </TableCell>
-                        <TableCell className="flex gap-3">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Link href={`/admin/users/edit/${user.id}`}>
-                                <Button variant="outline-warning" size="icon">
-                                  <Pencil />
-                                </Button>
-                              </Link>
-                            </TooltipTrigger>
-                            <TooltipContent side="left">
-                              <p>editar</p>
-                            </TooltipContent>
-                          </Tooltip>
-                          <DeleteUser
-                            userId={user.id}
-                            roles={session?.user.roles as string[]}
-                          />
+                        <TableCell className="">
+                          <div className="flex gap-3">
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Link href={`/admin/users/edit/${user.id}`}>
+                                  <Button variant="outline-warning" size="icon">
+                                    <Pencil />
+                                  </Button>
+                                </Link>
+                              </TooltipTrigger>
+                              <TooltipContent side="left">
+                                <p>editar</p>
+                              </TooltipContent>
+                            </Tooltip>
+                            <DeleteUser
+                              userId={user.id}
+                              roles={session?.user.roles as string[]}
+                            />
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
