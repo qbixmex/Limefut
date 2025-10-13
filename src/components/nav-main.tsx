@@ -27,6 +27,7 @@ export type NavItem = {
   subItems?: {
     label: string;
     url: string;
+    icon?: LucideIcon;
   }[];
 };
 
@@ -60,6 +61,7 @@ export const NavMain: FC<Props> = ({ items }) => {
                     <SidebarMenuSubItem key={subItem.label}>
                       <SidebarMenuSubButton asChild>
                         <Link href={subItem.url}>
+                          {subItem.icon && <subItem.icon />}
                           <span>{subItem.label}</span>
                         </Link>
                       </SidebarMenuSubButton>

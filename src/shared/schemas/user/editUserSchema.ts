@@ -25,8 +25,7 @@ export const editUserSchema = z.object({
       { message: '¡ Formato incorrecto del correo electrónico !' }
     )
     .nullish(),
-  image: z
-    .instanceof(File, { message: "La imagen debe ser un archivo" })
+  image: z.instanceof(File)
     .refine((file) => file.size <= MAX_UPLOAD_SIZE, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), `El tipo de archivo debe ser uno de los siguientes: ${ACCEPTED_FILE_TYPES.join(', ')}`)
     .nullish(),
