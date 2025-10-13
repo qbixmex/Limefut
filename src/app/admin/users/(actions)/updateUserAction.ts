@@ -44,11 +44,13 @@ export const updateUserAction = async ({
     };
   }
 
+  const imageFile = formData.get('image');
+
   const rawData = {
     name: formData.get('name') as string,
     username: formData.get('username') ?? '',
     email: formData.get('email') as string,
-    image: formData.get('image') ?? '',
+    image: (imageFile instanceof File && imageFile.size > 0) ? imageFile : undefined,
     password: formData.get('password') as string,
     passwordConfirmation: formData.get('passwordConfirmation') as string,
     roles: JSON.parse(formData.get('roles') as string),

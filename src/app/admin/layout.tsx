@@ -47,8 +47,11 @@ export const AdminLayout: FC<Props> = async ({ children }) => {
             <ThemeSwitcher />
             <NavUser
               user={{
-                name: user.name as string,
+                id: user.id,
+                name: user.name,
+                username: user.username,
                 email: user.email,
+                imageUrl: user.imageUrl,
               }}
             />
           </section>

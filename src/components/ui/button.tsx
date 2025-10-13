@@ -46,6 +46,22 @@ const buttonVariants = cva(
           "dark:hover:bg-gray-800",
           "dark:hover:text-gray-200",
         ],
+        "outline-info": [
+          // Light Mode
+          "border",
+          "bg-transparent",
+          "border-sky-900",
+          "text-sky-900",
+          "shadow-xs",
+          "hover:border-sky-500",
+          "hover:bg-sky-500",
+          "hover:text-white",
+          // Dark Mode
+          "dark:hover:text-sky-50",
+          "dark:text-sky-500",
+          "dark:border-sky-500",
+          "dark:hover:bg-sky-500",
+        ],
         "outline-warning": [
           // Light Mode
           "bg-transparent",

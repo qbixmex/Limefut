@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeClosed } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { handleLoginCredentials } from '@/app/(auth)/handleLoginCredentials';
+import { toast } from 'sonner';
 import './styles.css';
 
 const loginSchema = z.object({
@@ -46,11 +47,14 @@ export const LoginForm = () => {
     const response = await handleLoginCredentials({ email, password });
     if (response === 'Success') {
       form.reset();
+    } else {
+      toast.error(response);
     }
   };
 
   useEffect(() => {
     if (form.formState.isSubmitSuccessful) {
+      toast.success('¡ Has iniciado sesión correctamente !');
       window.location.href = "/admin/dashboard";
     }
   }, [form.formState.isSubmitSuccessful]);

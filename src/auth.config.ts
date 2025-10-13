@@ -1,10 +1,10 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import type { User } from '../next-auth';
 import { type AdapterUser } from 'next-auth/adapters';
 import z from "zod";
 import prisma from "./lib/prisma";
 import bcrypt from 'bcryptjs';
+import { SessionUser } from "../next-auth";
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -81,7 +81,17 @@ export const authConfig: NextAuthConfig = {
       return token;
     },
     async session({ session, token }) {
-      session.user = token.data as AdapterUser & User;
+      const user = token.data as AdapterUser & SessionUser;
+      session.user = {
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        imageUrl: user.imageUrl,
+        roles: user.roles,
+        isActive: user.isActive,
+      };
       return session;
     },
   },

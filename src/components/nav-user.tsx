@@ -29,17 +29,19 @@ import {
 } from "@/components/ui/sidebar";
 import { logoutAction } from "@/app/(auth)/handleLogout";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export type AuthenticatedUser = {
-  name: string;
+type Props = { user: {
+  id: string;
+  name: string | null;
+  username: string | null;
   email: string;
-  avatar?: string;
-};
-
-type Props = { user: AuthenticatedUser; };
+  imageUrl: string | null;
+}};
 
 export const NavUser: FC<Props> = ({ user }) => {
   // const { isMobile } = useSidebar();
+  const route = useRouter();
 
   const handleLogout = () => {
     logoutAction();
@@ -56,11 +58,16 @@ export const NavUser: FC<Props> = ({ user }) => {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">{user.name.at(0)}</AvatarFallback>
+                <AvatarImage
+                  src={user.imageUrl ?? undefined}
+                  alt={user.name ? `${user.name} profile image` : ''}
+                />
+                <AvatarFallback className="rounded-lg">{(user.name as string).at(0)}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">
+                  {user.username ?? user.name?.split(" ").at(0)}
+                </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -73,12 +80,10 @@ export const NavUser: FC<Props> = ({ user }) => {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">
+                    {user.name}
+                  </span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
@@ -88,9 +93,14 @@ export const NavUser: FC<Props> = ({ user }) => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Perfil
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <button
+                  className="w-full"
+                  onClick={() => route.replace(`/admin/users/profile/${user.id}`)}
+                >
+                  <BadgeCheck />
+                  <span>Perfil</span>
+                </button>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
