@@ -9,6 +9,7 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "email_verified" TIMESTAMP(3),
     "imageUrl" TEXT,
+    "imagePublicID" TEXT,
     "password" TEXT NOT NULL,
     "roles" "Role"[] DEFAULT ARRAY['user']::"Role"[],
     "isActive" BOOLEAN NOT NULL DEFAULT false,

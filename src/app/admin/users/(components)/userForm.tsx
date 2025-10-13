@@ -64,7 +64,6 @@ export const UserForm: FC<Props> = ({ session, user }) => {
       name: user?.name ?? '',
       username: user?.username ?? '',
       email: user?.email ?? '',
-      imageUrl: user?.imageUrl ?? '',
       password: '',
       passwordConfirmation: '',
       roles: (user?.roles && (user?.roles as string[]).length > 0)
@@ -77,10 +76,13 @@ export const UserForm: FC<Props> = ({ session, user }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
 
+    
     formData.append('name', data.name as string);
     if (data.username) formData.append('username', data.username);
     formData.append('email', data.email as string);
-    if (data.imageUrl) formData.append('imageUrl', data.imageUrl);
+    if (data.image && typeof data.image === 'object') {
+      formData.append("image", data.image);
+    }
     formData.append('password', data.password as string);
     formData.append('passwordConfirmation', data.passwordConfirmation as string);
     formData.append('roles', JSON.stringify(data.roles));
@@ -196,14 +198,20 @@ export const UserForm: FC<Props> = ({ session, user }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="imageUrl"
+              name="image"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Url de la Imagen
+                    Imagen
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      type="file"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        field.onChange(file);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -395,7 +403,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
             variant="outline-primary"
             size="lg"
           >
-            { !user ? 'crear' : 'actualizar' }
+            {!user ? 'crear' : 'actualizar'}
           </Button>
         </div>
       </form>

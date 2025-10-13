@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { createUserSchema } from "@/shared/schemas";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
+import { uploadImage } from "./uploadImageAction";
 
 export const createUserAction = async (
   formData: FormData,
@@ -21,7 +22,7 @@ export const createUserAction = async (
     name: formData.get('name') as string,
     username: formData.get('username') ?? '',
     email: formData.get('email') as string,
-    imageUrl: formData.get('imageUrl') ?? '',
+    image: formData.get('image') ?? '',
     password: formData.get('password') as string,
     passwordConfirmation: formData.get('passwordConfirmation') as string,
     roles: JSON.parse(formData.get('roles') as string),
@@ -42,19 +43,27 @@ export const createUserAction = async (
     };
   }
 
-  // TODO Upload image to third-party storage
+  const { image, ...userToSave } = userVerified.data;
+
+  // Upload Image to third-party storage (cloudinary).
+  const cloudinaryResponse = await uploadImage(image!, 'users');
+
+  if (!cloudinaryResponse) {
+    throw new Error('Error uploading image to cloudinary');
+  }
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdUser = await transaction.user.create({
         data: {
-          name: userVerified.data.name,
-          username: userVerified.data.username,
-          email: userVerified.data.email,
-          imageUrl: userVerified.data.imageUrl,
-          password: bcrypt.hashSync(userVerified.data.password, 10),
-          roles: userVerified.data.roles,
-          isActive: userVerified.data.isActive,
+          name: userToSave.name,
+          username: userToSave.username,
+          email: userToSave.email,
+          imageUrl: cloudinaryResponse.secureUrl,
+          imagePublicID: cloudinaryResponse.publicId,
+          password: bcrypt.hashSync(userToSave.password, 10),
+          roles: userToSave.roles,
+          isActive: userToSave.isActive,
         }
       });
 

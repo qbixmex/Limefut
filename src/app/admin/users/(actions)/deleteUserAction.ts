@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import deleteImage from "./deleteImageAction";
 
 export type ResponseDeleteUser = Promise<{
   ok: boolean;
@@ -12,6 +13,7 @@ export const deleteUserAction = async (userId: string): ResponseDeleteUser => {
   const userDeleted = await prisma.user.findUnique({
     where: { id: userId },
     select: {
+      imagePublicID: true,
       name: true,
     },
   });
@@ -27,7 +29,13 @@ export const deleteUserAction = async (userId: string): ResponseDeleteUser => {
     where: { id: userId },
   });
 
-  // TODO Delete previous image from third-party storage.
+  // Delete image from cloudinary.
+  if (userDeleted.imagePublicID) {
+    const response = await deleteImage(userDeleted.imagePublicID);
+    if (!response.ok) {
+      throw 'Error deleting image from cloudinary';
+    }
+  }
 
   revalidatePath('/admin/users');
 
