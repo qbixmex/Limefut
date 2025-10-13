@@ -14,8 +14,11 @@ import {
 } from "@/components/ui/sidebar";
 import {
   Users,
-  Shield,
   Globe,
+  ListIcon,
+  PlusIcon,
+  Flag,
+  Trophy,
 } from "lucide-react";
 
 import { type NavItem, NavMain } from "@/components/nav-main";
@@ -32,42 +35,48 @@ const navMain: NavItem[] = [
       {
         label: "Lista",
         url: "/admin/users",
+        icon: ListIcon,
       },
       {
         label: "Crear",
         url: "/admin/users/create",
+        icon: PlusIcon,
       },
     ],
   },
   {
     label: "Equipos",
     url: "#",
-    icon: Shield,
+    icon: Flag,
     isActive: false,
     subItems: [
       {
         label: "Lista",
         url: "#",
+        icon: ListIcon,
       },
       {
         label: "Crear",
         url: "#",
+        icon: PlusIcon,
       },
     ],
   },
   {
     label: "Torneos",
     url: "#",
-    icon: Shield,
+    icon: Trophy,
     isActive: false,
     subItems: [
       {
         label: "Lista",
         url: "#",
+        icon: ListIcon,
       },
       {
         label: "Crear",
         url: "#",
+        icon: PlusIcon,
       },
     ],
   },

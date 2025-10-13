@@ -17,7 +17,7 @@ import {
 import {
   Check,
   CircleOff,
-  File,
+  UserPlusIcon,
   Pencil,
   User,
 } from "lucide-react";
@@ -46,7 +46,7 @@ export const UsersPage = async () => {
                   <TooltipTrigger asChild>
                     <Link href="/admin/users/create">
                       <Button variant="outline-primary" size="icon">
-                        <File />
+                        <UserPlusIcon />
                       </Button>
                     </Link>
                   </TooltipTrigger>
@@ -74,21 +74,23 @@ export const UsersPage = async () => {
                     {users.map((user) => (
                       <TableRow key={user.id}>
                         <TableCell>
-                          {
-                            !user.imageUrl ? (
-                              <div>
-                                <User />
-                              </div>
-                            ) : (
-                              <Image
-                                src={user.imageUrl}
-                                alt={`${user.name} profile picture`}
-                                width={75}
-                                height={75}
-                                className="size-18 rounded-xl object-cover"
-                              />
-                            )
-                          }
+                          <Link href={`/admin/users/profile/${user.id}`}>
+                            {
+                              !user.imageUrl ? (
+                                <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
+                                  <User size={35} className="stroke-gray-400" />
+                                </figure>
+                              ) : (
+                                <Image
+                                  src={user.imageUrl}
+                                  alt={`${user.name} profile picture`}
+                                  width={75}
+                                  height={75}
+                                  className="size-18 rounded-xl object-cover"
+                                />
+                              )
+                            }
+                          </Link>
                         </TableCell>
                         <TableCell>{user.name}</TableCell>
                         <TableCell>{user.username}</TableCell>
@@ -109,13 +111,25 @@ export const UsersPage = async () => {
                           <div className="flex gap-3">
                             <Tooltip>
                               <TooltipTrigger asChild>
+                                <Link href={`/admin/users/profile/${user.id}`}>
+                                  <Button variant="outline-info" size="icon">
+                                    <User />
+                                  </Button>
+                                </Link>
+                              </TooltipTrigger>
+                              <TooltipContent side="top">
+                                <p>perfil</p>
+                              </TooltipContent>
+                            </Tooltip>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
                                 <Link href={`/admin/users/edit/${user.id}`}>
                                   <Button variant="outline-warning" size="icon">
                                     <Pencil />
                                   </Button>
                                 </Link>
                               </TooltipTrigger>
-                              <TooltipContent side="left">
+                              <TooltipContent side="top">
                                 <p>editar</p>
                               </TooltipContent>
                             </Tooltip>

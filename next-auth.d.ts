@@ -13,6 +13,16 @@ export interface User {
   updatedAt?: Date,
 }
 
+export interface SessionUser {
+  id: string;
+  name: string | null;
+  email: string;
+  username: string | null;
+  roles: string[],
+  imageUrl: string | null,
+  isActive: boolean,
+}
+
 declare module 'next-auth' {
   interface Session {
     user: User & DefaultSession['user'];
