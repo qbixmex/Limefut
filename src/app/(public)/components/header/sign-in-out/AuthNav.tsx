@@ -64,7 +64,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
           <div className="px-3">
             <Link
               href="/admin/dashboard"
-              className="block w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors inline-flex items-center gap-3"
+              className="flex items-center gap-3 w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               <LayoutDashboard />
@@ -72,14 +72,14 @@ export const AuthNav: FC<Props> = ({ user }) => {
             </Link>
             <Link
               href={`/admin/users/profile/${user.id}`}
-              className="block w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors inline-flex items-center gap-3"
+              className="flex items-center gap-3 w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               <UserCircle />
               <span>Perfil</span>
             </Link>
             <button
-              className="block w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors inline-flex items-center gap-3"
+              className="flex items-center gap-3 w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors"
               onClick={onLogout}
             >
               <LogOut />
