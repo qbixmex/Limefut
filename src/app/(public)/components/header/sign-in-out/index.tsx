@@ -28,7 +28,11 @@ export const SignInOut: FC<Props> = ({ session }) => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/login">
-                <LogIn className="icon" />
+                <LogIn
+                  className="stroke-green-50"
+                  size={22}
+                  strokeWidth={1.5}
+                />
               </Link>
             </TooltipTrigger>
             <TooltipContent side="bottom">
