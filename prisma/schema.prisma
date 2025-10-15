@@ -29,11 +29,35 @@ model User {
   imagePublicID String?
   password      String
 
-  roles    Role[] @default([user])
+  roles    Role[]  @default([user])
   isActive Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Team {
+  id            String   @id @default(uuid())
+  name          String
+  permalink     String   @unique
+  headquarters  String
+  imageUrl      String?  @map("image_url")
+  imagePublicID String?  @map("image_public_id")
+  division      String
+  group         String
+  tournament    String
+  country       String
+  city          String
+  state         String
+  coach         String
+  emails        String[] @default([])
+  address       String?
+  active        Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("teams")
 }

@@ -103,7 +103,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/users");
+        route.replace("/admin/usuarios");
         return;
       }
       return;
@@ -124,7 +124,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/users");
+        route.replace("/admin/usuarios");
         return;
       }
       return;

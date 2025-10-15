@@ -1,4 +1,5 @@
 import { DefaultSession } from 'next-auth';
+import { Role } from './src/shared/interfaces';
 
 export interface User {
   id: string;
@@ -11,6 +12,18 @@ export interface User {
   isActive: boolean,
   createdAt?: Date,
   updatedAt?: Date,
+}
+
+export interface UserSeed {
+  name: string;
+  email: string;
+  username: string | null;
+  emailVerified?: Date | null;
+  password: string;
+  roles: Role[],
+  imageUrl: string | null,
+  imagePublicID: string | null,
+  isActive: boolean,
 }
 
 export interface SessionUser {

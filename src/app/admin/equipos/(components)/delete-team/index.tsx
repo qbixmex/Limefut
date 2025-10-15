@@ -16,21 +16,21 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { deleteTeamAction } from "../../(actions)";
 import "./styles.css";
-import { deleteUserAction } from "../../usuarios/(actions)";
 
 type Props = Readonly<{
-  userId: string;
+  teamId: string;
   roles: string[];
 }>;
 
-export const DeleteUser: FC<Props> = ({ userId, roles }) => {
-  const onDeleteUser = async (userId: string) => {
+export const DeleteTeam: FC<Props> = ({ teamId, roles }) => {
+  const onDeleteTeam = async (teamId: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar usuarios !');
+      toast.error('¡ No tienes permisos administrativos para eliminar equipos !');
       return;
     }
-    const response = await deleteUserAction(userId);
+    const response = await deleteTeamAction(teamId);
     toast.success(response.message);
   };
 
@@ -50,16 +50,16 @@ export const DeleteUser: FC<Props> = ({ userId, roles }) => {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿ Estas seguro de eliminar el usuario ?</AlertDialogTitle>
+          <AlertDialogTitle>¿ Estas seguro de eliminar el equipo ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción no se puede deshacer y el usuario será eliminado de la base de datos permanentemente.
+            Esta acción no se puede deshacer y el equipo será eliminado de la base de datos permanentemente.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
           <AlertDialogAction
             className="delete-btn"
-            onClick={() => onDeleteUser(userId)}
+            onClick={() => onDeleteTeam(teamId)}
           >
             eliminar
           </AlertDialogAction>
@@ -69,4 +69,4 @@ export const DeleteUser: FC<Props> = ({ userId, roles }) => {
   );
 };
 
-export default DeleteUser;
+export default DeleteTeam;

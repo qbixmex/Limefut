@@ -17,20 +17,22 @@ import {
 import {
   Check,
   CircleOff,
-  UserPlusIcon,
   Pencil,
-  User,
+  InfoIcon,
+  Plus,
+  Flag,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { DeleteUser } from "../(components)/delete-user";
-import { fetchUsersAction } from "./(actions)";
+import { DeleteTeam } from "./(components)/delete-team";
+import { fetchTeamsAction } from "./(actions)";
 import { ErrorHandler } from "@/root/src/shared/components/errorHandler";
 import { auth } from "@/auth.config";
 
-export const UsersPage = async () => {
-  const response = await fetchUsersAction();
-  const users = response.users;
+export const TeamsPage = async () => {
+  const response = await fetchTeamsAction();
+  const teams = response.teams;
+
   const session = await auth();
 
   return (
@@ -40,13 +42,13 @@ export const UsersPage = async () => {
         <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
           <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
             <CardHeader className="flex items-center justify-between">
-              <CardTitle>Lista de Usuarios</CardTitle>
+              <CardTitle>Lista de Equipos</CardTitle>
               <div>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link href="/admin/users/create">
+                    <Link href="/admin/equipos/crear">
                       <Button variant="outline-primary" size="icon">
-                        <UserPlusIcon />
+                        <Plus strokeWidth={3} />
                       </Button>
                     </Link>
                   </TooltipTrigger>
@@ -57,33 +59,34 @@ export const UsersPage = async () => {
               </div>
             </CardHeader>
             <CardContent>
-              {users && users.length > 0 ? (
+              {teams && teams.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-[100px]">Imagen</TableHead>
-                      <TableHead className="w-[250px]">Nombre</TableHead>
-                      <TableHead className="w-[200px]">Nombre de Usuario</TableHead>
-                      <TableHead className="w-[250px]">Email</TableHead>
-                      <TableHead className="w-[120px]">Roles</TableHead>
-                      <TableHead className="w-[100px] text-center">Activo</TableHead>
+                      <TableHead>Nombre</TableHead>
+                      <TableHead>División</TableHead>
+                      <TableHead>Grupo</TableHead>
+                      <TableHead>Torneo</TableHead>
+                      <TableHead>Sede</TableHead>
+                      <TableHead className="text-center">Activo</TableHead>
                       <TableHead>Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {users.map((user) => (
-                      <TableRow key={user.id}>
+                    {teams.map((team) => (
+                      <TableRow key={team.id}>
                         <TableCell>
-                          <Link href={`/admin/users/profile/${user.id}`}>
+                          <Link href={`/admin/equipos/${team.permalink}`}>
                             {
-                              !user.imageUrl ? (
+                              !team.imageUrl ? (
                                 <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
-                                  <User size={35} className="stroke-gray-400" />
+                                  <Flag size={35} className="stroke-gray-400" />
                                 </figure>
                               ) : (
                                 <Image
-                                  src={user.imageUrl}
-                                  alt={`${user.name} profile picture`}
+                                  src={team.imageUrl}
+                                  alt={`${team.name} picture`}
                                   width={75}
                                   height={75}
                                   className="size-18 rounded-xl object-cover"
@@ -92,38 +95,33 @@ export const UsersPage = async () => {
                             }
                           </Link>
                         </TableCell>
-                        <TableCell>{user.name}</TableCell>
-                        <TableCell>{user.username}</TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            {user.roles.map((role) => (
-                              <Badge key={role} variant="outline-secondary">{role}</Badge>
-                            ))}
-                          </div>
-                        </TableCell>
+                        <TableCell>{team.name}</TableCell>
+                        <TableCell>{team.division}</TableCell>
+                        <TableCell>{team.group}</TableCell>
+                        <TableCell>{team.tournament}</TableCell>
+                        <TableCell>{team.headquarters}</TableCell>
                         <TableCell className="text-center">
-                          <Badge variant={user.isActive ? 'outline-success' : 'outline-secondary'}>
-                            {user.isActive ? <Check /> : <CircleOff />}
+                          <Badge variant={team.active ? 'outline-success' : 'outline-secondary'}>
+                            {team.active ? <Check /> : <CircleOff />}
                           </Badge>
                         </TableCell>
-                        <TableCell className="">
+                        <TableCell>
                           <div className="flex gap-3">
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Link href={`/admin/users/profile/${user.id}`}>
+                                <Link href={`/admin/equipos/${team.permalink}`}>
                                   <Button variant="outline-info" size="icon">
-                                    <User />
+                                    <InfoIcon />
                                   </Button>
                                 </Link>
                               </TooltipTrigger>
                               <TooltipContent side="top">
-                                <p>perfil</p>
+                                detalles
                               </TooltipContent>
                             </Tooltip>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Link href={`/admin/users/edit/${user.id}`}>
+                                <Link href={`/admin/equipos/editar/${team.permalink}`}>
                                   <Button variant="outline-warning" size="icon">
                                     <Pencil />
                                   </Button>
@@ -133,8 +131,8 @@ export const UsersPage = async () => {
                                 <p>editar</p>
                               </TooltipContent>
                             </Tooltip>
-                            <DeleteUser
-                              userId={user.id}
+                            <DeleteTeam
+                              teamId={team.id}
                               roles={session?.user.roles as string[]}
                             />
                           </div>
@@ -145,7 +143,7 @@ export const UsersPage = async () => {
                 </Table>
               ) : (
                 <div className="bg-sky-600 p-5 rounded">
-                  <p className="text-center text-xl font-bold">Todavía no hay usuarios creados</p>
+                  <p className="text-center text-xl font-bold">Todavía no hay equipos creados</p>
                 </div>
               )}
             </CardContent>
@@ -156,4 +154,4 @@ export const UsersPage = async () => {
   );
 };
 
-export default UsersPage;
+export default TeamsPage;
