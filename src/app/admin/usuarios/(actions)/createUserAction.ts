@@ -1,10 +1,10 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { createUserSchema } from "@/shared/schemas";
 import bcrypt from "bcryptjs";
+import { createUserSchema } from "@/shared/schemas";
+import { uploadImage } from '@/shared/actions';
 import { revalidatePath } from "next/cache";
-import { uploadImage } from "./uploadImageAction";
 
 export const createUserAction = async (
   formData: FormData,

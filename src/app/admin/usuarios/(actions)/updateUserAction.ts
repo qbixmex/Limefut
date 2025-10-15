@@ -6,8 +6,7 @@ import { Role } from '@/root/src/shared/interfaces';
 import { editUserSchema } from "@/root/src/shared/schemas";
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';
-import uploadImage from './uploadImageAction';
-import deleteImage from '@/shared/actions/deleteImageAction';
+import { uploadImage, deleteImage } from '@/shared/actions';
 
 type Options = {
   formData: FormData;

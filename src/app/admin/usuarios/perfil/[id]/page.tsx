@@ -114,7 +114,7 @@ export const UserProfilePage: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/users/edit/${user.id}`}>
+                  <Link href={`/admin/usuarios/editar/${user.id}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>

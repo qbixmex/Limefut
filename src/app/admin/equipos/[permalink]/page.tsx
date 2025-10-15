@@ -148,7 +148,7 @@ export const TeamPage: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/teams/edit/${team.id}`}>
+                  <Link href={`/admin/equipos/editar/${team.permalink}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>
