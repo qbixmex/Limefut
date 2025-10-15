@@ -31,7 +31,6 @@ import z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createUserSchema, editUserSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createUserAction } from '../(actions)';
 import { Session } from 'next-auth';
 import { type User } from '@/root/next-auth';
 import { toast } from 'sonner';
@@ -39,7 +38,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, Eye, EyeClosed } from 'lucide-react';
 import { Role } from '@/shared/interfaces';
-import { updateUserAction } from '../(actions)/updateUserAction';
+import { createUserAction, updateUserAction } from '../../usuarios/(actions)';
 
 const roles = [
   { value: "user", label: "Usuario" },
@@ -103,7 +102,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/users");
+        route.replace("/admin/usuarios");
         return;
       }
       return;
@@ -124,7 +123,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/users");
+        route.replace("/admin/usuarios");
         return;
       }
       return;

@@ -22,7 +22,7 @@ type EditArticleResponse = Promise<{
   user: User | null;
 }>;
 
-export const updateUserAction = async ({
+export const updateTeamAction = async ({
   formData,
   userId,
   userRoles,

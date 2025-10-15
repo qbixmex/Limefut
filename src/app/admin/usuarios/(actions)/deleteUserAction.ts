@@ -1,8 +1,8 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import deleteImage from "@/shared/actions/deleteImageAction";
 import { revalidatePath } from "next/cache";
-import deleteImage from "./deleteImageAction";
 
 export type ResponseDeleteUser = Promise<{
   ok: boolean;

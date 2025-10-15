@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "./uploadImageAction";
 
-export const createUserAction = async (
+export const createTeamAction = async (
   formData: FormData,
   userRole: string[] | null,
 ) => {
@@ -82,7 +82,7 @@ export const createUserAction = async (
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/users');
+    revalidatePath('/admin/usuarios');
 
     return prismaTransaction;
   } catch (error) {
