@@ -61,3 +61,22 @@ model Team {
 
   @@map("teams")
 }
+
+model Tournament {
+  id        String @id @default(uuid())
+  name      String
+  permalink String @unique
+  description String
+  country   String
+  state     String
+  city      String
+  season    String
+  startDate DateTime @map("start_date")
+  endDate   DateTime @map("end_date")
+  active        Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tournaments")
+}
