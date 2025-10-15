@@ -4,12 +4,12 @@ import prisma from "@/lib/prisma";
 import deleteImage from "@/shared/actions/deleteImageAction";
 import { revalidatePath } from "next/cache";
 
-export type ResponseDeleteTeam = Promise<{
+export type ResponseDeleteAction = Promise<{
   ok: boolean;
   message: string;
 }>;
 
-export const deleteTeamAction = async (teamId: string): ResponseDeleteTeam => {
+export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => {
   const teamDeleted = await prisma.team.findUnique({
     where: { id: teamId },
     select: {
