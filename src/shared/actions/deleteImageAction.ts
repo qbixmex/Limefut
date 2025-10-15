@@ -16,7 +16,7 @@ cloudinary.config(process.env.CLOUDINARY_URL ?? '');
  * ```
  * @returns 
  */
-const deleteImage = async (publicId: string): Promise<{ ok: boolean }> => {
+export const deleteImage = async (publicId: string): Promise<{ ok: boolean }> => {
   try {
     await cloudinary.uploader.destroy(publicId);
     return { ok: true };

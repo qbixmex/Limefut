@@ -1,10 +1,9 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { createUserSchema } from "@/shared/schemas";
-import bcrypt from "bcryptjs";
+import { createTeamSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
-import { uploadImage } from "./uploadImageAction";
+import { uploadImage } from "@/shared/actions";
 
 export const createTeamAction = async (
   formData: FormData,
@@ -20,33 +19,40 @@ export const createTeamAction = async (
 
   const rawData = {
     name: formData.get('name') as string,
-    username: formData.get('username') ?? '',
-    email: formData.get('email') as string,
-    image: formData.get('image') ?? '',
-    password: formData.get('password') as string,
-    passwordConfirmation: formData.get('passwordConfirmation') as string,
-    roles: JSON.parse(formData.get('roles') as string),
-    isActive: (formData.get('isActive') === 'true')
+    permalink: formData.get('permalink') ?? '',
+    headquarters: formData.get('headquarters') as string,
+    division: formData.get('division') ?? '',
+    group: formData.get('group') as string,
+    tournament: formData.get('tournament') as string,
+    country: formData.get('country') as string,
+    state: formData.get('state') as string,
+    city: formData.get('city') as string,
+    coach: formData.get('coach') as string,
+    emails: JSON.parse(formData.get('emails') as string),
+    address: formData.get('address') as string,
+    image: formData.get('image') as File,
+
+    isActive: (formData.get('active') === 'true')
       ? true
-      : (formData.get('isActive') === 'false')
+      : (formData.get('active') === 'false')
         ? false
         : false,
   };
 
-  const userVerified = createUserSchema.safeParse(rawData);
+  const teamVerified = createTeamSchema.safeParse(rawData);
 
-  if (!userVerified.success) {
+  if (!teamVerified.success) {
     return {
       ok: false,
-      message: userVerified.error.message,
+      message: teamVerified.error.message,
       user: null,
     };
   }
 
-  const { image, ...userToSave } = userVerified.data;
+  const { image, ...userToSave } = teamVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
-  const cloudinaryResponse = await uploadImage(image!, 'users');
+  const cloudinaryResponse = await uploadImage(image!, 'teams');
 
   if (!cloudinaryResponse) {
     throw new Error('Error uploading image to cloudinary');
@@ -54,35 +60,49 @@ export const createTeamAction = async (
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const createdUser = await transaction.user.create({
+      const createdTeam = await transaction.team.create({
         data: {
           name: userToSave.name,
-          username: userToSave.username,
-          email: userToSave.email,
+          permalink: userToSave.permalink,
+          headquarters: userToSave.headquarters,
+          division: userToSave.division,
+          group: userToSave.group,
+          tournament: userToSave.tournament,
+          country: userToSave.country,
+          state: userToSave.state,
+          city: userToSave.city,
+          coach: userToSave.coach,
+          emails: userToSave.emails,
+          address: userToSave.address,
           imageUrl: cloudinaryResponse.secureUrl,
           imagePublicID: cloudinaryResponse.publicId,
-          password: bcrypt.hashSync(userToSave.password, 10),
-          roles: userToSave.roles,
-          isActive: userToSave.isActive,
+          active: userToSave.active,
         }
       });
 
       return {
         ok: true,
-        message: '¡ Usuario creado satisfactoriamente 👍 !',
+        message: '¡ Equipo creado satisfactoriamente 👍 !',
         user: {
-          name: createdUser.name,
-          username: createdUser.username,
-          email: createdUser.email,
-          imageUrl: createdUser.imageUrl,
-          roles: createdUser.roles,
-          isActive: createdUser.isActive,
+          headquarters: createdTeam.headquarters,
+          division: createdTeam.division,
+          group: createdTeam.group,
+          tournament: createdTeam.tournament,
+          country: createdTeam.country,
+          state: createdTeam.state,
+          city: createdTeam.city,
+          coach: createdTeam.coach,
+          emails: createdTeam.emails,
+          address: createdTeam.address,
+          imageUrl: createdTeam.imageUrl,
+          imagePublicID: createdTeam.imagePublicID,
+          active: userToSave.active,
         },
       };
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/usuarios');
+    revalidatePath('/admin/equipos');
 
     return prismaTransaction;
   } catch (error) {
@@ -98,7 +118,7 @@ export const createTeamAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear el usuario, revise los logs del servidor !',
+        message: '¡ Error al crear el equipo, revise los logs del servidor !',
         user: null,
       };
     }

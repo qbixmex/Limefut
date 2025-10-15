@@ -6,7 +6,7 @@ import { pad, slugify } from "@/lib/utils";
 
 cloudinary.config(process.env.CLOUDINARY_URL ?? '');
 
-export const uploadImage = async (image: File, folder: 'users' | 'articles'): Promise<(CloudinaryResponse | null) | null> => {
+export const uploadImage = async (image: File, folder: string): Promise<(CloudinaryResponse | null) | null> => {
   try {
     const buffer = await image.arrayBuffer();
     const base64Image = Buffer.from(buffer).toString('base64');
