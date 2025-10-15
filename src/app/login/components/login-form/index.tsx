@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from 'zod';
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeClosed } from 'lucide-react';
+import { Eye, EyeClosed, LoaderCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { handleLoginCredentials } from '@/app/(auth)/handleLoginCredentials';
 import { toast } from 'sonner';
@@ -45,19 +45,16 @@ export const LoginForm = () => {
 
   const onSubmit = async ({ email, password }: z.infer<typeof loginSchema>) => {
     const response = await handleLoginCredentials({ email, password });
+
     if (response === 'Success') {
       form.reset();
-    } else {
-      toast.error(response);
-    }
-  };
-
-  useEffect(() => {
-    if (form.formState.isSubmitSuccessful) {
       toast.success('¡ Has iniciado sesión correctamente !');
       window.location.href = "/admin/dashboard";
+    } else {
+      toast.error(response);
+      return;
     }
-  }, [form.formState.isSubmitSuccessful]);
+  };
 
   return (
     <Form {...form}>
@@ -116,8 +113,16 @@ export const LoginForm = () => {
             variant="outline"
             size="lg"
             className="submitButton"
+            disabled={form.formState.isSubmitting}
           >
-            acceder
+            {form.formState.isSubmitting ? (
+              <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                <span className="text-sm italic">Espere</span>
+                <LoaderCircle className="size-4 animate-spin" />
+              </span>
+            ) : (
+              <span className="text-sm">acceder</span>
+            )}
           </Button>
         </div>
       </form>

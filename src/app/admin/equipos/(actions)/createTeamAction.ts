@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { createTeamSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "@/shared/actions";
+import { CloudinaryResponse } from "@/shared/interfaces";
 
 export const createTeamAction = async (
   formData: FormData,
@@ -52,10 +53,13 @@ export const createTeamAction = async (
   const { image, ...teamToSave } = teamVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
-  const cloudinaryResponse = await uploadImage(image!, 'teams');
+  let cloudinaryResponse: CloudinaryResponse | null = null;
 
-  if (!cloudinaryResponse) {
-    throw new Error('Error uploading image to cloudinary');
+  if (image) {
+    cloudinaryResponse = await uploadImage(image!, 'teams');
+    if (!cloudinaryResponse) {
+      throw new Error('Error subiendo imagen a cloudinary');
+    }
   }
 
   try {
@@ -74,8 +78,8 @@ export const createTeamAction = async (
           coach: teamToSave.coach,
           emails: teamToSave.emails,
           address: teamToSave.address,
-          imageUrl: cloudinaryResponse.secureUrl,
-          imagePublicID: cloudinaryResponse.publicId,
+          imageUrl: cloudinaryResponse?.secureUrl,
+          imagePublicID: cloudinaryResponse?.publicId,
           active: teamToSave.active,
         }
       });
