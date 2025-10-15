@@ -179,7 +179,7 @@ export const updateTeamAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el usuario, revise los logs del servidor !',
+            message: '¡ Error al actualizar el torneo, revise los logs del servidor !',
             team: null,
           };
         }

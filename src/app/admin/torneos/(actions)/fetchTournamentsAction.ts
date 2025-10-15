@@ -8,24 +8,22 @@ type Options = Readonly<{
   take?: number;
 }>;
 
-export type ResponseFetchTeams = Promise<{
+export type ResponseFetchTournaments = Promise<{
   ok: boolean;
   message: string;
-  teams: {
+  tournaments: {
     id: string;
     name: string;
     permalink: string;
-    headquarters: string;
-    imageUrl: string | null,
-    division: string;
-    group: string;
-    tournament: string;
+    season: string;
+    startDate: Date;
+    endDate: Date;
     active: boolean;
   }[] | null;
   pagination: Pagination | null;
 }>;
 
-export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams => {
+export const fetchTournamentsAction = async (options?: Options): ResponseFetchTournaments => {
   let { page = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)
@@ -33,37 +31,33 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
   if (isNaN(take)) take = 12;
 
   try {
-    const teams = await prisma.team.findMany({
+    const teams = await prisma.tournament.findMany({
       orderBy: { name: 'asc' },
       select: {
         id: true,
         name: true,
         permalink: true,
-        headquarters: true,
-        imageUrl: true,
-        division: true,
-        group: true,
-        tournament: true,
+        season: true,
+        startDate: true,
+        endDate: true,
         active: true,
       },
       take: take,
       skip: (page - 1) * take,
     });
 
-    const totalCount = await prisma.team.count();
+    const totalCount = await prisma.tournament.count();
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
-      teams: teams.map((team) => ({
+      message: '! Los torneos fueron obtenidos correctamente 👍',
+      tournaments: teams.map((team) => ({
         id: team.id,
         name: team.name,
         permalink: team.permalink,
-        headquarters: team.headquarters,
-        imageUrl: team.imageUrl,
-        division: team.division,
-        group: team.group,
-        tournament: team.tournament,
+        season: team.season,
+        startDate: team.startDate,
+        endDate: team.endDate,
         active: team.active,
       })),
       pagination: {
@@ -73,19 +67,19 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los equipos");
+      console.log("Error al intentar obtener los torneos");
       return {
         ok: false,
         message: error.message,
-        teams: null,
+        tournaments: null,
         pagination: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los equipos, revise los logs del servidor",
-      teams: null,
+      message: "Error inesperado al obtener los torneos, revise los logs del servidor",
+      tournaments: null,
       pagination: null,
     };
   }
