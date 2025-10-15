@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 export const Breadcrumbs = () => {
   const path = usePathname();
 
-  const pathSegments = path.split('/').filter(segment => segment);
+  const pathSegments = path.replaceAll("-", " ").split('/').filter(segment => segment);
 
   return (
     <Breadcrumb>

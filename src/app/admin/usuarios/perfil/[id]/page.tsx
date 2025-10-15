@@ -41,14 +41,18 @@ export const UserProfilePage: FC<Props> = async ({ params }) => {
       <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
         <Card className="w-full shadow-none bg-neutral-100 dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800 relative">
           <CardHeader className="flex items-center justify-between">
-            <CardTitle>Perfil de Usuario</CardTitle>
+            <CardTitle>
+              <h1 className="text-xl font-bold text-green-500">
+                Perfil de Usuario
+              </h1>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10">
               {
                 !user.imageUrl ? (
-                  <div className="bg-gray-800 size-[250px] rounded-xl flex items-center justify-center">
-                    <UserIcon size={220} strokeWidth={1} className="stroke-gray-400" />
+                  <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
+                    <UserIcon size={480} strokeWidth={1} className="stroke-gray-400" />
                   </div>
                 ) : (
                   <Image
@@ -110,7 +114,7 @@ export const UserProfilePage: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/users/edit/${user.id}`}>
+                  <Link href={`/admin/usuarios/editar/${user.id}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>

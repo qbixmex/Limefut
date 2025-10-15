@@ -1,10 +1,10 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { createUserSchema } from "@/shared/schemas";
 import bcrypt from "bcryptjs";
+import { createUserSchema } from "@/shared/schemas";
+import { uploadImage } from '@/shared/actions';
 import { revalidatePath } from "next/cache";
-import { uploadImage } from "./uploadImageAction";
 
 export const createUserAction = async (
   formData: FormData,
@@ -49,7 +49,7 @@ export const createUserAction = async (
   const cloudinaryResponse = await uploadImage(image!, 'users');
 
   if (!cloudinaryResponse) {
-    throw new Error('Error uploading image to cloudinary');
+    throw new Error('Error al subir la imagen a cloudinary');
   }
 
   try {
@@ -82,7 +82,7 @@ export const createUserAction = async (
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/users');
+    revalidatePath('/admin/usuarios');
 
     return prismaTransaction;
   } catch (error) {

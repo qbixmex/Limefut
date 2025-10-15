@@ -1,3 +1,5 @@
+'use server';
+
 import { type User } from "@/root/next-auth";
 import prisma from '@/lib/prisma';
 
@@ -10,7 +12,7 @@ type FetchUserResponse = Promise<{
 export const fetchUserAction = async (
   userId: string,
   userRole: string[] | null,
-): Promise<FetchUserResponse> => {
+): FetchUserResponse => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,

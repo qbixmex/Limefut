@@ -34,12 +34,12 @@ const navMain: NavItem[] = [
     subItems: [
       {
         label: "Lista",
-        url: "/admin/users",
+        url: "/admin/usuarios",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "/admin/users/create",
+        url: "/admin/usuarios/crear",
         icon: PlusIcon,
       },
     ],
@@ -52,12 +52,12 @@ const navMain: NavItem[] = [
     subItems: [
       {
         label: "Lista",
-        url: "#",
+        url: "/admin/equipos",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "#",
+        url: "/admin/equipos/crear",
         icon: PlusIcon,
       },
     ],

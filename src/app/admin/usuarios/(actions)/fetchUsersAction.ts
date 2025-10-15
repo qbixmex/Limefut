@@ -71,7 +71,7 @@ export const fetchUsersAction = async (options?: Options): ResponseFetchUsers =>
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los artículos, revise los logs del servidor",
+      message: "Error inesperado al obtener los usuarios, revise los logs del servidor",
       users: null,
       pagination: null,
     };
