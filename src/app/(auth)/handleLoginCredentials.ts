@@ -20,13 +20,14 @@ export const handleLoginCredentials = async ({ email, password }: Props): Promis
     if (error instanceof AuthError) {
       switch((error as AuthError & { type: string }).type) {
         case 'CredentialsSignin':
-          return 'Invalid credentials !';
+          return '¡ Credenciales Inválidas !';
         case 'CallbackRouteError':
-          return 'Callback route error !';
+          return '¡ Error de callback !';
         default:
-          return 'Something went wrong.';
+          return '¡ Error desconocido !';
       }
     }
-    return 'Unknown error occurred !';
+    console.error('Login error:', error);
+    return '¡ Error Desconocido, revise logs !';
   }
 };

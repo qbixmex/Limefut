@@ -37,7 +37,7 @@ import { type User } from '@/root/next-auth';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Check, ChevronsUpDown, Eye, EyeClosed } from 'lucide-react';
+import { Check, ChevronsUpDown, Eye, EyeClosed, LoaderCircle } from 'lucide-react';
 import { Role } from '@/shared/interfaces';
 import { updateUserAction } from '../(actions)/updateUserAction';
 
@@ -76,7 +76,6 @@ export const UserForm: FC<Props> = ({ session, user }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
 
-    
     formData.append('name', data.name as string);
     if (data.username) formData.append('username', data.username);
     formData.append('email', data.email as string);
@@ -145,9 +144,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Nombre
-                  </FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -163,9 +160,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Nombre de usuario
-                  </FormLabel>
+                  <FormLabel>Nombre de usuario</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -184,9 +179,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Correo Electrónico
-                  </FormLabel>
+                  <FormLabel>Correo Electrónico</FormLabel>
                   <FormControl>
                     <Input type="email" {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -201,9 +194,7 @@ export const UserForm: FC<Props> = ({ session, user }) => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Imagen
-                  </FormLabel>
+                  <FormLabel>Imagen</FormLabel>
                   <FormControl>
                     <Input
                       type="file"
@@ -228,28 +219,24 @@ export const UserForm: FC<Props> = ({ session, user }) => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Contraseña
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative">
+                  <FormLabel>Contraseña</FormLabel>
+                  <div className="relative">
+                    <FormControl>
                       <Input
                         type={showPassword ? "text" : "password"}
                         {...field}
                       />
-                      {
-                        (field.value as string).length > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(prev => !prev)}
-                            className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-600 hover:text-gray-400"
-                          >
-                            {showPassword ? <Eye size={16} /> : <EyeClosed size={16} />}
-                          </button>
-                        )
-                      }
-                    </div>
-                  </FormControl>
+                    </FormControl>
+                    {(field.value as string).length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(prev => !prev)}
+                        className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-600 hover:text-gray-400"
+                      >
+                        {showPassword ? <Eye size={16} /> : <EyeClosed size={16} />}
+                      </button>
+                    )}
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -264,25 +251,23 @@ export const UserForm: FC<Props> = ({ session, user }) => {
                   <FormLabel>
                     Contraseña
                   </FormLabel>
-                  <FormControl>
-                    <div className="relative">
+                  <div className="relative">
+                    <FormControl>
                       <Input
                         type={showPasswordConfirmation ? "text" : "password"}
                         {...field}
                       />
-                      {
-                        (field.value as string).length > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => setShowPasswordConfirmation(prev => !prev)}
-                            className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-600 hover:text-gray-400"
-                          >
-                            {showPasswordConfirmation ? <Eye size={16} /> : <EyeClosed size={16} />}
-                          </button>
-                        )
-                      }
-                    </div>
-                  </FormControl>
+                    </FormControl>
+                    {(field.value as string).length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswordConfirmation(prev => !prev)}
+                        className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-600 hover:text-gray-400"
+                      >
+                        {showPasswordConfirmation ? <Eye size={16} /> : <EyeClosed size={16} />}
+                      </button>
+                    )}
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -402,8 +387,16 @@ export const UserForm: FC<Props> = ({ session, user }) => {
             type="submit"
             variant="outline-primary"
             size="lg"
+            disabled={form.formState.isSubmitting}
           >
-            {!user ? 'crear' : 'actualizar'}
+            {form.formState.isSubmitting ? (
+              <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                <span className="text-sm italic">Espere</span>
+                <LoaderCircle className="size-4 animate-spin" />
+              </span>
+            ) : (
+              !user ? 'crear' : 'actualizar'
+            )}
           </Button>
         </div>
       </form>
