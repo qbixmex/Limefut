@@ -1,10 +1,8 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { createTeamSchema } from "@/shared/schemas";
+import { createTournamentSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
-import { uploadImage } from "@/shared/actions";
-import { CloudinaryResponse } from "@/shared/interfaces";
 
 export const createTournamentAction = async (
   formData: FormData,
@@ -18,95 +16,75 @@ export const createTournamentAction = async (
     };
   }
 
+  const startDate = new Date(formData.get('startDate') as string);
+  const endDate = new Date(formData.get('endDate') as string);
+
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
-    headquarters: formData.get('headquarters') as string,
-    division: formData.get('division') ?? '',
-    group: formData.get('group') as string,
-    tournament: formData.get('tournament') as string,
+    description: formData.get('description') as string,
     country: formData.get('country') as string,
     state: formData.get('state') as string,
     city: formData.get('city') as string,
-    coach: formData.get('coach') as string,
-    emails: JSON.parse(formData.get('emails') as string),
-    address: formData.get('address') as string,
-    image: formData.get('image') as File,
-
-    isActive: (formData.get('active') === 'true')
+    season: formData.get('season') as string,
+    startDate: startDate,
+    endDate: endDate,
+    active: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
         ? false
         : false,
   };
 
-  const teamVerified = createTeamSchema.safeParse(rawData);
+  const tournamentVerified = createTournamentSchema.safeParse(rawData);
 
-  if (!teamVerified.success) {
+  if (!tournamentVerified.success) {
     return {
       ok: false,
-      message: teamVerified.error.message,
+      message: tournamentVerified.error.message,
       user: null,
     };
   }
 
-  const { image, ...teamToSave } = teamVerified.data;
-
-  // Upload Image to third-party storage (cloudinary).
-  let cloudinaryResponse: CloudinaryResponse | null = null;
-
-  if (image) {
-    cloudinaryResponse = await uploadImage(image!, 'teams');
-    if (!cloudinaryResponse) {
-      throw new Error('Error subiendo imagen a cloudinary');
-    }
-  }
+  const tournamentToSave = tournamentVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const createdTeam = await transaction.team.create({
+      const createdTournament = await transaction.tournament.create({
         data: {
-          name: teamToSave.name,
-          permalink: teamToSave.permalink,
-          headquarters: teamToSave.headquarters,
-          division: teamToSave.division,
-          group: teamToSave.group,
-          tournament: teamToSave.tournament,
-          country: teamToSave.country,
-          state: teamToSave.state,
-          city: teamToSave.city,
-          coach: teamToSave.coach,
-          emails: teamToSave.emails,
-          address: teamToSave.address,
-          imageUrl: cloudinaryResponse?.secureUrl,
-          imagePublicID: cloudinaryResponse?.publicId,
-          active: teamToSave.active,
+          name: tournamentToSave.name,
+          permalink: tournamentToSave.permalink,
+          description: tournamentToSave.description,
+          country: tournamentToSave.country,
+          state: tournamentToSave.state,
+          city: tournamentToSave.city,
+          season: tournamentToSave.season,
+          startDate: tournamentToSave.startDate,
+          endDate: tournamentToSave.endDate,
+          active: tournamentToSave.active,
         }
       });
 
       return {
         ok: true,
-        message: '¡ Equipo creado satisfactoriamente 👍 !',
-        user: {
-          headquarters: createdTeam.headquarters,
-          division: createdTeam.division,
-          group: createdTeam.group,
-          tournament: createdTeam.tournament,
-          country: createdTeam.country,
-          state: createdTeam.state,
-          city: createdTeam.city,
-          coach: createdTeam.coach,
-          emails: createdTeam.emails,
-          address: createdTeam.address,
-          imageUrl: createdTeam.imageUrl,
-          imagePublicID: createdTeam.imagePublicID,
-          active: teamToSave.active,
+        message: '¡ Torneo creado satisfactoriamente 👍 !',
+        tournament: {
+          name: createdTournament.name,
+          permalink: createdTournament.permalink,
+          description: createdTournament.description,
+          country: createdTournament.country,
+          state: createdTournament.state,
+          city: createdTournament.city,
+          season: createdTournament.season,
+          startDate: createdTournament.startDate,
+          endDate: createdTournament.endDate,
+          active: createdTournament.active,
         },
       };
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/equipos');
+    revalidatePath('/admin/torneos');
 
     return prismaTransaction;
   } catch (error) {
@@ -122,7 +100,7 @@ export const createTournamentAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear el equipo, revise los logs del servidor !',
+        message: '¡ Error al crear el torneo, revise los logs del servidor !',
         user: null,
       };
     }

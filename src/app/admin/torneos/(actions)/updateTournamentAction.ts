@@ -2,13 +2,12 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { uploadImage, deleteImage } from "@/shared/actions";
-import { editTeamSchema } from '@/root/src/shared/schemas';
-import { Team } from '@/shared/interfaces';
+import { editTournamentSchema } from '@/shared/schemas';
+import { Tournament } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;
-  teamId: string;
+  tournamentId: string;
   userRoles: string[];
   authenticatedUserId: string;
 };
@@ -16,12 +15,12 @@ type Options = {
 type EditArticleResponse = Promise<{
   ok: boolean;
   message: string;
-  team: Team | null;
+  tournament: Tournament | null;
 }>;
 
 export const updateTournamentAction = async ({
   formData,
-  teamId,
+  tournamentId,
   userRoles,
   authenticatedUserId,
 }: Options): EditArticleResponse => {
@@ -29,7 +28,7 @@ export const updateTournamentAction = async ({
     return {
       ok: false,
       message: '¡ Usuario no autenticado !',
-      team: null,
+      tournament: null,
     };
   }
 
@@ -37,26 +36,23 @@ export const updateTournamentAction = async ({
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para solicitar esta petición !',
-      team: null,
+      tournament: null,
     };
   }
 
-  const imageFile = formData.get('image');
+  const startDate = new Date(formData.get('startDate') as string);
+  const endDate = new Date(formData.get('endDate') as string);
 
   const rawData = {
-    name: formData.get('name') as string,
-    permalink: formData.get('permalink') ?? '',
-    headquarters: formData.get('headquarters') as string,
-    division: formData.get('division') ?? '',
-    group: formData.get('group') as string,
-    tournament: formData.get('tournament') as string,
-    country: formData.get('country') as string,
-    state: formData.get('state') as string,
-    city: formData.get('city') as string,
-    coach: formData.get('coach') as string,
-    emails: JSON.parse(formData.get('emails') as string),
-    address: formData.get('address') as string,
-    image: imageFile,
+    name: formData.get('name') ?? undefined,
+    permalink: formData.get('permalink') ?? undefined,
+    description: formData.get('description') ?? undefined,
+    country: formData.get('country') ?? undefined,
+    state: formData.get('state') ?? undefined,
+    city: formData.get('city') ?? undefined,
+    season: formData.get('season') ?? undefined,
+    startDate: startDate,
+    endDate: endDate,
     active: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
@@ -64,106 +60,79 @@ export const updateTournamentAction = async ({
         : false,
   };
 
-  const teamVerified = editTeamSchema.safeParse(rawData);
+  const tournamentVerified = editTournamentSchema.safeParse(rawData);
 
-  if (!teamVerified.success) {
+  if (!tournamentVerified.success) {
     return {
       ok: false,
-      message: teamVerified.error.message,
-      team: null,
+      message: tournamentVerified.error.message,
+      tournament: null,
     };
   }
 
-  const { image, ...teamToSave } = teamVerified.data;
+  const tournamentToSave = tournamentVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
-        const isTeamExists = await transaction.team.count({
-          where: { id: teamId },
+        const isTournamentExists = await transaction.tournament.count({
+          where: { id: tournamentId },
+          select: {
+            name: true,
+            permalink: true,
+            description: true,
+            country: true,
+            state: true,
+            city: true,
+            season: true,
+            startDate: true,
+            endDate: true,
+            active: true,
+          }
         });
 
-        if (!isTeamExists) {
+        if (!isTournamentExists) {
           return {
             ok: false,
-            message: '¡ El equipo no existe o ha sido eliminado !',
-            team: null,
+            message: '¡ El torneo no existe o ha sido eliminado !',
+            tournament: null,
           };
         }
 
-        const updatedTeam = await transaction.team.update({
-          where: { id: teamId },
+        const updatedTournament = await transaction.tournament.update({
+          where: { id: tournamentId },
           data: {
-            name: teamToSave.name,
-            permalink: teamToSave.permalink,
-            headquarters: teamToSave.headquarters,
-            division: teamToSave.division,
-            group: teamToSave.group,
-            tournament: teamToSave.tournament,
-            country: teamToSave.country,
-            state: teamToSave.state,
-            city: teamToSave.city,
-            coach: teamToSave.coach,
-            emails: teamToSave.emails,
-            address: teamToSave.address,
-            active: teamToSave.active,
+            name: tournamentToSave.name,
+            permalink: tournamentToSave.permalink,
+            description: tournamentToSave.description,
+            country: tournamentToSave.country,
+            state: tournamentToSave.state,
+            city: tournamentToSave.city,
+            season: tournamentToSave.season,
+            startDate: tournamentToSave.startDate,
+            endDate: tournamentToSave.endDate,
+            active: tournamentToSave.active,
           },
         });
 
-        if (image !== null) {
-          // Delete previous image from cloudinary.
-          if (updatedTeam.imagePublicID) {
-            const cloudinaryResponse = await deleteImage(updatedTeam.imagePublicID);
-            if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
-            }
-          }
-
-          // Upload Image to third-party storage (cloudinary).
-          const imageUploaded = await uploadImage(image as File, 'teams');
-
-          if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
-          }
-
-          // Update image data to database.
-          await transaction.team.update({
-            where: { id: teamId },
-            data: {
-              imageUrl: imageUploaded.secureUrl,
-              imagePublicID: imageUploaded.publicId,
-            },
-          });
-
-          // Update event object to return.
-          updatedTeam.imageUrl = imageUploaded.secureUrl;
-          updatedTeam.imagePublicID = imageUploaded.publicId;
-        }
-
-
         // Revalidate Cache
-        revalidatePath('/admin/equipos');
+        revalidatePath('/admin/torneos');
 
         return {
           ok: true,
-          message: '¡ El equipo fue actualizado correctamente 👍 !',
-          team: {
-            id: updatedTeam.id,
-            name: updatedTeam.name,
-            permalink: updatedTeam.permalink,
-            headquarters: updatedTeam.headquarters,
-            division: updatedTeam.division,
-            group: updatedTeam.group,
-            tournament: updatedTeam.tournament,
-            country: updatedTeam.country,
-            state: updatedTeam.state,
-            city: updatedTeam.city,
-            coach: updatedTeam.coach,
-            emails: updatedTeam.emails,
-            address: updatedTeam.address,
-            imageUrl: updatedTeam.imageUrl,
-            imagePublicID: updatedTeam.imagePublicID,
-            active: updatedTeam.active,
+          message: '¡ El torneo fue actualizado correctamente 👍 !',
+          tournament: {
+            id: updatedTournament.id,
+            name: updatedTournament.name,
+            permalink: updatedTournament.permalink,
+            description: updatedTournament.description,
+            country: updatedTournament.country,
+            state: updatedTournament.state,
+            city: updatedTournament.city,
+            season: updatedTournament.season,
+            startDate: updatedTournament.startDate,
+            endDate: updatedTournament.endDate,
+            active: updatedTournament.active
           },
         };
       } catch (error) {
@@ -173,20 +142,20 @@ export const updateTournamentAction = async ({
             return {
               ok: false,
               message: `¡ El campo "${fieldError}", está duplicado !`,
-              team: null,
+              tournament: null,
             };
           }
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el usuario, revise los logs del servidor !',
-            team: null,
+            message: '¡ Error al actualizar el torneo, revise los logs del servidor !',
+            tournament: null,
           };
         }
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
-          team: null,
+          tournament: null,
         };
       }
     });
@@ -197,7 +166,7 @@ export const updateTournamentAction = async ({
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      team: null,
+      tournament: null,
     };
   }
 };

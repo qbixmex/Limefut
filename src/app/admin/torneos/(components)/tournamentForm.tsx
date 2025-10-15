@@ -1,6 +1,6 @@
 'use client';
 
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -12,45 +12,46 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from "@/components/ui/textarea";
 import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
+import { createTournamentSchema, editTournamentSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from 'next-auth';
 import { toast } from 'sonner';
-import type { Team } from '@/shared/interfaces';
+import type { Tournament } from '@/shared/interfaces';
 import { createTournamentAction, updateTournamentAction } from '../(actions)';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { EmailInput } from './email-input';
-import { LoaderCircle } from 'lucide-react';
+import { CalendarIcon, LoaderCircle } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { Switch } from '@/root/src/components/ui/switch';
+import { Label } from '@/root/src/components/ui/label';
 
 type Props = Readonly<{
   session: Session;
-  team?: Team;
+  tournament?: Tournament;
 }>;
 
-export const TeamForm: FC<Props> = ({ session, team }) => {
+export const TournamentForm: FC<Props> = ({ session, tournament }) => {
   const route = useRouter();
-  const formSchema = !team ? createTeamSchema : editTeamSchema;
+  const formSchema = !tournament ? createTournamentSchema : editTournamentSchema;
+  const [openStartDate, setStartDate] = useState(false);
+  const [openEndDate, setEndDate] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: team?.name ?? '',
-      permalink: team?.permalink ?? '',
-      headquarters: team?.headquarters ?? '',
-      division: team?.division ?? '',
-      group: team?.group ?? '',
-      tournament: team?.tournament ?? '',
-      country: team?.country ?? '',
-      state: team?.state ?? '',
-      city: team?.city ?? '',
-      coach: team?.coach ?? '',
-      emails: team?.emails ?? [],
-      address: team?.address ?? '',
-      active: team?.active ?? false,
+      name: tournament?.name ?? '',
+      permalink: tournament?.permalink ?? '',
+      description: tournament?.description ?? '',
+      country: tournament?.country ?? '',
+      state: tournament?.state ?? '',
+      city: tournament?.city ?? '',
+      season: tournament?.season ?? '',
+      startDate: tournament?.startDate ?? new Date(),
+      endDate: tournament?.endDate ?? new Date(),
     }
   });
 
@@ -59,25 +60,25 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
-    formData.append('headquarters', data.headquarters as string);
-    formData.append('division', data.division as string);
-    formData.append('group', data.group as string);
-    formData.append('tournament', data.tournament as string);
+    formData.append('description', data.description as string);
     formData.append('country', data.country as string);
     formData.append('state', data.state as string);
     formData.append('city', data.city as string);
-    formData.append('coach', data.coach as string);
-    formData.append('emails', JSON.stringify(data.emails as string[]));
-    formData.append('address', data.address as string);
-
-    if (data.image && typeof data.image === 'object') {
-      formData.append("image", data.image);
-    }
-
+    formData.append('season', data.season as string);
+    formData.append('startDate',
+      data.startDate
+        ? (data.startDate as Date).toISOString()
+        : new Date().toISOString()
+    );
+    formData.append('startDate',
+      data.endDate
+        ? (data.endDate as Date).toISOString()
+        : new Date().toISOString()
+    );
     formData.append('active', String(data.active ?? false));
 
     // Create tournament
-    if (!team) {
+    if (!tournament) {
       const response = await createTournamentAction(
         formData,
         session?.user.roles ?? null
@@ -91,16 +92,16 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/equipos");
+        route.replace("/admin/torneos");
         return;
       }
       return;
     }
 
-    if (team) {
+    if (tournament) {
       const response = await updateTournamentAction({
         formData,
-        teamId: team.id,
+        tournamentId: tournament.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });
@@ -112,7 +113,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/equipos");
+        route.replace("/admin/torneos");
         return;
       }
       return;
@@ -164,116 +165,15 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           </div>
         </div>
 
-        {/* Headquarters and Image */}
+        {/* Country and State */}
         <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="headquarters"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Sede
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Imagen
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        field.onChange(file);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Division and Group */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="division"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Division
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="group"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Grupo
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Tournament and Country */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="tournament"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Torneo
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    País
-                  </FormLabel>
+                  <FormLabel>País</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -282,19 +182,13 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               )}
             />
           </div>
-        </div>
-
-        {/* State and City */}
-        <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
               name="state"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Estado
-                  </FormLabel>
+                  <FormLabel>Estado</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -303,36 +197,17 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               )}
             />
           </div>
+        </div>
+
+        {/* City and Season */}
+        <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Ciudad
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Coach and Emails */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="coach"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Entrenador
-                  </FormLabel>
+                  <FormLabel>Ciudad</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -344,16 +219,12 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="emails"
+              name="season"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Correos Electrónicos</FormLabel>
+                  <FormLabel>Temporada</FormLabel>
                   <FormControl>
-                    <EmailInput
-                      value={field.value || []}
-                      onChange={field.onChange}
-                      placeholder="Escribe un email y después presiona Enter"
-                    />
+                    <Input {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -362,15 +233,79 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           </div>
         </div>
 
-        {/* Address and Active */}
+        {/* Dates and Description */}
         <div className="flex flex-col gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2 flex items-center gap-5">
+            <div className="w-1/2 flex items-center gap-5">
+              <Popover open={openStartDate} onOpenChange={setStartDate}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline-secondary">
+                    <CalendarIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="p-0 w-auto">
+                  <FormField
+                    control={form.control}
+                    name="startDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Calendar
+                            mode="single"
+                            selected={field.value as Date}
+                            onSelect={(date) => field.onChange(date)}
+                            className="rounded-lg border"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </PopoverContent>
+              </Popover>
+              <span className="text-sm text-gray-400 italic">
+                {format(form.getValues('startDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
+              </span>
+            </div>
+            <div className="w-1/2 flex items-center gap-5">
+              <Popover open={openEndDate} onOpenChange={setEndDate}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline-secondary">
+                    <CalendarIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="p-0 w-auto">
+                  <FormField
+                    control={form.control}
+                    name="endDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Calendar
+                            mode="single"
+                            selected={field.value as Date}
+                            onSelect={(date) => field.onChange(date)}
+                            className="rounded-lg border"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </PopoverContent>
+              </Popover>
+              <span className="text-sm text-gray-400 italic">
+                {format(form.getValues('endDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
+              </span>
+            </div>
+          </div>
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="address"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Dirección</FormLabel>
+                  <FormLabel>Descripción</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
@@ -383,7 +318,14 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               )}
             />
           </div>
-          <div className="w-full lg:w-1/2 flex items-center">
+        </div>
+
+        {/* Active */}
+        <div className="flex flex-col gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2">
+            {/* Empty for alignment */}
+          </div>
+          <div className="w-full lg:w-1/2 flex items-center gap-5">
             <FormField
               control={form.control}
               name="active"
@@ -427,7 +369,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
                 <LoaderCircle className="size-4 animate-spin" />
               </span>
             ) : (
-              !team ? 'crear' : 'actualizar'
+              !tournament ? 'crear' : 'actualizar'
             )}
           </Button>
         </div>
@@ -437,4 +379,4 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
 
 };
 
-export default TeamForm;
+export default TournamentForm;
