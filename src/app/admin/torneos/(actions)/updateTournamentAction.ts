@@ -77,18 +77,6 @@ export const updateTournamentAction = async ({
       try {
         const isTournamentExists = await transaction.tournament.count({
           where: { id: tournamentId },
-          select: {
-            name: true,
-            permalink: true,
-            description: true,
-            country: true,
-            state: true,
-            city: true,
-            season: true,
-            startDate: true,
-            endDate: true,
-            active: true,
-          }
         });
 
         if (!isTournamentExists) {

@@ -52,6 +52,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       season: tournament?.season ?? '',
       startDate: tournament?.startDate ?? new Date(),
       endDate: tournament?.endDate ?? new Date(),
+      active: tournament?.active ?? false,
     }
   });
 
@@ -70,7 +71,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
         ? (data.startDate as Date).toISOString()
         : new Date().toISOString()
     );
-    formData.append('startDate',
+    formData.append('endDate',
       data.endDate
         ? (data.endDate as Date).toISOString()
         : new Date().toISOString()

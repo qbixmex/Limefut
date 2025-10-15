@@ -56,6 +56,10 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                       <TableCell>{tournament.name}</TableCell>
                     </TableRow>
                     <TableRow>
+                      <TableHead className="font-semibold w-[180px]">Enlace Permanente</TableHead>
+                      <TableCell>{tournament.permalink}</TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableHead className="font-semibold">Temporada</TableHead>
                       <TableCell>{tournament.season}</TableCell>
                     </TableRow>

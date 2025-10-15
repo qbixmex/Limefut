@@ -29,17 +29,7 @@ export const editTournamentSchema = z.object({
     .min(3, { message: '¡ La temporada debe ser mayor a 3 caracteres !' })
     .max(200, { message: '¡ La temporada debe ser menor a 200 caracteres !' })
     .optional(),
-  coach: z.string()
-    .min(3, { message: '¡ El entrenador debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El entrenador debe ser menor a 100 caracteres !' })
-    .optional(),
-  startDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
-    message: '¡ La fecha de inicio no es válida !',
-  })
-  .optional(),
-  endDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
-    message: '¡ La fecha de fin no es válida !',
-  })
-  .optional(),
+  startDate: z.date({ message: "La fecha de inicio debe ser una fecha válida" }).optional(),
+  endDate: z.date({ message: "La fecha final debe ser una fecha válida" }).optional(),
   active: z.boolean().optional(),
 });

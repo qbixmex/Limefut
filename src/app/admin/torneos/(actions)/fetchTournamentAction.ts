@@ -6,7 +6,7 @@ import { Tournament } from "@/shared/interfaces";
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
-  tournament: Omit<Tournament, 'permalink'> | null;
+  tournament: Tournament | null;
 }>;
 
 export const fetchTournamentAction = async (
@@ -40,6 +40,7 @@ export const fetchTournamentAction = async (
       tournament: {
         id: tournament.id,
         name: tournament.name,
+        permalink: tournament.permalink,
         description: tournament.description,
         country: tournament.country,
         state: tournament.state,
