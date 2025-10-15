@@ -70,12 +70,12 @@ const navMain: NavItem[] = [
     subItems: [
       {
         label: "Lista",
-        url: "#",
+        url: "/admin/torneos",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "#",
+        url: "/admin/torneos/crear",
         icon: PlusIcon,
       },
     ],
