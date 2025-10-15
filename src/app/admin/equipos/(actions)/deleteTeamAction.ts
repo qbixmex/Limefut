@@ -33,15 +33,15 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteTeam => {
   if (teamDeleted.imagePublicID) {
     const response = await deleteImage(teamDeleted.imagePublicID);
     if (!response.ok) {
-      throw 'Error deleting image from cloudinary';
+      throw 'Error al eliminar la imagen de cloudinary';
     }
   }
 
   revalidatePath('/equipos');
-  revalidatePath('/admin/teams');
+  revalidatePath('/admin/equipos');
 
   return {
     ok: true,
-    message: `¡ El equipo "${teamDeleted.name}" ha sido eliminado 👍 !`
+    message: `¡ El equipo "${teamDeleted.name}" ha sido eliminado correctamente 👍 !`
   };
 };
