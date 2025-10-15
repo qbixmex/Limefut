@@ -16,7 +16,7 @@ export const fetchTeamAction = async (
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para editar equipos !',
+      message: '¡ No tienes permisos administrativos !',
       team: null,
     };
   }

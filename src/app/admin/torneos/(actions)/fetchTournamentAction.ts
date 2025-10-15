@@ -1,12 +1,12 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Team } from "@/shared/interfaces";
+import { Tournament } from "@/shared/interfaces";
 
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
-  team: Team | null;
+  tournament: Omit<Tournament, 'permalink'> | null;
 }>;
 
 export const fetchTournamentAction = async (
@@ -16,46 +16,40 @@ export const fetchTournamentAction = async (
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para editar equipos !',
-      team: null,
+      message: '¡ No tienes permisos administrativos !',
+      tournament: null,
     };
   }
 
   try {
-    const team = await prisma.team.findUnique({
+    const tournament = await prisma.tournament.findUnique({
       where: { permalink: permalink },
     });
 
-    if (!team) {
+    if (!tournament) {
       return {
         ok: false,
-        message: '¡ Equipo no encontrado ❌ !',
-        team: null,
+        message: '¡ Torneo no encontrado ❌ !',
+        tournament: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Equipo obtenido correctamente 👍 !',
-      team: {
-        id: team.id,
-        name: team.name,
-        permalink: team.permalink,
-        headquarters: team.headquarters,
-        imageUrl: team.imageUrl,
-        imagePublicID: null,
-        division: team.division,
-        group: team.group,
-        tournament: team.tournament,
-        country: team.country,
-        city: team.city,
-        state: team.state,
-        coach: team.coach,
-        emails: team.emails,
-        address: team.address,
-        active: team.active,
-        createdAt: team.createdAt,
-        updatedAt: team.updatedAt,
+      message: '¡ Torneo obtenido correctamente 👍 !',
+      tournament: {
+        id: tournament.id,
+        name: tournament.name,
+        description: tournament.description,
+        country: tournament.country,
+        state: tournament.state,
+        city: tournament.city,
+        season: tournament.season,
+        startDate: tournament.startDate,
+        endDate: tournament.endDate,
+        active: tournament.active,
+        createdAt: tournament.createdAt,
+        updatedAt: tournament.updatedAt,
       },
     };
   } catch (error) {
@@ -63,14 +57,14 @@ export const fetchTournamentAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el equipo,\n¡ Revise los logs del servidor !",
-        team: null,
+        message: "No se pudo obtener el torneo,\n¡ Revise los logs del servidor !",
+        tournament: null,
       };
     }
     return {
       ok: false,
       message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
-      team: null,
+      tournament: null,
     };
   }
 };
