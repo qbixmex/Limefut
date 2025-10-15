@@ -24,6 +24,7 @@ import { createTeamAction, updateTeamAction } from '../(actions)';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { EmailInput } from './email-input';
+import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
   session: Session;
@@ -418,8 +419,16 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
             type="submit"
             variant="outline-primary"
             size="lg"
+            disabled={form.formState.isSubmitting}
           >
-            {!team ? 'crear' : 'actualizar'}
+            {form.formState.isSubmitting ? (
+              <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                <span className="text-sm italic">Espere</span>
+                <LoaderCircle className="size-4 animate-spin" />
+              </span>
+            ) : (
+              !team ? 'crear' : 'actualizar'
+            )}
           </Button>
         </div>
       </form>

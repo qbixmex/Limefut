@@ -9,7 +9,7 @@
 }
 
 .showHidePassword {
-  @apply absolute top-[6px] right-[10px] z-10 text-green-900/50;
+  @apply absolute top-1/2 right-3 -translate-y-1/2 text-gray-600 hover:text-gray-400 z-10;
 }
 
 .submitWrapper {

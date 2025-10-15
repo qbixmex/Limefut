@@ -96,7 +96,7 @@ export const NavUser: FC<Props> = ({ user }) => {
               <DropdownMenuItem asChild className="cursor-pointer">
                 <button
                   className="w-full"
-                  onClick={() => route.replace(`/admin/users/profile/${user.id}`)}
+                  onClick={() => route.replace(`/admin/usuarios/perfil/${user.id}`)}
                 >
                   <BadgeCheck />
                   <span>Perfil</span>
