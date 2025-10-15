@@ -121,7 +121,7 @@ export const TeamsPage = async () => {
                             </Tooltip>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Link href={`/admin/equipos/editar/${team.id}`}>
+                                <Link href={`/admin/equipos/editar/${team.permalink}`}>
                                   <Button variant="outline-warning" size="icon">
                                     <Pencil />
                                   </Button>

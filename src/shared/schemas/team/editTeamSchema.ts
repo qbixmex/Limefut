@@ -25,7 +25,7 @@ export const editTeamSchema = z.object({
   image: z.instanceof(File)
     .refine((file) => file.size <= MAX_UPLOAD_SIZE, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), `El tipo de archivo debe ser uno de los siguientes: ${ACCEPTED_FILE_TYPES.join(', ')}`)
-    .optional(),
+    .nullish(),
   division: z.string()
     .min(3, { message: '¡ La división debe ser mayor a 3 caracteres !' })
     .max(200, { message: '¡ La división debe ser menor a 200 caracteres !' })

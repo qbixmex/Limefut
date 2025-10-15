@@ -99,7 +99,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
     if (team) {
       const response = await updateTeamAction({
         formData,
-        userId: team.id,
+        teamId: team.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });
@@ -391,12 +391,12 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
                   <div className="flex items-center gap-3">
                     <FormControl>
                       <Switch
-                        id="isActive"
+                        id="active"
                         checked={field.value ?? false}
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <Label htmlFor="isActive">Activo</Label>
+                    <Label htmlFor="active">Activo</Label>
                   </div>
                 </FormItem>
               )}

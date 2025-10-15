@@ -49,7 +49,7 @@ export const createTeamAction = async (
     };
   }
 
-  const { image, ...userToSave } = teamVerified.data;
+  const { image, ...teamToSave } = teamVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
   const cloudinaryResponse = await uploadImage(image!, 'teams');
@@ -62,21 +62,21 @@ export const createTeamAction = async (
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdTeam = await transaction.team.create({
         data: {
-          name: userToSave.name,
-          permalink: userToSave.permalink,
-          headquarters: userToSave.headquarters,
-          division: userToSave.division,
-          group: userToSave.group,
-          tournament: userToSave.tournament,
-          country: userToSave.country,
-          state: userToSave.state,
-          city: userToSave.city,
-          coach: userToSave.coach,
-          emails: userToSave.emails,
-          address: userToSave.address,
+          name: teamToSave.name,
+          permalink: teamToSave.permalink,
+          headquarters: teamToSave.headquarters,
+          division: teamToSave.division,
+          group: teamToSave.group,
+          tournament: teamToSave.tournament,
+          country: teamToSave.country,
+          state: teamToSave.state,
+          city: teamToSave.city,
+          coach: teamToSave.coach,
+          emails: teamToSave.emails,
+          address: teamToSave.address,
           imageUrl: cloudinaryResponse.secureUrl,
           imagePublicID: cloudinaryResponse.publicId,
-          active: userToSave.active,
+          active: teamToSave.active,
         }
       });
 
@@ -96,7 +96,7 @@ export const createTeamAction = async (
           address: createdTeam.address,
           imageUrl: createdTeam.imageUrl,
           imagePublicID: createdTeam.imagePublicID,
-          active: userToSave.active,
+          active: teamToSave.active,
         },
       };
     });

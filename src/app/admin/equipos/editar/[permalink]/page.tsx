@@ -6,23 +6,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UserForm } from "../../(components)/userForm";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
-import { User } from "@/root/next-auth";
 import { Session } from "next-auth";
-import { fetchUserAction } from "../../../users/(actions)";
+import { fetchTeamAction } from "../../(actions)";
+import { TeamForm } from "../../(components)/teamForm";
+import { Team } from '@/shared/interfaces';
 
 type Props = Readonly<{
   params: Promise<{
-    id: string;
+    permalink: string;
   }>;
 }>;
 
-export const EditUser: FC<Props> = async ({ params }) => {
+export const EditTeam: FC<Props> = async ({ params }) => {
   const session = await auth();
-  const userId = (await params).id;
-  const response = await fetchUserAction(userId, session?.user.roles ?? null);
+  const permalink = (await params).permalink;
+  const response = await fetchTeamAction(permalink, session?.user.roles ?? null);
 
   if (!response.ok) {
     redirect(`/admin/users?error=${encodeURIComponent(response.message)}`);
@@ -36,9 +36,9 @@ export const EditUser: FC<Props> = async ({ params }) => {
             <CardTitle>Editar Usuario</CardTitle>
           </CardHeader>
           <CardContent>
-            <UserForm
+            <TeamForm
               session={session as Session}
-              user={response.user as User}
+              team={response.team as Team}
             />
           </CardContent>
         </Card>
@@ -47,4 +47,4 @@ export const EditUser: FC<Props> = async ({ params }) => {
   );
 };
 
-export default EditUser;
+export default EditTeam;

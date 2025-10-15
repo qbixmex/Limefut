@@ -1,16 +1,14 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { User } from "@/root/next-auth";
-import { Role } from '@/root/src/shared/interfaces';
-import { editUserSchema } from "@/root/src/shared/schemas";
-import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
+import { editTeamSchema } from '@/root/src/shared/schemas';
+import { Team } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;
-  userId: string;
+  teamId: string;
   userRoles: string[];
   authenticatedUserId: string;
 };
@@ -18,12 +16,12 @@ type Options = {
 type EditArticleResponse = Promise<{
   ok: boolean;
   message: string;
-  user: User | null;
+  team: Team | null;
 }>;
 
 export const updateTeamAction = async ({
   formData,
-  userId,
+  teamId,
   userRoles,
   authenticatedUserId,
 }: Options): EditArticleResponse => {
@@ -31,7 +29,7 @@ export const updateTeamAction = async ({
     return {
       ok: false,
       message: '¡ Usuario no autenticado !',
-      user: null,
+      team: null,
     };
   }
 
@@ -39,7 +37,7 @@ export const updateTeamAction = async ({
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para solicitar esta petición !',
-      user: null,
+      team: null,
     };
   }
 
@@ -47,91 +45,90 @@ export const updateTeamAction = async ({
 
   const rawData = {
     name: formData.get('name') as string,
-    username: formData.get('username') ?? '',
-    email: formData.get('email') as string,
-    image: (imageFile instanceof File && imageFile.size > 0) ? imageFile : undefined,
-    password: formData.get('password') as string,
-    passwordConfirmation: formData.get('passwordConfirmation') as string,
-    roles: JSON.parse(formData.get('roles') as string),
-    isActive: (formData.get('isActive') === 'true')
+    permalink: formData.get('permalink') ?? '',
+    headquarters: formData.get('headquarters') as string,
+    division: formData.get('division') ?? '',
+    group: formData.get('group') as string,
+    tournament: formData.get('tournament') as string,
+    country: formData.get('country') as string,
+    state: formData.get('state') as string,
+    city: formData.get('city') as string,
+    coach: formData.get('coach') as string,
+    emails: JSON.parse(formData.get('emails') as string),
+    address: formData.get('address') as string,
+    image: imageFile,
+    active: (formData.get('active') === 'true')
       ? true
-      : (formData.get('isActive') === 'false')
+      : (formData.get('active') === 'false')
         ? false
         : false,
   };
 
-  const userVerified = editUserSchema.safeParse(rawData);
+  const teamVerified = editTeamSchema.safeParse(rawData);
 
-  if (!userVerified.success) {
+  if (!teamVerified.success) {
     return {
       ok: false,
-      message: userVerified.error.message,
-      user: null,
+      message: teamVerified.error.message,
+      team: null,
     };
   }
 
-  const { image, ...userToSave } = userVerified.data;
+  const { image, ...teamToSave } = teamVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
-        const isUserExists = await transaction.user.count({
-          where: { id: userId },
+        const isTeamExists = await transaction.team.count({
+          where: { id: teamId },
         });
 
-        if (!isUserExists) {
+        if (!isTeamExists) {
           return {
             ok: false,
-            message: '¡ El usuario no existe o ha sido eliminado !',
-            user: null,
+            message: '¡ El equipo no existe o ha sido eliminado !',
+            team: null,
           };
         }
 
-        const hashedPassword = userVerified.data.password ?
-          bcrypt.hashSync(userVerified.data.password, 10)
-          : undefined;
-
-        const updatedUser = await transaction.user.update({
-          where: { id: userId },
+        const updatedTeam = await transaction.team.update({
+          where: { id: teamId },
           data: {
-            name: userToSave.name,
-            username: userToSave.username,
-            email: userToSave.email as string,
-            password: hashedPassword,
-            roles: userToSave.roles as Role[],
-            isActive: userToSave.isActive,
+            name: teamToSave.name,
+            permalink: teamToSave.permalink,
+            headquarters: teamToSave.headquarters,
+            division: teamToSave.division,
+            group: teamToSave.group,
+            tournament: teamToSave.tournament,
+            country: teamToSave.country,
+            state: teamToSave.state,
+            city: teamToSave.city,
+            coach: teamToSave.coach,
+            emails: teamToSave.emails,
+            address: teamToSave.address,
+            active: teamToSave.active,
           },
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            email: true,
-            imageUrl: true,
-            imagePublicID: true,
-            roles: true,
-            isActive: true,
-          }
         });
 
-        if (image) {
+        if (image !== null) {
           // Delete previous image from cloudinary.
-          if (updatedUser.imagePublicID) {
-            const cloudinaryResponse = await deleteImage(updatedUser.imagePublicID);
+          if (updatedTeam.imagePublicID) {
+            const cloudinaryResponse = await deleteImage(updatedTeam.imagePublicID);
             if (!cloudinaryResponse.ok) {
               throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
             }
           }
 
           // Upload Image to third-party storage (cloudinary).
-          const imageUploaded = await uploadImage(image, 'users');
+          const imageUploaded = await uploadImage(image as File, 'teams');
 
           if (!imageUploaded) {
             throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
           }
 
           // Update image data to database.
-          await transaction.user.update({
-            where: { id: userId },
+          await transaction.team.update({
+            where: { id: teamId },
             data: {
               imageUrl: imageUploaded.secureUrl,
               imagePublicID: imageUploaded.publicId,
@@ -139,24 +136,34 @@ export const updateTeamAction = async ({
           });
 
           // Update event object to return.
-          updatedUser.imageUrl = imageUploaded.secureUrl;
+          updatedTeam.imageUrl = imageUploaded.secureUrl;
+          updatedTeam.imagePublicID = imageUploaded.publicId;
         }
 
 
         // Revalidate Cache
-        revalidatePath('/admin/users');
+        revalidatePath('/admin/equipos');
 
         return {
           ok: true,
-          message: '¡ Usuario actualizado satisfactoriamente 👍 !',
-          user: {
-            id: updatedUser.id,
-            name: updatedUser.name,
-            username: updatedUser.username,
-            email: updatedUser.email,
-            imageUrl: updatedUser.imageUrl,
-            roles: updatedUser.roles,
-            isActive: updatedUser.isActive,
+          message: '¡ El equipo fue actualizado correctamente 👍 !',
+          team: {
+            id: updatedTeam.id,
+            name: updatedTeam.name,
+            permalink: updatedTeam.permalink,
+            headquarters: updatedTeam.headquarters,
+            division: updatedTeam.division,
+            group: updatedTeam.group,
+            tournament: updatedTeam.tournament,
+            country: updatedTeam.country,
+            state: updatedTeam.state,
+            city: updatedTeam.city,
+            coach: updatedTeam.coach,
+            emails: updatedTeam.emails,
+            address: updatedTeam.address,
+            imageUrl: updatedTeam.imageUrl,
+            imagePublicID: updatedTeam.imagePublicID,
+            active: updatedTeam.active,
           },
         };
       } catch (error) {
@@ -166,20 +173,20 @@ export const updateTeamAction = async ({
             return {
               ok: false,
               message: `¡ El campo "${fieldError}", está duplicado !`,
-              user: null,
+              team: null,
             };
           }
 
           return {
             ok: false,
             message: '¡ Error al actualizar el usuario, revise los logs del servidor !',
-            user: null,
+            team: null,
           };
         }
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
-          user: null,
+          team: null,
         };
       }
     });
@@ -190,7 +197,7 @@ export const updateTeamAction = async ({
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      user: null,
+      team: null,
     };
   }
 };
