@@ -1,8 +1,7 @@
 "use client";
 
-import { FC } from "react";
+import type { FC } from "react";
 import Link from "next/link";
-import { ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,16 +17,19 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { ChevronRight, type LucideIcon } from "lucide-react";
+import type { IconType } from "react-icons/lib";
+import { CustomIconType } from "@/shared/types/icon";
 
 export type NavItem = {
   label: string;
   url: string;
-  icon?: LucideIcon;
+  icon?: LucideIcon | IconType | CustomIconType;
   isActive?: boolean;
   subItems?: {
     label: string;
     url: string;
-    icon?: LucideIcon;
+    icon?: LucideIcon | IconType | CustomIconType;
   }[];
 };
 
