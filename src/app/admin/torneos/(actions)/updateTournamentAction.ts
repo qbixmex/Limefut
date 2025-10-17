@@ -13,7 +13,7 @@ type Options = {
   authenticatedUserId: string;
 };
 
-type EditArticleResponse = Promise<{
+type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
   tournament: Tournament | null;
@@ -24,7 +24,7 @@ export const updateTournamentAction = async ({
   tournamentId,
   userRoles,
   authenticatedUserId,
-}: Options): EditArticleResponse => {
+}: Options): EditResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
@@ -36,7 +36,7 @@ export const updateTournamentAction = async ({
   if (!userRoles.includes('admin')) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para solicitar esta petición !',
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
       tournament: null,
     };
   }

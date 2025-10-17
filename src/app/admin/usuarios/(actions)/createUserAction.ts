@@ -6,15 +6,22 @@ import { createUserSchema } from "@/shared/schemas";
 import { uploadImage } from '@/shared/actions';
 import { revalidatePath } from "next/cache";
 import { CloudinaryResponse } from "@/shared/interfaces";
+import type { User } from "@/root/next-auth";
+
+type CreateResponseAction = Promise<{
+  ok: boolean;
+  message: string;
+  user: User | null;
+}>;
 
 export const createUserAction = async (
   formData: FormData,
   userRole: string[] | null,
-) => {
+): CreateResponseAction => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para solicitar esta petición !',
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
       user: null,
     };
   }
@@ -62,28 +69,17 @@ export const createUserAction = async (
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdUser = await transaction.user.create({
         data: {
-          name: userToSave.name,
-          username: userToSave.username,
-          email: userToSave.email,
+          ...userToSave,
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
           password: bcrypt.hashSync(userToSave.password, 10),
-          roles: userToSave.roles,
-          isActive: userToSave.isActive,
         }
       });
 
       return {
         ok: true,
         message: '¡ Usuario creado satisfactoriamente 👍 !',
-        user: {
-          name: createdUser.name,
-          username: createdUser.username,
-          email: createdUser.email,
-          imageUrl: createdUser.imageUrl,
-          roles: createdUser.roles,
-          isActive: createdUser.isActive,
-        },
+        user: createdUser,
       };
     });
 

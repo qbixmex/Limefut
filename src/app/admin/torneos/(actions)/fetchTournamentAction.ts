@@ -3,7 +3,7 @@
 import prisma from '@/lib/prisma';
 import { Tournament } from "@/shared/interfaces";
 
-type FetchTeamResponse = Promise<{
+type FetchTournamentResponse = Promise<{
   ok: boolean;
   message: string;
   tournament: Tournament | null;
@@ -12,7 +12,7 @@ type FetchTeamResponse = Promise<{
 export const fetchTournamentAction = async (
   permalink: string,
   userRole: string[] | null,
-): FetchTeamResponse => {
+): FetchTournamentResponse => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
