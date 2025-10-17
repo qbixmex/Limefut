@@ -1,18 +1,26 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { uploadImage } from "@/shared/actions";
+import { CloudinaryResponse, Tournament } from "@/shared/interfaces";
 import { createTournamentSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
+
+type ResponseCreateAction = Promise<{
+  ok: boolean;
+  message: string;
+  tournament: Tournament | null;
+}>;
 
 export const createTournamentAction = async (
   formData: FormData,
   userRole: string[] | null,
-) => {
+): ResponseCreateAction => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para solicitar esta petición !',
-      user: null,
+      tournament: null,
     };
   }
 
@@ -22,6 +30,7 @@ export const createTournamentAction = async (
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
+    image: formData.get('image') as File,
     description: formData.get('description') as string,
     country: formData.get('country') as string,
     state: formData.get('state') as string,
@@ -42,44 +51,36 @@ export const createTournamentAction = async (
     return {
       ok: false,
       message: tournamentVerified.error.message,
-      user: null,
+      tournament: null,
     };
   }
 
-  const tournamentToSave = tournamentVerified.data;
+  const { image, ...tournamentToSave } = tournamentVerified.data;
+  
+    // Upload Image to third-party storage (cloudinary).
+    let cloudinaryResponse: CloudinaryResponse | null = null;
+  
+    if (image) {
+      cloudinaryResponse = await uploadImage(image!, 'tournaments');
+      if (!cloudinaryResponse) {
+        throw new Error('Error subiendo imagen a cloudinary');
+      }
+    }
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdTournament = await transaction.tournament.create({
         data: {
-          name: tournamentToSave.name,
-          permalink: tournamentToSave.permalink,
-          description: tournamentToSave.description,
-          country: tournamentToSave.country,
-          state: tournamentToSave.state,
-          city: tournamentToSave.city,
-          season: tournamentToSave.season,
-          startDate: tournamentToSave.startDate,
-          endDate: tournamentToSave.endDate,
-          active: tournamentToSave.active,
+          ...tournamentToSave,
+          imageUrl: cloudinaryResponse?.secureUrl,
+          imagePublicID: cloudinaryResponse?.publicId,
         }
       });
 
       return {
         ok: true,
         message: '¡ Torneo creado satisfactoriamente 👍 !',
-        tournament: {
-          name: createdTournament.name,
-          permalink: createdTournament.permalink,
-          description: createdTournament.description,
-          country: createdTournament.country,
-          state: createdTournament.state,
-          city: createdTournament.city,
-          season: createdTournament.season,
-          startDate: createdTournament.startDate,
-          endDate: createdTournament.endDate,
-          active: createdTournament.active,
-        },
+        tournament: createdTournament,
       };
     });
 
@@ -94,21 +95,21 @@ export const createTournamentAction = async (
         return {
           ok: false,
           message: `¡ El campo "${fieldError}", está duplicado !`,
-          user: null,
+          tournament: null,
         };
       }
 
       return {
         ok: false,
         message: '¡ Error al crear el torneo, revise los logs del servidor !',
-        user: null,
+        tournament: null,
       };
     }
     console.log(error);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      user: null,
+      tournament: null,
     };
   }
 };

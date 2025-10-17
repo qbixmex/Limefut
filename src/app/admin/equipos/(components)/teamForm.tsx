@@ -97,6 +97,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
       return;
     }
 
+    // Update team
     if (team) {
       const response = await updateTeamAction({
         formData,
@@ -151,9 +152,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="permalink"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Enlace Permanente
-                  </FormLabel>
+                  <FormLabel>Enlace Permanente</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -172,9 +171,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="headquarters"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Sede
-                  </FormLabel>
+                  <FormLabel>Sede</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -189,9 +186,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Imagen
-                  </FormLabel>
+                  <FormLabel>Imagen</FormLabel>
                   <FormControl>
                     <Input
                       type="file"
@@ -216,9 +211,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="division"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Division
-                  </FormLabel>
+                  <FormLabel>Division</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -233,9 +226,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="group"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Grupo
-                  </FormLabel>
+                  <FormLabel>Grupo</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -254,9 +245,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="tournament"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Torneo
-                  </FormLabel>
+                  <FormLabel>Torneo</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -271,9 +260,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    País
-                  </FormLabel>
+                  <FormLabel>País</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -292,9 +279,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="state"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Estado
-                  </FormLabel>
+                  <FormLabel>Estado</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -309,9 +294,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Ciudad
-                  </FormLabel>
+                  <FormLabel>Ciudad</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -330,9 +313,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="coach"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Entrenador
-                  </FormLabel>
+                  <FormLabel>Entrenador</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>

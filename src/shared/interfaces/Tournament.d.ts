@@ -2,6 +2,8 @@ export interface Tournament {
   id: string;
   name: string;
   permalink: string;
+  imageUrl: string | null;
+  imagePublicID: string | null;
   description: string;
   country: string;
   state: string;

@@ -3,7 +3,8 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { editTournamentSchema } from '@/shared/schemas';
-import { Tournament } from '@/shared/interfaces';
+import { CloudinaryResponse, Tournament } from '@/shared/interfaces';
+import { deleteImage, uploadImage } from '@/shared/actions';
 
 type Options = {
   formData: FormData;
@@ -46,6 +47,7 @@ export const updateTournamentAction = async ({
   const rawData = {
     name: formData.get('name') ?? undefined,
     permalink: formData.get('permalink') ?? undefined,
+    image: formData.get('image'),
     description: formData.get('description') ?? undefined,
     country: formData.get('country') ?? undefined,
     state: formData.get('state') ?? undefined,
@@ -70,7 +72,17 @@ export const updateTournamentAction = async ({
     };
   }
 
-  const tournamentToSave = tournamentVerified.data;
+  const { image, ...tournamentToSave } = tournamentVerified.data;
+
+  // Upload Image to third-party storage (cloudinary).
+  let cloudinaryResponse: CloudinaryResponse | null = null;
+
+  if (image) {
+    cloudinaryResponse = await uploadImage(image!, 'teams');
+    if (!cloudinaryResponse) {
+      throw new Error('Error subiendo imagen a cloudinary');
+    }
+  }
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -89,19 +101,38 @@ export const updateTournamentAction = async ({
 
         const updatedTournament = await transaction.tournament.update({
           where: { id: tournamentId },
-          data: {
-            name: tournamentToSave.name,
-            permalink: tournamentToSave.permalink,
-            description: tournamentToSave.description,
-            country: tournamentToSave.country,
-            state: tournamentToSave.state,
-            city: tournamentToSave.city,
-            season: tournamentToSave.season,
-            startDate: tournamentToSave.startDate,
-            endDate: tournamentToSave.endDate,
-            active: tournamentToSave.active,
-          },
+          data: tournamentToSave,
         });
+
+        if (image !== null) {
+          // Delete previous image from cloudinary.
+          if (updatedTournament.imagePublicID) {
+            const cloudinaryResponse = await deleteImage(updatedTournament.imagePublicID);
+            if (!cloudinaryResponse.ok) {
+              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+            }
+          }
+
+          // Upload Image to third-party storage (cloudinary).
+          const imageUploaded = await uploadImage(image as File, 'tournaments');
+
+          if (!imageUploaded) {
+            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+          }
+
+          // Update image data to database.
+          await transaction.tournament.update({
+            where: { id: tournamentId },
+            data: {
+              imageUrl: imageUploaded.secureUrl,
+              imagePublicID: imageUploaded.publicId,
+            },
+          });
+
+          // Update event object to return.
+          updatedTournament.imageUrl = imageUploaded.secureUrl;
+          updatedTournament.imagePublicID = imageUploaded.publicId;
+        }
 
         // Revalidate Cache
         revalidatePath('/admin/torneos');
@@ -109,19 +140,7 @@ export const updateTournamentAction = async ({
         return {
           ok: true,
           message: '¡ El torneo fue actualizado correctamente 👍 !',
-          tournament: {
-            id: updatedTournament.id,
-            name: updatedTournament.name,
-            permalink: updatedTournament.permalink,
-            description: updatedTournament.description,
-            country: updatedTournament.country,
-            state: updatedTournament.state,
-            city: updatedTournament.city,
-            season: updatedTournament.season,
-            startDate: updatedTournament.startDate,
-            endDate: updatedTournament.endDate,
-            active: updatedTournament.active
-          },
+          tournament: updatedTournament,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
@@ -133,13 +152,14 @@ export const updateTournamentAction = async ({
               tournament: null,
             };
           }
-
+          console.log(error.message);
           return {
             ok: false,
             message: '¡ Error al actualizar el torneo, revise los logs del servidor !',
             tournament: null,
           };
         }
+        console.log((error as Error).message);
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',

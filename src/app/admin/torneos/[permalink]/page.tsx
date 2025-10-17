@@ -1,4 +1,5 @@
-import { FC } from "react";
+import type { FC } from "react";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@/auth.config";
@@ -9,7 +10,7 @@ import {
   TableCell,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil } from "lucide-react";
+import { Pencil, Trophy } from "lucide-react";
 import { Badge } from "@/root/src/components/ui/badge";
 import Link from "next/link";
 import { Tournament } from "@/generated/prisma";
@@ -49,6 +50,23 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
           <CardContent>
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
               <div className="w-full lg:w-1/2">
+                {
+                  !tournament.imageUrl ? (
+                    <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
+                      <Trophy size={480} strokeWidth={1} className="stroke-gray-400" />
+                    </div>
+                  ) : (
+                    <Image
+                      src={tournament.imageUrl}
+                      width={512}
+                      height={512}
+                      alt={`imagen de perfil de ${tournament.name}`}
+                      className="rounded-lg size-[512px] object-cover"
+                    />
+                  )
+                }
+              </div>
+              <div className="w-full lg:w-1/2">
                 <Table>
                   <TableBody>
                     <TableRow>
@@ -65,7 +83,7 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold">Descripción</TableHead>
-                      <TableCell>{tournament.description}</TableCell>
+                      <TableCell className="whitespace-break-spaces">{tournament.description}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold">País</TableHead>
@@ -79,16 +97,25 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                       <TableHead className="font-semibold">City</TableHead>
                       <TableCell>{tournament.city}</TableCell>
                     </TableRow>
+                    <TableRow>
+                      <TableHead className="font-medium w-[180px]">Activo</TableHead>
+                      <TableCell>
+                        {
+                          tournament.active
+                            ? <Badge variant="outline-info">Activo</Badge>
+                            : <Badge variant="outline-warning">No Activo</Badge>
+                        }
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </div>
+            </section>
+
+            <section className="flex gap-5">
               <div className="w-full lg:w-1/2">
                 <Table>
                   <TableBody>
-                    <TableRow>
-                      <TableHead className="font-semibold">Descripción</TableHead>
-                      <TableCell>{tournament.description}</TableCell>
-                    </TableRow>
                     <TableRow>
                       <TableHead className="w-[180px] font-semibold">Fecha de Inicio</TableHead>
                       <TableCell>
@@ -101,6 +128,12 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                         {format(new Date(tournament.endDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                       </TableCell>
                     </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+              <div className="w-full lg:w-1/2">
+                <Table>
+                  <TableBody>
                     <TableRow>
                       <TableHead className="w-[180px] font-semibold">Fecha de Creación</TableHead>
                       <TableCell>
@@ -111,16 +144,6 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                       <TableHead className="w-[180px] font-semibold">Última actualización</TableHead>
                       <TableCell>
                         {format(new Date(tournament?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-medium w-[180px]">Activo</TableHead>
-                      <TableCell>
-                        {
-                          tournament.active
-                            ? <Badge variant="outline-info">Activo</Badge>
-                            : <Badge variant="outline-warning">No Activo</Badge>
-                        }
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -145,7 +168,7 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </div >
   );
 };
 

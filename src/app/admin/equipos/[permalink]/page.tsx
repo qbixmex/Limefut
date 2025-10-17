@@ -1,8 +1,8 @@
 import { FC } from "react";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@/auth.config";
-import Image from "next/image";
 import {
   Table,
   TableBody,
