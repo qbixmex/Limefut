@@ -100,3 +100,20 @@ model Coach {
 
   @@map("coaches")
 }
+
+model Player {
+  id            String    @id @default(uuid())
+  name          String    @unique
+  email         String    @unique
+  phone         String?
+  birthday      DateTime?
+  nationality   String?
+  imageUrl      String?   @map("image_url")
+  imagePublicID String?   @map("image_public_id")
+  active        Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("players")
+}
