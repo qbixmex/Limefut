@@ -1,57 +1,57 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Coach } from "@/shared/interfaces";
+import { Player } from "@/shared/interfaces";
 
-type FetchCoachResponse = Promise<{
+type FetchPlayerResponse = Promise<{
   ok: boolean;
   message: string;
-  coach: Coach | null;
+  player: Player | null;
 }>;
 
 export const fetchPlayerAction = async (
-  coachId: string,
+  playerId: string,
   userRole: string[] | null,
-): FetchCoachResponse => {
+): FetchPlayerResponse => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos !',
-      coach: null,
+      player: null,
     };
   }
 
   try {
-    const coach = await prisma.coach.findUnique({
-      where: { id: coachId },
+    const player = await prisma.player.findUnique({
+      where: { id: playerId },
     });
 
-    if (!coach) {
+    if (!player) {
       return {
         ok: false,
-        message: '¡ Entrenador no encontrado ❌ !',
-        coach: null,
+        message: '¡ Jugador no encontrado ❌ !',
+        player: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Entrenador obtenido correctamente 👍 !',
-      coach,
+      message: '¡ Jugador obtenido correctamente 👍 !',
+      player,
     };
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el entrenador,\n¡ Revise los logs del servidor !",
-        coach: null,
+        message: "No se pudo obtener el jugador,\n¡ Revise los logs del servidor !",
+        player: null,
       };
     }
     return {
       ok: false,
       message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
-      coach: null,
+      player: null,
     };
   }
 };

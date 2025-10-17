@@ -4,9 +4,9 @@ export interface Player {
   email: string;
   phone?: string | null;
   birthday?: Date | null;
-  nationality?: string;
-  imageUrl?: string;
-  imagePublicID?: string;
+  nationality?: string | null;
+  imageUrl: string | null;
+  imagePublicID: string | null;
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;

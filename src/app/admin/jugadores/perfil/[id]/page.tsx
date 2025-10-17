@@ -15,11 +15,11 @@ import { Badge } from "@/root/src/components/ui/badge";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { fetchCoachAction } from "../../(actions)";
-import type { Coach } from '@/shared/interfaces';
+import { fetchPlayerAction } from "../../(actions)";
+import type { Player } from '@/shared/interfaces';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { GiWhistle } from "react-icons/gi";
+import { SoccerPlayer } from "@/shared/components/icons";
 
 type Props = Readonly<{
   params: Promise<{
@@ -27,17 +27,17 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const CoachPage: FC<Props> = async ({ params }) => {
+export const PlayerPage: FC<Props> = async ({ params }) => {
   const session = await auth();
-  const coachId = (await params).id;
+  const playerId = (await params).id;
 
-  const response = await fetchCoachAction(coachId, session?.user.roles ?? null);
+  const response = await fetchPlayerAction(playerId, session?.user.roles ?? null);
 
   if (!response.ok) {
-    redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);
+    redirect(`/admin/jugadores?error=${encodeURIComponent(response.message)}`);
   }
 
-  const coach = response.coach as Coach;
+  const player = response.player as Player;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -45,22 +45,22 @@ export const CoachPage: FC<Props> = async ({ params }) => {
         <Card className="w-full shadow-none bg-neutral-100 dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800 relative">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>
-              <h1 className="text-xl font-bold text-green-500">Detalles del Entrenador</h1>
+              <h1 className="text-xl font-bold text-green-500">Detalles del Jugador</h1>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
               {
-                !coach.imageUrl ? (
+                !player.imageUrl ? (
                   <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
-                    <GiWhistle size={480} strokeWidth={1} className="text-gray-400" />
+                    <SoccerPlayer size={480} strokeWidth={2} className="text-gray-400" />
                   </div>
                 ) : (
                   <Image
-                    src={coach.imageUrl}
+                    src={player.imageUrl}
                     width={512}
                     height={512}
-                    alt={`imagen de perfil de ${coach.name}`}
+                    alt={`imagen de perfil de ${player.name}`}
                     className="rounded-lg size-[512px] object-cover"
                   />
                 )
@@ -69,45 +69,41 @@ export const CoachPage: FC<Props> = async ({ params }) => {
                 <TableBody>
                   <TableRow>
                     <TableHead className="font-semibold w-[180px]">Nombre Completo</TableHead>
-                    <TableCell>{coach.name}</TableCell>
+                    <TableCell>{player.name}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Correo Electrónico</TableHead>
-                    <TableCell>{coach.email ?? 'No Proporcionado'}</TableCell>
+                    <TableCell>{player.email ?? 'No Proporcionado'}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Teléfono</TableHead>
-                    <TableCell>{coach.phone ?? 'No Proporcionado'}</TableCell>
+                    <TableCell>{player.phone ?? 'No Proporcionado'}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Edad</TableHead>
-                    <TableCell>{coach.age ?? 'No Proporcionado'}</TableCell>
+                    <TableHead className="font-semibold">Fecha de Nacimiento</TableHead>
+                    <TableCell>{player.birthday?.toISOString() ?? 'No Proporcionado'}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Nacionalidad</TableHead>
-                    <TableCell>{coach.nationality}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Descripción</TableHead>
-                    <TableCell>{coach.description ?? 'No proporcionada'}</TableCell>
+                    <TableCell>{player.nationality}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
                     <TableCell>
-                      {format(new Date(coach?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                      {format(new Date(player?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="w-[180px] font-semibold">Última Actualización</TableHead>
                     <TableCell>
-                      {format(new Date(coach?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                      {format(new Date(player?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-medium w-[180px]">Estado</TableHead>
                     <TableCell>
                       {
-                        coach.active
+                        player.active
                           ? <Badge variant="outline-info">Activo</Badge>
                           : <Badge variant="outline-warning">No Activo</Badge>
                       }
@@ -120,7 +116,7 @@ export const CoachPage: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/entrenadores/editar/${coach.id}`}>
+                  <Link href={`/admin/entrenadores/editar/${player.id}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>
@@ -138,4 +134,4 @@ export const CoachPage: FC<Props> = async ({ params }) => {
   );
 };
 
-export default CoachPage;
+export default PlayerPage;
