@@ -15,42 +15,35 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from "@/components/ui/textarea";
 import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
+import { createCoachSchema, editCoachSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from 'next-auth';
 import { toast } from 'sonner';
-import type { Team } from '@/shared/interfaces';
-import { createTeamAction, updateTeamAction } from '../(actions)';
+import type { Coach } from '@/shared/interfaces';
+import { createCoachAction, updateCoachAction } from '../(actions)';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { EmailInput } from './email-input';
 import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
   session: Session;
-  team?: Team;
+  coach?: Coach;
 }>;
 
-export const TeamForm: FC<Props> = ({ session, team }) => {
+export const CoachForm: FC<Props> = ({ session, coach }) => {
   const route = useRouter();
-  const formSchema = !team ? createTeamSchema : editTeamSchema;
+  const formSchema = !coach ? createCoachSchema : editCoachSchema;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: team?.name ?? '',
-      permalink: team?.permalink ?? '',
-      headquarters: team?.headquarters ?? '',
-      division: team?.division ?? '',
-      group: team?.group ?? '',
-      tournament: team?.tournament ?? '',
-      country: team?.country ?? '',
-      state: team?.state ?? '',
-      city: team?.city ?? '',
-      coach: team?.coach ?? '',
-      emails: team?.emails ?? [],
-      address: team?.address ?? '',
-      active: team?.active ?? false,
+      name: coach?.name ?? '',
+      email: coach?.email ?? '',
+      phone: coach?.phone ?? '',
+      age: coach?.age ?? 0,
+      nationality: coach?.nationality ?? '',
+      description: coach?.description ?? '',
+      active: coach?.active ?? false,
     }
   });
 
@@ -58,17 +51,11 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
     const formData = new FormData();
 
     formData.append('name', data.name as string);
-    formData.append('permalink', data.permalink as string);
-    formData.append('headquarters', data.headquarters as string);
-    formData.append('division', data.division as string);
-    formData.append('group', data.group as string);
-    formData.append('tournament', data.tournament as string);
-    formData.append('country', data.country as string);
-    formData.append('state', data.state as string);
-    formData.append('city', data.city as string);
-    formData.append('coach', data.coach as string);
-    formData.append('emails', JSON.stringify(data.emails as string[]));
-    formData.append('address', data.address as string);
+    formData.append('email', data.email as string);
+    formData.append('phone', data.phone as string);
+    formData.append('age', (data.age as number).toString());
+    formData.append('nationality', data.nationality as string);
+    formData.append('description', data.description as string);
 
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
@@ -77,8 +64,8 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
     formData.append('active', String(data.active ?? false));
 
     // Create team
-    if (!team) {
-      const response = await createTeamAction(
+    if (!coach) {
+      const response = await createCoachAction(
         formData,
         session?.user.roles ?? null
       );
@@ -91,16 +78,16 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/equipos");
+        route.replace("/admin/entrenadores");
         return;
       }
       return;
     }
 
-    if (team) {
-      const response = await updateTeamAction({
+    if (coach) {
+      const response = await updateCoachAction({
         formData,
-        teamId: team.id,
+        coachId: coach.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });
@@ -112,7 +99,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/equipos");
+        route.replace("/admin/entrenadores");
         return;
       }
       return;
@@ -125,7 +112,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
       >
-        {/* Name and Permalink */}
+        {/* Name and Email */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
@@ -148,12 +135,10 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="permalink"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Enlace Permanente
-                  </FormLabel>
+                  <FormLabel>Correo Electrónico</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -164,17 +149,15 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           </div>
         </div>
 
-        {/* Headquarters and Image */}
+        {/* Phone and Age */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="headquarters"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Sede
-                  </FormLabel>
+                  <FormLabel>Teléfono</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -189,9 +172,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Imagen
-                  </FormLabel>
+                  <FormLabel>Imagen</FormLabel>
                   <FormControl>
                     <Input
                       type="file"
@@ -208,19 +189,17 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           </div>
         </div>
 
-        {/* Division and Group */}
+        {/* Nationality and Description */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="division"
+              name="nationality"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Division
-                  </FormLabel>
+                  <FormLabel>Nacionalidad</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input type="text" {...field} value={field.value ?? ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -230,147 +209,10 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="group"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Grupo
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Tournament and Country */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="tournament"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Torneo
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    País
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* State and City */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="state"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Estado
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="city"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Ciudad
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Coach and Emails */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="coach"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Entrenador
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="emails"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Correos Electrónicos</FormLabel>
-                  <FormControl>
-                    <EmailInput
-                      value={field.value || []}
-                      onChange={field.onChange}
-                      placeholder="Escribe un email y después presiona Enter"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Address and Active */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Dirección</FormLabel>
+                  <FormLabel>Descripción</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
@@ -383,7 +225,38 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
               )}
             />
           </div>
-          <div className="w-full lg:w-1/2 flex items-center">
+        </div>
+
+        {/* Age and Active */}
+        <div className="flex flex-col gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2">
+            {/* Keep Empty */}
+          </div>
+          <div className="w-full lg:w-1/2 flex justify-end gap-5">
+            <FormField
+              control={form.control}
+              name="age"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-5">
+                    <Label htmlFor="age">Edad</Label>
+                    <FormControl>
+                      <Input
+                        id="age"
+                        type="number"
+                        {...field}
+                        min={0}
+                        max={100}
+                        className="w-[100px]"
+                        value={field.value ?? 0}
+                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="active"
@@ -427,7 +300,7 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
                 <LoaderCircle className="size-4 animate-spin" />
               </span>
             ) : (
-              !team ? 'crear' : 'actualizar'
+              !coach ? 'crear' : 'actualizar'
             )}
           </Button>
         </div>
@@ -437,4 +310,4 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
 
 };
 
-export default TeamForm;
+export default CoachForm;
