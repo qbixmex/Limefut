@@ -36,7 +36,7 @@ type Props = { user: {
   name: string | null;
   username: string | null;
   email: string;
-  imageUrl: string | null;
+  imageUrl?: string | null;
 }};
 
 export const NavUser: FC<Props> = ({ user }) => {
