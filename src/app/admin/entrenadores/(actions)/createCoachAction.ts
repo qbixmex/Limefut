@@ -56,7 +56,7 @@ export const createCoachAction = async (
   let cloudinaryResponse: CloudinaryResponse | null = null;
 
   if (image) {
-    cloudinaryResponse = await uploadImage(image!, 'teams');
+    cloudinaryResponse = await uploadImage(image!, 'coaches');
     if (!cloudinaryResponse) {
       throw new Error('Error subiendo imagen a cloudinary');
     }

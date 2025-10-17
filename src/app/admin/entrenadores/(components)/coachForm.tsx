@@ -37,13 +37,13 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: coach?.name ?? 'Fernando López González',
-      email: coach?.email ?? 'fernando456@gmail.com',
-      phone: coach?.phone ?? '335-678-1234',
-      age: coach?.age ?? 52,
-      nationality: coach?.nationality ?? 'Mexicana',
-      description: coach?.description ?? 'Es un formador con amplia experiencia en el fútbol juvenil, conocido por su enfoque táctico y su habilidad para desarrollar jóvenes talentos en categorías de menores de 12 años de edad.',
-      active: coach?.active ?? true,
+      name: coach?.name ?? '',
+      email: coach?.email ?? '',
+      phone: coach?.phone ?? '',
+      age: coach?.age ?? 0,
+      nationality: coach?.nationality ?? '',
+      description: coach?.description ?? '',
+      active: coach?.active ?? false,
     }
   });
 
@@ -87,7 +87,7 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
     if (coach) {
       const response = await updateCoachAction({
         formData,
-        teamId: coach.id,
+        coachId: coach.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });
@@ -247,8 +247,9 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
                         {...field}
                         min={0}
                         max={100}
-                        value={field.value ?? 0}
                         className="w-[100px]"
+                        value={field.value ?? 0}
+                        onChange={(e) => field.onChange(parseInt(e.target.value))}
                       />
                     </FormControl>
                   </div>

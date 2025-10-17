@@ -30,7 +30,7 @@ export const editCoachSchema = z.object({
     .max(100, { message: '¡ La edad debe ser menor a 100 !' })
     .optional(),
   nationality: z.string()
-    .min(12, { message: '¡ La nacionalidad debe ser mayor a 3 caracteres !' })
+    .min(3, { message: '¡ La nacionalidad debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ La nacionalidad debe ser menor a 100 caracteres !' })
     .optional(),
   image: z
