@@ -23,7 +23,7 @@ type Props = Readonly<{
     name: string | null;
     username: string | null;
     email: string;
-    imageUrl: string | null;
+    imageUrl?: string | null;
   }
 }>;
 
