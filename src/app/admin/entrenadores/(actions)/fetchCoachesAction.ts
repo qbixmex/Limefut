@@ -1,7 +1,6 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { Coach } from "@/shared/interfaces";
 import { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
@@ -12,7 +11,16 @@ type Options = Readonly<{
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
-  coaches: Coach[] | null;
+  coaches: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string | null;
+    age: number | null;
+    nationality: string | null;
+    imageUrl: string | null;
+    active: boolean;
+  }[] | null;
   pagination: Pagination | null;
 }>;
 
@@ -28,13 +36,23 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
       orderBy: { name: 'asc' },
       take: take,
       skip: (page - 1) * take,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        age: true,
+        nationality: true,
+        imageUrl: true,
+        active: true,
+      }
     });
 
     const totalCount = await prisma.team.count();
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
+      message: '! Los entrenadores fueron obtenidos correctamente 👍',
       coaches,
       pagination: {
         currentPage: page,

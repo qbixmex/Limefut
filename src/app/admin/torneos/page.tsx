@@ -78,7 +78,7 @@ export const TournamentPage = async () => {
                     {tournaments.map((tournament) => (
                       <TableRow key={tournament.id}>
                         <TableCell>
-                          <Link href={`/admin/equipos/${tournament.permalink}`}>
+                          <Link href={`/admin/torneos/${tournament.permalink}`}>
                             {
                               !tournament.imageUrl ? (
                                 <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">

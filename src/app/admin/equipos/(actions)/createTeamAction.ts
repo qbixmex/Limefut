@@ -4,17 +4,23 @@ import prisma from "@/lib/prisma";
 import { createTeamSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "@/shared/actions";
-import { CloudinaryResponse } from "@/shared/interfaces";
+import type { CloudinaryResponse, Team } from "@/shared/interfaces";
+
+type CreateResponseAction = Promise<{
+  ok: boolean;
+  message: string;
+  team: Team | null;
+}>;
 
 export const createTeamAction = async (
   formData: FormData,
   userRole: string[] | null,
-) => {
+): CreateResponseAction => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para solicitar esta petición !',
-      user: null,
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      team: null,
     };
   }
 
@@ -45,7 +51,7 @@ export const createTeamAction = async (
     return {
       ok: false,
       message: teamVerified.error.message,
-      user: null,
+      team: null,
     };
   }
 
@@ -64,43 +70,13 @@ export const createTeamAction = async (
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdTeam = await transaction.team.create({
-        data: {
-          name: teamToSave.name,
-          permalink: teamToSave.permalink,
-          headquarters: teamToSave.headquarters,
-          division: teamToSave.division,
-          group: teamToSave.group,
-          tournament: teamToSave.tournament,
-          country: teamToSave.country,
-          state: teamToSave.state,
-          city: teamToSave.city,
-          coach: teamToSave.coach,
-          emails: teamToSave.emails,
-          address: teamToSave.address,
-          imageUrl: cloudinaryResponse?.secureUrl,
-          imagePublicID: cloudinaryResponse?.publicId,
-          active: teamToSave.active,
-        }
+        data: teamToSave,
       });
 
       return {
         ok: true,
         message: '¡ Equipo creado satisfactoriamente 👍 !',
-        user: {
-          headquarters: createdTeam.headquarters,
-          division: createdTeam.division,
-          group: createdTeam.group,
-          tournament: createdTeam.tournament,
-          country: createdTeam.country,
-          state: createdTeam.state,
-          city: createdTeam.city,
-          coach: createdTeam.coach,
-          emails: createdTeam.emails,
-          address: createdTeam.address,
-          imageUrl: createdTeam.imageUrl,
-          imagePublicID: createdTeam.imagePublicID,
-          active: teamToSave.active,
-        },
+        team: createdTeam,
       };
     });
 
@@ -115,21 +91,21 @@ export const createTeamAction = async (
         return {
           ok: false,
           message: `¡ El campo "${fieldError}", está duplicado !`,
-          user: null,
+          team: null,
         };
       }
 
       return {
         ok: false,
         message: '¡ Error al crear el equipo, revise los logs del servidor !',
-        user: null,
+        team: null,
       };
     }
     console.log(error);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      user: null,
+      team: null,
     };
   }
 };

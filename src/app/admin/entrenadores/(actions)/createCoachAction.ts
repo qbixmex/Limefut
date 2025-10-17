@@ -20,7 +20,7 @@ export const createCoachAction = async (
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para solicitar esta petición !',
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
       coach: null,
     };
   }
@@ -74,7 +74,7 @@ export const createCoachAction = async (
 
       return {
         ok: true,
-        message: '¡ Entrenador creado satisfactoriamente 👍 !',
+        message: '¡ Entrenador creado correctamente 👍 !',
         coach: createdCoach,
       };
     });
@@ -96,7 +96,7 @@ export const createCoachAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear el equipo, revise los logs del servidor !',
+        message: '¡ Error al crear el entrenador, revise los logs del servidor !',
         coach: null,
       };
     }

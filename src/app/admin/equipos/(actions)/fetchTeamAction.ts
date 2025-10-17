@@ -37,26 +37,7 @@ export const fetchTeamAction = async (
     return {
       ok: true,
       message: '¡ Equipo obtenido correctamente 👍 !',
-      team: {
-        id: team.id,
-        name: team.name,
-        permalink: team.permalink,
-        headquarters: team.headquarters,
-        imageUrl: team.imageUrl,
-        imagePublicID: null,
-        division: team.division,
-        group: team.group,
-        tournament: team.tournament,
-        country: team.country,
-        city: team.city,
-        state: team.state,
-        coach: team.coach,
-        emails: team.emails,
-        address: team.address,
-        active: team.active,
-        createdAt: team.createdAt,
-        updatedAt: team.updatedAt,
-      },
+      team,
     };
   } catch (error) {
     if (error instanceof Error) {

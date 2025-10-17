@@ -41,6 +41,6 @@ export const deleteUserAction = async (userId: string): ResponseDeleteAction => 
 
   return {
     ok: true,
-    message: `¡ El usuario "${userDeleted.name}" ha sido eliminado 👍 !`
+    message: `¡ Usuario "${userDeleted.name}" eliminado correctamente 👍 !`
   };
 };
