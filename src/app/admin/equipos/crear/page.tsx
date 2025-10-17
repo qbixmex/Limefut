@@ -9,12 +9,12 @@ import { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 
-export const CreateUser = async () => {
+export const CreateTeam = async () => {
   const session = await auth();
 
   if (!session?.user.roles.includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear usuarios !';
-    redirect(`/admin/usuarios?error=${encodeURIComponent(message)}`);
+    const message = '¡ No tienes permisos administrativos para crear equipos !';
+    redirect(`/admin/equipos?error=${encodeURIComponent(message)}`);
   }
 
   return (
@@ -33,4 +33,4 @@ export const CreateUser = async () => {
   );
 };
 
-export default CreateUser;
+export default CreateTeam;

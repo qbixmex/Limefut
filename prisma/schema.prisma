@@ -63,20 +63,38 @@ model Team {
 }
 
 model Tournament {
-  id        String @id @default(uuid())
-  name      String
-  permalink String @unique
+  id          String   @id @default(uuid())
+  name        String
+  permalink   String   @unique
   description String
-  country   String
-  state     String
-  city      String
-  season    String
-  startDate DateTime @map("start_date")
-  endDate   DateTime @map("end_date")
-  active        Boolean @default(false)
+  country     String
+  state       String
+  city        String
+  season      String
+  startDate   DateTime @map("start_date")
+  endDate     DateTime @map("end_date")
+  active      Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("tournaments")
+}
+
+model Coach {
+  id            String  @id @default(uuid())
+  name          String
+  email         String  @unique
+  phone         String?
+  age           Int?
+  nationality   String?
+  imageUrl      String?
+  imagePublicID String? @map("image_public_id")
+  description   String?
+  active        Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("coaches")
 }

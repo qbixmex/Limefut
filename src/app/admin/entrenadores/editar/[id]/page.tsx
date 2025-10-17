@@ -9,23 +9,23 @@ import {
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { Session } from "next-auth";
-import { fetchTeamAction } from "../../(actions)";
-import { TeamForm } from "../../(components)/teamForm";
-import { Team } from '@/shared/interfaces';
+import { fetchCoachAction } from "../../(actions)";
+import { CoachForm } from "../../(components)/coachForm";
+import { Coach } from '@/shared/interfaces';
 
 type Props = Readonly<{
   params: Promise<{
-    permalink: string;
+    id: string;
   }>;
 }>;
 
-export const EditTeam: FC<Props> = async ({ params }) => {
+export const EditCoach: FC<Props> = async ({ params }) => {
   const session = await auth();
-  const permalink = (await params).permalink;
-  const response = await fetchTeamAction(permalink, session?.user.roles ?? null);
+  const coachId = (await params).id;
+  const response = await fetchCoachAction(coachId, session?.user.roles ?? null);
 
   if (!response.ok) {
-    redirect(`/admin/users?error=${encodeURIComponent(response.message)}`);
+    redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);
   }
 
   return (
@@ -36,9 +36,9 @@ export const EditTeam: FC<Props> = async ({ params }) => {
             <CardTitle>Editar Equipo</CardTitle>
           </CardHeader>
           <CardContent>
-            <TeamForm
+            <CoachForm
               session={session as Session}
-              team={response.team as Team}
+              coach={response.coach as Coach}
             />
           </CardContent>
         </Card>
@@ -47,4 +47,4 @@ export const EditTeam: FC<Props> = async ({ params }) => {
   );
 };
 
-export default EditTeam;
+export default EditCoach;
