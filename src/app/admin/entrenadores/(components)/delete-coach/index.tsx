@@ -25,7 +25,7 @@ type Props = Readonly<{
 }>;
 
 export const DeleteCoach: FC<Props> = ({ coachId, roles }) => {
-  const onDeleteTeam = async (teamId: string) => {
+  const onDeleteCoach = async (coachId: string) => {
     if (!roles.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar entrenadores !');
       return;
@@ -59,7 +59,7 @@ export const DeleteCoach: FC<Props> = ({ coachId, roles }) => {
           <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
           <AlertDialogAction
             className="delete-btn"
-            onClick={() => onDeleteTeam(coachId)}
+            onClick={() => onDeleteCoach(coachId)}
           >
             eliminar
           </AlertDialogAction>
