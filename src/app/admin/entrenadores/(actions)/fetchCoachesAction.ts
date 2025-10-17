@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { Coach } from "@/shared/interfaces/Coach";
+import { Coach } from "@/shared/interfaces";
 import { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{

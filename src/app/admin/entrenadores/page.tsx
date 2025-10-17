@@ -20,7 +20,6 @@ import {
   Pencil,
   InfoIcon,
   Plus,
-  Flag,
 } from "lucide-react";
 import { GiWhistle } from "react-icons/gi";
 import { Badge } from "@/components/ui/badge";
@@ -110,7 +109,7 @@ export const CoachesPage = async () => {
                           <div className="flex gap-3">
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Link href={`/admin/entrenadores/${coach.id}`}>
+                                <Link href={`/admin/entrenadores/perfil/${coach.id}`}>
                                   <Button variant="outline-info" size="icon">
                                     <InfoIcon />
                                   </Button>

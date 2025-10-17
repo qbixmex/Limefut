@@ -1,76 +1,57 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Team } from "@/shared/interfaces";
+import { Coach } from "@/shared/interfaces";
 
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
-  team: Team | null;
+  coach: Coach | null;
 }>;
 
 export const fetchCoachAction = async (
-  permalink: string,
+  coachId: string,
   userRole: string[] | null,
 ): FetchTeamResponse => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos !',
-      team: null,
+      coach: null,
     };
   }
 
   try {
-    const team = await prisma.team.findUnique({
-      where: { permalink: permalink },
+    const coach = await prisma.coach.findUnique({
+      where: { id: coachId },
     });
 
-    if (!team) {
+    if (!coach) {
       return {
         ok: false,
-        message: '¡ Equipo no encontrado ❌ !',
-        team: null,
+        message: '¡ Entrenador no encontrado ❌ !',
+        coach: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Equipo obtenido correctamente 👍 !',
-      team: {
-        id: team.id,
-        name: team.name,
-        permalink: team.permalink,
-        headquarters: team.headquarters,
-        imageUrl: team.imageUrl,
-        imagePublicID: null,
-        division: team.division,
-        group: team.group,
-        tournament: team.tournament,
-        country: team.country,
-        city: team.city,
-        state: team.state,
-        coach: team.coach,
-        emails: team.emails,
-        address: team.address,
-        active: team.active,
-        createdAt: team.createdAt,
-        updatedAt: team.updatedAt,
-      },
+      message: '¡ Entrenador obtenido correctamente 👍 !',
+      coach,
     };
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el equipo,\n¡ Revise los logs del servidor !",
-        team: null,
+        message: "No se pudo obtener el entrenador,\n¡ Revise los logs del servidor !",
+        coach: null,
       };
     }
     return {
       ok: false,
       message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
-      team: null,
+      coach: null,
     };
   }
 };
