@@ -15,7 +15,7 @@ type Options = {
   authenticatedUserId: string;
 };
 
-type EditArticleResponse = Promise<{
+type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
   user: User | null;
@@ -26,7 +26,7 @@ export const updateUserAction = async ({
   userId,
   userRoles,
   authenticatedUserId,
-}: Options): EditArticleResponse => {
+}: Options): EditResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
@@ -38,7 +38,7 @@ export const updateUserAction = async ({
   if (!userRoles.includes('admin')) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para solicitar esta petición !',
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
       user: null,
     };
   }
@@ -46,13 +46,17 @@ export const updateUserAction = async ({
   const imageFile = formData.get('image');
 
   const rawData = {
-    name: formData.get('name') as string,
+    name: formData.get('name') ?? '',
     username: formData.get('username') ?? '',
-    email: formData.get('email') as string,
-    image: (imageFile instanceof File && imageFile.size > 0) ? imageFile : undefined,
-    password: formData.get('password') as string,
-    passwordConfirmation: formData.get('passwordConfirmation') as string,
-    roles: JSON.parse(formData.get('roles') as string),
+    email: formData.get('email') ?? '',
+    image: (imageFile instanceof File && imageFile.size > 0)
+      ? imageFile
+      : null,
+    password: formData.get('password') ?? '',
+    passwordConfirmation: formData.get('passwordConfirmation') ?? '',
+    roles: formData.get('roles')
+      ? JSON.parse(formData.get('roles') as string)
+      : [],
     isActive: (formData.get('isActive') === 'true')
       ? true
       : (formData.get('isActive') === 'false')
@@ -87,30 +91,24 @@ export const updateUserAction = async ({
           };
         }
 
-        const hashedPassword = userVerified.data.password ?
-          bcrypt.hashSync(userVerified.data.password, 10)
-          : undefined;
+        let hashedPassword: string | undefined = undefined;
+
+        if (userToSave.password && userToSave.password.trim().length > 0) {
+          hashedPassword = userVerified.data.password ?
+            bcrypt.hashSync(userVerified.data.password, 10)
+            : undefined;
+        }
 
         const updatedUser = await transaction.user.update({
           where: { id: userId },
           data: {
-            name: userToSave.name,
+            name: userToSave.name as string,
             username: userToSave.username,
             email: userToSave.email as string,
-            password: hashedPassword,
             roles: userToSave.roles as Role[],
-            isActive: userToSave.isActive,
+            isActive: userToSave.isActive as boolean,
+            password: hashedPassword,
           },
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            email: true,
-            imageUrl: true,
-            imagePublicID: true,
-            roles: true,
-            isActive: true,
-          }
         });
 
         if (image) {
@@ -136,28 +134,31 @@ export const updateUserAction = async ({
               imageUrl: imageUploaded.secureUrl,
               imagePublicID: imageUploaded.publicId,
             },
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              email: true,
+              imageUrl: true,
+              imagePublicID: true,
+              roles: true,
+              isActive: true,
+              createdAt: true,
+              updatedAt: true,
+            },
           });
 
           // Update event object to return.
           updatedUser.imageUrl = imageUploaded.secureUrl;
         }
 
-
         // Revalidate Cache
         revalidatePath('/admin/usuarios');
-
+        
         return {
           ok: true,
           message: '¡ Usuario actualizado satisfactoriamente 👍 !',
-          user: {
-            id: updatedUser.id,
-            name: updatedUser.name,
-            username: updatedUser.username,
-            email: updatedUser.email,
-            imageUrl: updatedUser.imageUrl,
-            roles: updatedUser.roles,
-            isActive: updatedUser.isActive,
-          },
+          user: updatedUser,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {

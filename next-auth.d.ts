@@ -8,8 +8,9 @@ export interface User {
   username: string | null;
   emailVerified?: Date | null;
   roles: string[],
-  imageUrl: string | null,
   isActive: boolean,
+  imageUrl?: string | null,
+  imagePublicID?: string | null,
   createdAt?: Date,
   updatedAt?: Date,
 }

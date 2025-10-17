@@ -18,14 +18,14 @@ export type AdminUser = {
   imageUrl: string | null;
 };
 
-export type ResponseFetchUsers = Promise<{
+export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
   users: AdminUser[] | null;
   pagination: Pagination | null;
 }>;
 
-export const fetchUsersAction = async (options?: Options): ResponseFetchUsers => {
+export const fetchUsersAction = async (options?: Options): ResponseFetchAction => {
   let { page = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)
@@ -41,18 +41,20 @@ export const fetchUsersAction = async (options?: Options): ResponseFetchUsers =>
 
     const totalCount = await prisma.user.count();
 
+    const outputUsers = users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      imageUrl: user.imageUrl,
+      roles: user.roles,
+      isActive: user.isActive,
+    }));
+
     return {
       ok: true,
       message: '! Los usuarios fueron obtenidos satisfactoriamente 👍',
-      users: users.map((user) => ({
-        id: user.id,
-        name: user.name,
-        username: user.username,
-        email: user.email,
-        imageUrl: user.imageUrl,
-        roles: user.roles,
-        isActive: user.isActive,
-      })),
+      users: outputUsers,
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),

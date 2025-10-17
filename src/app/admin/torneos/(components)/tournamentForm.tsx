@@ -43,16 +43,16 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: tournament?.name ?? 'Torneo Jovenes Promesas',
-      permalink: tournament?.permalink ?? 'torneo-jovenes-promesas',
-      description: tournament?.description ?? 'Este torneo es para jovenes promesas del fútbol. Donde los mejores talentos se reúnen para competir y mostrar sus habilidades.',
-      country: tournament?.country ?? 'México',
-      state: tournament?.state ?? 'Jalisco',
-      city: tournament?.city ?? 'Guadalajara',
-      season: tournament?.season ?? '2023-2024',
+      name: tournament?.name ?? '',
+      permalink: tournament?.permalink ?? '',
+      description: tournament?.description ?? '',
+      country: tournament?.country ?? '',
+      state: tournament?.state ?? '',
+      city: tournament?.city ?? '',
+      season: tournament?.season ?? '',
       startDate: tournament?.startDate ?? new Date(),
       endDate: tournament?.endDate ?? new Date(),
-      active: tournament?.active ?? true,
+      active: tournament?.active ?? false,
     }
   });
 

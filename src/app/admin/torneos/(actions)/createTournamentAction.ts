@@ -19,7 +19,7 @@ export const createTournamentAction = async (
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para solicitar esta petición !',
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
       tournament: null,
     };
   }

@@ -13,7 +13,7 @@ type Options = {
   authenticatedUserId: string;
 };
 
-type EditArticleResponse = Promise<{
+type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
   team: Team | null;
@@ -24,7 +24,7 @@ export const updateTeamAction = async ({
   teamId,
   userRoles,
   authenticatedUserId,
-}: Options): EditArticleResponse => {
+}: Options): EditResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
@@ -36,7 +36,7 @@ export const updateTeamAction = async ({
   if (!userRoles.includes('admin')) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para solicitar esta petición !',
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
       team: null,
     };
   }
@@ -91,21 +91,7 @@ export const updateTeamAction = async ({
 
         const updatedTeam = await transaction.team.update({
           where: { id: teamId },
-          data: {
-            name: teamToSave.name,
-            permalink: teamToSave.permalink,
-            headquarters: teamToSave.headquarters,
-            division: teamToSave.division,
-            group: teamToSave.group,
-            tournament: teamToSave.tournament,
-            country: teamToSave.country,
-            state: teamToSave.state,
-            city: teamToSave.city,
-            coach: teamToSave.coach,
-            emails: teamToSave.emails,
-            address: teamToSave.address,
-            active: teamToSave.active,
-          },
+          data: teamToSave,
         });
 
         if (image !== null) {
@@ -144,24 +130,7 @@ export const updateTeamAction = async ({
         return {
           ok: true,
           message: '¡ El equipo fue actualizado correctamente 👍 !',
-          team: {
-            id: updatedTeam.id,
-            name: updatedTeam.name,
-            permalink: updatedTeam.permalink,
-            headquarters: updatedTeam.headquarters,
-            division: updatedTeam.division,
-            group: updatedTeam.group,
-            tournament: updatedTeam.tournament,
-            country: updatedTeam.country,
-            state: updatedTeam.state,
-            city: updatedTeam.city,
-            coach: updatedTeam.coach,
-            emails: updatedTeam.emails,
-            address: updatedTeam.address,
-            imageUrl: updatedTeam.imageUrl,
-            imagePublicID: updatedTeam.imagePublicID,
-            active: updatedTeam.active,
-          },
+          team: updatedTeam,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
@@ -176,7 +145,7 @@ export const updateTeamAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el torneo, revise los logs del servidor !',
+            message: '¡ Error al actualizar el equipo, revise los logs del servidor !',
             team: null,
           };
         }
