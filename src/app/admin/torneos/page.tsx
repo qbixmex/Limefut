@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -19,6 +20,7 @@ import {
   Pencil,
   InfoIcon,
   Plus,
+  Trophy,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -29,7 +31,7 @@ import { auth } from "@/auth.config";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-export const TeamsPage = async () => {
+export const TournamentPage = async () => {
   const response = await fetchTournamentsAction();
   const tournaments = response.tournaments;
 
@@ -63,6 +65,7 @@ export const TeamsPage = async () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="w-[100px]">Imagen</TableHead>
                       <TableHead>Nombre</TableHead>
                       <TableHead className="w-[100px]">Temporada</TableHead>
                       <TableHead className="w-[200px]">Fecha de Inicio</TableHead>
@@ -74,6 +77,25 @@ export const TeamsPage = async () => {
                   <TableBody>
                     {tournaments.map((tournament) => (
                       <TableRow key={tournament.id}>
+                        <TableCell>
+                          <Link href={`/admin/equipos/${tournament.permalink}`}>
+                            {
+                              !tournament.imageUrl ? (
+                                <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
+                                  <Trophy size={35} className="stroke-gray-400" />
+                                </figure>
+                              ) : (
+                                <Image
+                                  src={tournament.imageUrl}
+                                  alt={`${tournament.name} picture`}
+                                  width={75}
+                                  height={75}
+                                  className="size-18 rounded-xl object-cover"
+                                />
+                              )
+                            }
+                          </Link>
+                        </TableCell>
                         <TableCell>{tournament.name}</TableCell>
                         <TableCell>{tournament.season}</TableCell>
                         <TableCell>
@@ -136,4 +158,4 @@ export const TeamsPage = async () => {
   );
 };
 
-export default TeamsPage;
+export default TournamentPage;
