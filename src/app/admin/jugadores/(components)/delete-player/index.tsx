@@ -16,21 +16,25 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { deleteCoachAction } from "../../(actions)";
+import { deletePlayerAction } from "../../(actions)";
 import "./styles.css";
 
 type Props = Readonly<{
-  coachId: string;
+  playerId: string;
   roles: string[];
 }>;
 
-export const DeleteCoach: FC<Props> = ({ coachId, roles }) => {
-  const onDeleteCoach = async (coachId: string) => {
+export const DeletePlayer: FC<Props> = ({ playerId, roles }) => {
+  const onDeletePlayer = async (playerId: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar entrenadores !');
+      toast.error('¡ No tienes permisos administrativos para eliminar jugadores !');
       return;
     }
-    const response = await deleteCoachAction(coachId);
+    const response = await deletePlayerAction(playerId);
+    if (!response.ok) {
+      toast.error(response.message);
+      return;
+    }
     toast.success(response.message);
   };
 
@@ -50,16 +54,16 @@ export const DeleteCoach: FC<Props> = ({ coachId, roles }) => {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿ Estas seguro de eliminar el entrenador ?</AlertDialogTitle>
+          <AlertDialogTitle>¿ Estas seguro de eliminar el jugador ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción no se puede deshacer y el entrenador será eliminado de la base de datos permanentemente.
+            Esta acción no se puede deshacer y el jugador será eliminado de la base de datos permanentemente.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
           <AlertDialogAction
             className="delete-btn"
-            onClick={() => onDeleteCoach(coachId)}
+            onClick={() => onDeletePlayer(playerId)}
           >
             eliminar
           </AlertDialogAction>
@@ -69,4 +73,4 @@ export const DeleteCoach: FC<Props> = ({ coachId, roles }) => {
   );
 };
 
-export default DeleteCoach;
+export default DeletePlayer;

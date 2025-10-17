@@ -9,41 +9,41 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deletePlayerAction = async (coachId: string): ResponseDeleteAction => {
-  const coach = await prisma.coach.findUnique({
-    where: { id: coachId },
+export const deletePlayerAction = async (playerId: string): ResponseDeleteAction => {
+  const player = await prisma.player.findUnique({
+    where: { id: playerId },
     select: {
       imagePublicID: true,
       name: true,
     },
   });
 
-  if (!coach) {
+  if (!player) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el entrenador, quizás fue eliminado ó no existe !',
+      message: '¡ No se puede eliminar el jugador, quizás fue eliminado ó no existe !',
     };
   }
 
-  await prisma.coach.delete({
-    where: { id: coachId },
+  await prisma.player.delete({
+    where: { id: playerId },
   });
 
   // Delete image from cloudinary.
-  if (coach.imagePublicID) {
-    if (coach.imagePublicID) {
-      const response = await deleteImage(coach.imagePublicID);
+  if (player.imagePublicID) {
+    if (player.imagePublicID) {
+      const response = await deleteImage(player.imagePublicID);
       if (!response.ok) {
         throw 'Error al eliminar la imagen de cloudinary';
       }
     }
   }
 
-  revalidatePath('/entrenadores');
-  revalidatePath('/admin/entrenadores');
+  revalidatePath('/jugadores');
+  revalidatePath('/admin/jugadores');
 
   return {
     ok: true,
-    message: `¡ El entrenador "${coach.name}" ha sido eliminado correctamente 👍 !`
+    message: `¡ El jugador "${player.name}" ha sido eliminado correctamente 👍 !`
   };
 };

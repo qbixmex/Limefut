@@ -24,7 +24,7 @@ import {
 import { SoccerPlayer } from "@/shared/components/icons";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-// import { DeleteCoach } from "./(components)/delete-coach";
+import { DeletePlayer } from "./(components)/delete-player";
 import { fetchPlayersAction } from "./(actions)";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { auth } from "@/auth.config";
@@ -127,10 +127,10 @@ export const CoachesPage = async () => {
                                 <p>editar</p>
                               </TooltipContent>
                             </Tooltip>
-                            {/* <DeleteCoach
-                              coachId={player.id}
+                            <DeletePlayer
+                              playerId={player.id}
                               roles={session?.user.roles as string[]}
-                            /> */}
+                            />
                           </div>
                         </TableCell>
                       </TableRow>
