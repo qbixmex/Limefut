@@ -4,12 +4,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CoachForm } from "../(components)/coachForm";
+import { PlayerForm } from "../(components)/playerForm";
 import { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 
-export const CreateCoach = async () => {
+const CreatePlayerPage = async () => {
   const session = await auth();
 
   if (!session?.user.roles.includes('admin')) {
@@ -22,10 +22,10 @@ export const CreateCoach = async () => {
       <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
         <Card className="w-full shadow-none bg-neutral-100 dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800">
           <CardHeader className="flex items-center justify-between">
-            <CardTitle>Crear Entrenador</CardTitle>
+            <CardTitle>Crear Jugador</CardTitle>
           </CardHeader>
           <CardContent>
-            <CoachForm session={session as Session} />
+            <PlayerForm session={session as Session} />
           </CardContent>
         </Card>
       </div>
@@ -33,4 +33,4 @@ export const CreateCoach = async () => {
   );
 };
 
-export default CreateCoach;
+export default CreatePlayerPage;

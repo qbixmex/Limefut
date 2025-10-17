@@ -12,38 +12,38 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from "@/components/ui/textarea";
 import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { createCoachSchema, editCoachSchema } from '@/shared/schemas';
+import { createPlayerSchema, editPlayerSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from 'next-auth';
 import { toast } from 'sonner';
-import type { Coach } from '@/shared/interfaces';
-import { createCoachAction, updateCoachAction } from '../(actions)';
+import type { Player } from '@/shared/interfaces';
+import { createPlayerAction, updatePlayerAction } from '../(actions)';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { LoaderCircle } from 'lucide-react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 type Props = Readonly<{
   session: Session;
-  coach?: Coach;
+  player?: Player;
 }>;
 
-export const CoachForm: FC<Props> = ({ session, coach }) => {
+export const PlayerForm: FC<Props> = ({ session, player }) => {
   const route = useRouter();
-  const formSchema = !coach ? createCoachSchema : editCoachSchema;
+  const formSchema = !player ? createPlayerSchema : editPlayerSchema;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: coach?.name ?? '',
-      email: coach?.email ?? '',
-      phone: coach?.phone ?? '',
-      age: coach?.age ?? 0,
-      nationality: coach?.nationality ?? '',
-      description: coach?.description ?? '',
-      active: coach?.active ?? false,
+      name: player?.name ?? 'Armando Pérez',
+      email: player?.email ?? 'armandito@gmail.com',
+      phone: player?.phone ?? '333-555-1234',
+      birthday: player?.birthday ?? new Date(2000, 0, 1),
+      nationality: player?.nationality ?? 'Mexicana',
+      active: player?.active ?? false,
     }
   });
 
@@ -53,9 +53,8 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
     formData.append('name', data.name as string);
     formData.append('email', data.email as string);
     formData.append('phone', data.phone as string);
-    formData.append('age', (data.age as number).toString());
     formData.append('nationality', data.nationality as string);
-    formData.append('description', data.description as string);
+    formData.append('birthday', (data.birthday as Date).toISOString());
 
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
@@ -63,9 +62,9 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
 
     formData.append('active', String(data.active ?? false));
 
-    // Create team
-    if (!coach) {
-      const response = await createCoachAction(
+    // Create player
+    if (!player) {
+      const response = await createPlayerAction(
         formData,
         session?.user.roles ?? null
       );
@@ -78,16 +77,17 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/entrenadores");
+        route.replace("/admin/jugadores");
         return;
       }
       return;
     }
 
-    if (coach) {
-      const response = await updateCoachAction({
+    // Update player
+    if (player) {
+      const response = await updatePlayerAction({
         formData,
-        coachId: coach.id,
+        coachId: player.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });
@@ -99,7 +99,7 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/entrenadores");
+        route.replace("/admin/jugadores");
         return;
       }
       return;
@@ -149,7 +149,7 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
           </div>
         </div>
 
-        {/* Phone and Age */}
+        {/* Phone and Nationality */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
@@ -165,6 +165,86 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
                 </FormItem>
               )}
             />
+          </div>
+          <div className="w-full lg:w-1/2">
+            <FormField
+              control={form.control}
+              name="nationality"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nacionalidad</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} value={field.value ?? ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        {/* Nationality and Description */}
+        <div className="flex flex-col gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2">
+            <div className="flex flex-col gap-2">
+              <FormLabel>Fecha de Nacimiento</FormLabel>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  placeholder="Día"
+                  min={1}
+                  max={31}
+                  value={form.watch('birthday') ? format(form.watch('birthday') as Date, 'd') : ''}
+                  onChange={(e) => {
+                    const currentDate = form.watch('birthday') as Date || new Date();
+                    const newDate = new Date(currentDate);
+                    newDate.setDate(parseInt(e.target.value) || 1);
+                    form.setValue('birthday', newDate);
+                  }}
+                  className="w-20"
+                />
+                <Input
+                  type="number"
+                  placeholder="Mes"
+                  min={1}
+                  max={12}
+                  value={form.watch('birthday') ? format(form.watch('birthday') as Date, 'M') : ''}
+                  onChange={(e) => {
+                    const currentDate = form.watch('birthday') as Date || new Date();
+                    const newDate = new Date(currentDate);
+                    newDate.setMonth((parseInt(e.target.value) || 1) - 1);
+                    form.setValue('birthday', newDate);
+                  }}
+                  className="w-20"
+                />
+                <Input
+                  type="number"
+                  placeholder="Año"
+                  min={2000}
+                  max={new Date().getFullYear()}
+                  value={form.watch('birthday') ? format(form.watch('birthday') as Date, 'yyyy') : ''}
+                  onChange={(e) => {
+                    const currentDate = form.watch('birthday') as Date || new Date();
+                    const newDate = new Date(currentDate);
+                    newDate.setFullYear(parseInt(e.target.value) || 2000);
+                    form.setValue('birthday', newDate);
+                  }}
+                  className="w-24"
+                />
+                <FormField
+                  control={form.control}
+                  name="birthday"
+                  render={() => (
+                    <FormItem>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <span className="text-sm text-gray-400 italic">
+                  {format(form.watch('birthday') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
+                </span>
+              </div>
+            </div>
           </div>
           <div className="w-full lg:w-1/2">
             <FormField
@@ -189,74 +269,12 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
           </div>
         </div>
 
-        {/* Nationality and Description */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="nationality"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nacionalidad</FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Descripción</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      value={field.value ?? ''}
-                      className="resize-none"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
         {/* Age and Active */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             {/* Keep Empty */}
           </div>
           <div className="w-full lg:w-1/2 flex justify-end gap-5">
-            <FormField
-              control={form.control}
-              name="age"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center gap-5">
-                    <Label htmlFor="age">Edad</Label>
-                    <FormControl>
-                      <Input
-                        id="age"
-                        type="number"
-                        {...field}
-                        min={0}
-                        max={100}
-                        className="w-[100px]"
-                        value={field.value ?? 0}
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
-                      />
-                    </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="active"
@@ -300,7 +318,7 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
                 <LoaderCircle className="size-4 animate-spin" />
               </span>
             ) : (
-              !coach ? 'crear' : 'actualizar'
+              !player ? 'crear' : 'actualizar'
             )}
           </Button>
         </div>
@@ -310,4 +328,4 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
 
 };
 
-export default CoachForm;
+export default PlayerForm;

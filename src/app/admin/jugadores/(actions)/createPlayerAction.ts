@@ -5,12 +5,12 @@ import { createCoachSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "@/shared/actions";
 import { CloudinaryResponse } from "@/shared/interfaces";
-import type { Coach } from "@/shared/interfaces";
+import type { Player } from "@/shared/interfaces";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
   message: string;
-  coach: Coach | null;
+  player: Player | null;
 }>;
 
 export const createPlayerAction = async (
@@ -21,7 +21,7 @@ export const createPlayerAction = async (
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      coach: null,
+      player: null,
     };
   }
 
@@ -29,9 +29,8 @@ export const createPlayerAction = async (
     name: formData.get('name') ?? '',
     email: formData.get('email') ?? '',
     phone: formData.get('phone') as string ?? undefined,
-    age: parseInt(formData.get('age') as string) ?? 0,
     nationality: formData.get('nationality') ?? undefined,
-    description: formData.get('description') ?? undefined,
+    birthday: formData.get('birthday') ?? undefined,
     image: formData.get('image') as File,
     active: (formData.get('active') === 'true')
       ? true
@@ -40,23 +39,23 @@ export const createPlayerAction = async (
         : false,
   };
 
-  const coachVerified = createCoachSchema.safeParse(rawData);
+  const playerVerified = createCoachSchema.safeParse(rawData);
 
-  if (!coachVerified.success) {
+  if (!playerVerified.success) {
     return {
       ok: false,
-      message: coachVerified.error.message,
-      coach: null,
+      message: playerVerified.error.message,
+      player: null,
     };
   }
 
-  const { image, ...teamToSave } = coachVerified.data;
+  const { image, ...playerToSave } = playerVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
   let cloudinaryResponse: CloudinaryResponse | null = null;
 
   if (image) {
-    cloudinaryResponse = await uploadImage(image!, 'coaches');
+    cloudinaryResponse = await uploadImage(image!, 'players');
     if (!cloudinaryResponse) {
       throw new Error('Error subiendo imagen a cloudinary');
     }
@@ -64,9 +63,9 @@ export const createPlayerAction = async (
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const createdCoach = await transaction.coach.create({
+      const createdPlayer = await transaction.player.create({
         data: {
-          ...teamToSave,
+          ...playerToSave,
           imageUrl: cloudinaryResponse?.secureUrl ?? null,
           imagePublicID: cloudinaryResponse?.publicId ?? null,
         }
@@ -74,13 +73,13 @@ export const createPlayerAction = async (
 
       return {
         ok: true,
-        message: '¡ Entrenador creado correctamente 👍 !',
-        coach: createdCoach,
+        message: '¡ Jugador creado correctamente 👍 !',
+        player: createdPlayer,
       };
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/entrenadores');
+    revalidatePath('/admin/jugadores');
 
     return prismaTransaction;
   } catch (error) {
@@ -90,21 +89,21 @@ export const createPlayerAction = async (
         return {
           ok: false,
           message: `¡ El campo "${fieldError}", está duplicado !`,
-          coach: null,
+          player: null,
         };
       }
 
       return {
         ok: false,
-        message: '¡ Error al crear el entrenador, revise los logs del servidor !',
-        coach: null,
+        message: '¡ Error al crear el jugador, revise los logs del servidor !',
+        player: null,
       };
     }
     console.log(error);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      coach: null,
+      player: null,
     };
   }
 };

@@ -9,9 +9,9 @@ import {
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { Session } from "next-auth";
-import { fetchCoachAction } from "../../(actions)";
-import { CoachForm } from "../../(components)/coachForm";
-import { Coach } from '@/shared/interfaces';
+import { fetchPlayerAction } from "../../(actions)";
+import { CoachForm } from "../../(components)/playerForm";
+import { Player } from '@/shared/interfaces';
 
 type Props = Readonly<{
   params: Promise<{
@@ -22,10 +22,10 @@ type Props = Readonly<{
 export const EditCoach: FC<Props> = async ({ params }) => {
   const session = await auth();
   const coachId = (await params).id;
-  const response = await fetchCoachAction(coachId, session?.user.roles ?? null);
+  const response = await fetchPlayerAction(coachId, session?.user.roles ?? null);
 
   if (!response.ok) {
-    redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);
+    redirect(`/admin/jugadores?error=${encodeURIComponent(response.message)}`);
   }
 
   return (
@@ -33,12 +33,12 @@ export const EditCoach: FC<Props> = async ({ params }) => {
       <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
         <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
           <CardHeader className="flex items-center justify-between">
-            <CardTitle>Editar Equipo</CardTitle>
+            <CardTitle>Editar Jugador</CardTitle>
           </CardHeader>
           <CardContent>
             <CoachForm
               session={session as Session}
-              coach={response.coach as Coach}
+              player={response.player as Player}
             />
           </CardContent>
         </Card>
