@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { deleteImage } from "@/shared/actions";
 import { revalidatePath } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
@@ -9,12 +10,15 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteTournamentAction = async (teamId: string): ResponseDeleteAction => {
-  const teamDeleted = await prisma.tournament.findUnique({
+  const tournament = await prisma.tournament.findUnique({
     where: { id: teamId },
-    select: { name: true },
+    select: {
+      name: true,
+      imagePublicID: true,
+    },
   });
 
-  if (!teamDeleted) {
+  if (!tournament) {
     return {
       ok: false,
       message: '¡ No se puede eliminar el torneo, quizás fue eliminado ó no existe !',
@@ -25,11 +29,19 @@ export const deleteTournamentAction = async (teamId: string): ResponseDeleteActi
     where: { id: teamId },
   });
 
+  // Delete image from cloudinary.
+  if (tournament.imagePublicID) {
+    const response = await deleteImage(tournament.imagePublicID);
+    if (!response.ok) {
+      throw 'Error al eliminar la imagen de cloudinary';
+    }
+  }
+
   revalidatePath('/torneos');
   revalidatePath('/admin/torneos');
 
   return {
     ok: true,
-    message: `¡ El torneo "${teamDeleted.name}" ha sido eliminado correctamente 👍 !`
+    message: `¡ El torneo "${tournament.name}" ha sido eliminado correctamente 👍 !`
   };
 };

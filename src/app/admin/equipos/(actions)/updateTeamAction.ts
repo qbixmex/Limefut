@@ -41,8 +41,6 @@ export const updateTeamAction = async ({
     };
   }
 
-  const imageFile = formData.get('image');
-
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
@@ -56,7 +54,7 @@ export const updateTeamAction = async ({
     coach: formData.get('coach') as string,
     emails: JSON.parse(formData.get('emails') as string),
     address: formData.get('address') as string,
-    image: imageFile,
+    image: formData.get('image'),
     active: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
@@ -139,7 +137,6 @@ export const updateTeamAction = async ({
           updatedTeam.imageUrl = imageUploaded.secureUrl;
           updatedTeam.imagePublicID = imageUploaded.publicId;
         }
-
 
         // Revalidate Cache
         revalidatePath('/admin/equipos');

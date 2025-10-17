@@ -43,16 +43,16 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: tournament?.name ?? '',
-      permalink: tournament?.permalink ?? '',
-      description: tournament?.description ?? '',
-      country: tournament?.country ?? '',
-      state: tournament?.state ?? '',
-      city: tournament?.city ?? '',
-      season: tournament?.season ?? '',
+      name: tournament?.name ?? 'Torneo Jovenes Promesas',
+      permalink: tournament?.permalink ?? 'torneo-jovenes-promesas',
+      description: tournament?.description ?? 'Este torneo es para jovenes promesas del fútbol. Donde los mejores talentos se reúnen para competir y mostrar sus habilidades.',
+      country: tournament?.country ?? 'México',
+      state: tournament?.state ?? 'Jalisco',
+      city: tournament?.city ?? 'Guadalajara',
+      season: tournament?.season ?? '2023-2024',
       startDate: tournament?.startDate ?? new Date(),
       endDate: tournament?.endDate ?? new Date(),
-      active: tournament?.active ?? false,
+      active: tournament?.active ?? true,
     }
   });
 
@@ -61,6 +61,11 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
+
+    if (data.image && typeof data.image === 'object') {
+      formData.append("image", data.image);
+    }
+
     formData.append('description', data.description as string);
     formData.append('country', data.country as string);
     formData.append('state', data.state as string);
@@ -234,9 +239,53 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
           </div>
         </div>
 
-        {/* Dates and Description */}
+        {/* Image and Description */}
         <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2 flex items-center gap-5">
+          <div className="w-full lg:w-1/2">
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Imagen</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        field.onChange(file);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-full lg:w-1/2">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Descripción</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      value={field.value ?? ''}
+                      className="resize-none"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        {/* Dates and Active */}
+        <div className="flex flex-col gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2 flex items-center">
             <div className="w-1/2 flex items-center gap-5">
               <Popover open={openStartDate} onOpenChange={setStartDate}>
                 <PopoverTrigger asChild>
@@ -299,32 +348,6 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                 {format(form.getValues('endDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
               </span>
             </div>
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Descripción</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      value={field.value ?? ''}
-                      className="resize-none"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Active */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            {/* Empty for alignment */}
           </div>
           <div className="w-full lg:w-1/2 flex items-center gap-5">
             <FormField

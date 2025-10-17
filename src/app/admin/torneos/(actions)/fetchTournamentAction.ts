@@ -37,21 +37,7 @@ export const fetchTournamentAction = async (
     return {
       ok: true,
       message: '¡ Torneo obtenido correctamente 👍 !',
-      tournament: {
-        id: tournament.id,
-        name: tournament.name,
-        permalink: tournament.permalink,
-        description: tournament.description,
-        country: tournament.country,
-        state: tournament.state,
-        city: tournament.city,
-        season: tournament.season,
-        startDate: tournament.startDate,
-        endDate: tournament.endDate,
-        active: tournament.active,
-        createdAt: tournament.createdAt,
-        updatedAt: tournament.updatedAt,
-      },
+      tournament,
     };
   } catch (error) {
     if (error instanceof Error) {

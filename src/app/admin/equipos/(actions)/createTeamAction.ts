@@ -32,7 +32,6 @@ export const createTeamAction = async (
     emails: JSON.parse(formData.get('emails') as string),
     address: formData.get('address') as string,
     image: formData.get('image') as File,
-
     isActive: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
