@@ -80,12 +80,12 @@ export const navMain: NavItem[] = [
     subItems: [
       {
         label: "Lista",
-        url: "#",
+        url: "/admin/jugadores",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "#",
+        url: "/admin/jugadores/crear",
         icon: PlusIcon,
       },
     ],
