@@ -9,7 +9,7 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => {
+export const deleteCoachAction = async (teamId: string): ResponseDeleteAction => {
   const teamDeleted = await prisma.team.findUnique({
     where: { id: teamId },
     select: {

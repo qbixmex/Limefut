@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { uploadImage } from "@/shared/actions";
 import { CloudinaryResponse } from "@/shared/interfaces";
 
-export const createTeamAction = async (
+export const createCoachAction = async (
   formData: FormData,
   userRole: string[] | null,
 ) => {

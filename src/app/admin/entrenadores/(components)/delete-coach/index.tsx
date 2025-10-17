@@ -16,21 +16,21 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { deleteTeamAction } from "../../(actions)";
+import { deleteCoachAction } from "../../(actions)";
 import "./styles.css";
 
 type Props = Readonly<{
-  teamId: string;
+  coachId: string;
   roles: string[];
 }>;
 
-export const DeleteTeam: FC<Props> = ({ teamId, roles }) => {
+export const DeleteCoach: FC<Props> = ({ coachId, roles }) => {
   const onDeleteTeam = async (teamId: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar equipos !');
+      toast.error('¡ No tienes permisos administrativos para eliminar entrenadores !');
       return;
     }
-    const response = await deleteTeamAction(teamId);
+    const response = await deleteCoachAction(coachId);
     toast.success(response.message);
   };
 
@@ -50,16 +50,16 @@ export const DeleteTeam: FC<Props> = ({ teamId, roles }) => {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿ Estas seguro de eliminar el equipo ?</AlertDialogTitle>
+          <AlertDialogTitle>¿ Estas seguro de eliminar el entrenador ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción no se puede deshacer y el equipo será eliminado de la base de datos permanentemente.
+            Esta acción no se puede deshacer y el entrenador será eliminado de la base de datos permanentemente.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
           <AlertDialogAction
             className="delete-btn"
-            onClick={() => onDeleteTeam(teamId)}
+            onClick={() => onDeleteTeam(coachId)}
           >
             eliminar
           </AlertDialogAction>
@@ -69,4 +69,4 @@ export const DeleteTeam: FC<Props> = ({ teamId, roles }) => {
   );
 };
 
-export default DeleteTeam;
+export default DeleteCoach;

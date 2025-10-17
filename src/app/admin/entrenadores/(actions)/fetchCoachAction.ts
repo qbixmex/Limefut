@@ -9,7 +9,7 @@ type FetchTeamResponse = Promise<{
   team: Team | null;
 }>;
 
-export const fetchTeamAction = async (
+export const fetchCoachAction = async (
   permalink: string,
   userRole: string[] | null,
 ): FetchTeamResponse => {
