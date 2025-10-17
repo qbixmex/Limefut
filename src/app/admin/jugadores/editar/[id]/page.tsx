@@ -10,7 +10,7 @@ import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { Session } from "next-auth";
 import { fetchPlayerAction } from "../../(actions)";
-import { CoachForm } from "../../(components)/playerForm";
+import { PlayerForm } from "../../(components)/playerForm";
 import { Player } from '@/shared/interfaces';
 
 type Props = Readonly<{
@@ -36,7 +36,7 @@ export const EditCoach: FC<Props> = async ({ params }) => {
             <CardTitle>Editar Jugador</CardTitle>
           </CardHeader>
           <CardContent>
-            <CoachForm
+            <PlayerForm
               session={session as Session}
               player={response.player as Player}
             />

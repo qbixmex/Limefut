@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { createCoachSchema } from "@/shared/schemas";
+import { createPlayerSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "@/shared/actions";
 import { CloudinaryResponse } from "@/shared/interfaces";
@@ -30,7 +30,7 @@ export const createPlayerAction = async (
     email: formData.get('email') ?? '',
     phone: formData.get('phone') as string ?? undefined,
     nationality: formData.get('nationality') ?? undefined,
-    birthday: formData.get('birthday') ?? undefined,
+    birthday: new Date(formData.get('birthday') as string) ?? undefined,
     image: formData.get('image') as File,
     active: (formData.get('active') === 'true')
       ? true
@@ -39,7 +39,7 @@ export const createPlayerAction = async (
         : false,
   };
 
-  const playerVerified = createCoachSchema.safeParse(rawData);
+  const playerVerified = createPlayerSchema.safeParse(rawData);
 
   if (!playerVerified.success) {
     return {

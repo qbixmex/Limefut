@@ -38,11 +38,11 @@ export const PlayerForm: FC<Props> = ({ session, player }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: player?.name ?? 'Armando Pérez',
-      email: player?.email ?? 'armandito@gmail.com',
-      phone: player?.phone ?? '333-555-1234',
+      name: player?.name ?? '',
+      email: player?.email ?? '',
+      phone: player?.phone ?? '',
       birthday: player?.birthday ?? new Date(2000, 0, 1),
-      nationality: player?.nationality ?? 'Mexicana',
+      nationality: player?.nationality ?? '',
       active: player?.active ?? false,
     }
   });
@@ -87,7 +87,7 @@ export const PlayerForm: FC<Props> = ({ session, player }) => {
     if (player) {
       const response = await updatePlayerAction({
         formData,
-        coachId: player.id,
+        playerId: player.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });

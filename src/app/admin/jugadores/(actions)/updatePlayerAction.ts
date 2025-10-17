@@ -3,12 +3,12 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
-import { editCoachSchema } from '@//shared/schemas';
-import { Coach } from '@/shared/interfaces';
+import { editPlayerSchema } from '@//shared/schemas';
+import { Player } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;
-  coachId: string;
+  playerId: string;
   userRoles: string[];
   authenticatedUserId: string;
 };
@@ -16,12 +16,12 @@ type Options = {
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
-  coach: Coach | null;
+  player: Player | null;
 }>;
 
 export const updatePlayerAction = async ({
   formData,
-  coachId,
+  playerId,
   userRoles,
   authenticatedUserId,
 }: Options): EditResponseAction => {
@@ -29,7 +29,7 @@ export const updatePlayerAction = async ({
     return {
       ok: false,
       message: '¡ Usuario no autenticado !',
-      coach: null,
+      player: null,
     };
   }
 
@@ -37,7 +37,7 @@ export const updatePlayerAction = async ({
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      coach: null,
+      player: null,
     };
   }
 
@@ -47,9 +47,8 @@ export const updatePlayerAction = async ({
     name: formData.get('name') ?? '',
     email: formData.get('email') ?? '',
     phone: formData.get('phone') as string ?? undefined,
-    age: parseInt(formData.get('age') as string) ?? 0,
+    birthday: new Date(formData.get('birthday') as string) ?? undefined,
     nationality: formData.get('nationality') ?? undefined,
-    description: formData.get('description') ?? undefined,
     image: imageFile,
     active: (formData.get('active') === 'true')
       ? true
@@ -58,42 +57,42 @@ export const updatePlayerAction = async ({
         : false,
   };
 
-  const coachVerified = editCoachSchema.safeParse(rawData);
+  const playerVerified = editPlayerSchema.safeParse(rawData);
 
-  if (!coachVerified.success) {
+  if (!playerVerified.success) {
     return {
       ok: false,
-      message: coachVerified.error.message,
-      coach: null,
+      message: playerVerified.error.message,
+      player: null,
     };
   }
-
-  const { image, ...coachToSave } = coachVerified.data;
+  
+  const { image, ...playerToSave } = playerVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
-        const isCoachExists = await transaction.coach.count({
-          where: { id: coachId },
+        const isPlayerExists = await transaction.player.count({
+          where: { id: playerId },
         });
 
-        if (!isCoachExists) {
+        if (!isPlayerExists) {
           return {
             ok: false,
-            message: '¡ El entrenador no existe o ha sido eliminado !',
-            coach: null,
+            message: '¡ El jugador no existe o ha sido eliminado !',
+            player: null,
           };
         }
 
-        const updatedCoach = await transaction.coach.update({
-          where: { id: coachId },
-          data: coachToSave,
+        const updatedPlayer = await transaction.player.update({
+          where: { id: playerId },
+          data: playerToSave,
         });
 
         if (image) {
           // Delete previous image from cloudinary.
-          if (updatedCoach.imagePublicID) {
-            const cloudinaryResponse = await deleteImage(updatedCoach.imagePublicID);
+          if (updatedPlayer.imagePublicID) {
+            const cloudinaryResponse = await deleteImage(updatedPlayer.imagePublicID);
             if (!cloudinaryResponse.ok) {
               throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
             }
@@ -107,8 +106,8 @@ export const updatePlayerAction = async ({
           }
 
           // Update image data to database.
-          await transaction.coach.update({
-            where: { id: coachId },
+          await transaction.player.update({
+            where: { id: playerId },
             data: {
               imageUrl: imageUploaded.secureUrl,
               imagePublicID: imageUploaded.publicId,
@@ -116,18 +115,17 @@ export const updatePlayerAction = async ({
           });
 
           // Update event object to return.
-          updatedCoach.imageUrl = imageUploaded.secureUrl;
-          updatedCoach.imagePublicID = imageUploaded.publicId;
+          updatedPlayer.imageUrl = imageUploaded.secureUrl;
+          updatedPlayer.imagePublicID = imageUploaded.publicId;
         }
 
-
         // Revalidate Cache
-        revalidatePath('/admin/entrenadores');
+        revalidatePath('/admin/jugadores');
 
         return {
           ok: true,
-          message: '¡ El entrenador fue actualizado correctamente 👍 !',
-          coach: updatedCoach,
+          message: '¡ El jugador fue actualizado correctamente 👍 !',
+          player: updatedPlayer,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
@@ -136,20 +134,20 @@ export const updatePlayerAction = async ({
             return {
               ok: false,
               message: `¡ El campo "${fieldError}", está duplicado !`,
-              coach: null,
+              player: null,
             };
           }
           console.log(error.message);
           return {
             ok: false,
-            message: '¡ Error al actualizar el entrenador, revise los logs del servidor !',
-            coach: null,
+            message: '¡ Error al actualizar el jugador, revise los logs del servidor !',
+            player: null,
           };
         }
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
-          coach: null,
+          player: null,
         };
       }
     });
@@ -160,7 +158,7 @@ export const updatePlayerAction = async ({
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      coach: null,
+      player: null,
     };
   }
 };

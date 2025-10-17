@@ -81,7 +81,13 @@ export const PlayerPage: FC<Props> = async ({ params }) => {
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Fecha de Nacimiento</TableHead>
-                    <TableCell>{player.birthday?.toISOString() ?? 'No Proporcionado'}</TableCell>
+                    <TableCell>
+                      {
+                        player.birthday 
+                          ? format(player.birthday as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                          : 'No Proporcionado'
+                      } 
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Nacionalidad</TableHead>
