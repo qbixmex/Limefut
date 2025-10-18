@@ -1,0 +1,38 @@
+import { TeamSeed } from "@/shared/interfaces/Team";
+
+export const teams: TeamSeed[] = [
+  {
+    name: 'Altamira Búfalos',
+    permalink: 'altamira-bufalos',
+    headquarters: 'Colegio Altamira',
+    imageUrl: null,
+    imagePublicID: null,
+    division: '2018',
+    group: '9 vs 9',
+    tournament: 'Torneo Septiembre - Diciembre 2025',
+    country: 'México',
+    city: 'Guadalajara',
+    state: 'Jalisco',
+    coach: 'Rafael',
+    emails: ['rafael@gmail.com', 'buffalofutbolclub@gmail.com'],
+    address: 'Avenida Los Robles 734',
+    active: true,
+  },
+  {
+    name: 'Bari FC',
+    permalink: 'bari-fc',
+    headquarters: 'Colegio Enrique de OSSO',
+    imageUrl: null,
+    imagePublicID: null,
+    division: '2018',
+    group: '9 vs 9',
+    tournament: 'Torneo Septiembre - Diciembre 2025',
+    country: 'México',
+    city: 'Guadalajara',
+    state: 'Jalisco',
+    coach: 'Rafael',
+    emails: ['rafael@gmail.com', 'barifutbolclub@gmail.com'],
+    address: 'Avenida Los Robles 734',
+    active: true,
+  },
+];

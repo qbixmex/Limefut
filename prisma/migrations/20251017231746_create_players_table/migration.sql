@@ -9,8 +9,8 @@ CREATE TABLE "players" (
     "image_url" TEXT,
     "image_public_id" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "players_pkey" PRIMARY KEY ("id")
 );

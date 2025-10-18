@@ -1,5 +1,6 @@
-export * from "./user";
-export * from "./team";
-export * from "./tournament";
-export * from "./coach";
-export * from "./player";
+export { createUserSchema, editUserSchema } from "./user";
+export { createTeamSchema, editTeamSchema } from "./team";
+export { createTournamentSchema, editTournamentSchema } from "./tournament";
+export { createCoachSchema, editCoachSchema } from "./coach";
+export { createPlayerSchema, editPlayerSchema } from "./player";
+export { createMatchSchema, editMatchSchema } from "./match";
