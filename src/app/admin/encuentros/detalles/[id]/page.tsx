@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Minus, Pencil } from "lucide-react";
-import { Badge } from "@/root/src/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
@@ -110,7 +110,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/entrenadores/editar/${match.id}`}>
+                  <Link href={`/admin/encuentros/editar/${match.id}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>
