@@ -130,15 +130,17 @@ enum Status {
 }
 
 model Match {
-  id        String   @id @default(uuid())
-  local     String
-  visitor   String
-  place     String
-  matchDate DateTime @map("match_date")
-  week      Int
-  referee   String
+  id           String   @id @default(uuid())
+  local        String
+  visitor      String
+  localScore   Int?     @default(0) @map("local_score")
+  visitorScore Int?     @default(0) @map("visitor_score")
+  place        String
+  matchDate    DateTime @map("match_date")
+  week         Int
+  referee      String
 
-  status Status[] @default([scheduled])
+  status Status @default(scheduled)
 
   // Relations
   tournamentId String     @map("tournament_id")
