@@ -8,13 +8,13 @@ CREATE TABLE "users" (
     "username" TEXT,
     "email" TEXT NOT NULL,
     "email_verified" TIMESTAMP(3),
-    "imageUrl" TEXT,
-    "imagePublicID" TEXT,
+    "image_url" TEXT,
+    "image_public_id" TEXT,
     "password" TEXT NOT NULL,
     "roles" "Role"[] DEFAULT ARRAY['user']::"Role"[],
-    "isActive" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "is_active" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

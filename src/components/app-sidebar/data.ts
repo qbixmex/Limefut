@@ -116,12 +116,12 @@ export const navMain: NavItem[] = [
     subItems: [
       {
         label: "Lista",
-        url: "#",
+        url: "/admin/encuentros",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "#",
+        url: "/admin/encuentros/crear",
         icon: PlusIcon,
       },
     ],
