@@ -16,8 +16,8 @@ CREATE TABLE "teams" (
     "emails" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "address" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "teams_pkey" PRIMARY KEY ("id")
 );

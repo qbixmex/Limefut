@@ -1,5 +1,4 @@
 export interface Team {
-  id: string;
   name: string;
   permalink: string;
   headquarters: string;
