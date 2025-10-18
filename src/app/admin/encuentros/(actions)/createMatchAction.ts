@@ -1,16 +1,15 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { createPlayerSchema } from "@/shared/schemas";
+import { createMatchSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
-import { uploadImage } from "@/shared/actions";
-import { CloudinaryResponse } from "@/shared/interfaces";
-import type { Player } from "@/shared/interfaces";
+import type { Match } from "@/shared/interfaces";
+import { MATCH_STATUS } from "@/shared/enums";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
   message: string;
-  player: Player | null;
+  match: Match | null;
 }>;
 
 export const createMatchAction = async (
@@ -21,65 +20,72 @@ export const createMatchAction = async (
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      player: null,
+      match: null,
     };
   }
 
   const rawData = {
-    name: formData.get('name') ?? '',
-    email: formData.get('email') ?? '',
-    phone: formData.get('phone') as string ?? undefined,
-    nationality: formData.get('nationality') ?? undefined,
-    birthday: new Date(formData.get('birthday') as string) ?? undefined,
-    image: formData.get('image') as File,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    local: formData.get('local') ?? '',
+    visitor: formData.get('visitor') ?? '',
+    place: formData.get('place') ?? '',
+    matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
+    week: parseInt(formData.get('week') as string) ?? 1,
+    referee: formData.get('referee') ?? '',
+    status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
+    tournamentId: formData.get('tournamentId') ?? undefined,
   };
 
-  const playerVerified = createPlayerSchema.safeParse(rawData);
+  const matchVerified = createMatchSchema.safeParse(rawData);
 
-  if (!playerVerified.success) {
+  if (!matchVerified.success) {
     return {
       ok: false,
-      message: playerVerified.error.message,
-      player: null,
+      message: matchVerified.error.message,
+      match: null,
     };
   }
 
-  const { image, ...playerToSave } = playerVerified.data;
-
-  // Upload Image to third-party storage (cloudinary).
-  let cloudinaryResponse: CloudinaryResponse | null = null;
-
-  if (image) {
-    cloudinaryResponse = await uploadImage(image!, 'players');
-    if (!cloudinaryResponse) {
-      throw new Error('Error subiendo imagen a cloudinary');
-    }
-  }
+  const { tournamentId, ...matchToSave } = matchVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const createdPlayer = await transaction.player.create({
+      // Verificar que el torneo existe
+      const tournament = await transaction.tournament.count({
+        where: { id: tournamentId }
+      });
+
+      if (!tournament) {
+        return {
+          ok: false,
+          message: `¡ El torneo con el ID: "${tournamentId}" no existe !`,
+          match: null,
+        };
+      }
+
+      const createdMatch = await transaction.match.create({
         data: {
-          ...playerToSave,
-          imageUrl: cloudinaryResponse?.secureUrl ?? null,
-          imagePublicID: cloudinaryResponse?.publicId ?? null,
-        }
+          ...matchToSave,
+          localScore: 0,
+          visitorScore: 0,
+          status: matchToSave.status as MATCH_STATUS,
+          tournamentId,
+        },
       });
 
       return {
         ok: true,
-        message: '¡ Jugador creado correctamente 👍 !',
-        player: createdPlayer,
+        message: '¡ Encuentro creado correctamente 👍 !',
+        match: {
+          ...createdMatch,
+          localScore: createdMatch.localScore as number,
+          visitorScore: createdMatch.visitorScore as number,
+          status: createdMatch.status as MATCH_STATUS,
+        },
       };
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/jugadores');
+    revalidatePath('/admin/encuentros');
 
     return prismaTransaction;
   } catch (error) {
@@ -89,21 +95,21 @@ export const createMatchAction = async (
         return {
           ok: false,
           message: `¡ El campo "${fieldError}", está duplicado !`,
-          player: null,
+          match: null,
         };
       }
-
+      console.log(error.message);
       return {
         ok: false,
-        message: '¡ Error al crear el jugador, revise los logs del servidor !',
-        player: null,
+        message: '¡ Error al crear el encuentro, revise los logs del servidor !',
+        match: null,
       };
     }
     console.log(error);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      player: null,
+      match: null,
     };
   }
 };

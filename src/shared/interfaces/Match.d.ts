@@ -1,3 +1,5 @@
+import { MATCH_STATUS } from "../enums";
+
 export interface Match {
   id: string;
   local: string;
@@ -8,7 +10,7 @@ export interface Match {
   referee: string;
   localScore: number;
   visitorScore: number;
-  status: MatchStatus;
+  status: MATCH_STATUS;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -22,5 +24,5 @@ export interface MatchSeed {
   referee: string;
   localScore: number;
   visitorScore: number;
-  status: MatchStatus;
+  status: MATCH_STATUS;
 }

@@ -46,7 +46,7 @@ export const MatchesPage = async () => {
               <div>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link href="/admin/jugadores/crear">
+                    <Link href="/admin/encuentros/crear">
                       <Button variant="outline-primary" size="icon">
                         <Plus strokeWidth={3} />
                       </Button>
