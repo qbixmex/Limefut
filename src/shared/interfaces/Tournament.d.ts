@@ -1,5 +1,5 @@
 export interface Tournament {
-  id?: string;
+  id: string;
   name: string;
   permalink: string;
   imageUrl: string | null;
