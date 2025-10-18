@@ -17,6 +17,7 @@ import {
   Pencil,
   InfoIcon,
   Plus,
+  Minus,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -62,10 +63,7 @@ export const MatchesPage = async () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-[150px]">Equipo Local</TableHead>
-                      <TableHead className="w-[100px] text-center">Goles Local</TableHead>
-                      <TableHead className="w-[150px]">Equipo Visitante</TableHead>
-                      <TableHead className="w-[100px] text-center">Goles Visitante</TableHead>
+                      <TableHead>Encuentro</TableHead>
                       <TableHead className="w-[100px] text-center">Semana</TableHead>
                       <TableHead className="w-[120px]">Estado</TableHead>
                       <TableHead>Sede</TableHead>
@@ -76,13 +74,12 @@ export const MatchesPage = async () => {
                   <TableBody>
                     {matches.map((match) => (
                       <TableRow key={match.id}>
-                        <TableCell>{match.local}</TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="grid grid-cols-[1fr_50px_50px_50px_1fr] gap-2 font-bold text-gray-500">
+                          <span>{match.local}</span>
                           <Badge variant="outline-info">{match.localScore}</Badge>
-                        </TableCell>
-                        <TableCell>{match.visitor}</TableCell>
-                        <TableCell className="text-center">
+                          <Minus strokeWidth={2} />
                           <Badge variant="outline-info">{match.visitorScore}</Badge>
+                          <span>{match.visitor}</span>
                         </TableCell>
                         <TableCell className="text-center">
                           <Badge variant="outline-info">{match.week}</Badge>

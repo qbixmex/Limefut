@@ -1,57 +1,59 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Player } from "@/shared/interfaces";
+import { Match } from "@/shared/interfaces";
 
 type FetchPlayerResponse = Promise<{
   ok: boolean;
   message: string;
-  player: Player | null;
+  match: Match | null;
 }>;
 
 export const fetchMatchAction = async (
-  playerId: string,
+  id: string,
   userRole: string[] | null,
 ): FetchPlayerResponse => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos !',
-      player: null,
+      match: null,
     };
   }
 
   try {
-    const player = await prisma.player.findUnique({
-      where: { id: playerId },
-    });
+    const match = await prisma.match.findUnique({ where: { id } });
 
-    if (!player) {
+    if (!match) {
       return {
         ok: false,
-        message: '¡ Jugador no encontrado ❌ !',
-        player: null,
+        message: '¡ Encuentro no encontrado ❌ !',
+        match: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Jugador obtenido correctamente 👍 !',
-      player,
+      message: '¡ Encuentro obtenido correctamente 👍 !',
+      match: {
+        ...match,
+        localScore: match.localScore ?? 0,
+        visitorScore: match.visitorScore ?? 0, 
+      },
     };
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el jugador,\n¡ Revise los logs del servidor !",
-        player: null,
+        message: "No se pudo obtener el encuentro,\n¡ Revise los logs del servidor !",
+        match: null,
       };
     }
     return {
       ok: false,
       message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
-      player: null,
+      match: null,
     };
   }
 };
