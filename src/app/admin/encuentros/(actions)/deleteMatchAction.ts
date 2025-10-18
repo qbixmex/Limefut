@@ -1,7 +1,6 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import deleteImage from "@/shared/actions/deleteImageAction";
 import { revalidatePath } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
@@ -9,13 +8,10 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deleteMatchAction = async (playerId: string): ResponseDeleteAction => {
-  const player = await prisma.player.findUnique({
-    where: { id: playerId },
-    select: {
-      imagePublicID: true,
-      name: true,
-    },
+export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
+  const player = await prisma.match.findUnique({
+    where: { id },
+    select: { id: true }
   });
 
   if (!player) {
@@ -25,25 +21,13 @@ export const deleteMatchAction = async (playerId: string): ResponseDeleteAction 
     };
   }
 
-  await prisma.player.delete({
-    where: { id: playerId },
-  });
+  await prisma.match.delete({ where: { id: player.id } });
 
-  // Delete image from cloudinary.
-  if (player.imagePublicID) {
-    if (player.imagePublicID) {
-      const response = await deleteImage(player.imagePublicID);
-      if (!response.ok) {
-        throw 'Error al eliminar la imagen de cloudinary';
-      }
-    }
-  }
-
-  revalidatePath('/jugadores');
-  revalidatePath('/admin/jugadores');
+  revalidatePath('/encuentros');
+  revalidatePath('/admin/encuentros');
 
   return {
     ok: true,
-    message: `¡ El jugador "${player.name}" ha sido eliminado correctamente 👍 !`
+    message: `¡ El encuentro ha sido eliminado correctamente 👍 !`
   };
 };
