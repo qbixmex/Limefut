@@ -17,6 +17,14 @@ export const createMatchSchema = z.object({
   referee: z.string()
     .min(3, { message: '¡ El arbitro debe ser mayor a 3 caracteres !' })
     .max(50, { message: '¡ El arbitro debe ser menor a 50 caracteres !' }),
+  localScore: z
+    .int()
+    .min(0, { message: '¡ El marcador local debe ser mayor a 0 !' })
+    .optional(),
+  visitorScore: z
+    .int()
+    .min(0, { message: '¡ El marcador visitante debe ser mayor a 0 !' })
+    .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],
     { message: "¡ El estado del partido debe ser válido !" }

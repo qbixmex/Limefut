@@ -49,7 +49,6 @@ export const createMatchAction = async (
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      // Verificar que el torneo existe
       const tournament = await transaction.tournament.count({
         where: { id: tournamentId }
       });
@@ -70,6 +69,14 @@ export const createMatchAction = async (
           status: matchToSave.status as MATCH_STATUS,
           tournamentId,
         },
+        include: {
+          tournament: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        }
       });
 
       return {

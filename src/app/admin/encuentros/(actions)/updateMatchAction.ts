@@ -2,13 +2,13 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { uploadImage, deleteImage } from "@/shared/actions";
-import { editPlayerSchema } from '@//shared/schemas';
-import { Player } from '@/shared/interfaces';
+import { editMatchSchema } from '@//shared/schemas';
+import { type Match } from '@/shared/interfaces';
+import { MATCH_STATUS } from '@/shared/enums';
 
 type Options = {
   formData: FormData;
-  playerId: string;
+  id: string;
   userRoles: string[];
   authenticatedUserId: string;
 };
@@ -16,12 +16,12 @@ type Options = {
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
-  player: Player | null;
+  match: Match | null;
 }>;
 
 export const updateMatchAction = async ({
   formData,
-  playerId,
+  id,
   userRoles,
   authenticatedUserId,
 }: Options): EditResponseAction => {
@@ -29,7 +29,7 @@ export const updateMatchAction = async ({
     return {
       ok: false,
       message: '¡ Usuario no autenticado !',
-      player: null,
+      match: null,
     };
   }
 
@@ -37,95 +37,91 @@ export const updateMatchAction = async ({
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      player: null,
+      match: null,
     };
   }
-
-  const imageFile = formData.get('image');
 
   const rawData = {
-    name: formData.get('name') ?? '',
-    email: formData.get('email') ?? '',
-    phone: formData.get('phone') as string ?? undefined,
-    birthday: new Date(formData.get('birthday') as string) ?? undefined,
-    nationality: formData.get('nationality') ?? undefined,
-    image: imageFile,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    local: formData.get('local') ?? '',
+    localScore: parseInt(formData.get('localScore') as string) ?? undefined,
+    visitor: formData.get('visitor') ?? undefined,
+    visitorScore: parseInt(formData.get('visitorScore') as string) ?? undefined,
+    place: formData.get('place') ?? '',
+    matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
+    week: parseInt(formData.get('week') as string) ?? 1,
+    referee: formData.get('referee') ?? '',
+    status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
+    tournamentId: formData.get('tournamentId') ?? undefined,
   };
 
-  const playerVerified = editPlayerSchema.safeParse(rawData);
+  const matchVerified = editMatchSchema.safeParse(rawData);
 
-  if (!playerVerified.success) {
+  if (!matchVerified.success) {
     return {
       ok: false,
-      message: playerVerified.error.message,
-      player: null,
+      message: matchVerified.error.message,
+      match: null,
     };
   }
-  
-  const { image, ...playerToSave } = playerVerified.data;
+
+  const { tournamentId, ...matchToSave } = matchVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
-        const isPlayerExists = await transaction.player.count({
-          where: { id: playerId },
+        const isMatchExists = await transaction.match.count({
+          where: { id },
         });
 
-        if (!isPlayerExists) {
+        if (!isMatchExists) {
           return {
             ok: false,
-            message: '¡ El jugador no existe o ha sido eliminado !',
-            player: null,
+            message: '¡ El encuentro no existe o ha sido eliminado !',
+            match: null,
           };
         }
 
-        const updatedPlayer = await transaction.player.update({
-          where: { id: playerId },
-          data: playerToSave,
+        const tournament = await transaction.tournament.count({
+          where: { id: tournamentId }
         });
 
-        if (image) {
-          // Delete previous image from cloudinary.
-          if (updatedPlayer.imagePublicID) {
-            const cloudinaryResponse = await deleteImage(updatedPlayer.imagePublicID);
-            if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
-            }
-          }
-
-          // Upload Image to third-party storage (cloudinary).
-          const imageUploaded = await uploadImage(image as File, 'coaches');
-
-          if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
-          }
-
-          // Update image data to database.
-          await transaction.player.update({
-            where: { id: playerId },
-            data: {
-              imageUrl: imageUploaded.secureUrl,
-              imagePublicID: imageUploaded.publicId,
-            },
-          });
-
-          // Update event object to return.
-          updatedPlayer.imageUrl = imageUploaded.secureUrl;
-          updatedPlayer.imagePublicID = imageUploaded.publicId;
+        if (!tournament) {
+          return {
+            ok: false,
+            message: `¡ El torneo con el ID: "${tournamentId}" no existe !`,
+            match: null,
+          };
         }
 
+        const updatedMatch = await transaction.match.update({
+          where: { id },
+          data: {
+            ...matchToSave,
+            status: matchToSave.status as MATCH_STATUS,
+            tournamentId,
+          },
+          include: {
+            tournament: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          }
+        });
+
         // Revalidate Cache
-        revalidatePath('/admin/jugadores');
+        revalidatePath('/admin/encuentros');
 
         return {
           ok: true,
-          message: '¡ El jugador fue actualizado correctamente 👍 !',
-          player: updatedPlayer,
+          message: '¡ El encuentro fue actualizado correctamente 👍 !',
+          match: {
+            ...updatedMatch,
+            localScore: updatedMatch.localScore as number,
+            visitorScore: updatedMatch.visitorScore as number,
+            status: updatedMatch.status as MATCH_STATUS,
+          },
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
@@ -134,20 +130,20 @@ export const updateMatchAction = async ({
             return {
               ok: false,
               message: `¡ El campo "${fieldError}", está duplicado !`,
-              player: null,
+              match: null,
             };
           }
           console.log(error.message);
           return {
             ok: false,
-            message: '¡ Error al actualizar el jugador, revise los logs del servidor !',
-            player: null,
+            message: '¡ Error al actualizar el encuentro, revise los logs del servidor !',
+            match: null,
           };
         }
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
-          player: null,
+          match: null,
         };
       }
     });
@@ -158,7 +154,7 @@ export const updateMatchAction = async ({
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      player: null,
+      match: null,
     };
   }
 };

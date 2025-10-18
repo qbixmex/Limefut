@@ -46,13 +46,15 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       local: match?.local ?? '',
+      localScore: match?.localScore ?? 0,
       visitor: match?.visitor ?? '',
+      visitorScore: match?.visitorScore ?? 0,
       place: match?.place ?? '',
       matchDate: match?.matchDate ?? new Date(2000, 1, 1),
       week: match?.week ?? 1,
       referee: match?.referee ?? '',
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
-      tournamentId: '',
+      tournamentId: match?.tournament.id ?? '',
     }
   });
 
@@ -60,7 +62,9 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
     const formData = new FormData();
 
     formData.append('local', data.local as string);
+    formData.append('localScore', (data.localScore as number).toString());
     formData.append('visitor', data.visitor as string);
+    formData.append('visitorScore', (data.visitorScore as number).toString());
     formData.append('place', data.place as string);
     formData.append('matchDate', (data.matchDate as Date).toISOString());
     formData.append('week', (data.week as number).toString());
@@ -93,7 +97,7 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
     if (match) {
       const response = await updateMatchAction({
         formData,
-        playerId: match.id,
+        id: match.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });
@@ -118,7 +122,7 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
       >
-        {/* Local and Visitor */}
+        {/* Local and Local Score */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
@@ -135,7 +139,6 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
               )}
             />
           </div>
-
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
@@ -152,6 +155,60 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
             />
           </div>
         </div>
+
+        {/* Visitor and Visitor Score */}
+        {match && (
+          <div className="flex flex-col gap-5 lg:flex-row">
+            <div className="w-full lg:w-1/2">
+              <FormField
+                control={form.control}
+                name="localScore"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Marcador Local</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="localScore"
+                        type="number"
+                        {...field}
+                        min={0}
+                        max={50}
+                        value={field.value ?? ''}
+                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        className="w-full lg:w-[75px]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="w-full lg:w-1/2">
+              <FormField
+                control={form.control}
+                name="visitorScore"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Marcador Visitante</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="visitorScore"
+                        type="number"
+                        {...field}
+                        min={0}
+                        max={50}
+                        value={field.value ?? ''}
+                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        className="w-full lg:w-[75px]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Place and week */}
         <div className="flex flex-col gap-5 lg:flex-row">

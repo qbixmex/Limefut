@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { MATCH_STATUS } from '@/root/src/shared/enums';
 import { Match } from "@/shared/interfaces";
 
 type FetchPlayerResponse = Promise<{
@@ -22,7 +23,17 @@ export const fetchMatchAction = async (
   }
 
   try {
-    const match = await prisma.match.findUnique({ where: { id } });
+    const match = await prisma.match.findUnique({
+      where: { id },
+      include: {
+        tournament: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      }
+    });
 
     if (!match) {
       return {
@@ -38,7 +49,8 @@ export const fetchMatchAction = async (
       match: {
         ...match,
         localScore: match.localScore ?? 0,
-        visitorScore: match.visitorScore ?? 0, 
+        visitorScore: match.visitorScore ?? 0,
+        status: match.status as MATCH_STATUS,
       },
     };
   } catch (error) {
