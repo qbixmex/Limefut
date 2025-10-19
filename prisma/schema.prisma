@@ -32,34 +32,11 @@ model User {
   roles    Role[]  @default([user])
   isActive Boolean @default(false) @map("is_active")
 
+  // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
-}
-
-model Team {
-  id            String   @id @default(uuid())
-  name          String
-  permalink     String   @unique
-  headquarters  String
-  imageUrl      String?  @map("image_url")
-  imagePublicID String?  @map("image_public_id")
-  division      String
-  group         String
-  tournament    String
-  country       String
-  city          String
-  state         String
-  coach         String
-  emails        String[] @default([])
-  address       String?
-  active        Boolean  @default(false)
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("teams")
 }
 
 model Tournament {
@@ -78,12 +55,45 @@ model Tournament {
   active        Boolean  @default(false)
 
   // Relations
-  matches Match[]
+  matches     Match[]
+  credentials Credential[]
+  teams       Team[]
 
+  // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("tournaments")
+}
+
+model Team {
+  id            String   @id @default(uuid())
+  name          String
+  permalink     String   @unique
+  headquarters  String
+  imageUrl      String?  @map("image_url")
+  imagePublicID String?  @map("image_public_id")
+  division      String
+  group         String
+  country       String
+  city          String
+  state         String
+  emails        String[] @default([])
+  address       String?
+  active        Boolean  @default(false)
+
+  // Relations
+  coachId            String?     @map("coach_id")
+  coach              Coach?      @relation(fields: [coachId], references: [id])
+  players            Player[]
+  tournamentId       String      @map("tournament_id")
+  tournamentRelation Tournament? @relation(fields: [tournamentId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("teams")
 }
 
 model Coach {
@@ -98,6 +108,10 @@ model Coach {
   description   String?
   active        Boolean @default(false)
 
+  // Relations
+  teams Team[]
+
+  // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -115,6 +129,12 @@ model Player {
   imagePublicID String?   @map("image_public_id")
   active        Boolean   @default(false)
 
+  // Relations
+  credential Credential?
+  teamId     String?     @map("team_id")
+  team       Team?       @relation(fields: [teamId], references: [id])
+
+  // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -146,8 +166,30 @@ model Match {
   tournamentId String     @map("tournament_id")
   tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
 
+  // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("matches")
+}
+
+model Credential {
+  id           String   @id @default(uuid())
+  fullName     String   @map("full_name")
+  birthdate    DateTime @map("birthdate")
+  curp         String   @unique
+  position     String
+  jerseyNumber Int      @map("jersey_number")
+
+  // Relations
+  playerId     String     @unique @map("player_id")
+  player       Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  tournamentId String     @map("tournament_id")
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("credentials")
 }
