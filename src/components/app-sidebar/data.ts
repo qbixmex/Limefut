@@ -19,24 +19,6 @@ import {
 
 export const navMain: NavItem[] = [
   {
-    label: "Equipos",
-    url: "#",
-    icon: Flag,
-    isActive: false,
-    subItems: [
-      {
-        label: "Lista",
-        url: "/admin/equipos",
-        icon: ListIcon,
-      },
-      {
-        label: "Crear",
-        url: "/admin/equipos/crear",
-        icon: PlusIcon,
-      },
-    ],
-  },
-  {
     label: "Torneos",
     url: "#",
     icon: Trophy,
@@ -50,6 +32,24 @@ export const navMain: NavItem[] = [
       {
         label: "Crear",
         url: "/admin/torneos/crear",
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: "Equipos",
+    url: "#",
+    icon: Flag,
+    isActive: false,
+    subItems: [
+      {
+        label: "Lista",
+        url: "/admin/equipos",
+        icon: ListIcon,
+      },
+      {
+        label: "Crear",
+        url: "/admin/equipos/crear",
         icon: PlusIcon,
       },
     ],
@@ -98,12 +98,12 @@ export const navMain: NavItem[] = [
     subItems: [
       {
         label: "Lista",
-        url: "#",
+        url: "/admin/credenciales",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "#",
+        url: "/admin/credenciales/crear",
         icon: PlusIcon,
       },
     ],

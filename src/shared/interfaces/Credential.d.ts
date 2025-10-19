@@ -10,8 +10,8 @@ export interface Credential {
   jerseyNumber: number;
 
   // Relations
-  player: Player;
-  tournament: Tournament;
+  player: Partial<Player>;
+  tournament: Partial<Tournament>;
 
   // Timestamps
   createdAt?: Date;
