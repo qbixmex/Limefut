@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { deleteMatchAction } from "../../(actions)";
+import { deleteCredentialAction } from "../../(actions)";
 import "./styles.css";
 
 type Props = Readonly<{
@@ -24,13 +24,13 @@ type Props = Readonly<{
   roles: string[];
 }>;
 
-export const DeleteMatch: FC<Props> = ({ id, roles }) => {
-  const onDeleteMatch = async (id: string) => {
+export const DeleteCredential: FC<Props> = ({ id, roles }) => {
+  const onDeleteCredential = async (id: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar encuentros !');
+      toast.error('¡ No tienes permisos administrativos para eliminar credenciales !');
       return;
     }
-    const response = await deleteMatchAction(id);
+    const response = await deleteCredentialAction(id);
     if (!response.ok) {
       toast.error(response.message);
       return;
@@ -54,16 +54,16 @@ export const DeleteMatch: FC<Props> = ({ id, roles }) => {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿ Estas seguro de eliminar el encuentro ?</AlertDialogTitle>
+          <AlertDialogTitle>¿ Estas seguro de eliminar la credencial ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción no se puede deshacer y el encuentro será eliminado de la base de datos permanentemente.
+            Esta acción no se puede deshacer y la credencial será eliminado de la base de datos permanentemente.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
           <AlertDialogAction
             className="delete-btn"
-            onClick={() => onDeleteMatch(id)}
+            onClick={() => onDeleteCredential(id)}
           >
             eliminar
           </AlertDialogAction>
@@ -73,4 +73,4 @@ export const DeleteMatch: FC<Props> = ({ id, roles }) => {
   );
 };
 
-export default DeleteMatch;
+export default DeleteCredential;

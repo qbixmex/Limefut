@@ -19,7 +19,7 @@ import {
   Plus,
 } from "lucide-react";
 import Link from "next/link";
-// import { DeleteCredential } from "./(components)/DeleteCredential";
+import { DeleteCredential } from "./(components)/delete-credential";
 import { fetchCredentialsAction } from "./(actions)";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { auth } from "@/auth.config";
@@ -99,10 +99,10 @@ export const CredentialsPage = async () => {
                                 <p>editar</p>
                               </TooltipContent>
                             </Tooltip>
-                            {/* <DeleteCredential
+                            <DeleteCredential
                               id={credential.id}
                               roles={session?.user.roles as string[]}
-                            /> */}
+                            />
                           </div>
                         </TableCell>
                       </TableRow>

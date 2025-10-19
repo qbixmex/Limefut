@@ -9,25 +9,25 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteCredentialAction = async (id: string): ResponseDeleteAction => {
-  const player = await prisma.match.findUnique({
+  const credencial = await prisma.credential.findUnique({
     where: { id },
     select: { id: true }
   });
 
-  if (!player) {
+  if (!credencial) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el jugador, quizás fue eliminado ó no existe !',
+      message: '¡ No se puede eliminar la credencial, quizás fue eliminado ó no existe !',
     };
   }
 
-  await prisma.match.delete({ where: { id: player.id } });
+  await prisma.credential.delete({ where: { id: credencial.id } });
 
-  revalidatePath('/encuentros');
-  revalidatePath('/admin/encuentros');
+  revalidatePath('/credenciales');
+  revalidatePath('/admin/credenciales');
 
   return {
     ok: true,
-    message: `¡ El encuentro ha sido eliminado correctamente 👍 !`
+    message: `¡ La credencial ha sido eliminada correctamente 👍 !`
   };
 };
