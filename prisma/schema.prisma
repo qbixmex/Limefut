@@ -83,11 +83,11 @@ model Team {
   active        Boolean  @default(false)
 
   // Relations
-  coachId            String?     @map("coach_id")
-  coach              Coach?      @relation(fields: [coachId], references: [id])
-  players            Player[]
-  tournamentId       String      @map("tournament_id")
-  tournamentRelation Tournament? @relation(fields: [tournamentId], references: [id])
+  coachId      String?    @map("coach_id")
+  coach        Coach?     @relation(fields: [coachId], references: [id])
+  players      Player[]
+  tournamentId String     @map("tournament_id")
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")

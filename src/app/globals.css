@@ -48,6 +48,12 @@
     font-family: var(--font-open-sans), 'sans-serif';
     min-height: 100vh;
   }
+  a {
+    @apply text-sky-500 transition-colors duration-300 ease-in-out;
+  }
+  a:hover {
+    @apply text-sky-600;
+  }
 }
 
 :root {

@@ -98,7 +98,11 @@ export const TeamsPage = async () => {
                         <TableCell>{team.name}</TableCell>
                         <TableCell>{team.division}</TableCell>
                         <TableCell>{team.group}</TableCell>
-                        <TableCell>{team.tournament}</TableCell>
+                        <TableCell>
+                          <Link href={`/admin/torneos/${team.tournament.permalink}`}>
+                            {team.tournament.name}
+                          </Link>
+                        </TableCell>
                         <TableCell>{team.headquarters}</TableCell>
                         <TableCell className="text-center">
                           <Badge variant={team.active ? 'outline-success' : 'outline-secondary'}>

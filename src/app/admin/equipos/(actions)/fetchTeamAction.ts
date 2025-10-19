@@ -24,6 +24,21 @@ export const fetchTeamAction = async (
   try {
     const team = await prisma.team.findUnique({
       where: { permalink: permalink },
+      include: {
+        tournament: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
+        coach: {
+          select: {
+            id: true,
+            name: true,
+          },
+        }
+      }
     });
 
     if (!team) {

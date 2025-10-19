@@ -1,3 +1,5 @@
+import { Tournament } from "./Tournament";
+
 export interface Team {
   id: string;
   name: string;
@@ -15,8 +17,8 @@ export interface Team {
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
-  tournamentId: string;
-  coachId?: string | null;
+  tournament: Optional<Tournament>;
+  coach: Optional<Coach>;
 }
 
 export interface TeamSeed {
