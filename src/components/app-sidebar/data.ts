@@ -14,7 +14,6 @@ import { GiWhistle } from "react-icons/gi";
 import {
   SoccerPlayer,
   SoccerField,
-  GameScore,
 } from "@/shared/components/icons";
 
 export const navMain: NavItem[] = [
@@ -91,24 +90,6 @@ export const navMain: NavItem[] = [
     ],
   },
   {
-    label: "Credenciales",
-    url: "#",
-    icon: IdCard,
-    isActive: false,
-    subItems: [
-      {
-        label: "Lista",
-        url: "/admin/credenciales",
-        icon: ListIcon,
-      },
-      {
-        label: "Crear",
-        url: "/admin/credenciales/crear",
-        icon: PlusIcon,
-      },
-    ],
-  },
-  {
     label: "Encuentros",
     url: "#",
     icon: SoccerField,
@@ -145,19 +126,19 @@ export const navMain: NavItem[] = [
     ],
   },
   {
-    label: "Resultados",
+    label: "Credenciales",
     url: "#",
-    icon: GameScore,
+    icon: IdCard,
     isActive: false,
     subItems: [
       {
         label: "Lista",
-        url: "#",
+        url: "/admin/credenciales",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "#",
+        url: "/admin/credenciales/crear",
         icon: PlusIcon,
       },
     ],
