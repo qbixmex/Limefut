@@ -10,6 +10,7 @@ export const players: PlayerSeed[] = [
     imageUrl: null,
     imagePublicID: null,
     active: true,
+    teamId: null,
   },
   {
     name: 'Miguel Ángel López García',
@@ -20,6 +21,7 @@ export const players: PlayerSeed[] = [
     imageUrl: null,
     imagePublicID: null,
     active: true,
+    teamId: null,
   },
   {
     name: 'Fernando Duran Martínez',
@@ -30,6 +32,7 @@ export const players: PlayerSeed[] = [
     imageUrl: null,
     imagePublicID: null,
     active: true,
+    teamId: null,
   },
   {
     name: 'Javier Sánchez Ruiz',
@@ -40,6 +43,7 @@ export const players: PlayerSeed[] = [
     imageUrl: null,
     imagePublicID: null,
     active: true,
+    teamId: null,
   },
   {
     name: 'Alejandra Torres Fernández',
@@ -50,6 +54,7 @@ export const players: PlayerSeed[] = [
     imageUrl: null,
     imagePublicID: null,
     active: true,
+    teamId: null,
   },
   {
     name: 'Julieta Ramirez Arechiga',
@@ -60,6 +65,7 @@ export const players: PlayerSeed[] = [
     imageUrl: null,
     imagePublicID: null,
     active: true,
+    teamId: null,
   },
   {
     name: 'Karla Vazquez Mendoza',
@@ -70,6 +76,7 @@ export const players: PlayerSeed[] = [
     imageUrl: null,
     imagePublicID: null,
     active: true,
+    teamId: null,
   },
   {
     name: 'Lorena Lopez Castillo',
@@ -80,5 +87,6 @@ export const players: PlayerSeed[] = [
     imageUrl: null,
     imagePublicID: null,
     active: true,
+    teamId: null,
   },
 ];

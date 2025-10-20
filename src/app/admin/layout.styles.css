@@ -1,0 +1,13 @@
+@reference "tailwindcss";
+
+.header {
+  @apply flex h-16 shrink-0 justify-between items-center gap-5 px-5 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12;
+}
+
+.headerLeft {
+  @apply flex items-center gap-2;
+}
+
+.headerRight {
+  @apply flex items-center gap-3;
+}

@@ -1,3 +1,5 @@
+import { Tournament } from "./Tournament";
+
 export interface Team {
   id: string;
   name: string;
@@ -7,17 +9,16 @@ export interface Team {
   imagePublicID: string | null;
   division: string;
   group: string;
-  tournament: string;
   country: string;
   city: string;
   state: string;
-  coach: string;
   emails: string[];
   address: string | null;
   active: boolean;
-
   createdAt?: Date;
   updatedAt?: Date;
+  tournament?: Optional<Tournament>;
+  coach?: Optional<Coach>;
 }
 
 export interface TeamSeed {
@@ -28,12 +29,12 @@ export interface TeamSeed {
   imagePublicID: string | null;
   division: string;
   group: string;
-  tournament: string;
   country: string;
   city: string;
   state: string;
-  coach: string;
   emails: string[];
   address: string;
   active: boolean;
+  tournamentId: string;
+  coachId?: string | null;
 }

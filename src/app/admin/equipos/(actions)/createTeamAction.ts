@@ -70,7 +70,23 @@ export const createTeamAction = async (
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdTeam = await transaction.team.create({
-        data: teamToSave,
+        data: {
+          name: teamToSave.name,
+          permalink: teamToSave.permalink,
+          headquarters: teamToSave.headquarters,
+          imageUrl: cloudinaryResponse?.secureUrl ?? undefined,
+          imagePublicID: cloudinaryResponse?.publicId ?? undefined,
+          division: teamToSave.division,
+          group: teamToSave.group,
+          country: teamToSave.country,
+          city: teamToSave.city,
+          state: teamToSave.state,
+          emails: teamToSave.emails,
+          address: teamToSave.address,
+          active: teamToSave.active,
+          coachId: '',
+          tournamentId: '',
+        },
       });
 
       return {

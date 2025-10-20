@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { Tournament } from "@/root/src/generated/prisma";
 import { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
@@ -19,8 +20,8 @@ export type ResponseFetchTeams = Promise<{
     imageUrl: string | null,
     division: string;
     group: string;
-    tournament: string;
     active: boolean;
+    tournament: Pick<Tournament, 'id' | 'name' | 'permalink'>;
   }[] | null;
   pagination: Pagination | null;
 }>;
@@ -43,8 +44,14 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
         imageUrl: true,
         division: true,
         group: true,
-        tournament: true,
         active: true,
+        tournament: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          }
+        }
       },
       take: take,
       skip: (page - 1) * take,
@@ -63,8 +70,8 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
         imageUrl: team.imageUrl,
         division: team.division,
         group: team.group,
-        tournament: team.tournament,
         active: team.active,
+        tournament: team.tournament,
       })),
       pagination: {
         currentPage: page,

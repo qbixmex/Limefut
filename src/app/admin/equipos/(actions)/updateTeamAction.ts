@@ -91,7 +91,21 @@ export const updateTeamAction = async ({
 
         const updatedTeam = await transaction.team.update({
           where: { id: teamId },
-          data: teamToSave,
+          data: {
+            name: teamToSave.name,
+            permalink: teamToSave.permalink,
+            headquarters: teamToSave.headquarters,
+            division: teamToSave.division,
+            group: teamToSave.group,
+            country: teamToSave.country,
+            city: teamToSave.city,
+            state: teamToSave.state,
+            emails: teamToSave.emails,
+            address: teamToSave.address,
+            active: teamToSave.active,
+            coachId: '',
+            tournamentId: '',
+          },
         });
 
         if (image !== null) {
