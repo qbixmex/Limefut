@@ -1,8 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { Tournament } from "@/root/src/generated/prisma";
-import { Pagination } from "@/shared/interfaces";
+import type { Tournament, Coach, Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;
@@ -16,12 +15,12 @@ export type ResponseFetchTeams = Promise<{
     id: string;
     name: string;
     permalink: string;
-    headquarters: string;
     imageUrl: string | null,
     division: string;
     group: string;
     active: boolean;
     tournament: Pick<Tournament, 'id' | 'name' | 'permalink'>;
+    coach: Pick<Coach, 'id' | 'name'>;
   }[] | null;
   pagination: Pagination | null;
 }>;
@@ -40,7 +39,6 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
         id: true,
         name: true,
         permalink: true,
-        headquarters: true,
         imageUrl: true,
         division: true,
         group: true,
@@ -50,6 +48,12 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
             id: true,
             name: true,
             permalink: true,
+          }
+        },
+        coach: {
+          select: {
+            id: true,
+            name: true,
           }
         }
       },
@@ -63,15 +67,11 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
       ok: true,
       message: '! Los equipos fueron obtenidos correctamente 👍',
       teams: teams.map((team) => ({
-        id: team.id,
-        name: team.name,
-        permalink: team.permalink,
-        headquarters: team.headquarters,
-        imageUrl: team.imageUrl,
-        division: team.division,
-        group: team.group,
-        active: team.active,
-        tournament: team.tournament,
+        ...team,
+        coach: {
+          id: team.coach?.id ?? '',
+          name: team.coach?.name ?? 'Sin entrenador',
+        },
       })),
       pagination: {
         currentPage: page,

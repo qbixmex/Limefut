@@ -14,7 +14,11 @@ export const Providers: React.FC<Props> = ({ children }) => {
       disableTransitionOnChange
     >
       {children}
-      <Toaster richColors position="top-right" />
+      <Toaster
+        position="top-right"
+        toastOptions={{ style: { width: 400 }}}
+        richColors
+      />
     </ThemeProvider>
   );
 };

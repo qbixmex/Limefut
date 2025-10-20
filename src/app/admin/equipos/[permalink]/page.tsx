@@ -16,7 +16,6 @@ import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchTeamAction } from "../(actions)";
-import { Team } from '@/shared/interfaces';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -36,7 +35,7 @@ export const TeamPage: FC<Props> = async ({ params }) => {
     redirect(`/admin/equipos?error=${encodeURIComponent(response.message)}`);
   }
 
-  const team = response.team as Team;
+  const team = response.team!;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -105,9 +104,15 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="font-semibold">Entrenador</TableHead>
                     <TableCell>
-                      <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
-                        {team.coach.name}
-                      </Link>
+                      {
+                        (team.coach)
+                          ? (
+                            <Link href={`/admin/entrenadores/perfil/${team.coach?.id}`}>
+                              {team.coach.name}
+                            </Link>
+                          )
+                          : 'No asignado'
+                      }
                     </TableCell>
                   </TableRow>
                   <TableRow>

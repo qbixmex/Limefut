@@ -1,12 +1,15 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Team } from "@/shared/interfaces";
+import type { Team, Tournament, Coach } from "@/shared/interfaces";
 
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
-  team: Team | null;
+  team: Team & {
+    tournament: Pick<Tournament, 'id' | 'name' | 'permalink'>;
+    coach?: Pick<Coach, 'id' | 'name'>;
+  } | null;
 }>;
 
 export const fetchTeamAction = async (
@@ -52,7 +55,11 @@ export const fetchTeamAction = async (
     return {
       ok: true,
       message: '¡ Equipo obtenido correctamente 👍 !',
-      team,
+      team: {
+        ...team,
+        tournament: team.tournament,
+        coach: team.coach as Coach,
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

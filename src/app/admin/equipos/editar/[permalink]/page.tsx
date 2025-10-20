@@ -9,9 +9,10 @@ import {
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { Session } from "next-auth";
-import { fetchTeamAction } from "../../(actions)";
+import { fetchTeamAction, fetchTournamentsForTeam } from "../../(actions)";
 import { TeamForm } from "../../(components)/teamForm";
-import { Team } from '@/shared/interfaces';
+import { Coach, Tournament } from '@/shared/interfaces';
+import { fetchCoachesForTeam } from "../../(actions)/fetchCoachesForTeam";
 
 type Props = Readonly<{
   params: Promise<{
@@ -22,11 +23,25 @@ type Props = Readonly<{
 export const EditTeam: FC<Props> = async ({ params }) => {
   const session = await auth();
   const permalink = (await params).permalink;
-  const response = await fetchTeamAction(permalink, session?.user.roles ?? null);
+  const responseTeam = await fetchTeamAction(permalink, session?.user.roles ?? null);
 
-  if (!response.ok) {
-    redirect(`/admin/users?error=${encodeURIComponent(response.message)}`);
+  if (!responseTeam.ok) {
+    redirect(`/admin/users?error=${encodeURIComponent(responseTeam.message)}`);
   }
+
+  const responseTeams = await fetchTournamentsForTeam();
+
+  if (!responseTeams.ok) {
+    redirect(`/admin/equipos?error=${encodeURIComponent(responseTeams.message)}`);
+  }
+
+  const responseCoaches = await fetchCoachesForTeam();
+
+  if (!responseCoaches.ok) {
+    redirect(`/admin/equipos?error=${encodeURIComponent(responseCoaches.message)}`);
+  }
+  const tournaments = responseTeams.tournaments;
+  const coaches = responseCoaches.coaches;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -38,7 +53,9 @@ export const EditTeam: FC<Props> = async ({ params }) => {
           <CardContent>
             <TeamForm
               session={session as Session}
-              team={response.team as Team}
+              team={responseTeam.team!}
+              tournaments={tournaments as Tournament[]}
+              coaches={coaches as Coach[]}
             />
           </CardContent>
         </Card>

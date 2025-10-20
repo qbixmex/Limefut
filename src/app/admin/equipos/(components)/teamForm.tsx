@@ -1,6 +1,6 @@
 'use client';
 
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -19,21 +19,43 @@ import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from 'next-auth';
 import { toast } from 'sonner';
-import type { Team } from '@/shared/interfaces';
+import type { Coach, Team } from '@/shared/interfaces';
 import { createTeamAction, updateTeamAction } from '../(actions)';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { EmailInput } from './email-input';
-import { LoaderCircle } from 'lucide-react';
+import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '@/components/ui/command';
+import { cn } from '@/root/src/lib/utils';
+
+type Tournament = {
+  id: string;
+  name: string;
+};
 
 type Props = Readonly<{
   session: Session;
-  team?: Team;
+  tournaments: Tournament[];
+  coaches: Coach[];
+  team?: Team & {
+    tournament: Pick<Tournament, 'id' | 'name'>;
+    coach?: Pick<Coach, 'id' | 'name'>;
+  };
 }>;
 
-export const TeamForm: FC<Props> = ({ session, team }) => {
+export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => {
   const route = useRouter();
   const formSchema = !team ? createTeamSchema : editTeamSchema;
+  const [tournamentsOpen, setTournamentsOpen] = useState(false);
+  const [coachesOpen, setCoachesOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,11 +65,11 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
       headquarters: team?.headquarters ?? '',
       division: team?.division ?? '',
       group: team?.group ?? '',
-      tournament: team?.tournament ?? '',
-      country: team?.country ?? '',
+      tournamentId: team?.tournament.id ?? '',
+      country: team?.country ?? 'México',
       state: team?.state ?? '',
       city: team?.city ?? '',
-      coach: team?.coach ?? '',
+      coachId: team?.coach?.id ?? '',
       emails: team?.emails ?? [],
       address: team?.address ?? '',
       active: team?.active ?? false,
@@ -62,11 +84,11 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
     formData.append('headquarters', data.headquarters as string);
     formData.append('division', data.division as string);
     formData.append('group', data.group as string);
-    formData.append('tournament', data.tournament as string);
+    formData.append('tournamentId', data.tournamentId as string);
     formData.append('country', data.country as string);
     formData.append('state', data.state as string);
     formData.append('city', data.city as string);
-    formData.append('coach', data.coach as string);
+    formData.append('coachId', data.coachId as string);
     formData.append('emails', JSON.stringify(data.emails as string[]));
     formData.append('address', data.address as string);
 
@@ -242,16 +264,61 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="tournament"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Torneo</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="tournamentId"
+              render={({ field }) => {
+                const selectedTournament = tournaments.find((t) => t.id === field.value);
+                return (
+                  <FormItem>
+                    <FormLabel>Torneo</FormLabel>
+                    <Popover open={tournamentsOpen} onOpenChange={setTournamentsOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline-secondary"
+                          role="combobox"
+                          aria-expanded={tournamentsOpen}
+                          className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+                        >
+                          {selectedTournament ? selectedTournament.name : "Selecciona un torneo ..."}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Buscar torneo ..." className="h-9" />
+                          <CommandList>
+                            <CommandEmpty>No se encontró el torneo.</CommandEmpty>
+                            <CommandGroup>
+                              {tournaments.map((tournament) => (
+                                <CommandItem
+                                  key={tournament.id}
+                                  value={tournament.name}
+                                  onSelect={(currentValue) => {
+                                    field.onChange(currentValue);
+                                    const selected = tournaments.find((tournament) => tournament.name === currentValue);
+                                    if (selected) {
+                                      form.setValue('tournamentId', selected.id);
+                                    }
+                                    setTournamentsOpen(false);
+                                  }}
+                                >
+                                  {tournament.name}
+                                  <Check
+                                    className={cn(
+                                      "ml-auto",
+                                      field.value === tournament.name ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           </div>
           <div className="w-full lg:w-1/2">
@@ -310,16 +377,61 @@ export const TeamForm: FC<Props> = ({ session, team }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="coach"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Entrenador</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="coachId"
+              render={({ field }) => {
+                const selectedCoach = coaches.find((c) => c.id === field.value);
+                return (
+                  <FormItem>
+                    <FormLabel>Entrenador</FormLabel>
+                    <Popover open={coachesOpen} onOpenChange={setCoachesOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline-secondary"
+                          role="combobox"
+                          aria-expanded={coachesOpen}
+                          className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+                        >
+                          {selectedCoach ? selectedCoach.name : "Selecciona un entrenador ..."}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Buscar entrenador ..." className="h-9" />
+                          <CommandList>
+                            <CommandEmpty>¡ No se encontró el entrenador !</CommandEmpty>
+                            <CommandGroup>
+                              {coaches.map((coach) => (
+                                <CommandItem
+                                  key={coach.id}
+                                  value={coach.name}
+                                  onSelect={(currentValue) => {
+                                    field.onChange(currentValue);
+                                    const selected = coaches.find((coach) => coach.name === currentValue);
+                                    if (selected) {
+                                      form.setValue('coachId', selected.id);
+                                    }
+                                    setCoachesOpen(false);
+                                  }}
+                                >
+                                  {coach.name}
+                                  <Check
+                                    className={cn(
+                                      "ml-auto",
+                                      field.value === coach.name ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           </div>
           <div className="w-full lg:w-1/2">
