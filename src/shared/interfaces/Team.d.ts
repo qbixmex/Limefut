@@ -17,8 +17,8 @@ export interface Team {
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
-  tournament: Optional<Tournament>;
-  coach: Optional<Coach>;
+  tournament?: Optional<Tournament>;
+  coach?: Optional<Coach>;
 }
 
 export interface TeamSeed {
