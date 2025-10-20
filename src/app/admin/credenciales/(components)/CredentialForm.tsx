@@ -90,7 +90,7 @@ export const CredentialForm: FC<Props> = ({ session, credential, players }) => {
       }
       return;
     }
-
+    
     // Update credential
     if (credential) {
       const response = await updateCredentialAction({

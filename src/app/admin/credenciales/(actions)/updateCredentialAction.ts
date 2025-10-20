@@ -2,9 +2,8 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { editMatchSchema } from '@//shared/schemas';
-import { type Match } from '@/shared/interfaces';
-import { MATCH_STATUS } from '@/shared/enums';
+import { editCredentialSchema } from '@/shared/schemas';
+import { type Credential } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;
@@ -16,7 +15,7 @@ type Options = {
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
-  match: Match | null;
+  credential: Credential | null;
 }>;
 
 export const updateCredentialAction = async ({
@@ -29,7 +28,7 @@ export const updateCredentialAction = async ({
     return {
       ok: false,
       message: '¡ Usuario no autenticado !',
-      match: null,
+      credential: null,
     };
   }
 
@@ -37,68 +36,80 @@ export const updateCredentialAction = async ({
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      match: null,
+      credential: null,
     };
   }
 
   const rawData = {
-    local: formData.get('local') ?? '',
-    localScore: parseInt(formData.get('localScore') as string) ?? undefined,
-    visitor: formData.get('visitor') ?? undefined,
-    visitorScore: parseInt(formData.get('visitorScore') as string) ?? undefined,
-    place: formData.get('place') ?? '',
-    matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
-    week: parseInt(formData.get('week') as string) ?? 1,
-    referee: formData.get('referee') ?? '',
-    status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
-    tournamentId: formData.get('tournamentId') ?? undefined,
+    fullName: formData.get('fullName') ?? '',
+    playerId: formData.get('playerId') ?? '',
+    curp: formData.get('curp') ?? '',
+    position: formData.get('position') ?? '',
+    jerseyNumber: parseInt(formData.get('jerseyNumber') as string) ?? '',
   };
 
-  const matchVerified = editMatchSchema.safeParse(rawData);
+  const credentialVerified = editCredentialSchema.safeParse(rawData);
 
-  if (!matchVerified.success) {
+  if (!credentialVerified.success) {
     return {
       ok: false,
-      message: matchVerified.error.message,
-      match: null,
+      message: credentialVerified.error.message,
+      credential: null,
     };
   }
 
-  const { tournamentId, ...matchToSave } = matchVerified.data;
+  const data = credentialVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
-        const isMatchExists = await transaction.match.count({
-          where: { id },
+        const player = await prisma.player.findFirst({
+          where: { id: data.playerId },
+          select: {
+            name: true,
+            birthday: true,
+            team: {
+              select: {
+                tournament: {
+                  select: {
+                    id: true,
+                  }
+                },
+              }
+            },
+          }
         });
 
-        if (!isMatchExists) {
+        if (!player) {
           return {
             ok: false,
-            message: '¡ El encuentro no existe o ha sido eliminado !',
-            match: null,
+            message: `¡ El jugador: "${data.fullName}" no existe !`,
+            credential: null,
           };
         }
 
-        const tournament = await transaction.tournament.count({
-          where: { id: tournamentId }
+        const countCredential = await transaction.credential.count({
+          where: { playerId: data.playerId },
         });
 
-        if (!tournament) {
+        if (!countCredential) {
           return {
             ok: false,
-            message: `¡ El torneo con el ID: "${tournamentId}" no existe !`,
-            match: null,
+            message: `¡ La credencial con el jugador: "${data.fullName}" no existe !`,
+            credential: null,
           };
         }
 
-        const updatedMatch = await transaction.match.update({
+        const updatedCredential = await transaction.credential.update({
           where: { id },
           data: {
-            ...matchToSave,
-            status: matchToSave.status as MATCH_STATUS,
-            tournamentId,
+            fullName: data.fullName,
+            birthdate: player.birthday as Date ?? undefined,
+            curp: data.curp,
+            position: data.position,
+            jerseyNumber: data.jerseyNumber,
+            playerId: data.playerId,
+            tournamentId: player.team?.tournament.id as string,
           },
           include: {
             tournament: {
@@ -111,17 +122,12 @@ export const updateCredentialAction = async ({
         });
 
         // Revalidate Cache
-        revalidatePath('/admin/encuentros');
+        revalidatePath('/admin/credenciales');
 
         return {
           ok: true,
-          message: '¡ El encuentro fue actualizado correctamente 👍 !',
-          match: {
-            ...updatedMatch,
-            localScore: updatedMatch.localScore as number,
-            visitorScore: updatedMatch.visitorScore as number,
-            status: updatedMatch.status as MATCH_STATUS,
-          },
+          message: '¡ La credencial fue actualizada correctamente 👍 !',
+          credential: updatedCredential,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
@@ -130,20 +136,22 @@ export const updateCredentialAction = async ({
             return {
               ok: false,
               message: `¡ El campo "${fieldError}", está duplicado !`,
-              match: null,
+              credential: null,
             };
           }
-          console.log(error.message);
+          console.log("Mensaje de Error:");
+          console.log(error.meta);
+          console.log("Error:", error.message);
           return {
             ok: false,
-            message: '¡ Error al actualizar el encuentro, revise los logs del servidor !',
-            match: null,
+            message: '¡ Error al actualizar la credencial, revise los logs del servidor !',
+            credential: null,
           };
         }
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
-          match: null,
+          credential: null,
         };
       }
     });
@@ -154,7 +162,7 @@ export const updateCredentialAction = async ({
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      match: null,
+      credential: null,
     };
   }
 };

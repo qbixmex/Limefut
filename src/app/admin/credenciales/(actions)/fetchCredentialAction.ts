@@ -83,9 +83,9 @@ export const fetchCredentialAction = async (
 
     return {
       ok: true,
-      message: '¡ Credencial obtenido correctamente 👍 !',
+      message: '¡ Credencial obtenida correctamente 👍 !',
       credential: {
-        id: '', 
+        id: credential.id, 
         fullName: credential.fullName,
         birthdate: credential.birthdate,
         curp: credential.curp,
