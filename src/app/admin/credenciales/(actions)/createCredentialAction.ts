@@ -1,15 +1,14 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { createMatchSchema } from "@/shared/schemas";
+import { createCredentialSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
-import type { Match } from "@/shared/interfaces";
-import { MATCH_STATUS } from "@/shared/enums";
+import type { Credential } from "@/shared/interfaces";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
   message: string;
-  match: Match | null;
+  credential: Credential | null;
 }>;
 
 export const createCredentialAction = async (
@@ -20,79 +19,90 @@ export const createCredentialAction = async (
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      match: null,
+      credential: null,
     };
   }
 
   const rawData = {
-    local: formData.get('local') ?? '',
-    visitor: formData.get('visitor') ?? '',
-    place: formData.get('place') ?? '',
-    matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
-    week: parseInt(formData.get('week') as string) ?? 1,
-    referee: formData.get('referee') ?? '',
-    status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
-    tournamentId: formData.get('tournamentId') ?? undefined,
+    fullName: formData.get('fullName') ?? '',
+    playerId: formData.get('playerId') ?? '',
+    curp: formData.get('curp') ?? '',
+    position: formData.get('position') ?? '',
+    jerseyNumber: parseInt(formData.get('jerseyNumber') as string) ?? '',
   };
 
-  const matchVerified = createMatchSchema.safeParse(rawData);
+  const credentialVerified = createCredentialSchema.safeParse(rawData);
 
-  if (!matchVerified.success) {
+  if (!credentialVerified.success) {
     return {
       ok: false,
-      message: matchVerified.error.message,
-      match: null,
+      message: credentialVerified.error.message,
+      credential: null,
     };
   }
 
-  const { tournamentId, ...matchToSave } = matchVerified.data;
+  const data = credentialVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const tournament = await transaction.tournament.count({
-        where: { id: tournamentId }
-      });
-
-      if (!tournament) {
-        return {
-          ok: false,
-          message: `¡ El torneo con el ID: "${tournamentId}" no existe !`,
-          match: null,
-        };
-      }
-
-      const createdMatch = await transaction.match.create({
-        data: {
-          ...matchToSave,
-          localScore: 0,
-          visitorScore: 0,
-          status: matchToSave.status as MATCH_STATUS,
-          tournamentId,
-        },
-        include: {
-          tournament: {
+      const player = await prisma.player.findFirst({
+        where: { id: data.playerId },
+        select: {
+          name: true,
+          birthday: true,
+          team: {
             select: {
-              id: true,
-              name: true,
-            },
+              tournament: {
+                select: {
+                  id: true,
+                }
+              },
+            }
           },
         }
       });
 
+      if (!player) {
+        return {
+          ok: false,
+          message: `¡ El jugador: "${data.fullName}" no existe !`,
+          credential: null,
+        };
+      }
+
+      const countCredential = await transaction.credential.count({
+        where: { playerId: data.playerId },
+      });
+
+      if (countCredential) {
+        return {
+          ok: false,
+          message: `¡ La credencial con el jugador: "${data.fullName}" ya existe !`,
+          credential: null,
+        };
+      }
+
+      const createdCredential = await transaction.credential.create({
+        data: {
+          fullName: data.fullName,
+          birthdate: player.birthday as Date,
+          curp: data.curp,
+          position: data.position,
+          jerseyNumber: data.jerseyNumber,
+          playerId: data.playerId,
+          tournamentId: player.team?.tournament.id as string,
+        },
+      });
+
       return {
         ok: true,
-        message: '¡ Encuentro creado correctamente 👍 !',
-        match: {
-          ...createdMatch,
-          localScore: createdMatch.localScore as number,
-          visitorScore: createdMatch.visitorScore as number,
-          status: createdMatch.status as MATCH_STATUS,
-        },
+        message: '¡ Credencial creada correctamente 👍 !',
+        credential: createdCredential,
       };
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/encuentros');
+    revalidatePath('/admin/credenciales');
 
     return prismaTransaction;
   } catch (error) {
@@ -102,21 +112,21 @@ export const createCredentialAction = async (
         return {
           ok: false,
           message: `¡ El campo "${fieldError}", está duplicado !`,
-          match: null,
+          credential: null,
         };
       }
       console.log(error.message);
       return {
         ok: false,
-        message: '¡ Error al crear el encuentro, revise los logs del servidor !',
-        match: null,
+        message: '¡ Error al crear la credencial, revise los logs del servidor !',
+        credential: null,
       };
     }
     console.log(error);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      match: null,
+      credential: null,
     };
   }
 };
