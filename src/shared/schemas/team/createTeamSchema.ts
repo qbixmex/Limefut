@@ -30,9 +30,7 @@ export const createTeamSchema = z.object({
   group: z.string()
     .min(3, { message: '¡ El grupo debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El grupo debe ser menor a 100 caracteres !' }),
-  tournament: z.string()
-    .min(3, { message: '¡ El torneo debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ El torneo debe ser menor a 200 caracteres !' }),
+  tournamentId: z.uuid("El id del torneo debe ser un UUID válido"),
   country: z.string()
     .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),
@@ -42,9 +40,7 @@ export const createTeamSchema = z.object({
   city: z.string()
     .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' }),
-  coach: z.string()
-    .min(3, { message: '¡ El entrenador debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El entrenador debe ser menor a 100 caracteres !' }),
+  coachId: z.uuid("El id del entrenador debe ser un UUID válido"),
   emails: z.array(z.string())
     .refine(
       (emails) => emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)),
