@@ -83,10 +83,6 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                     <TableCell>{team.group}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Torneo</TableHead>
-                    <TableCell>{team.tournament}</TableCell>
-                  </TableRow>
-                  <TableRow>
                     <TableHead className="font-semibold">País</TableHead>
                     <TableCell>{team.country}</TableCell>
                   </TableRow>
@@ -99,8 +95,20 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                     <TableCell>{team.city}</TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableHead className="font-semibold">Torneo</TableHead>
+                    <TableCell>
+                      <Link href={`/admin/torneos/${team.tournament.permalink}`}>
+                        {team.tournament.name}
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
                     <TableHead className="font-semibold">Entrenador</TableHead>
-                    <TableCell>{team.coach}</TableCell>
+                    <TableCell>
+                      <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
+                        {team.coach.name}
+                      </Link>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-medium w-[180px]">Estado</TableHead>

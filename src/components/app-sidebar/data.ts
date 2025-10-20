@@ -14,28 +14,9 @@ import { GiWhistle } from "react-icons/gi";
 import {
   SoccerPlayer,
   SoccerField,
-  GameScore,
 } from "@/shared/components/icons";
 
 export const navMain: NavItem[] = [
-  {
-    label: "Equipos",
-    url: "#",
-    icon: Flag,
-    isActive: false,
-    subItems: [
-      {
-        label: "Lista",
-        url: "/admin/equipos",
-        icon: ListIcon,
-      },
-      {
-        label: "Crear",
-        url: "/admin/equipos/crear",
-        icon: PlusIcon,
-      },
-    ],
-  },
   {
     label: "Torneos",
     url: "#",
@@ -50,6 +31,24 @@ export const navMain: NavItem[] = [
       {
         label: "Crear",
         url: "/admin/torneos/crear",
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: "Equipos",
+    url: "#",
+    icon: Flag,
+    isActive: false,
+    subItems: [
+      {
+        label: "Lista",
+        url: "/admin/equipos",
+        icon: ListIcon,
+      },
+      {
+        label: "Crear",
+        url: "/admin/equipos/crear",
         icon: PlusIcon,
       },
     ],
@@ -91,24 +90,6 @@ export const navMain: NavItem[] = [
     ],
   },
   {
-    label: "Credenciales",
-    url: "#",
-    icon: IdCard,
-    isActive: false,
-    subItems: [
-      {
-        label: "Lista",
-        url: "#",
-        icon: ListIcon,
-      },
-      {
-        label: "Crear",
-        url: "#",
-        icon: PlusIcon,
-      },
-    ],
-  },
-  {
     label: "Encuentros",
     url: "#",
     icon: SoccerField,
@@ -145,19 +126,19 @@ export const navMain: NavItem[] = [
     ],
   },
   {
-    label: "Resultados",
+    label: "Credenciales",
     url: "#",
-    icon: GameScore,
+    icon: IdCard,
     isActive: false,
     subItems: [
       {
         label: "Lista",
-        url: "#",
+        url: "/admin/credenciales",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "#",
+        url: "/admin/credenciales/crear",
         icon: PlusIcon,
       },
     ],

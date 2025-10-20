@@ -1,22 +1,23 @@
-import { FC, ReactNode } from "react";
-import { redirect } from "next/navigation";
-import { AppSidebar } from "@/components/app-sidebar";
-import { Separator } from "@/components/ui/separator";
+import { FC, ReactNode } from 'react';
+import { redirect } from 'next/navigation';
+import { AppSidebar } from '@/components/app-sidebar';
+import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import type { Metadata } from "next";
-import { auth } from "@/auth.config";
-import { Breadcrumbs } from "./(components)/breadcrumbs";
-import { ThemeSwitcher } from "@/shared/theme/ThemeSwitcher";
+} from '@/components/ui/sidebar';
+import type { Metadata } from 'next';
+import { auth } from '@/auth.config';
+import { Breadcrumbs } from './(components)/breadcrumbs';
+import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
 import { NavUser } from '@/components/nav-user';
+import './layout.styles.css';
 
 export const metadata: Metadata = {
-  title: "Limefut - Admin",
-  description: "Panel de administración",
-  robots: "noindex, nofollow",
+  title: 'Limefut - Admin',
+  description: 'Panel de administración',
+  robots: 'noindex, nofollow',
 };
 
 type Props = Readonly<{ children: ReactNode; }>;
@@ -34,8 +35,8 @@ export const AdminLayout: FC<Props> = async ({ children }) => {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 justify-between items-center gap-5 px-5 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2">
+        <header className="header">
+          <div className="headerLeft">
             <SidebarTrigger className="-ml-1" />
             <Separator
               orientation="vertical"
@@ -43,7 +44,7 @@ export const AdminLayout: FC<Props> = async ({ children }) => {
             />
             <Breadcrumbs />
           </div>
-          <section className="flex items-center gap-3">
+          <section className="headerRight">
             <ThemeSwitcher />
             <NavUser
               user={{
