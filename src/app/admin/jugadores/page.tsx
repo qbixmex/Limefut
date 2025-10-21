@@ -66,7 +66,7 @@ export const CoachesPage = async () => {
                       <TableHead className="w-[100px]">Imagen</TableHead>
                       <TableHead>Nombre</TableHead>
                       <TableHead>Correo de Contacto</TableHead>
-                      <TableHead>Teléfono de Contacto</TableHead>
+                      <TableHead>Equipo</TableHead>
                       <TableHead className="text-center">Activo</TableHead>
                       <TableHead>Acciones</TableHead>
                     </TableRow>
@@ -95,7 +95,21 @@ export const CoachesPage = async () => {
                         </TableCell>
                         <TableCell>{player.name}</TableCell>
                         <TableCell>{player.email}</TableCell>
-                        <TableCell>{player.phone}</TableCell>
+                        <TableCell>
+                          <Link href={`/admin/equipos/${player.team?.permalink}`}>
+                            {
+                              player.team ? (
+                                <Badge variant="outline-info">
+                                  {player.team?.name}
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline-secondary">
+                                  Sin equipo asignado
+                                </Badge>
+                              )
+                            }
+                          </Link>
+                        </TableCell>
                         <TableCell className="text-center">
                           <Badge variant={player.active ? 'outline-success' : 'outline-secondary'}>
                             {player.active ? <Check /> : <CircleOff />}

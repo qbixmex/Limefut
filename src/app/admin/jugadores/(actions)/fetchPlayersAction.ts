@@ -1,12 +1,14 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { Pagination } from "@/shared/interfaces";
+import { Pagination, Team } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;
   take?: number;
 }>;
+
+type TeamType = Pick<Team, 'name' | 'permalink'>;
 
 export type ResponseFetchAction = Promise<{
   ok: boolean;
@@ -15,9 +17,9 @@ export type ResponseFetchAction = Promise<{
     id: string;
     name: string;
     email: string;
-    phone: string | null;
     imageUrl: string | null;
     active: boolean;
+    team: TeamType | null;
   }[] | null;
   pagination: Pagination | null;
 }>;
@@ -41,7 +43,13 @@ export const fetchPlayersAction = async (options?: Options): ResponseFetchAction
         phone: true,
         imageUrl: true,
         active: true,
-      }
+        team: {
+          select: {
+            name: true,
+            permalink: true,
+          },
+        },
+      },
     });
 
     const totalCount = await prisma.team.count();

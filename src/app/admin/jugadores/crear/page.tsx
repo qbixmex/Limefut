@@ -8,14 +8,23 @@ import { PlayerForm } from "../(components)/playerForm";
 import { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
+import { fetchTeamsForPlayer } from "../(actions)";
 
 const CreatePlayerPage = async () => {
   const session = await auth();
 
   if (!session?.user.roles.includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear entrenadores !';
-    redirect(`/admin/entrenadores?error=${encodeURIComponent(message)}`);
+    const message = '¡ No tienes permisos administrativos para crear jugadores !';
+    redirect(`/admin/jugadores?error=${encodeURIComponent(message)}`);
   }
+
+  const responseTeams = await fetchTeamsForPlayer();
+
+  if (!responseTeams.ok) {
+    redirect(`/admin/jugadores?error=${encodeURIComponent(responseTeams.message)}`);
+  }
+
+  const teams = responseTeams.teams!;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -25,7 +34,10 @@ const CreatePlayerPage = async () => {
             <CardTitle>Crear Jugador</CardTitle>
           </CardHeader>
           <CardContent>
-            <PlayerForm session={session as Session} />
+            <PlayerForm
+              session={session as Session}
+              teams={teams}
+            />
           </CardContent>
         </Card>
       </div>

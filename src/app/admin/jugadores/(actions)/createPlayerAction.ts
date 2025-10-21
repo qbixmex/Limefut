@@ -37,6 +37,9 @@ export const createPlayerAction = async (
       : (formData.get('active') === 'false')
         ? false
         : false,
+    teamId: ((formData.get('teamId') as string) === '')
+      ? null
+      : (formData.get('teamId') as string),
   };
 
   const playerVerified = createPlayerSchema.safeParse(rawData);
@@ -92,7 +95,8 @@ export const createPlayerAction = async (
           player: null,
         };
       }
-
+      console.log("ERROR META:", error.meta);
+      console.log("MESSAGE:", error.message);
       return {
         ok: false,
         message: '¡ Error al crear el jugador, revise los logs del servidor !',

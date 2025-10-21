@@ -1,8 +1,17 @@
 'use client';
 
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
+import { Session } from 'next-auth';
 import { useForm } from 'react-hook-form';
+import { createPlayerSchema, editPlayerSchema } from '@/shared/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
+import type { Player, Team } from '@/shared/interfaces';
+import { createPlayerAction, updatePlayerAction } from '../(actions)';
+import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import {
   Form,
   FormControl,
@@ -12,28 +21,39 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { createPlayerSchema, editPlayerSchema } from '@/shared/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Session } from 'next-auth';
-import { toast } from 'sonner';
-import type { Player } from '@/shared/interfaces';
-import { createPlayerAction, updatePlayerAction } from '../(actions)';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { LoaderCircle } from 'lucide-react';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import z from 'zod';
+
+type TeamType = Pick<Team, 'id' | 'name'>;
 
 type Props = Readonly<{
   session: Session;
-  player?: Player;
+  teams: TeamType[];
+  player?: Player & {
+    team: TeamType | null;
+  };
 }>;
 
-export const PlayerForm: FC<Props> = ({ session, player }) => {
+export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
   const route = useRouter();
   const formSchema = !player ? createPlayerSchema : editPlayerSchema;
+  const [teamsOpen, setTeamOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,6 +64,7 @@ export const PlayerForm: FC<Props> = ({ session, player }) => {
       birthday: player?.birthday ?? new Date(2000, 0, 1),
       nationality: player?.nationality ?? '',
       active: player?.active ?? false,
+      teamId: player?.team?.id ?? '',
     }
   });
 
@@ -61,6 +82,7 @@ export const PlayerForm: FC<Props> = ({ session, player }) => {
     }
 
     formData.append('active', String(data.active ?? false));
+    formData.append('teamId', data.teamId as string);
 
     // Create player
     if (!player) {
@@ -269,10 +291,90 @@ export const PlayerForm: FC<Props> = ({ session, player }) => {
           </div>
         </div>
 
-        {/* Age and Active */}
+        {/* Team & Age & Active */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
-            {/* Keep Empty */}
+            <FormField
+              control={form.control}
+              name="teamId"
+              render={({ field }) => {
+                const selectedTeam = teams.find((t) => t.id === field.value);
+                return (
+                  <FormItem>
+                    <FormLabel>Equipo</FormLabel>
+                    <Popover open={teamsOpen} onOpenChange={setTeamOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline-secondary"
+                          role="combobox"
+                          aria-expanded={teamsOpen}
+                          className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+                        >
+                          {selectedTeam
+                            ? selectedTeam.name
+                            : field.value === ''
+                              ? "Sin equipo asignado"
+                              : "Selecciona un equipo ..."}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Buscar equipo ..." className="h-9" />
+                          <CommandList>
+                            <CommandEmpty>No se encontró el equipo.</CommandEmpty>
+                            <CommandGroup>
+                              {/* Opción para dejar sin equipo */}
+                              <CommandItem
+                                key="no-team"
+                                value=""
+                                onSelect={() => {
+                                  field.onChange('');
+                                  form.setValue('teamId', '');
+                                  setTeamOpen(false);
+                                }}
+                              >
+                                <span className="italic text-gray-500">Sin equipo asignado</span>
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    field.value === '' ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                              {/* Equipos */}
+                              {teams.map((team) => (
+                                <CommandItem
+                                  key={team.id}
+                                  value={team.name}
+                                  onSelect={(currentValue) => {
+                                    const selected = teams.find((t) => t.name === currentValue);
+                                    if (selected) {
+                                      field.onChange(selected.id);
+                                      form.setValue('teamId', selected.id);
+                                    }
+                                    setTeamOpen(false);
+                                  }}
+                                >
+                                  {team.name}
+                                  <Check
+                                    className={cn(
+                                      "ml-auto",
+                                      field.value === team.id ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
           </div>
           <div className="w-full lg:w-1/2 flex justify-end gap-5">
             <FormField
