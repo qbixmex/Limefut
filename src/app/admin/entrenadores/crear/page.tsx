@@ -8,6 +8,7 @@ import { CoachForm } from "../(components)/coachForm";
 import { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
+import { fetchTeamsForCoach } from "../(actions)/fetchTeamsForCoach";
 
 export const CreateCoach = async () => {
   const session = await auth();
@@ -17,6 +18,14 @@ export const CreateCoach = async () => {
     redirect(`/admin/entrenadores?error=${encodeURIComponent(message)}`);
   }
 
+  const responseTeams = await fetchTeamsForCoach();
+
+  if (!responseTeams.ok) {
+    redirect(`/admin/entrenadores?error=${encodeURIComponent(responseTeams.message)}`);
+  }
+
+  const teams = responseTeams.teams;
+
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
@@ -25,7 +34,10 @@ export const CreateCoach = async () => {
             <CardTitle>Crear Entrenador</CardTitle>
           </CardHeader>
           <CardContent>
-            <CoachForm session={session as Session} />
+            <CoachForm
+              session={session as Session}
+              teams={teams!}
+            />
           </CardContent>
         </Card>
       </div>

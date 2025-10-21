@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 import { Session } from "next-auth";
 import { fetchCoachAction } from "../../(actions)";
 import { CoachForm } from "../../(components)/coachForm";
-import { Coach } from '@/shared/interfaces';
+import { fetchTeamsForCoach } from "../../(actions)/fetchTeamsForCoach";
 
 type Props = Readonly<{
   params: Promise<{
@@ -28,6 +28,14 @@ export const EditCoach: FC<Props> = async ({ params }) => {
     redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);
   }
 
+  const responseTeams = await fetchTeamsForCoach();
+
+  if (!responseTeams.ok) {
+    redirect(`/admin/entrenadores?error=${encodeURIComponent(responseTeams.message)}`);
+  }
+
+  const teams = responseTeams.teams!;
+
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
@@ -38,7 +46,8 @@ export const EditCoach: FC<Props> = async ({ params }) => {
           <CardContent>
             <CoachForm
               session={session as Session}
-              coach={response.coach as Coach}
+              teams={teams}
+              coach={response.coach!}
             />
           </CardContent>
         </Card>

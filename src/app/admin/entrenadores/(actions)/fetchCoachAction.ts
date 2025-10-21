@@ -1,12 +1,14 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Coach } from "@/shared/interfaces";
+import type { Coach, Team } from "@/shared/interfaces";
 
 type FetchCoachResponse = Promise<{
   ok: boolean;
   message: string;
-  coach: Coach | null;
+  coach: Coach & {
+    teams: Pick<Team, 'id' | 'name' | 'permalink'>[];
+  } | null;
 }>;
 
 export const fetchCoachAction = async (
@@ -24,6 +26,15 @@ export const fetchCoachAction = async (
   try {
     const coach = await prisma.coach.findUnique({
       where: { id: coachId },
+      include: {
+        teams: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          }
+        }
+      },
     });
 
     if (!coach) {

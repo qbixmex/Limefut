@@ -16,7 +16,6 @@ import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchCoachAction } from "../../(actions)";
-import type { Coach } from '@/shared/interfaces';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { GiWhistle } from "react-icons/gi";
@@ -37,7 +36,7 @@ export const CoachPage: FC<Props> = async ({ params }) => {
     redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);
   }
 
-  const coach = response.coach as Coach;
+  const coach = response.coach!;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -89,7 +88,19 @@ export const CoachPage: FC<Props> = async ({ params }) => {
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Descripción</TableHead>
-                    <TableCell>{coach.description ?? 'No proporcionada'}</TableCell>
+                    <TableCell className="whitespace-break-spaces">{coach.description ?? 'No proporcionada'}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="font-semibold">Equipo{coach.teams.length > 1 ? 's' : ''}</TableHead>
+                    <TableCell className="flex flex-wrap gap-2">
+                      {
+                        coach.teams.map((team) => (
+                          <Link key={team.id} href={`/admin/equipos/${team.permalink}`}>
+                            <Badge variant="outline-info">{team.name}</Badge>
+                          </Link>
+                        ))
+                      }
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
