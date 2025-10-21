@@ -67,8 +67,7 @@ export const CoachesPage = async () => {
                       <TableHead>Nombre</TableHead>
                       <TableHead>Correo Electrónico</TableHead>
                       <TableHead>Teléfono</TableHead>
-                      <TableHead>Edad</TableHead>
-                      <TableHead>Nacionalidad</TableHead>
+                      <TableHead className="text-center">Equipos</TableHead>
                       <TableHead className="text-center">Activo</TableHead>
                       <TableHead>Acciones</TableHead>
                     </TableRow>
@@ -98,8 +97,9 @@ export const CoachesPage = async () => {
                         <TableCell>{coach.name}</TableCell>
                         <TableCell>{coach.email}</TableCell>
                         <TableCell>{coach.phone}</TableCell>
-                        <TableCell>{coach.age}</TableCell>
-                        <TableCell>{coach.nationality}</TableCell>
+                        <TableCell className="text-center">
+                          <Badge variant="outline-info">{coach.teamsCount}</Badge>
+                        </TableCell>
                         <TableCell className="text-center">
                           <Badge variant={coach.active ? 'outline-success' : 'outline-secondary'}>
                             {coach.active ? <Check /> : <CircleOff />}

@@ -56,6 +56,9 @@ export const updateCoachAction = async ({
       : (formData.get('active') === 'false')
         ? false
         : false,
+    teamsIds: formData.get('teamsIds')
+      ? JSON.parse(formData.get('teamsIds') as string)
+      : [],
   };
 
   const coachVerified = editCoachSchema.safeParse(rawData);
@@ -68,7 +71,7 @@ export const updateCoachAction = async ({
     };
   }
 
-  const { image, ...coachToSave } = coachVerified.data;
+  const { image, teamsIds, ...coachToSave } = coachVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -87,7 +90,12 @@ export const updateCoachAction = async ({
 
         const updatedCoach = await transaction.coach.update({
           where: { id: coachId },
-          data: coachToSave,
+          data: {
+            ...coachToSave,
+            teams: {
+              set: (teamsIds ?? []).map((id: string) => ({ id })),
+            }
+          },
         });
 
         if (image) {
