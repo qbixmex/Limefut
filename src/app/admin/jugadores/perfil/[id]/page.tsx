@@ -16,7 +16,6 @@ import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchPlayerAction } from "../../(actions)";
-import type { Player } from '@/shared/interfaces';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { SoccerPlayer } from "@/shared/components/icons";
@@ -37,7 +36,7 @@ export const PlayerPage: FC<Props> = async ({ params }) => {
     redirect(`/admin/jugadores?error=${encodeURIComponent(response.message)}`);
   }
 
-  const player = response.player as Player;
+  const player = response.player!;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -83,15 +82,33 @@ export const PlayerPage: FC<Props> = async ({ params }) => {
                     <TableHead className="font-semibold">Fecha de Nacimiento</TableHead>
                     <TableCell>
                       {
-                        player.birthday 
+                        player.birthday
                           ? format(player.birthday as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
                           : 'No Proporcionado'
-                      } 
+                      }
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Nacionalidad</TableHead>
                     <TableCell>{player.nationality}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="font-semibold">Equipo</TableHead>
+                    <TableCell>
+                      {
+                        (player.team)
+                          ? (
+                            <Badge variant="outline-info">
+                              {player.team?.name}
+                            </Badge>
+                          )
+                          : (
+                            <Badge variant="outline-secondary">
+                              Sin equipo asignado
+                            </Badge>
+                          )
+                      }
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
@@ -122,7 +139,7 @@ export const PlayerPage: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/entrenadores/editar/${player.id}`}>
+                  <Link href={`/admin/jugadores/editar/${player.id}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>

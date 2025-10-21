@@ -1,12 +1,14 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Player } from "@/shared/interfaces";
+import { Player, Team } from "@/shared/interfaces";
+
+type TeamType = Pick<Team, 'id' | 'name' | 'permalink'>;
 
 type FetchPlayerResponse = Promise<{
   ok: boolean;
   message: string;
-  player: Player | null;
+  player: Player & { team: TeamType | null } | null;
 }>;
 
 export const fetchPlayerAction = async (
@@ -24,6 +26,16 @@ export const fetchPlayerAction = async (
   try {
     const player = await prisma.player.findUnique({
       where: { id: playerId },
+      include: {
+        team: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        }
+      }
+
     });
 
     if (!player) {
@@ -37,7 +49,10 @@ export const fetchPlayerAction = async (
     return {
       ok: true,
       message: '¡ Jugador obtenido correctamente 👍 !',
-      player,
+      player: {
+        ...player,
+        team: player?.team ?? null,
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

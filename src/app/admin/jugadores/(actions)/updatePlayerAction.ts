@@ -3,7 +3,7 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
-import { editPlayerSchema } from '@//shared/schemas';
+import { editPlayerSchema } from '@/shared/schemas';
 import { Player } from '@/shared/interfaces';
 
 type Options = {
@@ -55,6 +55,9 @@ export const updatePlayerAction = async ({
       : (formData.get('active') === 'false')
         ? false
         : false,
+    teamId: ((formData.get('teamId') as string) === '')
+      ? null
+      : (formData.get('teamId') as string),
   };
 
   const playerVerified = editPlayerSchema.safeParse(rawData);
@@ -111,6 +114,7 @@ export const updatePlayerAction = async ({
             data: {
               imageUrl: imageUploaded.secureUrl,
               imagePublicID: imageUploaded.publicId,
+              teamId: playerToSave.teamId,
             },
           });
 

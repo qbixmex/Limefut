@@ -53,7 +53,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
       nationality: coach?.nationality ?? '',
       description: coach?.description ?? '',
       active: coach?.active ?? false,
-      teamsIds: ((coach?.teams as TeamType[]).length > 0)
+      teamsIds: (coach?.teams && ((coach?.teams as TeamType[]).length > 0))
         ? coach?.teams.map((t) => t.id)
         : [],
     }
