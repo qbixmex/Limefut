@@ -15,6 +15,7 @@ export interface Team {
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+  tournamentId: string;
 }
 
 export interface TeamSeed {
