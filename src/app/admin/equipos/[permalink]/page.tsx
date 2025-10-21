@@ -130,32 +130,53 @@ export const TeamPage: FC<Props> = async ({ params }) => {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-sky-600">Datos Adicionales</h2>
-
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableHead className="w-[180px] font-semibold">Enlace Permanente</TableHead>
-                    <TableCell>{team.permalink}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="w-[180px] font-semibold">Dirección</TableHead>
-                    <TableCell>{team.address ?? 'No especificada'}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="w-[180px] font-semibold">Fecha de Creación</TableHead>
-                    <TableCell>
-                      {format(new Date(team?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="w-[180px] font-semibold">Última actualización</TableHead>
-                    <TableCell>
-                      {format(new Date(team?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              <div className="flex flex-col lg:flex-row gap-10">
+                <div className="w-full lg:w-1/2">
+                  <h2 className="text-xl font-bold text-sky-600 mb-5">Jugadores</h2>
+                  {
+                    !team.players ? (
+                      <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
+                        <p className="text-cyan-600 text-center font-bold">Aún no hay jugadores registrados</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-3">
+                        {team.players.map(({ id, name }) => (
+                          <Link key={id} href={`/admin/jugadores/perfil/${id}`}>
+                            <Badge variant="outline-info">{name}</Badge>
+                          </Link>
+                        ))}
+                      </div>
+                    )
+                  }
+                </div>
+                <div className="w-full lg:w-1/2">
+                  <h2 className="text-xl font-bold text-sky-600">Datos Adicionales</h2>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableHead className="w-[180px] font-semibold">Enlace Permanente</TableHead>
+                        <TableCell>{team.permalink}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="w-[180px] font-semibold">Dirección</TableHead>
+                        <TableCell>{team.address ?? 'No especificada'}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="w-[180px] font-semibold">Fecha de Creación</TableHead>
+                        <TableCell>
+                          {format(new Date(team?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="w-[180px] font-semibold">Última actualización</TableHead>
+                        <TableCell>
+                          {format(new Date(team?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
             </section>
 
             <div className="absolute top-5 right-5">
