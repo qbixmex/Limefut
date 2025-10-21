@@ -41,4 +41,5 @@ export const createCoachSchema = z.object({
     .max(250, { message: '¡ La descripción debe ser menor a 250 caracteres !' })
     .optional(),
   active: z.boolean().optional(),
+  teamsIds: z.array(z.uuid("¡ El valor debe ser un UUID válido !")).optional(),
 });

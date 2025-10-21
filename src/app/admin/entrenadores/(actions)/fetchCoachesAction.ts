@@ -16,10 +16,9 @@ export type ResponseFetchAction = Promise<{
     name: string;
     email: string;
     phone: string | null;
-    age: number | null;
-    nationality: string | null;
     imageUrl: string | null;
     active: boolean;
+    teamsCount: number;
   }[] | null;
   pagination: Pagination | null;
 }>;
@@ -41,10 +40,11 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
         name: true,
         email: true,
         phone: true,
-        age: true,
-        nationality: true,
         imageUrl: true,
         active: true,
+        _count: {
+          select: { teams: true },
+        },
       }
     });
 
@@ -53,7 +53,10 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
     return {
       ok: true,
       message: '! Los entrenadores fueron obtenidos correctamente 👍',
-      coaches,
+      coaches: coaches.map((coach) => ({
+        ...coach,
+        teamsCount: coach._count.teams,
+      })),
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),

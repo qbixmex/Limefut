@@ -1,5 +1,3 @@
-import type { Team } from './Team';
-
 export interface Coach {
   id: string;
   name: string;
@@ -13,7 +11,6 @@ export interface Coach {
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
-  teams?: Team[] | null;
 }
 
 export interface CoachSeed {

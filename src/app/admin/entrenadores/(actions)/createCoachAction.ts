@@ -10,7 +10,9 @@ import type { Coach } from "@/shared/interfaces";
 type CreateResponseAction = Promise<{
   ok: boolean;
   message: string;
-  coach: Coach | null;
+  coach: Coach & {
+    teams: { id: string; name: string; }[]
+  } | null;
 }>;
 
 export const createCoachAction = async (
@@ -38,6 +40,9 @@ export const createCoachAction = async (
       : (formData.get('active') === 'false')
         ? false
         : false,
+    teamsIds: formData.get('teamsIds')
+      ? JSON.parse(formData.get('teamsIds') as string)
+      : [],
   };
 
   const coachVerified = createCoachSchema.safeParse(rawData);
@@ -50,7 +55,7 @@ export const createCoachAction = async (
     };
   }
 
-  const { image, ...teamToSave } = coachVerified.data;
+  const { image, teamsIds, ...coachToSave } = coachVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
   let cloudinaryResponse: CloudinaryResponse | null = null;
@@ -66,10 +71,21 @@ export const createCoachAction = async (
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdCoach = await transaction.coach.create({
         data: {
-          ...teamToSave,
+          ...coachToSave,
           imageUrl: cloudinaryResponse?.secureUrl ?? null,
           imagePublicID: cloudinaryResponse?.publicId ?? null,
-        }
+          teams: {
+            connect: (teamsIds ?? []).map((id: string) => ({ id })),
+          },
+        },
+        include: {
+          teams: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
       });
 
       return {
@@ -93,7 +109,9 @@ export const createCoachAction = async (
           coach: null,
         };
       }
-
+      console.log("CAUSE:", error.cause);
+      console.log("META:", error.meta);
+      console.log("MESSAGE:", error.message);
       return {
         ok: false,
         message: '¡ Error al crear el entrenador, revise los logs del servidor !',
