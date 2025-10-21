@@ -21,6 +21,7 @@ export type ResponseFetchTeams = Promise<{
     active: boolean;
     tournament: Pick<Tournament, 'id' | 'name' | 'permalink'>;
     coach: Pick<Coach, 'id' | 'name'>;
+    playersCount: number;
   }[] | null;
   pagination: Pagination | null;
 }>;
@@ -48,14 +49,17 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
             id: true,
             name: true,
             permalink: true,
-          }
+          },
         },
         coach: {
           select: {
             id: true,
             name: true,
-          }
-        }
+          },
+        },
+        _count: {
+          select: { players: true },
+        },
       },
       take: take,
       skip: (page - 1) * take,
@@ -72,6 +76,7 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
           id: team.coach?.id ?? '',
           name: team.coach?.name ?? 'Sin entrenador',
         },
+        playersCount: team._count.players,
       })),
       pagination: {
         currentPage: page,

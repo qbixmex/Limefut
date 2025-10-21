@@ -69,6 +69,7 @@ export const TeamsPage = async () => {
                       <TableHead>Grupo</TableHead>
                       <TableHead>Torneo</TableHead>
                       <TableHead>Entrenador</TableHead>
+                      <TableHead className="text-center">Jugadores</TableHead>
                       <TableHead className="text-center">Activo</TableHead>
                       <TableHead>Acciones</TableHead>
                     </TableRow>
@@ -107,6 +108,11 @@ export const TeamsPage = async () => {
                           <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
                             {team.coach.name}
                           </Link>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Badge variant="outline-info">
+                            {team.playersCount}
+                          </Badge>
                         </TableCell>
                         <TableCell className="text-center">
                           <Badge variant={team.active ? 'outline-success' : 'outline-secondary'}>

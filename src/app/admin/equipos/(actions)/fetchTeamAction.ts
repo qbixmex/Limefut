@@ -1,14 +1,19 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Team, Tournament, Coach } from "@/shared/interfaces";
+import type { Team, Tournament, Coach, Player } from "@/shared/interfaces";
+
+type TournamentType = Pick<Tournament, 'id' | 'name' | 'permalink'>;
+type CoachType = Pick<Coach, 'id' | 'name'>;
+type PlayerType = Pick<Player, 'id' | 'name'>;
 
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
   team: Team & {
-    tournament: Pick<Tournament, 'id' | 'name' | 'permalink'>;
-    coach?: Pick<Coach, 'id' | 'name'>;
+    tournament: TournamentType;
+    coach?: CoachType;
+    players: PlayerType[] | null;
   } | null;
 }>;
 
@@ -36,6 +41,12 @@ export const fetchTeamAction = async (
           },
         },
         coach: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        players: {
           select: {
             id: true,
             name: true,
