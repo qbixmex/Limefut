@@ -36,4 +36,11 @@ export const createPlayerSchema = z.object({
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
   active: z.boolean().optional(),
+  teamId: z
+    .string()
+    .refine(
+      (value) => value === '' || z.string().uuid().safeParse(value).success,
+      { message: '¡ El id del equipo debe ser un UUID válido o vacío !' }
+    )
+    .nullish(),
 });

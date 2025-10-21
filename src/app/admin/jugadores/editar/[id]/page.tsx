@@ -9,9 +9,8 @@ import {
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { Session } from "next-auth";
-import { fetchPlayerAction } from "../../(actions)";
+import { fetchPlayerAction, fetchTeamsForPlayer } from "../../(actions)";
 import { PlayerForm } from "../../(components)/playerForm";
-import { Player } from '@/shared/interfaces';
 
 type Props = Readonly<{
   params: Promise<{
@@ -22,11 +21,20 @@ type Props = Readonly<{
 export const EditCoach: FC<Props> = async ({ params }) => {
   const session = await auth();
   const coachId = (await params).id;
-  const response = await fetchPlayerAction(coachId, session?.user.roles ?? null);
+  const responsePlayer = await fetchPlayerAction(coachId, session?.user.roles ?? null);
 
-  if (!response.ok) {
-    redirect(`/admin/jugadores?error=${encodeURIComponent(response.message)}`);
+  if (!responsePlayer.ok) {
+    redirect(`/admin/jugadores?error=${encodeURIComponent(responsePlayer.message)}`);
   }
+
+  const responseTeams = await fetchTeamsForPlayer();
+
+  if (!responseTeams.ok) {
+    redirect(`/admin/jugadores?error=${encodeURIComponent(responseTeams.message)}`);
+  }
+
+  const player = responsePlayer.player!;
+  const teams = responseTeams.teams!;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -38,7 +46,8 @@ export const EditCoach: FC<Props> = async ({ params }) => {
           <CardContent>
             <PlayerForm
               session={session as Session}
-              player={response.player as Player}
+              player={player}
+              teams={teams}
             />
           </CardContent>
         </Card>

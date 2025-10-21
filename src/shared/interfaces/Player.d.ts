@@ -10,7 +10,6 @@ export interface Player {
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
-  team?: Partial<Team> | null;
 }
 
 export interface PlayerSeed {

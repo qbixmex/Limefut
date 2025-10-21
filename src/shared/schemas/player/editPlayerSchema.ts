@@ -33,9 +33,16 @@ export const editPlayerSchema = z.object({
     .max(100, { message: '¡ La nacionalidad debe ser menor a 100 caracteres !' })
     .optional(),
   image: z
-    .instanceof(File, { message: "La imagen debe ser un archivo" })
+    .instanceof(File, { message: 'La imagen debe ser un archivo' })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
   active: z.boolean().optional(),
+  teamId: z
+    .string()
+    .refine(
+      (value) => value === '' || z.string().uuid().safeParse(value).success,
+      { message: '¡ El id del equipo debe ser un UUID válido o vacío !' }
+    )
+    .nullish(),
 });
