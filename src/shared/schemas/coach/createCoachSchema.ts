@@ -20,7 +20,7 @@ export const createCoachSchema = z.object({
       { message: '¡ Formato incorrecto del correo electrónico !' }
     ),
   phone: z.string()
-    .min(12, { message: '¡ El teléfono debe ser mayor a 3 caracteres !' })
+    .min(12, { message: '¡ El teléfono debe ser mayor a 12 caracteres !' })
     .max(100, { message: '¡ El teléfono debe ser menor a 100 caracteres !' })
     .optional(),
   age: z.int()

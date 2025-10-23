@@ -30,7 +30,7 @@ export interface TeamSeed {
   city: string;
   state: string;
   emails: string[];
-  address: string;
+  address: string | null;
   active: boolean;
   tournamentId: string;
   coachId?: string | null;

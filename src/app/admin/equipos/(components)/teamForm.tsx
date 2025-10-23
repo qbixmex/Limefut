@@ -69,9 +69,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       country: team?.country ?? 'México',
       state: team?.state ?? '',
       city: team?.city ?? '',
-      coachId: team?.coach?.id ?? '',
+      coachId: team?.coach?.id ?? undefined,
       emails: team?.emails ?? [],
-      address: team?.address ?? '',
+      address: team?.address ?? undefined,
       active: team?.active ?? false,
     }
   });
@@ -88,9 +88,16 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
     formData.append('country', data.country as string);
     formData.append('state', data.state as string);
     formData.append('city', data.city as string);
-    formData.append('coachId', data.coachId as string);
+
+    if (data.coachId) {
+      formData.append('coachId', data.coachId.trim());
+    }
+
     formData.append('emails', JSON.stringify(data.emails as string[]));
-    formData.append('address', data.address as string);
+
+    if (data.address) {
+      formData.append('address', data.address.trim());
+    }
 
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
@@ -467,8 +474,8 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                   <FormControl>
                     <Textarea
                       {...field}
-                      value={field.value ?? ''}
                       className="resize-none"
+                      value={field.value ?? undefined}
                     />
                   </FormControl>
                   <FormMessage />

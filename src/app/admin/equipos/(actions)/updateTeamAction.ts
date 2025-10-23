@@ -51,9 +51,9 @@ export const updateTeamAction = async ({
     country: formData.get('country') as string,
     state: formData.get('state') as string,
     city: formData.get('city') as string,
-    coachId: formData.get('coachId') as string,
+    coachId: formData.get('coachId') ?? null,
     emails: JSON.parse(formData.get('emails') as string),
-    address: formData.get('address') as string,
+    address: formData.get('address') ?? null,
     image: formData.get('image'),
     active: (formData.get('active') === 'true')
       ? true
@@ -65,6 +65,7 @@ export const updateTeamAction = async ({
   const teamVerified = editTeamSchema.safeParse(rawData);
 
   if (!teamVerified.success) {
+    console.log("Falló la validación del lado del backend");
     return {
       ok: false,
       message: teamVerified.error.message,
@@ -101,10 +102,10 @@ export const updateTeamAction = async ({
             city: teamToSave.city,
             state: teamToSave.state,
             emails: teamToSave.emails,
-            address: teamToSave.address,
+            address: teamToSave.address ?? undefined,
             active: teamToSave.active,
             tournamentId: teamToSave.tournamentId,
-            coachId: teamToSave.coachId,
+            coachId: teamToSave.coachId ?? undefined,
           },
         });
 
