@@ -2,12 +2,19 @@
 
 import prisma from '@/lib/prisma';
 import { MATCH_STATUS } from '@/root/src/shared/enums';
-import { Match } from "@/shared/interfaces";
+import type { Match } from '@/shared/interfaces';
+
+type TournamentType = {
+  id: string;
+  name: string;
+};
 
 type FetchPlayerResponse = Promise<{
   ok: boolean;
   message: string;
-  match: Match | null;
+  match: Match & {
+    tournament: TournamentType;
+  } | null;
 }>;
 
 export const fetchMatchAction = async (
@@ -25,14 +32,36 @@ export const fetchMatchAction = async (
   try {
     const match = await prisma.match.findUnique({
       where: { id },
-      include: {
+      select: {
+        id: true,
+        local: {
+          select: {
+            name: true,
+            permalink: true,
+          }
+        },
+        visitor: {
+          select: {
+            name: true,
+            permalink: true,
+          }
+        },
+        place: true,
+        matchDate: true,
+        week: true,
+        referee: true,
+        localScore: true,
+        visitorScore: true,
+        status: true,
         tournament: {
           select: {
             id: true,
             name: true,
           },
         },
-      }
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     if (!match) {
@@ -47,10 +76,22 @@ export const fetchMatchAction = async (
       ok: true,
       message: '¡ Encuentro obtenido correctamente 👍 !',
       match: {
-        ...match,
+        id: match.id,
+        localTeam: match.local,
+        visitorTeam: match.visitor,
+        place: match.place,
+        matchDate: match.matchDate,
+        week: match.week,
+        referee: match.referee,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS,
+        tournament: {
+          id: match.tournament.id,
+          name: match.tournament.name,
+        },
+        createdAt: match.createdAt,
+        updatedAt: match.updatedAt,
       },
     };
   } catch (error) {

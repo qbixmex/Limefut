@@ -1,10 +1,11 @@
 import { MATCH_STATUS } from "../enums";
-import { type Tournament } from "./Tournament";
+import type { Tournament } from "./Tournament";
+import type { Team } from "./Team";
 
 export interface Match {
   id: string;
-  local: string;
-  visitor: string;
+  localTeam: Partial<Team>;
+  visitorTeam: Partial<Team>;
   place: string;
   matchDate: Date;
   week: number;
@@ -12,7 +13,6 @@ export interface Match {
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS;
-  tournament: Pick<Tournament, 'id' | 'name'>;
   createdAt?: Date;
   updatedAt?: Date;
 }
