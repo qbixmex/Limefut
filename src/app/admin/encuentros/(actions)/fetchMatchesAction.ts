@@ -78,8 +78,8 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
           permalink: match.local.permalink,
         },
         visitorTeam: {
-          name: match.local.name,
-          permalink: match.local.permalink,
+          name: match.visitor.name,
+          permalink: match.visitor.permalink,
         },
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,

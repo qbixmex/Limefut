@@ -9,6 +9,8 @@ import { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { fetchTournamentsAction } from "../(actions)";
+import { fetchTeamsForMatchAction } from "../(actions)/fetchTeamsForMatchAction";
+import { Team } from "@/root/src/shared/interfaces";
 
 const CreateMatchPage = async () => {
   const session = await auth();
@@ -19,6 +21,14 @@ const CreateMatchPage = async () => {
   }
 
   const tournaments = await fetchTournamentsAction();
+
+  const responseTeams = await fetchTeamsForMatchAction();
+
+  if (!responseTeams.ok) {
+    redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
+  }
+
+  const teams = responseTeams.teams as Team[];
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -31,6 +41,7 @@ const CreateMatchPage = async () => {
             <MatchForm
               session={session as Session}
               tournaments={tournaments.tournaments || []}
+              teams={teams}
             />
           </CardContent>
         </Card>
