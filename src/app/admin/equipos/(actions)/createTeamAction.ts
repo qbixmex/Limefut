@@ -84,8 +84,8 @@ export const createTeamAction = async (
           emails: teamToSave.emails,
           address: teamToSave.address,
           active: teamToSave.active,
-          tournamentId: teamToSave.tournamentId,
-          coachId: teamToSave.coachId,
+          tournamentId: teamToSave.tournamentId ?? null,
+          coachId: teamToSave.coachId ?? null,
         },
       });
 

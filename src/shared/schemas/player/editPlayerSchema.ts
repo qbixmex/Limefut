@@ -41,7 +41,7 @@ export const editPlayerSchema = z.object({
   teamId: z
     .string()
     .refine(
-      (value) => value === '' || z.string().uuid().safeParse(value).success,
+      (value) => value === '' || z.uuid().safeParse(value).success,
       { message: '¡ El id del equipo debe ser un UUID válido o vacío !' }
     )
     .nullish(),
