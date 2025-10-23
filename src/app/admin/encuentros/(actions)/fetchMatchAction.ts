@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { MATCH_STATUS } from '@/root/src/shared/enums';
 import type { Match } from '@/shared/interfaces';
 
-type TournamentType = {
+export type TournamentType = {
   id: string;
   name: string;
 };
@@ -36,12 +36,14 @@ export const fetchMatchAction = async (
         id: true,
         local: {
           select: {
+            id: true,
             name: true,
             permalink: true,
           }
         },
         visitor: {
           select: {
+            id: true,
             name: true,
             permalink: true,
           }

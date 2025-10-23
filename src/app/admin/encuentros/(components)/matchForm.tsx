@@ -49,7 +49,9 @@ import { cn } from '@/root/src/lib/utils';
 type Props = Readonly<{
   session: Session;
   teams: Team[];
-  match?: Match;
+  match?: Match & {
+    tournament: Pick<Tournament, 'id' | 'name'>;
+  };
   tournaments: Pick<Tournament, 'id' | 'name'>[];
 }>;
 
@@ -62,16 +64,16 @@ export const MatchForm: FC<Props> = ({ session, teams, match, tournaments }) => 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      localTeamId: '',
+      localTeamId: match?.localTeam.id ?? '',
       localScore: match?.localScore ?? 0,
-      visitorTeamId: '',
+      visitorTeamId: match?.visitorTeam.id ?? '',
       visitorScore: match?.visitorScore ?? 0,
       place: match?.place ?? '',
       matchDate: match?.matchDate ?? new Date(),
       week: match?.week ?? 1,
       referee: match?.referee ?? '',
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
-      tournamentId: '',
+      tournamentId: match?.tournament.id ?? '',
     }
   });
 
@@ -159,7 +161,7 @@ export const MatchForm: FC<Props> = ({ session, teams, match, tournaments }) => 
                             role="combobox"
                             aria-expanded={localTeamsOpen}
                             className={cn(
-                              "w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+                              "w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
                               { "border-destructive!": form.formState.errors.localTeamId }
                             )}
                           >
@@ -238,7 +240,7 @@ export const MatchForm: FC<Props> = ({ session, teams, match, tournaments }) => 
                             role="combobox"
                             aria-expanded={visitorTeamsOpen}
                             className={cn(
-                              "w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+                              "w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
                               { "border-destructive!": form.formState.errors.visitorTeamId }
                             )}
                           >
