@@ -10,8 +10,9 @@ import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { Session } from "next-auth";
 import { fetchMatchAction, fetchTournamentsAction } from "../../(actions)";
-import { MatchForm } from "../../(components)/matchForm";
-import { Match } from '@/shared/interfaces';
+import { Match, Team, Tournament } from '@/shared/interfaces';
+import { fetchTeamsForMatchAction } from "../../(actions)/fetchTeamsForMatchAction";
+import { MatchForm } from "../../(components)/MatchForm";
 
 type Props = Readonly<{
   params: Promise<{
@@ -22,13 +23,23 @@ type Props = Readonly<{
 export const EditMatch: FC<Props> = async ({ params }) => {
   const session = await auth();
   const id = (await params).id;
-  const response = await fetchMatchAction(id, session?.user.roles ?? null);
 
-  if (!response.ok) {
-    redirect(`/admin/encuentros?error=${encodeURIComponent(response.message)}`);
+  const responseMatch = await fetchMatchAction(id, session?.user.roles ?? null);
+
+  if (!responseMatch.ok) {
+    redirect(`/admin/encuentros?error=${encodeURIComponent(responseMatch.message)}`);
   }
 
+  const responseTeams = await fetchTeamsForMatchAction();
+
+  if (!responseTeams.ok) {
+    redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
+  }
+
+  const teams = responseTeams.teams as Team[];
+
   const tournaments = await fetchTournamentsAction();
+  const match = responseMatch.match as Match & { tournament: Pick<Tournament, 'id' | 'name'> };
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -41,7 +52,8 @@ export const EditMatch: FC<Props> = async ({ params }) => {
             <MatchForm
               tournaments={tournaments.tournaments || []}
               session={session as Session}
-              match={response.match as Match}
+              match={match}
+              initialTeams={teams}
             />
           </CardContent>
         </Card>

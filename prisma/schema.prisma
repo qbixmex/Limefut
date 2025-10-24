@@ -53,6 +53,7 @@ model Tournament {
   startDate     DateTime @map("start_date")
   endDate       DateTime @map("end_date")
   active        Boolean  @default(false)
+  currentWeek   Int      @map("current_week") @default(0)
 
   // Relations
   matches     Match[]
@@ -84,16 +85,18 @@ model Team {
   active        Boolean  @default(false)
 
   // Relations
-  coachId      String?    @map("coach_id")
-  coach        Coach?     @relation(fields: [coachId], references: [id])
+  coachId      String?     @map("coach_id")
+  coach        Coach?      @relation(fields: [coachId], references: [id])
   players      Player[]
-  tournamentId String     @map("tournament_id")
-  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId String      @map("tournament_id")
+  tournament   Tournament  @relation(fields: [tournamentId], references: [id])
   standings    Standings[]
+  homeMatches  Match[]     @relation("HomeMatches")
+  awayMatches  Match[]     @relation("AwayMatches")
 
   // Timestamps
-  createdAt DateTime    @default(now()) @map("created_at")
-  updatedAt DateTime    @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("teams")
 }
@@ -153,8 +156,8 @@ enum Status {
 
 model Match {
   id           String   @id @default(uuid())
-  local        String
-  visitor      String
+  localId      String   @map("local_id")
+  visitorId    String   @map("visitor_id")
   localScore   Int?     @default(0) @map("local_score")
   visitorScore Int?     @default(0) @map("visitor_score")
   place        String
@@ -167,6 +170,8 @@ model Match {
   // Relations
   tournamentId String     @map("tournament_id")
   tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  local        Team       @relation("HomeMatches", fields: [localId], references: [id])
+  visitor      Team       @relation("AwayMatches", fields: [visitorId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")

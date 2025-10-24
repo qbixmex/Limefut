@@ -1,6 +1,7 @@
 'use client';
 
-import { type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
+import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -18,6 +19,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -25,32 +39,39 @@ import { createMatchSchema, editMatchSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from 'next-auth';
 import { toast } from 'sonner';
-import type { Match, Tournament } from '@/shared/interfaces';
+import type { Match, Team, Tournament } from '@/shared/interfaces';
 import { createMatchAction, updateMatchAction } from '../(actions)';
-import { LoaderCircle } from 'lucide-react';
+import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { MATCH_STATUS } from '@/shared/enums';
+import { cn } from '@/root/src/lib/utils';
 
 type Props = Readonly<{
   session: Session;
-  match?: Match;
+  initialTeams: Team[];
+  match?: Match & {
+    tournament: Pick<Tournament, 'id' | 'name'>;
+  };
   tournaments: Pick<Tournament, 'id' | 'name'>[];
 }>;
 
-export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
+export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments }) => {
   const route = useRouter();
   const formSchema = !match ? createMatchSchema : editMatchSchema;
+  const [teams, setTeams] = useState<Team[]>(initialTeams);
+  const [localTeamsOpen, setLocalTeamsOpen] = useState(false);
+  const [visitorTeamsOpen, setVisitorTeamOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      local: match?.local ?? '',
+      localTeamId: match?.localTeam.id ?? '',
       localScore: match?.localScore ?? 0,
-      visitor: match?.visitor ?? '',
+      visitorTeamId: match?.visitorTeam.id ?? '',
       visitorScore: match?.visitorScore ?? 0,
       place: match?.place ?? '',
-      matchDate: match?.matchDate ?? new Date(2000, 1, 1),
+      matchDate: match?.matchDate ?? new Date(),
       week: match?.week ?? 1,
       referee: match?.referee ?? '',
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
@@ -58,12 +79,40 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
     }
   });
 
+  useEffect(() => {
+    const initialWeek = form.watch('week');
+    if (initialWeek && initialWeek > 0 && !match) {
+      updateTeamsForWeek(initialWeek);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const updateTeamsForWeek = async (week: number) => {
+    const response = await fetchTeamsForMatchAction({ week });
+    if (response.ok && response.teams) {
+      setTeams(response.teams as Team[]);
+
+      // Clear team selections if they're no longer available
+      const localId = form.watch('localTeamId');
+      const visitorId = form.watch('visitorTeamId');
+      const availableTeamIds = new Set(response.teams.map(t => t.id));
+
+      if (localId && !availableTeamIds.has(localId)) {
+        form.setValue('localTeamId', '');
+      }
+
+      if (visitorId && !availableTeamIds.has(visitorId)) {
+        form.setValue('visitorTeamId', '');
+      }
+    }
+  };
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
 
-    formData.append('local', data.local as string);
+    formData.append('localTeamId', data.localTeamId as string);
     formData.append('localScore', (data.localScore as number).toString());
-    formData.append('visitor', data.visitor as string);
+    formData.append('visitorTeamId', data.visitorTeamId as string);
     formData.append('visitorScore', (data.visitorScore as number).toString());
     formData.append('place', data.place as string);
     formData.append('matchDate', (data.matchDate as Date).toISOString());
@@ -127,31 +176,156 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="local"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Equipo Local</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="localTeamId"
+              render={({ field }) => {
+                const selectedTeam = teams.find((t) => t.id === field.value);
+                const visitorTeamId = form.watch('visitorTeamId');
+                return (
+                  <FormItem>
+                    <FormLabel>Equipo *</FormLabel>
+                    <Popover open={localTeamsOpen} onOpenChange={setLocalTeamsOpen}>
+                      <FormControl>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline-secondary"
+                            role="combobox"
+                            aria-expanded={localTeamsOpen}
+                            className={cn(
+                              "w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+                              { "border-destructive!": form.formState.errors.localTeamId }
+                            )}
+                          >
+                            {selectedTeam
+                              ? selectedTeam.name
+                              : "Selecciona un equipo ..."
+                            }
+                            <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                      </FormControl>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Buscar equipo ..." className="h-9" />
+                          <CommandList>
+                            <CommandEmpty>No se encontró el equipo.</CommandEmpty>
+                            <CommandGroup>
+                              {teams.map((team) => (
+                                <CommandItem
+                                  key={team.id}
+                                  value={team.name}
+                                  onSelect={(currentValue) => {
+                                    const selected = teams.find((t) => t.name === currentValue);
+                                    // Validate if team is already selected as visitor
+                                    if (selected && selected.id === visitorTeamId) {
+                                      toast.error("Este equipo ya está seleccionado como visitante");
+                                      return;
+                                    }
+                                    if (selected) {
+                                      field.onChange(selected.id);
+                                      form.setValue('localTeamId', selected.id);
+                                    }
+                                    setLocalTeamsOpen(false);
+                                  }}
+                                  disabled={team.id === visitorTeamId}
+                                  className={cn(
+                                    team.id === visitorTeamId && "opacity-50 cursor-not-allowed"
+                                  )}
+                                >
+                                  {team.name}
+                                  <Check
+                                    className={cn(
+                                      "ml-auto",
+                                      field.value === team.id ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           </div>
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="visitor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Equipo Visitante</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="visitorTeamId"
+              render={({ field }) => {
+                const selectedTeam = teams.find((t) => t.id === field.value);
+                const localTeamId = form.watch('localTeamId');
+
+                return (
+                  <FormItem>
+                    <FormLabel>Equipo Visitante *</FormLabel>
+                    <Popover open={visitorTeamsOpen} onOpenChange={setVisitorTeamOpen}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline-secondary"
+                            role="combobox"
+                            aria-expanded={visitorTeamsOpen}
+                            className={cn(
+                              "w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+                              { "border-destructive!": form.formState.errors.visitorTeamId }
+                            )}
+                          >
+                            {selectedTeam
+                              ? selectedTeam.name
+                              : "Selecciona un equipo ..."}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Buscar equipo ..." className="h-9" />
+                          <CommandList>
+                            <CommandEmpty>No se encontró el equipo.</CommandEmpty>
+                            <CommandGroup>
+                              {teams.map((team) => (
+                                <CommandItem
+                                  key={team.id}
+                                  value={team.name}
+                                  onSelect={(currentValue) => {
+                                    const selected = teams.find((t) => t.name === currentValue);
+                                    if (selected && selected.id === localTeamId) {
+                                      toast.error("Este equipo ya está seleccionado como local");
+                                      return;
+                                    }
+                                    if (selected) {
+                                      field.onChange(selected.id);
+                                      form.setValue('visitorTeamId', selected.id);
+                                    }
+                                    setVisitorTeamOpen(false);
+                                  }}
+                                  disabled={team.id === localTeamId}
+                                  className={cn(
+                                    team.id === localTeamId && "opacity-50 cursor-not-allowed"
+                                  )}
+                                >
+                                  {team.name}
+                                  <Check
+                                    className={cn(
+                                      "ml-auto",
+                                      field.value === team.id ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           </div>
         </div>
@@ -349,7 +523,15 @@ export const MatchForm: FC<Props> = ({ session, match, tournaments }) => {
                         max={100}
                         className="w-[75px]"
                         value={field.value ?? 0}
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        onChange={async (e) => {
+                          const weekValue = parseInt(e.target.value);
+                          field.onChange(weekValue);
+                          if (weekValue && weekValue > 0 && !match) {
+                            await updateTeamsForWeek(weekValue);
+                          } else {
+                            setTeams(initialTeams);
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
