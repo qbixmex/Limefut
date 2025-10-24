@@ -4,13 +4,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MatchForm } from "../(components)/matchForm";
+
 import { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { fetchTournamentsAction } from "../(actions)";
 import { fetchTeamsForMatchAction } from "../(actions)/fetchTeamsForMatchAction";
 import { Team } from "@/root/src/shared/interfaces";
+import { MatchForm } from "../(components)/MatchForm";
 
 const CreateMatchPage = async () => {
   const session = await auth();
@@ -41,7 +42,7 @@ const CreateMatchPage = async () => {
             <MatchForm
               session={session as Session}
               tournaments={tournaments.tournaments || []}
-              teams={teams}
+              initialTeams={teams}
             />
           </CardContent>
         </Card>

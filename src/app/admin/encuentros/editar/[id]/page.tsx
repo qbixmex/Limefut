@@ -10,9 +10,9 @@ import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { Session } from "next-auth";
 import { fetchMatchAction, fetchTournamentsAction } from "../../(actions)";
-import { MatchForm } from "../../(components)/matchForm";
 import { Match, Team, Tournament } from '@/shared/interfaces';
 import { fetchTeamsForMatchAction } from "../../(actions)/fetchTeamsForMatchAction";
+import { MatchForm } from "../../(components)/MatchForm";
 
 type Props = Readonly<{
   params: Promise<{
@@ -53,7 +53,7 @@ export const EditMatch: FC<Props> = async ({ params }) => {
               tournaments={tournaments.tournaments || []}
               session={session as Session}
               match={match}
-              teams={teams}
+              initialTeams={teams}
             />
           </CardContent>
         </Card>

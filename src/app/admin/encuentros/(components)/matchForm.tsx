@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
+import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -48,16 +49,17 @@ import { cn } from '@/root/src/lib/utils';
 
 type Props = Readonly<{
   session: Session;
-  teams: Team[];
+  initialTeams: Team[];
   match?: Match & {
     tournament: Pick<Tournament, 'id' | 'name'>;
   };
   tournaments: Pick<Tournament, 'id' | 'name'>[];
 }>;
 
-export const MatchForm: FC<Props> = ({ session, teams, match, tournaments }) => {
+export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments }) => {
   const route = useRouter();
   const formSchema = !match ? createMatchSchema : editMatchSchema;
+  const [teams, setTeams] = useState<Team[]>(initialTeams);
   const [localTeamsOpen, setLocalTeamsOpen] = useState(false);
   const [visitorTeamsOpen, setVisitorTeamOpen] = useState(false);
 
@@ -76,6 +78,34 @@ export const MatchForm: FC<Props> = ({ session, teams, match, tournaments }) => 
       tournamentId: match?.tournament.id ?? '',
     }
   });
+
+  useEffect(() => {
+    const initialWeek = form.watch('week');
+    if (initialWeek && initialWeek > 0 && !match) {
+      updateTeamsForWeek(initialWeek);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const updateTeamsForWeek = async (week: number) => {
+    const response = await fetchTeamsForMatchAction({ week });
+    if (response.ok && response.teams) {
+      setTeams(response.teams as Team[]);
+
+      // Clear team selections if they're no longer available
+      const localId = form.watch('localTeamId');
+      const visitorId = form.watch('visitorTeamId');
+      const availableTeamIds = new Set(response.teams.map(t => t.id));
+
+      if (localId && !availableTeamIds.has(localId)) {
+        form.setValue('localTeamId', '');
+      }
+
+      if (visitorId && !availableTeamIds.has(visitorId)) {
+        form.setValue('visitorTeamId', '');
+      }
+    }
+  };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
@@ -493,7 +523,15 @@ export const MatchForm: FC<Props> = ({ session, teams, match, tournaments }) => 
                         max={100}
                         className="w-[75px]"
                         value={field.value ?? 0}
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        onChange={async (e) => {
+                          const weekValue = parseInt(e.target.value);
+                          field.onChange(weekValue);
+                          if (weekValue && weekValue > 0 && !match) {
+                            await updateTeamsForWeek(weekValue);
+                          } else {
+                            setTeams(initialTeams);
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage />

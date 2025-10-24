@@ -53,6 +53,7 @@ model Tournament {
   startDate     DateTime @map("start_date")
   endDate       DateTime @map("end_date")
   active        Boolean  @default(false)
+  currentWeek   Int      @map("current_week") @default(0)
 
   // Relations
   matches     Match[]

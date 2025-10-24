@@ -2,6 +2,10 @@
 
 import prisma from "@/lib/prisma";
 
+type OptionsType = {
+  week?: number;
+};
+
 export type ResponseFetchTeams = Promise<{
   ok: boolean;
   message: string;
@@ -11,11 +15,41 @@ export type ResponseFetchTeams = Promise<{
   }[] | null;
 }>;
 
-export const fetchTeamsForMatchAction = async (): ResponseFetchTeams => {
+export const fetchTeamsForMatchAction = async (options?: OptionsType): ResponseFetchTeams => {
+  const { week } = options ?? {};
+
   try {
+    // Get teams that are already scheduled for the specified week.
+    const scheduledTeams = week ? await prisma.match.findMany({
+      where: {
+        week: week,
+        status: {
+          not: 'canceled'
+        },
+      },
+      select: {
+        localId: true,
+        visitorId: true,
+      },
+    }) : [];
+
+    // Extract all team IDs that are already scheduled.
+    const scheduledTeamsIds = new Set([
+      ...scheduledTeams.map(match => match.localId),
+      ...scheduledTeams.map(match => match.visitorId),
+    ]);
+
+    // Get all active teams excluding those already scheduled.
     const teams = await prisma.team.findMany({
+      where: {
+        active: true,
+        ...(week && {
+          id: {
+            notIn: Array.from(scheduledTeamsIds),
+          }
+        })
+      },
       orderBy: { name: 'asc' },
-      where: { active: true },
       select: {
         id: true,
         name: true,
