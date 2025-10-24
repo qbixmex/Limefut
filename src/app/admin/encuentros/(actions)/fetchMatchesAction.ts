@@ -9,13 +9,18 @@ type Options = Readonly<{
   take?: number;
 }>;
 
+type Team = {
+  name: string;
+  permalink: string;
+};
+
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
   matches: {
     id: string;
-    local: string;
-    visitor: string;
+    localTeam: Team;
+    visitorTeam: Team;
     localScore: number;
     visitorScore: number;
     status: MATCH_STATUS;
@@ -40,8 +45,18 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       skip: (page - 1) * take,
       select: {
         id: true,
-        local: true,
-        visitor: true,
+        local: {
+          select: {
+            name: true,
+            permalink: true,
+          }
+        },
+        visitor: {
+          select: {
+            name: true,
+            permalink: true,
+          }
+        },
         localScore: true,
         visitorScore: true,
         status: true,
@@ -58,8 +73,14 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches: matches.map((match) => ({
         id: match.id,
-        local: match.local,
-        visitor: match.visitor,
+        localTeam: {
+          name: match.local.name,
+          permalink: match.local.permalink,
+        },
+        visitorTeam: {
+          name: match.visitor.name,
+          permalink: match.visitor.permalink,
+        },
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS,

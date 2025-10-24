@@ -2,13 +2,11 @@ import z from "zod";
 import { MATCH_STATUS } from "../../enums";
 
 export const editMatchSchema = z.object({
-  local: z.string()
-    .min(3, { message: '¡ El equipo local debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El equipo local debe ser menor a 50 caracteres !' })
+  localTeamId: z
+    .uuid('¡ El id del equipo local no es un UUID válido !')
     .optional(),
-  visitor: z.string()
-    .min(3, { message: '¡ El equipo visitante debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El equipo visitante debe ser menor a 50 caracteres !' })
+  visitorTeamId: z
+    .uuid('! El campo del equipo visitante es obligatorio !')
     .optional(),
   place: z.string()
     .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })

@@ -2,6 +2,10 @@
 
 import prisma from "@/lib/prisma";
 
+type OptionsType = {
+  currentWeek?: number;
+};
+
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
@@ -11,11 +15,16 @@ export type ResponseFetchAction = Promise<{
   }[] | null;
 }>;
 
-export const fetchTournamentsAction = async (): ResponseFetchAction => {
+export const fetchTournamentsAction = async (options?: OptionsType): ResponseFetchAction => {
+  const { currentWeek } = options ?? {};
+
   try {
     const tournaments = await prisma.tournament.findMany({
+      where: {
+        active: true,
+        ...(currentWeek && (currentWeek > 0) && { currentWeek })
+      },
       orderBy: { name: 'asc' },
-      where: { active: true },
       select: {
         id: true,
         name: true,

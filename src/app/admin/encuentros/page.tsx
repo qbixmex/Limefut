@@ -74,12 +74,16 @@ export const MatchesPage = async () => {
                   <TableBody>
                     {matches.map((match) => (
                       <TableRow key={match.id}>
-                        <TableCell className="grid grid-cols-[1fr_50px_50px_50px_1fr] gap-2 font-bold text-gray-500">
-                          <span>{match.local}</span>
+                        <TableCell className="grid grid-cols-[1fr_50px_50px_50px_1fr] gap-2 font-semibold text-gray-500">
+                          <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                            {match.localTeam.name}
+                          </Link>
                           <Badge variant="outline-info">{match.localScore}</Badge>
                           <Minus strokeWidth={2} />
                           <Badge variant="outline-info">{match.visitorScore}</Badge>
-                          <span>{match.visitor}</span>
+                          <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                            {match.visitorTeam.name}
+                          </Link>
                         </TableCell>
                         <TableCell className="text-center">
                           <Badge variant="outline-info">{match.week}</Badge>

@@ -42,9 +42,9 @@ export const updateMatchAction = async ({
   }
 
   const rawData = {
-    local: formData.get('local') ?? '',
+    localTeamId: formData.get('localTeamId') ?? '',
+    visitorTeamId: formData.get('visitorTeamId') ?? undefined,
     localScore: parseInt(formData.get('localScore') as string) ?? undefined,
-    visitor: formData.get('visitor') ?? undefined,
     visitorScore: parseInt(formData.get('visitorScore') as string) ?? undefined,
     place: formData.get('place') ?? '',
     matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
@@ -96,11 +96,40 @@ export const updateMatchAction = async ({
         const updatedMatch = await transaction.match.update({
           where: { id },
           data: {
-            ...matchToSave,
+            localId: matchToSave.localTeamId,
+            visitorId: matchToSave.visitorTeamId,
+            place: matchToSave.place,
+            week: matchToSave.week,
+            referee: matchToSave.referee,
+            localScore: matchToSave.localScore,
+            visitorScore: matchToSave.visitorScore,
+            matchDate: matchToSave.matchDate,
             status: matchToSave.status as MATCH_STATUS,
             tournamentId,
           },
-          include: {
+          select: {
+            id: true,
+            local: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            visitor: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            localScore: true,
+            visitorScore: true,
+            place: true,
+            matchDate: true,
+            week: true,
+            referee: true,
+            status: true,
+            createdAt: true,
+            updatedAt: true,
             tournament: {
               select: {
                 id: true,
@@ -118,9 +147,15 @@ export const updateMatchAction = async ({
           message: '¡ El encuentro fue actualizado correctamente 👍 !',
           match: {
             ...updatedMatch,
+            localTeam: updatedMatch.local,
+            visitorTeam: updatedMatch.visitor,
             localScore: updatedMatch.localScore as number,
             visitorScore: updatedMatch.visitorScore as number,
             status: updatedMatch.status as MATCH_STATUS,
+            tournament: {
+              id: updatedMatch.tournament.id,
+              name: updatedMatch.tournament.name,
+            },
           },
         };
       } catch (error) {

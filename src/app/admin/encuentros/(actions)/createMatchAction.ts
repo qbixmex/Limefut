@@ -25,8 +25,8 @@ export const createMatchAction = async (
   }
 
   const rawData = {
-    local: formData.get('local') ?? '',
-    visitor: formData.get('visitor') ?? '',
+    localTeamId: formData.get('localTeamId') ?? '',
+    visitorTeamId: formData.get('visitorTeamId') ?? '',
     place: formData.get('place') ?? '',
     matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
     week: parseInt(formData.get('week') as string) ?? 1,
@@ -63,13 +63,42 @@ export const createMatchAction = async (
 
       const createdMatch = await transaction.match.create({
         data: {
-          ...matchToSave,
+          localId: matchToSave.localTeamId,
+          visitorId: matchToSave.visitorTeamId,
+          place: matchToSave.place,
+          week: matchToSave.week,
+          referee: matchToSave.referee,
+          matchDate: matchToSave.matchDate,
           localScore: 0,
           visitorScore: 0,
           status: matchToSave.status as MATCH_STATUS,
           tournamentId,
         },
-        include: {
+        select: {
+          id: true,
+          localId: true,
+          visitorId: true,
+          place: true,
+          matchDate: true,
+          week: true,
+          referee: true,
+          localScore: true,
+          visitorScore: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+          local: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          visitor: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           tournament: {
             select: {
               id: true,
@@ -84,6 +113,8 @@ export const createMatchAction = async (
         message: '¡ Encuentro creado correctamente 👍 !',
         match: {
           ...createdMatch,
+          localTeam: createdMatch.local,
+          visitorTeam: createdMatch.visitor,
           localScore: createdMatch.localScore as number,
           visitorScore: createdMatch.visitorScore as number,
           status: createdMatch.status as MATCH_STATUS,
@@ -105,6 +136,10 @@ export const createMatchAction = async (
           match: null,
         };
       }
+      console.log("CAUSE:", error.cause);
+      console.log("NAME:", error.name);
+      console.log("META:", error.meta);
+      console.log("MESSAGE:", error.message);
       console.log(error.message);
       return {
         ok: false,
@@ -112,7 +147,7 @@ export const createMatchAction = async (
         match: null,
       };
     }
-    console.log(error);
+    console.log((error as Error).message);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',

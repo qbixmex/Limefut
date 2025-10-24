@@ -58,11 +58,15 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="font-semibold w-[180px]">Encuentro</TableHead>
                     <TableCell className="flex items-center gap-3 font-semibold text-gray-200">
-                      <span>{match.local}</span>
+                      <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                        {match.localTeam.name}
+                      </Link>
                       <Badge variant="outline-info">{match.localScore}</Badge>
                       <Minus strokeWidth={2} />
                       <Badge variant="outline-info">{match.visitorScore}</Badge>
-                      <span>{match.visitor}</span>
+                      <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                        {match.visitorTeam.name}
+                      </Link>
                     </TableCell>
                   </TableRow>
                   <TableRow>
