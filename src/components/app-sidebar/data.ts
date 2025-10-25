@@ -9,6 +9,8 @@ import {
   Trophy,
   IdCard,
   ClipboardList,
+  Sheet,
+  TrendingUp,
 } from "lucide-react";
 import { GiWhistle } from "react-icons/gi";
 import {
@@ -140,6 +142,19 @@ export const navMain: NavItem[] = [
         label: "Crear",
         url: "/admin/credenciales/crear",
         icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: "Estadísticas",
+    url: "#",
+    icon: TrendingUp,
+    isActive: false,
+    subItems: [
+      {
+        label: "Tabla de Posiciones",
+        url: "/admin/tabla-de-posiciones",
+        icon: Sheet,
       },
     ],
   },
