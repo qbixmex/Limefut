@@ -211,7 +211,7 @@ model Standings {
   losses          Int    @default(0) @map("losses")
   goalsFor        Int    @default(0) @map("goals_for")
   goalsAgainst    Int    @default(0) @map("goals_against")
-  GoalsDifference Int    @default(0) @map("goals_difference")
+  goalsDifference Int    @default(0) @map("goals_difference")
   points          Int    @default(0) @map("points")
 
   // Relations
