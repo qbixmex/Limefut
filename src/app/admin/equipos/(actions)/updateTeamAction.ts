@@ -47,7 +47,7 @@ export const updateTeamAction = async ({
     headquarters: formData.get('headquarters') as string,
     division: formData.get('division') ?? '',
     group: formData.get('group') as string,
-    tournamentId: formData.get('tournamentId') as string,
+    tournamentId: formData.get('tournamentId') ?? null,
     country: formData.get('country') as string,
     state: formData.get('state') as string,
     city: formData.get('city') as string,
@@ -109,6 +109,7 @@ export const updateTeamAction = async ({
           },
         });
 
+        // Update Image
         if (image !== null) {
           // Delete previous image from cloudinary.
           if (updatedTeam.imagePublicID) {

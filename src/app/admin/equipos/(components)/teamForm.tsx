@@ -46,8 +46,8 @@ type Props = Readonly<{
   tournaments: Tournament[];
   coaches: Coach[];
   team?: Team & {
-    tournament: Pick<Tournament, 'id' | 'name'>;
-    coach?: Pick<Coach, 'id' | 'name'>;
+    tournament: Pick<Tournament, 'id' | 'name'> | null;
+    coach: Pick<Coach, 'id' | 'name'> | null;
   };
 }>;
 
@@ -65,7 +65,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       headquarters: team?.headquarters ?? '',
       division: team?.division ?? '',
       group: team?.group ?? '',
-      tournamentId: team?.tournament.id ?? '',
+      tournamentId: team?.tournament?.id ?? undefined,
       country: team?.country ?? 'México',
       state: team?.state ?? '',
       city: team?.city ?? '',
@@ -84,7 +84,11 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
     formData.append('headquarters', data.headquarters as string);
     formData.append('division', data.division as string);
     formData.append('group', data.group as string);
-    formData.append('tournamentId', data.tournamentId as string);
+
+    if (data.tournamentId) {
+      formData.append('tournamentId', data.tournamentId.trim());
+    }
+
     formData.append('country', data.country as string);
     formData.append('state', data.state as string);
     formData.append('city', data.city as string);
@@ -285,8 +289,10 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           aria-expanded={tournamentsOpen}
                           className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                         >
-                          {selectedTournament ? selectedTournament.name : "Selecciona un torneo ..."}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                          {field.value && selectedTournament
+                            ? selectedTournament.name
+                            : "Sin torneo asignado"}
+                          <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-full p-0">
@@ -295,16 +301,26 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           <CommandList>
                             <CommandEmpty>No se encontró el torneo.</CommandEmpty>
                             <CommandGroup>
+                              <CommandItem
+                                onSelect={() => {
+                                  form.setValue('tournamentId', '');
+                                  setTournamentsOpen(false);
+                                }}
+                              >
+                                Sin torneo asignado
+                                <Check
+                                  className={cn(
+                                    'ml-auto',
+                                    field.value === '' ? 'opacity-100' : 'opacity-0'
+                                  )}
+                                />
+                              </CommandItem>
                               {tournaments.map((tournament) => (
                                 <CommandItem
                                   key={tournament.id}
-                                  value={tournament.name}
-                                  onSelect={(currentValue) => {
-                                    field.onChange(currentValue);
-                                    const selected = tournaments.find((tournament) => tournament.name === currentValue);
-                                    if (selected) {
-                                      form.setValue('tournamentId', selected.id);
-                                    }
+                                  value={tournament.id}
+                                  onSelect={(currentId) => {
+                                    form.setValue('tournamentId', currentId === field.value ? '' : currentId);
                                     setTournamentsOpen(false);
                                   }}
                                 >
@@ -312,7 +328,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === tournament.name ? "opacity-100" : "opacity-0"
+                                      field.value === tournament.id ? "opacity-100" : "opacity-0"
                                     )}
                                   />
                                 </CommandItem>
@@ -398,7 +414,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           aria-expanded={coachesOpen}
                           className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                         >
-                          {selectedCoach ? selectedCoach.name : "Selecciona un entrenador ..."}
+                          {field.value && selectedCoach
+                            ? selectedCoach.name
+                            : "Sin entrenador asignado"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -408,16 +426,22 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           <CommandList>
                             <CommandEmpty>¡ No se encontró el entrenador !</CommandEmpty>
                             <CommandGroup>
+                              <CommandItem onSelect={() => form.setValue('coachId', '')}>
+                                Sin entrenador asignado
+                                <Check
+                                  className={cn(
+                                    'ml-auto',
+                                    field.value === '' ? 'opacity-100' : 'opacity-0'
+                                  )}
+                                />
+                              </CommandItem>
                               {coaches.map((coach) => (
                                 <CommandItem
                                   key={coach.id}
-                                  value={coach.name}
-                                  onSelect={(currentValue) => {
-                                    field.onChange(currentValue);
-                                    const selected = coaches.find((coach) => coach.name === currentValue);
-                                    if (selected) {
-                                      form.setValue('coachId', selected.id);
-                                    }
+                                  value={coach.id}
+                                  onSelect={(currentId) => {
+                                    // Set the value to the coach ID, or empty string to clear it
+                                    form.setValue('coachId', currentId === field.value ? '' : currentId);
                                     setCoachesOpen(false);
                                   }}
                                 >
@@ -425,7 +449,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === coach.name ? "opacity-100" : "opacity-0"
+                                      field.value === coach.id ? "opacity-100" : "opacity-0"
                                     )}
                                   />
                                 </CommandItem>
