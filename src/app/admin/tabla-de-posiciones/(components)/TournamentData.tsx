@@ -15,9 +15,10 @@ import Link from "next/link";
 
 type Props = Readonly<{
   tournament: TournamentType & { teams: Pick<Team, 'id' | 'name' | 'permalink'>[] };
+  standings: boolean;
 }>;
 
-export const TournamentData: FC<Props> = ({ tournament }) => {
+export const TournamentData: FC<Props> = ({ tournament, standings = false }) => {
   return (
     <>
       <section className="flex flex-col lg:flex-row gap-5">
@@ -71,11 +72,12 @@ export const TournamentData: FC<Props> = ({ tournament }) => {
         </div>
       </section>
       <section className="mb-10">
-        {tournament.teams.length === 0 ? (
+        {tournament.teams.length === 0 && (
           <div className="border-2 w-full border-amber-700 py-4 text-center rounded-lg">
             <p className="text-amber-700 text-xl italic">Este torneo aún no tiene equipos asignados</p>
           </div>
-        ) : (
+        )}
+        {!standings && (
           <>
             <h2 className="text-lg mb-5">Equipos Asignados</h2>
             <div className="flex flex-wrap gap-3">
