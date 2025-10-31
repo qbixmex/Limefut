@@ -11,8 +11,8 @@ type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
   team: Team & {
-    tournament: TournamentType;
-    coach?: CoachType;
+    tournament: TournamentType | null;
+    coach: CoachType | null;
     players: PlayerType[] | null;
   } | null;
 }>;
@@ -66,11 +66,7 @@ export const fetchTeamAction = async (
     return {
       ok: true,
       message: '¡ Equipo obtenido correctamente 👍 !',
-      team: {
-        ...team,
-        tournament: team.tournament,
-        coach: team.coach as Coach,
-      },
+      team,
     };
   } catch (error) {
     if (error instanceof Error) {

@@ -30,7 +30,7 @@ export const StandingsTable: FC<{ standings: StandingType[] }> = ({ standings })
           {standings.map((standing) => (
             <TableRow key={standing.team.id}>
               <TableCell>
-                <Link href={`/admin/equipos/${standing.team.permalink}`}>
+                <Link href={`/admin/equipos/${standing.team.permalink}`} target="_blank">
                   {standing.team.name}
                 </Link>
               </TableCell>

@@ -13,12 +13,12 @@ import {
 import { Pencil, Trophy } from "lucide-react";
 import { Badge } from "@/root/src/components/ui/badge";
 import Link from "next/link";
-import { Tournament } from "@/generated/prisma";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchTournamentAction } from "../(actions)";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { Team, Tournament } from "@/shared/interfaces";
 
 type Props = Readonly<{
   params: Promise<{
@@ -36,11 +36,11 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
     redirect(`/admin/torneos?error=${encodeURIComponent(response.message)}`);
   }
 
-  const tournament = response.tournament as Tournament;
+  const tournament = response.tournament as Tournament & { teams: Partial<Team>[] };
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
-      <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
+      <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
         <Card className="w-full shadow-none bg-neutral-100 dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800 relative">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>
@@ -112,7 +112,7 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
               </div>
             </section>
 
-            <section className="flex gap-5">
+            <section className="flex gap-5 mb-5">
               <div className="w-full lg:w-1/2">
                 <Table>
                   <TableBody>
@@ -137,18 +137,42 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="w-[180px] font-semibold">Fecha de Creación</TableHead>
                       <TableCell>
-                        {format(new Date(tournament?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                        {format(new Date(tournament.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="w-[180px] font-semibold">Última actualización</TableHead>
                       <TableCell>
-                        {format(new Date(tournament?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                        {format(new Date(tournament.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
               </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-sky-600 mb-5">
+                Equipos Registrados&nbsp;
+                <span className="text-gray-500 text-base font-semibold">
+                  ({tournament.teams.length})
+                </span>
+              </h2>
+              {
+                tournament.teams.length === 0 ? (
+                  <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
+                    <p className="text-cyan-600 text-center font-bold">Aún no hay equipos registrados</p>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-3">
+                    {tournament.teams.map(({ id, name, permalink }) => (
+                      <Link key={id} href={`/admin/equipos/${permalink}`}>
+                        <Badge variant="outline-info">{name}</Badge>
+                      </Link>
+                    ))}
+                  </div>
+                )
+              }
             </section>
 
             <div className="absolute top-5 right-5">
