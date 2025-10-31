@@ -19,8 +19,8 @@ export type ResponseFetchTeams = Promise<{
     division: string;
     group: string;
     active: boolean;
-    tournament: Pick<Tournament, 'id' | 'name' | 'permalink'>;
-    coach: Pick<Coach, 'id' | 'name'>;
+    tournament: Pick<Tournament, 'id' | 'name' | 'permalink'> | null;
+    coach: Pick<Coach, 'id' | 'name'> | null;
     playersCount: number;
   }[] | null;
   pagination: Pagination | null;
@@ -72,10 +72,6 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
       message: '! Los equipos fueron obtenidos correctamente 👍',
       teams: teams.map((team) => ({
         ...team,
-        coach: {
-          id: team.coach?.id ?? '',
-          name: team.coach?.name ?? 'Sin entrenador',
-        },
         playersCount: team._count.players,
       })),
       pagination: {

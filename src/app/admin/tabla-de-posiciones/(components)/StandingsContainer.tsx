@@ -31,7 +31,6 @@ export const StandingsContainer: FC<Props> = ({ tournaments }) => {
         tournaments={tournaments} 
         onSelect={handleSelect} 
       />
-      
       {standingsPromise && (
         <Suspense fallback={<SkeletonTable />}>
           <Standings standingsPromise={standingsPromise} />

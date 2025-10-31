@@ -109,7 +109,7 @@ export const TeamsPage = async () => {
                           )}
                         </TableCell>
                         <TableCell>
-                          {team.tournament ? (
+                          {team.coach ? (
                             <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
                               {team.coach.name}
                             </Link>

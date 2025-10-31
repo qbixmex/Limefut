@@ -13,6 +13,11 @@ export type TournamentType = {
   startDate: Date;
   endDate: Date;
   currentWeek: number;
+  teams: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
 };
 
 export type StandingType = {
@@ -53,6 +58,13 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
         startDate: true,
         endDate: true,
         currentWeek: true,
+        teams: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          }
+        }
       },
     });
 

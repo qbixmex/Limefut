@@ -109,6 +109,7 @@ export const updateTeamAction = async ({
           },
         });
 
+        // Update Image
         if (image !== null) {
           // Delete previous image from cloudinary.
           if (updatedTeam.imagePublicID) {
