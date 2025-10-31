@@ -31,10 +31,12 @@ export const StandingsContainer: FC<Props> = ({ tournaments }) => {
         tournaments={tournaments} 
         onSelect={handleSelect} 
       />
-      
       {standingsPromise && (
         <Suspense fallback={<SkeletonTable />}>
-          <Standings standingsPromise={standingsPromise} />
+          <Standings
+            standingsPromise={standingsPromise}
+            refetchStandings={handleSelect}
+          />
         </Suspense>
       )}
     </div>

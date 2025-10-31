@@ -30,7 +30,11 @@ export const createTeamSchema = z.object({
   group: z.string()
     .min(3, { message: '¡ El grupo debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El grupo debe ser menor a 100 caracteres !' }),
-  tournamentId: z.uuid("El id del torneo debe ser un UUID válido"),
+  tournamentId: z.union([
+    z.uuid("El id del torneo debe ser un UUID válido"),
+    z.literal(''),
+    z.null(),
+  ]).optional(),
   country: z.string()
     .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),

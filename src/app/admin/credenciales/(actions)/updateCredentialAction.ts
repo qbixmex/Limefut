@@ -109,7 +109,7 @@ export const updateCredentialAction = async ({
             position: data.position,
             jerseyNumber: data.jerseyNumber,
             playerId: data.playerId,
-            tournamentId: player.team?.tournament.id as string,
+            tournamentId: player.team?.tournament?.id as string,
           },
           include: {
             tournament: {

@@ -1,12 +1,12 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Tournament } from "@/shared/interfaces";
+import { Tournament, Team } from "@/shared/interfaces";
 
 type FetchTournamentResponse = Promise<{
   ok: boolean;
   message: string;
-  tournament: Tournament | null;
+  tournament: Tournament & { teams: Partial<Team>[] } | null;
 }>;
 
 export const fetchTournamentAction = async (
@@ -24,6 +24,15 @@ export const fetchTournamentAction = async (
   try {
     const tournament = await prisma.tournament.findUnique({
       where: { permalink: permalink },
+      include: {
+        teams: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          }
+        }
+      }
     });
 
     if (!tournament) {

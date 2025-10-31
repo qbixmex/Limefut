@@ -39,7 +39,7 @@ export const TeamsPage = async () => {
     <>
       <ErrorHandler />
       <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
-        <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
+        <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
           <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
             <CardHeader className="flex items-center justify-between">
               <CardTitle>Lista de Equipos</CardTitle>
@@ -100,14 +100,22 @@ export const TeamsPage = async () => {
                         <TableCell>{team.division}</TableCell>
                         <TableCell>{team.group}</TableCell>
                         <TableCell>
-                          <Link href={`/admin/torneos/${team.tournament.permalink}`}>
-                            {team.tournament.name}
-                          </Link>
+                          {team.tournament ? (
+                            <Link href={`/admin/torneos/${team.tournament.permalink}`}>
+                              {team.tournament.name}
+                            </Link>
+                          ) : (
+                            <Badge variant="outline-secondary">No Asignado</Badge>
+                          )}
                         </TableCell>
                         <TableCell>
-                          <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
-                            {team.coach.name}
-                          </Link>
+                          {team.coach ? (
+                            <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
+                              {team.coach.name}
+                            </Link>
+                          ) : (
+                            <Badge variant="outline-secondary">No Asignado</Badge>
+                          )}
                         </TableCell>
                         <TableCell className="text-center">
                           <Badge variant="outline-info">

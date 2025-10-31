@@ -5,3 +5,4 @@ export { createCoachSchema, editCoachSchema } from "./coach";
 export { createPlayerSchema, editPlayerSchema } from "./player";
 export { createMatchSchema, editMatchSchema } from "./match";
 export { createCredentialSchema, editCredentialSchema } from "./credential";
+export { createStandingsSchema } from "./standings";

@@ -45,7 +45,7 @@ export const EditTeam: FC<Props> = async ({ params }) => {
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
-      <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
+      <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
         <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>Editar Equipo</CardTitle>

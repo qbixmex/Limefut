@@ -53,7 +53,7 @@ model Tournament {
   startDate     DateTime @map("start_date")
   endDate       DateTime @map("end_date")
   active        Boolean  @default(false)
-  currentWeek   Int      @map("current_week") @default(0)
+  currentWeek   Int      @default(0) @map("current_week")
 
   // Relations
   matches     Match[]
@@ -88,8 +88,8 @@ model Team {
   coachId      String?     @map("coach_id")
   coach        Coach?      @relation(fields: [coachId], references: [id])
   players      Player[]
-  tournamentId String      @map("tournament_id")
-  tournament   Tournament  @relation(fields: [tournamentId], references: [id])
+  tournamentId String?     @map("tournament_id")
+  tournament   Tournament? @relation(fields: [tournamentId], references: [id])
   standings    Standings[]
   homeMatches  Match[]     @relation("HomeMatches")
   awayMatches  Match[]     @relation("AwayMatches")
