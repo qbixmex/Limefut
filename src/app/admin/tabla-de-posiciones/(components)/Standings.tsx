@@ -13,10 +13,10 @@ import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
   standingsPromise: StandingPromise;
-  onCreatedStandings: (tournamentId: string) => void;
+  refetchStandings: (tournamentId: string) => void;
 }>;
 
-export const Standings: FC<Props> = ({ standingsPromise, onCreatedStandings }) => {
+export const Standings: FC<Props> = ({ standingsPromise, refetchStandings }) => {
   const response = use(standingsPromise);
   const [ creatingStandings, setCreatingStandings ] = useState(false);
 
@@ -44,7 +44,7 @@ export const Standings: FC<Props> = ({ standingsPromise, onCreatedStandings }) =
         toast.error(response.message);
       } else {
         toast.success(response.message);
-        onCreatedStandings(tournament.id);
+        refetchStandings(tournament.id);
       }
     } catch(error) {
       toast.error((error as Error).message);
@@ -61,7 +61,11 @@ export const Standings: FC<Props> = ({ standingsPromise, onCreatedStandings }) =
       />
       {
         (standings.length > 0) ? (
-          <StandingsTable standings={standings} />
+          <StandingsTable
+            tournamentId={tournament.id}
+            standings={standings}
+            onDeletedStandings={refetchStandings}
+          />
         ) : (
           (tournament.teams.length > 0) && (
             <div className="border border-blue-500 rounded-lg py-4 flex justify-center items-center gap-10">
