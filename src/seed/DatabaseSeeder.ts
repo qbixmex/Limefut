@@ -6,7 +6,7 @@ import { teams } from "./teams-seed";
 import { coaches } from "./coaches-seed";
 import { players } from "./players-seed";
 import { credentials } from "./credentials-seed";
-import type { Team, Player } from "../shared/interfaces";
+import type { TeamSeed, Player } from "../shared/interfaces";
 
 export class DatabaseSeeder {
   static async clearUsers() {
@@ -246,8 +246,8 @@ export class DatabaseSeeder {
 
     // Filter only players who have a team and tournament assigned
     const validPlayers = playersInDb.filter(
-      player => player.team && player.team.tournamentId
-    ) as (Player & { team: Team })[];
+      player => player.team?.tournamentId && player.team.tournamentId
+    ) as (Player & { team: TeamSeed })[];
 
     if (validPlayers.length === 0) {
       console.log('No players with team and tournament found. Credentials will not be seeded.');
