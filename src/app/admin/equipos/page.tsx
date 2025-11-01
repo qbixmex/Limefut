@@ -26,7 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { DeleteTeam } from "./(components)/delete-team";
 import { fetchTeamsAction } from "./(actions)";
-import { ErrorHandler } from "@/root/src/shared/components/errorHandler";
+import { ErrorHandler } from "@/shared/components/errorHandler";
 import { auth } from "@/auth.config";
 
 export const TeamsPage = async () => {
@@ -164,8 +164,10 @@ export const TeamsPage = async () => {
                   </TableBody>
                 </Table>
               ) : (
-                <div className="bg-sky-600 p-5 rounded">
-                  <p className="text-center text-xl font-bold">Todavía no hay equipos creados</p>
+                <div className="border border-sky-600 p-5 rounded">
+                  <p className="text-sky-500 text-center text-xl font-semibold">
+                    Todavía no hay equipos creados
+                  </p>
                 </div>
               )}
             </CardContent>
