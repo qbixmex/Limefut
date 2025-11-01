@@ -12,7 +12,7 @@ import { Session } from "next-auth";
 import { fetchMatchAction, fetchTournamentsAction } from "../../(actions)";
 import { Match, Team, Tournament } from '@/shared/interfaces';
 import { fetchTeamsForMatchAction } from "../../(actions)/fetchTeamsForMatchAction";
-import { MatchForm } from "../../(components)/MatchForm";
+import { MatchForm } from "../../(components)/matchForm";
 
 type Props = Readonly<{
   params: Promise<{

@@ -182,7 +182,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                 const visitorTeamId = form.watch('visitorTeamId');
                 return (
                   <FormItem>
-                    <FormLabel>Equipo *</FormLabel>
+                    <FormLabel>Equipo Local <span className="text-amber-500">*</span></FormLabel>
                     <Popover open={localTeamsOpen} onOpenChange={setLocalTeamsOpen}>
                       <FormControl>
                         <PopoverTrigger asChild>
@@ -197,7 +197,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                           >
                             {selectedTeam
                               ? selectedTeam.name
-                              : "Selecciona un equipo ..."
+                              : "Selecciona un equipo"
                             }
                             <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                           </Button>
@@ -205,7 +205,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                       </FormControl>
                       <PopoverContent className="w-full p-0">
                         <Command>
-                          <CommandInput placeholder="Buscar equipo ..." className="h-9" />
+                          <CommandInput placeholder="Buscar equipo" className="h-9" />
                           <CommandList>
                             <CommandEmpty>No se encontró el equipo.</CommandEmpty>
                             <CommandGroup>
@@ -261,7 +261,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
 
                 return (
                   <FormItem>
-                    <FormLabel>Equipo Visitante *</FormLabel>
+                    <FormLabel>Equipo Visitante <span className="text-amber-500">*</span></FormLabel>
                     <Popover open={visitorTeamsOpen} onOpenChange={setVisitorTeamOpen}>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -276,14 +276,14 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                           >
                             {selectedTeam
                               ? selectedTeam.name
-                              : "Selecciona un equipo ..."}
+                              : "Selecciona un equipo"}
                             <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent className="w-full p-0">
                         <Command>
-                          <CommandInput placeholder="Buscar equipo ..." className="h-9" />
+                          <CommandInput placeholder="Buscar equipo" className="h-9" />
                           <CommandList>
                             <CommandEmpty>No se encontró el equipo.</CommandEmpty>
                             <CommandGroup>
@@ -392,7 +392,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
               name="place"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Sede</FormLabel>
+                  <FormLabel>Sede <span className="text-amber-500">*</span></FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -407,7 +407,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
               name="referee"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Arbitro</FormLabel>
+                  <FormLabel>Arbitro <span className="text-amber-500">*</span></FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -558,9 +558,8 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                       <SelectContent>
                         <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
                         <SelectItem value={MATCH_STATUS.INPROGRESS}>En Progreso</SelectItem>
-                        <SelectItem value={MATCH_STATUS.COMPLETED}>Finalizado</SelectItem>
-                        <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
                         <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
+                        <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>

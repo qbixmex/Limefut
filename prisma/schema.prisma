@@ -203,10 +203,10 @@ model Credential {
 
 model Standings {
   id              String @id @default(uuid())
-  teamId          String @map("team_id")
+  teamId          String @map("team_id") @unique()
   team            Team   @relation(fields: [teamId], references: [id])
   matchesPlayed   Int    @default(0) @map("matches_played")
-  wings           Int    @default(0) @map("wings")
+  wins            Int    @default(0) @map("wins")
   draws           Int    @default(0) @map("draws")
   losses          Int    @default(0) @map("losses")
   goalsFor        Int    @default(0) @map("goals_for")

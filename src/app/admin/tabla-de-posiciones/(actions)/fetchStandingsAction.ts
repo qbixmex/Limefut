@@ -91,7 +91,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
           }
         },
         matchesPlayed: true,
-        wings: true,
+        wins: true,
         draws: true,
         losses: true,
         goalsFor: true,
@@ -115,7 +115,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
         permalink: standing.team.permalink,
       },
       matchesPlayed: standing.matchesPlayed,
-      wings: standing.wings,
+      wings: standing.wins,
       draws: standing.draws,
       losses: standing.losses,
       goalsFor: standing.goalsFor,

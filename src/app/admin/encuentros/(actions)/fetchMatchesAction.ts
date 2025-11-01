@@ -10,6 +10,7 @@ type Options = Readonly<{
 }>;
 
 type Team = {
+  id: string;
   name: string;
   permalink: string;
 };
@@ -47,12 +48,14 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         id: true,
         local: {
           select: {
+            id: true,
             name: true,
             permalink: true,
           }
         },
         visitor: {
           select: {
+            id: true,
             name: true,
             permalink: true,
           }
@@ -73,14 +76,8 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches: matches.map((match) => ({
         id: match.id,
-        localTeam: {
-          name: match.local.name,
-          permalink: match.local.permalink,
-        },
-        visitorTeam: {
-          name: match.visitor.name,
-          permalink: match.visitor.permalink,
-        },
+        localTeam: match.local,
+        visitorTeam: match.visitor,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS,

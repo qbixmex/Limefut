@@ -4,7 +4,7 @@ type BadgeVariant = "outline-secondary" | "outline-info" | "outline-warning" | "
 
 /**
  * Get match status in string format
- * @param state MATCH_STATUS enum
+ * @param status MATCH_STATUS enum
  * @example
  * ```ts
  * const status = getMatchStatus(MATCH_STATUS.SCHEDULED);
@@ -12,11 +12,11 @@ type BadgeVariant = "outline-secondary" | "outline-info" | "outline-warning" | "
  * ```
  * @returns representation of the match status
  */
-export const getMatchStatus = (state: MATCH_STATUS): {
+export const getMatchStatus = (status: MATCH_STATUS): {
   label: string;
   variant: BadgeVariant;
 } => {
-  switch (state) {
+  switch (status) {
     case MATCH_STATUS.SCHEDULED:
       return { label: 'Programado', variant: 'outline-warning' };
     case MATCH_STATUS.INPROGRESS:
