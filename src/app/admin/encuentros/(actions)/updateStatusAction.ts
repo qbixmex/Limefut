@@ -9,11 +9,6 @@ export type ResponseAction = Promise<{
 }>;
 
 export const updateStatusAction = async (matchId: string, status: MATCH_STATUS): ResponseAction => {
-  console.log({
-    matchId,
-    status,
-  });
-
   const updatedMatch = await prisma.match.update({
     where: { id: matchId },
     data: { status },

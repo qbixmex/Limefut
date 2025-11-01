@@ -94,7 +94,13 @@ export const MatchesPage = async () => {
                           ) : (
                             <div className="flex gap-2">
                               <MatchStatus matchId={match.id} status={match.status} />
-                              <FinishMatch />
+                              <FinishMatch
+                                matchId={match.id}
+                                localScore={match.localScore}
+                                visitorScore={match.visitorScore}
+                                localId={match.localTeam.id}
+                                visitorId={match.visitorTeam.id}
+                              />
                             </div>
                           )}
                         </TableCell>

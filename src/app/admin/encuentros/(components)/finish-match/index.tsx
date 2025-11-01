@@ -1,5 +1,6 @@
 'use client';
 
+import type { FC } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,8 +13,28 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { finishMatchAction } from "../../(actions)/finishMatchAction";
+import { toast } from "sonner";
 
-export const FinishMatch = () => {
+type Props = Readonly<{
+  matchId: string;
+  localScore: number;
+  visitorScore: number;
+  localId: string;
+  visitorId: string;
+}>;
+
+export const FinishMatch: FC<Props> = (props) => {
+  const handleFinishMatch = async () => {
+    const response = await finishMatchAction(props);
+
+    if (!response.ok) {
+      toast.error(response.message);
+    } else {
+      toast.success(response.message);
+    }
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -32,7 +53,7 @@ export const FinishMatch = () => {
           <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
           <AlertDialogAction
             className="delete-btn"
-            onClick={() => console.log('Encuentro Finalizado ⚽️🎉')}
+            onClick={handleFinishMatch}
           >
             Proceder
           </AlertDialogAction>
