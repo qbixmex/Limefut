@@ -1,6 +1,5 @@
-import { FC } from "react";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import type { FC } from "react";
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -10,8 +9,9 @@ import {
 } from "@/components/ui/table";
 import type { TournamentType } from "../(actions)/fetchStandingsAction";
 import type { Team } from "@/shared/interfaces";
-import { Badge } from "@/root/src/components/ui/badge";
-import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 type Props = Readonly<{
   tournament: TournamentType & { teams: Pick<Team, 'id' | 'name' | 'permalink'>[] };

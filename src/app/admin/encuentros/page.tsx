@@ -25,9 +25,9 @@ import { DeleteMatch } from "./(components)/delete-match";
 import { fetchMatchesAction } from "./(actions)";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { auth } from "@/auth.config";
-import { getMatchStatus } from "./(helpers)/place";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { MATCH_STATUS } from "@/root/src/shared/enums";
+import { MatchStatus } from "./(components)/match-status";
+import { FinishMatch } from "./(components)/finish-match";
 
 export const MatchesPage = async () => {
   const response = await fetchMatchesAction();
@@ -39,7 +39,7 @@ export const MatchesPage = async () => {
     <>
       <ErrorHandler />
       <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
-        <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
+        <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
           <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
             <CardHeader className="flex items-center justify-between">
               <CardTitle>Lista de Encuentros</CardTitle>
@@ -66,8 +66,6 @@ export const MatchesPage = async () => {
                       <TableHead>Encuentro</TableHead>
                       <TableHead className="w-[100px] text-center">Semana</TableHead>
                       <TableHead className="w-[120px]">Estado</TableHead>
-                      <TableHead>Sede</TableHead>
-                      <TableHead>Fecha</TableHead>
                       <TableHead>Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -89,13 +87,16 @@ export const MatchesPage = async () => {
                           <Badge variant="outline-info">{match.week}</Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={getMatchStatus(match.status).variant}>
-                            {getMatchStatus(match.status).label}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{match.place}</TableCell>
-                        <TableCell>
-                          {format(new Date(match?.matchDate), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                          { match.status === MATCH_STATUS.COMPLETED ? (
+                            <div className="w-full max-w-[150px] border border-emerald-500 text-center rounded-lg py-2 px-4">
+                              <span className="text-emerald-500 font-semibold">Finalizado</span>
+                            </div>
+                          ) : (
+                            <div className="flex gap-2">
+                              <MatchStatus matchId={match.id} status={match.status} />
+                              <FinishMatch />
+                            </div>
+                          )}
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-3">
@@ -134,8 +135,10 @@ export const MatchesPage = async () => {
                   </TableBody>
                 </Table>
               ) : (
-                <div className="bg-sky-600 p-5 rounded">
-                  <p className="text-center text-xl font-bold">Todavía no hay encuentros creados</p>
+                <div className="border border-sky-600 p-5 rounded">
+                  <p className="text-sky-500 text-center text-xl font-semibold">
+                    Todavía no hay encuentros creados
+                  </p>
                 </div>
               )}
             </CardContent>

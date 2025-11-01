@@ -37,7 +37,7 @@ export const UsersPage = async () => {
     <>
       <ErrorHandler />
       <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
-        <div className="bg-muted/50 min-h-[100vh] flex-1 flex rounded-xl md:min-h-min p-10">
+        <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
           <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
             <CardHeader className="flex items-center justify-between">
               <CardTitle>Lista de Usuarios</CardTitle>
@@ -144,8 +144,10 @@ export const UsersPage = async () => {
                   </TableBody>
                 </Table>
               ) : (
-                <div className="bg-sky-600 p-5 rounded">
-                  <p className="text-center text-xl font-bold">Todavía no hay usuarios creados</p>
+                <div className="border border-sky-600 p-5 rounded">
+                  <p className="text-sky-500 text-center text-xl font-semibold">
+                    Todavía no hay usuarios creados
+                  </p>
                 </div>
               )}
             </CardContent>
