@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 import { fetchTournamentsAction } from "../(actions)";
 import { fetchTeamsForMatchAction } from "../(actions)/fetchTeamsForMatchAction";
 import { Team } from "@/root/src/shared/interfaces";
-import { MatchForm } from "../(components)/MatchForm";
+import MatchForm from "../(components)/matchForm";
 
 const CreateMatchPage = async () => {
   const session = await auth();
