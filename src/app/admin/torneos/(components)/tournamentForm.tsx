@@ -12,11 +12,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import z from 'zod';
+import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createTournamentSchema, editTournamentSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import type { Tournament } from '@/shared/interfaces';
 import { createTournamentAction, updateTournamentAction } from '../(actions)';

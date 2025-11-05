@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { Pagination } from "@/shared/interfaces";
+import type { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;

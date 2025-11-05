@@ -6,7 +6,7 @@ import type { StandingType, TournamentType, StandingPromise } from '../(actions)
 import { TournamentData, StandingsTable } from '.';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Team } from '@/shared/interfaces';
+import type { Team } from '@/shared/interfaces';
 import { createStandingsAction } from "../(actions)/createStandingsAction";
 import { cn } from '@/root/src/lib/utils';
 import { LoaderCircle } from 'lucide-react';

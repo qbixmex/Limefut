@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { MATCH_STATUS } from '@/root/src/shared/enums';
+import type { MATCH_STATUS } from '@/root/src/shared/enums';
 import type { Match } from '@/shared/interfaces';
 
 export type TournamentType = {

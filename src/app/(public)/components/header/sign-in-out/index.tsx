@@ -1,8 +1,8 @@
 'use client';
 
-import { FC } from "react";
+import type { FC } from "react";
 import { LogIn } from "lucide-react";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import Link from "next/link";
 import "./styles.css";
 import { usePathname } from 'next/navigation';

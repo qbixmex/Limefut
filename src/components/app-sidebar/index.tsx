@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentProps, FC } from "react";
+import type { ComponentProps, FC } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {

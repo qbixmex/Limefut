@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
 import { editCoachSchema } from '@//shared/schemas';
-import { Coach } from '@/shared/interfaces';
+import type { Coach } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;

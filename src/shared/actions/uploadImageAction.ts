@@ -1,6 +1,6 @@
 "use server";
 
-import { CloudinaryResponse } from "@/shared/interfaces";
+import type { CloudinaryResponse } from "@/shared/interfaces";
 import { v2 as cloudinary } from "cloudinary";
 import { pad, slugify } from "@/lib/utils";
 

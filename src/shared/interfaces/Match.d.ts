@@ -1,4 +1,4 @@
-import { MATCH_STATUS } from "../enums";
+import type { MATCH_STATUS } from "../enums";
 import type { Tournament } from "./Tournament";
 import type { Team } from "./Team";
 

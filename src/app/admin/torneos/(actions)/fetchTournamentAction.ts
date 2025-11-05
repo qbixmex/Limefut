@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Tournament, Team } from "@/shared/interfaces";
+import type { Tournament, Team } from "@/shared/interfaces";
 
 type FetchTournamentResponse = Promise<{
   ok: boolean;

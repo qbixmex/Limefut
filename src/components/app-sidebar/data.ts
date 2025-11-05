@@ -1,5 +1,5 @@
-import { NavItem } from "../nav-main";
-import { NavLink } from "../nav-links";
+import type { NavItem } from "../nav-main";
+import type { NavLink } from "../nav-links";
 import {
   Users,
   Globe,

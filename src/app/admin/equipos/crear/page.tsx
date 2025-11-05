@@ -5,11 +5,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TeamForm } from "../(components)/teamForm";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { fetchTournamentsForTeam } from "../(actions)";
-import { Coach, type Tournament } from "@/shared/interfaces";
+import type { Coach} from "@/shared/interfaces";
+import { type Tournament } from "@/shared/interfaces";
 import { fetchCoachesForTeam } from "../(actions)/fetchCoachesForTeam";
 
 export const CreateTeam = async () => {

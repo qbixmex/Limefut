@@ -27,18 +27,18 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Input } from '@/components/ui/input';
-import z from 'zod';
+import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createUserSchema, editUserSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createUserAction } from '../(actions)';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { type User } from '@/root/next-auth';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, Eye, EyeClosed, LoaderCircle } from 'lucide-react';
-import { Role } from '@/shared/interfaces';
+import type { Role } from '@/shared/interfaces';
 import { updateUserAction } from '../(actions)/updateUserAction';
 
 const roles = [

@@ -1,4 +1,4 @@
-import { TournamentSeed } from "@/shared/interfaces";
+import type { TournamentSeed } from "@/shared/interfaces";
 
 export const tournaments: TournamentSeed[] = [
   {

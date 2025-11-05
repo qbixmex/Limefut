@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 
 import {
   Card,
@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/card";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { fetchTeamAction, fetchTournamentsForTeam } from "../../(actions)";
 import { TeamForm } from "../../(components)/teamForm";
-import { Coach, Tournament } from '@/shared/interfaces';
+import type { Coach, Tournament } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from "../../(actions)/fetchCoachesForTeam";
 
 type Props = Readonly<{

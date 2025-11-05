@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ChevronRight, type LucideIcon } from "lucide-react";
 import type { IconType } from "react-icons/lib";
-import { CustomIconType } from "@/shared/types/icon";
+import type { CustomIconType } from "@/shared/types/icon";
 
 export type NavItem = {
   label: string;

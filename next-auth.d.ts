@@ -1,5 +1,5 @@
-import { DefaultSession } from 'next-auth';
-import { Role } from './src/shared/interfaces';
+import type { DefaultSession } from 'next-auth';
+import type { Role } from './src/shared/interfaces';
 
 export interface User {
   id: string;

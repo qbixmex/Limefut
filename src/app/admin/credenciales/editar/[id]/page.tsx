@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 
 import {
   Card,
@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { fetchCredentialAction, fetchPlayersForCredentialForm } from "../../(actions)";
 import { CredentialForm } from "../../(components)/CredentialForm";
 import { type Credential } from '@/shared/interfaces';

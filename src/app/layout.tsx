@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import type { Metadata } from "next";
 import { openSans, arimo } from "@/app/(public)/fonts";
 import "@/app/globals.css";

@@ -3,7 +3,7 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { editTournamentSchema } from '@/shared/schemas';
-import { CloudinaryResponse, Tournament } from '@/shared/interfaces';
+import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
 
 type Options = {

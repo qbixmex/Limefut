@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, KeyboardEvent, forwardRef } from 'react';
+import type { KeyboardEvent} from 'react';
+import { useState, forwardRef } from 'react';
 import { X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';

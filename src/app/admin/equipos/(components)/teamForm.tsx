@@ -13,11 +13,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from "@/components/ui/textarea";
-import z from 'zod';
+import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import type { Coach, Team } from '@/shared/interfaces';
 import { createTeamAction, updateTeamAction } from '../(actions)';
