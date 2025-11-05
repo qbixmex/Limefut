@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { Player, Team } from "@/shared/interfaces";
+import type { Player, Team } from "@/shared/interfaces";
 
 type TeamType = Pick<Team, 'id' | 'name' | 'permalink'>;
 

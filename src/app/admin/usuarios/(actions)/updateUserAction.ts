@@ -1,8 +1,8 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { User } from "@/root/next-auth";
-import { Role } from '@/root/src/shared/interfaces';
+import type { User } from "@/root/next-auth";
+import type { Role } from '@/root/src/shared/interfaces';
 import { editUserSchema } from "@/root/src/shared/schemas";
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';

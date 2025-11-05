@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 
 import {
   Card,
@@ -10,8 +10,8 @@ import { UserForm } from "../../(components)/userForm";
 import { auth } from "@/auth.config";
 import { fetchUserAction } from "../../(actions)/fetchUserAction";
 import { redirect } from "next/navigation";
-import { User } from "@/root/next-auth";
-import { Session } from "next-auth";
+import type { User } from "@/root/next-auth";
+import type { Session } from "next-auth";
 
 type Props = Readonly<{
   params: Promise<{

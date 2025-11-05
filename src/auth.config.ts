@@ -1,10 +1,11 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { type AdapterUser } from 'next-auth/adapters';
 import z from "zod";
 import prisma from "./lib/prisma";
 import bcrypt from 'bcryptjs';
-import { SessionUser } from "../next-auth";
+import type { SessionUser } from "../next-auth";
 
 export const authConfig: NextAuthConfig = {
   pages: {

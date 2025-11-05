@@ -1,4 +1,4 @@
-import { PlayerSeed } from "@/shared/interfaces";
+import type { PlayerSeed } from "@/shared/interfaces";
 
 export const players: PlayerSeed[] = [
   {

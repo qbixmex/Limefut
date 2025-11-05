@@ -4,12 +4,12 @@ import { useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { Button } from '@/components/ui/button';
 import { createCredentialSchema, editCredentialSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { PlayerForCredential } from '../(actions)/fetchPlayersForCredentialForm';
+import type { PlayerForCredential } from '../(actions)/fetchPlayersForCredentialForm';
 import type { Credential } from '@/shared/interfaces';
 import { createCredentialAction, updateCredentialAction } from '../(actions)';
 import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
@@ -35,7 +35,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/root/src/components/ui/popover';
-import z from 'zod';
+import type z from 'zod';
 
 type Props = Readonly<{
   session: Session;

@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { FC } from "react";
+import type { FC } from "react";
 
 export type NavLink = {
   label: string;

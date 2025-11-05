@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { uploadImage } from "@/shared/actions";
-import { CloudinaryResponse, Tournament } from "@/shared/interfaces";
+import type { CloudinaryResponse, Tournament } from "@/shared/interfaces";
 import { createTournamentSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
 

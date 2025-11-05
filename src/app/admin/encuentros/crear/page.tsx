@@ -5,12 +5,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { fetchTournamentsAction } from "../(actions)";
 import { fetchTeamsForMatchAction } from "../(actions)/fetchTeamsForMatchAction";
-import { Team } from "@/root/src/shared/interfaces";
+import type { Team } from "@/root/src/shared/interfaces";
 import MatchForm from "../(components)/matchForm";
 
 const CreateMatchPage = async () => {

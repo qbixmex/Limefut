@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
 import { editPlayerSchema } from '@/shared/schemas';
-import { Player } from '@/shared/interfaces';
+import type { Player } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;

@@ -1,5 +1,5 @@
-import { UserSeed } from '@/root/next-auth';
-import { Role } from '@/shared/interfaces';
+import type { UserSeed } from '@/root/next-auth';
+import type { Role } from '@/shared/interfaces';
 
 export const users: UserSeed[] = [
   {

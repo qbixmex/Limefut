@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { MATCH_STATUS } from "@/shared/enums";
+import type { MATCH_STATUS } from "@/shared/enums";
 import type { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{

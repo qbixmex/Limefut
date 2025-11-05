@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { createUserSchema } from "@/shared/schemas";
 import { uploadImage } from '@/shared/actions';
 import { revalidatePath } from "next/cache";
-import { CloudinaryResponse } from "@/shared/interfaces";
+import type { CloudinaryResponse } from "@/shared/interfaces";
 import type { User } from "@/root/next-auth";
 
 type CreateResponseAction = Promise<{
