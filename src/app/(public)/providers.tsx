@@ -1,7 +1,7 @@
 // import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type Props = { readonly children?: ReactNode; };
 

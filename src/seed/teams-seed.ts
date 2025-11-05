@@ -1,4 +1,4 @@
-import { TeamSeed } from "@/shared/interfaces/Team";
+import type { TeamSeed } from "@/shared/interfaces/Team";
 
 export const teams: TeamSeed[] = [
   {

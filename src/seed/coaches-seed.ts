@@ -1,4 +1,4 @@
-import { CoachSeed } from "@/shared/interfaces";
+import type { CoachSeed } from "@/shared/interfaces";
 
 export const coaches: CoachSeed[] = [
   {

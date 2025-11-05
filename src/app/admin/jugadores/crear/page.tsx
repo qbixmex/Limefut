@@ -5,7 +5,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { PlayerForm } from "../(components)/playerForm";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { fetchTeamsForPlayer } from "../(actions)";

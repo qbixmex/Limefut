@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { createPlayerSchema } from "@/shared/schemas";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "@/shared/actions";
-import { CloudinaryResponse } from "@/shared/interfaces";
+import type { CloudinaryResponse } from "@/shared/interfaces";
 import type { Player } from "@/shared/interfaces";
 
 type CreateResponseAction = Promise<{

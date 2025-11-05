@@ -1,4 +1,4 @@
-import { CredentialSeed } from "../shared/interfaces/Credential";
+import type { CredentialSeed } from "../shared/interfaces/Credential";
 
 export const credentials: CredentialSeed[] = [
   {

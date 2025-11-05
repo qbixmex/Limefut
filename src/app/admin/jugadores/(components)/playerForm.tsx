@@ -2,10 +2,10 @@
 
 import { useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
-import { Session } from 'next-auth';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { createPlayerSchema, editPlayerSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import type { Player, Team } from '@/shared/interfaces';
 import { createPlayerAction, updatePlayerAction } from '../(actions)';
@@ -38,7 +38,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import z from 'zod';
+import type z from 'zod';
 
 type TeamType = Pick<Team, 'id' | 'name'>;
 
@@ -66,6 +66,11 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
       active: player?.active ?? false,
       teamId: player?.team?.id ?? '',
     }
+  });
+
+  const birthdayValue = useWatch({
+    control: form.control,
+    name: 'birthday',
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -216,9 +221,9 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                   placeholder="Día"
                   min={1}
                   max={31}
-                  value={form.watch('birthday') ? format(form.watch('birthday') as Date, 'd') : ''}
+                  value={birthdayValue ? format(birthdayValue as Date, 'd') : ''}
                   onChange={(e) => {
-                    const currentDate = form.watch('birthday') as Date || new Date();
+                    const currentDate = form.getValues('birthday') as Date || new Date();
                     const newDate = new Date(currentDate);
                     newDate.setDate(parseInt(e.target.value) || 1);
                     form.setValue('birthday', newDate);
@@ -230,9 +235,9 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                   placeholder="Mes"
                   min={1}
                   max={12}
-                  value={form.watch('birthday') ? format(form.watch('birthday') as Date, 'M') : ''}
+                  value={birthdayValue ? format(birthdayValue as Date, 'M') : ''}
                   onChange={(e) => {
-                    const currentDate = form.watch('birthday') as Date || new Date();
+                    const currentDate = form.getValues('birthday') as Date || new Date();
                     const newDate = new Date(currentDate);
                     newDate.setMonth((parseInt(e.target.value) || 1) - 1);
                     form.setValue('birthday', newDate);
@@ -244,9 +249,9 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                   placeholder="Año"
                   min={2000}
                   max={new Date().getFullYear()}
-                  value={form.watch('birthday') ? format(form.watch('birthday') as Date, 'yyyy') : ''}
+                  value={birthdayValue ? format(birthdayValue as Date, 'yyyy') : ''}
                   onChange={(e) => {
-                    const currentDate = form.watch('birthday') as Date || new Date();
+                    const currentDate = form.getValues('birthday') as Date || new Date();
                     const newDate = new Date(currentDate);
                     newDate.setFullYear(parseInt(e.target.value) || 2000);
                     form.setValue('birthday', newDate);
@@ -263,7 +268,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                   )}
                 />
                 <span className="text-sm text-gray-400 italic">
-                  {format(form.watch('birthday') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
+                  {format(birthdayValue as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
                 </span>
               </div>
             </div>

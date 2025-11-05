@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import type { FC } from "react";
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 

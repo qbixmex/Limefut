@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchUserAction } from "../../(actions)/fetchUserAction";

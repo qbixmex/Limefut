@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useState } from "react";
+import type { FC } from "react";
 import { useTheme } from "next-themes";
 import { cn } from "../../lib/utils";
 import { Moon, Sun } from "lucide-react";
@@ -15,21 +15,20 @@ type Props = Readonly<{
 }>;
 
 export const ThemeSwitcher: FC<Props> = ({ className }) => {
-  const { setTheme, theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { setTheme, resolvedTheme } = useTheme();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
+  // The theme is not available on the server, so `theme` may be `undefined`
+  // on initial rendering. We return null to avoid hydration errors.
+  // `resolvedTheme` gives us the actual theme being used ('light' or 'dark').
+  // When `theme` is 'system', `resolvedTheme` will be the user's system theme.
+  if (!resolvedTheme) {
+    return <div className={cn('size-5', className)} />; // Renderiza un placeholder para evitar saltos en el layout
   }
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        {theme === "light" ? (
+        {resolvedTheme === "light" ? (
           <button onClick={() => setTheme("dark")}>
             <Moon className={cn('size-5', className)} />
           </button>
@@ -40,7 +39,7 @@ export const ThemeSwitcher: FC<Props> = ({ className }) => {
         )}
       </TooltipTrigger>
       <TooltipContent side="bottom">
-        { theme === "light" ? "Modo Obscuro" : "Modo Claro" }
+        { resolvedTheme === "light" ? "Modo Obscuro" : "Modo Claro" }
       </TooltipContent>
     </Tooltip>
   );

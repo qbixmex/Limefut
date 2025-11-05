@@ -33,11 +33,11 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
-import z from 'zod';
+import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createMatchSchema, editMatchSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import type { Match, Team, Tournament } from '@/shared/interfaces';
 import { createMatchAction, updateMatchAction } from '../(actions)';
