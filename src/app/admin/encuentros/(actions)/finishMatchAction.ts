@@ -86,6 +86,6 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
 
   return {
     ok: true,
-    message: `¡ El estado del partido fue actualizado correctamente ⚽️🎉 !`
+    message: `¡ El estado del partido finalizó correctamente ⚽️🎉 !`
   };
 };
