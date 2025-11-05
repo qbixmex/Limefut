@@ -21,15 +21,11 @@ export const fetchTeamsForMatchAction = async (options?: OptionsType): ResponseF
   try {
     // Get teams that are already scheduled for the specified week.
     const scheduledTeams = week ? await prisma.match.findMany({
-      where: {
-        week: week,
-        status: {
-          not: 'canceled'
-        },
-      },
+      where: { week },
       select: {
         localId: true,
         visitorId: true,
+        week: true,
       },
     }) : [];
 
@@ -43,7 +39,7 @@ export const fetchTeamsForMatchAction = async (options?: OptionsType): ResponseF
     const teams = await prisma.team.findMany({
       where: {
         active: true,
-        ...(week && {
+        ...({
           id: {
             notIn: Array.from(scheduledTeamsIds),
           }

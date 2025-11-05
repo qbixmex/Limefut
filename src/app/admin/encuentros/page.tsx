@@ -28,11 +28,11 @@ import { auth } from "@/auth.config";
 import { MATCH_STATUS } from "@/root/src/shared/enums";
 import { MatchStatus } from "./(components)/match-status";
 import { FinishMatch } from "./(components)/finish-match";
+import { MatchScoreInput } from "./(components)/match-score-input";
 
 export const MatchesPage = async () => {
   const response = await fetchMatchesAction();
   const matches = response.matches;
-
   const session = await auth();
 
   return (
@@ -64,7 +64,7 @@ export const MatchesPage = async () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Encuentro</TableHead>
-                      <TableHead className="w-[100px] text-center">Semana</TableHead>
+                      <TableHead className="w-[100px] text-center">Jornada</TableHead>
                       <TableHead className="w-[120px]">Estado</TableHead>
                       <TableHead>Acciones</TableHead>
                     </TableRow>
@@ -72,13 +72,32 @@ export const MatchesPage = async () => {
                   <TableBody>
                     {matches.map((match) => (
                       <TableRow key={match.id}>
-                        <TableCell className="grid grid-cols-[1fr_50px_50px_50px_1fr] gap-2 font-semibold text-gray-500">
+                        <TableCell className="grid grid-cols-[1fr_180px_1fr] gap-2 font-semibold text-gray-500">
                           <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
                             {match.localTeam.name}
                           </Link>
-                          <Badge variant="outline-info">{match.localScore}</Badge>
-                          <Minus strokeWidth={2} />
-                          <Badge variant="outline-info">{match.visitorScore}</Badge>
+                          <div className="flex justify-center items-center gap-2">
+                            {match.status != MATCH_STATUS.COMPLETED ? (
+                              <MatchScoreInput
+                                matchId={match.id}
+                                score={match.localScore}
+                                local
+                              />
+                            ) : (
+                              <Badge variant="outline">{match.localScore}</Badge>
+                            )}
+                            <Minus strokeWidth={2} />
+                            {match.status != MATCH_STATUS.COMPLETED ? (
+                              <MatchScoreInput
+                                matchId={match.id}
+                                score={match.visitorScore}
+                                visitor
+                              />
+                            ) : (
+                              <Badge variant="outline">{match.visitorScore}</Badge>
+                            )}
+
+                          </div>
                           <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
                             {match.visitorTeam.name}
                           </Link>
@@ -87,7 +106,7 @@ export const MatchesPage = async () => {
                           <Badge variant="outline-info">{match.week}</Badge>
                         </TableCell>
                         <TableCell>
-                          { match.status === MATCH_STATUS.COMPLETED ? (
+                          {match.status === MATCH_STATUS.COMPLETED ? (
                             <div className="w-full max-w-[150px] border border-emerald-500 text-center rounded-lg py-2 px-4">
                               <span className="text-emerald-500 font-semibold">Finalizado</span>
                             </div>

@@ -72,7 +72,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
       visitorScore: match?.visitorScore ?? 0,
       place: match?.place ?? '',
       matchDate: match?.matchDate ?? new Date(),
-      week: match?.week ?? 1,
+      week: match?.week ?? 0,
       referee: match?.referee ?? '',
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
       tournamentId: match?.tournament.id ?? '',
@@ -80,9 +80,9 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
   });
 
   useEffect(() => {
-    const initialWeek = form.watch('week');
-    if (initialWeek && initialWeek > 0 && !match) {
-      updateTeamsForWeek(initialWeek);
+    const currentWeek = form.watch('week');
+    if (currentWeek && currentWeek > 0 && !match) {
+      updateTeamsForWeek(currentWeek);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -331,7 +331,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
         </div>
 
         {/* Visitor and Visitor Score */}
-        {match && (
+        {match && match.status !== MATCH_STATUS.COMPLETED && (
           <div className="flex flex-col gap-5 lg:flex-row">
             <div className="w-full lg:w-1/2">
               <FormField
