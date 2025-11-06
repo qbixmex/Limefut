@@ -1,6 +1,6 @@
 'use client';
 
-import { type FC, useState } from 'react';
+import { type FC, useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { SearchIcon, XIcon } from 'lucide-react';
@@ -15,6 +15,12 @@ export const Search: FC<Props> = ({ placeholder }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [ inputValue, setInputValue ] = useState(query);
+
+  // Synchronize input value with URL param.
+  // This is useful if the user navigates with browser back and forward button.
+  useEffect(() => {
+    setInputValue(query);
+  }, [query]);
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);

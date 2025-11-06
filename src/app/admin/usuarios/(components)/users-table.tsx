@@ -24,7 +24,6 @@ import { Button } from '@/components/ui/button';
 import { TooltipContent } from '@/components/ui/tooltip';
 import Pagination from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
-const session = await auth();
 import { auth } from '@/auth.config';
 
 type Props = Readonly<{
@@ -33,6 +32,7 @@ type Props = Readonly<{
 }>;
 
 export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
+  const session = await auth(); // <- Aquí estaba el problema ja ja ja ja.
   const {
     users = [],
     pagination = {
@@ -126,7 +126,7 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                         </Tooltip>
                         <DeleteUser
                           userId={user.id}
-                          roles={session?.user.roles as string[]}
+                          roles={session?.user?.roles ?? []}
                         />
                       </div>
                     </TableCell>
