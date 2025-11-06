@@ -1,11 +1,13 @@
 'use server';
 
+import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 import type { Pagination, Credential } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;
   take?: number;
+  searchTerm: string;
 }>;
 
 export type ResponseFetchAction = Promise<{
@@ -22,8 +24,26 @@ export const fetchCredentialsAction = async (options?: Options): ResponseFetchAc
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
+  const whereCondition: Prisma.CredentialWhereInput = options?.searchTerm ? {
+    OR: [
+      {
+        fullName: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+      {
+        curp: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+    ],
+  } : {};
+
   try {
     const credentials = await prisma.credential.findMany({
+      where: whereCondition,
       orderBy: { fullName: 'asc' },
       take: take,
       skip: (page - 1) * take,
@@ -35,7 +55,7 @@ export const fetchCredentialsAction = async (options?: Options): ResponseFetchAc
       },
     });
 
-    const totalCount = await prisma.credential.count();
+    const totalCount = await prisma.credential.count({ where: whereCondition });
 
     return {
       ok: true,
