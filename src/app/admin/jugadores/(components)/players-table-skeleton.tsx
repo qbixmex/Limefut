@@ -5,7 +5,7 @@ type Props = Readonly<{
   rowCount?: number;
 }>;
 
-export const CoachesTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) => {
+export const PlayersTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) => {
   return (
     <div className="flex flex-col gap-5 animate-pulse">
       {/* Skeleton Header */}
@@ -33,4 +33,4 @@ export const CoachesTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) 
   );
 };
 
-export default CoachesTableSkeleton;
+export default PlayersTableSkeleton;
