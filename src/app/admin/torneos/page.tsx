@@ -10,8 +10,8 @@ import {
 import { Plus } from "lucide-react";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { TournamentsTable } from "./(components)/tournamentsTable";
-import { TournamentsTableSkeleton } from "../usuarios/(components)/tournaments-table-skeleton";
 import { Search } from "@/shared/components/search";
+import { TournamentsTableSkeleton } from "./(components)/tournaments-table-skeleton";
 
 type Props = Readonly<{
   searchParams?: Promise<{
