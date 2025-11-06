@@ -51,7 +51,7 @@ type Props = Readonly<{
   user?: User;
 }>;
 
-export const UserForm: FC<Props> = ({ session, user }) => {
+export const UsersForm: FC<Props> = ({ session, user }) => {
   const route = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
@@ -405,4 +405,4 @@ export const UserForm: FC<Props> = ({ session, user }) => {
 
 };
 
-export default UserForm;
+export default UsersForm;
