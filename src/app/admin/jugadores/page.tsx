@@ -1,39 +1,29 @@
-import Image from "next/image";
+import { Suspense, type FC } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Check,
-  CircleOff,
-  Pencil,
-  InfoIcon,
-  Plus,
-} from "lucide-react";
-import { SoccerPlayer } from "@/shared/components/icons";
-import { Badge } from "@/components/ui/badge";
+import { Plus } from "lucide-react";
 import Link from "next/link";
-import { DeletePlayer } from "./(components)/delete-player";
-import { fetchPlayersAction } from "./(actions)";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import { auth } from "@/auth.config";
+import { PlayersTableSkeleton } from "./(components)/players-table-skeleton";
+import { PlayersTable } from "./(components)/players-table";
+import { Search } from "@/shared/components/search";
 
-export const PlayersPage = async () => {
-  const response = await fetchPlayersAction();
-  const players = response.players;
+type Props = Readonly<{
+  searchParams?: Promise<{
+    query?: string;
+    page?: string;
+  }>;
+}>;
 
-  const session = await auth();
+export const PlayersPage: FC<Props> = async (props) => {
+  const searchParams = await props.searchParams;
+  const query = searchParams?.query || '';
+  const currentPage = Number(searchParams?.page) || 1;
 
   return (
     <>
@@ -43,7 +33,8 @@ export const PlayersPage = async () => {
           <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
             <CardHeader className="flex items-center justify-between">
               <CardTitle>Lista de Jugadores</CardTitle>
-              <div>
+              <section className="flex gap-5 items-center">
+                <Search placeholder="Buscar jugador ..." />
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link href="/admin/jugadores/crear">
@@ -56,108 +47,15 @@ export const PlayersPage = async () => {
                     <p>crear</p>
                   </TooltipContent>
                 </Tooltip>
-              </div>
+              </section>
             </CardHeader>
             <CardContent>
-              {players && players.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[100px]">Imagen</TableHead>
-                      <TableHead>Nombre</TableHead>
-                      <TableHead>Correo de Contacto</TableHead>
-                      <TableHead>Equipo</TableHead>
-                      <TableHead className="text-center">Activo</TableHead>
-                      <TableHead>Acciones</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {players.map((player) => (
-                      <TableRow key={player.id}>
-                        <TableCell>
-                          <Link href={`/admin/jugadores/${player.id}`}>
-                            {
-                              !player.imageUrl ? (
-                                <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
-                                  <SoccerPlayer size={35} className="text-gray-300" />
-                                </figure>
-                              ) : (
-                                <Image
-                                  src={player.imageUrl}
-                                  alt={`${player.name} picture`}
-                                  width={75}
-                                  height={75}
-                                  className="size-18 rounded-xl object-cover"
-                                />
-                              )
-                            }
-                          </Link>
-                        </TableCell>
-                        <TableCell>{player.name}</TableCell>
-                        <TableCell>{player.email}</TableCell>
-                        <TableCell>
-                          <Link href={`/admin/equipos/${player.team?.permalink}`}>
-                            {
-                              player.team ? (
-                                <Badge variant="outline-info">
-                                  {player.team?.name}
-                                </Badge>
-                              ) : (
-                                <Badge variant="outline-secondary">
-                                  Sin equipo asignado
-                                </Badge>
-                              )
-                            }
-                          </Link>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant={player.active ? 'outline-success' : 'outline-secondary'}>
-                            {player.active ? <Check /> : <CircleOff />}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-3">
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Link href={`/admin/jugadores/perfil/${player.id}`}>
-                                  <Button variant="outline-info" size="icon">
-                                    <InfoIcon />
-                                  </Button>
-                                </Link>
-                              </TooltipTrigger>
-                              <TooltipContent side="top">
-                                detalles
-                              </TooltipContent>
-                            </Tooltip>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Link href={`/admin/jugadores/editar/${player.id}`}>
-                                  <Button variant="outline-warning" size="icon">
-                                    <Pencil />
-                                  </Button>
-                                </Link>
-                              </TooltipTrigger>
-                              <TooltipContent side="top">
-                                <p>editar</p>
-                              </TooltipContent>
-                            </Tooltip>
-                            <DeletePlayer
-                              playerId={player.id}
-                              roles={session?.user.roles as string[]}
-                            />
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                <div className="border border-sky-600 p-5 rounded">
-                  <p className="text-sky-500 text-center text-xl font-semibold">
-                    Todavía no hay jugadores creados
-                  </p>
-                </div>
-              )}
+              <Suspense
+                key={`${query}-${currentPage}`}
+                fallback={<PlayersTableSkeleton colCount={7} rowCount={6} />}
+              >
+                <PlayersTable query={query} currentPage={currentPage} />
+              </Suspense>
             </CardContent>
           </Card>
         </div>

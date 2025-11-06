@@ -1,11 +1,13 @@
 'use server';
 
+import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 import type { Pagination, Team } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;
   take?: number;
+  searchTerm?: string;
 }>;
 
 type TeamType = Pick<Team, 'name' | 'permalink'>;
@@ -31,8 +33,32 @@ export const fetchPlayersAction = async (options?: Options): ResponseFetchAction
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
+  const whereCondition: Prisma.PlayerWhereInput = options?.searchTerm ? {
+    OR: [
+      {
+        name: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+      {
+        email: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+      {
+        phone: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+    ],
+  } : {};
+
   try {
     const players = await prisma.player.findMany({
+      where: whereCondition,
       orderBy: { name: 'asc' },
       take: take,
       skip: (page - 1) * take,
@@ -52,7 +78,7 @@ export const fetchPlayersAction = async (options?: Options): ResponseFetchAction
       },
     });
 
-    const totalCount = await prisma.team.count();
+    const totalCount = await prisma.player.count({ where: whereCondition });
 
     return {
       ok: true,
