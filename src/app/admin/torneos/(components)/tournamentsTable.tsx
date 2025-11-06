@@ -10,22 +10,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Check,
-  CircleOff,
   Pencil,
   InfoIcon,
   Trophy,
 } from "lucide-react";
-import { fetchTournamentsAction } from "../(actions)";
+import { fetchTournamentsAction, updateTournamentStateAction } from "../(actions)";
 import { auth } from '@/auth.config';
 import { format } from 'date-fns';
-import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { DeleteTournament } from './delete-tournament';
 import { es } from 'date-fns/locale';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
+import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
   query: string;
@@ -94,9 +92,10 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                       {format(new Date(tournament.endDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={tournament.active ? 'outline-success' : 'outline-secondary'}>
-                        {tournament.active ? <Check /> : <CircleOff />}
-                      </Badge>
+                      <ActiveSwitch
+                        resource={{ id: tournament.id, state: tournament.active }}
+                        updateResourceStateAction={updateTournamentStateAction}
+                      />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">

@@ -1,5 +1,8 @@
 import type { FC } from 'react';
-
+import Link from 'next/link';
+import Image from "next/image";
+import { auth } from "@/auth.config";
+import { fetchPlayersAction, updatePlayerStateAction } from "../(actions)";
 import {
   Table,
   TableBody,
@@ -8,27 +11,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Check,
-  CircleOff,
-  Pencil,
-  InfoIcon,
-} from "lucide-react";
+import { Pencil, InfoIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import { SoccerPlayer } from "@/shared/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { DeletePlayer } from "../(components)/delete-player";
-import Image from "next/image";
-import { auth } from "@/auth.config";
-import { fetchPlayersAction } from "../(actions)";
-import Link from 'next/link';
-import { Button } from "@/components/ui/button";
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
+import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
   query: string;
@@ -105,9 +100,10 @@ export const PlayersTable: FC<Props> = async ({ query, currentPage }) => {
                       </Link>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={player.active ? 'outline-success' : 'outline-secondary'}>
-                        {player.active ? <Check /> : <CircleOff />}
-                      </Badge>
+                      <ActiveSwitch
+                        resource={{ id: player.id, state: player.active }}
+                        updateResourceStateAction={updatePlayerStateAction}
+                      />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">

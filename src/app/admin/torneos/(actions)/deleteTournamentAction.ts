@@ -9,9 +9,9 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deleteTournamentAction = async (teamId: string): ResponseDeleteAction => {
+export const deleteTournamentAction = async (id: string): ResponseDeleteAction => {
   const tournament = await prisma.tournament.findUnique({
-    where: { id: teamId },
+    where: { id },
     select: {
       name: true,
       imagePublicID: true,
@@ -26,7 +26,7 @@ export const deleteTournamentAction = async (teamId: string): ResponseDeleteActi
   }
 
   await prisma.tournament.delete({
-    where: { id: teamId },
+    where: { id },
   });
 
   // Delete image from cloudinary.

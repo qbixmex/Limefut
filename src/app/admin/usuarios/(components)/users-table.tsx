@@ -1,5 +1,9 @@
 import type { FC } from 'react';
-
+import Image from "next/image";
+import Link from 'next/link';
+import { fetchUsersAction, updateUserStateAction } from '../(actions)';
+import { cn } from '@/lib/utils';
+import { auth } from '@/auth.config';
 import {
   Table,
   TableBody,
@@ -9,22 +13,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Check,
-  CircleOff,
   Pencil,
   User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DeleteUser } from "../../(components)/delete-user";
-import Image from "next/image";
-import Link from 'next/link';
-import { fetchUsersAction } from '../(actions)';
 import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { TooltipContent } from '@/components/ui/tooltip';
 import Pagination from '@/shared/components/pagination';
-import { cn } from '@/lib/utils';
-import { auth } from '@/auth.config';
+import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
   query: string;
@@ -94,9 +92,10 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                       </div>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={user.isActive ? 'outline-success' : 'outline-secondary'}>
-                        {user.isActive ? <Check /> : <CircleOff />}
-                      </Badge>
+                      <ActiveSwitch
+                        resource={{ id: user.id, state: user.isActive }}
+                        updateResourceStateAction={updateUserStateAction}
+                      />
                     </TableCell>
                     <TableCell className="">
                       <div className="flex gap-3">

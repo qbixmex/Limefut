@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import Image from "next/image";
-import { fetchCoachesAction } from "../(actions)";
+import { fetchCoachesAction, updateCoachStateAction } from "../(actions)";
 import { auth } from "@/auth.config";
 import { DeleteCoach } from "../(components)/delete-coach";
 import {
@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from '@/components/ui/button';
 import {
-  Check,
-  CircleOff,
   Pencil,
   InfoIcon,
 } from "lucide-react";
@@ -24,6 +22,7 @@ import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
+import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
   query: string;
@@ -90,9 +89,10 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
                       <Badge variant="outline-info">{coach.teamsCount}</Badge>
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={coach.active ? 'outline-success' : 'outline-secondary'}>
-                        {coach.active ? <Check /> : <CircleOff />}
-                      </Badge>
+                      <ActiveSwitch
+                        resource={{ id: coach.id, state: coach.active }}
+                        updateResourceStateAction={updateCoachStateAction}
+                      />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">

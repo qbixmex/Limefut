@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import Link from 'next/link';
 import Image from "next/image";
 import { DeleteTeam } from "../(components)/delete-team";
-import { fetchTeamsAction } from "../(actions)";
+import { fetchTeamsAction, updateTeamStateAction } from "../(actions)";
 import { auth } from "@/auth.config";
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
@@ -28,6 +28,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
   query: string;
@@ -111,9 +112,10 @@ export const TeamsTable: FC<Props> = async ({ query, currentPage }) => {
                       )}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant="outline-info">
-                        {team.playersCount}
-                      </Badge>
+                      <ActiveSwitch
+                        resource={{ id: team.id, state: team.active }}
+                        updateResourceStateAction={updateTeamStateAction}
+                      />
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant={team.active ? 'outline-success' : 'outline-secondary'}>
