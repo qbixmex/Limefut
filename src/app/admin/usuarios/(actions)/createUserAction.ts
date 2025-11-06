@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { createUserSchema } from "@/shared/schemas";
 import { uploadImage } from '@/shared/actions';
 import { revalidatePath } from "next/cache";
-import type { CloudinaryResponse } from "@/shared/interfaces";
+import type { CloudinaryResponse, Role } from "@/shared/interfaces";
 import type { User } from "@/root/next-auth";
 
 type CreateResponseAction = Promise<{
@@ -13,6 +13,14 @@ type CreateResponseAction = Promise<{
   message: string;
   user: User | null;
 }>;
+
+type UserToSave = {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  roles: string[];
+};
 
 export const createUserAction = async (
   formData: FormData,
@@ -53,7 +61,7 @@ export const createUserAction = async (
     };
   }
 
-  const { image, ...userToSave } = userVerified.data;
+  const { image, ...dataParsed } = userVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
   let cloudinaryResponse: CloudinaryResponse | null = null;
@@ -65,20 +73,29 @@ export const createUserAction = async (
     }
   }
 
+  const userToSave = Object.fromEntries(
+    Object
+      .entries(dataParsed)
+      .filter(([property]) => property !== 'passwordConfirmation')
+  ) as UserToSave;
+
+  const hashedPassword = bcrypt.hashSync(userToSave.password, 10);
+
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdUser = await transaction.user.create({
         data: {
           ...userToSave,
+          password: hashedPassword,
+          roles: userToSave.roles as Role[],
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
-          password: bcrypt.hashSync(userToSave.password, 10),
         }
       });
 
       return {
         ok: true,
-        message: '¡ Usuario creado satisfactoriamente 👍 !',
+        message: '¡ Usuario creado correctamente 👍 !',
         user: createdUser,
       };
     });
@@ -104,7 +121,7 @@ export const createUserAction = async (
         user: null,
       };
     }
-    console.log(error);
+    console.log((error as Error).message);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',

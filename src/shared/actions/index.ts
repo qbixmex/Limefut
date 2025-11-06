@@ -1,2 +1,3 @@
-export { uploadImage } from "./uploadImageAction";
-export { deleteImage } from "./deleteImageAction";
+export { default as uploadImage } from "./uploadImageAction";
+export { default as deleteImage } from "./deleteImageAction";
+export { default as generatePagination } from "./generatePagination";

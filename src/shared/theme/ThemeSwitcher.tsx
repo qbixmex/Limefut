@@ -1,6 +1,5 @@
 'use client';
-
-import type { FC } from "react";
+import { type FC, useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { cn } from "../../lib/utils";
 import { Moon, Sun } from "lucide-react";
@@ -15,14 +14,16 @@ type Props = Readonly<{
 }>;
 
 export const ThemeSwitcher: FC<Props> = ({ className }) => {
+  const [mounted, setMounted] = useState(false);
   const { setTheme, resolvedTheme } = useTheme();
+  
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
-  // The theme is not available on the server, so `theme` may be `undefined`
-  // on initial rendering. We return null to avoid hydration errors.
-  // `resolvedTheme` gives us the actual theme being used ('light' or 'dark').
-  // When `theme` is 'system', `resolvedTheme` will be the user's system theme.
-  if (!resolvedTheme) {
-    return <div className={cn('size-5', className)} />; // Renderiza un placeholder para evitar saltos en el layout
+  if (!mounted) {
+    return <div className={cn('size-5', className)} />;
   }
 
   return (
