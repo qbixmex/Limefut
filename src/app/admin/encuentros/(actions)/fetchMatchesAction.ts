@@ -1,12 +1,14 @@
 'use server';
 
+import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
-import type { MATCH_STATUS } from "@/shared/enums";
+import { MATCH_STATUS } from "@/shared/enums";
 import type { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;
   take?: number;
+  searchTerm: string;
 }>;
 
 type Team = {
@@ -39,8 +41,47 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
+  const statusMap: Record<string, MATCH_STATUS> = {
+    "programado": MATCH_STATUS.SCHEDULED,
+    "en progreso": MATCH_STATUS.INPROGRESS,
+    "finalizado": MATCH_STATUS.COMPLETED,
+    "pospuesto": MATCH_STATUS.POST_POSED,
+    "cancelado": MATCH_STATUS.CANCELED,
+  };
+
+  const whereCondition: Prisma.MatchWhereInput = {};
+
+  if (options?.searchTerm) {
+    const searchTerm = options.searchTerm;
+    const weekNumber = parseInt(searchTerm, 10);
+
+    whereCondition.OR = [
+      { // Search by local team name
+        local: { name: { contains: searchTerm, mode: 'insensitive' } }
+      },
+      { // Search by visitor team name
+        visitor: { name: { contains: searchTerm, mode: 'insensitive' } }
+      }
+    ];
+
+    // If the search term is a valid number, add the condition to search by week.
+    if (!isNaN(weekNumber)) {
+      whereCondition.OR.push({
+        week: { equals: weekNumber }
+      });
+    }
+
+    // Search by status in Spanish
+    const searchTermLower = searchTerm.toLowerCase();
+    const status = statusMap[searchTermLower];
+    if (status) {
+      whereCondition.OR.push({ status: { equals: status } });
+    }
+  }
+
   try {
     const matches = await prisma.match.findMany({
+      where: whereCondition,
       orderBy: { matchDate: 'desc' },
       take: take,
       skip: (page - 1) * take,
@@ -69,7 +110,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       }
     });
 
-    const totalCount = await prisma.match.count();
+    const totalCount = await prisma.match.count({ where: whereCondition });
 
     return {
       ok: true,
