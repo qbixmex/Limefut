@@ -1,11 +1,13 @@
 'use server';
 
+import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 import type { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;
   take?: number;
+  searchTerm?: string;
 }>;
 
 export type AdminUser = {
@@ -33,13 +35,37 @@ export const fetchUsersAction = async (options?: Options): ResponseFetchAction =
   if (isNaN(take)) take = 12;
 
   try {
+    const whereCondition: Prisma.UserWhereInput = options?.searchTerm ? {
+      OR: [
+        {
+          name: {
+            contains: options.searchTerm,
+            mode: 'insensitive' as const,
+          },
+        },
+        {
+          username: {
+            contains: options.searchTerm,
+            mode: 'insensitive' as const,
+          },
+        },
+        {
+          email: {
+            contains: options.searchTerm,
+            mode: 'insensitive' as const,
+          },
+        },
+      ],
+    } : {};
+
     const users = await prisma.user.findMany({
       orderBy: { name: 'asc' },
+      where: whereCondition,
       take: take,
       skip: (page - 1) * take,
     });
 
-    const totalCount = await prisma.user.count();
+    const totalCount = await prisma.user.count({ where: whereCondition });
 
     const outputUsers = users.map((user) => ({
       id: user.id,
