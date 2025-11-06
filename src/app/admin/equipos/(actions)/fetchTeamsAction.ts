@@ -1,11 +1,13 @@
 'use server';
 
+import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 import type { Tournament, Coach, Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;
   take?: number;
+  searchTerm?: string;
 }>;
 
 export type ResponseFetchTeams = Promise<{
@@ -33,8 +35,32 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
+  const whereCondition: Prisma.TeamWhereInput = options?.searchTerm ? {
+    OR: [
+      {
+        name: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+      {
+        division: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+      {
+        group: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+    ],
+  } : {};
+
   try {
     const teams = await prisma.team.findMany({
+      where: whereCondition,
       orderBy: { name: 'asc' },
       select: {
         id: true,
@@ -65,7 +91,7 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
       skip: (page - 1) * take,
     });
 
-    const totalCount = await prisma.team.count();
+    const totalCount = await prisma.team.count({ where: whereCondition });
 
     return {
       ok: true,

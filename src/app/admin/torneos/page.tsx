@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Plus } from "lucide-react";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import TournamentsForm from "./(components)/tournamentsForm";
+import { TournamentsTable } from "./(components)/tournamentsTable";
 import { TournamentsTableSkeleton } from "../usuarios/(components)/tournaments-table-skeleton";
 import { Search } from "@/shared/components/search";
 
@@ -54,7 +54,7 @@ export const TournamentPage: FC<Props> = async (props) => {
                 key={`${query}-${currentPage}`}
                 fallback={<TournamentsTableSkeleton colCount={7} rowCount={8} />}
               >
-                <TournamentsForm query={query} currentPage={currentPage} />
+                <TournamentsTable query={query} currentPage={currentPage} />
               </Suspense>
             </CardContent>
           </Card>

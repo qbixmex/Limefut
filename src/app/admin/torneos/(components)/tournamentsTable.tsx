@@ -32,7 +32,7 @@ type Props = Readonly<{
   currentPage: number;
 }>;
 
-export const TournamentsForm: FC<Props> = async ({ query, currentPage }) => {
+export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
   const session = await auth();
   const {
     tournaments = [],
@@ -144,7 +144,7 @@ export const TournamentsForm: FC<Props> = async ({ query, currentPage }) => {
       ) : (
         <div className="border border-sky-600 p-5 rounded">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            Todavía no hay torneos creados
+            No hay torneos
           </p>
         </div>
       )}
@@ -152,4 +152,4 @@ export const TournamentsForm: FC<Props> = async ({ query, currentPage }) => {
   );
 };
 
-export default TournamentsForm;
+export default TournamentsTable;
