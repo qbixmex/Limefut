@@ -1,11 +1,13 @@
 'use server';
 
+import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 import type { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
   page?: number;
   take?: number;
+  searchTerm?: string;
 }>;
 
 export type ResponseFetchTournaments = Promise<{
@@ -31,8 +33,26 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetchTo
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
+  const whereCondition: Prisma.TournamentWhereInput = options?.searchTerm ? {
+    OR: [
+      {
+        name: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+      {
+        season: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+    ],
+  } : {};
+
   try {
     const tournaments = await prisma.tournament.findMany({
+      where: whereCondition,
       orderBy: { name: 'asc' },
       select: {
         id: true,
@@ -48,7 +68,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetchTo
       skip: (page - 1) * take,
     });
 
-    const totalCount = await prisma.tournament.count();
+    const totalCount = await prisma.tournament.count({ where: whereCondition });
 
     return {
       ok: true,
