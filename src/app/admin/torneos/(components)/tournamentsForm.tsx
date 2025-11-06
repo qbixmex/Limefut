@@ -1,5 +1,6 @@
 import type { FC } from 'react';
-
+import Link from 'next/link';
+import Image from "next/image";
 import {
   Table,
   TableBody,
@@ -12,69 +13,70 @@ import {
   Check,
   CircleOff,
   Pencil,
-  User,
+  InfoIcon,
+  Trophy,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { DeleteUser } from "../../(components)/delete-user";
-import Image from "next/image";
-import Link from 'next/link';
-import { fetchUsersAction } from '../(actions)';
-import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
-import { TooltipContent } from '@/components/ui/tooltip';
-import Pagination from '@/shared/components/pagination';
-import { cn } from '@/lib/utils';
+import { fetchTournamentsAction } from "../(actions)";
 import { auth } from '@/auth.config';
+import { format } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { DeleteTournament } from './delete-tournament';
+import { es } from 'date-fns/locale';
+import { Pagination } from '@/shared/components/pagination';
+import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   query: string;
   currentPage: number;
 }>;
 
-export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
+export const TournamentsForm: FC<Props> = async ({ query, currentPage }) => {
   const session = await auth();
   const {
-    users = [],
+    tournaments = [],
     pagination = {
       currentPage: 1,
       totalPages: 1,
     },
-  } = await fetchUsersAction({
+  } = await fetchTournamentsAction({
     page: currentPage,
-    take: 8,
+    take: 6,
     searchTerm: query,
   });
+
   return (
     <>
-      {users && users.length > 0 ? (
+      {tournaments && tournaments.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[100px]">Imagen</TableHead>
-                  <TableHead className="w-[250px]">Nombre</TableHead>
-                  <TableHead className="w-[200px]">Nombre de Usuario</TableHead>
-                  <TableHead className="w-[250px]">Email</TableHead>
-                  <TableHead className="w-[120px]">Roles</TableHead>
-                  <TableHead className="w-[100px] text-center">Activo</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead className="w-[100px]">Temporada</TableHead>
+                  <TableHead className="w-[200px]">Fecha de Inicio</TableHead>
+                  <TableHead className="w-[200px]">Fecha Final</TableHead>
+                  <TableHead className="text-center">Activo</TableHead>
                   <TableHead>Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id}>
+                {tournaments.map((tournament) => (
+                  <TableRow key={tournament.id}>
                     <TableCell>
-                      <Link href={`/admin/usuarios/perfil/${user.id}`}>
+                      <Link href={`/admin/torneos/${tournament.permalink}`}>
                         {
-                          !user.imageUrl ? (
-                            <figure className="bg-gray-200 dark:bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
-                              <User size={35} className="stroke-gray-400" />
+                          !tournament.imageUrl ? (
+                            <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
+                              <Trophy size={35} className="stroke-gray-400" />
                             </figure>
                           ) : (
                             <Image
-                              src={user.imageUrl}
-                              alt={`${user.name} profile picture`}
+                              src={tournament.imageUrl}
+                              alt={`${tournament.name} picture`}
                               width={75}
                               height={75}
                               className="size-18 rounded-xl object-cover"
@@ -83,38 +85,36 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                         }
                       </Link>
                     </TableCell>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.username}</TableCell>
-                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{tournament.name}</TableCell>
+                    <TableCell>{tournament.season}</TableCell>
                     <TableCell>
-                      <div className="flex gap-2">
-                        {user.roles.map((role) => (
-                          <Badge key={role} variant="outline-secondary">{role}</Badge>
-                        ))}
-                      </div>
+                      {format(new Date(tournament.startDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                    </TableCell>
+                    <TableCell>
+                      {format(new Date(tournament.endDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={user.isActive ? 'outline-success' : 'outline-secondary'}>
-                        {user.isActive ? <Check /> : <CircleOff />}
+                      <Badge variant={tournament.active ? 'outline-success' : 'outline-secondary'}>
+                        {tournament.active ? <Check /> : <CircleOff />}
                       </Badge>
                     </TableCell>
-                    <TableCell className="">
+                    <TableCell>
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/usuarios/perfil/${user.id}`}>
+                            <Link href={`/admin/torneos/${tournament.permalink}`}>
                               <Button variant="outline-info" size="icon">
-                                <User />
+                                <InfoIcon />
                               </Button>
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">
-                            <p>perfil</p>
+                            detalles
                           </TooltipContent>
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/usuarios/editar/${user.id}`}>
+                            <Link href={`/admin/torneos/editar/${tournament.permalink}`}>
                               <Button variant="outline-warning" size="icon">
                                 <Pencil />
                               </Button>
@@ -124,9 +124,9 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        <DeleteUser
-                          userId={user.id}
-                          roles={session?.user?.roles ?? []}
+                        <DeleteTournament
+                          tournamentId={tournament.id}
+                          roles={session?.user.roles as string[]}
                         />
                       </div>
                     </TableCell>
@@ -144,13 +144,12 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
       ) : (
         <div className="border border-sky-600 p-5 rounded">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay usuarios
+            Todavía no hay torneos creados
           </p>
         </div>
       )}
     </>
   );
-
 };
 
-export default UsersTable;
+export default TournamentsForm;

@@ -10,7 +10,7 @@ import { UserPlusIcon, } from "lucide-react";
 import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { Search } from "@/shared/components/search";
-import UsersTable from "./(components)/users-table";
+import { UsersTable } from "./(components)/users-table";
 import { UsersTableSkeleton } from "./(components)/users-table-skeleton";
 
 type Props = Readonly<{
@@ -50,7 +50,10 @@ export const UsersPage: FC<Props> = async (props) => {
               </section>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col">
-              <Suspense key={`${query}-${currentPage}`} fallback={<UsersTableSkeleton />}>
+              <Suspense
+                key={`${query}-${currentPage}`}
+                fallback={<UsersTableSkeleton colCount={7} rowCount={6} />}
+              >
                 <UsersTable query={query} currentPage={currentPage} />
               </Suspense>
             </CardContent>

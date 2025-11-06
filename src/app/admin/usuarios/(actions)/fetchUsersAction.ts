@@ -34,33 +34,33 @@ export const fetchUsersAction = async (options?: Options): ResponseFetchAction =
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
-  try {
-    const whereCondition: Prisma.UserWhereInput = options?.searchTerm ? {
-      OR: [
-        {
-          name: {
-            contains: options.searchTerm,
-            mode: 'insensitive' as const,
-          },
+  const whereCondition: Prisma.UserWhereInput = options?.searchTerm ? {
+    OR: [
+      {
+        name: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
         },
-        {
-          username: {
-            contains: options.searchTerm,
-            mode: 'insensitive' as const,
-          },
+      },
+      {
+        username: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
         },
-        {
-          email: {
-            contains: options.searchTerm,
-            mode: 'insensitive' as const,
-          },
+      },
+      {
+        email: {
+          contains: options.searchTerm,
+          mode: 'insensitive' as const,
         },
-      ],
-    } : {};
+      },
+    ],
+  } : {};
 
+  try {
     const users = await prisma.user.findMany({
-      orderBy: { name: 'asc' },
       where: whereCondition,
+      orderBy: { name: 'asc' },
       take: take,
       skip: (page - 1) * take,
     });
