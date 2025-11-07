@@ -15,8 +15,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Check,
-  CircleOff,
   Pencil,
   InfoIcon,
   Flag,
@@ -112,15 +110,13 @@ export const TeamsTable: FC<Props> = async ({ query, currentPage }) => {
                       )}
                     </TableCell>
                     <TableCell className="text-center">
+                      <Badge variant="outline-primary">{team.playersCount}</Badge>
+                    </TableCell>
+                    <TableCell className="text-center">
                       <ActiveSwitch
                         resource={{ id: team.id, state: team.active }}
                         updateResourceStateAction={updateTeamStateAction}
                       />
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant={team.active ? 'outline-success' : 'outline-secondary'}>
-                        {team.active ? <Check /> : <CircleOff />}
-                      </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
