@@ -3,6 +3,6 @@
 .header {
   @apply
     flex justify-between items-center
-    bg-gradient-to-b from-green-800 to-green-600 h-[80px]
+    bg-linear-to-b from-green-800 to-green-600 h-[80px]
     px-5 py-4 lg:rounded-b;
 }

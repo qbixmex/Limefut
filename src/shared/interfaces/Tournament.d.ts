@@ -12,6 +12,7 @@ export interface Tournament {
   startDate: Date;
   endDate: Date;
   active: boolean;
+  currentWeek: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -1,0 +1,39 @@
+import { Suspense } from "react";
+import Image from "next/image";
+import styles from "./home-styles.module.css";
+import { Heading } from "./components/heading";
+import { NextMatches } from "./components/next-matches";
+import { MatchesSkeleton } from "./components";
+
+const Home = () => {
+  return (
+    <div className="bg-gray-50 md:rounded p-5 flex-1 flex flex-col gap-5">
+      <Heading level="h1" className="text-green-900">
+        Bienvenidos a LIMEFUT
+      </Heading>
+
+      <section className={styles.banners}>
+        <Image
+          src="/images/inscription.jpg"
+          width={640}
+          height={640}
+          alt="Inscripciones"
+          className="rounded"
+        />
+        <Image
+          src="/images/set-aside-spot.jpg"
+          width={640}
+          height={640}
+          alt="Aparta tu lugar"
+          className="rounded"
+        />
+      </section>
+
+      <Suspense fallback={<MatchesSkeleton />}>
+        <NextMatches />
+      </Suspense>
+    </div>
+  );
+};
+
+export default Home;
