@@ -46,6 +46,7 @@ export const NavUser: FC<Props> = ({ user }) => {
   const handleLogout = () => {
     logoutAction();
     toast.success("Has Cerrado Sesión Satisfactoriamente");
+    route.replace("/login");
   };
 
   return (

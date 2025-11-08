@@ -1,11 +1,19 @@
-import { Suspense } from "react";
+import { type FC, Suspense } from "react";
 import Image from "next/image";
 import styles from "./home-styles.module.css";
 import { Heading } from "./components/heading";
 import { NextMatches } from "./components/next-matches";
 import { MatchesSkeleton } from "./components";
 
-const Home = () => {
+type Props = Readonly<{
+  searchParams: Promise<{
+    "next-matches"?: string;
+  }>;
+}>;
+
+const HomePage: FC<Props> = ({ searchParams }) => {
+  const matchesPromise = searchParams.then((sp) => ({ matchesPage: sp['next-matches'] }));
+
   return (
     <div className="bg-gray-50 md:rounded p-5 flex-1 flex flex-col gap-5">
       <Heading level="h1" className="text-green-900">
@@ -30,10 +38,12 @@ const Home = () => {
       </section>
 
       <Suspense fallback={<MatchesSkeleton />}>
-        <NextMatches />
+        <NextMatches matchesPromise={
+          matchesPromise as Promise<{ matchesPage: string }>
+        } />
       </Suspense>
     </div>
   );
 };
 
-export default Home;
+export default HomePage;

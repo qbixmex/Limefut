@@ -1,23 +1,26 @@
 'use client';
 
 import type { FC } from 'react';
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { generatePagination } from '@/shared/actions';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import clsx from 'clsx';
 
-type PaginationProps = Readonly<{ totalPages: number }>;
+type PaginationProps = Readonly<{
+  totalPages: number;
+  propName?: string;
+}>;
 
-export const Pagination: FC<PaginationProps> = ({ totalPages }) => {
+export const Pagination: FC<PaginationProps> = (props) => {
+  const { totalPages, propName = 'page' } = props;
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentPage = Number(searchParams.get(propName)) || 1;
   const allPages = generatePagination(currentPage, totalPages);
 
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', pageNumber.toString());
+    params.set(propName, pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   };
 
@@ -26,7 +29,7 @@ export const Pagination: FC<PaginationProps> = ({ totalPages }) => {
       <div className="inline-flex">
         <PaginationArrow
           direction="left"
-          href={createPageURL(currentPage - 1)}
+          url={createPageURL(currentPage - 1)}
           isDisabled={currentPage <= 1}
         />
 
@@ -42,7 +45,7 @@ export const Pagination: FC<PaginationProps> = ({ totalPages }) => {
             return (
               <PaginationNumber
                 key={`${page}-${index}`}
-                href={createPageURL(page)}
+                url={createPageURL(page)}
                 page={page}
                 position={position}
                 isActive={currentPage === page}
@@ -53,7 +56,7 @@ export const Pagination: FC<PaginationProps> = ({ totalPages }) => {
 
         <PaginationArrow
           direction="right"
-          href={createPageURL(currentPage + 1)}
+          url={createPageURL(currentPage + 1)}
           isDisabled={currentPage >= totalPages}
         />
       </div>
@@ -63,12 +66,18 @@ export const Pagination: FC<PaginationProps> = ({ totalPages }) => {
 
 type PaginationNumberProps = Readonly<{
   page: number | string;
-  href: string;
+  url: string;
   position?: 'first' | 'last' | 'middle' | 'single';
   isActive: boolean;
 }>;
 
-const PaginationNumber: FC<PaginationNumberProps> = ({ page, href, isActive, position, }) => {
+const PaginationNumber: FC<PaginationNumberProps> = ({ page, url, isActive, position, }) => {
+  const router = useRouter();
+
+  const handleNavigate = () => {
+    router.replace(url, { scroll: false });    
+  };
+
   const className = clsx(
     'flex h-10 w-10 items-center justify-center text-sm border',
     {
@@ -83,19 +92,25 @@ const PaginationNumber: FC<PaginationNumberProps> = ({ page, href, isActive, pos
   return isActive || position === 'middle' ? (
     <div className={className}>{page}</div>
   ) : (
-    <Link href={href} className={className}>
+    <button className={className} onClick={handleNavigate}>
       {page}
-    </Link>
+    </button>
   );
 };
 
 type PaginationArrowProps = Readonly<{
-  href: string;
+  url: string;
   direction: 'left' | 'right';
   isDisabled?: boolean;
 }>;
 
-const PaginationArrow: FC<PaginationArrowProps> = ({ href, direction, isDisabled }) => {
+const PaginationArrow: FC<PaginationArrowProps> = ({ url, direction, isDisabled }) => {
+  const router = useRouter();
+
+  const handleNavigate = () => {
+    router.replace(url, { scroll: false });    
+  };
+
   const className = clsx(
     'flex h-10 w-10 items-center justify-center rounded-md border',
     {
@@ -116,9 +131,9 @@ const PaginationArrow: FC<PaginationArrowProps> = ({ href, direction, isDisabled
   return isDisabled ? (
     <div className={className}>{icon}</div>
   ) : (
-    <Link className={className} href={href}>
+    <button className={className} onClick={handleNavigate}>
       {icon}
-    </Link>
+    </button>
   );
 };
 
