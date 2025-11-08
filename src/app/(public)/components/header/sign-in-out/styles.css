@@ -1,4 +1,4 @@
-@reference '../../../../globals.css';
+@reference 'tailwindcss';
 
 .icon {
   @apply size-5;

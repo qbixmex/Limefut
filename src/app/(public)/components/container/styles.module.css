@@ -1,7 +1,7 @@
-@reference "../../../globals.css";
+@reference "tailwindcss";
 
 .container {
- @apply
+  @apply
     w-full
     flex flex-col gap-5 min-h-screen
     lg:mx-auto

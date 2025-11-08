@@ -41,11 +41,13 @@ import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import type { Match, Team, Tournament } from '@/shared/interfaces';
 import { createMatchAction, updateMatchAction } from '../(actions)';
-import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
+import { Check, ChevronDownIcon, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { MATCH_STATUS } from '@/shared/enums';
 import { cn } from '@/root/src/lib/utils';
+import { Calendar } from '@/root/src/components/ui/calendar';
+import { Label } from '@/root/src/components/ui/label';
 
 type Props = Readonly<{
   session: Session;
@@ -70,8 +72,8 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
       localScore: match?.localScore ?? 0,
       visitorTeamId: match?.visitorTeam.id ?? '',
       visitorScore: match?.visitorScore ?? 0,
-      place: match?.place ?? '',
-      matchDate: match?.matchDate ?? new Date(),
+      place: match?.place ?? '',      
+      matchDate: match?.matchDate ? new Date(match.matchDate) : new Date(),
       week: match?.week ?? 0,
       referee: match?.referee ?? '',
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
@@ -79,12 +81,28 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
     }
   });
 
+  const [openCalendar, setOpenCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(form.getValues('matchDate'));
+  const [selectedTime, setSelectedTime] = useState<string>(() => {
+    const initialDate = form.getValues('matchDate');
+    return initialDate ? format(initialDate, 'HH:mm:ss') : '00:00:00';
+  });
+
+  useEffect(() => {
+    if (selectedDate) {
+      const [hours, minutes, seconds] = selectedTime.split(':').map(Number);
+      const combinedDate = new Date(selectedDate);
+      combinedDate.setHours(hours, minutes, seconds);
+      form.setValue('matchDate', combinedDate, { shouldValidate: true });
+    }
+  }, [selectedDate, selectedTime, form]);
+
   useEffect(() => {
     const currentWeek = form.watch('week');
     if (currentWeek && currentWeek > 0 && !match) {
       updateTeamsForWeek(currentWeek);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateTeamsForWeek = async (week: number) => {
@@ -422,62 +440,54 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <div className="flex flex-col gap-2">
-              <FormLabel>Fecha del encuentro</FormLabel>
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  placeholder="Día"
-                  min={1}
-                  max={31}
-                  value={form.watch('matchDate') ? format(form.watch('matchDate') as Date, 'd') : ''}
-                  onChange={(e) => {
-                    const currentDate = form.watch('matchDate') as Date || new Date();
-                    const newDate = new Date(currentDate);
-                    newDate.setDate(parseInt(e.target.value) || 1);
-                    form.setValue('matchDate', newDate);
-                  }}
-                  className="w-20"
-                />
-                <Input
-                  type="number"
-                  placeholder="Mes"
-                  min={1}
-                  max={12}
-                  value={form.watch('matchDate') ? format(form.watch('matchDate') as Date, 'M') : ''}
-                  onChange={(e) => {
-                    const currentDate = form.watch('matchDate') as Date || new Date();
-                    const newDate = new Date(currentDate);
-                    newDate.setMonth((parseInt(e.target.value) || 1) - 1);
-                    form.setValue('matchDate', newDate);
-                  }}
-                  className="w-20"
-                />
-                <Input
-                  type="number"
-                  placeholder="Año"
-                  min={2000}
-                  value={form.watch('matchDate') ? format(form.watch('matchDate') as Date, 'yyyy') : ''}
-                  onChange={(e) => {
-                    const currentDate = form.watch('matchDate') as Date || new Date();
-                    const newDate = new Date(currentDate);
-                    newDate.setFullYear(parseInt(e.target.value) || 2000);
-                    form.setValue('matchDate', newDate);
-                  }}
-                  className="w-24"
-                />
-                <FormField
-                  control={form.control}
-                  name="matchDate"
-                  render={() => (
-                    <FormItem>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <span className="text-sm text-gray-400 italic">
-                  {format(form.watch('matchDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
-                </span>
-              </div>
+              <>
+                <div className="flex gap-4">
+                  <div className="flex flex-col gap-3">
+                    <Label htmlFor="date-picker" className="px-1">
+                      Fecha
+                    </Label>
+                    <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="secondary"
+                          id="date-picker"
+                          className="w-56 justify-between font-normal"
+                        >
+                          {selectedDate ? format(form.watch('matchDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es }) : "Selecciona Fecha"}
+                          <ChevronDownIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          startMonth={new Date(2020, 0)}
+                          endMonth={new Date(new Date().getFullYear() + 10, 11)}
+                          selected={selectedDate}
+                          defaultMonth={selectedDate}
+                          captionLayout="dropdown"
+                          onSelect={(date) => {
+                            setSelectedDate(date);
+                            setOpenCalendar(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <Label htmlFor="time-picker" className="px-1">
+                      Hora
+                    </Label>
+                    <Input
+                      id="time-picker"
+                      type="time"
+                      step="1"
+                      value={selectedTime}
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                    />
+                  </div>
+                </div>
+              </>
             </div>
           </div>
           <div className="w-full lg:w-1/2 flex justify-end gap-5">
@@ -598,7 +608,6 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
       </form>
     </Form>
   );
-
 };
 
 export default MatchForm;

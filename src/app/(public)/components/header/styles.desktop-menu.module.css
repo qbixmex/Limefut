@@ -1,4 +1,4 @@
-@reference "../../../globals.css";
+@reference "tailwindcss";
 
 .navigation {
   @apply hidden md:flex gap-5;
