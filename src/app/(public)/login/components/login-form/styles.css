@@ -1,4 +1,4 @@
-@reference '../../../globals.css';
+@reference '../../../../globals.css';
 
 .label {
   @apply font-semibold text-gray-500 dark:text-gray-400;
