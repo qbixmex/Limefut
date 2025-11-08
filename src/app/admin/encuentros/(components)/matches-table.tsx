@@ -45,7 +45,7 @@ export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
     },
   } = await fetchMatchesAction({
     page: currentPage,
-    take: 8,
+    take: 12,
     searchTerm: query,
   });
 

@@ -1,7 +1,7 @@
 import { MobileMenu } from "./MobileMenu";
 import { DesktopMenu } from "./DesktopMenu";
 import { ThemeSwitcher } from "@/shared/theme/ThemeSwitcher";
-import { Logo } from "../logo/Logo";
+import { Logo } from "@/app/(public)/components";
 import styles from "./styles.module.css";
 import { SignInOut } from "./sign-in-out";
 import { auth } from "@/auth.config";
