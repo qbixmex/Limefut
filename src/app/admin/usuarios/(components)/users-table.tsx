@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from 'next/link';
 import { fetchUsersAction, updateUserStateAction } from '../(actions)';
 import { cn } from '@/lib/utils';
-import { auth } from '@/auth.config';
+import { auth } from '@/auth';
 import {
   Table,
   TableBody,

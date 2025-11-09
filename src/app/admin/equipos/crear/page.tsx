@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/card";
 import { TeamForm } from "../(components)/teamForm";
 import type { Session } from "next-auth";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { fetchTournamentsForTeam } from "../(actions)";
 import type { Coach} from "@/shared/interfaces";

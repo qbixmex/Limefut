@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { LoginForm } from "./components/login-form";
 import {
   Card,
@@ -6,15 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { auth } from "@/auth.config";
 
-export const Login = async () => {
-  const session = await auth();
-
-  if(session?.user) {
-    redirect('/admin/dashboard');
-  }
-
+export const Login = () => {
   return (
     <section className="flex-1 rounded p-5 flex flex-col item-center justify-center">
       <Card className="w-full max-w-md mx-auto p-10">

@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import {
   Table,
   TableBody,

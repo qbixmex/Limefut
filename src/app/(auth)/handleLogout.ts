@@ -1,5 +1,10 @@
 'use server';
 
-import { signOut } from "@/auth.config";
+import { signOut } from "@/auth";
 
-export const logoutAction = async () => await signOut();
+export const logoutAction = async () => {
+  await signOut({
+    redirectTo: '/',
+    redirect: true,
+  });
+};

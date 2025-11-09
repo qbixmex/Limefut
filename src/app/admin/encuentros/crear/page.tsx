@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/card";
 
 import type { Session } from "next-auth";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { fetchTournamentsAction } from "../(actions)";
 import { fetchTeamsForMatchAction } from "../(actions)/fetchTeamsForMatchAction";

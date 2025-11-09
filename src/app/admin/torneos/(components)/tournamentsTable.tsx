@@ -15,7 +15,7 @@ import {
   Trophy,
 } from "lucide-react";
 import { fetchTournamentsAction, updateTournamentStateAction } from "../(actions)";
-import { auth } from '@/auth.config';
+import { auth } from '@/auth';
 import { format } from 'date-fns';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';

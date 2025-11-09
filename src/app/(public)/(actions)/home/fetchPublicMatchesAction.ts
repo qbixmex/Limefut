@@ -2,44 +2,56 @@
 
 import prisma from "@/lib/prisma";
 import type { MATCH_STATUS } from "@/shared/enums";
-import type { Pagination, Team, Tournament } from "@/shared/interfaces";
+import type { Team, Tournament } from "@/shared/interfaces";
+import { cacheLife } from "next/cache";
 
 type Options = Readonly<{
-  page?: number;
+  nextMatches?: number;
   take?: number;
 }>;
+
+export type MatchResponse = {
+  id: string;
+  tournament: Partial<Tournament>,
+  localTeam: Partial<Team>;
+  visitorTeam: Partial<Team>;
+  localScore: number;
+  visitorScore: number;
+  status: MATCH_STATUS;
+  week: number;
+  place: string;
+  matchDate: Date;
+};
 
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
-  matches: {
-    id: string;
-    tournament: Partial<Tournament>,
-    localTeam: Partial<Team>;
-    visitorTeam: Partial<Team>;
-    localScore: number;
-    visitorScore: number;
-    status: MATCH_STATUS;
-    week: number;
-    place: string;
-    matchDate: Date;
-  }[];
+  matches: MatchResponse[];
   pagination: Pagination;
 }>;
 
+type Pagination = {
+  nextMatches: number;
+  totalPages: number;
+};
+
 export const fetchPublicMatchesAction = async (options?: Options): ResponseFetchAction => {
-  let { page = 1, take = 12 } = options ?? {};
+  "use cache";
+
+  cacheLife('hours');
+
+  let { nextMatches = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)
-  if (isNaN(page)) page = 1;
+  if (isNaN(nextMatches)) nextMatches = 1;
   if (isNaN(take)) take = 12;
 
   try {
-    const matches = await prisma.match.findMany({
+    const data = await prisma.match.findMany({
       where: { status: "scheduled" },
       orderBy: { matchDate: 'desc' },
       take: take,
-      skip: (page - 1) * take,
+      skip: (nextMatches - 1) * take,
       select: {
         id: true,
         tournament: {
@@ -82,7 +94,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     return {
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
-      matches: matches.map((match) => ({
+      matches: data.map((match) => ({
         id: match.id,
         tournament: match.tournament,
         localTeam: match.local,
@@ -95,7 +107,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         matchDate: match.matchDate,
       })),
       pagination: {
-        currentPage: page,
+        nextMatches: nextMatches,
         totalPages: Math.ceil(totalCount / take),
       }
     };
@@ -107,7 +119,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         message: error.message,
         matches: [],
         pagination: {
-          currentPage: 1,
+          nextMatches: 0,
           totalPages: 0,
         },
       };
@@ -118,7 +130,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
       message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
       matches: [],
       pagination: {
-        currentPage: 1,
+        nextMatches: 0,
         totalPages: 0,
       },
     };

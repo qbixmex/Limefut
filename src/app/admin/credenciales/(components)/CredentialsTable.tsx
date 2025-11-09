@@ -17,7 +17,7 @@ import { Pencil, InfoIcon } from "lucide-react";
 import Link from "next/link";
 import { DeleteCredential } from "../(components)/delete-credential";
 import { fetchCredentialsAction } from "../(actions)";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { Badge } from "@/components/ui/badge";
 import { Pagination } from "@/shared/components/pagination";
 import { cn } from "@/lib/utils";
