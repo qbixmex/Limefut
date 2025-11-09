@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn } from '@/auth.config';
+import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
 type Props = {

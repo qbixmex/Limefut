@@ -1,7 +1,7 @@
 import { Suspense, type FC, type ReactNode } from 'react';
 import type { Metadata } from 'next';
 import './layout.styles.css';
-import { MainLayout } from './(components)/auth-redirect';
+import { MainLayout } from './(components)/main-layout';
 import DashboardSkeleton from './(components)/dashboard-skeleton';
 
 export const metadata: Metadata = {

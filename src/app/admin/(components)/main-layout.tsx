@@ -1,5 +1,4 @@
 import type { FC, ReactNode } from 'react';
-import { redirect } from "next/navigation";
 import { AppSidebar } from '@/components/app-sidebar';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -7,19 +6,17 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { auth } from '@/auth.config';
+import { auth } from '@/auth';
 import { Breadcrumbs } from '../(components)/breadcrumbs';
 import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
 import { NavUser } from '@/components/nav-user';
+import type { User } from '@/root/next-auth';
 
 type Props = Readonly<{ children: ReactNode; }>;
 
 export const MainLayout:FC<Props> = async ({ children }) => {
   const session = await auth();
-
-  if (!session) {
-    redirect("/login");
-  }
+  const user = session!.user as User;
 
   return (
     <SidebarProvider>
@@ -38,11 +35,11 @@ export const MainLayout:FC<Props> = async ({ children }) => {
             <ThemeSwitcher />
             <NavUser
               user={{
-                id: session.user.id,
-                name: session.user.name,
-                username: session.user.username,
-                email: session.user.email,
-                imageUrl: session.user.imageUrl,
+                id: user.id,
+                name: user.name,
+                username: user.username,
+                email: user.email,
+                imageUrl: user.imageUrl,
               }}
             />
           </section>

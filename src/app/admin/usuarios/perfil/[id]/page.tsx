@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchUserAction } from "../../(actions)/fetchUserAction";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import Image from "next/image";
 import { type User } from "@/root/next-auth";
 import {

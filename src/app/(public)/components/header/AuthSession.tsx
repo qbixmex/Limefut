@@ -1,4 +1,4 @@
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { SignInOut } from "./sign-in-out";
 
 export const AuthSession = async () => {

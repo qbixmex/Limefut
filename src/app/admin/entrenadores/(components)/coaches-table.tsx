@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Image from "next/image";
 import { fetchCoachesAction, updateCoachStateAction } from "../(actions)";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { DeleteCoach } from "../(components)/delete-coach";
 import {
   Table,
