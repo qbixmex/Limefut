@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { StandingsContainer } from "./(components)";
 import { fetchTournamentsAction, type TournamentType } from "./(actions)/fetchTournamentsAction";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 
 export const StandingsPage = async () => {
   const session = await auth();

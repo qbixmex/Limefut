@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/card";
 import { TournamentForm } from "../(components)/tournamentForm";
 import type { Session } from "next-auth";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export const CreateUser = async () => {

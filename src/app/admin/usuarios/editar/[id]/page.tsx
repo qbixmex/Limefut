@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { UsersForm } from "../../(components)/usersForm";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { fetchUserAction } from "../../(actions)/fetchUserAction";
 import { redirect } from "next/navigation";
 import type { User } from "@/root/next-auth";

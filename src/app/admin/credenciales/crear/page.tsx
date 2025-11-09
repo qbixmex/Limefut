@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/card";
 import { CredentialForm } from "../(components)/CredentialForm";
 import type { Session } from "next-auth";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { fetchPlayersForCredentialForm } from "../(actions)/fetchPlayersForCredentialForm";
 

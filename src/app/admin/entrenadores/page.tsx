@@ -14,16 +14,17 @@ import { CoachesTableSkeleton } from './(components)/coaches-table-skeleton';
 import { Search } from '@/root/src/shared/components/search';
 
 type Props = Readonly<{
-  searchParams?: Promise<{
+  searchParams: Promise<{
     query?: string;
     page?: string;
   }>;
 }>;
 
-export const CoachesPage: FC<Props> = async (props) => {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+export const CoachesPage: FC<Props> = async ({ searchParams }) => {
+  const paramsPromise = searchParams.then((sp) => ({
+    query: sp.query ?? '',
+    currentPage: Number(sp.page) ?? 1,
+  }));
 
   return (
     <>
@@ -50,11 +51,10 @@ export const CoachesPage: FC<Props> = async (props) => {
               </section>
             </CardHeader>
             <CardContent>
-              <Suspense
-                key={`${query}-${currentPage}`}
-                fallback={<CoachesTableSkeleton colCount={7} rowCount={6} />}
-              >
-                <CoachesTable query={query} currentPage={currentPage} />
+              <Suspense fallback={
+                <CoachesTableSkeleton colCount={7} rowCount={6} />
+              }>
+                <CoachesTable paramsPromise={paramsPromise} />
               </Suspense>
             </CardContent>
           </Card>

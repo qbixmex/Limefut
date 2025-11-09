@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from "next/image";
 import { DeleteTeam } from "../(components)/delete-team";
 import { fetchTeamsAction, updateTeamStateAction } from "../(actions)";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import {

@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Link from 'next/link';
 import Image from "next/image";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { fetchPlayersAction, updatePlayerStateAction } from "../(actions)";
 import {
   Table,

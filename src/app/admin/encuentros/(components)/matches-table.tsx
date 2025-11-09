@@ -26,7 +26,7 @@ import { MatchStatus } from "../(components)/match-status";
 import { FinishMatch } from "../(components)/finish-match";
 import { MatchScoreInput } from "../(components)/match-score-input";
 import { fetchMatchesAction } from '../(actions)';
-import { auth } from '@/auth.config';
+import { auth } from "@/auth";
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 

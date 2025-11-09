@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Image from "next/image";
 import { fetchCoachesAction, updateCoachStateAction } from "../(actions)";
-import { auth } from "@/auth.config";
+import { auth } from "@/auth";
 import { DeleteCoach } from "../(components)/delete-coach";
 import {
   Table,
@@ -25,12 +25,15 @@ import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
-  query: string;
-  currentPage: number;
+  paramsPromise: Promise<{
+    query: string;
+    currentPage: number;
+  }>;
 }>;
 
-export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
+export const CoachesTable: FC<Props> = async ({ paramsPromise }) => {
   const session = await auth();
+  const { query, currentPage } = await paramsPromise;
   const {
     coaches = [],
     pagination = {
