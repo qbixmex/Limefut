@@ -38,11 +38,12 @@ const HomePage: FC<Props> = ({ searchParams }) => {
         />
       </section>
 
-      <Suspense fallback={<HorizontalCalendarSkeleton />}>
-        <HorizontalCalendar />
-      </Suspense>
-
-      <Suspense fallback={<MatchesSkeleton />}>
+      <Suspense fallback={
+        <>
+          <HorizontalCalendarSkeleton />
+          <MatchesSkeleton />
+        </>
+      }>
         <NextMatches matchesPromise={
           matchesPromise as Promise<{ matchesPage: string }>
         } />

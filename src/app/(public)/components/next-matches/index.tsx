@@ -6,6 +6,7 @@ import { CalendarDaysIcon, ShieldQuestion } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { CurrentDayMatchesAction } from "../../(actions)/home/currentDayMatchesAction";
+import { HorizontalCalendar } from "../horizontal-calendar";
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string }>;
@@ -29,6 +30,7 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
 
   return (
     <section>
+      <HorizontalCalendar />
       <div className="bg-emerald-700 px-5 py-3 rounded-t flex items-center gap-4">
         <CalendarDaysIcon size={50} strokeWidth={1.5} />
         <div>
@@ -37,7 +39,7 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
             <span className="capitalize">{ format(new Date(), 'dd', { locale: es }) }</span>
             <span>de</span>
             <span className="capitalize">{ format(new Date(), 'MMMM', { locale: es }) }</span>
-            <span className="capitalize">{ format(new Date(), 'Y', { locale: es }) }</span>
+            <span className="capitalize">{ format(new Date(), 'y', { locale: es }) }</span>
           </p>
           <p className="font-semibold italic">{todayMatchesCount()}</p>
         </div>

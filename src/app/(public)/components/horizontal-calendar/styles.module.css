@@ -53,11 +53,15 @@
 }
 
 .today {
-  @apply border-2 text-blue-500 italic border-blue-500 shadow-none cursor-pointer;
+  @apply border-2 text-blue-500 italic border-blue-500 shadow-none;
 }
 
 .gamesCount {
   @apply text-gray-500 text-center border border-gray-400 rounded mt-5;
+}
+
+.todayGamesCount {
+  @apply font-bold border-2 text-blue-500 border-blue-500;
 }
 
 /* optional: hide scrollbar on webkit but keep scroll functionality */
