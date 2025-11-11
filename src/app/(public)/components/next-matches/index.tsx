@@ -2,9 +2,10 @@ import type { FC } from "react";
 import Heading from "../heading";
 import { fetchPublicMatchesAction } from "@/app/(public)/(actions)";
 import { Pagination } from "@/shared/components/pagination";
-import { ShieldQuestion } from "lucide-react";
+import { CalendarDaysIcon, ShieldQuestion } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { CurrentDayMatchesAction } from "../../(actions)/home/currentDayMatchesAction";
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string }>;
@@ -17,17 +18,38 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
     nextMatches: Number(matchesPage),
   });
 
+  const todayMatchesCount = async () => {
+    const { matchesDates } = await CurrentDayMatchesAction();
+    const count = matchesDates.length;
+    const pluralize = (count > 1) ? 's' : '';
+    return (matchesDates.length > 0)
+      ? `Hoy hay ${count} encuentro${pluralize} programado${pluralize}`
+      : 'Hoy no hay encuentros programados';
+  };
+
   return (
     <section>
-      <div className="bg-emerald-800 px-5 py-3 rounded-t">
-        <h2 className="text-emerald-50 text-xl font-black">Próximos Encuentros</h2>
+      <div className="bg-emerald-700 px-5 py-3 rounded-t flex items-center gap-4">
+        <CalendarDaysIcon size={50} strokeWidth={1.5} />
+        <div>
+          <p className="font-bold text-2xl flex gap-1">
+            <span className="capitalize">{ format(new Date(), 'EEEE', { locale: es }) }</span>
+            <span className="capitalize">{ format(new Date(), 'dd', { locale: es }) }</span>
+            <span>de</span>
+            <span className="capitalize">{ format(new Date(), 'MMMM', { locale: es }) }</span>
+            <span className="capitalize">{ format(new Date(), 'Y', { locale: es }) }</span>
+          </p>
+          <p className="font-semibold italic">{todayMatchesCount()}</p>
+        </div>
       </div>
+
       <div className="border border-green-900/90 rounded-b-lg p-5">
         {(matches.length === 0) && (
           <div className="text-emerald-800 text-center font-bold text-xl italic">
             Aún no hay encuentros programados
           </div>
         )}
+
         {(matches.length > 0) && matches.map((match, index) => (
           <div key={match.id} className="flex flex-col gap-3 text-neutral-800">
             <div className="grid grid-cols-[1fr_1fr_250px_1fr] items-center">

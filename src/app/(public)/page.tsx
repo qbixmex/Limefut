@@ -3,7 +3,8 @@ import Image from "next/image";
 import styles from "./home-styles.module.css";
 import { Heading } from "./components/heading";
 import { NextMatches } from "./components/next-matches";
-import { MatchesSkeleton } from "./components";
+import { HorizontalCalendar, MatchesSkeleton } from "./components";
+import { HorizontalCalendarSkeleton } from "./components/horizontal-calendar/horizontal-calendar-skeleton";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -36,6 +37,10 @@ const HomePage: FC<Props> = ({ searchParams }) => {
           className="rounded"
         />
       </section>
+
+      <Suspense fallback={<HorizontalCalendarSkeleton />}>
+        <HorizontalCalendar />
+      </Suspense>
 
       <Suspense fallback={<MatchesSkeleton />}>
         <NextMatches matchesPromise={

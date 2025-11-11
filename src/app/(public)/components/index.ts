@@ -3,4 +3,5 @@ export * from "./container";
 export * from "./footer";
 export * from "./logo";
 export * from "./heading";
+export * from "./horizontal-calendar";
 export * from "./skeletons";
