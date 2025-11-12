@@ -3,17 +3,19 @@ import Image from "next/image";
 import styles from "./home-styles.module.css";
 import { Heading } from "./components/heading";
 import { NextMatches } from "./components/next-matches";
-import { HorizontalCalendar, MatchesSkeleton } from "./components";
+import { LatestResults, MatchesSkeleton } from "./components";
 import { HorizontalCalendarSkeleton } from "./components/horizontal-calendar/horizontal-calendar-skeleton";
 
 type Props = Readonly<{
   searchParams: Promise<{
     "next-matches"?: string;
+    "latest-results"?: string;
   }>;
 }>;
 
 const HomePage: FC<Props> = ({ searchParams }) => {
   const matchesPromise = searchParams.then((sp) => ({ matchesPage: sp['next-matches'] }));
+  const resultsPromise = searchParams.then((sp) => ({ latestResultsPage: sp['latest-results'] }));
 
   return (
     <div className="bg-gray-50 md:rounded p-5 flex-1 flex flex-col gap-5">
@@ -38,14 +40,23 @@ const HomePage: FC<Props> = ({ searchParams }) => {
         />
       </section>
 
-      <Suspense fallback={<HorizontalCalendarSkeleton />}>
-        <HorizontalCalendar />
-      </Suspense>
-
-      <Suspense fallback={<MatchesSkeleton />}>
+      <Suspense fallback={
+        <>
+          <HorizontalCalendarSkeleton />
+          <MatchesSkeleton />
+        </>
+      }>
         <NextMatches matchesPromise={
           matchesPromise as Promise<{ matchesPage: string }>
         } />
+      </Suspense>
+
+      <Suspense fallback={<MatchesSkeleton />}>
+        <LatestResults
+          resultsPromise={
+            resultsPromise as Promise<{ latestResultsPage: string }>
+          }
+        />
       </Suspense>
     </div>
   );

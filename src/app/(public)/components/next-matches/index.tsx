@@ -6,6 +6,7 @@ import { CalendarDaysIcon, ShieldQuestion } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { CurrentDayMatchesAction } from "../../(actions)/home/currentDayMatchesAction";
+import { HorizontalCalendar } from "../horizontal-calendar";
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string }>;
@@ -29,15 +30,16 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
 
   return (
     <section>
+      <HorizontalCalendar />
       <div className="bg-emerald-700 px-5 py-3 rounded-t flex items-center gap-4">
         <CalendarDaysIcon size={50} strokeWidth={1.5} />
         <div>
           <p className="font-bold text-2xl flex gap-1">
-            <span className="capitalize">{ format(new Date(), 'EEEE', { locale: es }) }</span>
-            <span className="capitalize">{ format(new Date(), 'dd', { locale: es }) }</span>
+            <span className="capitalize">{format(new Date(), 'EEEE', { locale: es })}</span>
+            <span className="capitalize">{format(new Date(), 'dd', { locale: es })}</span>
             <span>de</span>
-            <span className="capitalize">{ format(new Date(), 'MMMM', { locale: es }) }</span>
-            <span className="capitalize">{ format(new Date(), 'Y', { locale: es }) }</span>
+            <span className="capitalize">{format(new Date(), 'MMMM', { locale: es })}</span>
+            <span className="capitalize">{format(new Date(), 'y', { locale: es })}</span>
           </p>
           <p className="font-semibold italic">{todayMatchesCount()}</p>
         </div>
@@ -64,14 +66,25 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
                 <p className="text-2xl font-semibold italic text-blue-900">{match.localTeam.name}</p>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <span className="text-2xl italic">
+                <div className="font-semibold italic text-center">
+                  <p className="text-gray-600">
+                    <span>
+                      {` ${format(new Date(match.matchDate), 'dd', { locale: es })} `}
+                    </span>
+                    <span>{' de '}</span>
+                    <span className="capitalize">
+                      {format(new Date(match.matchDate), "LLLL", { locale: es })}
+                    </span>
+                    <span>
+                      &nbsp;{format(new Date(match.matchDate), "y", { locale: es })}
+                    </span>
+                  </p>
+                </div>
+                <div className="text-2xl italic">
                   <span className="font-bold text-blue-800">{format(new Date(match.matchDate), 'h')}</span>:
                   <span>{format(new Date(match.matchDate), 'mm')}</span>
                   <span>&nbsp;{format(new Date(match.matchDate), 'bbb')}</span>
-                </span>
-                <span className="text-2xl text-gray-800 semibold italic">
-                  {format(new Date(match.matchDate), "dd-LLL-y", { locale: es })}
-                </span>
+                </div>
               </div>
               <div className="flex justify-start items-center gap-5">
                 <p className="text-2xl font-semibold italic text-blue-900">{match.visitorTeam.name}</p>

@@ -36,7 +36,7 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.header}>Próximos partidos</div>
+      <div className={styles.header}>Calendario de partidos</div>
 
       <div className={styles.calendar} ref={containerRef} role="list">
         {days.map((d, index) => {
@@ -58,7 +58,7 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
                 <p className={styles.month}>{format(d, 'MMM', { locale: es }).toLowerCase()}</p>
               </div>
               <p className={cn(styles.gamesCount, {
-                'text-blue-500 font-bold': matchesOnThisDay > 0
+                [styles.todayGamesCount]: (matchesOnThisDay > 0) && isToday,
               })}>
                 {matchesOnThisDay}
               </p>
