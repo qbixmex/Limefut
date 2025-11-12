@@ -1,0 +1,155 @@
+'use server';
+
+import prisma from "@/lib/prisma";
+import type { MATCH_STATUS } from "@/shared/enums";
+import type { Team, Tournament } from "@/shared/interfaces";
+import { cacheLife } from "next/cache";
+
+type Options = Readonly<{
+  nextMatches?: number;
+  take?: number;
+}>;
+
+export type MatchResponse = {
+  id: string;
+  tournament: Partial<Tournament>,
+  localTeam: Partial<Team>;
+  visitorTeam: Partial<Team>;
+  localScore: number;
+  visitorScore: number;
+  status: MATCH_STATUS;
+  week: number;
+  place: string;
+  matchDate: Date;
+};
+
+export type ResponseFetchAction = Promise<{
+  ok: boolean;
+  message: string;
+  matches: MatchResponse[];
+  pagination: Pagination;
+}>;
+
+type Pagination = {
+  nextMatches: number;
+  totalPages: number;
+};
+
+export const fetchPublicLatestMatchesAction = async (options?: Options): ResponseFetchAction => {
+  "use cache";
+
+  cacheLife('hours');
+
+  let { nextMatches = 1, take = 12 } = options ?? {};
+
+  // In case is an invalid number like (lorem)
+  if (isNaN(nextMatches)) nextMatches = 1;
+  if (isNaN(take)) take = 12;
+
+  try {
+    const now = new Date();
+    const startDate = new Date(now);
+    startDate.setDate(now.getDate() - 30);
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(now);
+    endDate.setDate(now.getDate());
+    endDate.setHours(23, 59, 59, 999);
+
+    const data = await prisma.match.findMany({
+      where: {
+        status: "completed",
+        matchDate: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      orderBy: { matchDate: 'desc' },
+      take: take,
+      skip: (nextMatches - 1) * take,
+      select: {
+        id: true,
+        tournament: {
+          select: {
+            name: true,
+            permalink: true,
+            currentWeek: true,
+
+          }
+        },
+        local: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+            division: true,
+            group: true,
+          }
+        },
+        visitor: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          }
+        },
+        localScore: true,
+        visitorScore: true,
+        status: true,
+        week: true,
+        place: true,
+        matchDate: true,
+      }
+    });
+
+    const totalCount = await prisma.match.count({
+      where: { status: "completed" }
+    });
+
+    return {
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches: data.map((match) => ({
+        id: match.id,
+        tournament: match.tournament,
+        localTeam: match.local,
+        visitorTeam: match.visitor,
+        localScore: match.localScore ?? 0,
+        visitorScore: match.visitorScore ?? 0,
+        status: match.status as MATCH_STATUS,
+        week: match.week,
+        place: match.place,
+        matchDate: match.matchDate,
+      })),
+      pagination: {
+        nextMatches: nextMatches,
+        totalPages: Math.ceil(totalCount / take),
+      }
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log("Error al intentar obtener los encuentros");
+      return {
+        ok: false,
+        message: error.message,
+        matches: [],
+        pagination: {
+          nextMatches: 0,
+          totalPages: 0,
+        },
+      };
+    }
+    console.log(error);
+    return {
+      ok: false,
+      message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
+      matches: [],
+      pagination: {
+        nextMatches: 0,
+        totalPages: 0,
+      },
+    };
+  }
+};
+
+export default fetchPublicLatestMatchesAction;

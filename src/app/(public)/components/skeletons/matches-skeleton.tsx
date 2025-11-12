@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 
 export const MatchesSkeleton: FC = () => {
-
   return (
     <div className="animate-pulse">
       <div className="bg-gray-500 h-12 rounded-t" />

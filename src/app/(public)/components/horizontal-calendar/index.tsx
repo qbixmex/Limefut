@@ -4,13 +4,9 @@ import { PublicCalendar } from './PublicCalendar';
 
 export const HorizontalCalendar: FC = async () => {
   const { matchesDates } = await fetchPublicMatchesCountAction();
-
   return (
-    <>
-      <PublicCalendar matchesDates={matchesDates} />
-    </>
+    <PublicCalendar matchesDates={matchesDates} />
   );
-
 };
 
 export default HorizontalCalendar;

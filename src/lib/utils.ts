@@ -36,3 +36,15 @@ export const slugify = (name: string): string => {
     .replace(/[^a-z0-9]+/g, "-") // replace non-alphanumeric characters with dashes
     .replace(/^-+|-+$/g, ""); // remove leading and trailing dashes
 };
+
+/**
+ * Simulates an asynchronous request.
+ * @param time time in seconds.
+ * ```ts
+ * sleep(2); // 2 seconds promise simulation.
+ * ```
+ * @returns a promise to be resolved.
+ */
+export const sleep = (time: number = 1): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, time * 1000));
+};
