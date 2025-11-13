@@ -18,7 +18,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
   const resultsPromise = searchParams.then((sp) => ({ latestResultsPage: sp['latest-results'] }));
 
   return (
-    <div className="bg-gray-50 md:rounded p-5 flex-1 flex flex-col gap-5">
+    <div className="bg-neutral-50 md:rounded p-5 flex-1 flex flex-col gap-5">
       <Heading level="h1" className="text-green-900">
         Bienvenidos a LIMEFUT
       </Heading>
