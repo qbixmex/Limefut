@@ -1,3 +1,25 @@
 @reference "tailwindcss";
 
-/* Extra Styles Here */
+.headingOne {
+  @apply text-5xl;
+}
+
+.headingTwo {
+  @apply text-4xl;
+}
+
+.headingThree {
+  @apply text-3xl;
+}
+
+.headingFour {
+  @apply text-2xl;
+}
+
+.headingFive {
+  @apply text-xl;
+}
+
+.headingSix {
+  @apply text-lg;
+}
