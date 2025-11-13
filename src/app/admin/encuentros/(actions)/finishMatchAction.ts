@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { MATCH_STATUS } from "@/shared/enums";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -75,7 +75,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
     data: { status: MATCH_STATUS.COMPLETED },
   });
 
-  revalidatePath('/admin/encuentros');
+  updateTag('matches');
 
   if (!updatedMatch) {
     return {

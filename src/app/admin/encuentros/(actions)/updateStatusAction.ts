@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import type { MATCH_STATUS } from "@/shared/enums";
+import { updateTag } from "next/cache";
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -20,6 +21,8 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS):
       message: '¡ No se pudo actualizar el estado del partido !',
     };
   }
+
+  updateTag('matches');
 
   return {
     ok: true,

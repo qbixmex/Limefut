@@ -29,6 +29,8 @@ import { fetchMatchesAction } from '../(actions)';
 import { auth } from "@/auth";
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 type Props = Readonly<{
   query: string;
@@ -58,6 +60,7 @@ export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Encuentro</TableHead>
+                  <TableHead className="w-[100px] text-center">Fecha</TableHead>
                   <TableHead className="w-[100px] text-center">Jornada</TableHead>
                   <TableHead className="w-[120px]">Estado</TableHead>
                   <TableHead>Acciones</TableHead>
@@ -94,6 +97,9 @@ export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
                       <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
                         {match.visitorTeam.name}
                       </Link>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      { format(match.matchDate as Date, "dd / MMM / y", { locale: es }) }
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant="outline-info">{match.week}</Badge>

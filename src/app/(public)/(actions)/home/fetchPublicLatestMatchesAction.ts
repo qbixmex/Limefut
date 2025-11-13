@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import type { MATCH_STATUS } from "@/shared/enums";
 import type { Team, Tournament } from "@/shared/interfaces";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   nextMatches?: number;
@@ -39,6 +39,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
   "use cache";
 
   cacheLife('hours');
+  cacheTag('matches');
 
   let { nextMatches = 1, take = 12 } = options ?? {};
 

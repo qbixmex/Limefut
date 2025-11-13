@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   take?: number;
@@ -17,6 +17,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   "use cache";
 
   cacheLife('hours');
+  cacheTag('matches');
 
   let { take = 12 } = options ?? {};
 
