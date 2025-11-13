@@ -449,11 +449,14 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                     <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
                       <PopoverTrigger asChild>
                         <Button
-                          variant="secondary"
                           id="date-picker"
+                          variant="secondary"
                           className="w-56 justify-between font-normal"
                         >
-                          {selectedDate ? format(form.watch('matchDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es }) : "Selecciona Fecha"}
+                          {selectedDate
+                            ? format(form.watch('matchDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                            : "Selecciona Fecha"
+                          }
                           <ChevronDownIcon />
                         </Button>
                       </PopoverTrigger>
@@ -481,8 +484,12 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                       id="time-picker"
                       type="time"
                       step="1"
+                      min="00:00:00"
                       value={selectedTime}
-                      onChange={(e) => setSelectedTime(e.target.value)}
+                      onChange={(e) => {
+                        const value = !e.target.value ? '00:00:00' : e.target.value;
+                        setSelectedTime(value);
+                      }}
                       className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                     />
                   </div>

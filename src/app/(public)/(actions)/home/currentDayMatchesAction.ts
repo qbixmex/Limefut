@@ -2,7 +2,7 @@
 
 import { endOfDay, startOfDay } from "date-fns";
 import prisma from "@/lib/prisma";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   take?: number;
@@ -18,6 +18,7 @@ export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchA
   "use cache";
 
   cacheLife('hours');
+  cacheTag('matches');
 
   let { take = 12 } = options ?? {};
 
@@ -31,7 +32,11 @@ export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchA
 
     const data = await prisma.match.findMany({
       where: {
-        matchDate: { gte: startOfToday, lte: endOfToday },
+        status: 'inProgress',
+        matchDate: {
+          gte: startOfToday,
+          lte: endOfToday
+        },
       },
       orderBy: { matchDate: 'desc' },
       take,
@@ -39,6 +44,8 @@ export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchA
         matchDate: true,
       }
     });
+
+    console.log(data);
 
     return {
       ok: true,

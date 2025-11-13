@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -26,7 +26,7 @@ export const updateStatusAction = async (params: Params): ResponseAction => {
     },
   });
 
-  revalidatePath('/admin/encuentros');
+  updateTag('matches');
 
   if (!updatedMatch) {
     return {

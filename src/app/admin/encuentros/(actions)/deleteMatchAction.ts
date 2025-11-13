@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -23,8 +23,7 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
 
   await prisma.match.delete({ where: { id: player.id } });
 
-  revalidatePath('/encuentros');
-  revalidatePath('/admin/encuentros');
+  updateTag('matches');
 
   return {
     ok: true,

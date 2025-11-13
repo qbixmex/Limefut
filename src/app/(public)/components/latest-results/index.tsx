@@ -20,7 +20,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
 
   return (
     <section>
-      <div className="bg-emerald-700 px-5 py-3 rounded-t flex items-center gap-3">
+      <div className="bg-emerald-700 px-5 py-3 rounded-t-lg flex items-center gap-3">
         <GameScore size={50} strokeWidth={1.5} />
         <p className="font-bold text-2xl">Resultados Recientes</p>
       </div>
