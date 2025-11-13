@@ -7,27 +7,27 @@ export type Link = {
 
 export const links: Link[] = [
   {
+    id: "20d31d0a-4fe2-4c9b-b7f0-54b49ae1f0af",
+    url: "/quienes-somos",
+    label: "¿ Quienes Somos ?",
+    position: 1,
+  },
+  {
     id: "55074de1-5c02-489d-b712-428e234c8a24",
     url: "/equipos",
     label: "Equipos",
-    position: 1,
+    position: 2,
   },
   {
     id: "6e6a5dbc-e8ef-4e67-9e87-255301eaf3c7",
     url: "#",
     label: "Roles",
-    position: 2,
+    position: 3,
   },
   {
     id: "44f528e2-b083-4968-8e29-94e002a61cbb",
     url: "/estadisticas",
     label: "Estadísticas",
-    position: 3,
-  },
-  {
-    id: "20d31d0a-4fe2-4c9b-b7f0-54b49ae1f0af",
-    url: "#",
-    label: "Información",
     position: 4,
   },
   {

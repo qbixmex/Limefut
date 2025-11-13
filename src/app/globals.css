@@ -136,37 +136,4 @@
   button {
     cursor: pointer;
   }
-
-  #heading-1,
-  #heading-2,
-  #heading-3,
-  #heading-4,
-  #heading-5,
-  #heading-6 {
-    @apply text-gray-700 font-bold;
-  }
-
-  #heading-1 {
-    @apply text-5xl;
-  }
-
-  #heading-2 {
-    @apply text-4xl;
-  }
-
-  #heading-3 {
-    @apply text-3xl;
-  }
-
-  #heading-4 {
-    @apply text-2xl;
-  }
-
-  #heading-5 {
-    @apply text-xl;
-  }
-
-  #heading-6 {
-    @apply text-lg;
-  }
 }
