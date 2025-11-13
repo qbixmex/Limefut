@@ -30,8 +30,11 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
 
   return (
     <section>
-      <HorizontalCalendar />
-      <div className="bg-emerald-700 px-5 py-3 rounded-t flex items-center gap-4">
+      <div className="mb-5">
+        <HorizontalCalendar />
+      </div>
+
+      <div className="bg-emerald-700 px-5 py-3 rounded-t-lg flex items-center gap-4">
         <CalendarDaysIcon size={50} strokeWidth={1.5} />
         <div>
           <p className="font-bold text-2xl flex gap-1">
@@ -83,7 +86,7 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
                 <div className="text-2xl italic">
                   <span className="font-bold text-blue-800">{format(new Date(match.matchDate), 'h')}</span>:
                   <span>{format(new Date(match.matchDate), 'mm')}</span>
-                  <span>&nbsp;{format(new Date(match.matchDate), 'bbb')}</span>
+                  <span>&nbsp;{format(new Date(match.matchDate), 'bbb', { locale: es })}</span>
                 </div>
               </div>
               <div className="flex justify-start items-center gap-5">
@@ -97,9 +100,11 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
           </div>
         ))}
       </div>
-      <section className="flex justify-center mt-5">
-        <Pagination totalPages={pagination.totalPages} propName="next-matches" />
-      </section>
+      {(pagination.totalPages > 1) && (
+        <section className="flex justify-center mt-5">
+          <Pagination totalPages={pagination.totalPages} propName="next-matches" />
+        </section>
+      )}
     </section>
   );
 };

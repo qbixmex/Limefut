@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import type { MATCH_STATUS } from "@/shared/enums";
 import type { Team, Tournament } from "@/shared/interfaces";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   nextMatches?: number;
@@ -39,6 +39,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   "use cache";
 
   cacheLife('hours');
+  cacheTag('matches');
 
   let { nextMatches = 1, take = 12 } = options ?? {};
 
@@ -49,7 +50,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   try {
     const data = await prisma.match.findMany({
       where: { status: "scheduled" },
-      orderBy: { matchDate: 'desc' },
+      orderBy: { matchDate: 'asc' },
       take: take,
       skip: (nextMatches - 1) * take,
       select: {

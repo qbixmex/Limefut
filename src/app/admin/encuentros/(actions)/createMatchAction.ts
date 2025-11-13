@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createMatchSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import type { Match } from "@/shared/interfaces";
 import { MATCH_STATUS } from "@/shared/enums";
 
@@ -123,7 +123,7 @@ export const createMatchAction = async (
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/encuentros');
+    updateTag('matches');
 
     return prismaTransaction;
   } catch (error) {
