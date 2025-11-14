@@ -14,6 +14,31 @@ export const metadata: Metadata = {
       { url: '/favicon.png', type: 'image/png' },
     ]
   },
+  openGraph: {
+    locale: "es_MX",
+    type: "website",
+    images: [
+     {
+       url: "/liga-menor-de-futbol-black.webp",
+       width: 500,
+       height: 500,
+       alt: "Liga menor de fútbol"
+     },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Limefut - Liga menor de futbol",
+    description: "Liga menor de futbol para niños y jóvenes en México",
+    images: [
+      {
+        url: "/liga-menor-de-futbol-black.webp",
+        width: 500,
+        height: 500,
+        alt: "Liga menor de futbol Limefut",
+      },
+    ],
+  }
 };
 
 type Props = Readonly<{ children: ReactNode; }>
