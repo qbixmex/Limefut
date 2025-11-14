@@ -1,6 +1,12 @@
 import type { FC } from 'react';
+import type { Metadata } from 'next/types';
 import Image from "next/image";
 import "./styles.css";
+
+export const metadata: Metadata = {
+  title: '¿ Quienes Somos ?',
+  description: 'Somos una liga de fútbol infantil dedicada a fomentar el desarrollo integral de niños y jóvenes a través del deporte.',
+};
 
 export const About: FC = () => {
   return (
