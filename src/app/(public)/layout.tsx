@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
      {
-       url: "/liga-menor-de-futbol-black.webp",
+       url: "https://limefut.netlify.app/liga-menor-de-futbol-black.webp",
        width: 500,
        height: 500,
        alt: "Liga menor de fútbol"
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     description: "Liga menor de futbol para niños y jóvenes en México",
     images: [
       {
-        url: "/liga-menor-de-futbol-black.webp",
+        url: "https://limefut.netlify.app/liga-menor-de-futbol-black.webp",
         width: 500,
         height: 500,
         alt: "Liga menor de futbol Limefut",
