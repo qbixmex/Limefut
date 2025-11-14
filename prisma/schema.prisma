@@ -203,7 +203,7 @@ model Credential {
 
 model Standings {
   id              String @id @default(uuid())
-  teamId          String @map("team_id") @unique()
+  teamId          String @unique() @map("team_id")
   team            Team   @relation(fields: [teamId], references: [id])
   matchesPlayed   Int    @default(0) @map("matches_played")
   wins            Int    @default(0) @map("wins")
@@ -223,4 +223,17 @@ model Standings {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("standings")
+}
+
+model ContactMessage {
+  id      String @id @default(uuid())
+  name    String
+  email   String
+  message String @db.Text
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("contact_messages")
 }
