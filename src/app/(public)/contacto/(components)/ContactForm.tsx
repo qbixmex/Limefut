@@ -1,0 +1,139 @@
+'use client';
+
+import type { FC } from 'react';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import z from 'zod';
+import { LoaderCircle } from 'lucide-react';
+
+const sendMessageSchema = z.object({
+  name: z.string("El nombre deber ser una cadena de texto")
+    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
+    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' }),
+  email: z.email("¡ Formato de email incorrecto !"),
+  message: z.string("¡ El mensaje deber ser una cadena de texto !")
+    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
+    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' }),
+});
+
+export const ContactForm: FC = () => {
+  const form = useForm<z.infer<typeof sendMessageSchema>>({
+    resolver: zodResolver(sendMessageSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      message: '',
+    }
+  });
+
+  const onSubmit = async (data: z.infer<typeof sendMessageSchema>) => {
+    const formData = new FormData();
+
+    console.log(data); // TODO: Remove this line
+
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('message', data.message);
+
+    // TODO: const response = await sendMessageAction(formData);
+
+    // TODO
+    // if (!response.ok) {
+    //   toast.error(response.message);
+    //   return;
+    // }
+
+    // TODO
+    //   toast.success(response.message);
+    //   form.reset();
+    //   return;
+  };
+
+  return (
+    <section className="w-full md:max-w-lg mx-auto">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8"
+        >
+          {/* Name */}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nombre <span>*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Email */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Correo Electrónico <span>*</span></FormLabel>
+                <FormControl>
+                  <Input {...field} className="border-emerald-800" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Message */}
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Correo Electrónico <span>*</span></FormLabel>
+                <FormControl>
+                  <Textarea {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Submit Button */}
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              size="lg"
+              disabled={form.formState.isSubmitting}
+              className="submit-button"
+            >
+              {form.formState.isSubmitting ? (
+                <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                  <span className="text-sm italic">Espere</span>
+                  <LoaderCircle className="size-4 animate-spin" />
+                </span>
+              ) : (
+                <span>enviar</span>
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </section>
+  );
+};
+
+export default ContactForm;

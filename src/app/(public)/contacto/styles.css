@@ -1,0 +1,29 @@
+@reference "../../globals.css";
+
+h1 {
+  @apply text-4xl lg:text-6xl text-emerald-800 dark:text-emerald-500 font-semibold text-center;
+}
+
+label {
+  @apply font-semibold text-emerald-800 dark:text-emerald-500 italic;
+}
+
+input, textarea {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+input, textarea {
+  @apply border-emerald-800 dark:border-emerald-700;
+}
+
+textarea {
+  @apply h-30 resize-none;
+}
+
+.message {
+  @apply text-xl text-gray-500 font-medium italic text-center dark:text-cyan-600;
+}
+
+.submit-button {
+  @apply bg-emerald-700 text-white;
+}
