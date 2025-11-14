@@ -14,50 +14,39 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import z from 'zod';
+import { sendMessageSchema } from '@/shared/schemas';
 import { LoaderCircle } from 'lucide-react';
-
-const sendMessageSchema = z.object({
-  name: z.string("El nombre deber ser una cadena de texto")
-    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' }),
-  email: z.email("¡ Formato de email incorrecto !"),
-  message: z.string("¡ El mensaje deber ser una cadena de texto !")
-    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' }),
-});
+import type z from 'zod';
+import sendEmailAction from '../../(actions)/contact/sendEmailAction';
+import { toast } from 'sonner';
 
 export const ContactForm: FC = () => {
   const form = useForm<z.infer<typeof sendMessageSchema>>({
     resolver: zodResolver(sendMessageSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      message: '',
-    }
+      name: 'Daniel González Briseño',
+      email: 'qbixmex@gmail.com',
+      message: 'Mensaje de pruebas',
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof sendMessageSchema>) => {
     const formData = new FormData();
 
-    console.log(data); // TODO: Remove this line
-
     formData.append('name', data.name);
     formData.append('email', data.email);
     formData.append('message', data.message);
 
-    // TODO: const response = await sendMessageAction(formData);
+    const response = await sendEmailAction(formData);
 
-    // TODO
-    // if (!response.ok) {
-    //   toast.error(response.message);
-    //   return;
-    // }
+    if (!response.ok) {
+      toast.error(response.message);
+      return;
+    }
 
-    // TODO
-    //   toast.success(response.message);
-    //   form.reset();
-    //   return;
+    toast.success(response.message);
+    form.reset();
+    return;
   };
 
   return (
@@ -103,7 +92,7 @@ export const ContactForm: FC = () => {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Correo Electrónico <span>*</span></FormLabel>
+                <FormLabel>Mensaje <span>*</span></FormLabel>
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
