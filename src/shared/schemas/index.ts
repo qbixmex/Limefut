@@ -6,3 +6,4 @@ export { createPlayerSchema, editPlayerSchema } from "./player";
 export { createMatchSchema, editMatchSchema } from "./match";
 export { createCredentialSchema, editCredentialSchema } from "./credential";
 export { createStandingsSchema } from "./standings";
+export { sendMessageSchema } from "./contact/sendEmailSchema";
