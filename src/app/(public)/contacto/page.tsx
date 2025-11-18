@@ -13,7 +13,6 @@ export const ContactPage: FC = () => {
   return (
     <div className="wrapper justify-center dark:bg-gray-600/20!">
       <h1>Contacto</h1>
-      <p className="message">Ponte en contacto con nosotros y envíanos tu mensaje</p>
       <ContactForm />
     </div>
   );
