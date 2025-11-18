@@ -3,6 +3,7 @@
 import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 import type { ContactMessage, Pagination } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   userRoles: string[] | null,
@@ -19,6 +20,11 @@ export type ResponseFetchAction = Promise<{
 }>;
 
 export const fetchMessagesAction = async (options?: Options): ResponseFetchAction => {
+  "use cache";
+
+  cacheLife('hours');
+  cacheTag('contact-messages');
+
   if ((options?.userRoles !== null) && (!options?.userRoles.includes('admin'))) {
     return {
       ok: false,
