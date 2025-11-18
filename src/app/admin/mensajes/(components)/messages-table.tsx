@@ -72,7 +72,7 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/usuarios/perfil/${message.id}`}>
+                            <Link href={`/admin/mensajes/${message.id}`}>
                               <Button variant="outline-info" size="icon">
                                 <Info />
                               </Button>
