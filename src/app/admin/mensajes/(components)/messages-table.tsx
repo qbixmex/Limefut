@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { User } from "lucide-react";
+import { Info } from "lucide-react";
 import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { TooltipContent } from '@/components/ui/tooltip';
@@ -18,6 +18,7 @@ import Pagination from '@/shared/components/pagination';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { fetchMessagesAction } from '../(actions)/fetchMessagesAction';
+import { DeleteMessage } from './delete-message';
 
 type Props = Readonly<{
   query: string;
@@ -61,8 +62,8 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell>{message.email}</TableCell>
                     <TableCell>
                       {
-                        (message.message.length >= 60)
-                          ? message.message.substring(0, 60) + ' ...'
+                        (message.message.length >= 50)
+                          ? message.message.substring(0, 50) + ' ...'
                           : message.message
                       }
                     </TableCell>
@@ -73,18 +74,18 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
                           <TooltipTrigger asChild>
                             <Link href={`/admin/usuarios/perfil/${message.id}`}>
                               <Button variant="outline-info" size="icon">
-                                <User />
+                                <Info />
                               </Button>
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">
-                            <p>perfil</p>
+                            <p>detalles</p>
                           </TooltipContent>
                         </Tooltip>
-                        {/* <DeleteMessage
-                          userId={user.id}
+                        <DeleteMessage
+                          id={message.id as string}
                           roles={session?.user?.roles ?? []}
-                        /> */}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
