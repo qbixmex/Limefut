@@ -11,6 +11,7 @@ import {
   ClipboardList,
   Sheet,
   TrendingUp,
+  Inbox,
 } from "lucide-react";
 import { GiWhistle } from "react-icons/gi";
 import {
@@ -173,6 +174,19 @@ export const navMain: NavItem[] = [
         label: "Crear",
         url: "/admin/usuarios/crear",
         icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: "Mensajes",
+    url: "#",
+    icon: Inbox,
+    isActive: false,
+    subItems: [
+      {
+        label: "Lista",
+        url: "/admin/mensajes",
+        icon: ListIcon,
       },
     ],
   },

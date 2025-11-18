@@ -19,14 +19,15 @@ import { LoaderCircle } from 'lucide-react';
 import type z from 'zod';
 import sendEmailAction from '../../(actions)/contact/sendEmailAction';
 import { toast } from 'sonner';
+import { saveMessageAction } from '../(actions)/saveMessageAction';
 
 export const ContactForm: FC = () => {
   const form = useForm<z.infer<typeof sendMessageSchema>>({
     resolver: zodResolver(sendMessageSchema),
     defaultValues: {
-      name: 'Daniel González Briseño',
-      email: 'qbixmex@gmail.com',
-      message: 'Mensaje de pruebas',
+      name: '',
+      email: '',
+      message: '',
     },
   });
 
@@ -44,9 +45,10 @@ export const ContactForm: FC = () => {
       return;
     }
 
+    await saveMessageAction(formData);
+
     toast.success(response.message);
     form.reset();
-    return;
   };
 
   return (
