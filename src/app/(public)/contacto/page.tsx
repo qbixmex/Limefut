@@ -1,25 +1,20 @@
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import type { FC } from 'react';
+import type { Metadata } from 'next/types';
+import "./styles.css";
+import { ContactForm } from './(components)/ContactForm';
 
-const ContactPage = () => {
+export const metadata: Metadata = {
+  title: 'Contacto',
+  description: 'Ponte en contacto con nosotros y envíanos tu mensaje',
+  robots: 'noindex, nofollow',
+};
+
+export const ContactPage: FC = () => {
   return (
-    <section className="flex-1 rounded flex flex-col item-center justify-center">
-      <Card className="p-10 flex-1">
-        <CardContent>
-          <div className="bg-amber-600 text-amber-950 p-8 rounded-lg mb-10 text-center font-black text-5xl">
-            Página en Construcción
-          </div>
-
-          <Image
-            src="/images/under-construction.webp"
-            width={1536}
-            height={1024}
-            alt="En Construcción"
-            className="rounded-lg"
-          />
-        </CardContent>
-      </Card>
-    </section>
+    <div className="wrapper justify-center dark:bg-gray-600/20!">
+      <h1>Contacto</h1>
+      <ContactForm />
+    </div>
   );
 };
 

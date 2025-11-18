@@ -122,7 +122,7 @@ export const createMatchAction = async (
       };
     });
 
-    // Revalidate Paths
+    // Refresh Cache
     updateTag('matches');
 
     return prismaTransaction;
