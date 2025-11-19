@@ -1,26 +1,21 @@
-import { type FC } from "react";
-
+import { Suspense, type FC } from "react";
 import { StandingsTable } from "./standings-table";
-import { SelectTournament } from "./select-tournament";
-import { fetchTournamentsAction } from "../../(actions)/fetchTournamentsAction";
-import { fetchStandingsAction } from '../../(actions)/fetchStandingsAction';
+import { StandingsSkeleton } from "./standings-skeleton";
 
 type Props = Readonly<{
-  paramsPromise: Promise<{ tournamentPermalink: string; }>;
+  searchParams: Promise<{ torneo: string; }>;
 }>;
 
-export const Standings: FC<Props> = async ({ paramsPromise }) => {
-  const { tournaments } = await fetchTournamentsAction();
-  const { tournamentPermalink } = await paramsPromise;
-  const { standings } = await fetchStandingsAction(tournamentPermalink);
+export const Standings: FC<Props> = async ({ searchParams }) => {
+  const tournamentPermalink = (await searchParams).torneo;
 
   return (
-    <>
-      <SelectTournament tournaments={tournaments} />
-      {tournamentPermalink && (
-        <StandingsTable standings={standings} />
-      )}
-    </>
+    <Suspense
+      key={`permalink-${tournamentPermalink}`}
+      fallback={<StandingsSkeleton />}
+    >
+      <StandingsTable permalink={tournamentPermalink} />
+    </Suspense>
   );
 };
 

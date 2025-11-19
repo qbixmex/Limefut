@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from "next/cache";
 
 export type TournamentType = {
   id: string;
@@ -44,6 +45,11 @@ export type StandingPromise = Promise<{
 }>;
 
 export const fetchStandingsAction = async (tournamentPermalink: string): StandingPromise => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("public-standings");
+
   try {
     const tournament = await prisma.tournament.findUnique({
       where: { permalink: tournamentPermalink },
@@ -132,7 +138,6 @@ export const fetchStandingsAction = async (tournamentPermalink: string): Standin
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener las estadísticas");
       return {
         ok: false,
         message: error.message,

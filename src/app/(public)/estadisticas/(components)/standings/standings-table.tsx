@@ -8,25 +8,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { fetchStandingsAction } from "../../(actions)/fetchStandingsAction";
 
 type Props = {
-  standings: {
-    matchesPlayed: number;
-    wings: number;
-    losses: number;
-    goalsFor: number;
-    goalsAgainst: number;
-    goalsDifference: number;
-    points: number;
-    team: {
-      id: string;
-      name: string;
-      permalink: string;
-    }
-  }[];
+  permalink: string;
 };
 
-export const StandingsTable: FC<Props> = ({ standings }) => {
+export const StandingsTable: FC<Props> = async ({ permalink }) => {
+  if (!permalink) {
+    return (
+      <div className="border-2 border-gray-600 py-5 rounded-lg">
+        <p className="text-gray-600 font-bold text-center italic">
+          Seleccione un torneo
+        </p>
+      </div>
+    );
+  }
+
+  const { standings } = await fetchStandingsAction(permalink);
+
   if (standings.length == 0) {
     return (
       <div className="border-2 border-blue-500 py-5 rounded-lg">

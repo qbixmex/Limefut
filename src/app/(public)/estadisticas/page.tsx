@@ -1,8 +1,10 @@
 import { Suspense, type FC } from 'react';
 import type { Metadata } from 'next/types';
-import "./styles.css";
 import { Heading } from '../components';
 import { Standings } from './(components)/standings';
+import { TournamentsSelectorSkeleton } from './(components)/TournamentsSelectorSkeleton';
+import { TournamentsSelector } from './(components)/TournamentsSelector';
+import "./styles.css";
 
 export const metadata: Metadata = {
   title: 'Contacto',
@@ -16,16 +18,19 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const StandingsPage: FC<Props> =  ({ searchParams }) => {
-  const paramsPromise = searchParams.then((sp) => ({ tournamentPermalink: sp.torneo }));
-  
+export const StandingsPage: FC<Props> = async ({ searchParams }) => {
   return (
     <div className="wrapper dark:bg-gray-600/20!">
       <Heading className="text-emerald-600" level="h1">
         Estadísticas
       </Heading>
-      <Suspense fallback={<p>Espere ...</p>}>
-        <Standings paramsPromise={paramsPromise} />
+
+      <Suspense fallback={<TournamentsSelectorSkeleton />}>
+        <TournamentsSelector />
+      </Suspense>
+
+      <Suspense>
+        <Standings searchParams={searchParams} />
       </Suspense>
     </div>
   );

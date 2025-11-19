@@ -34,9 +34,9 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
   return (
     <Select
       onValueChange={setTournamentPermalinkParam}
-      defaultValue={tournamentPermalink ?? undefined}
+      value={tournamentPermalink ?? ""}
     >
-      <SelectTrigger>
+      <SelectTrigger className="w-60">
         <SelectValue placeholder="¡ Selecciona un torneo !" />
       </SelectTrigger>
       <SelectContent>
