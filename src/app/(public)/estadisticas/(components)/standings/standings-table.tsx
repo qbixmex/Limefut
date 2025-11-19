@@ -47,7 +47,7 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
           {standings.map((standing) => (
             <TableRow key={standing.team.id}>
               <TableCell>
-                <Link href={`/admin/equipos/${standing.team.permalink}`} target="_blank">
+                <Link href="#" target="_blank">
                   {standing.team.name}
                 </Link>
               </TableCell>
