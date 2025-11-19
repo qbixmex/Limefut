@@ -24,6 +24,12 @@ export const createTournamentSchema = z.object({
   description: z.string()
     .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' })
     .max(250, { message: '¡ La descripción debe ser menor a 250 caracteres !' }),
+  division: z.string()
+    .min(3, { message: '¡ La división debe ser mayor a 3 caracteres !' })
+    .max(200, { message: '¡ La división debe ser menor a 200 caracteres !' }),
+  group: z.string()
+    .min(3, { message: '¡ El grupo debe ser mayor a 3 caracteres !' })
+    .max(100, { message: '¡ El grupo debe ser menor a 100 caracteres !' }),
   country: z.string()
     .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),

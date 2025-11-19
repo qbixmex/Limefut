@@ -32,6 +32,8 @@ export const createTournamentAction = async (
     permalink: formData.get('permalink') ?? '',
     image: formData.get('image') as File,
     description: formData.get('description') as string,
+    division: formData.get('division') as string,
+    group: formData.get('group') as string,
     country: formData.get('country') as string,
     state: formData.get('state') as string,
     city: formData.get('city') as string,
