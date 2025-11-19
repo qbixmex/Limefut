@@ -49,6 +49,8 @@ export const updateTournamentAction = async ({
     permalink: formData.get('permalink') ?? undefined,
     image: formData.get('image'),
     description: formData.get('description') ?? undefined,
+    division: formData.get('division') ?? undefined,
+    group: formData.get('group') ?? undefined,
     country: formData.get('country') ?? undefined,
     state: formData.get('state') ?? undefined,
     city: formData.get('city') ?? undefined,
