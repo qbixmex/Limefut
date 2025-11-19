@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { uploadImage } from "@/shared/actions";
 import type { CloudinaryResponse, Tournament } from "@/shared/interfaces";
 import { createTournamentSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -84,8 +84,9 @@ export const createTournamentAction = async (
       };
     });
 
-    // Revalidate Paths
+    // Refresh Cache
     revalidatePath('/admin/torneos');
+    updateTag("public-tournaments-list");
 
     return prismaTransaction;
   } catch (error) {
