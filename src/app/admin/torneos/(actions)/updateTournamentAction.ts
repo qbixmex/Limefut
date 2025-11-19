@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { editTournamentSchema } from '@/shared/schemas';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
@@ -134,8 +134,9 @@ export const updateTournamentAction = async ({
           updatedTournament.imagePublicID = imageUploaded.publicId;
         }
 
-        // Revalidate Cache
+        // Update Cache
         revalidatePath('/admin/torneos');
+        updateTag("public-tournaments-list");
 
         return {
           ok: true,

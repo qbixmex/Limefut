@@ -1,26 +1,39 @@
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import { Suspense, type FC } from 'react';
+import type { Metadata } from 'next/types';
+import { Heading } from '../components';
+import { Standings } from './(components)/standings';
+import { TournamentsSelectorSkeleton } from './(components)/TournamentsSelectorSkeleton';
+import { TournamentsSelector } from './(components)/TournamentsSelector';
+import "./styles.css";
 
-const StatisticsPage = () => {
+export const metadata: Metadata = {
+  title: 'Contacto',
+  description: 'Tabla de posiciones por torneo.',
+  robots: 'noindex, nofollow',
+};
+
+type Props = Readonly<{
+  searchParams: Promise<{
+    torneo: string;
+  }>;
+}>;
+
+export const StandingsPage: FC<Props> = async ({ searchParams }) => {
   return (
-    <section className="flex-1 rounded flex flex-col item-center justify-center">
-      <Card className="p-10 flex-1">
-        <CardContent>
-          <div className="bg-amber-600 text-amber-950 p-8 rounded-lg mb-10 text-center font-black text-5xl">
-            Página en Construcción
-          </div>
+    <div className="wrapper dark:bg-gray-600/20!">
+      <Heading className="text-emerald-600" level="h1">
+        Estadísticas
+      </Heading>
 
-          <Image
-            src="/images/under-construction.webp"
-            width={1536}
-            height={1024}
-            alt="En Construcción"
-            className="rounded-lg"
-          />
-        </CardContent>
-      </Card>
-    </section>
+      <Suspense fallback={<TournamentsSelectorSkeleton />}>
+        <TournamentsSelector />
+      </Suspense>
+
+      <Suspense>
+        <Standings searchParams={searchParams} />
+      </Suspense>
+    </div>
   );
 };
 
-export default StatisticsPage;
+export default StandingsPage;
