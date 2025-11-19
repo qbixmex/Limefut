@@ -75,7 +75,9 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
     data: { status: MATCH_STATUS.COMPLETED },
   });
 
+  // Refresh Match
   updateTag('matches');
+  updateTag('public-standings');
 
   if (!updatedMatch) {
     return {

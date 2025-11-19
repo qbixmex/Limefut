@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -9,6 +10,8 @@ export type ResponseDeleteAction = Promise<{
 
 export const deleteStandingsAction = async (tournamentId: string): ResponseDeleteAction => {
   await prisma.standings.deleteMany({ where: { tournamentId } });
+
+  updateTag('public-standings');
 
   return {
     ok: true,
