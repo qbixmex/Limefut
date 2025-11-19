@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createStandingsSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -38,8 +38,9 @@ export const createStandingsAction = async ( data: DataType ): CreateResponseAct
       };
     });
 
-    // Revalidate Paths
+    // Update Cache
     revalidatePath('/admin/tabla-de-posiciones');
+    updateTag('public-standings');
 
     return prismaTransaction;
   } catch (error) {
