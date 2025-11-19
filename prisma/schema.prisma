@@ -11,7 +11,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -46,6 +45,8 @@ model Tournament {
   imageUrl      String?  @map("image_url")
   imagePublicID String?  @map("image_public_id")
   description   String
+  division      String
+  group         String
   country       String
   state         String
   city          String
