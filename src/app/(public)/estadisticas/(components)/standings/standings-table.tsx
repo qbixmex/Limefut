@@ -15,15 +15,7 @@ type Props = {
 };
 
 export const StandingsTable: FC<Props> = async ({ permalink }) => {
-  if (!permalink) {
-    return (
-      <div className="border-2 border-gray-600 py-5 rounded-lg">
-        <p className="text-gray-600 font-bold text-center italic">
-          Seleccione un torneo
-        </p>
-      </div>
-    );
-  }
+  if (!permalink) return null;
 
   const { standings } = await fetchStandingsAction(permalink);
 
@@ -43,11 +35,12 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
             <TableHead className="text-gray-400">Equipo</TableHead>
             <TableHead className="text-gray-400 text-center">JJ</TableHead>
             <TableHead className="text-gray-400 text-center">JG</TableHead>
+            <TableHead className="text-gray-400 text-center">JE</TableHead>
             <TableHead className="text-gray-400 text-center">JP</TableHead>
             <TableHead className="text-gray-400 text-center">GF</TableHead>
             <TableHead className="text-gray-400 text-center">GC</TableHead>
-            <TableHead className="text-gray-400 text-center">Dif</TableHead>
-            <TableHead className="text-gray-400 text-center">Puntos</TableHead>
+            <TableHead className="text-gray-400 text-center">DIF</TableHead>
+            <TableHead className="text-gray-400 text-center">PTS</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -60,6 +53,7 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
               </TableCell>
               <TableCell className="text-blue-500 text-center">{standing.matchesPlayed}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.wings}</TableCell>
+              <TableCell className="text-blue-500 text-center">{standing.draws}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.losses}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.goalsFor}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.goalsAgainst}</TableCell>
@@ -69,6 +63,49 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
           ))}
         </TableBody>
       </Table>
+
+      <section className="grid grid-cols-4 mt-10 text-gray-500">
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">JJ</span>
+            <span className="italic">Juegos Jugados</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">JG</span>
+            <span className="italic">Juegos Ganados</span>
+          </div>
+        </div>
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">JG</span>
+            <span className="italic">Juegos Empatados</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">JP</span>
+            <span className="italic">Juegos Perdidos</span>
+          </div>
+        </div>
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">GF</span>
+            <span className="italic">Goles a Favor</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">GC</span>
+            <span className="italic">Goles en Contra</span>
+          </div>
+        </div>
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">DIF</span>
+            <span className="italic">Diferencia de Goles</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">PTS</span>
+            <span className="italic">Puntos</span>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
