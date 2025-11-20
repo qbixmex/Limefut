@@ -82,6 +82,14 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                       <TableCell>{tournament.season}</TableCell>
                     </TableRow>
                     <TableRow>
+                      <TableHead className="font-semibold">División</TableHead>
+                      <TableCell>{tournament.division}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead className="font-semibold">Grupo</TableHead>
+                      <TableCell>{tournament.group}</TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableHead className="font-semibold">Descripción</TableHead>
                       <TableCell className="whitespace-break-spaces">{tournament.description}</TableCell>
                     </TableRow>
