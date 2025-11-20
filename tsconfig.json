@@ -28,6 +28,9 @@
       "@testing-library/jest-dom"
     ],
     "paths": {
+      "~/*": [
+        "./*"
+      ],
       "@/root/*": [
         "./*"
       ],

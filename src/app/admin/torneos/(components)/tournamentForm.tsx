@@ -24,10 +24,10 @@ import { CalendarIcon, LoaderCircle } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Switch } from '@/root/src/components/ui/switch';
-import { Label } from '@/root/src/components/ui/label';
 
 type Props = Readonly<{
   session: Session;
@@ -46,6 +46,8 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       name: tournament?.name ?? '',
       permalink: tournament?.permalink ?? '',
       description: tournament?.description ?? '',
+      division: tournament?.division ?? '',
+      group: tournament?.group ?? '',
       country: tournament?.country ?? '',
       state: tournament?.state ?? '',
       city: tournament?.city ?? '',
@@ -161,6 +163,40 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                   <FormLabel>
                     Enlace Permanente
                   </FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value ?? ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        {/* Division and Group */}
+        <div className="flex flex-col gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2">
+            <FormField
+              control={form.control}
+              name="division"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>División</FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value ?? ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-full lg:w-1/2">
+            <FormField
+              control={form.control}
+              name="group"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Grupo</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
