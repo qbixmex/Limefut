@@ -7,7 +7,7 @@ import { TournamentsSelector } from './(components)/TournamentsSelector';
 import "./styles.css";
 
 export const metadata: Metadata = {
-  title: 'Contacto',
+  title: 'Tabla de posiciones',
   description: 'Tabla de posiciones por torneo.',
   robots: 'noindex, nofollow',
 };
