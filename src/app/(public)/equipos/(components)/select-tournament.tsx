@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from "react";
+import type { TournamentType } from "../(actions)/fetchTournamentsAction";
 import {
   usePathname,
   useRouter,
@@ -13,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { TournamentType } from "@/app/(public)/(actions)/tournaments/fetchTournamentsAction";
 
 type Props = Readonly<{
   tournaments: TournamentType[];
@@ -28,15 +28,15 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
   const setTournamentPermalinkParam = (permalink: string) => {
     const params = new URLSearchParams();
     params.set('torneo', permalink);
-    router.replace(`${pathname}?${params}`);
+    router.push(`${pathname}?${params}`);
   };
 
   return (
     <Select
       onValueChange={setTournamentPermalinkParam}
-      value={tournamentPermalink ?? ""}
+      defaultValue={tournamentPermalink ?? ""}
     >
-      <SelectTrigger className="w-60">
+      <SelectTrigger className="w-[300px]">
         <SelectValue placeholder="¡ Selecciona un torneo !" />
       </SelectTrigger>
       <SelectContent>

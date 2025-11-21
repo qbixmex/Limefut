@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
 import { editTeamSchema } from '@/root/src/shared/schemas';
 import type { Team } from '@/shared/interfaces';
@@ -140,8 +140,9 @@ export const updateTeamAction = async ({
           updatedTeam.imagePublicID = imageUploaded.publicId;
         }
 
-        // Revalidate Cache
+        // Update Cache
         revalidatePath('/admin/equipos');
+        updateTag('public-team');
 
         return {
           ok: true,
