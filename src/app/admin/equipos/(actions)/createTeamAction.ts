@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createTeamSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { uploadImage } from "@/shared/actions";
 import type { CloudinaryResponse, Team } from "@/shared/interfaces";
 
@@ -98,6 +98,7 @@ export const createTeamAction = async (
 
     // Revalidate Paths
     revalidatePath('/admin/equipos');
+    updateTag('public-team');
 
     return prismaTransaction;
   } catch (error) {
