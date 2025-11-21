@@ -4,7 +4,6 @@ import { Heading } from "../components";
 import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
 import { TournamentsSelector } from "./(components)/TournamentsSelector";
 import { TeamsContent } from "./(components)/TeamsContent";
-import { TeamsSelectorSkeleton } from "./(components)/TeamsSelectorSkeleton";
 
 export const metadata: Metadata = {
   title: 'Equipos',

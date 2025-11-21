@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { TournamentType } from "../../(actions)/fetchTournamentsAction";
+import type { TournamentType } from "@/app/(public)/(actions)/tournaments/fetchTournamentsAction";
 
 type Props = Readonly<{
   tournaments: TournamentType[];
