@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Heading } from "../components";
 import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
 import { TournamentsSelector } from "./(components)/TournamentsSelector";
-import { TeamsSelector } from "./(components)/TeamsSelector";
+import { TeamsContent } from "./(components)/TeamsContent";
 import { TeamsSelectorSkeleton } from "./(components)/TeamsSelectorSkeleton";
 
 export const metadata: Metadata = {
@@ -29,8 +29,8 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
         <TournamentsSelector />
       </Suspense>
 
-      <Suspense fallback={<TeamsSelectorSkeleton />}>
-        <TeamsSelector searchParams={searchParams} />
+      <Suspense>
+        <TeamsContent searchParams={searchParams} />
       </Suspense>
     </div>
   );

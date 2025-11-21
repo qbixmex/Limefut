@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -31,6 +31,7 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
 
   revalidatePath('/equipo');
   revalidatePath('/admin/equipo');
+  updateTag('public-team');
 
   return {
     ok: true,

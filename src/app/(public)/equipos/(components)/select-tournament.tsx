@@ -28,13 +28,13 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
   const setTournamentPermalinkParam = (permalink: string) => {
     const params = new URLSearchParams();
     params.set('torneo', permalink);
-    router.replace(`${pathname}?${params}`);
+    router.push(`${pathname}?${params}`);
   };
 
   return (
     <Select
       onValueChange={setTournamentPermalinkParam}
-      value={tournamentPermalink ?? ""}
+      defaultValue={tournamentPermalink ?? ""}
     >
       <SelectTrigger className="w-[300px]">
         <SelectValue placeholder="¡ Selecciona un torneo !" />

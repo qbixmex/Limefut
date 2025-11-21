@@ -1,17 +1,17 @@
-import { type FC } from "react";
-import { fetchTeamsAction } from "../(actions)/fetchTeamsAction";
-import Image from "next/image";
-import { Shield } from "lucide-react";
+import type { FC } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { fetchTeamsAction } from "../(actions)/fetchTeamsAction";
+import { Shield } from "lucide-react";
 
-type Props = {
-  tournamentPermalink: string;
-};
+type TeamsListProps = Readonly<{
+  permalink?: string;
+}>;
 
-export const TeamsTable: FC<Props> = async ({ tournamentPermalink }) => {
-  if (!tournamentPermalink) return null;
+export const TeamsList: FC<TeamsListProps> = async ({ permalink }) => {
+  if (!permalink) return null;
 
-  const { teams } = await fetchTeamsAction(tournamentPermalink);
+  const { teams } = await fetchTeamsAction(permalink);
 
   if (teams.length == 0) {
     return (
@@ -42,7 +42,12 @@ export const TeamsTable: FC<Props> = async ({ tournamentPermalink }) => {
                 />
               )}
             </figure>
-            <Link href="#" className="italic font-bold">{team.name}</Link>
+            <Link
+              href={`/equipos/${team.permalink}`}
+              className="italic font-bold"
+            >
+              {team.name}
+            </Link>
           </div>
         ))
       }
