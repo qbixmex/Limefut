@@ -55,7 +55,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
             src={user.imageUrl ?? undefined}
             alt={user.name ? `${user.name} profile image` : ''}
           />
-          <AvatarFallback className="rounded-lg">{(user.name as string).at(0)}</AvatarFallback>
+          <AvatarFallback className="rounded-lg bg-emerald-900 font-medium text-sm">{(user.name as string).at(0)}</AvatarFallback>
         </Avatar>
         <ChevronsUpDown className="ml-auto size-4 stroke-green-50" />
       </button>

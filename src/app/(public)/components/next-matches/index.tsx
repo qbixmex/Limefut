@@ -34,7 +34,7 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
         <HorizontalCalendar />
       </div>
 
-      <div className="bg-emerald-700 px-5 py-3 rounded-t-lg flex items-center gap-4">
+      <div className="bg-emerald-700 text-emerald-50 px-6 py-3 rounded-t-lg flex items-center gap-4">
         <CalendarDaysIcon size={50} strokeWidth={1.5} />
         <div>
           <p className="font-bold text-2xl flex gap-1">
