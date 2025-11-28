@@ -21,7 +21,7 @@ type Props = Readonly<{
 export const StandingsPage: FC<Props> = async ({ searchParams }) => {
   return (
     <div className="wrapper dark:bg-gray-600/20!">
-      <Heading className="text-emerald-600" level="h1">
+      <Heading level="h1" className="text-emerald-600">
         Estadísticas
       </Heading>
 

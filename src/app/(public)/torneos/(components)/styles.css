@@ -1,0 +1,33 @@
+@reference "../../../globals.css";
+
+.tournaments {
+  @apply
+    grid
+    grid-cols-1
+    md:grid-cols-2
+    lg:grid-cols-4
+    gap-5;
+}
+
+.tournament {
+  @apply
+    border-2
+   border-green-800
+   dark:border-gray-500
+    rounded-lg
+    p-5;
+}
+
+.tournamentName {
+  @apply text-xl font-bold mb-5;
+  & a {
+    @apply text-green-700 hover:text-green-600
+      dark:text-sky-500 dark:hover:text-sky-600;
+  }
+}
+
+.tournamentData {
+  @apply
+    text-gray-700
+    dark:text-gray-200;
+}

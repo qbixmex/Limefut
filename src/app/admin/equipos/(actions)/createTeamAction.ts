@@ -98,6 +98,7 @@ export const createTeamAction = async (
 
     // Revalidate Paths
     revalidatePath('/admin/equipos');
+    updateTag('public-teams');
     updateTag('public-team');
 
     return prismaTransaction;

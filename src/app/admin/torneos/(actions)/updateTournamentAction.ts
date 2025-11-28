@@ -139,6 +139,8 @@ export const updateTournamentAction = async ({
         // Update Cache
         revalidatePath('/admin/torneos');
         updateTag("public-tournaments-list");
+        updateTag("public-tournaments");
+        updateTag("public-tournament");
 
         return {
           ok: true,
