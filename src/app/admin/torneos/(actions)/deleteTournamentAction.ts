@@ -40,6 +40,8 @@ export const deleteTournamentAction = async (id: string): ResponseDeleteAction =
   // Update Cache
   revalidatePath('/admin/torneos');
   updateTag("public-tournaments-list");
+  updateTag("public-tournaments");
+  updateTag("public-tournament");
 
   return {
     ok: true,

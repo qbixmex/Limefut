@@ -30,7 +30,7 @@ export const TeamsList: FC<TeamsListProps> = async ({ permalink }) => {
           <div key={team.id} className="flex items-center gap-5">
             <figure>
               {(!team.imageUrl) ? (
-                <div className="size-[50px] bg-gray-700 rounded grid place-content-center">
+                <div className="size-[50px] text-gray-400 bg-gray-200 dark:bg-gray-700 rounded grid place-content-center">
                   <Shield size={40} strokeWidth={1} />
                 </div>
               ) : (

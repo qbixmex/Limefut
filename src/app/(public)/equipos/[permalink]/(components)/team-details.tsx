@@ -77,7 +77,7 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
               <TableHead className="font-semibold">Torneo</TableHead>
               <TableCell>
                 {team.tournament ? (
-                  <Link href="#">
+                  <Link href={`/torneos/${team.tournament.permalink}`}>
                     {team.tournament.name}
                   </Link>
                 ) : (

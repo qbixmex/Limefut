@@ -1,22 +1,22 @@
 import type { FC } from 'react';
 import { fetchTournamentsAction } from '../(actions)/fetchTournamentsAction';
-import styles from "./styles.module.css";
 import Link from 'next/link';
+import "./styles.css";
 
-export const TournamentsTable: FC = async () => {
+export const TournamentsList: FC = async () => {
   const { tournaments } = await fetchTournamentsAction();
 
   return (
-    <div className={styles.wrapper}>
+    <div className="tournaments">
       {tournaments.map((tournament) => (
-        <section key={tournament.id} className={styles.tournament}>
-          <h2 className={styles.tournamentName}>
-            <Link href={`#-${tournament.permalink}`}>
+        <section key={tournament.id} className="tournament">
+          <h2 className="tournamentName">
+            <Link href={`torneos/${tournament.permalink}`}>
               {tournament.name}
             </Link>
           </h2>
           <p>{tournament.imageUrl}</p>
-          <div className={styles.tournamentData}>
+          <div className="tournamentData">
             <p><b>División:</b> {tournament.division}</p>
             <p><b>Group:</b> {tournament.group}</p>
             <p><b>Temporada:</b> {tournament.season}</p>
@@ -27,4 +27,4 @@ export const TournamentsTable: FC = async () => {
   );
 };
 
-export default TournamentsTable;
+export default TournamentsList;
