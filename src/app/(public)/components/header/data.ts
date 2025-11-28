@@ -13,15 +13,15 @@ export const links: Link[] = [
     position: 1,
   },
   {
-    id: "55074de1-5c02-489d-b712-428e234c8a24",
-    url: "/equipos",
-    label: "Equipos",
+    id: "6e6a5dbc-e8ef-4e67-9e87-255301eaf3c7",
+    url: "/torneos",
+    label: "Torneos",
     position: 2,
   },
   {
-    id: "6e6a5dbc-e8ef-4e67-9e87-255301eaf3c7",
-    url: "#",
-    label: "Roles",
+    id: "55074de1-5c02-489d-b712-428e234c8a24",
+    url: "/equipos",
+    label: "Equipos",
     position: 3,
   },
   {

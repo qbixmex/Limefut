@@ -1,0 +1,60 @@
+@reference "../../../../globals.css";
+
+.description {
+  & h2 {
+    @apply
+      text-3xl
+    text-sky-600
+      font-semibold
+      mb-2;
+  }
+
+  & p {
+    @apply
+      text-gray-400
+      text-xl
+      italic
+      mb-4;
+  }
+}
+
+.image-placeholder {
+  @apply
+    flex
+    justify-center
+    items-center
+    bg-gray-200
+    dark:bg-gray-800
+    size-[500px]
+    p-2
+    rounded-lg;
+}
+
+.image-placeholder-icon {
+  @apply text-gray-400;
+}
+
+.table {
+  & th,
+  & td {
+    @apply text-gray-500;
+  }
+  & th {
+    @apply font-bold;
+  }
+  & td {
+    @apply italic;
+  }
+}
+
+.teamsSubheading {
+  @apply text-2xl mb-5;
+}
+
+.teams {
+  @apply flex flex-wrap gap-5;
+}
+
+.teamCard {
+  @apply border-2 border-gray-400 dark:border-sky-800 px-8 py-4 rounded-lg;
+}

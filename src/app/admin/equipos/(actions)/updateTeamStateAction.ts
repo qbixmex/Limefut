@@ -32,6 +32,8 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
   revalidatePath('/equipo');
   revalidatePath('/admin/equipo');
   updateTag('public-team');
+  updateTag('public-teams');
+  updateTag('public-team');
 
   return {
     ok: true,
