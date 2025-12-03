@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { GalleriesTable } from './(components)/galleries-table';
+import Search from '~/src/shared/components/search';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -27,7 +28,7 @@ export const GalleryPage: FC<Props> = async ({ searchParams }) => {
             <CardHeader className="flex items-center justify-between">
               <CardTitle>Lista de Galerías</CardTitle>
               <section className="flex gap-5 items-center">
-                {/* <Search placeholder="Buscar galería ..." /> */}
+                <Search placeholder="Buscar galería ..." />
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link href="/admin/galeria/crear">

@@ -245,6 +245,7 @@ model Gallery {
   id        String  @id @default(uuid())
   title     String  @unique
   permalink String  @unique
+  galleryDate DateTime @map("gallery_date")
   active    Boolean @default(false)
 
   // Relations

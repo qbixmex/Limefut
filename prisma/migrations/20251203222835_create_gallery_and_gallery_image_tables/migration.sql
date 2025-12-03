@@ -3,6 +3,7 @@ CREATE TABLE "gallery" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "permalink" TEXT NOT NULL,
+    "gallery_date" TIMESTAMP(3) NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT false,
     "team_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
