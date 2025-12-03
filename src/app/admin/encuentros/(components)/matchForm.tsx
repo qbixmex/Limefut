@@ -451,10 +451,10 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                         <Button
                           id="date-picker"
                           variant="secondary"
-                          className="w-56 justify-between font-normal"
+                          className="w-[225px] justify-between font-normal"
                         >
                           {selectedDate
-                            ? format(form.watch('matchDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                            ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
                             : "Selecciona Fecha"
                           }
                           <ChevronDownIcon />
@@ -470,6 +470,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                           captionLayout="dropdown"
                           onSelect={(date) => {
                             setSelectedDate(date);
+                            form.setValue('matchDate', date);
                             setOpenCalendar(false);
                           }}
                         />

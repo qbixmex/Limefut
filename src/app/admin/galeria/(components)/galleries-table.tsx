@@ -2,17 +2,16 @@ import type { FC } from 'react';
 import { auth } from '~/src/auth';
 import { fetchGalleriesAction } from '../(actions)/fetchGalleriesAction';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import Image from "next/image";
 import Link from 'next/link';
-import { InfoIcon, Pencil, Trophy } from 'lucide-react';
+import { InfoIcon, Pencil } from 'lucide-react';
 import { format } from 'date-fns/format';
 import { es } from 'date-fns/locale';
-import { ActiveSwitch } from '~/src/shared/components/active-switch';
+// import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Pagination } from '~/src/shared/components/pagination';
-import { Badge } from '~/src/components/ui/badge';
+import { Pagination } from '@/shared/components/pagination';
+import { Badge } from '@/components/ui/badge';
 
 type Props = Readonly<{
   query: string | undefined;
@@ -115,7 +114,7 @@ export const GalleriesTable: FC<Props> = async ({
       ) : (
         <div className="border border-sky-600 p-5 rounded">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay galerias
+            No hay galerías
           </p>
         </div>
       )}

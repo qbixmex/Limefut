@@ -7,3 +7,4 @@ export { createMatchSchema, editMatchSchema } from "./match";
 export { createCredentialSchema, editCredentialSchema } from "./credential";
 export { createStandingsSchema } from "./standings";
 export { sendMessageSchema } from "./contact/sendEmailSchema";
+export { createGallerySchema, editGallerySchema } from "./gallery";
