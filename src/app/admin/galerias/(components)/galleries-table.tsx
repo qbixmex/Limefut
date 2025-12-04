@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Pagination } from '@/shared/components/pagination';
 import { Badge } from '@/components/ui/badge';
+import { DeleteGallery } from './delete-gallery';
 
 type Props = Readonly<{
   query: string | undefined;
@@ -93,10 +94,10 @@ export const GalleriesTable: FC<Props> = async ({
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        {/* <DeleteGallery
-                          tournamentId={gallery.id}
+                        <DeleteGallery
+                          galleryId={gallery.id}
                           roles={session?.user.roles as string[]}
-                        /> */}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

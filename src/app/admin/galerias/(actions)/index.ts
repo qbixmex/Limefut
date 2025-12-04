@@ -4,4 +4,4 @@ export { fetchTeamsForGalleryAction } from "./fetchTeamsForGalleryAction";
 export { createGalleryAction } from "./createGalleryAction";
 export { updateGalleryAction } from "./updateGalleryAction";
 export { updateGalleryStateAction } from "./updateGalleryStateAction";
-// export { deleteGalleryAction } from "./deleteGalleryAction";
+export { deleteGalleryAction } from "./deleteGalleryAction";
