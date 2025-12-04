@@ -41,6 +41,7 @@ import {
 } from '@/components/ui/command';
 import { es } from "date-fns/locale";
 import { cn } from '@/lib/utils';
+import { updateGalleryAction } from '../(actions)/updateGalleryAction';
 
 type Props = Readonly<{
   session: Session;
@@ -103,26 +104,25 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
       return;
     }
 
-    // if (gallery) {
-    //   const response = await updateGalleryAction({
-    //     formData,
-    //     tournamentId: gallery.id,
-    //     userRoles: session.user.roles,
-    //     authenticatedUserId: session?.user.id,
-    //   });
+    if (gallery) {
+      const response = await updateGalleryAction({
+        formData,
+        userRoles: session.user.roles,
+        authenticatedUserId: session?.user.id,
+        galleryId: gallery.id as string,
+      });
 
-    //   if (!response.ok) {
-    //     toast.error(response.message);
-    //     return;
-    //   }
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
 
-    //   if (response.ok) {
-    //     toast.success(response.message);
-    //     route.replace("/admin/torneos");
-    //     return;
-    //   }
-    //   return;
-    // }
+      if (response.ok) {
+        toast.success(response.message);
+        route.replace("/admin/galerias");
+        return;
+      }
+    }
   };
 
   return (

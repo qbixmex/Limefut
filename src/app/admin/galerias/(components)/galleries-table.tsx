@@ -84,7 +84,7 @@ export const GalleriesTable: FC<Props> = async ({
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/torneos/editar/${gallery.permalink}`}>
+                            <Link href={`/admin/galerias/editar/${gallery.permalink}`}>
                               <Button variant="outline-warning" size="icon">
                                 <Pencil />
                               </Button>
