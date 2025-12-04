@@ -10,5 +10,6 @@ export const editGallerySchema = z.object({
     .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' }),
   galleryDate: z.date({ message: "La fecha de la galería debe ser una fecha válida" }).optional(),
   endDate: z.date({ message: "La fecha final debe ser una fecha válida" }).optional(),
+  teamId: z.uuid({ message: '¡ El id del equipo no es un UUID válido !' }).optional(),
   active: z.boolean().optional(),
 });

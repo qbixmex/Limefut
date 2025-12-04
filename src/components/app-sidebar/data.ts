@@ -161,19 +161,19 @@ export const navMain: NavItem[] = [
     ],
   },
   {
-    label: "Galería",
+    label: "Galerías",
     url: "#",
     icon: ImageIcon,
     isActive: false,
     subItems: [
       {
         label: "Lista",
-        url: "/admin/galeria",
+        url: "/admin/galerias",
         icon: ListIcon,
       },
       {
         label: "Crear",
-        url: "/admin/galeria/crear",
+        url: "/admin/galerias/crear",
         icon: PlusIcon,
       },
     ],

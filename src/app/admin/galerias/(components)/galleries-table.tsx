@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { auth } from '~/src/auth';
-import { fetchGalleriesAction } from '../(actions)/fetchGalleriesAction';
+import { fetchGalleriesAction } from '../(actions)';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
 import { InfoIcon, Pencil } from 'lucide-react';

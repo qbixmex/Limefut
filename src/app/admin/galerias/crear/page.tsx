@@ -8,9 +8,12 @@ import { GalleryForm } from "../(components)/galleryForm";
 import type { Session } from "next-auth";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { fetchTeamsForGalleryAction } from "../(actions)";
 
 export const CreateGallery = async () => {
   const session = await auth();
+
+  const { teams } = await fetchTeamsForGalleryAction();
 
   if (!session?.user.roles.includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear galerías !';
@@ -25,7 +28,10 @@ export const CreateGallery = async () => {
             <CardTitle>Crear Galería</CardTitle>
           </CardHeader>
           <CardContent>
-            <GalleryForm session={session as Session} />
+            <GalleryForm
+              session={session as Session}
+              teams={teams}
+            />
           </CardContent>
         </Card>
       </div>

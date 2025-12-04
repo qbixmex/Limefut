@@ -5,5 +5,5 @@ export interface Gallery {
   galleryDate: Date;
   active: boolean;
   createdAt?: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
