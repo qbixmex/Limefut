@@ -72,7 +72,7 @@ export const GalleriesTable: FC<Props> = async ({
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/torneos/${gallery.permalink}`}>
+                            <Link href={`/admin/galerias/${gallery.permalink}`}>
                               <Button variant="outline-info" size="icon">
                                 <InfoIcon />
                               </Button>
