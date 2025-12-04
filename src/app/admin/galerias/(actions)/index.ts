@@ -5,3 +5,5 @@ export { createGalleryAction } from "./createGalleryAction";
 export { updateGalleryAction } from "./updateGalleryAction";
 export { updateGalleryStateAction } from "./updateGalleryStateAction";
 export { deleteGalleryAction } from "./deleteGalleryAction";
+export { createGalleryImageAction } from "./createGalleryImageAction";
+export { updateGalleryImageAction } from "./updateGalleryImageAction";

@@ -1,6 +1,7 @@
 'use client';
 
-import type { FC } from "react";
+import { useState, type FC } from "react";
+import type { Session } from "next-auth";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -18,12 +19,17 @@ import type { GalleryImage } from "~/src/shared/interfaces";
 import { createGalleryImageSchema, editGalleryImageSchema } from "~/src/shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { createGalleryImageAction } from "../(actions)";
+import { toast } from "sonner";
 
 type Props = Readonly<{
+  session: Session;
+  galleryId: string;
   galleryImage?: GalleryImage;
 }>;
 
-export const GalleryImageForm: FC<Props> = ({ galleryImage }) => {
+export const GalleryImageForm: FC<Props> = ({ session, galleryId, galleryImage }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const formSchema = !galleryImage
     ? createGalleryImageSchema
     : editGalleryImageSchema;
@@ -44,28 +50,28 @@ export const GalleryImageForm: FC<Props> = ({ galleryImage }) => {
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
     }
-    formData.append('active', String(data.active ?? false));
 
     // Create Gallery Image
-    // if (!galleryImage) {
-    //   const response = await createGalleryImageAction(
-    //     formData,
-    //     session?.user.roles ?? null,
-    //   );
+    if (!galleryImage) {
+      const response = await createGalleryImageAction({
+        userRoles: session?.user.roles ?? null,
+        galleryId,
+        formData,
+      });
 
-    //   if (!response.ok) {
-    //     toast.error(response.message);
-    //     return;
-    //   }
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
 
-    //   if (response.ok) {
-    //     toast.success(response.message);
-    //     form.reset();
-    //     route.replace(`/admin/galerias/>>permalink<<`);
-    //     return;
-    //   }
-    //   return;
-    // }
+      if (response.ok) {
+        toast.success(response.message);
+        form.reset();
+        setIsOpen(false);
+        return;
+      }
+      return;
+    }
 
     // Update Gallery Image
     // if (galleryImage) {
@@ -90,7 +96,7 @@ export const GalleryImageForm: FC<Props> = ({ galleryImage }) => {
   };
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <Tooltip>
         <TooltipTrigger asChild>
           <SheetTrigger asChild>

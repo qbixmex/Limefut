@@ -3,11 +3,19 @@
 import prisma from '@/lib/prisma';
 import type { Gallery } from "@/shared/interfaces";
 
+type GalleryImageType = {
+  id: string;
+  title: string;
+  imageUrl: string;
+  imagePublicID: string;
+};
+
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
   gallery: Gallery & {
     team: { id: string; };
+    images: GalleryImageType[];
   } | null;
 }>;
 
@@ -32,12 +40,22 @@ export const fetchGalleryAction = async (
         permalink: true,
         galleryDate: true,
         active: true,
+        createdAt: true,
+        updatedAt: true,
         team: {
           select: {
             id: true,
           },
-        }
-      }
+        },
+        images: {
+          select: {
+            id: true,
+            title: true,
+            imageUrl: true,
+            imagePublicID: true,
+          },
+        },
+      },
     });
 
     if (!gallery) {

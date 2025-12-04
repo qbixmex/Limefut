@@ -265,7 +265,7 @@ model GalleryImage {
   title         String
   permalink     String  @unique
   imageUrl      String  @unique
-  imagePublicID String? @map("image_public_id")
+  imagePublicID String @map("image_public_id")
   active        Boolean @default(false)
 
   // Relations

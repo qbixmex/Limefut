@@ -1,13 +1,14 @@
 import type { FC } from 'react';
 import { redirect } from 'next/navigation';
 import { auth } from '~/src/auth';
+import type { Session } from 'next-auth';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ImageIcon, Pencil, Plus } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
@@ -15,9 +16,9 @@ import { es } from 'date-fns/locale';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Gallery } from '~/src/shared/interfaces';
-import { GalleryImage } from '~/src/generated/prisma';
 import { GalleryImageForm } from '../(components)/galleryImageForm';
+import { fetchGalleryAction } from '../(actions)';
+import { GalleryImage } from '../(components)/gallery-image';
 
 type Props = Readonly<{
   params: Promise<{
@@ -29,46 +30,13 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
   const session = await auth();
   const permalink = (await params).permalink;
 
-  // const response = await fetchGalleryAction(permalink, session?.user.roles ?? null);
+  const response = await fetchGalleryAction(session?.user.roles ?? [], permalink);
 
-  // if (!response.ok) {
-  //   redirect(`/admin/galerias?error=${encodeURIComponent(response.message)}`);
-  // }
+  if (!response.ok) {
+    redirect(`/admin/galerias?error=${encodeURIComponent(response.message)}`);
+  }
 
-  // const gallery = response.gallery!;
-  const gallery: Gallery & { images: GalleryImage[] } = {
-    id: 'abc',
-    title: 'Finales 2022',
-    permalink: 'finales-2022',
-    galleryDate: new Date('2022-02-01T16:32:15.722Z'),
-    active: true,
-    createdAt: new Date('2022-02-01T16:22:02.232Z'),
-    updatedAt: new Date('2022-02-01T18:52:07.763Z'),
-    images: [
-      {
-        id: 'sd89f7sdfis7dfo8sdf7so',
-        title: 'Foto grupal',
-        permalink: 'foto_grupal',
-        imageUrl: 'https://cloudinary.com/abcdersgs',
-        imagePublicID: 'cx8f7sdfksudfi8s7dfsjdfhsk',
-        active: true,
-        galleryId: 'sd89f7sdfis7dfo8sdf7so',
-        createdAt: new Date('2022-02-01T18:22:12.232Z'),
-        updatedAt: new Date('2022-02-01T18:22:12.324Z'),
-      },
-      {
-        id: 'sd987fsodifsdof9s8dfs9oi',
-        title: 'Foto con el entrenador',
-        permalink: 'foto_con_el_entrenador',
-        imageUrl: 'https://cloudinary.com/asdaysiduya',
-        imagePublicID: 'as8da9s8d7as89da',
-        active: true,
-        galleryId: 'sd89f7sdfis7dfo8sdf7so',
-        createdAt: new Date('2022-02-01T18:22:12.232Z'),
-        updatedAt: new Date('2022-02-01T18:22:12.324Z'),
-      },
-    ],
-  };
+  const gallery = response.gallery!;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -136,29 +104,23 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
             <section>
               <h2 className="text-xl font-bold text-sky-600 mb-5">Imágenes</h2>
               {
-                !gallery.images ? (
+                gallery.images.length === 0 ? (
                   <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
-                    <p className="text-cyan-600 text-center font-bold">Aún no hay jugadores registrados</p>
+                    <p className="text-cyan-600 text-center font-bold">La galería aún no tiene imágenes</p>
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-3">
-                    {gallery.images.map(({ id, title }) => (
-                      <div key={id}>
-                        <figure className="space-y-2">
-                          <ImageIcon className="size-[250px] text-gray-500" strokeWidth={1} />
-                          <figcaption className="text-sm italic text-center text-gray-500">
-                            { title }
-                          </figcaption>
-                        </figure>
-                      </div>
-                    ))}
+                    <GalleryImage images={gallery.images} />
                   </div>
                 )
               }
             </section>
 
             <div className="absolute top-5 right-5 space-x-5">
-              <GalleryImageForm />
+              <GalleryImageForm
+                session={session as Session}
+                galleryId={gallery.id as string}
+              />
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link href={`/admin/galerias/editar/${gallery.permalink}`}>
