@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { GalleriesTable } from './(components)/galleries-table';
 import Search from '~/src/shared/components/search';
+import { GalleriesTableSkeleton } from './(components)/galleries-table-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -45,8 +46,8 @@ export const GalleryPage: FC<Props> = async ({ searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense
-                // key={`${query}-${currentPage}`}
-                // fallback={<TeamsTableSkeleton colCount={9} rowCount={6} />}
+                key={`${query}-${currentPage}`}
+                fallback={<GalleriesTableSkeleton />}
               >
                 <GalleriesTable
                   query={query}
