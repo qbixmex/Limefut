@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { createGalleryAction } from '../(actions)';
+import { createGalleryAction, updateGalleryAction } from '../(actions)';
 import { createGallerySchema, editGallerySchema } from '@/shared/schemas';
 import type { Session } from 'next-auth';
 import type { Gallery, Team } from '@/shared/interfaces';
@@ -41,7 +41,6 @@ import {
 } from '@/components/ui/command';
 import { es } from "date-fns/locale";
 import { cn } from '@/lib/utils';
-import { updateGalleryAction } from '../(actions)/updateGalleryAction';
 
 type Props = Readonly<{
   session: Session;

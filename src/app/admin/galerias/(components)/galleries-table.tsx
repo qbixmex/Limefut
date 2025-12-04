@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 import { auth } from '~/src/auth';
-import { fetchGalleriesAction } from '../(actions)';
+import { fetchGalleriesAction, updateGalleryStateAction } from '../(actions)';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
 import { InfoIcon, Pencil } from 'lucide-react';
 import { format } from 'date-fns/format';
+import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { es } from 'date-fns/locale';
-// import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -62,11 +62,10 @@ export const GalleriesTable: FC<Props> = async ({
                       {format(new Date(gallery.galleryDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                     </TableCell>
                     <TableCell className="text-center">
-                      {/* <ActiveSwitch
+                      <ActiveSwitch
                         resource={{ id: gallery.id, state: gallery.active }}
-                        updateResourceStateAction={updateTournamentStateAction}
-                      /> */}
-                      {gallery.active ? 'Si' : 'No'}
+                        updateResourceStateAction={updateGalleryStateAction}
+                      />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
