@@ -9,5 +9,6 @@ export type { Credential } from "./Credential";
 export type { Standing } from "./Standing";
 export type { ContactMessage } from "./ContactMessage";
 export type { Gallery } from "./Gallery";
+export type { GalleryImage } from "./GalleryImage";
 
 export type { CloudinaryResponse } from "./Cloudinary";

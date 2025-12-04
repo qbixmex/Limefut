@@ -60,7 +60,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
       galleryDate: gallery?.galleryDate ?? new Date(),
       teamId: gallery?.team.id ?? '',
       active: gallery?.active ?? false,
-    }
+    },
   });
 
   const [openCalendar, setOpenCalendar] = useState(false);

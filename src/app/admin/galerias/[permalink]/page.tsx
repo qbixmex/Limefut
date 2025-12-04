@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ImageIcon, Pencil } from 'lucide-react';
+import { ImageIcon, Pencil, Plus } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Gallery } from '~/src/shared/interfaces';
 import { GalleryImage } from '~/src/generated/prisma';
+import { GalleryImageForm } from '../(components)/galleryImageForm';
 
 type Props = Readonly<{
   params: Promise<{
@@ -53,7 +54,7 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
         active: true,
         galleryId: 'sd89f7sdfis7dfo8sdf7so',
         createdAt: new Date('2022-02-01T18:22:12.232Z'),
-        updatedAt: new Date('2022-02-01T18:22:12.324Z')
+        updatedAt: new Date('2022-02-01T18:22:12.324Z'),
       },
       {
         id: 'sd987fsodifsdof9s8dfs9oi',
@@ -156,7 +157,8 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
               }
             </section>
 
-            <div className="absolute top-5 right-5">
+            <div className="absolute top-5 right-5 space-x-5">
+              <GalleryImageForm />
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link href={`/admin/galerias/editar/${gallery.permalink}`}>

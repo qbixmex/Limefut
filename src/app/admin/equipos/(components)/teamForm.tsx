@@ -73,7 +73,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       emails: team?.emails ?? [],
       address: team?.address ?? undefined,
       active: team?.active ?? false,
-    }
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
