@@ -6,6 +6,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import { Pencil, XIcon } from "lucide-react";
 import { useImageGallery } from "~/src/store";
+import { deleteGalleryImageAction } from "../(actions)/deleteGalleryImageAction";
+import { toast } from "sonner";
 
 type GalleryImageProps = Readonly<{
   images: {
@@ -13,7 +15,6 @@ type GalleryImageProps = Readonly<{
     title: string;
     permalink: string;
     imageUrl: string;
-    imagePublicID: string;
     active: boolean;
   }[];
 }>;
@@ -21,14 +22,17 @@ type GalleryImageProps = Readonly<{
 export const GalleryImage: FC<GalleryImageProps> = ({ images }) => {
   const { setGalleryImage } = useImageGallery();
 
-  const onDeleteImage = (imagePublicID: string) => {
-    console.log(`Deleting image: ${imagePublicID}`);
+  const onDeleteImage = async (id: string) => {
+    const response = await deleteGalleryImageAction(id);
+    if (response.ok) {
+      toast.success(response.message);
+    }
   };
 
   return (
     <>
       {
-        images.map(({ id, title, permalink, imageUrl, imagePublicID, active }) => (
+        images.map(({ id, title, permalink, imageUrl, active }) => (
           <figure key={id} className="space-y-2 relative">
             {<Image
               src={imageUrl}
@@ -60,7 +64,7 @@ export const GalleryImage: FC<GalleryImageProps> = ({ images }) => {
                   variant="destructive"
                   size="icon"
                   className="absolute top-1 right-2"
-                  onClick={() => onDeleteImage(imagePublicID)}
+                  onClick={() => onDeleteImage(id)}
                 >
                   <XIcon />
                 </Button>

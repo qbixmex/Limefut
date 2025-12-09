@@ -8,7 +8,6 @@ type GalleryImageType = {
   title: string;
   permalink: string;
   imageUrl: string;
-  imagePublicID: string;
   active: boolean;
 };
 
@@ -55,7 +54,6 @@ export const fetchGalleryAction = async (
             title: true,
             permalink: true,
             imageUrl: true,
-            imagePublicID: true,
             active: true,
           },
         },
