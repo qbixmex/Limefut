@@ -18,7 +18,7 @@ import type z from "zod";
 import { createGalleryImageSchema, editGalleryImageSchema } from "~/src/shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { createGalleryImageAction } from "../(actions)";
+import { createGalleryImageAction, updateGalleryImageAction } from "../(actions)";
 import { toast } from "sonner";
 import { useImageGallery } from "~/src/store";
 
@@ -86,29 +86,30 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
         setIsOpen(false);
         return;
       }
-      return;
     }
 
     // Update Gallery Image
-    // if (galleryImage) {
-    //   const response = await updateGalleryImageAction({
-    //     formData,
-    //     teamId: galleryImage.id,
-    //     userRoles: session.user.roles,
-    //     authenticatedUserId: session?.user.id,
-    //   });
+    if (galleryImage) {
+      const response = await updateGalleryImageAction({
+        formData,
+        authenticatedUserId: session?.user.id,
+        userRoles: session.user.roles,
+        galleryImageId: galleryImage.id,
+      });
 
-    //   if (!response.ok) {
-    //     toast.error(response.message);
-    //     return;
-    //   }
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
 
-    //   if (response.ok) {
-    //     toast.success(response.message);
-    //     route.replace("/admin/galerias/>>permalink<<");
-    //     return;
-    //   }
-    // }
+      if (response.ok) {
+        toast.success(response.message);
+        form.reset();
+        clearGalleryImage();
+        setIsOpen(false);
+        return;
+      }
+    }
   };
 
   return (

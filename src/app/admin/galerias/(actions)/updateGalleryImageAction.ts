@@ -3,32 +3,33 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath, updateTag } from 'next/cache';
 import { editGallerySchema } from '~/src/shared/schemas';
-import type { Gallery } from '@/shared/interfaces';
+import type { GalleryImage } from '@/shared/interfaces';
+import { deleteImage, uploadImage } from '~/src/shared/actions';
 
 type Options = {
   formData: FormData;
   userRoles: string[];
   authenticatedUserId: string;
-  galleryId: string;
+  galleryImageId: string;
 };
 
 type UpdateResponseAction = Promise<{
   ok: boolean;
   message: string;
-  gallery: Gallery | null;
+  galleryImage: GalleryImage | null;
 }>;
 
 export const updateGalleryImageAction = async ({
   formData,
   userRoles,
   authenticatedUserId,
-  galleryId,
+  galleryImageId,
 }: Options): UpdateResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
       message: '¡ Usuario no autenticado !',
-      gallery: null,
+      galleryImage: null,
     };
   }
 
@@ -36,15 +37,14 @@ export const updateGalleryImageAction = async ({
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      gallery: null,
+      galleryImage: null,
     };
   }
 
   const rawData = {
     title: formData.get('title') as string,
     permalink: formData.get('permalink') ?? '',
-    teamId: formData.get('teamId') as string,
-    galleryDate: new Date(formData.get('galleryDate') as string),
+    image: formData.get('image') as File,
     active: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
@@ -58,48 +58,77 @@ export const updateGalleryImageAction = async ({
     return {
       ok: false,
       message: galleryVerified.error.message,
-      gallery: null,
+      galleryImage: null,
     };
   }
 
-  const galleryToSave = galleryVerified.data;
+  const { image, ...data } = galleryVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
-        const isGalleryExists = await transaction.gallery.count({
-          where: { id: galleryId },
+        const isGalleryImageExists = await transaction.galleryImage.count({
+          where: { id: galleryImageId },
         });
 
-        if (!isGalleryExists) {
+        if (!isGalleryImageExists) {
           return {
             ok: false,
-            message: '¡ La galería no existe o ha sido eliminada !',
-            gallery: null,
+            message: '¡ La imagen de la galería no existe o ha sido eliminada !',
+            galleryImage: null,
           };
         }
 
-        const updatedGallery = await transaction.gallery.update({
-          where: { id: galleryId },
+        const updatedGalleryImage = await transaction.galleryImage.update({
+          where: { id: galleryImageId },
           data: {
-            title: galleryToSave.title,
-            permalink: galleryToSave.permalink,
-            galleryDate: galleryToSave.galleryDate,
-            teamId: galleryToSave.teamId,
-            active: galleryToSave.active,
+            title: data.title,
+            permalink: data.permalink,
+            active: data.active,
           },
         });
 
+        // Update Image
+        if (image !== null) {
+          // Delete previous image from cloudinary.
+          if (updatedGalleryImage.imagePublicID) {
+            const cloudinaryResponse = await deleteImage(updatedGalleryImage.imagePublicID);
+            if (!cloudinaryResponse.ok) {
+              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+            }
+          }
+
+          // Upload Image to third-party storage (cloudinary).
+          const imageUploaded = await uploadImage(image as File, 'teams');
+
+          if (!imageUploaded) {
+            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+          }
+
+          // Update image data to database.
+          await transaction.galleryImage.update({
+            where: { id: galleryImageId },
+            data: {
+              imageUrl: imageUploaded.secureUrl,
+              imagePublicID: imageUploaded.publicId,
+            },
+          });
+
+          // Update event object to return.
+          updatedGalleryImage.imageUrl = imageUploaded.secureUrl;
+          updatedGalleryImage.imagePublicID = imageUploaded.publicId;
+        }
+
         // Update Cache
         revalidatePath('/admin/galerias');
-        updateTag('public-gallery');
+        revalidatePath(`/admin/galerias/${updatedGalleryImage.galleryId}`);
         updateTag('public-galleries');
         updateTag('public-gallery');
 
         return {
           ok: true,
-          message: '¡ La galería fue actualizada correctamente 👍 !',
-          gallery: updatedGallery,
+          message: '¡ La imagen de la galería fue actualizada correctamente 👍 !',
+          galleryImage: updatedGalleryImage,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
@@ -108,7 +137,7 @@ export const updateGalleryImageAction = async ({
             return {
               ok: false,
               message: `¡ El campo "${fieldError}", está duplicado !`,
-              gallery: null,
+              galleryImage: null,
             };
           }
 
@@ -117,25 +146,27 @@ export const updateGalleryImageAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar la galería, revise los logs del servidor !',
-            gallery: null,
+            message: '¡ Error al actualizar la imagen de la galería, revise los logs del servidor !',
+            galleryImage: null,
           };
         }
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
-          gallery: null,
+          galleryImage: null,
         };
       }
     });
 
     return prismaTransaction;
   } catch (error) {
-    console.log(error);
+    console.log("Error Name:", (error as Error).name);
+    console.log("Cause:", (error as Error).cause);
+    console.log("Error Message:", (error as Error).message);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      gallery: null,
+      galleryImage: null,
     };
   }
 };
