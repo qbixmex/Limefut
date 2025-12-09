@@ -6,8 +6,10 @@ import type { Gallery } from "@/shared/interfaces";
 type GalleryImageType = {
   id: string;
   title: string;
+  permalink: string;
   imageUrl: string;
   imagePublicID: string;
+  active: boolean;
 };
 
 type FetchTeamResponse = Promise<{
@@ -51,8 +53,10 @@ export const fetchGalleryAction = async (
           select: {
             id: true,
             title: true,
+            permalink: true,
             imageUrl: true,
             imagePublicID: true,
+            active: true,
           },
         },
       },

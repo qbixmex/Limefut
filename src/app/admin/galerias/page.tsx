@@ -38,9 +38,7 @@ export const GalleryPage: FC<Props> = async ({ searchParams }) => {
                       </Button>
                     </Link>
                   </TooltipTrigger>
-                  <TooltipContent side="left">
-                    <p>crear</p>
-                  </TooltipContent>
+                  <TooltipContent side="left">crear</TooltipContent>
                 </Tooltip>
               </section>
             </CardHeader>

@@ -121,6 +121,7 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
                 session={session as Session}
                 galleryId={gallery.id as string}
               />
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link href={`/admin/galerias/editar/${gallery.permalink}`}>
@@ -129,9 +130,7 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
                     </Button>
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="left">
-                  <p>editar</p>
-                </TooltipContent>
+                <TooltipContent side="left">editar</TooltipContent>
               </Tooltip>
             </div>
           </CardContent>

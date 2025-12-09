@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import type { Session } from "next-auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,25 +10,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { LoaderCircle, Plus } from "lucide-react";
+import { LoaderCircle, Plus, Upload } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from '@/components/ui/input';
 import { useForm } from "react-hook-form";
 import type z from "zod";
-import type { GalleryImage } from "~/src/shared/interfaces";
 import { createGalleryImageSchema, editGalleryImageSchema } from "~/src/shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { createGalleryImageAction } from "../(actions)";
 import { toast } from "sonner";
+import { useImageGallery } from "~/src/store";
 
 type Props = Readonly<{
   session: Session;
   galleryId: string;
-  galleryImage?: GalleryImage;
 }>;
 
-export const GalleryImageForm: FC<Props> = ({ session, galleryId, galleryImage }) => {
+export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
+  const { galleryImage, clearGalleryImage } = useImageGallery();
   const [isOpen, setIsOpen] = useState(false);
   const formSchema = !galleryImage
     ? createGalleryImageSchema
@@ -37,11 +37,27 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, galleryImage }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: galleryImage?.title ?? '',
-      permalink: galleryImage?.permalink ?? '',
-      active: galleryImage?.active ?? false,
+      title: '',
+      permalink: '',
+      active: false,
     },
   });
+
+  useEffect(() => {
+    if (galleryImage) {
+      form.reset({
+        title: galleryImage.title,
+        permalink: galleryImage.permalink,
+        active: galleryImage.active,
+      });
+    } else {
+      form.reset({
+        title: '',
+        permalink: '',
+        active: false,
+      });
+    }
+  }, [galleryImage, form]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
@@ -96,18 +112,28 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, galleryImage }
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={galleryImage !== null || isOpen} onOpenChange={(open) => {
+      if (!open && galleryImage !== null) {
+        clearGalleryImage();
+      }
+      setIsOpen(open);
+    }}>
       <Tooltip>
         <TooltipTrigger asChild>
           <SheetTrigger asChild>
-            <Button variant="outline-primary" size="icon">
+            <Button
+              variant="outline-primary"
+              size="icon"
+            >
               <Plus strokeWidth={3} />
             </Button>
           </SheetTrigger>
         </TooltipTrigger>
-        <TooltipContent side="left">Subir Imagen</TooltipContent>
+        <TooltipContent side="left">
+          Subir Imagen
+        </TooltipContent>
       </Tooltip>
-      <SheetContent side="right">
+      <SheetContent side="right" onOpenAutoFocus={(e) => e.preventDefault()}>
         <SheetHeader>
           <SheetTitle>Subir Imagen</SheetTitle>
         </SheetHeader>
@@ -125,7 +151,11 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, galleryImage }
                         Título de la imagen
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} value={field.value ?? ''} />
+                        <Input
+                          {...field}
+                          value={field.value ?? ''}
+                          autoFocus={false}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -171,12 +201,8 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, galleryImage }
                 type="submit"
                 variant="outline-primary"
                 size="lg"
-                disabled={form.formState.isSubmitting}
                 className="w-full"
-                onClick={() => {
-                  console.log("Errores del formulario:", form.formState.errors);
-                  console.log("Valores del formulario:", form.getValues());
-                }}
+                disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting ? (
                   <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
@@ -184,7 +210,10 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, galleryImage }
                     <LoaderCircle className="size-4 animate-spin" />
                   </span>
                 ) : (
-                  !galleryImage ? 'subir' : 'actualizar'
+                  <span className="inline-flex gap-3">
+                    <span className="text-sm italic">Subir</span>
+                    <Upload className="size-4" />
+                  </span>
                 )}
               </Button>
             </form>
