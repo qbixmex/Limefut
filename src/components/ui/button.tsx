@@ -10,10 +10,40 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        warning: [
+          "bg-amber-500",
+          "text-white",
+          "hover:bg-amber-500/90",
+          "focus-visible:ring-amber-500/20",
+          "dark:focus-visible:ring-amber-500/40",
+          "dark:bg-amber-600/60",
+          "dark:hover:bg-amber-500/80",
+        ],
+        destructive: [
+          "bg-destructive",
+          "text-white",
+          "hover:bg-destructive/90",
+          "focus-visible:ring-destructive/20",
+          "dark:focus-visible:ring-destructive/40",
+          "dark:bg-destructive/60",
+          "dark:hover:bg-destructive/80",
+        ],
         outline:
-          "bg-background border border-primary bg-transparent shadow-xs hover:bg-primary hover:text-white dark:bg-input/30 dark:text-primary-foreground dark:border-primary dark:hover:bg-input/50 dark:hover:bg-primary dark:hover:text-white",
+          [
+            "bg-background",
+            "border",
+            "border-primary",
+            "bg-transparent",
+            "shadow-xs",
+            "hover:bg-primary",
+            "hover:text-white",
+            "dark:bg-input/30",
+            "dark:text-primary-foreground",
+            "dark:border-primary",
+            "dark:hover:bg-input/50",
+            "dark:hover:bg-primary",
+            "dark:hover:text-white",
+          ],
         "outline-primary": [
           // Light Mode
           "border",

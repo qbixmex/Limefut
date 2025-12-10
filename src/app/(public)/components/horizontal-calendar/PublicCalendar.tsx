@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { addDays, format, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import styles from './styles.module.css';
-import { cn } from '@/root/src/lib/utils';
+import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   matchesDates: string[];
