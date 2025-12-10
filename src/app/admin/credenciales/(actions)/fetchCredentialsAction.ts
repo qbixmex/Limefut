@@ -64,7 +64,7 @@ export const fetchCredentialsAction = async (options?: Options): ResponseFetchAc
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

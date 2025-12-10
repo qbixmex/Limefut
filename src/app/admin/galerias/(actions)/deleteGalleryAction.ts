@@ -10,7 +10,7 @@ export type ResponseDeleteAction = Promise<{
 
 export const deleteGalleryAction = async (galleryId: string): ResponseDeleteAction => {
   const imagesCount = await prisma.galleryImage.count({
-    where: { galleryId: galleryId }
+    where: { galleryId: galleryId },
   });
 
   if (imagesCount !== 0) {
@@ -42,6 +42,6 @@ export const deleteGalleryAction = async (galleryId: string): ResponseDeleteActi
 
   return {
     ok: true,
-    message: `¡ La galería "${galleryDeleted.title}" ha sido eliminada correctamente 👍 !`
+    message: `¡ La galería "${galleryDeleted.title}" ha sido eliminada correctamente 👍 !`,
   };
 };

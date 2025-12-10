@@ -76,7 +76,7 @@ export const createTournamentAction = async (
           ...tournamentToSave,
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
-        }
+        },
       });
 
       return {

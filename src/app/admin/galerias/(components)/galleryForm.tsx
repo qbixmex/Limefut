@@ -86,7 +86,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
     if (!gallery) {
       const response = await createGalleryAction(
         formData,
-        session?.user.roles ?? null
+        session?.user.roles ?? null,
       );
 
       if (!response.ok) {
@@ -212,7 +212,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
                                 <Check
                                   className={cn(
                                     'ml-auto',
-                                    field.value === '' ? 'opacity-100' : 'opacity-0'
+                                    field.value === '' ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                               </CommandItem>
@@ -230,7 +230,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === team.id ? "opacity-100" : "opacity-0"
+                                      field.value === team.id ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>

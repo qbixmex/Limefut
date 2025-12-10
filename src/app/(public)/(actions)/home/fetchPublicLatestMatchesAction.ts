@@ -76,7 +76,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
             permalink: true,
             currentWeek: true,
 
-          }
+          },
         },
         local: {
           select: {
@@ -85,14 +85,14 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
             permalink: true,
             division: true,
             group: true,
-          }
+          },
         },
         visitor: {
           select: {
             id: true,
             name: true,
             permalink: true,
-          }
+          },
         },
         localScore: true,
         visitorScore: true,
@@ -100,11 +100,11 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         week: true,
         place: true,
         matchDate: true,
-      }
+      },
     });
 
     const totalCount = await prisma.match.count({
-      where: { status: "completed" }
+      where: { status: "completed" },
     });
 
     return {
@@ -125,7 +125,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
       pagination: {
         nextMatches: nextMatches,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

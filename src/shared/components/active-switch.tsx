@@ -21,7 +21,7 @@ type Props = Readonly<{
 export const ActiveSwitch: FC<Props> = ({ resource, updateResourceStateAction }) => {
   const [optimisticState, setOptimisticState] = useOptimistic(
     resource.state,
-    (_, newState: boolean) => newState
+    (_, newState: boolean) => newState,
   );
 
   const handleActiveSwitch = async (newState: boolean) => {

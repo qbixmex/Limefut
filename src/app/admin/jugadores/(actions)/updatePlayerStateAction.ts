@@ -34,6 +34,6 @@ export const updatePlayerStateAction = async (id: string, state: boolean): Respo
 
   return {
     ok: true,
-    message: `¡ El jugador "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`
+    message: `¡ El jugador "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
   };
 };

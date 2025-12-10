@@ -26,6 +26,6 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS):
 
   return {
     ok: true,
-    message: `¡ El estado del partido fue actualizado correctamente 👍 !`
+    message: `¡ El estado del partido fue actualizado correctamente 👍 !`,
   };
 };

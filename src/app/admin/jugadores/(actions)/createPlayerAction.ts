@@ -71,7 +71,7 @@ export const createPlayerAction = async (
           ...playerToSave,
           imageUrl: cloudinaryResponse?.secureUrl ?? null,
           imagePublicID: cloudinaryResponse?.publicId ?? null,
-        }
+        },
       });
 
       return {

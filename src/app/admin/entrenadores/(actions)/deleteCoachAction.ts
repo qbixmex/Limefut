@@ -44,6 +44,6 @@ export const deleteCoachAction = async (coachId: string): ResponseDeleteAction =
 
   return {
     ok: true,
-    message: `¡ El entrenador "${coach.name}" ha sido eliminado correctamente 👍 !`
+    message: `¡ El entrenador "${coach.name}" ha sido eliminado correctamente 👍 !`,
   };
 };

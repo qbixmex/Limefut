@@ -52,7 +52,7 @@ export const createTeamSchema = z.object({
   emails: z.array(z.string())
     .refine(
       (emails) => emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)),
-      { message: '¡ Todos los correos electrónicos deben tener un formato válido !' }
+      { message: '¡ Todos los correos electrónicos deben tener un formato válido !' },
     )
     .optional(),
   address: z.union([

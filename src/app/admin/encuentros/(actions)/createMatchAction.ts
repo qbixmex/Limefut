@@ -50,7 +50,7 @@ export const createMatchAction = async (
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const tournament = await transaction.tournament.count({
-        where: { id: tournamentId }
+        where: { id: tournamentId },
       });
 
       if (!tournament) {
@@ -105,7 +105,7 @@ export const createMatchAction = async (
               name: true,
             },
           },
-        }
+        },
       });
 
       return {

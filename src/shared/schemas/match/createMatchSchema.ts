@@ -5,12 +5,12 @@ export const createMatchSchema = z.object({
   localTeamId: z.uuid({
     error: (issue) => (issue.input === '')
       ? '! El equipo local es obligatorio !'
-      : '¡ El id del equipo local no es un UUID válido !'
+      : '¡ El id del equipo local no es un UUID válido !',
   }),
   visitorTeamId: z.uuid({
     error: (issue) => (issue.input === '')
       ? '! El equipo visitante es obligatorio !'
-      : '¡ El id del equipo visitante no es un UUID válido !'
+      : '¡ El id del equipo visitante no es un UUID válido !',
   }),
   place: z.string()
     .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
@@ -31,7 +31,7 @@ export const createMatchSchema = z.object({
     .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],
-    { message: "¡ El estado del partido debe ser válido !" }
+    { message: "¡ El estado del partido debe ser válido !" },
   ),
   matchDate: z
     .date({ message: "La fecha del encuentro debe ser una fecha válida" }),

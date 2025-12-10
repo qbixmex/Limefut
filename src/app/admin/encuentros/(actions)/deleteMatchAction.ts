@@ -11,7 +11,7 @@ export type ResponseDeleteAction = Promise<{
 export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
   const player = await prisma.match.findUnique({
     where: { id },
-    select: { id: true }
+    select: { id: true },
   });
 
   if (!player) {
@@ -27,6 +27,6 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
 
   return {
     ok: true,
-    message: `¡ El encuentro ha sido eliminado correctamente 👍 !`
+    message: `¡ El encuentro ha sido eliminado correctamente 👍 !`,
   };
 };

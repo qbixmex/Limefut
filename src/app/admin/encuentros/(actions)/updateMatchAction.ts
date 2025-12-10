@@ -82,7 +82,7 @@ export const updateMatchAction = async ({
         }
 
         const tournament = await transaction.tournament.count({
-          where: { id: tournamentId }
+          where: { id: tournamentId },
         });
 
         if (!tournament) {
@@ -136,7 +136,7 @@ export const updateMatchAction = async ({
                 name: true,
               },
             },
-          }
+          },
         });
 
         // Revalidate Cache

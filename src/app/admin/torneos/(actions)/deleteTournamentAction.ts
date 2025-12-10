@@ -45,6 +45,6 @@ export const deleteTournamentAction = async (id: string): ResponseDeleteAction =
 
   return {
     ok: true,
-    message: `¡ El torneo "${tournament.name}" ha sido eliminado correctamente 👍 !`
+    message: `¡ El torneo "${tournament.name}" ha sido eliminado correctamente 👍 !`,
   };
 };

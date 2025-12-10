@@ -44,7 +44,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
         goalsFor: { increment: localScore },
         goalsAgainst: { increment: visitorScore },
         goalsDifference: { increment: localScore - visitorScore },
-        points: { increment: localPoints }
+        points: { increment: localPoints },
       },
     });
   } catch (error) {
@@ -63,7 +63,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
         goalsFor: { increment: visitorScore },
         goalsAgainst: { increment: localScore },
         goalsDifference: { increment: visitorScore - localScore },
-        points: { increment: visitorPoints }
+        points: { increment: visitorPoints },
       },
     });
   } catch(error) {
@@ -88,6 +88,6 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
 
   return {
     ok: true,
-    message: `¡ El estado del partido finalizó correctamente ⚽️🎉 !`
+    message: `¡ El estado del partido finalizó correctamente ⚽️🎉 !`,
   };
 };
