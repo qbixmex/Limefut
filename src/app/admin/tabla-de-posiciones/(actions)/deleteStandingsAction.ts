@@ -15,6 +15,6 @@ export const deleteStandingsAction = async (tournamentId: string): ResponseDelet
 
   return {
     ok: true,
-    message: `¡ Las estadísticas han sido eliminadas correctamente 👍 !`
+    message: `¡ Las estadísticas han sido eliminadas correctamente 👍 !`,
   };
 };

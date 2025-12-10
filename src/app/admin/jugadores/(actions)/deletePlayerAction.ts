@@ -44,6 +44,6 @@ export const deletePlayerAction = async (playerId: string): ResponseDeleteAction
 
   return {
     ok: true,
-    message: `¡ El jugador "${player.name}" ha sido eliminado correctamente 👍 !`
+    message: `¡ El jugador "${player.name}" ha sido eliminado correctamente 👍 !`,
   };
 };

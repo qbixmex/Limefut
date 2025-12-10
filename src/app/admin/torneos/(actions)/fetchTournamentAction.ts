@@ -30,9 +30,9 @@ export const fetchTournamentAction = async (
             id: true,
             name: true,
             permalink: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     if (!tournament) {

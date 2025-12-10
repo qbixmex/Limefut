@@ -55,7 +55,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       startDate: tournament?.startDate ?? new Date(),
       endDate: tournament?.endDate ?? new Date(),
       active: tournament?.active ?? false,
-    }
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -76,12 +76,12 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     formData.append('startDate',
       data.startDate
         ? (data.startDate as Date).toISOString()
-        : new Date().toISOString()
+        : new Date().toISOString(),
     );
     formData.append('endDate',
       data.endDate
         ? (data.endDate as Date).toISOString()
-        : new Date().toISOString()
+        : new Date().toISOString(),
     );
     formData.append('active', String(data.active ?? false));
 
@@ -89,7 +89,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     if (!tournament) {
       const response = await createTournamentAction(
         formData,
-        session?.user.roles ?? null
+        session?.user.roles ?? null,
       );
 
       if (!response.ok) {

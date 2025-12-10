@@ -67,7 +67,7 @@ export const fetchGalleriesAction = async (options: Options): ResponseAction => 
         galleryDate: true,
         active: true,
         _count: {
-          select: { images: true }
+          select: { images: true },
         },
       },
       take: take,
@@ -86,7 +86,7 @@ export const fetchGalleriesAction = async (options: Options): ResponseAction => 
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

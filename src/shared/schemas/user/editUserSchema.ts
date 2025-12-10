@@ -22,7 +22,7 @@ export const editUserSchema = z.object({
     .min(1, { message: '¡ El correo electrónico es obligatorio !' })
     .refine(
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-      { message: '¡ Formato incorrecto del correo electrónico !' }
+      { message: '¡ Formato incorrecto del correo electrónico !' },
     )
     .nullish(),
   image: z.instanceof(File)
@@ -48,5 +48,5 @@ export const editUserSchema = z.object({
   return true;
 }, {
   message: "¡ Las contraseñas no coinciden !",
-  path: ["passwordConfirmation"]
+  path: ["passwordConfirmation"],
 });

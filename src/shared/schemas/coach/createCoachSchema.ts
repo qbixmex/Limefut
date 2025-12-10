@@ -17,7 +17,7 @@ export const createCoachSchema = z.object({
     .min(1, { message: '¡ El correo electrónico es obligatorio !' })
     .refine(
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-      { message: '¡ Formato incorrecto del correo electrónico !' }
+      { message: '¡ Formato incorrecto del correo electrónico !' },
     ),
   phone: z.string()
     .min(12, { message: '¡ El teléfono debe ser mayor a 12 caracteres !' })

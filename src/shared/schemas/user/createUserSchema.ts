@@ -21,23 +21,23 @@ export const createUserSchema = z.object({
     .min(1, { message: '¡ El correo electrónico es obligatorio !' })
     .refine(
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-      { message: '¡ Formato incorrecto del correo electrónico !' }
+      { message: '¡ Formato incorrecto del correo electrónico !' },
     ),
   image: z.instanceof(File)
     .refine((file) => file.size <= MAX_UPLOAD_SIZE, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), `El tipo de archivo debe ser uno de los siguientes: ${ACCEPTED_FILE_TYPES.join(', ')}`)
     .nullish(),
   password: z.string().min(8, {
-    message: '¡ La contraseña debe ser por lo menos de 8 caracteres!'
+    message: '¡ La contraseña debe ser por lo menos de 8 caracteres!',
   }),
   passwordConfirmation: z.string().min(8, {
-    error: '¡ La confirmación de la contraseña debe ser por lo menos de 8 caracteres!'
+    error: '¡ La confirmación de la contraseña debe ser por lo menos de 8 caracteres!',
   }),
   roles: z.array(z.enum(['user', 'admin'])).min(1, {
-    message: '¡ Debe seleccionar al menos un rol !'
+    message: '¡ Debe seleccionar al menos un rol !',
   }),
   isActive: z.boolean().optional(),
 }).refine((data) => data.password === data.passwordConfirmation, {
   message: "¡ Las contraseñas no coinciden !",
-  path: ["passwordConfirmation"]
+  path: ["passwordConfirmation"],
 });

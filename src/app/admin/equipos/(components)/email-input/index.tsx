@@ -18,7 +18,7 @@ export const EmailInput = forwardRef<HTMLInputElement, EmailInputProps>(
   ({
     value = [],
     onChange,
-    placeholder = "Escribe un email y presiona Enter", className
+    placeholder = "Escribe un email y presiona Enter", className,
   }, ref) => {
     const [emailInput, setEmailInput] = useState('');
 
@@ -99,7 +99,7 @@ export const EmailInput = forwardRef<HTMLInputElement, EmailInputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 EmailInput.displayName = "EmailInput";

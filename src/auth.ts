@@ -9,10 +9,10 @@ import z from 'zod';
 
 const loginSchema = z.object({
   email: z.string().min(1, {
-    message: '! El correo electrónico no puede ir vacío !'
+    message: '! El correo electrónico no puede ir vacío !',
   }),
   password: z.string().min(8, {
-    message: '! La contraseña debe ser mayor a 8 caracteres !'
+    message: '! La contraseña debe ser mayor a 8 caracteres !',
   }),
 });
 
@@ -37,7 +37,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 
           // Remove Password from Authenticated User
           const userWithoutPassword = Object.fromEntries(
-            Object.entries(user).filter(([key]) => key !== 'password')
+            Object.entries(user).filter(([key]) => key !== 'password'),
           );
 
           return userWithoutPassword;

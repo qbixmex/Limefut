@@ -66,11 +66,11 @@ export const fetchCredentialAction = async (
               select: {
                 id: true,
                 name: true,
-              }
+              },
             },
           },
         },
-      }
+      },
     });
 
     if (!credential) {

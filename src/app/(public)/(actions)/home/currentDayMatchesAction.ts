@@ -35,14 +35,14 @@ export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchA
         status: 'inProgress',
         matchDate: {
           gte: startOfToday,
-          lte: endOfToday
+          lte: endOfToday,
         },
       },
       orderBy: { matchDate: 'desc' },
       take,
       select: {
         matchDate: true,
-      }
+      },
     });
 
     console.log(data);

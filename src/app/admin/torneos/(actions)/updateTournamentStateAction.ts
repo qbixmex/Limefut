@@ -38,6 +38,6 @@ export const updateTournamentStateAction = async (id: string, state: boolean): R
 
   return {
     ok: true,
-    message: `¡ El torneo "${updatedTournament.name}" fue ${updatedTournament.active ? 'activado' : 'desactivado'} correctamente 👍 !`
+    message: `¡ El torneo "${updatedTournament.name}" fue ${updatedTournament.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
   };
 };

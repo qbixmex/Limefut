@@ -37,6 +37,6 @@ export const updateGalleryStateAction = async (id: string, state: boolean)
 
   return {
     ok: true,
-    message: `¡ La galería fue ${updatedGallery.active ? 'activada' : 'desactivada'} correctamente 👍 !`
+    message: `¡ La galería fue ${updatedGallery.active ? 'activada' : 'desactivada'} correctamente 👍 !`,
   };
 };

@@ -62,9 +62,9 @@ export const fetchTournamentAction = async (
             name: true,
             permalink: true,
             imageUrl: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     if (!tournament) {

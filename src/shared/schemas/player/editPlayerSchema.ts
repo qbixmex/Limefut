@@ -18,7 +18,7 @@ export const editPlayerSchema = z.object({
     .min(1, { message: '¡ El correo electrónico es obligatorio !' })
     .refine(
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-      { message: '¡ Formato incorrecto del correo electrónico !' }
+      { message: '¡ Formato incorrecto del correo electrónico !' },
     )
     .optional(),
   phone: z.string()
@@ -42,7 +42,7 @@ export const editPlayerSchema = z.object({
     .string()
     .refine(
       (value) => value === '' || z.uuid().safeParse(value).success,
-      { message: '¡ El id del equipo debe ser un UUID válido o vacío !' }
+      { message: '¡ El id del equipo debe ser un UUID válido o vacío !' },
     )
     .nullish(),
 });

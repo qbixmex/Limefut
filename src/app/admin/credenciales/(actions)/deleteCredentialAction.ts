@@ -11,7 +11,7 @@ export type ResponseDeleteAction = Promise<{
 export const deleteCredentialAction = async (id: string): ResponseDeleteAction => {
   const credencial = await prisma.credential.findUnique({
     where: { id },
-    select: { id: true }
+    select: { id: true },
   });
 
   if (!credencial) {
@@ -28,6 +28,6 @@ export const deleteCredentialAction = async (id: string): ResponseDeleteAction =
 
   return {
     ok: true,
-    message: `¡ La credencial ha sido eliminada correctamente 👍 !`
+    message: `¡ La credencial ha sido eliminada correctamente 👍 !`,
   };
 };

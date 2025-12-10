@@ -33,7 +33,7 @@ export const MatchScoreInput: FC<Props> = (props) => {
       matchId,
       score: finalScore,
       local,
-      visitor
+      visitor,
     });
 
     if (!response.ok) {

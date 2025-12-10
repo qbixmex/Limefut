@@ -55,11 +55,11 @@ export const createCredentialAction = async (
               tournament: {
                 select: {
                   id: true,
-                }
+                },
               },
-            }
+            },
           },
-        }
+        },
       });
 
       if (!player) {

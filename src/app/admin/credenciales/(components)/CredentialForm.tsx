@@ -33,7 +33,7 @@ import {
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
+  PopoverTrigger,
 } from '@/root/src/components/ui/popover';
 import type z from 'zod';
 
@@ -58,7 +58,7 @@ export const CredentialForm: FC<Props> = ({ session, credential, players }) => {
       curp: credential?.curp ?? '',
       position: credential?.position ?? '',
       jerseyNumber: credential?.jerseyNumber ?? 0,
-    }
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -166,7 +166,7 @@ export const CredentialForm: FC<Props> = ({ session, credential, players }) => {
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === player.name ? "opacity-100" : "opacity-0"
+                                      field.value === player.name ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>

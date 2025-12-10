@@ -46,7 +46,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
       take,
       select: {
         matchDate: true,
-      }
+      },
     });
 
     return {

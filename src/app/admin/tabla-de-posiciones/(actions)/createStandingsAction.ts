@@ -29,7 +29,7 @@ export const createStandingsAction = async ( data: DataType ): CreateResponseAct
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       await transaction.standings.createMany({
-        data: standingsData
+        data: standingsData,
       });
 
       return {

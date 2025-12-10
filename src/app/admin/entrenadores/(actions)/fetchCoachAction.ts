@@ -32,8 +32,8 @@ export const fetchCoachAction = async (
             id: true,
             name: true,
             permalink: true,
-          }
-        }
+          },
+        },
       },
     });
 

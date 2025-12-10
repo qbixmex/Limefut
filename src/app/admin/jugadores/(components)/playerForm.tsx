@@ -65,7 +65,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
       nationality: player?.nationality ?? '',
       active: player?.active ?? false,
       teamId: player?.team?.id ?? '',
-    }
+    },
   });
 
   const birthdayValue = useWatch({
@@ -93,7 +93,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
     if (!player) {
       const response = await createPlayerAction(
         formData,
-        session?.user.roles ?? null
+        session?.user.roles ?? null,
       );
 
       if (!response.ok) {
@@ -343,7 +343,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                                 <Check
                                   className={cn(
                                     "ml-auto",
-                                    field.value === '' ? "opacity-100" : "opacity-0"
+                                    field.value === '' ? "opacity-100" : "opacity-0",
                                   )}
                                 />
                               </CommandItem>
@@ -365,7 +365,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === team.id ? "opacity-100" : "opacity-0"
+                                      field.value === team.id ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>

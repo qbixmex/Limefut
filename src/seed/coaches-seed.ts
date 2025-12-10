@@ -48,5 +48,5 @@ export const coaches: CoachSeed[] = [
     description: 'Entrenadora enfocada en el desarrollo integral de jugadoras jóvenes, promoviendo la igualdad de género en el deporte y técnicas modernas de entrenamiento.',
     active: true,
     teamIds: [],
-  }
+  },
 ];

@@ -94,7 +94,7 @@ export const updateCoachAction = async ({
             ...coachToSave,
             teams: {
               set: (teamsIds ?? []).map((id: string) => ({ id })),
-            }
+            },
           },
         });
 

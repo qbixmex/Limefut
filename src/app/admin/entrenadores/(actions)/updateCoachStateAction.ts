@@ -34,6 +34,6 @@ export const updateCoachStateAction = async (id: string, state: boolean): Respon
 
   return {
     ok: true,
-    message: `¡ El entrenador "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`
+    message: `¡ El entrenador "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
   };
 };

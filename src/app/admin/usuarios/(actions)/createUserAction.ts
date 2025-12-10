@@ -76,7 +76,7 @@ export const createUserAction = async (
   const userToSave = Object.fromEntries(
     Object
       .entries(dataParsed)
-      .filter(([property]) => property !== 'passwordConfirmation')
+      .filter(([property]) => property !== 'passwordConfirmation'),
   ) as UserToSave;
 
   const hashedPassword = bcrypt.hashSync(userToSave.password, 10);
@@ -90,7 +90,7 @@ export const createUserAction = async (
           roles: userToSave.roles as Role[],
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
-        }
+        },
       });
 
       return {

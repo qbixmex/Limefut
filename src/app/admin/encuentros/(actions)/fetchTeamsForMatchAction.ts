@@ -42,8 +42,8 @@ export const fetchTeamsForMatchAction = async (options?: OptionsType): ResponseF
         ...({
           id: {
             notIn: Array.from(scheduledTeamsIds),
-          }
-        })
+          },
+        }),
       },
       orderBy: { name: 'asc' },
       select: {
