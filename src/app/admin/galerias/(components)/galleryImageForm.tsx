@@ -10,8 +10,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { LoaderCircle, Plus, Upload } from "lucide-react";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { LoaderCircle, Plus } from "lucide-react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from '@/components/ui/input';
 import { useForm } from "react-hook-form";
 import type z from "zod";
@@ -21,6 +28,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { createGalleryImageAction, updateGalleryImageAction } from "../(actions)";
 import { toast } from "sonner";
 import { useImageGallery } from "~/src/store";
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 type Props = Readonly<{
   session: Session;
@@ -63,8 +72,13 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
     const formData = new FormData();
     formData.append('title', data.title as string);
     formData.append('permalink', data.permalink as string);
+
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
+    }
+
+    if (data.active) {
+      formData.append('active', String(data.active));
     }
 
     // Create Gallery Image
@@ -196,6 +210,27 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
                     </FormItem>
                   )}
                 />
+
+                <div className="inline-flex justify-end">
+                  <FormField
+                    control={form.control}
+                    name="active"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center gap-3">
+                          <FormControl>
+                            <Switch
+                              id="active"
+                              checked={field.value ?? false}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <Label htmlFor="active">Activo</Label>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
               <Button
@@ -212,8 +247,7 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
                   </span>
                 ) : (
                   <span className="inline-flex gap-3">
-                    <span className="text-sm italic">Subir</span>
-                    <Upload className="size-4" />
+                    <span className="text-sm italic">Guardar</span>
                   </span>
                 )}
               </Button>
