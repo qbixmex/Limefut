@@ -86,7 +86,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetchTo
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

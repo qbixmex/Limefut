@@ -39,14 +39,14 @@ export const fetchMatchAction = async (
             id: true,
             name: true,
             permalink: true,
-          }
+          },
         },
         visitor: {
           select: {
             id: true,
             name: true,
             permalink: true,
-          }
+          },
         },
         place: true,
         matchDate: true,

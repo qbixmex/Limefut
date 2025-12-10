@@ -37,6 +37,6 @@ export const updateStatusAction = async (params: Params): ResponseAction => {
 
   return {
     ok: true,
-    message: `¡ El marcador del partido fue actualizado correctamente 👍 !`
+    message: `¡ El marcador del partido fue actualizado correctamente 👍 !`,
   };
 };

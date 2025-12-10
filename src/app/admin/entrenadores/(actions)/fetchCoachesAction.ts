@@ -71,7 +71,7 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
         _count: {
           select: { teams: true },
         },
-      }
+      },
     });
 
     const totalCount = await prisma.coach.count({ where: whereCondition });
@@ -86,7 +86,7 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

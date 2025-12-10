@@ -37,6 +37,6 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
 
   return {
     ok: true,
-    message: `¡ El equipo "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`
+    message: `¡ El equipo "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
   };
 };

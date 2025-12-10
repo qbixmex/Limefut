@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { UserPlusIcon, } from "lucide-react";
+import { UserPlusIcon } from "lucide-react";
 import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { Search } from "@/shared/components/search";

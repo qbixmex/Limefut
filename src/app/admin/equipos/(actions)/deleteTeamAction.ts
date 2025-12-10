@@ -44,6 +44,6 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
 
   return {
     ok: true,
-    message: `¡ El equipo "${teamDeleted.name}" ha sido eliminado correctamente 👍 !`
+    message: `¡ El equipo "${teamDeleted.name}" ha sido eliminado correctamente 👍 !`,
   };
 };

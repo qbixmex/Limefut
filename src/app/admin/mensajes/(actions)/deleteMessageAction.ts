@@ -30,6 +30,6 @@ export const deleteMessageAction = async (id: string): ResponseDeleteAction => {
 
   return {
     ok: true,
-    message: `¡ El mensaje de ha sido eliminado correctamente 👍 !`
+    message: `¡ El mensaje de ha sido eliminado correctamente 👍 !`,
   };
 };

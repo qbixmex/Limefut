@@ -16,12 +16,12 @@ export const Footer = () => {
             'border-gray-600',
             'dark:border-gray-300',
             'group-hover:border-blue-500!',
-            'group-hover:bg-blue-500'
+            'group-hover:bg-blue-500',
           ])}>
             <FaFacebookF className={cn([
               styles.facebookIcon,
               'dark:text-gray-200!',
-              'group-hover:text-neutral-50!'
+              'group-hover:text-neutral-50!',
             ])} />
           </div>
         </a>

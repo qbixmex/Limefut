@@ -22,13 +22,13 @@ export const fetchTournamentsAction = async (options?: OptionsType): ResponseFet
     const tournaments = await prisma.tournament.findMany({
       where: {
         active: true,
-        ...(currentWeek && (currentWeek > 0) && { currentWeek })
+        ...(currentWeek && (currentWeek > 0) && { currentWeek }),
       },
       orderBy: { name: 'asc' },
       select: {
         id: true,
         name: true,
-      }
+      },
     });
 
     return {

@@ -33,8 +33,8 @@ export const fetchPlayerAction = async (
             name: true,
             permalink: true,
           },
-        }
-      }
+        },
+      },
 
     });
 

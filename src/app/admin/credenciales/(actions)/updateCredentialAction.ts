@@ -73,11 +73,11 @@ export const updateCredentialAction = async ({
                 tournament: {
                   select: {
                     id: true,
-                  }
+                  },
                 },
-              }
+              },
             },
-          }
+          },
         });
 
         if (!player) {
@@ -118,7 +118,7 @@ export const updateCredentialAction = async ({
                 name: true,
               },
             },
-          }
+          },
         });
 
         // Revalidate Cache

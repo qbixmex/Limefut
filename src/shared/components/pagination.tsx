@@ -71,7 +71,7 @@ type PaginationNumberProps = Readonly<{
   isActive: boolean;
 }>;
 
-const PaginationNumber: FC<PaginationNumberProps> = ({ page, url, isActive, position, }) => {
+const PaginationNumber: FC<PaginationNumberProps> = ({ page, url, isActive, position }) => {
   const router = useRouter();
 
   const handleNavigate = () => {

@@ -56,7 +56,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
       teamsIds: (coach?.teams && ((coach?.teams as TeamType[]).length > 0))
         ? coach?.teams.map((t) => t.id)
         : [],
-    }
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -80,7 +80,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
     if (!coach) {
       const response = await createCoachAction(
         formData,
-        session?.user.roles ?? null
+        session?.user.roles ?? null,
       );
 
       if (!response.ok) {
@@ -293,7 +293,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
                                     <Check
                                       className={cn(
                                         "ml-auto",
-                                        isSelected ? "opacity-100" : "opacity-0"
+                                        isSelected ? "opacity-100" : "opacity-0",
                                       )}
                                     />
                                   </CommandItem>

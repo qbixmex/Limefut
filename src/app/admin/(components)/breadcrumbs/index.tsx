@@ -6,7 +6,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbSeparator,
-  BreadcrumbPage
+  BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 

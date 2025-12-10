@@ -57,17 +57,17 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
 
     whereCondition.OR = [
       { // Search by local team name
-        local: { name: { contains: searchTerm, mode: 'insensitive' } }
+        local: { name: { contains: searchTerm, mode: 'insensitive' } },
       },
       { // Search by visitor team name
-        visitor: { name: { contains: searchTerm, mode: 'insensitive' } }
-      }
+        visitor: { name: { contains: searchTerm, mode: 'insensitive' } },
+      },
     ];
 
     // If the search term is a valid number, add the condition to search by week.
     if (!isNaN(weekNumber)) {
       whereCondition.OR.push({
-        week: { equals: weekNumber }
+        week: { equals: weekNumber },
       });
     }
 
@@ -92,14 +92,14 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
             id: true,
             name: true,
             permalink: true,
-          }
+          },
         },
         visitor: {
           select: {
             id: true,
             name: true,
             permalink: true,
-          }
+          },
         },
         localScore: true,
         visitorScore: true,
@@ -107,7 +107,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         week: true,
         place: true,
         matchDate: true,
-      }
+      },
     });
 
     const totalCount = await prisma.match.count({ where: whereCondition });
@@ -129,7 +129,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {
