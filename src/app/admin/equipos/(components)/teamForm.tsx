@@ -32,7 +32,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList
+  CommandList,
 } from '@/components/ui/command';
 import { cn } from '@/root/src/lib/utils';
 
@@ -73,7 +73,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       emails: team?.emails ?? [],
       address: team?.address ?? undefined,
       active: team?.active ?? false,
-    }
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -113,7 +113,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
     if (!team) {
       const response = await createTeamAction(
         formData,
-        session?.user.roles ?? null
+        session?.user.roles ?? null,
       );
 
       if (!response.ok) {
@@ -311,7 +311,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                 <Check
                                   className={cn(
                                     'ml-auto',
-                                    field.value === '' ? 'opacity-100' : 'opacity-0'
+                                    field.value === '' ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                               </CommandItem>
@@ -328,7 +328,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === tournament.id ? "opacity-100" : "opacity-0"
+                                      field.value === tournament.id ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>
@@ -431,7 +431,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                 <Check
                                   className={cn(
                                     'ml-auto',
-                                    field.value === '' ? 'opacity-100' : 'opacity-0'
+                                    field.value === '' ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                               </CommandItem>
@@ -449,7 +449,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === coach.id ? "opacity-100" : "opacity-0"
+                                      field.value === coach.id ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>

@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider   = "prisma-client-js"
+  output     = "../src/generated/prisma"
   engineType = "client"
 }
 
@@ -95,6 +95,7 @@ model Team {
   standings    Standings[]
   homeMatches  Match[]     @relation("HomeMatches")
   awayMatches  Match[]     @relation("AwayMatches")
+  galleries    Gallery[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -238,4 +239,42 @@ model ContactMessage {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("contact_messages")
+}
+
+model Gallery {
+  id          String   @id @default(uuid())
+  title       String   @unique
+  permalink   String   @unique
+  galleryDate DateTime @map("gallery_date")
+  active      Boolean  @default(false)
+
+  // Relations
+  images GalleryImage[]
+  teamId String         @map("team_id")
+  team   Team           @relation(fields: [teamId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("gallery")
+}
+
+model GalleryImage {
+  id            String  @id @default(uuid())
+  title         String
+  permalink     String  @unique
+  imageUrl      String  @unique
+  imagePublicID String @map("image_public_id")
+  active        Boolean @default(false)
+
+  // Relations
+  galleryId String  @map("gallery_id")
+  gallery   Gallery @relation(fields: [galleryId], references: [id])
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("gallery_image")
 }

@@ -120,7 +120,7 @@ export class DatabaseSeeder {
 
     // Get all available tournaments to assign teams.
     const tournamentsInDb = await prisma.tournament.findMany({
-      select: { id: true, name: true }
+      select: { id: true, name: true },
     });
 
     if (tournamentsInDb.length === 0) {
@@ -139,7 +139,7 @@ export class DatabaseSeeder {
       console.log(`Assigning team "${team.name}" to tournament "${tournamentName}"`);
 
       const teamData = Object.fromEntries(
-        Object.entries(team).filter(([key]) => key !== 'coachId')
+        Object.entries(team).filter(([key]) => key !== 'coachId'),
       ) as Omit<typeof team, 'coachId'>;
 
       return {
@@ -162,14 +162,14 @@ export class DatabaseSeeder {
     for (const coach of coaches) {
       const { teamIds, ...coachFields } = coach;
       const createdCoach = await prisma.coach.create({
-        data: coachFields
+        data: coachFields,
       });
       createdCoaches.push({ ...createdCoach, originalTeamIds: teamIds });
     }
 
     // Get all available teams to assign coaches
     const teamsInDb = await prisma.team.findMany({
-      select: { id: true, name: true }
+      select: { id: true, name: true },
     });
 
     if (teamsInDb.length === 0) {
@@ -188,7 +188,7 @@ export class DatabaseSeeder {
       // Update the team to assign the coach
       await prisma.team.update({
         where: { id: team.id },
-        data: { coachId: coach.id }
+        data: { coachId: coach.id },
       });
 
       console.log(`Assigned coach "${coach.name}" to team "${team.name}"`);
@@ -209,7 +209,7 @@ export class DatabaseSeeder {
       console.log(`Found ${teamsCount} teams. Assigning players to teams...`);
 
       const teamsInDb = await prisma.team.findMany({
-        select: { id: true, name: true }
+        select: { id: true, name: true },
       });
 
       const playersData = players.map((player, index) => {
@@ -217,7 +217,7 @@ export class DatabaseSeeder {
         const teamId = teamsInDb[teamIndex].id;
         return {
           ...player,
-          teamId
+          teamId,
         };
       });
 
@@ -238,15 +238,15 @@ export class DatabaseSeeder {
         birthday: true,
         team: {
           select: {
-            tournamentId: true
-          }
-        }
-      }
+            tournamentId: true,
+          },
+        },
+      },
     });
 
     // Filter only players who have a team and tournament assigned
     const validPlayers = playersInDb.filter(
-      player => player.team?.tournamentId && player.team.tournamentId
+      player => player.team?.tournamentId && player.team.tournamentId,
     ) as (Player & { team: TeamSeed })[];
 
     if (validPlayers.length === 0) {

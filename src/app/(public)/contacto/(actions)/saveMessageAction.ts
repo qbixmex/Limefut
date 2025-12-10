@@ -30,7 +30,7 @@ export const saveMessageAction = async (
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const savedMessage = await transaction.contactMessage.create({
-        data: messageVerified.data
+        data: messageVerified.data,
       });
 
       return {

@@ -12,6 +12,7 @@ import {
   Sheet,
   TrendingUp,
   Inbox,
+  ImageIcon,
 } from "lucide-react";
 import { GiWhistle } from "react-icons/gi";
 import {
@@ -156,6 +157,24 @@ export const navMain: NavItem[] = [
         label: "Tabla de Posiciones",
         url: "/admin/tabla-de-posiciones",
         icon: Sheet,
+      },
+    ],
+  },
+  {
+    label: "Galerías",
+    url: "#",
+    icon: ImageIcon,
+    isActive: false,
+    subItems: [
+      {
+        label: "Lista",
+        url: "/admin/galerias",
+        icon: ListIcon,
+      },
+      {
+        label: "Crear",
+        url: "/admin/galerias/crear",
+        icon: PlusIcon,
       },
     ],
   },

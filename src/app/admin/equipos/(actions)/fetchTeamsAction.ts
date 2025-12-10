@@ -103,7 +103,7 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

@@ -18,7 +18,8 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-unused-vars": "warn",
       "semi": ["warn", "always"],
       "@typescript-eslint/consistent-type-imports": ["warn", { "prefer": "type-imports" }],
-    }
+      "comma-dangle": ["warn", "always-multiline"],
+    },
   },
   {
     ignores: [
@@ -27,9 +28,9 @@ const eslintConfig = defineConfig([
       "out/**",
       "build/**",
       "next-env.d.ts",
-      "src/generated/prisma/**"
-    ]
-  }
+      "src/generated/prisma/**",
+    ],
+  },
 ]);
 
 export default eslintConfig;

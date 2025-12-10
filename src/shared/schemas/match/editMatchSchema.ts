@@ -22,7 +22,7 @@ export const editMatchSchema = z.object({
     .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],
-    { message: "¡ El estado del partido debe ser válido !" }
+    { message: "¡ El estado del partido debe ser válido !" },
   )
     .optional(),
   localScore: z

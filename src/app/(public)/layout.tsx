@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.png', type: 'image/png' },
-    ]
+    ],
   },
   openGraph: {
     locale: "es_MX",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
        url: "https://limefut.netlify.app/liga-menor-de-futbol-black.webp",
        width: 500,
        height: 500,
-       alt: "Liga menor de fútbol"
+       alt: "Liga menor de fútbol",
      },
     ],
   },
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
         alt: "Liga menor de futbol Limefut",
       },
     ],
-  }
+  },
 };
 
 type Props = Readonly<{ children: ReactNode; }>

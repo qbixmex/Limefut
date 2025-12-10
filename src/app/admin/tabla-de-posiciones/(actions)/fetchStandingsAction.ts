@@ -63,8 +63,8 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
             id: true,
             name: true,
             permalink: true,
-          }
-        }
+          },
+        },
       },
     });
 
@@ -88,7 +88,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
             id: true,
             name: true,
             permalink: true,
-          }
+          },
         },
         matchesPlayed: true,
         wins: true,
@@ -103,8 +103,8 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
             id: true,
             name: true,
             permalink: true,
-          }
-        }
+          },
+        },
       },
     });
 

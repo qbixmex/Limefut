@@ -40,7 +40,7 @@ const uploadImage = async (image: File, folder: string): Promise<(CloudinaryResp
           gravity: 'auto', // Automatically determine the focal point
           format: "webp", // Use webp format
           quality: "auto:good", // Automatic Quality
-        }
+        },
       ],
       // Additional optimization configurations
       format: "webp", // Force (webp) format

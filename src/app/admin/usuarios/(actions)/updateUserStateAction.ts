@@ -34,6 +34,6 @@ export const updateUserStateAction = async (id: string, state: boolean): Respons
 
   return {
     ok: true,
-    message: `¡ El usuario "${updatedTeam.name}" fue ${updatedTeam.isActive ? 'activado' : 'desactivado'} correctamente 👍 !`
+    message: `¡ El usuario "${updatedTeam.name}" fue ${updatedTeam.isActive ? 'activado' : 'desactivado'} correctamente 👍 !`,
   };
 };

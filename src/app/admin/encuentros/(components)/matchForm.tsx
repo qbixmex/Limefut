@@ -78,7 +78,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
       referee: match?.referee ?? '',
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
       tournamentId: match?.tournament.id ?? '',
-    }
+    },
   });
 
   const [openCalendar, setOpenCalendar] = useState(false);
@@ -210,7 +210,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                             aria-expanded={localTeamsOpen}
                             className={cn(
                               "w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-                              { "border-destructive!": form.formState.errors.localTeamId }
+                              { "border-destructive!": form.formState.errors.localTeamId },
                             )}
                           >
                             {selectedTeam
@@ -246,14 +246,14 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                                   }}
                                   disabled={team.id === visitorTeamId}
                                   className={cn(
-                                    team.id === visitorTeamId && "opacity-50 cursor-not-allowed"
+                                    team.id === visitorTeamId && "opacity-50 cursor-not-allowed",
                                   )}
                                 >
                                   {team.name}
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === team.id ? "opacity-100" : "opacity-0"
+                                      field.value === team.id ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>
@@ -289,7 +289,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                             aria-expanded={visitorTeamsOpen}
                             className={cn(
                               "w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-                              { "border-destructive!": form.formState.errors.visitorTeamId }
+                              { "border-destructive!": form.formState.errors.visitorTeamId },
                             )}
                           >
                             {selectedTeam
@@ -323,14 +323,14 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                                   }}
                                   disabled={team.id === localTeamId}
                                   className={cn(
-                                    team.id === localTeamId && "opacity-50 cursor-not-allowed"
+                                    team.id === localTeamId && "opacity-50 cursor-not-allowed",
                                   )}
                                 >
                                   {team.name}
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === team.id ? "opacity-100" : "opacity-0"
+                                      field.value === team.id ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>
@@ -451,10 +451,10 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                         <Button
                           id="date-picker"
                           variant="secondary"
-                          className="w-56 justify-between font-normal"
+                          className="w-[225px] justify-between font-normal"
                         >
                           {selectedDate
-                            ? format(form.watch('matchDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                            ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
                             : "Selecciona Fecha"
                           }
                           <ChevronDownIcon />
@@ -470,6 +470,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                           captionLayout="dropdown"
                           onSelect={(date) => {
                             setSelectedDate(date);
+                            form.setValue('matchDate', date);
                             setOpenCalendar(false);
                           }}
                         />

@@ -87,7 +87,7 @@ export const fetchPlayersAction = async (options?: Options): ResponseFetchAction
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

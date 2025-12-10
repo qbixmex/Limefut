@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { addDays, format, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import styles from './styles.module.css';
-import { cn } from '@/root/src/lib/utils';
+import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   matchesDates: string[];
@@ -17,7 +17,7 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
 
   const days = Array.from(
     { length: RANGE * 2 + 1 },
-    (_, index) => addDays(today, index - RANGE)
+    (_, index) => addDays(today, index - RANGE),
   );
 
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -42,7 +42,7 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
         {days.map((d, index) => {
           const isToday = isSameDay(d, today);
           const matchesOnThisDay = matchesDates.filter(
-            (matchDate) => isSameDay(d, new Date(matchDate))
+            (matchDate) => isSameDay(d, new Date(matchDate)),
           ).length;
 
           return (

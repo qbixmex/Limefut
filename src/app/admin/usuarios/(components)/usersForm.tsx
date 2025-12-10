@@ -70,7 +70,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
         ? user.roles.map((role) => role as Role)
         : ['user'],
       isActive: user?.isActive ?? false,
-    }
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -91,7 +91,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
     if (!user) {
       const response = await createUserAction(
         formData,
-        session?.user.roles ?? null
+        session?.user.roles ?? null,
       );
 
       if (!response.ok) {
@@ -323,7 +323,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value?.includes(role.value as Role) ? "opacity-100" : "opacity-0"
+                                      field.value?.includes(role.value as Role) ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>

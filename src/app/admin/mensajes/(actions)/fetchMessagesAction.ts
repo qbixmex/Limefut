@@ -71,7 +71,7 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
         email: true,
         message: true,
         createdAt: true,
-      }
+      },
     });
 
     const totalCount = await prisma.contactMessage.count({ where: whereCondition });
@@ -83,7 +83,7 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
-      }
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

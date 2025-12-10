@@ -65,7 +65,6 @@ export const updateTeamAction = async ({
   const teamVerified = editTeamSchema.safeParse(rawData);
 
   if (!teamVerified.success) {
-    console.log("Falló la validación del lado del backend");
     return {
       ok: false,
       message: teamVerified.error.message,

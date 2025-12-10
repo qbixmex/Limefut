@@ -73,8 +73,8 @@ export const fetchTeamAction = async (
             id: true,
             name: true,
           },
-        }
-      }
+        },
+      },
     });
 
     if (!team) {
