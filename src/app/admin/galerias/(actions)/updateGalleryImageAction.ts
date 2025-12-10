@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath, updateTag } from 'next/cache';
-import { editGallerySchema } from '~/src/shared/schemas';
+import { editGalleryImageSchema } from '~/src/shared/schemas';
 import type { GalleryImage } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '~/src/shared/actions';
 
@@ -52,7 +52,7 @@ export const updateGalleryImageAction = async ({
         : false,
   };
 
-  const galleryVerified = editGallerySchema.safeParse(rawData);
+  const galleryVerified = editGalleryImageSchema.safeParse(rawData);
 
   if (!galleryVerified.success) {
     return {
@@ -121,7 +121,7 @@ export const updateGalleryImageAction = async ({
 
         // Update Cache
         revalidatePath('/admin/galerias');
-        revalidatePath(`/admin/galerias/${updatedGalleryImage.galleryId}`);
+        revalidatePath(`/admin/galerias/`);
         updateTag('public-galleries');
         updateTag('public-gallery');
 

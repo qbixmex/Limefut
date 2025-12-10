@@ -211,26 +211,30 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
                   )}
                 />
 
-                <div className="inline-flex justify-end">
-                  <FormField
-                    control={form.control}
-                    name="active"
-                    render={({ field }) => (
-                      <FormItem>
-                        <div className="flex items-center gap-3">
-                          <FormControl>
-                            <Switch
-                              id="active"
-                              checked={field.value ?? false}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <Label htmlFor="active">Activo</Label>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                {galleryImage && (
+                  <div className="inline-flex justify-end">
+                    <FormField
+                      control={form.control}
+                      name="active"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="flex items-center gap-3">
+                            <FormControl>
+                              <Switch
+                                id="active"
+                                checked={field.value ?? false}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <Label htmlFor="active">
+                              {field.value ? 'Visible' : 'Oculta'}
+                            </Label>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
               </div>
 
               <Button

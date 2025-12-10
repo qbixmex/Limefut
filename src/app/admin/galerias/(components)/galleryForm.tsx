@@ -65,7 +65,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
 
   const [openCalendar, setOpenCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    form.getValues('galleryDate')
+    form.getValues('galleryDate'),
   );
   const [teamsOpen, setTeamsOpen] = useState(false);
 
@@ -77,7 +77,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
     formData.append('galleryDate',
       data.galleryDate
         ? (data.galleryDate as Date).toISOString()
-        : new Date().toISOString()
+        : new Date().toISOString(),
     );
     formData.append('teamId', data.teamId as string);
     formData.append('active', String(data.active ?? false));
@@ -274,7 +274,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
                   captionLayout="dropdown"
                   onSelect={(date) => {
                     setSelectedDate(date);
-                    form.setValue('galleryDate', date);
+                    form.setValue('galleryDate', date as Date);
                     setOpenCalendar(false);
                   }}
                 />
