@@ -18,7 +18,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { GalleryImageForm } from '../(components)/galleryImageForm';
 import { fetchGalleryAction } from '../(actions)';
-import { GalleryImage } from '../(components)/gallery-image';
+import { GalleryImages } from '../(components)/gallery-images';
 
 type Props = Readonly<{
   params: Promise<{
@@ -110,7 +110,7 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-3">
-                    <GalleryImage images={gallery.images} />
+                    <GalleryImages images={gallery.images} />
                   </div>
                 )
               }
