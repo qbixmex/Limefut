@@ -29,7 +29,6 @@ export const fetchTeamsAction = async (tournamentPermalink: string): ResponseAct
   });
 
   if (!tournament) {
-    console.log(`! No hay un equipo con el enlace permanente ${tournamentPermalink} ¡`);
     return {
       ok: true,
       message: `! No hay un equipo con el enlace permanente ${tournamentPermalink} ¡`,
