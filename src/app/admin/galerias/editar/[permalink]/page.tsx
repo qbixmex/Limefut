@@ -10,6 +10,7 @@ import type { Session } from "next-auth";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { fetchTeamsForGalleryAction, fetchGalleryAction } from "../../(actions)";
+import { fetchTournamentsForGalleryAction } from "../../(actions)/fetchTournamentsForGalleryAction";
 
 type Props = Readonly<{
   params: Promise<{
@@ -27,6 +28,7 @@ export const EditGalleryPage: FC<Props> = async ({ params }) => {
     redirect('/admin/galleries');
   }
 
+  const { tournaments } = await fetchTournamentsForGalleryAction();
   const { teams } = await fetchTeamsForGalleryAction();
 
   if (!session?.user.roles.includes('admin')) {
@@ -44,6 +46,7 @@ export const EditGalleryPage: FC<Props> = async ({ params }) => {
           <CardContent>
             <GalleryForm
               session={session as Session}
+              tournaments={tournaments}
               teams={teams}
               gallery={response.gallery!}
             />

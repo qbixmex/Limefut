@@ -62,6 +62,7 @@ model Tournament {
   credentials Credential[]
   teams       Team[]
   standings   Standings[]
+  galleries   Gallery[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -249,9 +250,11 @@ model Gallery {
   active      Boolean  @default(false)
 
   // Relations
-  images GalleryImage[]
-  teamId String         @map("team_id")
-  team   Team           @relation(fields: [teamId], references: [id])
+  images       GalleryImage[]
+  tournamentId String?        @map("tournament_id")
+  teamId       String?        @map("team_id")
+  tournament   Tournament?    @relation(fields: [tournamentId], references: [id])
+  team         Team?          @relation(fields: [teamId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -265,7 +268,7 @@ model GalleryImage {
   title         String
   permalink     String  @unique
   imageUrl      String  @unique
-  imagePublicID String @map("image_public_id")
+  imagePublicID String  @map("image_public_id")
   active        Boolean @default(false)
 
   // Relations
