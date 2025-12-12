@@ -61,7 +61,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
     defaultValues: {
       title: gallery?.title ?? '',
       permalink: gallery?.permalink ?? '',
-      galleryDate: gallery?.galleryDate ?? new Date(''),
+      galleryDate: gallery?.galleryDate ?? new Date(),
       tournamentId: gallery?.tournament?.id ?? undefined,
       teamId: gallery?.team?.id ?? undefined,
       active: gallery?.active ?? false,
