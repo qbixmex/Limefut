@@ -17,12 +17,17 @@ export const editGallerySchema = z.object({
   permalink: z.string()
     .min(3, { message: '¡ El enlace permanente debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' }),
-    image: z
+  image: z
     .instanceof(File, { message: "La imagen debe ser un archivo" })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
   galleryDate: z.date({ message: "La fecha de la galería debe ser una fecha válida" }),
-  teamId: z.uuid({ message: '¡ El id del equipo no es un UUID válido !' }),
+  tournamentId: z
+    .uuid({ message: '¡ El id del torneo no es un UUID válido !' })
+    .nullish(),
+  teamId: z
+    .uuid({ message: '¡ El id del equipo no es un UUID válido !' })
+    .nullish(),
   active: z.boolean().optional(),
 });
