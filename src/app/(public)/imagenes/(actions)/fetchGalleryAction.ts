@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
-import { sleep } from "~/src/lib/utils";
 
 export type GalleryType = {
   title: string;
