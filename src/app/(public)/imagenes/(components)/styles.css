@@ -1,0 +1,142 @@
+@reference "tailwindcss";
+
+.gallery {
+  @apply
+    grid
+    grid-cols-1
+    gap-5
+    sm:grid-cols-2
+    md:grid-cols-3
+    xl:grid-cols-4;
+}
+
+.gallery-item {
+  @apply relative cursor-pointer h-[300px] rounded overflow-hidden;
+}
+
+.gallery-image {
+  @apply
+    w-auto
+    h-[300px]
+    object-cover
+    mb-2
+    cursor-pointer
+    md:w-[300px]
+    lg:w-full
+    lg:h-auto;
+}
+
+.image-caption {
+  @apply
+    absolute
+    inset-0
+    flex
+    justify-center
+    items-center
+    duration-300
+    overflow-hidden;
+    & p {
+      @apply
+        text-gray-200
+        text-sm
+        italic
+        font-semibold
+        p-2
+        duration-300
+        ease-in-out
+        text-pretty;
+    }
+}
+
+.overlay {
+  @apply
+    fixed
+    inset-0
+    bg-black
+    z-100
+    flex
+    items-center
+    justify-center
+    p-5;
+}
+
+.overlay-container {
+  @apply
+    overflow-hidden
+    w-full
+    max-w-7xl
+    flex
+    justify-center
+    items-center
+    z-0;
+  }
+
+.image-container {
+  & .image {
+    @apply
+      flex-1
+      flex
+      justify-center
+      items-center
+      lg:max-w-3xl
+      rounded-t-xl;
+  }
+}
+
+.image-details {
+  @apply
+    flex
+    flex-col
+    bg-zinc-800/80
+    p-5
+    rounded-b-xl;
+
+  & .image-title {
+    @apply flex-1;
+    & p {
+      @apply text-xl font-semibold text-zinc-100
+    }
+  }
+}
+
+.current-image {
+  @apply
+    text-right
+    font-medium
+    text-gray-200
+    italic
+    space-x-2 mb-5;
+}
+
+.navigation-buttons {
+  @apply w-full flex justify-between gap-5;
+}
+
+.navigation-btn {
+  @apply
+    flex
+    w-1/2
+    justify-center
+    p-2
+    rounded
+    bg-zinc-600
+    transition-colors
+    duration-300
+    ease-in-out
+    lg:w-16
+    hover:bg-zinc-700
+    text-blue-50;
+}
+
+.navigation-btn.selected {
+  @apply bg-blue-600 hover:bg-blue-700 active:bg-blue-400;
+}
+
+.close-btn {
+  @apply absolute top-5 right-5 z-10;
+}
+
+.close-icon {
+  @apply block;
+}
+
