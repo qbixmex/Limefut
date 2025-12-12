@@ -14,7 +14,7 @@ import {
 import { createGallerySchema, editGallerySchema } from '@/shared/schemas';
 import { createGalleryAction, updateGalleryAction } from '../(actions)';
 import type { Session } from 'next-auth';
-import type { Gallery, Tournament, Team } from '@/shared/interfaces';
+import type { Gallery } from '@/shared/interfaces';
 import type z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';

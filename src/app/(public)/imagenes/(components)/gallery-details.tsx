@@ -40,9 +40,25 @@ export const GalleryDetails: FC<Props> = async ({ paramsPromise }) => {
           <TableRow>
             <TableHead>Torneo</TableHead>
             <TableCell>
-              <Link href={`/equipos/${gallery?.team.permalink}`}>
-                {gallery?.team.name}
-              </Link>
+              {gallery?.tournament ? (
+                <Link href={`/torneo/${gallery?.tournament.permalink}`}>
+                  {gallery?.tournament.name}
+                </Link>
+              ) : (
+                <p>No asignado</p>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableHead>Equipo</TableHead>
+            <TableCell>
+              {gallery?.team ? (
+                <Link href={`/equipos/${gallery?.team.permalink}`}>
+                  {gallery?.team.name}
+                </Link>
+              ) : (
+                <p>No asignado</p>
+              )}
             </TableCell>
           </TableRow>
         </TableBody>
