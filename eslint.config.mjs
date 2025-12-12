@@ -19,6 +19,7 @@ const eslintConfig = defineConfig([
       "semi": ["warn", "always"],
       "@typescript-eslint/consistent-type-imports": ["warn", { "prefer": "type-imports" }],
       "comma-dangle": ["warn", "always-multiline"],
+      "@next/next/no-img-element": "off",
     },
   },
   {
