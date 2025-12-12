@@ -27,6 +27,7 @@ export const createGalleryAction = async (
     title: formData.get('title') as string,
     permalink: formData.get('permalink') ?? '',
     galleryDate: new Date(formData.get('galleryDate') as string),
+    tournamentId: formData.get('tournamentId') as string,
     teamId: formData.get('teamId') as string,
     active: (formData.get('active') === 'true')
       ? true

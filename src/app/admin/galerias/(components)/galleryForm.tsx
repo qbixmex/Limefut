@@ -11,10 +11,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { createGalleryAction, updateGalleryAction } from '../(actions)';
 import { createGallerySchema, editGallerySchema } from '@/shared/schemas';
+import { createGalleryAction, updateGalleryAction } from '../(actions)';
 import type { Session } from 'next-auth';
-import type { Gallery, Team } from '@/shared/interfaces';
+import type { Gallery } from '@/shared/interfaces';
 import type z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
@@ -44,11 +44,15 @@ import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   session: Session;
+  tournaments: { id: string; name: string; }[],
   teams: { id: string; name: string; }[],
-  gallery?: Gallery & { team: Pick<Team, 'id'>; };
+  gallery?: Gallery & {
+    tournament: { id: string; } | null,
+    team: { id: string; } | null;
+  };
 }>;
 
-export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
+export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery }) => {
   const route = useRouter();
   const formSchema = !gallery ? createGallerySchema : editGallerySchema;
 
@@ -57,8 +61,9 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
     defaultValues: {
       title: gallery?.title ?? '',
       permalink: gallery?.permalink ?? '',
-      galleryDate: gallery?.galleryDate ?? new Date(),
-      teamId: gallery?.team.id ?? '',
+      galleryDate: gallery?.galleryDate ?? new Date(''),
+      tournamentId: gallery?.tournament?.id ?? undefined,
+      teamId: gallery?.team?.id ?? undefined,
       active: gallery?.active ?? false,
     },
   });
@@ -67,6 +72,9 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     form.getValues('galleryDate'),
   );
+  const [selectedTournament, setSelectedTournament] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState(false);
+  const [tournamentsOpen, setTournamentsOpen] = useState(false);
   const [teamsOpen, setTeamsOpen] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -79,7 +87,15 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
         ? (data.galleryDate as Date).toISOString()
         : new Date().toISOString(),
     );
-    formData.append('teamId', data.teamId as string);
+
+    if (data.tournamentId) {
+      formData.append('teamId', data.teamId as string);
+    }
+
+    if (data.teamId) {
+      formData.append('teamId', data.teamId as string);
+    }
+
     formData.append('active', String(data.active ?? false));
 
     // Create gallery
@@ -169,82 +185,177 @@ export const GalleryForm: FC<Props> = ({ session, teams, gallery }) => {
           </div>
         </div>
 
-        {/* Dates and Active */}
+        {/* Teams and Active */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2 flex gap-5 items-center">
-            <FormField
-              control={form.control}
-              name="teamId"
-              render={({ field }) => {
-                const selectedTeam = teams.find((t) => t.id === field.value);
-                return (
-                  <FormItem>
-                    <FormLabel>Equipo</FormLabel>
-                    <Popover open={teamsOpen} onOpenChange={setTeamsOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline-secondary"
-                          role="combobox"
-                          aria-expanded={teamsOpen}
-                          className="w-[250px] justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
-                        >
-                          {
-                            field.value && selectedTeam
-                              ? selectedTeam.name
-                              : "Asigne un equipo"
-                          }
-                          <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command>
-                          <CommandInput placeholder="Buscar equipo ..." className="h-9" />
-                          <CommandList>
-                            <CommandEmpty>No se encontró equipo.</CommandEmpty>
-                            <CommandGroup>
-                              <CommandItem
-                                onSelect={() => {
-                                  form.setValue('teamId', '');
-                                  setTeamsOpen(false);
-                                }}
-                              >
-                                Seleccione un equipo
-                                <Check
-                                  className={cn(
-                                    'ml-auto',
-                                    field.value === '' ? 'opacity-100' : 'opacity-0',
-                                  )}
-                                />
-                              </CommandItem>
-                              {teams.map((team) => (
+            {!selectedTournament && !selectedTeam && (
+              <>
+                <Label>Torneo</Label>
+                <Switch
+                  checked={selectedTournament}
+                  onCheckedChange={setSelectedTournament}
+                />
+              </>
+            )}
+            {selectedTournament && (
+              <FormField
+                control={form.control}
+                name="tournamentId"
+                render={({ field }) => {
+                  const selectedTournament = tournaments.find((t) => t.id === field.value);
+                  return (
+                    <FormItem>
+                      <FormLabel>Torneo</FormLabel>
+                      <Popover open={tournamentsOpen} onOpenChange={setTournamentsOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline-secondary"
+                            role="combobox"
+                            aria-expanded={tournamentsOpen}
+                            className="w-[250px] justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+                          >
+                            {
+                              field.value && selectedTournament
+                                ? selectedTournament.name
+                                : "Seleccione un torneo"
+                            }
+                            <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0">
+                          <Command>
+                            <CommandInput placeholder="Buscar torneo ..." className="h-9" />
+                            <CommandList>
+                              <CommandEmpty>No se encontró torneo.</CommandEmpty>
+                              <CommandGroup>
                                 <CommandItem
-                                  key={team.id}
-                                  value={team.name}
-                                  keywords={[team.name]}
                                   onSelect={() => {
-                                    form.setValue('teamId', field.value === team.id ? '' : team.id);
-                                    setTeamsOpen(false);
+                                    form.setValue('tournamentId', '');
+                                    setTournamentsOpen(false);
                                   }}
                                 >
-                                  {team.name}
+                                  Seleccione un torneo
                                   <Check
                                     className={cn(
-                                      "ml-auto",
-                                      field.value === team.id ? "opacity-100" : "opacity-0",
+                                      'ml-auto',
+                                      field.value === '' ? 'opacity-100' : 'opacity-0',
                                     )}
                                   />
                                 </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
+                                {tournaments.map((tournament) => (
+                                  <CommandItem
+                                    key={tournament.id}
+                                    value={tournament.name}
+                                    keywords={[tournament.name]}
+                                    onSelect={() => {
+                                      form.setValue('tournamentId', field.value === tournament.id ? '' : tournament.id);
+                                      setTournamentsOpen(false);
+                                    }}
+                                  >
+                                    {tournament.name}
+                                    <Check
+                                      className={cn(
+                                        "ml-auto",
+                                        field.value === tournament.id ? "opacity-100" : "opacity-0",
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            )}
+            {!selectedTeam && !selectedTournament && (
+              <>
+                <Label>Equipo</Label>
+                <Switch
+                  checked={selectedTeam}
+                  onCheckedChange={setSelectedTeam}
+                />
+              </>
+            )}
+            {selectedTeam && !selectedTournament && (
+              <FormField
+                control={form.control}
+                name="teamId"
+                render={({ field }) => {
+                  const selectedTeam = teams.find((t) => t.id === field.value);
+                  return (
+                    <FormItem>
+                      <FormLabel>Equipo</FormLabel>
+                      <Popover open={teamsOpen} onOpenChange={setTeamsOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline-secondary"
+                            role="combobox"
+                            aria-expanded={teamsOpen}
+                            className="w-[250px] justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+                          >
+                            {
+                              field.value && selectedTeam
+                                ? selectedTeam.name
+                                : "Seleccione un equipo"
+                            }
+                            <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0">
+                          <Command>
+                            <CommandInput placeholder="Buscar equipo ..." className="h-9" />
+                            <CommandList>
+                              <CommandEmpty>No se encontró equipo.</CommandEmpty>
+                              <CommandGroup>
+                                <CommandItem
+                                  onSelect={() => {
+                                    form.setValue('teamId', '');
+                                    setTeamsOpen(false);
+                                  }}
+                                >
+                                  Seleccione un equipo
+                                  <Check
+                                    className={cn(
+                                      'ml-auto',
+                                      field.value === '' ? 'opacity-100' : 'opacity-0',
+                                    )}
+                                  />
+                                </CommandItem>
+                                {teams.map((team) => (
+                                  <CommandItem
+                                    key={team.id}
+                                    value={team.name}
+                                    keywords={[team.name]}
+                                    onSelect={() => {
+                                      form.setValue('teamId', field.value === team.id ? '' : team.id);
+                                      setTeamsOpen(false);
+                                    }}
+                                  >
+                                    {team.name}
+                                    <Check
+                                      className={cn(
+                                        "ml-auto",
+                                        field.value === team.id ? "opacity-100" : "opacity-0",
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            )}
           </div>
           <div className="w-full lg:w-1/2 flex items-center gap-5">
             <Label htmlFor="date-picker">

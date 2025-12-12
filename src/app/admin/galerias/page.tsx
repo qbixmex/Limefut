@@ -32,7 +32,7 @@ export const GalleryPage: FC<Props> = async ({ searchParams }) => {
                 <Search placeholder="Buscar galería ..." />
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link href="/admin/galeria/crear">
+                    <Link href="/admin/galerias/crear">
                       <Button variant="outline-primary" size="icon">
                         <Plus strokeWidth={3} />
                       </Button>

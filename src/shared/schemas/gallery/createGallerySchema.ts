@@ -8,6 +8,11 @@ export const createGallerySchema = z.object({
     .min(3, { message: '¡ El enlace permanente debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' }),
   galleryDate: z.date({ message: "La fecha de la galería debe ser una fecha válida" }),
-  teamId: z.uuid({ message: '¡ El id del equipo no es un UUID válido !' }),
+  tournamentId: z
+    .uuid({ message: '¡ El id del torneo no es un UUID válido !' })
+    .nullish(),
+  teamId: z
+    .uuid({ message: '¡ El id del equipo no es un UUID válido !' })
+    .nullish(),
   active: z.boolean().optional(),
 });

@@ -7,8 +7,14 @@ export type GalleryType = {
   title: string;
   permalink: string;
   galleryDate: Date;
-  team: TeamType;
+  tournament: TournamentType | null;
+  team: TeamType | null;
   images: GalleryImageType[];
+};
+
+type TournamentType = {
+  name: string;
+  permalink: string;
 };
 
 type TeamType = {
@@ -41,6 +47,12 @@ export const fetchGalleryAction = async (permalink: string): ResponseAction => {
         title: true,
         permalink: true,
         galleryDate: true,
+        tournament: {
+          select: {
+            name: true,
+            permalink: true,
+          },
+        },
         team: {
           select: {
             name: true,

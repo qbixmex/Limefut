@@ -15,7 +15,8 @@ type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
   gallery: Gallery & {
-    team: { id: string; };
+    tournament: { id: string; } | null;
+    team: { id: string; } | null;
     images: GalleryImageType[];
   } | null;
 }>;
@@ -43,6 +44,11 @@ export const fetchGalleryAction = async (
         active: true,
         createdAt: true,
         updatedAt: true,
+        tournament: {
+          select: {
+            id: true,
+          },
+        },
         team: {
           select: {
             id: true,
