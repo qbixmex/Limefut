@@ -7,7 +7,6 @@ export type GalleryType = {
   id: string;
   title: string;
   permalink: string;
-  galleryDate: Date;
   image: ImageType;
 };
 
@@ -40,7 +39,6 @@ export const fetchGalleriesAction = async (): ResponseAction => {
         id: true,
         title: true,
         permalink: true,
-        galleryDate: true,
         images: {
           select: {
             title: true,
@@ -58,7 +56,6 @@ export const fetchGalleriesAction = async (): ResponseAction => {
         id: gallery.id,
         title: gallery.title,
         permalink: gallery.permalink,
-        galleryDate: gallery.galleryDate,
         image: {
           title: gallery.images[0].title,
           imageUrl: gallery.images[0].imageUrl,

@@ -4,7 +4,7 @@ import { fetchGalleriesAction } from "./(actions)/fetchGalleriesAction";
 import Image from "next/image";
 import Link from "next/link";
 
-const ImagesPage = async () => {
+const GalleriesPage = async () => {
   const response = await fetchGalleriesAction();
 
   const galleries = response.galleries;
@@ -42,4 +42,4 @@ const ImagesPage = async () => {
   );
 };
 
-export default ImagesPage;
+export default GalleriesPage;
