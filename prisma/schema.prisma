@@ -206,17 +206,18 @@ model Credential {
 }
 
 model Standings {
-  id              String @id @default(uuid())
-  teamId          String @unique() @map("team_id")
-  team            Team   @relation(fields: [teamId], references: [id])
-  matchesPlayed   Int    @default(0) @map("matches_played")
-  wins            Int    @default(0) @map("wins")
-  draws           Int    @default(0) @map("draws")
-  losses          Int    @default(0) @map("losses")
-  goalsFor        Int    @default(0) @map("goals_for")
-  goalsAgainst    Int    @default(0) @map("goals_against")
-  goalsDifference Int    @default(0) @map("goals_difference")
-  points          Int    @default(0) @map("points")
+  id               String @id @default(uuid())
+  teamId           String @unique() @map("team_id")
+  team             Team   @relation(fields: [teamId], references: [id])
+  matchesPlayed    Int    @default(0) @map("matches_played")
+  wins             Int    @default(0) @map("wins")
+  draws            Int    @default(0) @map("draws")
+  losses           Int    @default(0) @map("losses")
+  goalsFor         Int    @default(0) @map("goals_for")
+  goalsAgainst     Int    @default(0) @map("goals_against")
+  goalsDifference  Int    @default(0) @map("goals_difference")
+  additionalPoints Int    @default(0) @map("additional_points")
+  points           Int    @default(0) @map("points")
 
   // Relations
   tournamentId String     @map("tournament_id")
