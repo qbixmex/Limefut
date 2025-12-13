@@ -88,15 +88,16 @@ model Team {
   active        Boolean  @default(false)
 
   // Relations
-  coachId      String?     @map("coach_id")
-  coach        Coach?      @relation(fields: [coachId], references: [id])
-  players      Player[]
-  tournamentId String?     @map("tournament_id")
-  tournament   Tournament? @relation(fields: [tournamentId], references: [id])
-  standings    Standings[]
-  homeMatches  Match[]     @relation("HomeMatches")
-  awayMatches  Match[]     @relation("AwayMatches")
-  galleries    Gallery[]
+  coachId         String?          @map("coach_id")
+  coach           Coach?           @relation(fields: [coachId], references: [id])
+  players         Player[]
+  tournamentId    String?          @map("tournament_id")
+  tournament      Tournament?      @relation(fields: [tournamentId], references: [id])
+  standings       Standings[]
+  homeMatches     Match[]          @relation("HomeMatches")
+  awayMatches     Match[]          @relation("AwayMatches")
+  penaltiesShoots PenaltiesShoot[]
+  galleries       Gallery[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -172,16 +173,38 @@ model Match {
   status Status @default(scheduled)
 
   // Relations
-  tournamentId String     @map("tournament_id")
-  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
-  local        Team       @relation("HomeMatches", fields: [localId], references: [id])
-  visitor      Team       @relation("AwayMatches", fields: [visitorId], references: [id])
+  tournamentId    String           @map("tournament_id")
+  tournament      Tournament       @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  local           Team             @relation("HomeMatches", fields: [localId], references: [id])
+  visitor         Team             @relation("AwayMatches", fields: [visitorId], references: [id])
+  penaltiesShoots PenaltiesShoot[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("matches")
+}
+
+model PenaltiesShoot {
+  id String @id @default(uuid())
+
+  matchId String @map("match_id")
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  teamId String @map("team_id")
+  team   Team   @relation(fields: [teamId], references: [id])
+
+  shooterNumber Int     @map("shooter_number")
+  isGoal        Boolean @map("is_goal")
+  shooterName   String? @map("shooter_name")
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([matchId, teamId, shooterNumber])
+  @@map("penalties_shoots")
 }
 
 model Credential {
@@ -206,17 +229,18 @@ model Credential {
 }
 
 model Standings {
-  id              String @id @default(uuid())
-  teamId          String @unique() @map("team_id")
-  team            Team   @relation(fields: [teamId], references: [id])
-  matchesPlayed   Int    @default(0) @map("matches_played")
-  wins            Int    @default(0) @map("wins")
-  draws           Int    @default(0) @map("draws")
-  losses          Int    @default(0) @map("losses")
-  goalsFor        Int    @default(0) @map("goals_for")
-  goalsAgainst    Int    @default(0) @map("goals_against")
-  goalsDifference Int    @default(0) @map("goals_difference")
-  points          Int    @default(0) @map("points")
+  id               String @id @default(uuid())
+  teamId           String @unique() @map("team_id")
+  team             Team   @relation(fields: [teamId], references: [id])
+  matchesPlayed    Int    @default(0) @map("matches_played")
+  wins             Int    @default(0) @map("wins")
+  draws            Int    @default(0) @map("draws")
+  losses           Int    @default(0) @map("losses")
+  goalsFor         Int    @default(0) @map("goals_for")
+  goalsAgainst     Int    @default(0) @map("goals_against")
+  goalsDifference  Int    @default(0) @map("goals_difference")
+  additionalPoints Int    @default(0) @map("additional_points")
+  points           Int    @default(0) @map("points")
 
   // Relations
   tournamentId String     @map("tournament_id")
