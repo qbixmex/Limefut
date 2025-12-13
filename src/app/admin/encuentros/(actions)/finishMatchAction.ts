@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { MATCH_STATUS } from "@/shared/enums";
-import { updateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -76,6 +76,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
   });
 
   // Refresh Match
+  revalidatePath('admin/encuentros');
   updateTag('matches');
   updateTag('public-standings');
 
