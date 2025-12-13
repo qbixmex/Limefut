@@ -9,17 +9,18 @@ import {
   TableCell,
   TableRow,
 } from "@/components/ui/table";
-import { Minus, Pencil } from "lucide-react";
+import { Check, Minus, MinusIcon, Pencil, XIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchMatchAction } from "../../(actions)";
-import type { Match } from '@/shared/interfaces';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { getMatchStatus } from "../../(helpers)/place";
 import { TbSoccerField } from "react-icons/tb";
+import { cn } from "~/src/lib/utils";
+import type { MatchType } from "../../(actions)/fetchMatchAction";
 
 type Props = Readonly<{
   params: Promise<{
@@ -37,7 +38,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
     redirect(`/admin/encuentros?error=${encodeURIComponent(response.message)}`);
   }
 
-  const match = response.match as Match;
+  const match = response.match as MatchType;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -90,13 +91,13 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
                     <TableCell>
-                      {format(new Date(match?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                      {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                     </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="w-[180px] font-semibold">Última Actualización</TableHead>
                     <TableCell>
-                      {format(new Date(match?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                      {format(new Date(match.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -109,6 +110,45 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   </TableRow>
                 </TableBody>
               </Table>
+            </section>
+
+            <section className="w-full lg:max-w-md">
+              <h2 className="text-lg font-bold text-sky-500 mb-5">Tiros Penales</h2>
+
+              <div className="flex flex-col gap-5">
+                <div className="grid grid-cols-2 items-center gap-5">
+                  <span className="justify-self-end space-x-2">
+                    <span className="text-sm text-gray-500">( {match.localPenalties} )</span>
+                    <span className="font-bold">Club Country</span>
+                  </span>
+                  <span className="justify-self-start space-x-2">
+                    <span className="font-bold">Colegio New Land</span>
+                    <span className="text-sm text-gray-500">( {match.visitorPenalties} )</span>
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 items-center gap-5">
+                  {match.penaltiesShoots.map((shoot, index) => (
+                    <div key={shoot.id} className={cn("flex items-center gap-5", {
+                      "justify-start": index % 3 == 0,
+                      "justify-end": index % 2 == 0,
+                    })}>
+                      <span className={cn({
+                        "order-0": shoot.team.id === match.localTeam.id,
+                        "order-1": shoot.team.id === match.visitorTeam.id,
+                      })}>{shoot.shooterName}</span>
+                      <PenaltiIcon
+                        className={cn({
+                          "order-1": shoot.team.id === match.localTeam.id,
+                          "order-0": shoot.team.id === match.visitorTeam.id,
+                        })}
+                        isGoal={shoot.isGoal}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+              </div>
             </section>
 
             <div className="absolute top-5 right-5">
@@ -128,6 +168,29 @@ export const MatchPage: FC<Props> = async ({ params }) => {
           </CardContent>
         </Card>
       </div>
+    </div>
+  );
+};
+
+const PenaltiIcon: FC<{
+  isGoal: boolean | null;
+  className?: string;
+}> = ({ isGoal = undefined, className = "" }) => {
+  return (
+    <div className={cn("size-[32px] flex justify-center items-center rounded-full",
+      className,
+      {
+        "bg-emerald-600 text-emerald-50": isGoal,
+        "bg-rose-600 text-rose-50": !isGoal,
+        "bg-gray-600 text-gray-50": isGoal === null,
+      },
+    )}>
+      {(isGoal === true)
+        ? <Check size={18} />
+        : (isGoal === false)
+          ? <XIcon size={18} />
+          : <MinusIcon size={18} strokeWidth={3} />
+      }
     </div>
   );
 };

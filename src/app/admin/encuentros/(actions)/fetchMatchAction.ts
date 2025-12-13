@@ -9,18 +9,55 @@ export type TournamentType = {
   name: string;
 };
 
-type FetchPlayerResponse = Promise<{
+export type PenaltyShoot = {
+  id: string;
+  isGoal: boolean | null;
+  shooterName: string | null;
+  team: { id: string };
+};
+
+export type MatchType = Match & {
+  tournament: TournamentType;
+  penaltiesShoots: PenaltyShoot[];
+  localPenalties: number;
+  visitorPenalties: number;
+};
+
+type FetchResponse = Promise<{
   ok: boolean;
   message: string;
-  match: Match & {
-    tournament: TournamentType;
-  } | null;
+  match: MatchType | null,
 }>;
+
+const getPenaltyScores = (
+  shoots: Partial<PenaltyShoot>[],
+  localTeamId: string,
+  visitorTeamId: string,
+) => {
+  let localPenalties = 0;
+  let visitorPenalties = 0;
+
+  shoots.forEach((shoot) => {
+    if (shoot.isGoal) {
+      if (shoot.team?.id === localTeamId) {
+        localPenalties++;
+      }
+      if (shoot.team?.id === visitorTeamId) {
+        visitorPenalties++;
+      }
+    }
+  });
+
+  return {
+    localPenalties,
+    visitorPenalties,
+  };
+};
 
 export const fetchMatchAction = async (
   id: string,
   userRole: string[] | null,
-): FetchPlayerResponse => {
+): FetchResponse => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
@@ -61,6 +98,18 @@ export const fetchMatchAction = async (
             name: true,
           },
         },
+        penaltiesShoots: {
+          select: {
+            id: true,
+            shooterName: true,
+            isGoal: true,
+            team: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
         createdAt: true,
         updatedAt: true,
       },
@@ -73,6 +122,12 @@ export const fetchMatchAction = async (
         match: null,
       };
     }
+
+    const { localPenalties, visitorPenalties } = getPenaltyScores(
+      match.penaltiesShoots,
+      match.local.id,
+      match.visitor.id,
+    );
 
     return {
       ok: true,
@@ -92,6 +147,9 @@ export const fetchMatchAction = async (
           id: match.tournament.id,
           name: match.tournament.name,
         },
+        penaltiesShoots: match.penaltiesShoots,
+        localPenalties,
+        visitorPenalties,
         createdAt: match.createdAt,
         updatedAt: match.updatedAt,
       },

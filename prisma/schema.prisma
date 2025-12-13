@@ -195,9 +195,9 @@ model PenaltiesShoot {
   teamId String @map("team_id")
   team   Team   @relation(fields: [teamId], references: [id])
 
-  shooterNumber Int     @map("shooter_number")
-  isGoal        Boolean @map("is_goal")
-  shooterName   String? @map("shooter_name")
+  shooterNumber Int      @map("shooter_number")
+  isGoal        Boolean? @map("is_goal")
+  shooterName   String?  @map("shooter_name")
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
