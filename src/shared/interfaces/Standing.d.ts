@@ -13,6 +13,7 @@ export interface Standing {
   goalsAgainst: number;
   goalsDifference: number;
   points: number;
+  additionalPoints: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

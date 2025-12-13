@@ -30,6 +30,7 @@ export const Standings: FC<Props> = ({ standingsPromise, refetchStandings }) => 
   };
   const standings = response.standings as StandingType[];
 
+
   const handleOnCreateStandings = async () => {
     
     const data = tournament.teams.map((team) => ({
