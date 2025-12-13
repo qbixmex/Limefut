@@ -34,6 +34,7 @@ export type StandingType = {
   goalsFor: number;
   goalsAgainst: number;
   goalsDifference: number;
+  additionalPoints: number;
   points: number;
 };
 
@@ -103,6 +104,7 @@ export const fetchStandingsAction = async (tournamentPermalink: string): Standin
         goalsFor: true,
         goalsAgainst: true,
         goalsDifference: true,
+        additionalPoints: true,
         points: true,
         tournament: {
           select: {
@@ -127,6 +129,7 @@ export const fetchStandingsAction = async (tournamentPermalink: string): Standin
       goalsFor: standing.goalsFor,
       goalsAgainst: standing.goalsAgainst,
       goalsDifference: standing.goalsDifference,
+      additionalPoints: standing.additionalPoints,
       points: standing.points,
     }));
 
