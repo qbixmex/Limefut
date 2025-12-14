@@ -88,16 +88,19 @@ model Team {
   active        Boolean  @default(false)
 
   // Relations
-  coachId         String?          @map("coach_id")
-  coach           Coach?           @relation(fields: [coachId], references: [id])
-  players         Player[]
-  tournamentId    String?          @map("tournament_id")
-  tournament      Tournament?      @relation(fields: [tournamentId], references: [id])
-  standings       Standings[]
-  homeMatches     Match[]          @relation("HomeMatches")
-  awayMatches     Match[]          @relation("AwayMatches")
-  penaltiesShoots PenaltiesShoot[]
-  galleries       Gallery[]
+  coachId          String?           @map("coach_id")
+  coach            Coach?            @relation(fields: [coachId], references: [id])
+  players          Player[]
+  tournamentId     String?           @map("tournament_id")
+  tournament       Tournament?       @relation(fields: [tournamentId], references: [id])
+  standings        Standings[]
+  homeMatches      Match[]           @relation("HomeMatches")
+  awayMatches      Match[]           @relation("AwayMatches")
+  galleries        Gallery[]
+  localShootouts   PenaltyShootout[] @relation("ShootoutLocalTeam")
+  visitorShootouts PenaltyShootout[] @relation("ShootoutVisitorTeam")
+  wonShootouts     PenaltyShootout[] @relation("ShootoutWinnerTeam")
+  penaltyKicks     PenaltyKick[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -140,9 +143,10 @@ model Player {
   active        Boolean   @default(false)
 
   // Relations
-  credential Credential?
-  teamId     String?     @map("team_id")
-  team       Team?       @relation(fields: [teamId], references: [id])
+  credential   Credential?
+  teamId       String?       @map("team_id")
+  team         Team?         @relation(fields: [teamId], references: [id])
+  penaltyKicks PenaltyKick[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -157,6 +161,11 @@ enum Status {
   completed
   postPosed
   canceled
+}
+
+enum ShootoutStatus {
+  in_progress
+  completed
 }
 
 model Match {
@@ -177,7 +186,7 @@ model Match {
   tournament      Tournament       @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   local           Team             @relation("HomeMatches", fields: [localId], references: [id])
   visitor         Team             @relation("AwayMatches", fields: [visitorId], references: [id])
-  penaltiesShoots PenaltiesShoot[]
+  penaltyShootout PenaltyShootout?
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -186,25 +195,61 @@ model Match {
   @@map("matches")
 }
 
-model PenaltiesShoot {
+model PenaltyShootout {
   id String @id @default(uuid())
 
-  matchId String @map("match_id")
+  // Match (1–1)
+  matchId String @unique @map("match_id")
   match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
 
-  teamId String @map("team_id")
-  team   Team   @relation(fields: [teamId], references: [id])
+  // Local team
+  localTeamId String @map("local_team_id")
+  localTeam   Team   @relation("ShootoutLocalTeam", fields: [localTeamId], references: [id])
 
-  shooterNumber Int      @map("shooter_number")
-  isGoal        Boolean? @map("is_goal")
-  shooterName   String?  @map("shooter_name")
+  // Visitor team
+  visitorTeamId String @map("visitor_team_id")
+  visitorTeam   Team   @relation("ShootoutVisitorTeam", fields: [visitorTeamId], references: [id])
+
+  // Result
+  localGoals   Int @default(0) @map("local_goals")
+  visitorGoals Int @default(0) @map("visitor_goals")
+
+  // Winner
+  winnerTeamId String? @map("winner_team_id")
+  winnerTeam   Team?   @relation("ShootoutWinnerTeam", fields: [winnerTeamId], references: [id])
+
+  status ShootoutStatus @default(in_progress)
+  kicks  PenaltyKick[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@unique([matchId, teamId, shooterNumber])
-  @@map("penalties_shoots")
+  @@index([matchId])
+  @@map("penalties_shootouts")
+}
+
+model PenaltyKick {
+  id String @id @default(uuid())
+
+  shootoutId String          @map("shootout_id")
+  shootout   PenaltyShootout @relation(fields: [shootoutId], references: [id], onDelete: Cascade)
+
+  teamId String @map("team_id")
+  team   Team   @relation(fields: [teamId], references: [id])
+
+  playerId String? @map("player_id")
+  player   Player? @relation(fields: [playerId], references: [id])
+
+  shooterName String?  @map("shooter_name")
+  order       Int
+  isGoal      Boolean? @map("is_goal")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([shootoutId, teamId, order])
+  @@map("penalty_kicks")
 }
 
 model Credential {
