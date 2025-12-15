@@ -1,0 +1,184 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { FC } from 'react';
+import { PenaltiesForm } from "../../(components)/penalties-form";
+import { MATCH_STATUS, SHOOTOUT_STATUS } from "~/src/shared/enums";
+import { Check, MinusIcon, XIcon } from "lucide-react";
+import { cn } from '~/src/lib/utils';
+import { Match } from '~/src/shared/interfaces';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
+import Link from 'next/link';
+
+type Shootout = {
+  id: string;
+  localTeam: Team;
+  visitorTeam: Team;
+  localGoals: number;
+  visitorGoals: number;
+  winnerTeamId: string | null;
+  status: string;
+  kicks: Kick[];
+};
+
+type Team = {
+  id: string;
+  name: string;
+  permalink: string;
+};
+
+type Kick = {
+  id: string;
+  teamId: string;
+  playerId: string | null;
+  shooterName: string | null;
+  order: number;
+  isGoal: boolean | null;
+};
+
+type Props = Readonly<{
+  shootout: Shootout | null;
+}>;
+
+export const PenaltyShootout: FC<Props> = ({
+  shootout,
+}) => {
+  return (
+    <>
+      {(shootout) ? (
+        <>
+          <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
+
+          <Table className="w-full max-w-[300px] mb-10">
+            <TableBody>
+              <TableRow>
+                <TableHead>Ganador:</TableHead>
+                <TableCell>
+                  <ShootoutWinner
+                    winnerTeamId={shootout.winnerTeamId}
+                    localTeam={shootout.localTeam}
+                    visitorTeam={shootout.visitorTeam}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead>Estado:</TableHead>
+                <TableCell>
+                  {shootout.status === SHOOTOUT_STATUS.IN_PROGRESS && 'En Progreso'}
+                  {shootout.status === SHOOTOUT_STATUS.COMPLETED && 'Completados'}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+
+          <div className="w-full lg:max-w-md flex flex-col gap-5">
+            <div className="grid grid-cols-2 items-center gap-5">
+              <span className="justify-self-end space-x-2">
+                <span className="text-sm text-gray-500">( {shootout.localGoals} )</span>
+                <span className="font-bold">Equipo Local</span>
+              </span>
+              <span className="justify-self-start space-x-2">
+                <span className="font-bold">Equipo Visitante</span>
+                <span className="text-sm text-gray-500">( {shootout.visitorGoals} )</span>
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 items-center gap-5">
+              {shootout.kicks.map((kick) => (
+                <div
+                  key={kick.id}
+                  className={cn('flex items-center gap-5', {
+                    "justify-end": kick.teamId === shootout.localTeam.id,
+                    "justify-start": kick.teamId === shootout.visitorTeam.id,
+                  })}
+                >
+                  <span
+                    className={cn({
+                      "order-1": kick.teamId === shootout.localTeam.id,
+                      "order-2": kick.teamId === shootout.visitorTeam.id,
+                    })}
+                  >{kick.shooterName}</span>
+                  <PenaltiIcon
+                    isGoal={kick.isGoal}
+                    className={cn({
+                      "order-2": kick.teamId === shootout.localTeam.id,
+                      "order-1": kick.teamId === shootout.visitorTeam.id,
+                    })}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/*
+            <PenaltiesForm
+              currentMatchId={match.id}
+              teams={[
+                {
+                  id: localTeam.id as string,
+                  name: localTeam.name as string,
+                },
+                {
+                  id: visitorTeam.id as string,
+                  name: visitorTeam.name as string,
+                },
+              ]}
+            />
+          */}
+        </>
+      ) : (
+        <p>No se han realizado tiros penales</p>
+      )}
+    </>
+  );
+};
+
+const ShootoutWinner: FC<{
+  winnerTeamId: string | null;
+  localTeam: Team;
+  visitorTeam: Team;
+}> = ({ winnerTeamId, localTeam, visitorTeam }) => {
+  return (
+    <>
+      {winnerTeamId ? (
+        <>
+          {(winnerTeamId == localTeam.id) && (
+            <Link href={`/admin/equipos/${localTeam.permalink}`}>
+              {localTeam.name}
+            </Link>
+          )}
+          {(winnerTeamId == visitorTeam.id) && (
+            <Link href={`/admin/equipos/${visitorTeam.permalink}`}>
+              {localTeam.name}
+            </Link>
+          )}
+        </>
+      ) : (
+        <span>No definido aún</span>
+      )}
+    </>
+  );
+};
+
+const PenaltiIcon: FC<{
+  isGoal: boolean | null;
+  className?: string;
+}> = ({ isGoal = undefined, className = "" }) => {
+  return (
+    <div className={cn("size-[32px] flex justify-center items-center rounded-full",
+      className,
+      {
+        "bg-emerald-600 text-emerald-50": isGoal,
+        "bg-rose-600 text-rose-50": !isGoal,
+        "bg-gray-600 text-gray-50": isGoal === null,
+      },
+    )}>
+      {(isGoal === true)
+        ? <Check size={18} />
+        : (isGoal === false)
+          ? <XIcon size={18} />
+          : <MinusIcon size={18} strokeWidth={3} />
+      }
+    </div>
+  );
+};
+
+export default PenaltyShootout;

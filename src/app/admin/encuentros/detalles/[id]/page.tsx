@@ -9,7 +9,7 @@ import {
   TableCell,
   TableRow,
 } from "@/components/ui/table";
-import { Check, Minus, MinusIcon, Pencil, XIcon } from "lucide-react";
+import { Minus, Pencil } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
@@ -19,10 +19,8 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { getMatchStatus } from "../../(helpers)/place";
 import { TbSoccerField } from "react-icons/tb";
-import { MATCH_STATUS } from "~/src/shared/enums";
-import { cn } from "~/src/lib/utils";
 import type { MatchType } from "../../(actions)/fetchMatchAction";
-import { PenaltiesForm } from "../../(components)/penalties-form";
+import { PenaltyShootout } from "../../(components)/penalty-shootouts";
 
 type Props = Readonly<{
   params: Promise<{
@@ -114,76 +112,10 @@ export const MatchPage: FC<Props> = async ({ params }) => {
               </Table>
             </section>
 
-            <section>
-              {(match.penaltiesShoots.length > 0) ? (
-                <>
-                  <h2 className="text-lg font-bold text-sky-500 mb-5">Tiros Penales</h2>
-
-                  <div className="w-full lg:max-w-md flex flex-col gap-5">
-                    <div className="grid grid-cols-2 items-center gap-5">
-                      <span className="justify-self-end space-x-2">
-                        <span className="text-sm text-gray-500">( {match.localPenalties} )</span>
-                        <span className="font-bold">{match.localTeam.name}</span>
-                      </span>
-                      <span className="justify-self-start space-x-2">
-                        <span className="font-bold">{match.visitorTeam.name}</span>
-                        <span className="text-sm text-gray-500">( {match.visitorPenalties} )</span>
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 items-center gap-5">
-                      {match.penaltiesShoots.map((shoot, index) => (
-                        <div key={shoot.id} className={cn("flex items-center gap-5", {
-                          "justify-start": index % 3 == 0,
-                          "justify-end": index % 2 == 0,
-                        })}>
-                          <span className={cn({
-                            "order-0": shoot.team.id === match.localTeam.id,
-                            "order-1": shoot.team.id === match.visitorTeam.id,
-                          })}>{shoot.shooterName}</span>
-                          <PenaltiIcon
-                            className={cn({
-                              "order-1": shoot.team.id === match.localTeam.id,
-                              "order-0": shoot.team.id === match.visitorTeam.id,
-                            })}
-                            isGoal={shoot.isGoal}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {(
-                    (match.status === MATCH_STATUS.COMPLETED)
-                    && (match.localScore === match.visitorScore)
-                  ) && (
-                      <div className="flex flex-col lg:flex-row gap-5">
-                        <div className="w-full lg:w-1/2 border border-sky-600 p-5 rounded">
-                          <p className="text-sky-500 text-center text-xl font-semibold">
-                            Crear Tiros Penales
-                          </p>
-                        </div>
-                        <div className="w-full lg:w-1/2">
-                          <PenaltiesForm
-                            currentMatchId={match.id}
-                            teams={[
-                              {
-                                id: match.localTeam.id as string,
-                                name: match.localTeam.name as string,
-                              },
-                              {
-                                id: match.visitorTeam.id as string,
-                                name: match.visitorTeam.name as string,
-                              },
-                            ]}
-                          />
-                        </div>
-                      </div>
-                    )}
-                </>
-              )}
-            </section>
+            {/* // TODO Penalty Shootouts */}
+            <PenaltyShootout
+              shootout={match.penaltyShootout}
+            />
 
             <div className="absolute top-5 right-5">
               <Tooltip>
@@ -202,29 +134,6 @@ export const MatchPage: FC<Props> = async ({ params }) => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
-};
-
-const PenaltiIcon: FC<{
-  isGoal: boolean | null;
-  className?: string;
-}> = ({ isGoal = undefined, className = "" }) => {
-  return (
-    <div className={cn("size-[32px] flex justify-center items-center rounded-full",
-      className,
-      {
-        "bg-emerald-600 text-emerald-50": isGoal,
-        "bg-rose-600 text-rose-50": !isGoal,
-        "bg-gray-600 text-gray-50": isGoal === null,
-      },
-    )}>
-      {(isGoal === true)
-        ? <Check size={18} />
-        : (isGoal === false)
-          ? <XIcon size={18} />
-          : <MinusIcon size={18} strokeWidth={3} />
-      }
     </div>
   );
 };

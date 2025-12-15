@@ -9,18 +9,33 @@ export type TournamentType = {
   name: string;
 };
 
-export type PenaltyShoot = {
-  id: string;
-  isGoal: boolean | null;
-  shooterName: string | null;
-  team: { id: string };
-};
-
 export type MatchType = Match & {
   tournament: TournamentType;
-  penaltiesShoots: PenaltyShoot[];
-  localPenalties: number;
-  visitorPenalties: number;
+  penaltyShootout: {
+    id: string;
+    localTeam: {
+      id: string;
+      name: string;
+      permalink: string;
+    };
+    visitorTeam: {
+       id: string;
+      name: string;
+      permalink: string;
+    };
+    localGoals: number;
+    visitorGoals: number;
+    winnerTeamId: string | null;
+    status: string;
+    kicks: {
+      id: string;
+      teamId: string;
+      playerId: string | null;
+      shooterName: string | null;
+      order: number;
+      isGoal: boolean | null;
+    }[];
+  } | null;
 };
 
 type FetchResponse = Promise<{
@@ -28,31 +43,6 @@ type FetchResponse = Promise<{
   message: string;
   match: MatchType | null,
 }>;
-
-const getPenaltyScores = (
-  shoots: Partial<PenaltyShoot>[],
-  localTeamId: string,
-  visitorTeamId: string,
-) => {
-  let localPenalties = 0;
-  let visitorPenalties = 0;
-
-  shoots.forEach((shoot) => {
-    if (shoot.isGoal) {
-      if (shoot.team?.id === localTeamId) {
-        localPenalties++;
-      }
-      if (shoot.team?.id === visitorTeamId) {
-        visitorPenalties++;
-      }
-    }
-  });
-
-  return {
-    localPenalties,
-    visitorPenalties,
-  };
-};
 
 export const fetchMatchAction = async (
   id: string,
@@ -98,14 +88,35 @@ export const fetchMatchAction = async (
             name: true,
           },
         },
-        penaltiesShoots: {
+        penaltyShootout: {
           select: {
             id: true,
-            shooterName: true,
-            isGoal: true,
-            team: {
+            localTeam: {
               select: {
                 id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+            visitorTeam: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+            localGoals: true,
+            visitorGoals: true,
+            winnerTeamId: true,
+            status: true,
+            kicks: {
+              select: {
+                id: true,
+                teamId: true,
+                playerId: true,
+                shooterName: true,
+                order: true,
+                isGoal: true,
               },
             },
           },
@@ -122,12 +133,6 @@ export const fetchMatchAction = async (
         match: null,
       };
     }
-
-    const { localPenalties, visitorPenalties } = getPenaltyScores(
-      match.penaltiesShoots,
-      match.local.id,
-      match.visitor.id,
-    );
 
     return {
       ok: true,
@@ -147,9 +152,7 @@ export const fetchMatchAction = async (
           id: match.tournament.id,
           name: match.tournament.name,
         },
-        penaltiesShoots: match.penaltiesShoots,
-        localPenalties,
-        visitorPenalties,
+        penaltyShootout: match.penaltyShootout,
         createdAt: match.createdAt,
         updatedAt: match.updatedAt,
       },
