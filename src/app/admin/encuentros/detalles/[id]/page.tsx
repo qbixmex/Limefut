@@ -21,6 +21,7 @@ import { getMatchStatus } from "../../(helpers)/place";
 import { TbSoccerField } from "react-icons/tb";
 import type { MatchType } from "../../(actions)/fetchMatchAction";
 import { PenaltyShootout } from "../../(components)/penalty-shootouts";
+import { PenaltiesForm } from "../../(components)/penalties-form";
 
 type Props = Readonly<{
   params: Promise<{
@@ -112,10 +113,14 @@ export const MatchPage: FC<Props> = async ({ params }) => {
               </Table>
             </section>
 
-            {/* // TODO Penalty Shootouts */}
-            <PenaltyShootout
-              shootout={match.penaltyShootout}
-            />
+            <section className="flex flex-col lg:flex-row gap-5">
+              <div className="w-full lg:w-1/2">
+                <PenaltyShootout shootout={match.penaltyShootout} />
+              </div>
+              <div className="w-full lg:w-1/2">
+                <PenaltiesForm currentMatchId={match.id} />
+              </div>
+            </section>
 
             <div className="absolute top-5 right-5">
               <Tooltip>

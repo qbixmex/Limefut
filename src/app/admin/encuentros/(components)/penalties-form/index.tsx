@@ -2,12 +2,10 @@
 
 import { type FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { createPenaltiesSchema } from './createSchema';
 import type z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -20,29 +18,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
+import { createPenaltyShootoutSchema } from '~/src/shared/schemas';
 
 type Props = Readonly<{
   currentMatchId: string;
-  teams: {
-    id: string;
-    name: string;
-  }[];
 }>;
 
-export const PenaltiesForm: FC<Props> = ({ currentMatchId, teams }) => {
-  const formSchema = createPenaltiesSchema;
+export const PenaltiesForm: FC<Props> = ({ currentMatchId }) => {
+  const formSchema = createPenaltyShootoutSchema;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       matchId: currentMatchId,
-      teamId: '',
-      shooterNumber: 0,
-      isGoal: false,
-      shooterName: '',
+      localTeamId: '',
+      localPlayerId: '',
+      visitorTeamId: '',
+      visitorPlayerId: '',
     },
   });
 
@@ -100,92 +94,126 @@ export const PenaltiesForm: FC<Props> = ({ currentMatchId, teams }) => {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex items-center gap-3">
+          <div className="grid grid-cols-2 gap-5">
             <FormField
               control={form.control}
-              name="shooterNumber"
+              name="localTeamId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Camiseta</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="shooterNumber"
-                      type="number"
-                      {...field}
-                      min={0}
-                      value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
-                      className="w-[75px]"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="shooterName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tirador</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="shooterName"
-                      type="text"
-                      {...field}
-                      className="w-full lg:min-w-[150px]"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="teamId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Equipo</FormLabel>
+                  <FormLabel>Equipo Local</FormLabel>
                   <Select
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
                   >
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Seleccione Equipo" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {teams.map((team) => (
-                          <SelectItem
-                            key={team.id}
-                            value={team.id}
-                          >
-                            {team.name}
-                          </SelectItem>
-                        ))}
+                        <SelectItem value="abc">Real San José</SelectItem>
+                        <SelectItem value="cde">Búfalos FC</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 </FormItem>
               )}
             />
-            <div className="w-full pt-5">
-              <Button
-                type="submit"
-                variant="outline-primary"
-                disabled={form.formState.isSubmitting}
-                className="w-full"
-              >
-                {form.formState.isSubmitting ? (
-                  <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                    <span className="text-sm italic">Espere</span>
-                    <LoaderCircle className="size-4 animate-spin" />
-                  </span>
-                ) : (
-                  true ? 'crear' : 'actualizar'
-                )}
-              </Button>
-            </div>
+
+            <FormField
+              control={form.control}
+              name="localPlayerId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tirador Local</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={(value) => field.onChange(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Seleccione Jugador" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="1">Alejandro Pérez</SelectItem>
+                        <SelectItem value="2">Carlos Muñoz</SelectItem>
+                        <SelectItem value="3">Fernando Fernandez</SelectItem>
+                        <SelectItem value="4">Jorge López</SelectItem>
+                        <SelectItem value="5">Luis Ochoa</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="visitorTeamId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Equipo Visitante</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={(value) => field.onChange(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Seleccione Equipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="abc">Real San José</SelectItem>
+                        <SelectItem value="cde">Búfalos FC</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="visitorPlayerId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tirador Visitante</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={(value) => field.onChange(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Seleccione Jugador" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="1">Alejandro Pérez</SelectItem>
+                        <SelectItem value="2">Carlos Muñoz</SelectItem>
+                        <SelectItem value="3">Fernando Fernandez</SelectItem>
+                        <SelectItem value="4">Jorge López</SelectItem>
+                        <SelectItem value="5">Luis Ochoa</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="w-full flex lg:justify-end pt-5">
+            <Button
+              type="submit"
+              variant="outline-primary"
+              disabled={form.formState.isSubmitting}
+              className="w-full lg:w-auto"
+            >
+              {form.formState.isSubmitting ? (
+                <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                  <span className="text-sm italic">Espere</span>
+                  <LoaderCircle className="size-4 animate-spin" />
+                </span>
+              ) : (
+                true ? 'crear' : 'actualizar'
+              )}
+            </Button>
           </div>
         </form>
       </Form>

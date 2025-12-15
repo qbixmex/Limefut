@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FC } from 'react';
 import { PenaltiesForm } from "../../(components)/penalties-form";
-import { MATCH_STATUS, SHOOTOUT_STATUS } from "~/src/shared/enums";
 import { Check, MinusIcon, XIcon } from "lucide-react";
 import { cn } from '~/src/lib/utils';
-import { Match } from '~/src/shared/interfaces';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
+import { SHOOTOUT_STATUS } from '~/src/shared/enums';
 
 type Shootout = {
   id: string;
@@ -107,22 +106,6 @@ export const PenaltyShootout: FC<Props> = ({
               ))}
             </div>
           </div>
-
-          {/*
-            <PenaltiesForm
-              currentMatchId={match.id}
-              teams={[
-                {
-                  id: localTeam.id as string,
-                  name: localTeam.name as string,
-                },
-                {
-                  id: visitorTeam.id as string,
-                  name: visitorTeam.name as string,
-                },
-              ]}
-            />
-          */}
         </>
       ) : (
         <p>No se han realizado tiros penales</p>
