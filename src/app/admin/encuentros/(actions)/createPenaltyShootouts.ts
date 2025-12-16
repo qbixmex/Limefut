@@ -28,7 +28,11 @@ export const createPenaltyShootoutAction = async (
     localTeamId: formData.get('localTeamId') as string,
     visitorTeamId: formData.get('visitorTeamId') as string,
     localPlayerId: formData.get('localPlayerId') as string,
+    localPlayerName: formData.get('localPlayerName') as string,
     visitorPlayerId: formData.get('visitorPlayerId') as string,
+    visitorPlayerName: formData.get('visitorPlayerName') as string,
+    localIsGoal: formData.get('localIsGoal') as string,
+    visitorIsGoal: formData.get('visitorIsGoal') as string,
   };
 
   const shootoutVerified = createPenaltyShootoutSchema.safeParse(rawData);
@@ -36,7 +40,7 @@ export const createPenaltyShootoutAction = async (
   if (!shootoutVerified.success) {
     return {
       ok: false,
-      message: shootoutVerified.error.message,
+      message: shootoutVerified.error.issues[0].message,
       penaltyShootout: null,
     };
   }
@@ -45,7 +49,7 @@ export const createPenaltyShootoutAction = async (
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      // Verificar que el match existe
+      // Verify that the match exists
       const match = await transaction.match.findUnique({
         where: { id: matchId },
       });
@@ -58,7 +62,7 @@ export const createPenaltyShootoutAction = async (
         };
       }
 
-      // Obtener el penalty shootout existente
+      // Get the existing penalty shootout
       let penaltyShootout = await transaction.penaltyShootout.findUnique({
         where: { matchId },
         include: {
@@ -69,13 +73,19 @@ export const createPenaltyShootoutAction = async (
         },
       });
 
-      // Obtener el último orden de penalty kick
+      const kicksCount = await transaction.penaltyKick.count({
+        where: {
+          shootoutId: penaltyShootout?.id,
+        },
+      });
+
+      // Get the latest penalty kick order
       let nextOrder = 1;
       if (penaltyShootout && penaltyShootout.kicks.length > 0) {
         nextOrder = penaltyShootout.kicks[0].order + 1;
       }
 
-      // Si no existe penalty shootout, crearlo
+      // If there is no penalty shootout, create one.
       if (!penaltyShootout) {
         penaltyShootout = await transaction.penaltyShootout.create({
           data: {
@@ -88,20 +98,63 @@ export const createPenaltyShootoutAction = async (
         nextOrder = 1;
       }
 
-      // Crear los nuevos penalty kicks con los órdenes consecutivos
+      // current kicks + 2 new ones that will be created
+      const totalKicks = kicksCount + 2;
+
+      let winnerTeamId: string | null = null;
+      let status: 'in_progress' | 'completed' = 'in_progress';
+
+      const finalLocalGoals =
+        penaltyShootout.localGoals +
+        (shootoutToSave.localIsGoal === 'scored' ? 1 : 0);
+
+      const finalVisitorGoals =
+        penaltyShootout.visitorGoals +
+        (shootoutToSave.visitorIsGoal === 'scored' ? 1 : 0);
+
+      // Evaluate winner when there are 6 minimum kicks
+      if (totalKicks >= 6) {
+        // If there's NO draw, penalty shootout finishes.
+        if (finalLocalGoals !== finalVisitorGoals) {
+          status = 'completed';
+
+          winnerTeamId =
+            finalLocalGoals > finalVisitorGoals
+              ? shootoutToSave.localTeamId
+              : shootoutToSave.visitorTeamId;
+        }
+      }
+
+      // Create the new penalty kicks with the consecutive commands
       const createdPenaltyShootout = await transaction.penaltyShootout.update({
         where: { id: penaltyShootout.id },
         data: {
+          localGoals: shootoutToSave.localIsGoal === 'scored'
+            ? penaltyShootout.localGoals + 1
+            : undefined,
+          visitorGoals: shootoutToSave.visitorIsGoal === 'scored'
+            ? penaltyShootout.visitorGoals + 1
+            : undefined,
+          winnerTeamId,
+          status,
           kicks: {
             create: [
               {
                 teamId: shootoutToSave.localTeamId,
                 playerId: shootoutToSave.localPlayerId,
+                shooterName: shootoutToSave.localPlayerName,
+                isGoal: (shootoutToSave.localIsGoal === 'scored' && true)
+                  || (shootoutToSave.localIsGoal === 'missed' && false)
+                  || (shootoutToSave.localIsGoal === 'not-taken' && null),
                 order: nextOrder,
               },
               {
                 teamId: shootoutToSave.visitorTeamId,
                 playerId: shootoutToSave.visitorPlayerId,
+                shooterName: shootoutToSave.visitorPlayerName,
+                isGoal: (shootoutToSave.visitorIsGoal === 'scored' && true)
+                  || (shootoutToSave.visitorIsGoal === 'missed' && false)
+                  || (shootoutToSave.visitorIsGoal === 'not-taken' && null),
                 order: nextOrder + 1,
               },
             ],
@@ -142,7 +195,8 @@ export const createPenaltyShootoutAction = async (
         penaltyShootout: null,
       };
     }
-    console.log((error as Error).message);
+    console.log("Error Cause:", (error as Error).cause);
+    console.log("Error Message:", (error as Error).message);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',

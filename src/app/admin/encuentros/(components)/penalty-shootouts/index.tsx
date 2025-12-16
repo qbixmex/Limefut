@@ -85,21 +85,21 @@ export const PenaltyShootout: FC<Props> = ({
                 <div
                   key={kick.id}
                   className={cn('flex items-center gap-5', {
-                    "justify-end": kick.teamId === shootout.localTeam.id,
-                    "justify-start": kick.teamId === shootout.visitorTeam.id,
+                    "justify-end": kick.teamId == shootout.localTeam.id,
+                    "justify-start": kick.teamId == shootout.visitorTeam.id,
                   })}
                 >
                   <span
                     className={cn({
-                      "order-1": kick.teamId === shootout.localTeam.id,
-                      "order-2": kick.teamId === shootout.visitorTeam.id,
+                      "order-1": kick.teamId == shootout.localTeam.id,
+                      "order-2": kick.teamId == shootout.visitorTeam.id,
                     })}
                   >{kick.shooterName}</span>
                   <PenaltiIcon
                     isGoal={kick.isGoal}
                     className={cn({
-                      "order-2": kick.teamId === shootout.localTeam.id,
-                      "order-1": kick.teamId === shootout.visitorTeam.id,
+                      "order-2": kick.teamId == shootout.localTeam.id,
+                      "order-1": kick.teamId == shootout.visitorTeam.id,
                     })}
                   />
                 </div>

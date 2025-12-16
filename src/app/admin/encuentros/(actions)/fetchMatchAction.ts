@@ -2,14 +2,34 @@
 
 import prisma from '@/lib/prisma';
 import type { MATCH_STATUS } from '@/root/src/shared/enums';
-import type { Match } from '@/shared/interfaces';
 
-export type TournamentType = {
+export type MatchType = {
   id: string;
-  name: string;
-};
-
-export type MatchType = Match & {
+  localTeam: {
+    name: string;
+    id: string;
+    permalink: string;
+    players: {
+      name: string;
+      id: string;
+    }[];
+  }
+  visitorTeam: {
+    name: string;
+    id: string;
+    permalink: string;
+    players: {
+      name: string;
+      id: string;
+    }[];
+  }
+  place: string;
+  matchDate: Date;
+  week: number;
+  referee: string;
+  localScore: number;
+  visitorScore: number;
+  status: MATCH_STATUS;
   tournament: TournamentType;
   penaltyShootout: {
     id: string;
@@ -19,7 +39,7 @@ export type MatchType = Match & {
       permalink: string;
     };
     visitorTeam: {
-       id: string;
+      id: string;
       name: string;
       permalink: string;
     };
@@ -36,6 +56,13 @@ export type MatchType = Match & {
       isGoal: boolean | null;
     }[];
   } | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type TournamentType = {
+  id: string;
+  name: string;
 };
 
 type FetchResponse = Promise<{
@@ -66,6 +93,12 @@ export const fetchMatchAction = async (
             id: true,
             name: true,
             permalink: true,
+            players: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
         visitor: {
@@ -73,6 +106,12 @@ export const fetchMatchAction = async (
             id: true,
             name: true,
             permalink: true,
+            players: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
         place: true,
@@ -118,6 +157,7 @@ export const fetchMatchAction = async (
                 order: true,
                 isGoal: true,
               },
+              orderBy: { order: 'asc' },
             },
           },
         },

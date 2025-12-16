@@ -2,13 +2,14 @@
 
 import { type FC } from 'react';
 import { useForm } from 'react-hook-form';
-import type z from 'zod';
+import type { Session } from 'next-auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import {
   Select,
@@ -20,182 +21,200 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
-import { createPenaltyShootoutSchema } from '~/src/shared/schemas';
+import { createPenaltyShootoutAction } from '../../(actions)/createPenaltyShootouts';
+import type z from 'zod';
+import { createPenaltyShootoutSchema } from './createPenaltyShootout.schema';
+import { toast } from 'sonner';
 
 type Props = Readonly<{
+  session: Session | null;
   currentMatchId: string;
+  localTeam: Team;
+  visitorTeam: Team;
 }>;
 
-export const PenaltiesForm: FC<Props> = ({ currentMatchId }) => {
+type Team = {
+  id: string;
+  name: string;
+  players: {
+    id: string;
+    name: string;
+  }[];
+}
+
+export const PenaltiesForm: FC<Props> = ({
+  session,
+  currentMatchId,
+  localTeam,
+  visitorTeam,
+}) => {
   const formSchema = createPenaltyShootoutSchema;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      matchId: currentMatchId,
-      localTeamId: '',
       localPlayerId: '',
-      visitorTeamId: '',
       visitorPlayerId: '',
+      localIsGoal: "",
+      visitorIsGoal: "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("DATA:", data);
-    // const formData = new FormData();
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    const formData = new FormData();
 
-    //  formData.append('name', data.name as string);
+    formData.append('matchId', currentMatchId);
+    formData.append('localTeamId', localTeam.id);
+    formData.append('visitorTeamId', visitorTeam.id);
+
+    formData.append('localPlayerId', data.localPlayerId);
+
+    const localPlayerName = localTeam.players.find((p) => {
+      return p.id == data.localPlayerId;
+    })?.name as string;
+    formData.append('localPlayerName', localPlayerName);
+
+    const visitorPlayerName = visitorTeam.players.find((p) => {
+      return p.id == data.visitorPlayerId;
+    })?.name as string;
+
+    formData.append('visitorPlayerId', data.visitorPlayerId);
+    formData.append('visitorPlayerName', visitorPlayerName);
+    formData.append('localIsGoal', data.localIsGoal);
+    formData.append('visitorIsGoal', data.visitorIsGoal);
 
     // Create match
-    // if (!penalty) {
-    //   const response = await createPenaltyAction(
-    //     formData,
-    //     session?.user.roles ?? null,
-    //   );
+    const response = await createPenaltyShootoutAction(
+      formData,
+      session?.user.roles ?? null,
+    );
 
-    //   if (!response.ok) {
-    //     toast.error(response.message);
-    //     return;
-    //   }
+    console.log("RESPONSE:", response.message);
 
-    //   if (response.ok) {
-    //     toast.success(response.message);
-    //     form.reset();
-    //     route.replace("/admin/<<lorem>>");
-    //     return;
-    //   }
-    //   return;
-    // }
+    if (!response.ok) {
+      toast.error(response.message);
+      return;
+    }
 
-    // Update match
-    // if (penalty) {
-    //   const response = await updatePenaltyAction({
-    //     formData,
-    //     id: match.id,
-    //     userRoles: session.user.roles,
-    //     authenticatedUserId: session?.user.id,
-    //   });
-
-    //   if (!response.ok) {
-    //     toast.error(response.message);
-    //     return;
-    //   }
-
-    //   if (response.ok) {
-    //     toast.success(response.message);
-    //     route.replace("/admin/<<lorem>>");
-    //     return;
-    //   }
-    //   return;
-    // }
+    if (response.ok) {
+      toast.success(response.message);
+      form.reset();
+    }
   };
 
   return (
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-2 gap-5">
-            <FormField
-              control={form.control}
-              name="localTeamId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Equipo Local</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Seleccione Equipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="abc">Real San José</SelectItem>
-                        <SelectItem value="cde">Búfalos FC</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="localPlayerId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tirador Local</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Seleccione Jugador" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="1">Alejandro Pérez</SelectItem>
-                        <SelectItem value="2">Carlos Muñoz</SelectItem>
-                        <SelectItem value="3">Fernando Fernandez</SelectItem>
-                        <SelectItem value="4">Jorge López</SelectItem>
-                        <SelectItem value="5">Luis Ochoa</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="visitorTeamId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Equipo Visitante</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Seleccione Equipo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="abc">Real San José</SelectItem>
-                        <SelectItem value="cde">Búfalos FC</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="visitorPlayerId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tirador Visitante</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Seleccione Jugador" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="1">Alejandro Pérez</SelectItem>
-                        <SelectItem value="2">Carlos Muñoz</SelectItem>
-                        <SelectItem value="3">Fernando Fernandez</SelectItem>
-                        <SelectItem value="4">Jorge López</SelectItem>
-                        <SelectItem value="5">Luis Ochoa</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
+          <div className="space-y-5">
+            <div className="grid grid-cols-2 items-center gap-5">
+              <FormField
+                control={form.control}
+                name="localPlayerId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tirador Local</FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Seleccione Jugador" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {localTeam.players.map((player) => (
+                            <SelectItem key={player.id} value={player.id}>
+                              {player.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="localIsGoal"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Resultado</FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Seleccione una opción" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="scored">Anotado</SelectItem>
+                          <SelectItem value="missed">Fallado</SelectItem>
+                          <SelectItem value="not-taken">No Realizado</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-5">
+              <FormField
+                control={form.control}
+                name="visitorPlayerId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tirador Visitante</FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Seleccione Jugador" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {visitorTeam.players.map((player) => (
+                            <SelectItem key={player.id} value={player.id}>
+                              {player.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="visitorIsGoal"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Resultado</FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Seleccione una opción" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="scored">Anotado</SelectItem>
+                          <SelectItem value="missed">Fallado</SelectItem>
+                          <SelectItem value="not-taken">No Realizado</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
 
           <div className="w-full flex lg:justify-end pt-5">

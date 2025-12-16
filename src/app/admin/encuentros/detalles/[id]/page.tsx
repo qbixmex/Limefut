@@ -118,7 +118,26 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                 <PenaltyShootout shootout={match.penaltyShootout} />
               </div>
               <div className="w-full lg:w-1/2">
-                <PenaltiesForm currentMatchId={match.id} />
+                <PenaltiesForm
+                  session={session}
+                  currentMatchId={match.id}
+                  localTeam={{
+                    id: match.localTeam.id,
+                    name: match.localTeam.name,
+                    players: match.localTeam.players?.map((player) => ({
+                      id: player.id,
+                      name: player.name,
+                    })),
+                  }}
+                  visitorTeam={{
+                    id: match.visitorTeam.id,
+                    name: match.visitorTeam.name,
+                    players: match.visitorTeam.players.map((player) => ({
+                      id: player.id,
+                      name: player.name,
+                    })),
+                  }}
+                />
               </div>
             </section>
 
