@@ -2,25 +2,79 @@
 
 import prisma from '@/lib/prisma';
 import type { MATCH_STATUS } from '@/root/src/shared/enums';
-import type { Match } from '@/shared/interfaces';
+
+export type MatchType = {
+  id: string;
+  localTeam: {
+    name: string;
+    id: string;
+    permalink: string;
+    players: {
+      name: string;
+      id: string;
+    }[];
+  }
+  visitorTeam: {
+    name: string;
+    id: string;
+    permalink: string;
+    players: {
+      name: string;
+      id: string;
+    }[];
+  }
+  place: string;
+  matchDate: Date;
+  week: number;
+  referee: string;
+  localScore: number;
+  visitorScore: number;
+  status: MATCH_STATUS;
+  tournament: TournamentType;
+  penaltyShootout: {
+    id: string;
+    localTeam: {
+      id: string;
+      name: string;
+      permalink: string;
+    };
+    visitorTeam: {
+      id: string;
+      name: string;
+      permalink: string;
+    };
+    localGoals: number;
+    visitorGoals: number;
+    winnerTeamId: string | null;
+    status: string;
+    kicks: {
+      id: string;
+      teamId: string;
+      playerId: string | null;
+      shooterName: string | null;
+      order: number;
+      isGoal: boolean | null;
+    }[];
+  } | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export type TournamentType = {
   id: string;
   name: string;
 };
 
-type FetchPlayerResponse = Promise<{
+type FetchResponse = Promise<{
   ok: boolean;
   message: string;
-  match: Match & {
-    tournament: TournamentType;
-  } | null;
+  match: MatchType | null,
 }>;
 
 export const fetchMatchAction = async (
   id: string,
   userRole: string[] | null,
-): FetchPlayerResponse => {
+): FetchResponse => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
@@ -39,6 +93,12 @@ export const fetchMatchAction = async (
             id: true,
             name: true,
             permalink: true,
+            players: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
         visitor: {
@@ -46,6 +106,12 @@ export const fetchMatchAction = async (
             id: true,
             name: true,
             permalink: true,
+            players: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
         place: true,
@@ -59,6 +125,40 @@ export const fetchMatchAction = async (
           select: {
             id: true,
             name: true,
+          },
+        },
+        penaltyShootout: {
+          select: {
+            id: true,
+            localTeam: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+            visitorTeam: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+            localGoals: true,
+            visitorGoals: true,
+            winnerTeamId: true,
+            status: true,
+            kicks: {
+              select: {
+                id: true,
+                teamId: true,
+                playerId: true,
+                shooterName: true,
+                order: true,
+                isGoal: true,
+              },
+              orderBy: { order: 'asc' },
+            },
           },
         },
         createdAt: true,
@@ -92,6 +192,7 @@ export const fetchMatchAction = async (
           id: match.tournament.id,
           name: match.tournament.name,
         },
+        penaltyShootout: match.penaltyShootout,
         createdAt: match.createdAt,
         updatedAt: match.updatedAt,
       },
