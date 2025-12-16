@@ -40,8 +40,9 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
             <TableHead className="text-gray-400 text-center">GF</TableHead>
             <TableHead className="text-gray-400 text-center">GC</TableHead>
             <TableHead className="text-gray-400 text-center">DIF</TableHead>
-            <TableHead className="text-gray-400 text-center">PA</TableHead>
             <TableHead className="text-gray-400 text-center">PTS</TableHead>
+            <TableHead className="text-gray-400 text-center">PA</TableHead>
+            <TableHead className="text-gray-400 text-center">PT</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -59,14 +60,17 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
               <TableCell className="text-blue-500 text-center">{standing.goalsFor}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.goalsAgainst}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.goalsDifference}</TableCell>
-              <TableCell className="text-blue-500 text-center">{standing.additionalPoints}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.points}</TableCell>
+              <TableCell className="text-blue-500 text-center">{standing.additionalPoints}</TableCell>
+              <TableCell className="text-blue-500 text-center">
+                { standing.points + standing.additionalPoints }
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      <section className="grid grid-cols-4 mt-10 text-gray-500">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mt-10 text-gray-500">
         <div>
           <div className="flex gap-5">
             <span className="font-bold">JJ</span>
@@ -75,10 +79,6 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
           <div className="flex gap-5">
             <span className="font-bold">JG</span>
             <span className="italic">Juegos Ganados</span>
-          </div>
-          <div className="flex gap-5">
-            <span className="font-bold">PA</span>
-            <span className="italic">Puntos Adicionales</span>
           </div>
         </div>
         <div>
@@ -109,6 +109,16 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
           <div className="flex gap-5">
             <span className="font-bold">PTS</span>
             <span className="italic">Puntos</span>
+          </div>
+        </div>
+        <div>
+           <div className="flex gap-5">
+            <span className="font-bold">PA</span>
+            <span className="italic">Puntos Adicionales</span>
+          </div>
+           <div className="flex gap-5">
+            <span className="font-bold">PT</span>
+            <span className="italic">Puntos Totales</span>
           </div>
         </div>
       </section>

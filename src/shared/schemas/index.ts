@@ -4,6 +4,7 @@ export { createTournamentSchema, editTournamentSchema } from "./tournament";
 export { createCoachSchema, editCoachSchema } from "./coach";
 export { createPlayerSchema, editPlayerSchema } from "./player";
 export { createMatchSchema, editMatchSchema } from "./match";
+export { createPenaltyShootoutSchema } from "./penalty-shootout";
 export { createCredentialSchema, editCredentialSchema } from "./credential";
 export { createStandingsSchema } from "./standings";
 export { sendMessageSchema } from "./contact/sendEmailSchema";

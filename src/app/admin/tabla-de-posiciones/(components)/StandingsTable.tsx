@@ -54,6 +54,8 @@ export const StandingsTable: FC<Props> = ({ standings, tournamentId, onDeletedSt
             <TableHead className="text-gray-400 text-center">Diferencia</TableHead>
             <TableHead className="text-gray-400 text-center">Puntos Extra</TableHead>
             <TableHead className="text-gray-400 text-center">Puntos</TableHead>
+            <TableHead className="text-gray-400 text-center">Puntos Extra</TableHead>
+            <TableHead className="text-gray-400 text-center">Puntos Totales</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -72,6 +74,10 @@ export const StandingsTable: FC<Props> = ({ standings, tournamentId, onDeletedSt
               <TableCell className="text-blue-500 text-center">{standing.goalsDifference}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.additionalPoints}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.points}</TableCell>
+              <TableCell className="text-blue-500 text-center">{standing.additionalPoints}</TableCell>
+              <TableCell className="text-blue-500 text-center">{
+                standing.points + standing.additionalPoints
+              }</TableCell>
             </TableRow>
           ))}
         </TableBody>
