@@ -44,8 +44,6 @@ export const PenaltyShootout: FC<Props> = ({
     <>
       {(shootout) ? (
         <>
-          <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
-
           <Table className="w-full max-w-[300px] mb-10">
             <TableBody>
               <TableRow>
@@ -62,7 +60,7 @@ export const PenaltyShootout: FC<Props> = ({
                 <TableHead>Estado:</TableHead>
                 <TableCell>
                   {shootout.status === SHOOTOUT_STATUS.IN_PROGRESS && 'En Progreso'}
-                  {shootout.status === SHOOTOUT_STATUS.COMPLETED && 'Completados'}
+                  {shootout.status === SHOOTOUT_STATUS.COMPLETED && 'Completado'}
                 </TableCell>
               </TableRow>
             </TableBody>

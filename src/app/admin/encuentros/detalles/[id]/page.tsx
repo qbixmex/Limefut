@@ -113,11 +113,14 @@ export const MatchPage: FC<Props> = async ({ params }) => {
               </Table>
             </section>
 
+            <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
+
             <section className="flex flex-col lg:flex-row gap-5">
               <div className="w-full lg:w-1/2">
                 <PenaltyShootout shootout={match.penaltyShootout} />
               </div>
               <div className="w-full lg:w-1/2">
+                <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda</h3>
                 <PenaltiesForm
                   session={session}
                   currentMatchId={match.id}

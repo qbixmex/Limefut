@@ -89,8 +89,6 @@ export const PenaltiesForm: FC<Props> = ({
       session?.user.roles ?? null,
     );
 
-    console.log("RESPONSE:", response.message);
-
     if (!response.ok) {
       toast.error(response.message);
       return;

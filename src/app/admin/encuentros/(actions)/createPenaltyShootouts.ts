@@ -126,7 +126,7 @@ export const createPenaltyShootoutAction = async (
       }
 
       // Create the new penalty kicks with the consecutive commands
-      const createdPenaltyShootout = await transaction.penaltyShootout.update({
+      const updatedShootout = await transaction.penaltyShootout.update({
         where: { id: penaltyShootout.id },
         data: {
           localGoals: shootoutToSave.localIsGoal === 'scored'
@@ -163,10 +163,24 @@ export const createPenaltyShootoutAction = async (
         include: { kicks: true },
       });
 
+      if (
+        updatedShootout.winnerTeamId !== null
+        && updatedShootout.status === 'completed'
+      ) {
+        await transaction.standings.update({
+          where: { teamId: updatedShootout.winnerTeamId },
+          data: {
+            additionalPoints: {
+              increment: 1,
+            },
+          },
+        });
+      }
+
       return {
         ok: true,
         message: '¡ Tanda de penales creada correctamente 👍 !',
-        penaltyShootout: createdPenaltyShootout,
+        penaltyShootout: updatedShootout,
       };
     });
 
