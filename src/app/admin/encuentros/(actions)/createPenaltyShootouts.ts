@@ -173,6 +173,9 @@ export const createPenaltyShootoutAction = async (
             additionalPoints: {
               increment: 1,
             },
+            totalPoints: {
+              increment: 1,
+            },
           },
         });
       }

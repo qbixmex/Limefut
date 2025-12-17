@@ -46,16 +46,16 @@ export const StandingsTable: FC<Props> = ({ standings, tournamentId, onDeletedSt
         <TableHeader>
           <TableRow>
             <TableHead className="text-gray-400">Equipo</TableHead>
-            <TableHead className="text-gray-400 text-center">Jugados</TableHead>
-            <TableHead className="text-gray-400 text-center">Ganados</TableHead>
-            <TableHead className="text-gray-400 text-center">Perdidos</TableHead>
-            <TableHead className="text-gray-400 text-center">Goles a favor</TableHead>
-            <TableHead className="text-gray-400 text-center">Goles en contra</TableHead>
-            <TableHead className="text-gray-400 text-center">Diferencia</TableHead>
-            <TableHead className="text-gray-400 text-center">Puntos Extra</TableHead>
-            <TableHead className="text-gray-400 text-center">Puntos</TableHead>
-            <TableHead className="text-gray-400 text-center">Puntos Extra</TableHead>
-            <TableHead className="text-gray-400 text-center">Puntos Totales</TableHead>
+            <TableHead className="text-gray-400 text-center">JJ</TableHead>
+            <TableHead className="text-gray-400 text-center">JG</TableHead>
+            <TableHead className="text-gray-400 text-center">JE</TableHead>
+            <TableHead className="text-gray-400 text-center">GP</TableHead>
+            <TableHead className="text-gray-400 text-center">GF</TableHead>
+            <TableHead className="text-gray-400 text-center">GC</TableHead>
+            <TableHead className="text-gray-400 text-center">DIF</TableHead>
+            <TableHead className="text-gray-400 text-center">PTS</TableHead>
+            <TableHead className="text-gray-400 text-center">PTA</TableHead>
+            <TableHead className="text-gray-400 text-center">PTT</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -82,6 +82,60 @@ export const StandingsTable: FC<Props> = ({ standings, tournamentId, onDeletedSt
           ))}
         </TableBody>
       </Table>
+
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mt-10 text-gray-500">
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">JJ</span>
+            <span className="italic">Juegos Jugados</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">JG</span>
+            <span className="italic">Juegos Ganados</span>
+          </div>
+        </div>
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">JG</span>
+            <span className="italic">Juegos Empatados</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">JP</span>
+            <span className="italic">Juegos Perdidos</span>
+          </div>
+        </div>
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">GF</span>
+            <span className="italic">Goles a Favor</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">GC</span>
+            <span className="italic">Goles en Contra</span>
+          </div>
+        </div>
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">DIF</span>
+            <span className="italic">Diferencia de Goles</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">PTS</span>
+            <span className="italic">Puntos</span>
+          </div>
+        </div>
+        <div>
+          <div className="flex gap-5">
+            <span className="font-bold">PTA</span>
+            <span className="italic">Puntos Adicionales</span>
+          </div>
+          <div className="flex gap-5">
+            <span className="font-bold">PTT</span>
+            <span className="italic">Puntos Totales</span>
+          </div>
+        </div>
+      </section>
+
       <div className="absolute z-50 -top-10 right-0">
         <AlertDialog>
           <Tooltip>

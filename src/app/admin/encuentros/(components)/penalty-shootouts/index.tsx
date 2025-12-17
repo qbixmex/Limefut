@@ -4,6 +4,7 @@ import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
 import { SHOOTOUT_STATUS } from '~/src/shared/enums';
+import { DeletePenaltyShootouts } from '../delete-penalty-shootouts';
 
 type Shootout = {
   id: string;
@@ -35,43 +36,53 @@ type Props = Readonly<{
   shootout: Shootout | null;
 }>;
 
-export const PenaltyShootout: FC<Props> = ({
-  shootout,
-}) => {
+export const PenaltyShootout: FC<Props> = ({ shootout }) => {
   return (
     <>
       {(shootout) ? (
         <>
-          <Table className="w-full max-w-[300px] mb-10">
-            <TableBody>
-              <TableRow>
-                <TableHead>Ganador:</TableHead>
-                <TableCell>
-                  <ShootoutWinner
-                    winnerTeamId={shootout.winnerTeamId}
-                    localTeam={shootout.localTeam}
-                    visitorTeam={shootout.visitorTeam}
-                  />
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableHead>Estado:</TableHead>
-                <TableCell>
-                  {shootout.status === SHOOTOUT_STATUS.IN_PROGRESS && 'En Progreso'}
-                  {shootout.status === SHOOTOUT_STATUS.COMPLETED && 'Completado'}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <section className="relative w-full max-w-[300px] mb-10">
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableHead>Ganador:</TableHead>
+                  <TableCell>
+                    <ShootoutWinner
+                      winnerTeamId={shootout.winnerTeamId}
+                      localTeam={shootout.localTeam}
+                      visitorTeam={shootout.visitorTeam}
+                    />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Estado:</TableHead>
+                  <TableCell>
+                    {shootout.status === SHOOTOUT_STATUS.IN_PROGRESS && 'En Progreso'}
+                    {shootout.status === SHOOTOUT_STATUS.COMPLETED && 'Completado'}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+            <div className="absolute -top-5 -right-10">
+              <DeletePenaltyShootouts
+                penaltyShootoutsId={shootout.id}
+                winnerTeamId={shootout.winnerTeamId}
+              />
+            </div>
+          </section>
 
           <div className="w-full lg:max-w-md flex flex-col gap-5">
             <div className="grid grid-cols-2 items-center gap-5">
               <span className="justify-self-end space-x-2">
                 <span className="text-sm text-gray-500">( {shootout.localGoals} )</span>
-                <span className="font-bold">Equipo Local</span>
+                <Link href={`/admin/equipos/${shootout.localTeam.permalink}`} className="font-semibold">
+                  {shootout.localTeam.name}
+                </Link>
               </span>
               <span className="justify-self-start space-x-2">
-                <span className="font-bold">Equipo Visitante</span>
+                <Link href={`/admin/equipos/${shootout.visitorTeam.permalink}`} className="font-semibold">
+                  {shootout.visitorTeam.name}
+                </Link>
                 <span className="text-sm text-gray-500">( {shootout.visitorGoals} )</span>
               </span>
             </div>
@@ -104,7 +115,9 @@ export const PenaltyShootout: FC<Props> = ({
           </div>
         </>
       ) : (
-        <p>No se han realizado tiros penales</p>
+        <div className="inline-block border border-sky-600 p-4 rounded-lg">
+          <p className="text-sky-500 font-semibold italic">No se han realizado tiros penales</p>
+        </div>
       )}
     </>
   );
@@ -119,14 +132,20 @@ const ShootoutWinner: FC<{
     <>
       {winnerTeamId ? (
         <>
-          {(winnerTeamId == localTeam.id) && (
-            <Link href={`/admin/equipos/${localTeam.permalink}`}>
+          {(winnerTeamId === localTeam.id) && (
+            <Link
+              href={`/admin/equipos/${localTeam.permalink}`}
+              className="font-semibold"
+            >
               {localTeam.name}
             </Link>
           )}
-          {(winnerTeamId == visitorTeam.id) && (
-            <Link href={`/admin/equipos/${visitorTeam.permalink}`}>
-              {localTeam.name}
+          {(winnerTeamId === visitorTeam.id) && (
+            <Link
+              href={`/admin/equipos/${visitorTeam.permalink}`}
+              className="font-semibold"
+            >
+              {visitorTeam.name}
             </Link>
           )}
         </>

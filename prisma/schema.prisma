@@ -286,6 +286,7 @@ model Standings {
   goalsDifference  Int    @default(0) @map("goals_difference")
   additionalPoints Int    @default(0) @map("additional_points")
   points           Int    @default(0) @map("points")
+  totalPoints      Int    @default(0) @map("total_points")
 
   // Relations
   tournamentId String     @map("tournament_id")

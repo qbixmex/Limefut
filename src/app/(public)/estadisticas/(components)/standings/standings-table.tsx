@@ -41,8 +41,8 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
             <TableHead className="text-gray-400 text-center">GC</TableHead>
             <TableHead className="text-gray-400 text-center">DIF</TableHead>
             <TableHead className="text-gray-400 text-center">PTS</TableHead>
-            <TableHead className="text-gray-400 text-center">PA</TableHead>
-            <TableHead className="text-gray-400 text-center">PT</TableHead>
+            <TableHead className="text-gray-400 text-center">PTA</TableHead>
+            <TableHead className="text-gray-400 text-center">PTT</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -113,11 +113,11 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
         </div>
         <div>
            <div className="flex gap-5">
-            <span className="font-bold">PA</span>
+            <span className="font-bold">PTA</span>
             <span className="italic">Puntos Adicionales</span>
           </div>
            <div className="flex gap-5">
-            <span className="font-bold">PT</span>
+            <span className="font-bold">PTT</span>
             <span className="italic">Puntos Totales</span>
           </div>
         </div>
