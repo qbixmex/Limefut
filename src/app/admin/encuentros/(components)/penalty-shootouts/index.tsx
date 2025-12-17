@@ -4,6 +4,7 @@ import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
 import { SHOOTOUT_STATUS } from '~/src/shared/enums';
+import { DeletePenaltyShootouts } from '../delete-penalty-shootouts';
 
 type Shootout = {
   id: string;
@@ -35,34 +36,40 @@ type Props = Readonly<{
   shootout: Shootout | null;
 }>;
 
-export const PenaltyShootout: FC<Props> = ({
-  shootout,
-}) => {
+export const PenaltyShootout: FC<Props> = ({ shootout }) => {
   return (
     <>
       {(shootout) ? (
         <>
-          <Table className="w-full max-w-[300px] mb-10">
-            <TableBody>
-              <TableRow>
-                <TableHead>Ganador:</TableHead>
-                <TableCell>
-                  <ShootoutWinner
-                    winnerTeamId={shootout.winnerTeamId}
-                    localTeam={shootout.localTeam}
-                    visitorTeam={shootout.visitorTeam}
-                  />
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableHead>Estado:</TableHead>
-                <TableCell>
-                  {shootout.status === SHOOTOUT_STATUS.IN_PROGRESS && 'En Progreso'}
-                  {shootout.status === SHOOTOUT_STATUS.COMPLETED && 'Completado'}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <section className="relative w-full max-w-[300px] mb-10">
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableHead>Ganador:</TableHead>
+                  <TableCell>
+                    <ShootoutWinner
+                      winnerTeamId={shootout.winnerTeamId}
+                      localTeam={shootout.localTeam}
+                      visitorTeam={shootout.visitorTeam}
+                    />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableHead>Estado:</TableHead>
+                  <TableCell>
+                    {shootout.status === SHOOTOUT_STATUS.IN_PROGRESS && 'En Progreso'}
+                    {shootout.status === SHOOTOUT_STATUS.COMPLETED && 'Completado'}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+            <div className="absolute -top-5 -right-10">
+              <DeletePenaltyShootouts
+                penaltyShootoutsId={shootout.id}
+                winnerTeamId={shootout.winnerTeamId}
+              />
+            </div>
+          </section>
 
           <div className="w-full lg:max-w-md flex flex-col gap-5">
             <div className="grid grid-cols-2 items-center gap-5">
