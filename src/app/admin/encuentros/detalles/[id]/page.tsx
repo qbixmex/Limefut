@@ -1,4 +1,4 @@
-import { Activity, type FC } from "react";
+import { type FC } from "react";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@/auth";
@@ -17,12 +17,13 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 import { fetchMatchAction } from "../../(actions)";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { getMatchStatus } from "../../(helpers)/place";
 import { TbSoccerField } from "react-icons/tb";
+import { MATCH_STATUS } from "~/src/shared/enums";
+import { SHOOTOUT_STATUS } from '~/src/shared/enums/shoutout-status.enum';
+import { getMatchStatus } from "../../(helpers)/place";
 import type { MatchType } from "../../(actions)/fetchMatchAction";
 import { PenaltyShootout } from "../../(components)/penalty-shootouts";
 import { PenaltiesForm } from "../../(components)/penalties-form";
-import { MATCH_STATUS } from "~/src/shared/enums";
 
 type Props = Readonly<{
   params: Promise<{
@@ -41,6 +42,16 @@ export const MatchPage: FC<Props> = async ({ params }) => {
   }
 
   const match = response.match as MatchType;
+  const usedShooterIds = match.penaltyShootout?.kicks
+    ?.map(kick => kick.playerId) ?? [];
+
+  const availableLocalPlayers = match.localTeam.players
+    ?.filter(({ id }) => !usedShooterIds.includes(id))
+    .map(({ id, name }) => ({ id, name })) ?? [];
+
+  const availableVisitorPlayers = match.visitorTeam.players
+    ?.filter(({ id }) => !usedShooterIds.includes(id))
+    .map(({ id, name }) => ({ id, name })) ?? [];
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -114,53 +125,41 @@ export const MatchPage: FC<Props> = async ({ params }) => {
               </Table>
             </section>
 
-            <Activity mode={
-              (
-                (match.status === MATCH_STATUS.COMPLETED)
-                && (match.localScore === match.visitorScore)
-              )
-               ? 'visible'
-               : 'hidden'
-            }>
-              <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
-
-              <section className="flex flex-col lg:flex-row gap-5">
-                <div className="w-full lg:w-1/2">
-                  <PenaltyShootout shootout={match.penaltyShootout} />
-                </div>
-                <Activity
-                  mode={
-                    (match.penaltyShootout?.status === 'completed')
-                      ? 'hidden'
-                      : 'visible'
-                  }
-                >
-                  <div className="w-full lg:w-1/2">
-                    <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda</h3>
-                    <PenaltiesForm
-                      session={session}
-                      currentMatchId={match.id}
-                      localTeam={{
-                        id: match.localTeam.id,
-                        name: match.localTeam.name,
-                        players: match.localTeam.players?.map((player) => ({
-                          id: player.id,
-                          name: player.name,
-                        })),
-                      }}
-                      visitorTeam={{
-                        id: match.visitorTeam.id,
-                        name: match.visitorTeam.name,
-                        players: match.visitorTeam.players.map((player) => ({
-                          id: player.id,
-                          name: player.name,
-                        })),
-                      }}
-                    />
-                  </div>
-                </Activity>
-              </section>
-            </Activity>
+            {(
+              (match.status === MATCH_STATUS.COMPLETED)
+              && (match.localScore === match.visitorScore)
+            ) && (
+                <>
+                  <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
+                  <section className="flex flex-col lg:flex-row gap-5">
+                    <div className="w-full lg:w-1/2">
+                      <PenaltyShootout shootout={match.penaltyShootout} />
+                    </div>
+                    {(
+                      match.penaltyShootout === null
+                      || match.penaltyShootout?.status === SHOOTOUT_STATUS.IN_PROGRESS
+                    ) && (
+                      <div className="w-full lg:w-1/2">
+                        <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda de Penales</h3>
+                        <PenaltiesForm
+                          session={session}
+                          currentMatchId={match.id}
+                          localTeam={{
+                            id: match.localTeam.id,
+                            name: match.localTeam.name,
+                            players: availableLocalPlayers,
+                          }}
+                          visitorTeam={{
+                            id: match.visitorTeam.id,
+                            name: match.visitorTeam.name,
+                            players: availableVisitorPlayers,
+                          }}
+                        />
+                      </div>
+                    )}
+                  </section>
+                </>
+              )}
 
             <div className="absolute top-5 right-5">
               <Tooltip>

@@ -81,7 +81,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
     const standings = await prisma.standings.findMany({
       where: { tournamentId },
       orderBy: {
-        points: 'desc',
+        totalPoints: 'desc',
       },
       select: {
         team: {
