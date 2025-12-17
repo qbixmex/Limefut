@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FC } from 'react';
-import { PenaltiesForm } from "../../(components)/penalties-form";
 import { Check, MinusIcon, XIcon } from "lucide-react";
 import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
