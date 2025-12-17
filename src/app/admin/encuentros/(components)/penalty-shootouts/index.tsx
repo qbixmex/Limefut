@@ -75,10 +75,14 @@ export const PenaltyShootout: FC<Props> = ({ shootout }) => {
             <div className="grid grid-cols-2 items-center gap-5">
               <span className="justify-self-end space-x-2">
                 <span className="text-sm text-gray-500">( {shootout.localGoals} )</span>
-                <span className="font-bold">Equipo Local</span>
+                <Link href={`/admin/equipos/${shootout.localTeam.permalink}`} className="font-semibold">
+                  {shootout.localTeam.name}
+                </Link>
               </span>
               <span className="justify-self-start space-x-2">
-                <span className="font-bold">Equipo Visitante</span>
+                <Link href={`/admin/equipos/${shootout.visitorTeam.permalink}`} className="font-semibold">
+                  {shootout.visitorTeam.name}
+                </Link>
                 <span className="text-sm text-gray-500">( {shootout.visitorGoals} )</span>
               </span>
             </div>
@@ -111,7 +115,9 @@ export const PenaltyShootout: FC<Props> = ({ shootout }) => {
           </div>
         </>
       ) : (
-        <p>No se han realizado tiros penales</p>
+        <div className="inline-block border border-sky-600 p-4 rounded-lg">
+          <p className="text-sky-500 font-semibold italic">No se han realizado tiros penales</p>
+        </div>
       )}
     </>
   );
@@ -126,14 +132,20 @@ const ShootoutWinner: FC<{
     <>
       {winnerTeamId ? (
         <>
-          {(winnerTeamId == localTeam.id) && (
-            <Link href={`/admin/equipos/${localTeam.permalink}`}>
+          {(winnerTeamId === localTeam.id) && (
+            <Link
+              href={`/admin/equipos/${localTeam.permalink}`}
+              className="font-semibold"
+            >
               {localTeam.name}
             </Link>
           )}
-          {(winnerTeamId == visitorTeam.id) && (
-            <Link href={`/admin/equipos/${visitorTeam.permalink}`}>
-              {localTeam.name}
+          {(winnerTeamId === visitorTeam.id) && (
+            <Link
+              href={`/admin/equipos/${visitorTeam.permalink}`}
+              className="font-semibold"
+            >
+              {visitorTeam.name}
             </Link>
           )}
         </>

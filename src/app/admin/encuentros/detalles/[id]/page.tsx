@@ -135,7 +135,10 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                     <div className="w-full lg:w-1/2">
                       <PenaltyShootout shootout={match.penaltyShootout} />
                     </div>
-                    {(match.penaltyShootout?.status === SHOOTOUT_STATUS.IN_PROGRESS) && (
+                    {(
+                      match.penaltyShootout === null
+                      || match.penaltyShootout?.status === SHOOTOUT_STATUS.IN_PROGRESS
+                    ) && (
                       <div className="w-full lg:w-1/2">
                         <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda de Penales</h3>
                         <PenaltiesForm
