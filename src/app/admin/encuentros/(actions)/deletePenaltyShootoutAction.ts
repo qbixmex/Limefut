@@ -30,14 +30,24 @@ export const deletePenaltyShootoutAction = async (
     await prisma.$transaction(async (transaction) => {
       const standings = await transaction.standings.findUnique({
         where: { teamId: winnerTeamId },
-        select: { additionalPoints: true },
+        select: {
+          additionalPoints: true,
+          totalPoints: true,
+        },
       });
 
-      if (standings && standings.additionalPoints > 0) {
+      if (
+        standings
+        && (standings.additionalPoints > 0)
+        && (standings.totalPoints > 0)
+      ) {
         await transaction.standings.update({
           where: { teamId: winnerTeamId },
           data: {
             additionalPoints: {
+              decrement: 1,
+            },
+            totalPoints: {
               decrement: 1,
             },
           },

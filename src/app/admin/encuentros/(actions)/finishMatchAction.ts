@@ -45,6 +45,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
         goalsAgainst: { increment: visitorScore },
         goalsDifference: { increment: localScore - visitorScore },
         points: { increment: localPoints },
+        totalPoints: { increment: localPoints },
       },
     });
   } catch (error) {
@@ -64,6 +65,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
         goalsAgainst: { increment: localScore },
         goalsDifference: { increment: visitorScore - localScore },
         points: { increment: visitorPoints },
+        totalPoints: { increment: visitorPoints },
       },
     });
   } catch(error) {
