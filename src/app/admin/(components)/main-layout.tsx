@@ -10,12 +10,18 @@ import { auth } from '@/auth';
 import { Breadcrumbs } from '../(components)/breadcrumbs';
 import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
 import { NavUser } from '@/components/nav-user';
-import type { User } from '@/root/next-auth';
+import type { User } from '~/next-auth';
+import { redirect } from 'next/navigation';
 
 type Props = Readonly<{ children: ReactNode; }>;
 
 export const MainLayout:FC<Props> = async ({ children }) => {
   const session = await auth();
+
+  if (!session || !session.user.roles.includes('admin')) {
+    redirect('/login');
+  }
+
   const user = session!.user as User;
 
   return (

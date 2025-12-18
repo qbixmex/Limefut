@@ -1,4 +1,4 @@
-export const DashboardPage = async () => {
+export const DashboardPage = () => {
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="grid auto-rows-min gap-5 md:grid-cols-3">
