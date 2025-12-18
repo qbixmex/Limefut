@@ -132,10 +132,10 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
     formData.append('localScore', (data.localScore as number).toString());
     formData.append('visitorTeamId', data.visitorTeamId as string);
     formData.append('visitorScore', (data.visitorScore as number).toString());
-    formData.append('place', data.place as string);
+    if (data.place) formData.append('place', data.place as string);
+    if (data.referee) formData.append('referee', data.referee as string);
     formData.append('matchDate', (data.matchDate as Date).toISOString());
     formData.append('week', (data.week as number).toString());
-    formData.append('referee', data.referee as string);
     formData.append('status', data.status as string);
     formData.append('tournamentId', data.tournamentId as string);
 

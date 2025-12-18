@@ -12,13 +12,13 @@ export const editMatchSchema = z.object({
     .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
     .max(50, { message: '¡ La sede debe ser menor a 50 caracteres !' })
     .optional(),
-  week: z
-    .int()
-    .min(1, { message: '¡ La sede debe ser mínimo 1 !' })
-    .optional(),
   referee: z.string()
     .min(3, { message: '¡ El arbitro debe ser mayor a 3 caracteres !' })
     .max(50, { message: '¡ El arbitro debe ser menor a 50 caracteres !' })
+    .optional(),
+  week: z
+    .int()
+    .min(1, { message: '¡ La sede debe ser mínimo 1 !' })
     .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],
