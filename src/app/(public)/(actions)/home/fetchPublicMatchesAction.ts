@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/prisma";
 import type { MATCH_STATUS } from "@/shared/enums";
-import type { Team, Tournament } from "@/shared/interfaces";
 import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
