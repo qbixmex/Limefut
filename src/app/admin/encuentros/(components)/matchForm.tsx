@@ -567,7 +567,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                     <FormLabel>Estado</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
