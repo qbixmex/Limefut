@@ -139,6 +139,10 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
     formData.append('status', data.status as string);
     formData.append('tournamentId', data.tournamentId as string);
 
+    // Reset Date and Time
+    setSelectedDate(new Date());
+    setSelectedTime('00:00:00');
+
     // Create match
     if (!match) {
       const response = await createMatchAction(
