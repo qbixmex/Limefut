@@ -45,17 +45,17 @@ model Tournament {
   permalink     String   @unique
   imageUrl      String?  @map("image_url")
   imagePublicID String?  @map("image_public_id")
-  description   String
-  division      String
-  group         String
-  country       String
-  state         String
-  city          String
-  season        String
+  description   String?
+  division      String?
+  group         String?
+  country       String?
+  state         String?
+  city          String?
+  season        String?
   startDate     DateTime @map("start_date")
   endDate       DateTime @map("end_date")
   active        Boolean  @default(false)
-  currentWeek   Int      @default(0) @map("current_week")
+  currentWeek   Int?     @default(0) @map("current_week")
 
   // Relations
   matches     Match[]
@@ -75,14 +75,14 @@ model Team {
   id            String   @id @default(uuid())
   name          String
   permalink     String   @unique
-  headquarters  String
+  headquarters  String?
   imageUrl      String?  @map("image_url")
   imagePublicID String?  @map("image_public_id")
-  division      String
-  group         String
-  country       String
-  city          String
-  state         String
+  division      String?
+  group         String?
+  country       String?
+  city          String?
+  state         String?
   emails        String[] @default([])
   address       String?
   active        Boolean  @default(false)
@@ -112,7 +112,7 @@ model Team {
 model Coach {
   id            String  @id @default(uuid())
   name          String
-  email         String  @unique
+  email         String? @unique
   phone         String?
   age           Int?
   nationality   String?
@@ -133,8 +133,8 @@ model Coach {
 
 model Player {
   id            String    @id @default(uuid())
-  name          String    @unique
-  email         String    @unique
+  name          String
+  email         String?
   phone         String?
   birthday      DateTime?
   nationality   String?
@@ -169,15 +169,15 @@ enum ShootoutStatus {
 }
 
 model Match {
-  id           String   @id @default(uuid())
-  localId      String   @map("local_id")
-  visitorId    String   @map("visitor_id")
-  localScore   Int?     @default(0) @map("local_score")
-  visitorScore Int?     @default(0) @map("visitor_score")
-  place        String
-  matchDate    DateTime @map("match_date")
-  week         Int
-  referee      String
+  id           String    @id @default(uuid())
+  localId      String    @map("local_id")
+  visitorId    String    @map("visitor_id")
+  localScore   Int?      @default(0) @map("local_score")
+  visitorScore Int?      @default(0) @map("visitor_score")
+  place        String?
+  matchDate    DateTime? @map("match_date")
+  week         Int?
+  referee      String?
 
   status Status @default(scheduled)
 
