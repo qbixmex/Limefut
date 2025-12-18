@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { updateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { editMatchSchema } from '@//shared/schemas';
 import { type Match } from '@/shared/interfaces';
 import { MATCH_STATUS } from '@/shared/enums';
@@ -140,7 +140,7 @@ export const updateMatchAction = async ({
         });
 
         // Revalidate Cache
-        updateTag('matches');
+        revalidatePath('/admin/encuentros');
 
         return {
           ok: true,
