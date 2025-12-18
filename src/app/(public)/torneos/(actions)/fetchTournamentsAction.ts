@@ -8,9 +8,9 @@ export type TournamentType = {
   name: string;
   permalink: string;
   imageUrl: string | null;
-  division: string;
-  group: string;
-  season: string;
+  division: string | null;
+  group: string | null;
+  season: string | null;
 };
 
 export type ResponseAction = Promise<{

@@ -16,9 +16,9 @@ export type ResponseFetchTournaments = Promise<{
   tournaments: {
     id: string;
     name: string;
-    permalink: string;
+    permalink: string | null;
     imageUrl: string | null;
-    season: string;
+    season: string | null;
     startDate: Date;
     endDate: Date;
     active: boolean;

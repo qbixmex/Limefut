@@ -4,11 +4,11 @@ import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 
 export type TournamentType = {
-  id: string;
   name: string;
-  permalink: string;
+  id: string;
   imageUrl: string | null;
-  season: string;
+  permalink: string;
+  season: string | null;
   startDate: Date;
   endDate: Date;
 };

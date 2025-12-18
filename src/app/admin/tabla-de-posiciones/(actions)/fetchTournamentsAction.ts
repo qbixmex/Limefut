@@ -7,7 +7,7 @@ export type TournamentType = {
   name: string;
   permalink: string;
   imageUrl: string | null;
-  season: string;
+  season: string | null;
   startDate: Date;
   endDate: Date;
 };

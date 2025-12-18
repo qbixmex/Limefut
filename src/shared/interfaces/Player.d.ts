@@ -1,7 +1,7 @@
 export interface Player {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
   phone?: string | null;
   birthday?: Date | null;
   nationality?: string | null;

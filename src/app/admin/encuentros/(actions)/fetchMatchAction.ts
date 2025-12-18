@@ -23,10 +23,10 @@ export type MatchType = {
       id: string;
     }[];
   }
-  place: string;
-  matchDate: Date;
-  week: number;
-  referee: string;
+  place: string | null;
+  matchDate: Date | null;
+  week: number | null;
+  referee: string | null;
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS;

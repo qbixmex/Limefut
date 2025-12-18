@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/prisma";
 import type { MATCH_STATUS } from "@/shared/enums";
-import type { Team, Tournament } from "@/shared/interfaces";
 import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
@@ -12,15 +11,29 @@ type Options = Readonly<{
 
 export type MatchResponse = {
   id: string;
-  tournament: Partial<Tournament>,
-  localTeam: Partial<Team>;
-  visitorTeam: Partial<Team>;
+  tournament: {
+    name: string;
+    permalink: string;
+    currentWeek: number | null;
+  },
+  localTeam: {
+    name: string;
+    id: string;
+    permalink: string;
+    division: string | null;
+    group: string | null;
+  };
+  visitorTeam: {
+    name: string;
+    id: string;
+    permalink: string;
+  };
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS;
-  week: number;
-  place: string;
-  matchDate: Date;
+  week: number | null;
+  place: string | null;
+  matchDate: Date | null;
 };
 
 export type ResponseFetchAction = Promise<{
