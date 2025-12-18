@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/sidebar";
 import { logoutAction } from "@/app/(auth)/handleLogout";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 type Props = { user: {
   id: string;
@@ -41,10 +40,9 @@ type Props = { user: {
 
 export const NavUser: FC<Props> = ({ user }) => {
   // const { isMobile } = useSidebar();
-  const route = useRouter();
 
-  const handleLogout = () => {
-    logoutAction();
+  const handleLogout = async () => {
+    await logoutAction();
     toast.success("Has Cerrado Sesión Satisfactoriamente");
   };
 
@@ -96,7 +94,7 @@ export const NavUser: FC<Props> = ({ user }) => {
               <DropdownMenuItem asChild className="cursor-pointer">
                 <button
                   className="w-full"
-                  onClick={() => route.replace(`/admin/usuarios/perfil/${user.id}`)}
+                  onClick={() => window.location.href = `/admin/usuarios/perfil/${user.id}`}
                 >
                   <BadgeCheck />
                   <span>Perfil</span>
