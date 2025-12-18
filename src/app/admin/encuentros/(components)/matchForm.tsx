@@ -72,10 +72,10 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
       localScore: match?.localScore ?? 0,
       visitorTeamId: match?.visitorTeam.id ?? '',
       visitorScore: match?.visitorScore ?? 0,
-      place: match?.place ?? '',      
+      place: match?.place ?? undefined,
+      referee: match?.referee ?? undefined,
       matchDate: match?.matchDate ? new Date(match.matchDate) : new Date(),
       week: match?.week ?? 0,
-      referee: match?.referee ?? '',
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
       tournamentId: match?.tournament.id ?? '',
     },
@@ -157,7 +157,6 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
         route.replace("/admin/encuentros");
         return;
       }
-      return;
     }
 
     // Update match
@@ -176,10 +175,8 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/encuentros");
-        return;
+        route.push("/admin/encuentros");
       }
-      return;
     }
   };
 
@@ -410,7 +407,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
               name="place"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Sede <span className="text-amber-500">*</span></FormLabel>
+                  <FormLabel>Sede</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -425,7 +422,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
               name="referee"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Arbitro <span className="text-amber-500">*</span></FormLabel>
+                  <FormLabel>Arbitro</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -508,7 +505,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                     <FormLabel>Torneo</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -521,6 +518,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                         ))}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -537,8 +535,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                         id="week"
                         type="number"
                         {...field}
-                        min={1}
-                        max={100}
+                        min={0}
                         className="w-[75px]"
                         value={field.value ?? 0}
                         onChange={async (e) => {
