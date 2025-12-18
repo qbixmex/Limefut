@@ -6,13 +6,13 @@ export type TournamentType = {
   id: string;
   name: string;
   permalink: string;
-  country: string;
-  state: string;
-  city: string;
-  season: string;
+  country: string | null;
+  state: string | null;
+  city: string | null;
+  season: string | null;
   startDate: Date;
   endDate: Date;
-  currentWeek: number;
+  currentWeek: number | null;
   teams: {
     id: string;
     name: string;

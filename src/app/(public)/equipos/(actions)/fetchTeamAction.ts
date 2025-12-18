@@ -12,13 +12,13 @@ export type TeamType = {
   id: string;
   name: string;
   permalink: string;
-  headquarters: string;
+  headquarters: string | null;
   imageUrl: string | null;
-  division: string;
-  group: string;
-  country: string;
-  city: string;
-  state: string;
+  division: string | null;
+  group: string | null;
+  country: string | null;
+  city: string | null;
+  state: string | null;
   address: string | null;
 };
 

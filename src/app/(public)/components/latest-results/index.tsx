@@ -50,21 +50,27 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
               </div>
               <div className="flex flex-col items-center gap-1">
                 <div className="font-semibold italic text-center">
-                  <p className="text-green-950">
-                    <span className="capitalize">
-                      {format(new Date(match.matchDate), 'EEEE', { locale: es })}
-                    </span>
-                    <span>
-                      {` ${format(new Date(match.matchDate), 'dd', { locale: es })} `}
-                    </span>
-                    <span>{' de '}</span>
-                    <span className="capitalize">
-                      {format(new Date(match.matchDate), "LLLL", { locale: es })}
-                    </span>
-                  </p>
-                  <p className="text-xl text-green-900">
-                    {format(new Date(match.matchDate), "y", { locale: es })}
-                  </p>
+                  {match.matchDate ? (
+                    <>
+                      <p className="text-green-950">
+                        <span className="capitalize">
+                          {format(match.matchDate, 'EEEE', { locale: es })}
+                        </span>
+                        <span>
+                          {` ${format(match.matchDate, 'dd', { locale: es })} `}
+                        </span>
+                        <span>{' de '}</span>
+                        <span className="capitalize">
+                          {format(match.matchDate, "LLLL", { locale: es })}
+                        </span>
+                      </p>
+                      <p className="text-xl text-green-900">
+                        {format(match.matchDate, "y", { locale: es })}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-green-950">No definido</p>
+                  )}
                 </div>
               </div>
               <div className="flex justify-start items-center gap-5">

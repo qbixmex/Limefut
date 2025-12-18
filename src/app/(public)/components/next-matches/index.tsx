@@ -70,24 +70,32 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
               </div>
               <div className="flex flex-col items-center gap-1">
                 <div className="font-semibold italic text-center">
-                  <p className="text-gray-600">
-                    <span>
-                      {` ${format(new Date(match.matchDate), 'dd', { locale: es })} `}
-                    </span>
-                    <span>{' de '}</span>
-                    <span className="capitalize">
-                      {format(new Date(match.matchDate), "LLLL", { locale: es })}
-                    </span>
-                    <span>
-                      &nbsp;{format(new Date(match.matchDate), "y", { locale: es })}
-                    </span>
-                  </p>
+                  {match.matchDate ? (
+                    <p className="text-gray-600">
+                      <span>
+                        {` ${format(match.matchDate, 'dd', { locale: es })} `}
+                      </span>
+                      <span>{' de '}</span>
+                      <span className="capitalize">
+                        {format(match.matchDate, "LLLL", { locale: es })}
+                      </span>
+                      <span>
+                        &nbsp;{format(match.matchDate, "y", { locale: es })}
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="text-gray-600">No definido</p>
+                  )}
                 </div>
-                <div className="text-2xl italic">
-                  <span className="font-bold text-blue-800">{format(new Date(match.matchDate), 'h')}</span>:
-                  <span>{format(new Date(match.matchDate), 'mm')}</span>
-                  <span>&nbsp;{format(new Date(match.matchDate), 'bbb', { locale: es })}</span>
-                </div>
+                {match.matchDate ? (
+                  <div className="text-2xl italic">
+                    <span className="font-bold text-blue-800">{format(new Date(match.matchDate), 'h')}</span>:
+                    <span>{format(match.matchDate, 'mm')}</span>
+                    <span>&nbsp;{format(match.matchDate, 'bbb', { locale: es })}</span>
+                  </div>
+                ) : (
+                  <div className="text-2xl italic">No Definido</div>
+                )}
               </div>
               <div className="flex justify-start items-center gap-5">
                 <p className="text-2xl font-semibold italic text-blue-900">{match.visitorTeam.name}</p>
