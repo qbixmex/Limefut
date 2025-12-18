@@ -27,10 +27,10 @@ export const createMatchAction = async (
   const rawData = {
     localTeamId: formData.get('localTeamId') ?? '',
     visitorTeamId: formData.get('visitorTeamId') ?? '',
-    place: formData.get('place') ?? '',
+    place: formData.get('place') ?? undefined,
+    referee: formData.get('referee') ?? undefined,
     matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
     week: parseInt(formData.get('week') as string) ?? 1,
-    referee: formData.get('referee') ?? '',
     status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
     tournamentId: formData.get('tournamentId') ?? undefined,
   };
@@ -65,8 +65,8 @@ export const createMatchAction = async (
         data: {
           localId: matchToSave.localTeamId,
           visitorId: matchToSave.visitorTeamId,
-          place: matchToSave.place,
-          week: matchToSave.week,
+          place: matchToSave.place ?? undefined,
+          week: matchToSave.week ?? undefined,
           referee: matchToSave.referee,
           matchDate: matchToSave.matchDate,
           localScore: 0,

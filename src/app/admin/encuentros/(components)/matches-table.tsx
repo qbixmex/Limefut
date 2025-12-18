@@ -99,7 +99,7 @@ export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
                       </Link>
                     </TableCell>
                     <TableCell className="text-center">
-                      { format(match.matchDate as Date, "dd / MMM / y", { locale: es }) }
+                      {format(match.matchDate as Date, "dd / MMM / y", { locale: es })}
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant="outline-info">{match.week}</Badge>
@@ -145,7 +145,7 @@ export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">
-                            <p>editar</p>
+                            editar
                           </TooltipContent>
                         </Tooltip>
                         <DeleteMatch
