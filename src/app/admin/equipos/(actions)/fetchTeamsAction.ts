@@ -18,8 +18,8 @@ export type ResponseFetchTeams = Promise<{
     name: string;
     permalink: string;
     imageUrl: string | null,
-    division: string;
-    group: string;
+    division: string | null;
+    group: string | null;
     active: boolean;
     tournament: Pick<Tournament, 'id' | 'name' | 'permalink'> | null;
     coach: Pick<Coach, 'id' | 'name'> | null;

@@ -18,7 +18,7 @@ export type ResponseFetchAction = Promise<{
   players: {
     id: string;
     name: string;
-    email: string;
+    email: string | null;
     imageUrl: string | null;
     active: boolean;
     team: TeamType | null;

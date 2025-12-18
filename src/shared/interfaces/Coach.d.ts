@@ -1,7 +1,7 @@
 export interface Coach {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
   phone: string | null;
   age: number | null;
   nationality: string | null;

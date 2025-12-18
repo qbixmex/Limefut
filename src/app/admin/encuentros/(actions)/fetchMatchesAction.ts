@@ -27,9 +27,9 @@ export type ResponseFetchAction = Promise<{
     localScore: number;
     visitorScore: number;
     status: MATCH_STATUS;
-    week: number;
-    place: string;
-    matchDate: Date;
+    week: number | null;
+    place: string | null;
+    matchDate: Date | null;
   }[] | null;
   pagination: Pagination | null;
 }>;

@@ -52,7 +52,11 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     return {
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
-      matchesDates: data.map((match) => match.matchDate.toISOString()),
+      matchesDates: data.map((match) => {
+        return match.matchDate
+          ? match.matchDate.toISOString()
+          : '';
+      }),
     };
   } catch (error) {
     if (error instanceof Error) {
