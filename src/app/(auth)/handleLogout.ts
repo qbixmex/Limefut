@@ -1,6 +1,7 @@
 'use server';
 
 import { signOut } from "@/auth";
+import { cookies } from "next/headers";
 
 export const logoutAction = async () => {
   const cookieStore = await cookies();
