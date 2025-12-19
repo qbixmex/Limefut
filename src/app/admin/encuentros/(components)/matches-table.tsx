@@ -1,4 +1,6 @@
-import type { FC } from 'react';
+'use client';
+
+import { type FC, useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -17,6 +19,8 @@ import {
   Pencil,
   InfoIcon,
   Minus,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -25,31 +29,67 @@ import { MATCH_STATUS } from "@/shared/enums";
 import { MatchStatus } from "../(components)/match-status";
 import { FinishMatch } from "../(components)/finish-match";
 import { MatchScoreInput } from "../(components)/match-score-input";
-import { fetchMatchesAction } from '../(actions)';
-import { auth } from "@/auth";
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import type { Match } from '../(actions)/fetchMatchesAction';
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
 type Props = Readonly<{
-  query: string;
-  currentPage: number;
+  matches: Match[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
+  roles: string[];
 }>;
 
-export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth();
-  const {
-    matches = [],
-    pagination = {
-      currentPage: 1,
-      totalPages: 1,
-    },
-  } = await fetchMatchesAction({
-    page: currentPage,
-    take: 12,
-    searchTerm: query,
-  });
+export const MatchesTable: FC<Props> = ({ matches, pagination, roles }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const [sortMatchDate, setSortMatchDate] = useState<'asc' | 'desc' | undefined>(undefined);
+  const [sortWeek, setSortWeek] = useState<'asc' | 'desc' | undefined>(undefined);
+
+  const handleSort = (column: 'matchDate' | 'week') => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (column === 'matchDate') {
+      if (params.get('sortWeek')) {
+        params.delete('sortWeek');
+        setSortWeek(undefined);
+      }
+      const nextSort = (sortMatchDate === 'asc') ? 'desc' : 'asc';
+      setSortMatchDate(nextSort);
+      params.set('sortMatchDate', nextSort);
+      router.replace(`${pathname}?${params}`);
+    }
+
+    if (column === 'week') {
+      if (params.get('sortMatchDate')) {
+        params.delete('sortMatchDate');
+        setSortMatchDate(undefined);
+      }
+      const nextSort = (sortWeek === 'asc') ? 'desc' : 'asc';
+      setSortWeek(nextSort);
+      params.set('sortWeek', nextSort);
+      router.replace(`${pathname}?${params}`);
+    }
+  };
+
+  useEffect(() => {
+    const urlSortMatchDate = searchParams.get('sortMatchDate') as 'asc' | 'desc' | null;
+    const urlSortWeek = searchParams.get('sortWeek') as 'asc' | 'desc' | null;
+
+    if (urlSortMatchDate !== sortMatchDate) {
+      setSortMatchDate(urlSortMatchDate ?? undefined);
+    }
+    if (urlSortWeek !== sortWeek) {
+      setSortWeek(urlSortWeek ?? undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return (
     <>
@@ -60,8 +100,28 @@ export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Encuentro</TableHead>
-                  <TableHead className="w-[100px] text-center">Fecha</TableHead>
-                  <TableHead className="w-[100px] text-center">Jornada</TableHead>
+                  <TableHead className="w-[100px] text-center">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('matchDate')}
+                      className="inline-flex items-center gap-1 font-semibold hover:text-sky-500"
+                    >
+                      <span>Fecha</span>
+                      {sortMatchDate === 'asc' && <ChevronUp size={16} />}
+                      {sortMatchDate === 'desc' && <ChevronDown size={16} />}
+                    </button>
+                  </TableHead>
+                  <TableHead className="w-[100px] text-center">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('week')}
+                      className="inline-flex items-center gap-1 font-semibold hover:text-sky-500"
+                    >
+                      <span>Semana</span>
+                      {sortWeek === 'asc' && <ChevronUp size={16} />}
+                      {sortWeek === 'desc' && <ChevronDown size={16} />}
+                    </button>
+                  </TableHead>
                   <TableHead className="w-[120px]">Estado</TableHead>
                   <TableHead>Acciones</TableHead>
                 </TableRow>
@@ -150,7 +210,7 @@ export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
                         </Tooltip>
                         <DeleteMatch
                           id={match.id}
-                          roles={session?.user.roles as string[]}
+                          roles={roles}
                         />
                       </div>
                     </TableCell>
@@ -174,7 +234,6 @@ export const MatchesTable: FC<Props> = async ({ query, currentPage }) => {
       )}
     </>
   );
-
 };
 
 export default MatchesTable;

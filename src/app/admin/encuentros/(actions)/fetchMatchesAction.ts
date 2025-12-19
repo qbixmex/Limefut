@@ -6,10 +6,24 @@ import { MATCH_STATUS } from "@/shared/enums";
 import type { Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
+  searchTerm: string;
   page?: number;
   take?: number;
-  searchTerm: string;
+  sortMatchDate?: 'asc' | 'desc';
+  sortWeek?: 'asc' | 'desc';
 }>;
+
+export type Match = {
+  id: string;
+  localTeam: Team;
+  visitorTeam: Team;
+  localScore: number;
+  visitorScore: number;
+  status: MATCH_STATUS;
+  week: number | null;
+  place: string | null;
+  matchDate: Date | null;
+};
 
 type Team = {
   id: string;
@@ -20,22 +34,14 @@ type Team = {
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
-  matches: {
-    id: string;
-    localTeam: Team;
-    visitorTeam: Team;
-    localScore: number;
-    visitorScore: number;
-    status: MATCH_STATUS;
-    week: number | null;
-    place: string | null;
-    matchDate: Date | null;
-  }[] | null;
-  pagination: Pagination | null;
+  matches: Match[];
+  pagination: Pagination;
 }>;
 
 export const fetchMatchesAction = async (options?: Options): ResponseFetchAction => {
   let { page = 1, take = 12 } = options ?? {};
+  const sortMatchDate = options?.sortMatchDate;
+  const sortWeek = options?.sortWeek;
 
   // In case is an invalid number like (lorem)
   if (isNaN(page)) page = 1;
@@ -82,7 +88,10 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   try {
     const matches = await prisma.match.findMany({
       where: whereCondition,
-      orderBy: { week: 'desc' },
+      orderBy: [
+        { matchDate: sortMatchDate },
+        { week: sortWeek ?? 'desc' },
+      ],
       take: take,
       skip: (page - 1) * take,
       select: {
@@ -137,16 +146,22 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       return {
         ok: false,
         message: error.message,
-        matches: null,
-        pagination: null,
+        matches: [],
+        pagination: {
+          currentPage: 0,
+          totalPages: 0,
+        },
       };
     }
     console.log(error);
     return {
       ok: false,
       message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
-      matches: null,
-      pagination: null,
+      matches: [],
+      pagination: {
+        currentPage: 0,
+        totalPages: 0,
+      },
     };
   }
 };
