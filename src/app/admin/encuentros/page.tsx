@@ -9,14 +9,17 @@ import {
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import { MatchesTable } from "./(components)/matches-table";
 import { MatchesTableSkeleton } from "./(components)/matches-table-skeleton";
 import { Search } from "@/root/src/shared/components/search";
+import { MatchesWrapper } from "./(components)/matches.wrapper";
+import ClearFilters from "./(components)/clear-filters";
 
 type Props = Readonly<{
-  searchParams?: Promise<{
+  searchParams: Promise<{
     query?: string;
     page?: string;
+    sortMatchDate?: 'asc' | 'desc';
+    sortWeek?: 'asc' | 'desc';
   }>;
 }>;
 
@@ -24,6 +27,8 @@ export const MatchesPage: FC<Props> = async (props) => {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
+  const sortMatchDate = searchParams?.sortMatchDate;
+  const sortWeek = searchParams?.sortWeek ?? 'desc';
 
   return (
     <>
@@ -34,6 +39,7 @@ export const MatchesPage: FC<Props> = async (props) => {
             <CardHeader className="flex items-center justify-between">
               <CardTitle>Lista de Encuentros</CardTitle>
               <section className="flex gap-5 items-center">
+                <ClearFilters />
                 <Search placeholder="Buscar encuentro ..." />
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -54,7 +60,12 @@ export const MatchesPage: FC<Props> = async (props) => {
                 key={`${query}-${currentPage}`}
                 fallback={<MatchesTableSkeleton colCount={6} rowCount={16} />}
               >
-                <MatchesTable query={query} currentPage={currentPage} />
+                <MatchesWrapper
+                  query={query}
+                  currentPage={currentPage}
+                  sortMatchDate={sortMatchDate}
+                  sortWeek={sortWeek}
+                />
               </Suspense>
             </CardContent>
           </Card>
