@@ -22,11 +22,13 @@ export type MatchResponse = {
     permalink: string;
     division: string | null;
     group: string | null;
+    imageUrl: string | null;
   };
   visitorTeam: {
     name: string;
     id: string;
     permalink: string;
+    imageUrl: string | null;
   };
   localScore: number;
   visitorScore: number;
@@ -51,7 +53,7 @@ type Pagination = {
 export const fetchPublicLatestMatchesAction = async (options?: Options): ResponseFetchAction => {
   "use cache";
 
-  cacheLife('hours');
+  cacheLife('days');
   cacheTag('matches');
 
   let { nextMatches = 1, take = 12 } = options ?? {};
@@ -88,7 +90,6 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
             name: true,
             permalink: true,
             currentWeek: true,
-
           },
         },
         local: {
@@ -98,6 +99,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
             permalink: true,
             division: true,
             group: true,
+            imageUrl: true,
           },
         },
         visitor: {
@@ -105,6 +107,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
             id: true,
             name: true,
             permalink: true,
+            imageUrl: true,
           },
         },
         localScore: true,
