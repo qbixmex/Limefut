@@ -110,38 +110,36 @@ export const Tournament: FC<Props> = async ({ params }) => {
 
       <h2 className="teamsSubheading">Equipos</h2>
 
-      {
-        (tournament.teams.length > 0) ? (
-          <section className="teams">
-            {tournament.teams.map((team) => (
-              <section key={team.id} className="teamCard">
-                <div className="flex gap-3">
-                  {!team.imageUrl ? (
-                    <Shield className="text-gray-400" />
-                  ) : (
-                    <Image
-                      src={team.imageUrl}
-                      width={200}
-                      height={200}
-                      className="object-contain"
-                      alt={`${team.name} equipo`}
-                    />
-                  )}
-                  <Link href={`/equipos/${team.permalink}`}>
-                    {team.name}
-                  </Link>
-                </div>
-              </section>
-            ))}
-          </section>
-        ) : (
-          <div className="border-2 border-sky-600 dark:border-sky-500 py-6 rounded-lg mb-5">
-            <p className="text-2xl text-center text-sky-600 dark:text-sky-500">
-              ¡ El torneo aún no tiene equipos asignados !
-            </p>
-          </div>
-        )
-      }
+      {(tournament.teams.length > 0) ? (
+        <section className="teams">
+          {tournament.teams.map((team) => (
+            <section key={team.id} className="teamCard">
+              <Link href={`/equipos/${team.permalink}`}>
+                {!team.imageUrl ? (
+                  <Shield className="text-gray-400" />
+                ) : (
+                  <Image
+                    src={team.imageUrl}
+                    width={200}
+                    height={200}
+                    className="object-contain"
+                    alt={`${team.name} equipo`}
+                  />
+                )}
+              </Link>
+              <Link href={`/equipos/${team.permalink}`}>
+                {team.name}
+              </Link>
+            </section>
+          ))}
+        </section>
+      ) : (
+        <div className="border-2 border-sky-600 dark:border-sky-500 py-6 rounded-lg mb-5">
+          <p className="text-2xl text-center text-sky-600 dark:text-sky-500">
+            ¡ El torneo aún no tiene equipos asignados !
+          </p>
+        </div>
+      )}
     </>
   );
 };

@@ -52,9 +52,28 @@
 }
 
 .teams {
-  @apply flex flex-wrap gap-5;
+  @apply
+    grid
+    grid-cols-1
+    gap-5
+    md:grid-cols-2
+    lg:grid-cols-4
+    xl:grid-cols-4;
 }
 
 .teamCard {
-  @apply border-2 border-gray-400 dark:border-sky-800 px-8 py-4 rounded-lg;
+  @apply
+  rounded-lg
+  border-2
+  dark:border
+  dark:bg-gray-800/80
+  flex
+  flex-col      
+  justify-center
+  items-center
+  gap-2
+  p-5;
+  & img {
+    @apply rounded;
+  }
 }
