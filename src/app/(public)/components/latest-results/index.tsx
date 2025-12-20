@@ -6,6 +6,7 @@ import { ShieldQuestion } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { GameScore } from "@/shared/components/icons";
+import Image from "next/image";
 
 type Props = Readonly<{
   resultsPromise: Promise<{ latestResultsPage: string }>;
@@ -14,7 +15,7 @@ type Props = Readonly<{
 export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
   const { latestResultsPage } = await resultsPromise;
   const { matches, pagination } = await fetchPublicLatestMatchesAction({
-    take: 2,
+    take: 4,
     nextMatches: Number(latestResultsPage),
   });
 
@@ -39,10 +40,20 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                 <Heading level="h3" className="text-lg">{match.tournament.name}</Heading>
                 <p><b>Division:</b> {match.localTeam.division}</p>
                 <p><b>Jornada:</b> {match.week}</p>
-                <p><b>Lugar:</b> {match.place}</p>
+                <p><b>Lugar:</b> {match.place ?? <span>No especificado</span>}</p>
               </div>
               <div className="flex justify-start items-center gap-5">
-                <ShieldQuestion className="text-gray-400" />
+                {match.localTeam.imageUrl ? (
+                  <Image
+                    src={match.localTeam.imageUrl}
+                    width={100}
+                    height={100}
+                    alt={`${match.localTeam.name} escudo`}
+                    className="size-[100px] object-cover rounded"
+                  />
+                ) : (
+                  <ShieldQuestion className="text-gray-400" />
+                )}
                 <div className="flex flex-col items-center gap-3">
                   <p className="text-2xl font-semibold italic text-green-900">{match.localTeam.name}</p>
                   <p className="text-xl font-bold text-blue-600">{match.localScore}</p>
@@ -78,7 +89,17 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                   <p className="text-2xl font-semibold italic text-green-900">{match.visitorTeam.name}</p>
                   <p className="text-xl font-bold text-blue-600">{match.visitorScore}</p>
                 </div>
-                <ShieldQuestion className="text-gray-400" />
+                {match.visitorTeam.imageUrl ? (
+                  <Image
+                    src={match.visitorTeam.imageUrl}
+                    width={100}
+                    height={100}
+                    alt={`${match.visitorTeam.name} escudo`}
+                    className="size-[100px] object-cover rounded"
+                  />
+                ) : (
+                  <ShieldQuestion className="text-gray-400" />
+                )}
               </div>
             </div>
             {((matches.length - 1) !== index) && (

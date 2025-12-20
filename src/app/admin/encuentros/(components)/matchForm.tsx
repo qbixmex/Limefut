@@ -89,6 +89,15 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
   });
 
   useEffect(() => {
+    if (match?.matchDate) {
+      const d = new Date(match.matchDate);
+      setSelectedDate(d);
+      setSelectedTime(format(d, 'HH:mm:ss'));
+      form.setValue('matchDate', d, { shouldValidate: true });
+    }
+  }, [match, form]);
+
+  useEffect(() => {
     if (selectedDate) {
       const [hours, minutes, seconds] = selectedTime.split(':').map(Number);
       const combinedDate = new Date(selectedDate);
@@ -158,6 +167,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
       if (response.ok) {
         toast.success(response.message);
         form.reset();
+        route.refresh();
         route.replace("/admin/encuentros");
         return;
       }
@@ -179,6 +189,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
 
       if (response.ok) {
         toast.success(response.message);
+        route.refresh();
         route.push("/admin/encuentros");
       }
     }
