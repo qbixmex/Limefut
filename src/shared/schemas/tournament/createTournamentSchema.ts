@@ -21,27 +21,34 @@ export const createTournamentSchema = z.object({
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
-  description: z.string()
-    .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' })
-    .max(250, { message: '¡ La descripción debe ser menor a 250 caracteres !' }),
   division: z.string()
     .min(3, { message: '¡ La división debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La división debe ser menor a 200 caracteres !' }),
+    .max(200, { message: '¡ La división debe ser menor a 200 caracteres !' })
+    .optional(),
   group: z.string()
     .min(3, { message: '¡ El grupo debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El grupo debe ser menor a 100 caracteres !' }),
+    .max(100, { message: '¡ El grupo debe ser menor a 100 caracteres !' })
+    .optional(),
   country: z.string()
     .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),
+    .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' })
+    .optional(),
   state: z.string()
     .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' }),
+    .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' })
+    .optional(),
   city: z.string()
     .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' }),
+    .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' })
+    .optional(),
+  description: z.string()
+    .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' })
+    .max(250, { message: '¡ La descripción debe ser menor a 250 caracteres !' })
+    .optional(),
   season: z.string()
     .min(3, { message: '¡ La temporada debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La temporada debe ser menor a 200 caracteres !' }),
+    .max(200, { message: '¡ La temporada debe ser menor a 200 caracteres !' })
+    .optional(),
   startDate: z.date({ message: "La fecha de inicio debe ser una fecha válida" }),
   endDate: z.date({ message: "La fecha final debe ser una fecha válida" }),
   active: z.boolean().optional(),

@@ -45,13 +45,13 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     defaultValues: {
       name: tournament?.name ?? '',
       permalink: tournament?.permalink ?? '',
-      description: tournament?.description ?? '',
-      division: tournament?.division ?? '',
-      group: tournament?.group ?? '',
-      country: tournament?.country ?? '',
-      state: tournament?.state ?? '',
-      city: tournament?.city ?? '',
-      season: tournament?.season ?? '',
+      division: tournament?.division ?? undefined,
+      group: tournament?.group ?? undefined,
+      country: tournament?.country ?? undefined,
+      state: tournament?.state ?? undefined,
+      city: tournament?.city ?? undefined,
+      season: tournament?.season ?? undefined,
+      description: tournament?.description ?? undefined,
       startDate: tournament?.startDate ?? new Date(),
       endDate: tournament?.endDate ?? new Date(),
       active: tournament?.active ?? false,
@@ -63,16 +63,19 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
-
+    if (data.division) formData.append('division', data.division as string);
+    if (data.group) formData.append('group', data.group as string);
+    if (data.country) formData.append('country', data.country as string);
+    if (data.state) formData.append('state', data.state as string);
+    if (data.city) formData.append('city', data.city as string);
+    
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
     }
+    
+    if (data.description) formData.append('description', data.description as string);
+    if (data.season) formData.append('season', data.season as string);
 
-    formData.append('description', data.description as string);
-    formData.append('country', data.country as string);
-    formData.append('state', data.state as string);
-    formData.append('city', data.city as string);
-    formData.append('season', data.season as string);
     formData.append('startDate',
       data.startDate
         ? (data.startDate as Date).toISOString()
@@ -101,6 +104,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
         toast.success(response.message);
         form.reset();
         route.replace("/admin/torneos");
+        route.refresh();
         return;
       }
       return;
@@ -122,9 +126,9 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       if (response.ok) {
         toast.success(response.message);
         route.replace("/admin/torneos");
+        route.refresh();
         return;
       }
-      return;
     }
   };
 
@@ -143,7 +147,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Nombre
+                    Nombre <span className="text-amber-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
@@ -161,7 +165,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Enlace Permanente
+                    Enlace Permanente <span className="text-amber-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
