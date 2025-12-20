@@ -147,7 +147,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Nombre
+                    Nombre <span className="text-amber-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
@@ -165,7 +165,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Enlace Permanente
+                    Enlace Permanente <span className="text-amber-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
