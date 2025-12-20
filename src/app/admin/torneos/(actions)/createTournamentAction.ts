@@ -31,13 +31,13 @@ export const createTournamentAction = async (
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
     image: formData.get('image') as File,
-    description: formData.get('description') as string,
-    division: formData.get('division') as string,
-    group: formData.get('group') as string,
-    country: formData.get('country') as string,
-    state: formData.get('state') as string,
-    city: formData.get('city') as string,
-    season: formData.get('season') as string,
+    division: formData.get('division') ?? undefined,
+    group: formData.get('group') ?? undefined,
+    country: formData.get('country') ?? undefined,
+    state: formData.get('state') ?? undefined,
+    city: formData.get('city') ?? undefined,
+    description: formData.get('description') ?? undefined,
+    season: formData.get('season') ?? undefined,
     startDate: startDate,
     endDate: endDate,
     active: (formData.get('active') === 'true')
@@ -52,22 +52,37 @@ export const createTournamentAction = async (
   if (!tournamentVerified.success) {
     return {
       ok: false,
-      message: tournamentVerified.error.message,
+      message: tournamentVerified.error.issues[0].message,
       tournament: null,
     };
   }
 
   const { image, ...tournamentToSave } = tournamentVerified.data;
-  
-    // Upload Image to third-party storage (cloudinary).
-    let cloudinaryResponse: CloudinaryResponse | null = null;
-  
-    if (image) {
-      cloudinaryResponse = await uploadImage(image!, 'tournaments');
-      if (!cloudinaryResponse) {
-        throw new Error('Error subiendo imagen a cloudinary');
-      }
+
+  // Verify tournament existence by permalink
+  const foundTournament = await prisma.tournament.count({
+    where: {
+      permalink: tournamentToSave.permalink,
+    },
+  });
+
+  if (foundTournament > 0) {
+    return {
+      ok: false,
+      message: `¡ El enlace permanente, "${tournamentToSave.permalink}", ya existe, elija otro !`,
+      tournament: null,
+    };
+  }
+
+  // Upload Image to third-party storage (cloudinary).
+  let cloudinaryResponse: CloudinaryResponse | null = null;
+
+  if (image) {
+    cloudinaryResponse = await uploadImage(image!, 'tournaments');
+    if (!cloudinaryResponse) {
+      throw new Error('Error subiendo imagen a cloudinary');
     }
+  }
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
