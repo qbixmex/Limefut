@@ -17,7 +17,7 @@ export type ResponseFetchAction = Promise<{
 export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchAction => {
   "use cache";
 
-  cacheLife('hours');
+  cacheLife('days');
   cacheTag('matches');
 
   let { take = 12 } = options ?? {};
@@ -32,7 +32,7 @@ export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchA
 
     const data = await prisma.match.findMany({
       where: {
-        status: 'inProgress',
+        status: 'scheduled',
         matchDate: {
           gte: startOfToday,
           lte: endOfToday,

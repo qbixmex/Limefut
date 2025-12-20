@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { CurrentDayMatchesAction } from "../../(actions)/home/currentDayMatchesAction";
 import { HorizontalCalendar } from "../horizontal-calendar";
+import Image from "next/image";
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string }>;
@@ -15,7 +16,7 @@ type Props = Readonly<{
 export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
   const { matchesPage } = await matchesPromise;
   const { matches, pagination } = await fetchPublicMatchesAction({
-    take: 2,
+    take: 4,
     nextMatches: Number(matchesPage),
   });
 
@@ -23,9 +24,10 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
     const { matchesDates } = await CurrentDayMatchesAction();
     const count = matchesDates.length;
     const pluralize = (count > 1) ? 's' : '';
-    return (matchesDates.length > 0)
-      ? `Hoy hay ${count} encuentro${pluralize} programado${pluralize}`
-      : 'Hoy no hay encuentros programados';
+
+    if (matchesDates.length > 0) {
+      return `Hoy hay ${count} encuentro${pluralize} programado${pluralize}`;
+    }
   };
 
   return (
@@ -36,36 +38,34 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
 
       <div className="bg-emerald-700 text-emerald-50 px-6 py-3 rounded-t-lg flex items-center gap-4">
         <CalendarDaysIcon size={50} strokeWidth={1.5} />
-        <div>
-          <p className="font-bold text-2xl flex gap-1">
-            <span className="capitalize">{format(new Date(), 'EEEE', { locale: es })}</span>
-            <span className="capitalize">{format(new Date(), 'dd', { locale: es })}</span>
-            <span>de</span>
-            <span className="capitalize">{format(new Date(), 'MMMM', { locale: es })}</span>
-            <span className="capitalize">{format(new Date(), 'y', { locale: es })}</span>
-          </p>
+        <>
+          <p className="text-2xl font-semibold">Próximos Encuentros</p>
           <p className="font-semibold italic">{todayMatchesCount()}</p>
-        </div>
+        </>
       </div>
 
       <div className="border border-green-900/90 rounded-b-lg p-5">
-        {(matches.length === 0) && (
-          <div className="text-emerald-800 text-center font-bold text-xl italic">
-            Aún no hay encuentros programados
-          </div>
-        )}
-
-        {(matches.length > 0) && matches.map((match, index) => (
+        {(matches.length > 0) ? matches.map((match, index) => (
           <div key={match.id} className="flex flex-col gap-3 text-neutral-800">
             <div className="grid grid-cols-[1fr_1fr_250px_1fr] items-center">
               <div className="flex flex-col gap-1">
                 <Heading level="h3" className="text-lg">{match.tournament.name}</Heading>
                 <p><b>Division:</b> {match.localTeam.division}</p>
                 <p><b>Jornada:</b> {match.week}</p>
-                <p><b>Lugar:</b> {match.place}</p>
+                <p><b>Lugar:</b> {match.place ?? <span>No especificado</span>}</p>
               </div>
               <div className="flex justify-start items-center gap-5">
-                <ShieldQuestion className="text-gray-400" />
+                {match.localTeam.imageUrl ? (
+                  <Image
+                    src={match.localTeam.imageUrl}
+                    width={100}
+                    height={100}
+                    alt={`${match.localTeam.name} escudo`}
+                    className="size-[100px] object-cover rounded"
+                  />
+                ) : (
+                  <ShieldQuestion className="text-gray-400" />
+                )}
                 <p className="text-2xl font-semibold italic text-blue-900">{match.localTeam.name}</p>
               </div>
               <div className="flex flex-col items-center gap-1">
@@ -99,14 +99,26 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
               </div>
               <div className="flex justify-start items-center gap-5">
                 <p className="text-2xl font-semibold italic text-blue-900">{match.visitorTeam.name}</p>
-                <ShieldQuestion className="text-gray-400" />
+                {match.visitorTeam.imageUrl ? (
+                  <Image
+                    src={match.visitorTeam.imageUrl}
+                    width={100}
+                    height={100}
+                    alt={`${match.visitorTeam.name} escudo`}
+                    className="size-[100px] object-cover rounded"
+                  />
+                ) : (
+                  <ShieldQuestion className="text-gray-400" />
+                )}
               </div>
             </div>
             {((matches.length - 1) !== index) && (
               <div className="w-full h-0.5 bg-gray-300 my-3" />
             )}
           </div>
-        ))}
+        )): (
+          <p className="text-2xl text-green-800 font-semibold italic text-center">No hay encuentros programados</p>
+        )}
       </div>
       {(pagination.totalPages > 1) && (
         <section className="flex justify-center mt-5">
