@@ -120,7 +120,13 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
     });
 
     const totalCount = await prisma.match.count({
-      where: { status: "completed" },
+      where: {
+        status: "completed",
+        matchDate: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
     });
 
     return {
