@@ -1,10 +1,9 @@
 import { Suspense, type FC } from 'react';
 import { MatchForm } from '../(components)/matchForm';
 import type { Session } from "next-auth";
-import { fetchTournamentsAction } from '../(actions)';
 import { redirect } from 'next/navigation';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
-import { Team } from '~/src/shared/interfaces';
+import type { Team } from '~/src/shared/interfaces';
 import { auth } from '~/src/auth';
 import { FormSkeleton } from '../(components)/form-skeleton';
 
