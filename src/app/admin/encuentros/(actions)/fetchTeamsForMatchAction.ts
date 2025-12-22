@@ -3,7 +3,8 @@
 import prisma from "@/lib/prisma";
 
 type OptionsType = {
-  week?: number;
+  tournamentId: string;
+  week: number;
 };
 
 export type ResponseFetchTeams = Promise<{
@@ -12,22 +13,23 @@ export type ResponseFetchTeams = Promise<{
   teams: {
     id: string;
     name: string;
-  }[] | null;
+  }[];
 }>;
 
-export const fetchTeamsForMatchAction = async (options?: OptionsType): ResponseFetchTeams => {
-  const { week } = options ?? {};
-
+export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsType): ResponseFetchTeams => {
   try {
-    // Get teams that are already scheduled for the specified week.
-    const scheduledTeams = week ? await prisma.match.findMany({
-      where: { week },
+    // Get teams that are already scheduled for the specified tournament and week.
+    const scheduledTeams = await prisma.match.findMany({
+      where: {
+        tournamentId,
+        week,
+      },
       select: {
         localId: true,
         visitorId: true,
         week: true,
       },
-    }) : [];
+    });
 
     // Extract all team IDs that are already scheduled.
     const scheduledTeamsIds = new Set([
@@ -38,7 +40,7 @@ export const fetchTeamsForMatchAction = async (options?: OptionsType): ResponseF
     // Get all active teams excluding those already scheduled.
     const teams = await prisma.team.findMany({
       where: {
-        active: true,
+        tournamentId,
         ...({
           id: {
             notIn: Array.from(scheduledTeamsIds),
@@ -63,14 +65,14 @@ export const fetchTeamsForMatchAction = async (options?: OptionsType): ResponseF
       return {
         ok: false,
         message: error.message,
-        teams: null,
+        teams: [],
       };
     }
     console.log(error);
     return {
       ok: false,
       message: "Error inesperado al obtener los equipos, revise los logs del servidor",
-      teams: null,
+      teams: [],
     };
   }
 };
