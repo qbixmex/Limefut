@@ -23,7 +23,8 @@ export const createMatchSchema = z.object({
     .optional(),
   week: z
     .int()
-    .min(0, { message: '¡ La sede debe ser mínimo 1 !' }),
+    .min(0, { message: '¡ La sede debe ser mínimo 1 !' })
+    .optional(),
   localScore: z
     .int()
     .min(0, { message: '¡ El marcador local debe ser mayor a 0 !' })
@@ -41,5 +42,5 @@ export const createMatchSchema = z.object({
   tournamentId: requiredUUID(
     '¡ Seleccione el torneo !',
     '¡ El id del torneo debe ser un UUID válido !',
-  ),
+  ).optional(),
 });

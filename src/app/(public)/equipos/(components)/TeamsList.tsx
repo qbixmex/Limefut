@@ -24,10 +24,10 @@ export const TeamsList: FC<TeamsListProps> = async ({ permalink }) => {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 lg:gap-10 mt-5">
       {
         teams.map((team) => (
-          <div key={team.id} className="flex items-center gap-5">
+          <div key={team.id} className="flex flex-col items-center gap-5">
             <figure>
               {(!team.imageUrl) ? (
                 <div className="size-[50px] text-gray-400 bg-gray-200 dark:bg-gray-700 rounded grid place-content-center">
@@ -36,9 +36,10 @@ export const TeamsList: FC<TeamsListProps> = async ({ permalink }) => {
               ) : (
                 <Image
                   src={team.imageUrl as string}
-                  width={50}
-                  height={50}
+                  width={250}
+                  height={250}
                   alt={`Equipo ${team.name}`}
+                  className="size-[250px] rounded"
                 />
               )}
             </figure>

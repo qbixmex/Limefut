@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { Suspense, type FC } from "react";
 
 import {
   Card,
@@ -6,13 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
-import type { Session } from "next-auth";
-import { fetchMatchAction, fetchTournamentsAction } from "../../(actions)";
-import type { Match, Team, Tournament } from '@/shared/interfaces';
-import { fetchTeamsForMatchAction } from "../../(actions)/fetchTeamsForMatchAction";
-import { MatchForm } from "../../(components)/matchForm";
+import FormSkeleton from "../../(components)/form-skeleton";
+import EditMatchContent from "./edit-match-content";
 
 type Props = Readonly<{
   params: Promise<{
@@ -21,25 +16,7 @@ type Props = Readonly<{
 }>;
 
 export const EditMatch: FC<Props> = async ({ params }) => {
-  const session = await auth();
-  const id = (await params).id;
-
-  const responseMatch = await fetchMatchAction(id, session?.user.roles ?? null);
-
-  if (!responseMatch.ok) {
-    redirect(`/admin/encuentros?error=${encodeURIComponent(responseMatch.message)}`);
-  }
-
-  const responseTeams = await fetchTeamsForMatchAction();
-
-  if (!responseTeams.ok) {
-    redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
-  }
-
-  const teams = responseTeams.teams as Team[];
-
-  const tournaments = await fetchTournamentsAction();
-  const match = responseMatch.match as Match & { tournament: Pick<Tournament, 'id' | 'name'> };
+  const matchId = (await params).id;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -49,12 +26,9 @@ export const EditMatch: FC<Props> = async ({ params }) => {
             <CardTitle>Editar Encuentro</CardTitle>
           </CardHeader>
           <CardContent>
-            <MatchForm
-              tournaments={tournaments.tournaments || []}
-              session={session as Session}
-              match={match}
-              initialTeams={teams}
-            />
+            <Suspense fallback={<FormSkeleton />}>
+              <EditMatchContent matchId={matchId} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>

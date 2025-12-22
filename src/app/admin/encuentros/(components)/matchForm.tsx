@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type FC } from 'react';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -39,26 +39,36 @@ import { createMatchSchema, editMatchSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
-import type { Match, Team, Tournament } from '@/shared/interfaces';
+import type { Match, Team } from '@/shared/interfaces';
 import { createMatchAction, updateMatchAction } from '../(actions)';
 import { Check, ChevronDownIcon, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { MATCH_STATUS } from '@/shared/enums';
-import { cn } from '@/root/src/lib/utils';
-import { Calendar } from '@/root/src/components/ui/calendar';
-import { Label } from '@/root/src/components/ui/label';
+import { cn } from '@/lib/utils';
+import { Calendar } from '@/components/ui/calendar';
+import { Label } from '@/components/ui/label';
 
 type Props = Readonly<{
   session: Session;
   initialTeams: Team[];
+  tournamentId?: string;
+  week?: number;
   match?: Match & {
-    tournament: Pick<Tournament, 'id' | 'name'>;
+    tournament: {
+      id: string;
+      name: string;
+    };
   };
-  tournaments: Pick<Tournament, 'id' | 'name'>[];
 }>;
 
-export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments }) => {
+export const MatchForm: FC<Props> = ({
+  session,
+  initialTeams,
+  tournamentId,
+  week,
+  match,
+}) => {
   const route = useRouter();
   const formSchema = !match ? createMatchSchema : editMatchSchema;
   const [teams, setTeams] = useState<Team[]>(initialTeams);
@@ -75,9 +85,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
       place: match?.place ?? undefined,
       referee: match?.referee ?? undefined,
       matchDate: match?.matchDate ? new Date(match.matchDate) : new Date(),
-      week: match?.week ?? 0,
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
-      tournamentId: match?.tournament.id ?? '',
     },
   });
 
@@ -115,7 +123,10 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
   }, []);
 
   const updateTeamsForWeek = async (week: number) => {
-    const response = await fetchTeamsForMatchAction({ week });
+    const response = await fetchTeamsForMatchAction({
+      tournamentId: match?.tournament.id as string,
+      week,
+    });
     if (response.ok && response.teams) {
       setTeams(response.teams as Team[]);
 
@@ -144,9 +155,9 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
     if (data.place) formData.append('place', data.place as string);
     if (data.referee) formData.append('referee', data.referee as string);
     formData.append('matchDate', (data.matchDate as Date).toISOString());
-    formData.append('week', (data.week as number).toString());
     formData.append('status', data.status as string);
-    formData.append('tournamentId', data.tournamentId as string);
+    formData.append('tournamentId', !match ? tournamentId as string : match.tournament.id);
+    formData.append('week', !match ? `${week}` : `${match.week}`);
 
     // Reset Date and Time
     setSelectedDate(new Date());
@@ -166,9 +177,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
 
       if (response.ok) {
         toast.success(response.message);
-        form.reset();
-        route.refresh();
-        route.replace("/admin/encuentros");
+        route.replace(`/admin/encuentros/detalles/${response.match?.id}`);
         return;
       }
     }
@@ -189,8 +198,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
 
       if (response.ok) {
         toast.success(response.message);
-        route.refresh();
-        route.push("/admin/encuentros");
+        route.replace(`/admin/encuentros/detalles/${match.id}`);
       }
     }
   };
@@ -201,14 +209,14 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
       >
-        {/* Local and Local Score */}
+        {/* Local Team and Visitor Team */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
               name="localTeamId"
               render={({ field }) => {
-                const selectedTeam = teams.find((t) => t.id === field.value);
+                const selectedTeam = teams.find((t) => t.id === field.value) ?? match?.localTeam;
                 const visitorTeamId = form.watch('visitorTeamId');
                 return (
                   <FormItem>
@@ -225,9 +233,10 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                               { "border-destructive!": form.formState.errors.localTeamId },
                             )}
                           >
-                            {selectedTeam
-                              ? selectedTeam.name
-                              : "Selecciona un equipo"
+                            {
+                              selectedTeam
+                                ? selectedTeam.name
+                                : "Selecciona un equipo"
                             }
                             <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                           </Button>
@@ -286,7 +295,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
               control={form.control}
               name="visitorTeamId"
               render={({ field }) => {
-                const selectedTeam = teams.find((t) => t.id === field.value);
+                const selectedTeam = teams.find((t) => t.id === field.value) ?? match?.localTeam;
                 const localTeamId = form.watch('localTeamId');
 
                 return (
@@ -360,7 +369,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
           </div>
         </div>
 
-        {/* Visitor and Visitor Score */}
+        {/* Local Score and Visitor Score */}
         {match && match.status !== MATCH_STATUS.COMPLETED && (
           <div className="flex flex-col gap-5 lg:flex-row">
             <div className="w-full lg:w-1/2">
@@ -510,66 +519,9 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
               </>
             </div>
           </div>
-          <div className="w-full lg:w-1/2 flex justify-end gap-5">
-            <div>
-              <FormField
-                control={form.control}
-                name="tournamentId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Torneo</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un torneo" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {tournaments.map(({ id, name }) => (
-                          <SelectItem key={id} value={id as string}>{name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div>
-              <FormField
-                control={form.control}
-                name="week"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Jornada</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="week"
-                        type="number"
-                        {...field}
-                        min={0}
-                        className="w-[75px]"
-                        value={field.value ?? 0}
-                        onChange={async (e) => {
-                          const weekValue = parseInt(e.target.value);
-                          field.onChange(weekValue);
-                          if (weekValue && weekValue > 0 && !match) {
-                            await updateTeamsForWeek(weekValue);
-                          } else {
-                            setTeams(initialTeams);
-                          }
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div>
+
+          {(match?.status != 'completed') && (
+            <div className='w-full lg:w-1/2 flex justify-end gap-5'>
               <FormField
                 control={form.control}
                 name="status"
@@ -596,7 +548,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
                 )}
               />
             </div>
-          </div>
+          )}
         </div>
 
         {/* Buttons */}
@@ -605,7 +557,7 @@ export const MatchForm: FC<Props> = ({ session, initialTeams, match, tournaments
             type="button"
             variant="outline-secondary"
             size="lg"
-            onClick={() => route.back()}
+            onClick={() => route.replace('/admin/encuentros')}
           >
             cancelar
           </Button>
