@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { auth } from "~/src/auth";
 import { fetchMatchesAction } from "../(actions)";
 import { MatchesTable } from "./matches-table";
+import { fetchTournamentAction } from "../(actions)/fetchTournamentAction";
 
 type Props = Readonly<{
   tournamentId: string;
@@ -20,6 +21,10 @@ export const MatchesWrapper: FC<Props> = async ({
 }) => {
   const session = await auth();
 
+  const { tournament } = await fetchTournamentAction(
+    tournamentId,
+  );
+
   const { matches, pagination } = await fetchMatchesAction({
     tournamentId,
     page: currentPage,
@@ -31,6 +36,7 @@ export const MatchesWrapper: FC<Props> = async ({
 
   return (
     <MatchesTable
+      matchesWeeks={tournament!.weeks}
       matches={matches}
       pagination={pagination}
       roles={session?.user.roles as string[]}
