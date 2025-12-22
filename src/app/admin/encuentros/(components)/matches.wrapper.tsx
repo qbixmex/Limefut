@@ -2,8 +2,10 @@ import type { FC } from "react";
 import { auth } from "~/src/auth";
 import { fetchMatchesAction } from "../(actions)";
 import { MatchesTable } from "./matches-table";
+import { fetchTournamentAction } from "../(actions)/fetchTournamentAction";
 
 type Props = Readonly<{
+  tournamentId: string;
   currentPage: number;
   query: string;
   sortMatchDate: 'asc' | 'desc' | undefined;
@@ -11,6 +13,7 @@ type Props = Readonly<{
 }>;
 
 export const MatchesWrapper: FC<Props> = async ({
+  tournamentId,
   currentPage,
   query,
   sortMatchDate,
@@ -18,7 +21,12 @@ export const MatchesWrapper: FC<Props> = async ({
 }) => {
   const session = await auth();
 
+  const { tournament } = await fetchTournamentAction(
+    tournamentId,
+  );
+
   const { matches, pagination } = await fetchMatchesAction({
+    tournamentId,
     page: currentPage,
     take: 12,
     searchTerm: query,
@@ -28,6 +36,7 @@ export const MatchesWrapper: FC<Props> = async ({
 
   return (
     <MatchesTable
+      matchesWeeks={tournament!.weeks}
       matches={matches}
       pagination={pagination}
       roles={session?.user.roles as string[]}

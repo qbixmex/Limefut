@@ -4,13 +4,15 @@ import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 import { MATCH_STATUS } from "@/shared/enums";
 import type { Pagination } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
+  tournamentId: string;
   searchTerm: string;
   page?: number;
   take?: number;
   sortMatchDate?: 'asc' | 'desc';
-  sortWeek?: 'asc' | 'desc';
+  sortWeek?: string;
 }>;
 
 export type Match = {
@@ -39,6 +41,12 @@ export type ResponseFetchAction = Promise<{
 }>;
 
 export const fetchMatchesAction = async (options?: Options): ResponseFetchAction => {
+  "use cache";
+  
+  cacheLife('days');
+  cacheTag('admin-matches');
+
+  const tournamentId = options?.tournamentId;
   let { page = 1, take = 12 } = options ?? {};
   const sortMatchDate = options?.sortMatchDate;
   const sortWeek = options?.sortWeek;
@@ -56,6 +64,12 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   };
 
   const whereCondition: Prisma.MatchWhereInput = {};
+
+  whereCondition.OR = [{
+    // Fetch by tournamentId
+    tournamentId,
+    week: !isNaN(Number(sortWeek)) ? Number(sortWeek) : undefined,
+  }];
 
   if (options?.searchTerm) {
     const searchTerm = options.searchTerm;
@@ -90,7 +104,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       where: whereCondition,
       orderBy: [
         { matchDate: sortMatchDate },
-        { week: sortWeek ?? 'desc' },
+        { week: isNaN(Number(sortWeek)) ? (sortWeek as 'asc' | 'desc') : 'desc' },
       ],
       take: take,
       skip: (page - 1) * take,
