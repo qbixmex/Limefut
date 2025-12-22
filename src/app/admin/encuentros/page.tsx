@@ -9,10 +9,12 @@ import {
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import { MatchesTableSkeleton } from "./(components)/matches-table-skeleton";
 import { Search } from "@/root/src/shared/components/search";
-import { MatchesWrapper } from "./(components)/matches.wrapper";
 import ClearFilters from "./(components)/clear-filters";
+import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
+import { TournamentsSelector } from "./(components)/tournaments-selector";
+import { TournamentsSelectorSkeleton } from "../../(public)/equipos/(components)/TournamentsSelectorSkeleton";
+import { MatchesContent } from "./matches-content";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -20,15 +22,12 @@ type Props = Readonly<{
     page?: string;
     sortMatchDate?: 'asc' | 'desc';
     sortWeek?: 'asc' | 'desc';
+    torneo?: string;
   }>;
 }>;
 
-export const MatchesPage: FC<Props> = async (props) => {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
-  const sortMatchDate = searchParams?.sortMatchDate;
-  const sortWeek = searchParams?.sortWeek ?? 'desc';
+export const MatchesPage: FC<Props> = (props) => {
+  const searchParams = props.searchParams;
 
   return (
     <>
@@ -56,22 +55,25 @@ export const MatchesPage: FC<Props> = async (props) => {
               </section>
             </CardHeader>
             <CardContent>
-              <Suspense
-                key={`${query}-${currentPage}`}
-                fallback={<MatchesTableSkeleton colCount={6} rowCount={16} />}
-              >
-                <MatchesWrapper
-                  query={query}
-                  currentPage={currentPage}
-                  sortMatchDate={sortMatchDate}
-                  sortWeek={sortWeek}
-                />
+              <Suspense fallback={<TournamentsSelectorSkeleton />}>
+                <TournamentsWrapper />
+              </Suspense>
+              <Suspense>
+                <MatchesContent searchParams={searchParams} />
               </Suspense>
             </CardContent>
           </Card>
         </div>
       </div>
     </>
+  );
+};
+
+const TournamentsWrapper = async () => {
+  const { tournaments } = await fetchTournamentsAction();
+
+  return (
+    <TournamentsSelector tournaments={tournaments} />
   );
 };
 

@@ -78,7 +78,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
   });
 
   // Refresh Match
-  revalidatePath('admin/encuentros');
+  updateTag('admin-matches');
   updateTag('matches');
   updateTag('public-standings');
 

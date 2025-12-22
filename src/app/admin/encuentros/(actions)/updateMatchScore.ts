@@ -26,6 +26,7 @@ export const updateStatusAction = async (params: Params): ResponseAction => {
     },
   });
 
+  updateTag('admin-matches');
   updateTag('matches');
 
   if (!updatedMatch) {

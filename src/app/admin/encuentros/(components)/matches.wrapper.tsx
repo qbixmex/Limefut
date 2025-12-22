@@ -4,6 +4,7 @@ import { fetchMatchesAction } from "../(actions)";
 import { MatchesTable } from "./matches-table";
 
 type Props = Readonly<{
+  tournamentId: string;
   currentPage: number;
   query: string;
   sortMatchDate: 'asc' | 'desc' | undefined;
@@ -11,6 +12,7 @@ type Props = Readonly<{
 }>;
 
 export const MatchesWrapper: FC<Props> = async ({
+  tournamentId,
   currentPage,
   query,
   sortMatchDate,
@@ -19,6 +21,7 @@ export const MatchesWrapper: FC<Props> = async ({
   const session = await auth();
 
   const { matches, pagination } = await fetchMatchesAction({
+    tournamentId,
     page: currentPage,
     take: 12,
     searchTerm: query,

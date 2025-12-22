@@ -4,8 +4,10 @@ import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
 import { MATCH_STATUS } from "@/shared/enums";
 import type { Pagination } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
+  tournamentId: string;
   searchTerm: string;
   page?: number;
   take?: number;
@@ -39,6 +41,12 @@ export type ResponseFetchAction = Promise<{
 }>;
 
 export const fetchMatchesAction = async (options?: Options): ResponseFetchAction => {
+  "use cache";
+  
+  cacheLife('days');
+  cacheTag('admin-matches');
+
+  const tournamentId = options?.tournamentId;
   let { page = 1, take = 12 } = options ?? {};
   const sortMatchDate = options?.sortMatchDate;
   const sortWeek = options?.sortWeek;
@@ -56,6 +64,9 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   };
 
   const whereCondition: Prisma.MatchWhereInput = {};
+
+  // Fetch by tournamentId
+  whereCondition.OR = [{ tournamentId }];
 
   if (options?.searchTerm) {
     const searchTerm = options.searchTerm;
