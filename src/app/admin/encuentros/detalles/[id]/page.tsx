@@ -85,11 +85,19 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Arbitro</TableHead>
-                    <TableCell>{match.referee}</TableCell>
+                    <TableCell>
+                      {match.referee ?? (
+                        <span className="text-gray-500 italic">No definido</span>
+                      )}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Sede</TableHead>
-                    <TableCell>{match.place}</TableCell>
+                    <TableCell>
+                      {match.place ?? (
+                        <span className="text-gray-500 italic">No definida</span>
+                      )}
+                      </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Fecha del Encuentro</TableHead>
