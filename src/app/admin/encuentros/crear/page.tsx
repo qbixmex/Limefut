@@ -1,36 +1,22 @@
+import { type FC, Suspense } from "react";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import TournamentsSelectorSkeleton from "~/src/app/(public)/equipos/(components)/TournamentsSelectorSkeleton";
+import { MatchWrapper } from "./create-match-content";
+import TournamentsSelector from "../(components)/selectors/tournaments-selector";
 
-import type { Session } from "next-auth";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
-import { fetchTournamentsAction } from "../(actions)";
-import { fetchTeamsForMatchAction } from "../(actions)/fetchTeamsForMatchAction";
-import type { Team } from "@/root/src/shared/interfaces";
-import MatchForm from "../(components)/matchForm";
+type Props = Readonly<{
+  searchParams: Promise<{
+    torneo: string;
+    semana: string;
+  }>;
+}>;
 
-const CreateMatchPage = async () => {
-  const session = await auth();
-
-  if (!session?.user.roles.includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear encuentros !';
-    redirect(`/admin/encuentros?error=${encodeURIComponent(message)}`);
-  }
-
-  const tournaments = await fetchTournamentsAction();
-
-  const responseTeams = await fetchTeamsForMatchAction();
-
-  if (!responseTeams.ok) {
-    redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
-  }
-
-  const teams = responseTeams.teams as Team[];
-
+const CreateMatchPage: FC<Props> = async ({ searchParams }) => {
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
@@ -39,11 +25,12 @@ const CreateMatchPage = async () => {
             <CardTitle>Crear Encuentro</CardTitle>
           </CardHeader>
           <CardContent>
-            <MatchForm
-              session={session as Session}
-              tournaments={tournaments.tournaments || []}
-              initialTeams={teams}
-            />
+            <Suspense fallback={<TournamentsSelectorSkeleton />}>
+              <TournamentsSelector />
+            </Suspense>
+            <Suspense>
+              <MatchWrapper searchParams={searchParams} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>
