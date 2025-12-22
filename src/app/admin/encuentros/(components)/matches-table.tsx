@@ -58,10 +58,6 @@ export const MatchesTable: FC<Props> = ({ matches, matchesWeeks, pagination, rol
     const params = new URLSearchParams(searchParams);
 
     if (column === 'matchDate') {
-      if (params.get('sortWeek')) {
-        params.delete('sortWeek');
-        setSortWeek(undefined);
-      }
       const nextSort = (sortMatchDate === 'asc') ? 'desc' : 'asc';
       setSortMatchDate(nextSort);
       params.set('sortMatchDate', nextSort);
