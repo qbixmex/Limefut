@@ -35,9 +35,11 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Match } from '../(actions)/fetchMatchesAction';
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { WeeksSelector } from './weeks-selector';
 
 type Props = Readonly<{
   matches: Match[];
+  matchesWeeks: number[];
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -45,7 +47,7 @@ type Props = Readonly<{
   roles: string[];
 }>;
 
-export const MatchesTable: FC<Props> = ({ matches, pagination, roles }) => {
+export const MatchesTable: FC<Props> = ({ matches, matchesWeeks, pagination, roles }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -53,13 +55,9 @@ export const MatchesTable: FC<Props> = ({ matches, pagination, roles }) => {
   const [sortWeek, setSortWeek] = useState<'asc' | 'desc' | undefined>(undefined);
 
   const handleSort = (column: 'matchDate' | 'week') => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams);
 
     if (column === 'matchDate') {
-      if (params.get('sortWeek')) {
-        params.delete('sortWeek');
-        setSortWeek(undefined);
-      }
       const nextSort = (sortMatchDate === 'asc') ? 'desc' : 'asc';
       setSortMatchDate(nextSort);
       params.set('sortMatchDate', nextSort);
@@ -112,15 +110,7 @@ export const MatchesTable: FC<Props> = ({ matches, pagination, roles }) => {
                     </button>
                   </TableHead>
                   <TableHead className="w-[100px] text-center">
-                    <button
-                      type="button"
-                      onClick={() => handleSort('week')}
-                      className="inline-flex items-center gap-1 font-semibold hover:text-sky-500"
-                    >
-                      <span>Semana</span>
-                      {sortWeek === 'asc' && <ChevronUp size={16} />}
-                      {sortWeek === 'desc' && <ChevronDown size={16} />}
-                    </button>
+                    <WeeksSelector weeks={matchesWeeks} />
                   </TableHead>
                   <TableHead className="w-[120px]">Estado</TableHead>
                   <TableHead>Acciones</TableHead>

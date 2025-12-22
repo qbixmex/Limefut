@@ -140,7 +140,7 @@ export const updateMatchAction = async ({
         });
 
         // Update Cache
-        revalidatePath('/admin/encuentros');
+        updateTag('admin-matches');
         updateTag('matches');
 
         return {

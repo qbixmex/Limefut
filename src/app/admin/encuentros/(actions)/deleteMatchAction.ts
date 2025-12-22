@@ -23,6 +23,7 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
 
   await prisma.match.delete({ where: { id: player.id } });
 
+  updateTag('admin-matches');
   updateTag('matches');
 
   return {

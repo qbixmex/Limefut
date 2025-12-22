@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import TournamentsSelectorSkeleton from "~/src/app/(public)/equipos/(components)/TournamentsSelectorSkeleton";
+import TournamentsSelectorSkeleton from "@/app/(public)/equipos/(components)/TournamentsSelectorSkeleton";
 import { MatchWrapper } from "./create-match-content";
 import TournamentsSelector from "../(components)/selectors/tournaments-selector";
 
