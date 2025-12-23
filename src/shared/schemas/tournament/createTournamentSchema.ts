@@ -51,5 +51,9 @@ export const createTournamentSchema = z.object({
     .optional(),
   startDate: z.date({ message: "La fecha de inicio debe ser una fecha válida" }),
   endDate: z.date({ message: "La fecha final debe ser una fecha válida" }),
+  currentWeek: z
+    .int("¡ La semana actual debe ser un número válido !")
+    .min(0, { message: "¡ La semana actual debe ser un número positivo !" })
+    .optional(),
   active: z.boolean().optional(),
 });
