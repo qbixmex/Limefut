@@ -15,6 +15,7 @@ import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAct
 import { TournamentsSelector } from "./(components)/tournaments-selector";
 import { TournamentsSelectorSkeleton } from "../../(public)/equipos/(components)/TournamentsSelectorSkeleton";
 import { MatchesContent } from "./matches-content";
+import type { MATCH_STATUS } from "~/src/shared/enums";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -23,6 +24,7 @@ type Props = Readonly<{
     sortMatchDate?: 'asc' | 'desc';
     sortWeek?: 'asc' | 'desc';
     torneo?: string;
+    status?: MATCH_STATUS;
   }>;
 }>;
 

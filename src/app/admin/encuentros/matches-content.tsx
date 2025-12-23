@@ -1,6 +1,7 @@
 import { Suspense, type FC } from 'react';
 import { MatchesTableSkeleton } from './(components)/matches-table-skeleton';
 import { MatchesWrapper } from './(components)/matches.wrapper';
+import type { MATCH_STATUS } from '~/src/shared/enums';
 
 type MatchesContentProps = Readonly<{
   searchParams: Promise<{
@@ -9,15 +10,19 @@ type MatchesContentProps = Readonly<{
     sortMatchDate?: 'asc' | 'desc';
     sortWeek?: 'asc' | 'desc';
     torneo?: string;
+    status?: MATCH_STATUS;
   }>;
 }>;
 
 export const MatchesContent: FC<MatchesContentProps> = async ({ searchParams }) => {
-  const tournamentId = (await searchParams).torneo;
-  const query = (await searchParams).query || '';
-  const currentPage = (await searchParams).page || 1;
-  const sortMatchDate = (await searchParams).sortMatchDate;
-  const sortWeek = (await searchParams).sortWeek ?? 'desc';
+  const {
+    torneo: tournamentId,
+    query = '',
+    page: currentPage = 1,
+    sortMatchDate,
+    sortWeek = 'desc',
+    status,
+  } = await searchParams;
 
   if (!tournamentId) return null;
 
@@ -33,6 +38,7 @@ export const MatchesContent: FC<MatchesContentProps> = async ({ searchParams }) 
           currentPage={+currentPage}
           sortMatchDate={sortMatchDate}
           sortWeek={sortWeek}
+          status={status as MATCH_STATUS}
         />
       </Suspense>
     </section>

@@ -13,6 +13,7 @@ type Options = Readonly<{
   take?: number;
   sortMatchDate?: 'asc' | 'desc';
   sortWeek?: string;
+  status?: MATCH_STATUS;
 }>;
 
 export type Match = {
@@ -50,6 +51,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   let { page = 1, take = 12 } = options ?? {};
   const sortMatchDate = options?.sortMatchDate;
   const sortWeek = options?.sortWeek;
+  const status = options?.status;
 
   // In case is an invalid number like (lorem)
   if (isNaN(page)) page = 1;
@@ -65,11 +67,13 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
 
   const whereCondition: Prisma.MatchWhereInput = {};
 
-  whereCondition.OR = [{
-    // Fetch by tournamentId
-    tournamentId,
-    week: !isNaN(Number(sortWeek)) ? Number(sortWeek) : undefined,
-  }];
+  whereCondition.OR = [
+    {
+      tournamentId,
+      week: !isNaN(Number(sortWeek)) ? Number(sortWeek) : undefined,
+      status,
+    },
+  ];
 
   if (options?.searchTerm) {
     const searchTerm = options.searchTerm;
