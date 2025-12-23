@@ -43,6 +43,7 @@ export const updateTournamentAction = async ({
 
   const startDate = new Date(formData.get('startDate') as string);
   const endDate = new Date(formData.get('endDate') as string);
+  const currentWeek = Number(formData.get('currentWeek') ?? '0');
 
   const rawData = {
     name: formData.get('name') ?? undefined,
@@ -57,6 +58,7 @@ export const updateTournamentAction = async ({
     season: formData.get('season') ?? undefined,
     startDate: startDate,
     endDate: endDate,
+    currentWeek,
     active: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
@@ -69,7 +71,7 @@ export const updateTournamentAction = async ({
   if (!tournamentVerified.success) {
     return {
       ok: false,
-      message: tournamentVerified.error.message,
+      message: tournamentVerified.error.issues[0].message,
       tournament: null,
     };
   }
