@@ -13,6 +13,7 @@ export interface Tournament {
   season: string | null;
   startDate: Date;
   endDate: Date;
+  currentWeek: number | null;
   active: boolean;
   currentWeek: number | null;
   createdAt?: Date;

@@ -54,6 +54,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       description: tournament?.description ?? undefined,
       startDate: tournament?.startDate ?? new Date(),
       endDate: tournament?.endDate ?? new Date(),
+      currentWeek: tournament?.currentWeek ?? 0,
       active: tournament?.active ?? false,
     },
   });
@@ -68,11 +69,11 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     if (data.country) formData.append('country', data.country as string);
     if (data.state) formData.append('state', data.state as string);
     if (data.city) formData.append('city', data.city as string);
-    
+
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
     }
-    
+
     if (data.description) formData.append('description', data.description as string);
     if (data.season) formData.append('season', data.season as string);
 
@@ -86,6 +87,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
         ? (data.endDate as Date).toISOString()
         : new Date().toISOString(),
     );
+    formData.append('currentWeek', String(data.currentWeek ?? 0));
     formData.append('active', String(data.active ?? false));
 
     // Create tournament
@@ -389,13 +391,37 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               </span>
             </div>
           </div>
-          <div className="w-full lg:w-1/2 flex items-center gap-5">
+          <div className="w-full lg:w-1/2 flex justify-end items-center gap-5">
+            <FormField
+              control={form.control}
+              name="currentWeek"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-3">
+                    <Label htmlFor="currentWeek">Semana Actual</Label>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        id="currentWeek"
+                        min={0}
+                        {...field}
+                        value={field.value ?? 0}
+                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        className="w-20"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="active"
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center gap-3">
+                    <Label htmlFor="active">Activo</Label>
                     <FormControl>
                       <Switch
                         id="active"
@@ -403,7 +429,6 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <Label htmlFor="active">Activo</Label>
                   </div>
                 </FormItem>
               )}

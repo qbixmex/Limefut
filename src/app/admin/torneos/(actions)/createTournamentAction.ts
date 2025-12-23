@@ -26,6 +26,7 @@ export const createTournamentAction = async (
 
   const startDate = new Date(formData.get('startDate') as string);
   const endDate = new Date(formData.get('endDate') as string);
+  const currentWeek = Number(formData.get('currentWeek') ?? '');
 
   const rawData = {
     name: formData.get('name') as string,
@@ -40,6 +41,7 @@ export const createTournamentAction = async (
     season: formData.get('season') ?? undefined,
     startDate: startDate,
     endDate: endDate,
+    currentWeek,
     active: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
