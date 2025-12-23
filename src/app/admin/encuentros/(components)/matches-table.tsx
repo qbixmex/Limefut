@@ -19,8 +19,6 @@ import {
   Pencil,
   InfoIcon,
   Minus,
-  ChevronUp,
-  ChevronDown,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -34,8 +32,10 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Match } from '../(actions)/fetchMatchesAction';
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { WeeksSelector } from './weeks-selector';
+import { DateSelector } from './date-selector';
+import { StatusSelector } from './status-selector';
 
 type Props = Readonly<{
   matches: Match[];
@@ -48,33 +48,9 @@ type Props = Readonly<{
 }>;
 
 export const MatchesTable: FC<Props> = ({ matches, matchesWeeks, pagination, roles }) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const [sortMatchDate, setSortMatchDate] = useState<'asc' | 'desc' | undefined>(undefined);
   const [sortWeek, setSortWeek] = useState<'asc' | 'desc' | undefined>(undefined);
-
-  const handleSort = (column: 'matchDate' | 'week') => {
-    const params = new URLSearchParams(searchParams);
-
-    if (column === 'matchDate') {
-      const nextSort = (sortMatchDate === 'asc') ? 'desc' : 'asc';
-      setSortMatchDate(nextSort);
-      params.set('sortMatchDate', nextSort);
-      router.replace(`${pathname}?${params}`);
-    }
-
-    if (column === 'week') {
-      if (params.get('sortMatchDate')) {
-        params.delete('sortMatchDate');
-        setSortMatchDate(undefined);
-      }
-      const nextSort = (sortWeek === 'asc') ? 'desc' : 'asc';
-      setSortWeek(nextSort);
-      params.set('sortWeek', nextSort);
-      router.replace(`${pathname}?${params}`);
-    }
-  };
 
   useEffect(() => {
     const urlSortMatchDate = searchParams.get('sortMatchDate') as 'asc' | 'desc' | null;
@@ -91,137 +67,134 @@ export const MatchesTable: FC<Props> = ({ matches, matchesWeeks, pagination, rol
 
   return (
     <>
-      {matches && matches.length > 0 ? (
-        <div className="flex-1 flex flex-col">
-          <div className="flex-1">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Encuentro</TableHead>
-                  <TableHead className="w-[100px] text-center">
-                    <button
-                      type="button"
-                      onClick={() => handleSort('matchDate')}
-                      className="inline-flex items-center gap-1 font-semibold hover:text-sky-500"
-                    >
-                      <span>Fecha</span>
-                      {sortMatchDate === 'asc' && <ChevronUp size={16} />}
-                      {sortMatchDate === 'desc' && <ChevronDown size={16} />}
-                    </button>
-                  </TableHead>
-                  <TableHead className="w-[100px] text-center">
-                    <WeeksSelector weeks={matchesWeeks} />
-                  </TableHead>
-                  <TableHead className="w-[120px]">Estado</TableHead>
-                  <TableHead>Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {matches.map((match) => (
-                  <TableRow key={match.id}>
-                    <TableCell className="grid grid-cols-[1fr_180px_1fr] gap-2 font-semibold text-gray-500">
-                      <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
-                        {match.localTeam.name}
-                      </Link>
-                      <div className="flex justify-center items-center gap-2">
-                        {match.status != MATCH_STATUS.COMPLETED ? (
-                          <MatchScoreInput
-                            matchId={match.id}
-                            score={match.localScore}
-                            local
-                          />
-                        ) : (
-                          <Badge variant="outline">{match.localScore}</Badge>
-                        )}
-                        <Minus strokeWidth={2} />
-                        {match.status != MATCH_STATUS.COMPLETED ? (
-                          <MatchScoreInput
-                            matchId={match.id}
-                            score={match.visitorScore}
-                            visitor
-                          />
-                        ) : (
-                          <Badge variant="outline">{match.visitorScore}</Badge>
-                        )}
-                      </div>
-                      <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
-                        {match.visitorTeam.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {format(match.matchDate as Date, "dd / MMM / y", { locale: es })}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="outline-info">{match.week}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      {match.status === MATCH_STATUS.COMPLETED ? (
-                        <div className="w-full max-w-[150px] border border-emerald-500 text-center rounded-lg py-2 px-4">
-                          <span className="text-emerald-500 font-semibold">Finalizado</span>
-                        </div>
+      <div className="flex-1 flex flex-col">
+        <div className="flex-1">
+          <Table>
+            <TableHeader>
+              <TableRow className="h-16">
+                <TableHead className="w-2/3">Encuentro</TableHead>
+                <TableHead className="w-[100px] text-center">
+                  <DateSelector />
+                </TableHead>
+                <TableHead className="w-[100px] text-center">
+                  <WeeksSelector weeks={matchesWeeks} />
+                </TableHead>
+                <TableHead
+                  className="w-[120px]"
+                  colSpan={2}
+                >
+                  <StatusSelector />
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(matches.length > 0) && matches.map((match) => (
+                <TableRow key={match.id}>
+                  <TableCell className="grid grid-cols-[1fr_180px_1fr] gap-2 font-semibold text-gray-500">
+                    <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                      {match.localTeam.name}
+                    </Link>
+                    <div className="flex justify-center items-center gap-2">
+                      {match.status != MATCH_STATUS.COMPLETED ? (
+                        <MatchScoreInput
+                          matchId={match.id}
+                          score={match.localScore}
+                          local
+                        />
                       ) : (
-                        <div className="flex gap-2">
-                          <MatchStatus matchId={match.id} status={match.status} />
-                          <FinishMatch
-                            matchId={match.id}
-                            localScore={match.localScore}
-                            visitorScore={match.visitorScore}
-                            localId={match.localTeam.id}
-                            visitorId={match.visitorTeam.id}
-                          />
-                        </div>
+                        <Badge variant="outline">{match.localScore}</Badge>
                       )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/encuentros/detalles/${match.id}`}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            detalles
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/encuentros/editar/${match.id}`}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            editar
-                          </TooltipContent>
-                        </Tooltip>
-                        <DeleteMatch
-                          id={match.id}
-                          roles={roles}
+                      <Minus strokeWidth={2} />
+                      {match.status != MATCH_STATUS.COMPLETED ? (
+                        <MatchScoreInput
+                          matchId={match.id}
+                          score={match.visitorScore}
+                          visitor
+                        />
+                      ) : (
+                        <Badge variant="outline">{match.visitorScore}</Badge>
+                      )}
+                    </div>
+                    <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                      {match.visitorTeam.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {format(match.matchDate as Date, "dd / MMM / y", { locale: es })}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Badge variant="outline-info">{match.week}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    {match.status === MATCH_STATUS.COMPLETED ? (
+                      <div className="w-full max-w-[150px] border border-emerald-500 text-center rounded-lg py-2 px-4">
+                        <span className="text-emerald-500 font-semibold">Finalizado</span>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        <MatchStatus matchId={match.id} status={match.status} />
+                        <FinishMatch
+                          matchId={match.id}
+                          localScore={match.localScore}
+                          visitorScore={match.visitorScore}
+                          localId={match.localTeam.id}
+                          visitorId={match.visitorTeam.id}
                         />
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
-          })}>
-            <Pagination totalPages={pagination!.totalPages as number} />
-          </div>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-3">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link href={`/admin/encuentros/detalles/${match.id}`}>
+                            <Button variant="outline-info" size="icon">
+                              <InfoIcon />
+                            </Button>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                          detalles
+                        </TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link href={`/admin/encuentros/editar/${match.id}`}>
+                            <Button variant="outline-warning" size="icon">
+                              <Pencil />
+                            </Button>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                          editar
+                        </TooltipContent>
+                      </Tooltip>
+                      <DeleteMatch
+                        id={match.id}
+                        roles={roles}
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {matches.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5}>
+                    <div className="text-blue-500 text-semibold text-2xl text-center py-5">
+                      No hay encuentros
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
-      ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay encuentros
-          </p>
+        <div className={cn("flex justify-center mt-10", {
+          'hidden': matches.length === 0 || pagination!.totalPages === 1,
+        })}>
+          <Pagination totalPages={pagination!.totalPages as number} />
         </div>
-      )}
+      </div>
     </>
   );
 };
