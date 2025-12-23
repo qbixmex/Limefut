@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { MATCH_STATUS } from "@/shared/enums";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export type ResponseAction = Promise<{
   ok: boolean;
