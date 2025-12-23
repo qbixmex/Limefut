@@ -36,6 +36,7 @@ import { es } from 'date-fns/locale';
 import type { Match } from '../(actions)/fetchMatchesAction';
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { WeeksSelector } from './weeks-selector';
+import { DateSelector } from './date-selector';
 
 type Props = Readonly<{
   matches: Match[];
@@ -48,33 +49,9 @@ type Props = Readonly<{
 }>;
 
 export const MatchesTable: FC<Props> = ({ matches, matchesWeeks, pagination, roles }) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const [sortMatchDate, setSortMatchDate] = useState<'asc' | 'desc' | undefined>(undefined);
   const [sortWeek, setSortWeek] = useState<'asc' | 'desc' | undefined>(undefined);
-
-  const handleSort = (column: 'matchDate' | 'week') => {
-    const params = new URLSearchParams(searchParams);
-
-    if (column === 'matchDate') {
-      const nextSort = (sortMatchDate === 'asc') ? 'desc' : 'asc';
-      setSortMatchDate(nextSort);
-      params.set('sortMatchDate', nextSort);
-      router.replace(`${pathname}?${params}`);
-    }
-
-    if (column === 'week') {
-      if (params.get('sortMatchDate')) {
-        params.delete('sortMatchDate');
-        setSortMatchDate(undefined);
-      }
-      const nextSort = (sortWeek === 'asc') ? 'desc' : 'asc';
-      setSortWeek(nextSort);
-      params.set('sortWeek', nextSort);
-      router.replace(`${pathname}?${params}`);
-    }
-  };
 
   useEffect(() => {
     const urlSortMatchDate = searchParams.get('sortMatchDate') as 'asc' | 'desc' | null;
@@ -99,15 +76,7 @@ export const MatchesTable: FC<Props> = ({ matches, matchesWeeks, pagination, rol
                 <TableRow>
                   <TableHead>Encuentro</TableHead>
                   <TableHead className="w-[100px] text-center">
-                    <button
-                      type="button"
-                      onClick={() => handleSort('matchDate')}
-                      className="inline-flex items-center gap-1 font-semibold hover:text-sky-500"
-                    >
-                      <span>Fecha</span>
-                      {sortMatchDate === 'asc' && <ChevronUp size={16} />}
-                      {sortMatchDate === 'desc' && <ChevronDown size={16} />}
-                    </button>
+                    <DateSelector />
                   </TableHead>
                   <TableHead className="w-[100px] text-center">
                     <WeeksSelector weeks={matchesWeeks} />

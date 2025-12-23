@@ -20,7 +20,7 @@ export const WeeksSelector: FC<Props> = ({ weeks }) => {
   return (
     <Select
       onValueChange={setWeek}
-      value={sortWeek ?? undefined}
+      value={sortWeek ?? ''}
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Semana" />
