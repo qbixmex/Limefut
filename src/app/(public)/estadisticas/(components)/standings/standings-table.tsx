@@ -32,6 +32,7 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="text-center">Posición</TableHead>
             <TableHead className="text-gray-400">Equipo</TableHead>
             <TableHead className="text-gray-400 text-center">JJ</TableHead>
             <TableHead className="text-gray-400 text-center">JG</TableHead>
@@ -46,8 +47,9 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {standings.map((standing) => (
+          {standings.map((standing, index) => (
             <TableRow key={standing.team.id}>
+              <TableCell className="text-center">{ index + 1 }</TableCell>
               <TableCell>
                 <Link href="#" target="_blank">
                   {standing.team.name}
