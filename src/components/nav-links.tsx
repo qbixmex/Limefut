@@ -15,6 +15,7 @@ export type NavLink = {
   label: string;
   url: string;
   icon: LucideIcon;
+  target: '_blank' | 'self' | 'parent' | 'top';
 };
 
 type Props = Readonly<{
@@ -29,7 +30,7 @@ export const NavLinks: FC<Props> = ({ links }) => {
         {links.map((link) => (
           <SidebarMenuItem key={link.label}>
             <SidebarMenuButton asChild>
-              <a href={link.url}>
+              <a href={link.url} target={link.target ?  "_blank" : "_self"}>
                 <link.icon />
                 <span>{link.label}</span>
               </a>

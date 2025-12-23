@@ -216,5 +216,6 @@ export const navLinks: NavLink[] = [
     label: "Página Principal",
     url: "/",
     icon: Globe,
+    target: '_blank',
   },
 ];
