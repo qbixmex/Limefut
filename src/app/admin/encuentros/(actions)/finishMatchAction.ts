@@ -20,6 +20,9 @@ type Props = {
 export const finishMatchAction = async (props: Props): ResponseAction => {
   const { matchId, localScore, visitorScore, localId, visitorId } = props;
 
+  // console.log({ matchId, localScore, visitorScore, localId, visitorId });
+  // return;
+
   let localPoints = 0;
   let visitorPoints = 0;
 
