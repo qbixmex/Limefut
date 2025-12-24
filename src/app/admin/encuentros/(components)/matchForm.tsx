@@ -48,6 +48,9 @@ import { MATCH_STATUS } from '@/shared/enums';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { Label } from '@/components/ui/label';
+import { finishMatchAction } from '../(actions)/finishMatchAction';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import "./match-form.css";
 
 type Props = Readonly<{
   session: Session;
@@ -200,6 +203,26 @@ export const MatchForm: FC<Props> = ({
         toast.success(response.message);
         route.replace(`/admin/encuentros/detalles/${match.id}`);
       }
+    }
+  };
+
+  const onFinishMatch = async () => {
+    const { ok, message } = await finishMatchAction({
+      matchId: match?.id as string,
+      localScore: form.getValues('localScore') as number,
+      visitorScore: form.getValues('visitorScore') as number,
+      localId: match?.localTeam.id as string,
+      visitorId: match?.visitorTeam.id as string,
+    });
+
+    if (!ok) {
+      toast.error(message);
+      return;
+    }
+
+    if (ok) {
+      toast.success(message);
+      route.replace(`/admin/encuentros/detalles/${match?.id}`);
     }
   };
 
@@ -576,6 +599,48 @@ export const MatchForm: FC<Props> = ({
               !match ? 'crear' : 'actualizar'
             )}
           </Button>
+          {match && (match.status !== MATCH_STATUS.COMPLETED) && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline-success"
+                  size="lg"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting ? (
+                    <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                      <span className="text-sm italic">Espere</span>
+                      <LoaderCircle className="size-4 animate-spin" />
+                    </span>
+                  ) : (
+                    <span>Finalizar</span>
+                  )}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>¿ Confirmas que quieres finalizar el encuentro ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Al finalizar el encuentro el resultado final impactará la tabla de posiciones.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="finish-btn"
+                    onClick={() => {
+                      form.handleSubmit(async () => {
+                        await onFinishMatch();
+                      })();
+                    }}
+                  >
+                    Proceder
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
       </form>
     </Form>
