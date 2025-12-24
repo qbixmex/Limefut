@@ -108,6 +108,7 @@ export const createTournamentAction = async (
     updateTag("public-tournaments-list");
     updateTag("public-tournaments");
     updateTag("public-tournament");
+    updateTag("dashboard-tournaments");
 
     return prismaTransaction;
   } catch (error) {

@@ -42,6 +42,7 @@ export const deleteTournamentAction = async (id: string): ResponseDeleteAction =
   updateTag("public-tournaments-list");
   updateTag("public-tournaments");
   updateTag("public-tournament");
+  updateTag("dashboard-tournaments");
 
   return {
     ok: true,
