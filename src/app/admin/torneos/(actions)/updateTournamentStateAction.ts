@@ -35,6 +35,7 @@ export const updateTournamentStateAction = async (id: string, state: boolean): R
   updateTag("public-tournaments-list");
   updateTag("public-tournaments");
   updateTag("public-tournament");
+  updateTag("dashboard-tournaments");
 
   return {
     ok: true,

@@ -143,6 +143,7 @@ export const updateTournamentAction = async ({
         updateTag("public-tournaments-list");
         updateTag("public-tournaments");
         updateTag("public-tournament");
+        updateTag("dashboard-tournaments");
 
         return {
           ok: true,

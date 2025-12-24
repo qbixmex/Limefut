@@ -106,6 +106,10 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                       <TableCell>{tournament.city}</TableCell>
                     </TableRow>
                     <TableRow>
+                      <TableHead className="font-semibold">Jornada</TableHead>
+                      <TableCell>{tournament.currentWeek}</TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableHead className="font-medium w-[180px]">Activo</TableHead>
                       <TableCell>
                         {
