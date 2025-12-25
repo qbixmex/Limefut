@@ -25,6 +25,7 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
 
   updateTag('admin-matches');
   updateTag('matches');
+  updateTag('dashboard-results');
 
   return {
     ok: true,

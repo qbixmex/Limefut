@@ -24,6 +24,7 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS):
 
   updateTag('admin-matches');
   updateTag('matches');
+  updateTag('dashboard-results');
 
   return {
     ok: true,
