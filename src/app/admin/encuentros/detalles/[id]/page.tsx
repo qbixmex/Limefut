@@ -72,13 +72,13 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="font-semibold w-[180px]">Encuentro</TableHead>
                     <TableCell className="flex items-center gap-3 font-semibold text-gray-200">
-                      <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                      <Link href={`/admin/equipos/${match.localTeam.permalink}`} className="text-wrap">
                         {match.localTeam.name}
                       </Link>
                       <Badge variant="outline-info">{match.localScore}</Badge>
                       <Minus strokeWidth={2} />
                       <Badge variant="outline-info">{match.visitorScore}</Badge>
-                      <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                      <Link href={`/admin/equipos/${match.localTeam.permalink}`} className="text-wrap">
                         {match.visitorTeam.name}
                       </Link>
                     </TableCell>
