@@ -142,6 +142,7 @@ export const updateMatchAction = async ({
         // Update Cache
         updateTag('admin-matches');
         updateTag('matches');
+        updateTag('dashboard-results');
 
         return {
           ok: true,
