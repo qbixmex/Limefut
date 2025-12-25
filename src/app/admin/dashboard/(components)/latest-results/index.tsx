@@ -1,9 +1,8 @@
 import { Badge } from "~/src/components/ui/badge";
 import { fetchLatestResultsAction } from "../../(actions)/fetchLatestResultsAction";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/src/components/ui/table";
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Eye, Info, InfoIcon } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 import { Button } from "~/src/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
