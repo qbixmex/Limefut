@@ -41,8 +41,10 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
     }
   }
 
+  // Refresh Cache
   revalidatePath(`/admin/galerias/${gallery.permalink}`);
-  updateTag('public-galeries');
+  updateTag('dashboard-images');
+  updateTag('public-galleries');
   updateTag('public-gallery');
 
   return {

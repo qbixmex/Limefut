@@ -62,6 +62,7 @@ export const createGalleryAction = async (
     });
 
     // Refresh Cache
+    updateTag('dashboard-images');
     revalidatePath('/admin/galerias');
     updateTag("public-galleries-list");
     updateTag("public-galleries");
