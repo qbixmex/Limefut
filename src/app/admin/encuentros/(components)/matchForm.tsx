@@ -318,7 +318,7 @@ export const MatchForm: FC<Props> = ({
               control={form.control}
               name="visitorTeamId"
               render={({ field }) => {
-                const selectedTeam = teams.find((t) => t.id === field.value) ?? match?.localTeam;
+                const selectedTeam = teams.find((t) => t.id === field.value) ?? match?.visitorTeam;
                 const localTeamId = form.watch('localTeamId');
 
                 return (
