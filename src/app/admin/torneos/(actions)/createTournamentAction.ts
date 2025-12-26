@@ -105,10 +105,11 @@ export const createTournamentAction = async (
 
     // Refresh Cache
     revalidatePath('/admin/torneos');
+    updateTag("dashboard-tournaments");
+    updateTag("admin-tournaments-list");
     updateTag("public-tournaments-list");
     updateTag("public-tournaments");
     updateTag("public-tournament");
-    updateTag("dashboard-tournaments");
 
     return prismaTransaction;
   } catch (error) {
