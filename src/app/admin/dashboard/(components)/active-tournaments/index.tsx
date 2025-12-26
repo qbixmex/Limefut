@@ -4,41 +4,55 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from '@/components/ui/button';
 import { InfoIcon } from "lucide-react";
+import "../../styles.css";
 
 export const ActiveTournaments = async () => {
   const { tournaments } = await fetchLatestTournamentsAction({ limit: 5 });
 
   return (
-    <>
-      <h2 className="text-emerald-500 text-2xl font-semibold mb-4">
+    <div className="widget">
+      <h2 className="widgetTitle">
         Torneos Activos
       </h2>
-      <Table>
-        <TableBody>
-          {tournaments.map(({ id, name, permalink }) => (
-            <TableRow key={id}>
-              <TableCell>
-                {name}
-              </TableCell>
-              <TableCell>
-                <Link href={`/admin/torneos/${permalink}`}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="outline-info" size="icon-sm">
-                        <InfoIcon />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="left">
-                      ver detalles
-                    </TooltipContent>
-                  </Tooltip>
-                </Link>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+      {
+        (tournaments.length === 0) && (
+          <div className="widgetMessageContainer">
+            <p className="widgetMessageText">
+              No hay torneos para mostrar
+            </p>
+          </div>
+        )
+      }
+      {
+        (tournaments.length > 0) && (
+          <Table>
+            <TableBody>
+              {tournaments.map(({ id, name, permalink }) => (
+                <TableRow key={id}>
+                  <TableCell>
+                    {name}
+                  </TableCell>
+                  <TableCell>
+                    <Link href={`/admin/torneos/${permalink}`}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="outline-info" size="icon-sm">
+                            <InfoIcon />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="left">
+                          ver detalles
+                        </TooltipContent>
+                      </Tooltip>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )
+      }
+    </div>
   );
 };
 

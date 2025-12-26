@@ -2,20 +2,23 @@ import type { FC } from 'react';
 import { fetchLatestImagesAction } from '../../(actions)/fetchLatestImagesAction';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import "../../styles.css";
 
 export const LatestImages: FC = async () => {
   const { latestImages } = await fetchLatestImagesAction({ quantity: 4 });
 
   return (
-    <div className="flex flex-col h-full">
-      <h2 className="text-emerald-500 text-2xl font-semibold mb-4 space-x-2">
+    <div className="widget">
+      <h2 className="widgetTitle">
         <span>Imágenes Recientes</span>
-        <span className="italic text-sm font-normal text-emerald-700">(30 días)</span>
+        <span className="widgetDateLength">(30 días)</span>
       </h2>
       {
         (latestImages.length === 0) && (
-          <div className="flex-1 border border-gray-400 dark:border-blue-500/50 flex justify-center items-center rounded-lg">
-            <p className="text-xl text-gray-500 dark:text-blue-600 font-semibold">No hay imágenes para mostrar</p>
+          <div className="widgetMessageContainer">
+            <p className="widgetMessageText">
+              No hay imágenes para mostrar
+            </p>
           </div>
         )
       }
