@@ -36,8 +36,9 @@ export const deleteGalleryAction = async (galleryId: string): ResponseDeleteActi
     select: { title: true },
   });
 
+  updateTag('dashboard-images');
   revalidatePath('/admin/galerias');
-  updateTag('public-galeries');
+  updateTag('public-galleries');
   updateTag('public-gallery');
 
   return {

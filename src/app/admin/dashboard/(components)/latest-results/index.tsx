@@ -45,8 +45,6 @@ export const LatestResults = async () => {
                 </div>
               </TableCell>
               <TableCell className="text-left">
-                {/* {result.visitorTeamName.substring(0, 24)}
-                {result.visitorTeamName.length > 24 ? ' ...' : ''} */}
                 <p className="text-pretty">{result.localTeamName}</p>
               </TableCell>
               <TableCell>

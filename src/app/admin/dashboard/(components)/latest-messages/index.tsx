@@ -10,13 +10,14 @@ export const LatestMessages = async () => {
 
   return (
     <>
-      <h2 className="text-emerald-500 text-2xl font-semibold mb-4">
-        Últimos Mensajes <span className="text-emerald-700 text-sm font-normal italic">(30 días)</span>
+      <h2 className="text-emerald-500 text-2xl font-semibold mb-4 space-x-2">
+        <span>Últimos Mensajes</span>
+        <span className="text-emerald-700 text-sm font-normal italic">(30 días)</span>
       </h2>
 
       <Table>
         <TableBody>
-          {latestMessages.length > 0 && latestMessages.map(({ id, message }) => (
+          {(latestMessages.length > 0) && latestMessages.map(({ id, message }) => (
             <TableRow key={id}>
               <TableCell>
                 <p className="text-gray-500 italic text-pretty">

@@ -7,6 +7,7 @@ import { LeadingSkeleton } from "./(components)/leading-teams/leading-skeleton";
 import { LatestImages } from "./(components)/latest-images";
 import { LatestMessages } from "./(components)/latest-messages";
 import { MessagesSkeleton } from "./(components)/latest-messages/messages-skeleton";
+import { ImagesSkeleton } from "./(components)/latest-images/images-skeleton";
 
 export const DashboardPage = () => {
   return (
@@ -18,7 +19,7 @@ export const DashboardPage = () => {
           </Suspense>
         </section>
         <section className="bg-muted/50 min-h-[300px] rounded-xl p-5">
-          <Suspense fallback={<p>Cargando</p>}>
+          <Suspense fallback={<ImagesSkeleton />}>
             <LatestImages />
           </Suspense>
         </section>
