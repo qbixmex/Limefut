@@ -41,6 +41,7 @@ export const saveMessageAction = async (
     });
 
     // Refresh Cache
+    updateTag('dashboard-messages');
     updateTag('contact-messages');
 
     return prismaTransaction;
