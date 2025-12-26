@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import type { CloudinaryResponse, GalleryImage } from "@/shared/interfaces";
 import { createGalleryImageSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { uploadImage } from "~/src/shared/actions";
 
 type ResponseCreateAction = Promise<{
@@ -106,10 +106,9 @@ export const createGalleryImageAction = async ({
     });
 
     // Refresh Cache
+    updateTag('dashboard-images');
     revalidatePath('/admin/galerias');
     revalidatePath(`/admin/galerias/${gallery.permalink}`);
-    // updateTag("public-galleries");
-    // updateTag("public-gallery");
 
     return prismaTransaction;
   } catch (error) {

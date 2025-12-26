@@ -30,6 +30,7 @@ export const updateGalleryStateAction = async (id: string, state: boolean)
     },
   });
 
+  updateTag('dashboard-images');
   revalidatePath('/admin/galerias');
   updateTag('public-gallery');
   updateTag('public-galleries');

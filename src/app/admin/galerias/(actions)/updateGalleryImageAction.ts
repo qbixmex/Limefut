@@ -120,6 +120,7 @@ export const updateGalleryImageAction = async ({
         }
 
         // Update Cache
+        updateTag('dashboard-images');
         revalidatePath('/admin/galerias');
         revalidatePath(`/admin/galerias/`);
         updateTag('public-galleries');

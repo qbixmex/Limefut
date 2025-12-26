@@ -27,6 +27,7 @@ export const deleteMessageAction = async (id: string): ResponseDeleteAction => {
 
   // Refresh Cache
   updateTag('contact-messages');
+  updateTag('dashboard-messages');
 
   return {
     ok: true,
