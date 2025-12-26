@@ -32,6 +32,7 @@ export const updateTournamentStateAction = async (id: string, state: boolean): R
   revalidatePath('/admin/torneos');
 
   // Update Cache
+  updateTag("admin-tournaments-list");
   updateTag("public-tournaments-list");
   updateTag("public-tournaments");
   updateTag("public-tournament");
