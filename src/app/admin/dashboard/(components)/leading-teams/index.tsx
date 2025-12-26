@@ -31,14 +31,12 @@ export const LeadingTeams = async () => {
                 </Link>
               </TableCell>
               <TableCell>
-                <TableCell>
-                  <Link
-                    href={`/admin/torneos/${leading.tournament.permalink}`}
-                    className="text-wrap"
-                  >
-                    {leading.tournament.name}
-                  </Link>
-                </TableCell>
+                <Link
+                  href={`/admin/torneos/${leading.tournament.permalink}`}
+                  className="text-wrap"
+                >
+                  {leading.tournament.name}
+                </Link>
               </TableCell>
               <TableCell className="text-center">
                 <Badge variant="outline-primary">{leading.points}</Badge>

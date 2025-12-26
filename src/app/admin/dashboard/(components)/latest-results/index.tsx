@@ -27,7 +27,7 @@ export const LatestResults = async () => {
           {latestResults.map((result) => (
             <TableRow key={result.id}>
               <TableCell className="text-right">
-                {result.localTeamName}
+                <p className="text-pretty">{result.localTeamName}</p>
               </TableCell>
               <TableCell className="text-center">
                 <div className="flex justify-center gap-3 items-center">
@@ -45,7 +45,9 @@ export const LatestResults = async () => {
                 </div>
               </TableCell>
               <TableCell className="text-left">
-                {result.visitorTeamName}
+                {/* {result.visitorTeamName.substring(0, 24)}
+                {result.visitorTeamName.length > 24 ? ' ...' : ''} */}
+                <p className="text-pretty">{result.localTeamName}</p>
               </TableCell>
               <TableCell>
                 <Link href={`/admin/encuentros/detalles/${result.id}`}>
