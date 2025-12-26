@@ -1,0 +1,37 @@
+@reference "tailwindcss";
+
+.widget {
+  @apply flex flex-col h-full;
+}
+
+.widgetTitle {
+  @apply text-emerald-500 text-2xl font-semibold mb-4;
+}
+
+.widgetDateLength {
+  @apply
+    italic
+    text-sm
+    font-normal
+    text-emerald-700;
+}
+
+.widgetMessageContainer {
+  @apply
+    flex-1
+    border
+    border-gray-400
+    dark:border-blue-500/50
+    flex
+    justify-center
+    items-center
+    rounded-lg;
+}
+
+.widgetMessageText {
+  @apply
+    text-xl
+    text-gray-500
+    dark:text-blue-600
+    font-semibold;
+}
