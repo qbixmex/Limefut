@@ -5,7 +5,7 @@
 }
 
 .widgetTitle {
-  @apply text-emerald-500 text-2xl font-semibold mb-4;
+  @apply text-emerald-500 text-2xl font-semibold mb-4 space-x-2;
 }
 
 .widgetDateLength {

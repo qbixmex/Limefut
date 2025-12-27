@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FC } from 'react';
+import { useEffect, useRef, useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -56,6 +56,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
   const formSchema = !team ? createTeamSchema : editTeamSchema;
   const [tournamentsOpen, setTournamentsOpen] = useState(false);
   const [coachesOpen, setCoachesOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,6 +76,15 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       active: team?.active ?? false,
     },
   });
+
+  // Clean Input Image if exists
+  // from previous team creation
+  useEffect(() => {
+    if (!team) {
+      form.setValue('image', undefined);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  }, [team, form]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
@@ -122,9 +132,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       }
 
       if (response.ok) {
-        toast.success(response.message);
         form.reset();
-        route.replace("/admin/equipos");
+        toast.success(response.message);
+        route.replace(`/admin/equipos/${response.team?.permalink}`);
         return;
       }
       return;
@@ -146,8 +156,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/equipos");
-        return;
+        route.replace(`/admin/equipos/${response.team?.permalink}`);
       }
       return;
     }
@@ -222,7 +231,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                   <FormLabel>Imagen</FormLabel>
                   <FormControl>
                     <Input
+                      ref={fileInputRef}
                       type="file"
+                      value={undefined}
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         field.onChange(file);
@@ -414,9 +425,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           aria-expanded={coachesOpen}
                           className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                         >
-                          {field.value && selectedCoach
-                            ? selectedCoach.name
-                            : "Sin entrenador asignado"}
+                          {field.value && selectedCoach ? selectedCoach.name : "Sin entrenador asignado"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -426,22 +435,33 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           <CommandList>
                             <CommandEmpty>¡ No se encontró el entrenador !</CommandEmpty>
                             <CommandGroup>
-                              <CommandItem onSelect={() => form.setValue('coachId', '')}>
+                              <CommandItem
+                                value=""
+                                onSelect={() => {
+                                  form.setValue('coachId', '');
+                                  setCoachesOpen(false);
+                                }}
+                              >
                                 Sin entrenador asignado
                                 <Check
                                   className={cn(
                                     'ml-auto',
-                                    field.value === '' ? 'opacity-100' : 'opacity-0',
+                                    !field.value ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                               </CommandItem>
                               {coaches.map((coach) => (
                                 <CommandItem
                                   key={coach.id}
-                                  value={coach.id}
-                                  onSelect={(currentId) => {
-                                    // Set the value to the coach ID, or empty string to clear it
-                                    form.setValue('coachId', currentId === field.value ? '' : currentId);
+                                  value={coach.name}
+                                  onSelect={(currentName) => {
+                                    const matched = coaches.find(c => c.name === currentName);
+                                    if (!matched) {
+                                      form.setValue('coachId', '');
+                                      setCoachesOpen(false);
+                                      return;
+                                    }
+                                    form.setValue('coachId', matched.id === field.value ? '' : matched.id);
                                     setCoachesOpen(false);
                                   }}
                                 >
@@ -498,8 +518,15 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                   <FormControl>
                     <Textarea
                       {...field}
+                      value={field.value ?? ''}
+                      onChange={({ target }) => {
+                        field.onChange(
+                          (target.value === '')
+                            ? undefined
+                            : target.value,
+                        );
+                      }}
                       className="resize-none"
-                      value={field.value ?? undefined}
                     />
                   </FormControl>
                   <FormMessage />

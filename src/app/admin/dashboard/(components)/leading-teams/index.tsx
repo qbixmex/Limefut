@@ -5,7 +5,7 @@ import Link from "next/link";
 import "../../styles.css";
 
 export const LeadingTeams = async () => {
-  const { leadingTeams } = await fetchLeadingTeamsAction({ quantity: 100 });
+  const { leadingTeams } = await fetchLeadingTeamsAction({ quantity: 8 });
 
   return (
     <div className="widget">
