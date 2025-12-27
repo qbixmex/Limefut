@@ -414,9 +414,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           aria-expanded={coachesOpen}
                           className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                         >
-                          {field.value && selectedCoach
-                            ? selectedCoach.name
-                            : "Sin entrenador asignado"}
+                          {field.value && selectedCoach ? selectedCoach.name : "Sin entrenador asignado"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -426,22 +424,33 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           <CommandList>
                             <CommandEmpty>¡ No se encontró el entrenador !</CommandEmpty>
                             <CommandGroup>
-                              <CommandItem onSelect={() => form.setValue('coachId', '')}>
+                              <CommandItem
+                                value=""
+                                onSelect={() => {
+                                  form.setValue('coachId', '');
+                                  setCoachesOpen(false);
+                                }}
+                              >
                                 Sin entrenador asignado
                                 <Check
                                   className={cn(
                                     'ml-auto',
-                                    field.value === '' ? 'opacity-100' : 'opacity-0',
+                                    !field.value ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                               </CommandItem>
                               {coaches.map((coach) => (
                                 <CommandItem
                                   key={coach.id}
-                                  value={coach.id}
-                                  onSelect={(currentId) => {
-                                    // Set the value to the coach ID, or empty string to clear it
-                                    form.setValue('coachId', currentId === field.value ? '' : currentId);
+                                  value={coach.name}
+                                  onSelect={(currentName) => {
+                                    const matched = coaches.find(c => c.name === currentName);
+                                    if (!matched) {
+                                      form.setValue('coachId', '');
+                                      setCoachesOpen(false);
+                                      return;
+                                    }
+                                    form.setValue('coachId', matched.id === field.value ? '' : matched.id);
                                     setCoachesOpen(false);
                                   }}
                                 >
