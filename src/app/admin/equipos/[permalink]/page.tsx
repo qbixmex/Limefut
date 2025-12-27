@@ -18,6 +18,7 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 import { fetchTeamAction } from "../(actions)";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { GenerateGenericPlayers } from "../(components)/generate-generic-players";
 
 type Props = Readonly<{
   params: Promise<{
@@ -137,11 +138,17 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                   <h2 className="text-xl font-bold text-sky-600 mb-5">Jugadores</h2>
                   {
                     team.players && (team.players.length === 0) ? (
-                      <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
-                        <p className="text-cyan-600 text-center font-bold">
-                          Aún no hay jugadores registrados
-                        </p>
-                      </div>
+                      <section className="space-y-5">
+                        <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
+                          <p className="text-cyan-600 text-center font-bold">
+                            Aún no hay jugadores registrados
+                          </p>
+                        </div>
+                        <GenerateGenericPlayers
+                          teamId={team.id}
+                          userRoles={session?.user.roles}
+                        />
+                      </section>
                     ) : (
                       <div className="flex flex-wrap gap-3">
                         {team.players?.map(({ id, name }) => (
