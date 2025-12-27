@@ -20,7 +20,7 @@ import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import type { Tournament } from '@/shared/interfaces';
 import { createTournamentAction, updateTournamentAction } from '../(actions)';
-import { CalendarIcon, LoaderCircle } from 'lucide-react';
+import { ChevronDownIcon, LoaderCircle } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
@@ -37,8 +37,8 @@ type Props = Readonly<{
 export const TournamentForm: FC<Props> = ({ session, tournament }) => {
   const route = useRouter();
   const formSchema = !tournament ? createTournamentSchema : editTournamentSchema;
-  const [openStartDate, setStartDate] = useState(false);
-  const [openEndDate, setEndDate] = useState(false);
+  const [openInitDateCalendar, setOpenInitDateCalendar] = useState(false);
+  const [openEndDateCalendar, setOpenEndDateCalendar] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,8 +52,8 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       city: tournament?.city ?? undefined,
       season: tournament?.season ?? undefined,
       description: tournament?.description ?? undefined,
-      startDate: tournament?.startDate ?? new Date(),
-      endDate: tournament?.endDate ?? new Date(),
+      startDate: tournament?.startDate ?? undefined,
+      endDate: tournament?.endDate ?? undefined,
       currentWeek: tournament?.currentWeek ?? 0,
       active: tournament?.active ?? false,
     },
@@ -329,66 +329,93 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2 flex items-center">
             <div className="w-1/2 flex items-center gap-5">
-              <Popover open={openStartDate} onOpenChange={setStartDate}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline-secondary">
-                    <CalendarIcon />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="p-0 w-auto">
-                  <FormField
-                    control={form.control}
-                    name="startDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Calendar
-                            mode="single"
-                            selected={field.value as Date}
-                            onSelect={(date) => field.onChange(date)}
-                            className="rounded-lg border"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </PopoverContent>
-              </Popover>
-              <span className="text-sm text-gray-400 italic">
-                {format(form.getValues('startDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
-              </span>
+              <FormField
+                control={form.control}
+                name="startDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label htmlFor="date-picker" className="px-1">
+                      Fecha Inicial
+                    </Label>
+                    <Popover open={openInitDateCalendar} onOpenChange={setOpenInitDateCalendar}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          id="date-picker"
+                          variant="secondary"
+                          className="w-[225px] justify-between font-normal"
+                        >
+                          {field.value
+                            ? format(field.value as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                            : "Selecciona Fecha"
+                          }
+                          <ChevronDownIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          startMonth={new Date(2020, 0)}
+                          endMonth={new Date(new Date().getFullYear() + 10, 11)}
+                          selected={field.value as Date}
+                          defaultMonth={field.value as Date}
+                          captionLayout="dropdown"
+                          onSelect={(date) => {
+                            field.onChange(date);
+                            setOpenInitDateCalendar(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <div className="w-1/2 flex items-center gap-5">
-              <Popover open={openEndDate} onOpenChange={setEndDate}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline-secondary">
-                    <CalendarIcon />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="p-0 w-auto">
-                  <FormField
-                    control={form.control}
-                    name="endDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Calendar
-                            mode="single"
-                            selected={field.value as Date}
-                            onSelect={(date) => field.onChange(date)}
-                            className="rounded-lg border"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </PopoverContent>
-              </Popover>
-              <span className="text-sm text-gray-400 italic">
-                {format(form.getValues('endDate') as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
-              </span>
+              <FormField
+                control={form.control}
+                name="endDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label htmlFor="date-picker" className="px-1">
+                      Fecha Final
+                    </Label>
+                    <Popover
+                      open={openEndDateCalendar}
+                      onOpenChange={setOpenEndDateCalendar}
+                    >
+                      <PopoverTrigger asChild>
+                        <Button
+                          id="date-picker"
+                          variant="secondary"
+                          className="w-[225px] justify-between font-normal"
+                        >
+                          {field.value
+                            ? format(field.value as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                            : "Selecciona Fecha"
+                          }
+                          <ChevronDownIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          startMonth={new Date(2020, 0)}
+                          endMonth={new Date(new Date().getFullYear() + 10, 11)}
+                          selected={field.value as Date}
+                          defaultMonth={field.value as Date}
+                          captionLayout="dropdown"
+                          onSelect={(date) => {
+                            field.onChange(date);
+                            setOpenInitDateCalendar(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
           <div className="w-full lg:w-1/2 flex justify-end items-center gap-5">
