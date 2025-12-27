@@ -66,7 +66,7 @@ export const TeamPage: FC<Props> = async ({ params }) => {
               <Table>
                 <TableBody>
                   <TableRow>
-                    <TableHead className="font-semibold w-[180px]">Nombre Completo</TableHead>
+                    <TableHead className="font-semibold w-[180px]">Nombre</TableHead>
                     <TableCell>{team.name}</TableCell>
                   </TableRow>
                   <TableRow>
@@ -90,7 +90,7 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                     <TableCell>{team.state}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">City</TableHead>
+                    <TableHead className="font-semibold">Ciudad</TableHead>
                     <TableCell>{team.city}</TableCell>
                   </TableRow>
                   <TableRow>
@@ -136,13 +136,15 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                 <div className="w-full lg:w-1/2">
                   <h2 className="text-xl font-bold text-sky-600 mb-5">Jugadores</h2>
                   {
-                    !team.players ? (
+                    team.players && (team.players.length === 0) ? (
                       <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
-                        <p className="text-cyan-600 text-center font-bold">Aún no hay jugadores registrados</p>
+                        <p className="text-cyan-600 text-center font-bold">
+                          Aún no hay jugadores registrados
+                        </p>
                       </div>
                     ) : (
                       <div className="flex flex-wrap gap-3">
-                        {team.players.map(({ id, name }) => (
+                        {team.players?.map(({ id, name }) => (
                           <Link key={id} href={`/admin/jugadores/perfil/${id}`}>
                             <Badge variant="outline-info">{name}</Badge>
                           </Link>
