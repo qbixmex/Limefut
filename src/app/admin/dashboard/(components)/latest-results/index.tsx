@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import "../../styles.css";
 
 export const LatestResults = async () => {
-  const { latestResults } = await fetchLatestResultsAction({ quantity: 5 });
+  const { latestResults } = await fetchLatestResultsAction({ quantity: 7 });
 
   return (
     <div className="widget">
