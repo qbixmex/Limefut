@@ -13,7 +13,6 @@ export const WeekSelector = () => {
   const searchParams = useSearchParams();
   const tournamentSearchParam = searchParams.get('torneo');
   const [week, setWeek] = useState(0);
-  // await updateTeamsForWeek(weekValue);
 
   if (!tournamentSearchParam) return null;
 

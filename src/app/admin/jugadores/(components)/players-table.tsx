@@ -26,11 +26,12 @@ import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
+  teamId: string;
   query: string;
   currentPage: number;
 }>;
 
-export const PlayersTable: FC<Props> = async ({ query, currentPage }) => {
+export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) => {
   const session = await auth();
   const {
     players = [],
@@ -38,11 +39,14 @@ export const PlayersTable: FC<Props> = async ({ query, currentPage }) => {
       currentPage: 1,
       totalPages: 1,
     },
-  } = await fetchPlayersAction({
-    page: currentPage,
-    take: 6,
-    searchTerm: query,
-  });
+  } = await fetchPlayersAction(
+    teamId,
+    {
+      page: currentPage,
+      take: 12,
+      searchTerm: query,
+    },
+  );
 
   return (
     <>
@@ -83,7 +87,7 @@ export const PlayersTable: FC<Props> = async ({ query, currentPage }) => {
                       </Link>
                     </TableCell>
                     <TableCell>{player.name}</TableCell>
-                    <TableCell>{player.email}</TableCell>
+                    <TableCell>{player.email ?? 'No proporcionado'}</TableCell>
                     <TableCell>
                       <Link href={`/admin/equipos/${player.team?.permalink}`}>
                         {
@@ -151,7 +155,7 @@ export const PlayersTable: FC<Props> = async ({ query, currentPage }) => {
       ) : (
         <div className="border border-sky-600 p-5 rounded">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay jugadores
+            No hay jugadores asignados a este equipo
           </p>
         </div>
       )}

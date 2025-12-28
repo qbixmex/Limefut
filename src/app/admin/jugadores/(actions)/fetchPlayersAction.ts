@@ -26,15 +26,22 @@ export type ResponseFetchAction = Promise<{
   pagination: Pagination | null;
 }>;
 
-export const fetchPlayersAction = async (options?: Options): ResponseFetchAction => {
+export const fetchPlayersAction = async (
+  teamId: string,
+  options?: Options,
+): ResponseFetchAction => {
   let { page = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
-  const whereCondition: Prisma.PlayerWhereInput = options?.searchTerm ? {
-    OR: [
+  const whereCondition: Prisma.PlayerWhereInput = {
+    teamId: teamId !== 'none' ? teamId : null,
+  };
+
+  if (options?.searchTerm) {
+    whereCondition.OR = [
       {
         name: {
           contains: options.searchTerm,
@@ -53,8 +60,8 @@ export const fetchPlayersAction = async (options?: Options): ResponseFetchAction
           mode: 'insensitive' as const,
         },
       },
-    ],
-  } : {};
+    ];
+  }
 
   try {
     const players = await prisma.player.findMany({
