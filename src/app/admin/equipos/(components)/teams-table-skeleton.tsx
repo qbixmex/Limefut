@@ -7,7 +7,7 @@ type Props = Readonly<{
 
 export const TeamsTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) => {
   return (
-    <div className="flex flex-col gap-5 animate-pulse">
+    <div className="flex flex-col gap-5 animate-pulse mt-10">
       {/* Skeleton Header */}
       <div
         className="grid gap-5"

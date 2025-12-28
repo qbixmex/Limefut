@@ -1,9 +1,10 @@
+'use client';
+
 import type { FC } from 'react';
 import Link from 'next/link';
 import Image from "next/image";
 import { DeleteTeam } from "../(components)/delete-team";
-import { fetchTeamsAction, updateTeamStateAction } from "../(actions)";
-import { auth } from "@/auth";
+import { updateTeamStateAction } from "../(actions)";
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import {
@@ -27,30 +28,22 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { ActiveSwitch } from '@/shared/components/active-switch';
+import type { TeamType } from '../(actions)/fetchTeamsAction';
 
 type Props = Readonly<{
-  query: string;
-  currentPage: number;
+  teams: TeamType[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
+  roles: string[];
 }>;
 
-export const TeamsTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth();
-  const {
-    teams = [],
-    pagination = {
-      currentPage: 1,
-      totalPages: 1,
-    },
-  } = await fetchTeamsAction({
-    page: currentPage,
-    take: 8,
-    searchTerm: query,
-  });
-
+export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
   return (
     <>
-      {teams && teams.length > 0 ? (
-        <div className="flex-1 flex flex-col">
+      {teams.length > 0 ? (
+        <div className="flex-1 flex flex-col mt-10">
           <div className="flex-1">
             <Table>
               <TableHeader>
@@ -59,7 +52,6 @@ export const TeamsTable: FC<Props> = async ({ query, currentPage }) => {
                   <TableHead>Nombre</TableHead>
                   <TableHead>División</TableHead>
                   <TableHead>Grupo</TableHead>
-                  <TableHead>Torneo</TableHead>
                   <TableHead>Entrenador</TableHead>
                   <TableHead className="text-center">Jugadores</TableHead>
                   <TableHead className="text-center">Activo</TableHead>
@@ -91,15 +83,6 @@ export const TeamsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell>{team.name}</TableCell>
                     <TableCell>{team.division}</TableCell>
                     <TableCell>{team.group}</TableCell>
-                    <TableCell>
-                      {team.tournament ? (
-                        <Link href={`/admin/torneos/${team.tournament.permalink}`}>
-                          {team.tournament.name}
-                        </Link>
-                      ) : (
-                        <Badge variant="outline-secondary">No Asignado</Badge>
-                      )}
-                    </TableCell>
                     <TableCell>
                       {team.coach ? (
                         <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
@@ -146,7 +129,7 @@ export const TeamsTable: FC<Props> = async ({ query, currentPage }) => {
                         </Tooltip>
                         <DeleteTeam
                           teamId={team.id}
-                          roles={session?.user.roles as string[]}
+                          roles={roles}
                         />
                       </div>
                     </TableCell>
@@ -162,15 +145,14 @@ export const TeamsTable: FC<Props> = async ({ query, currentPage }) => {
           </div>
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
+        <div className="border border-sky-600 p-5 rounded mt-10">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay equipos
+            No hay equipos registrados en el torneo seleccionado
           </p>
         </div>
       )}
     </>
   );
-
 };
 
 export default TeamsTable;

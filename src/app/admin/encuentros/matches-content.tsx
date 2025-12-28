@@ -3,7 +3,7 @@ import { MatchesTableSkeleton } from './(components)/matches-table-skeleton';
 import { MatchesWrapper } from './(components)/matches.wrapper';
 import type { MATCH_STATUS } from '~/src/shared/enums';
 
-type MatchesContentProps = Readonly<{
+type Props = Readonly<{
   searchParams: Promise<{
     query?: string;
     page?: string;
@@ -14,7 +14,7 @@ type MatchesContentProps = Readonly<{
   }>;
 }>;
 
-export const MatchesContent: FC<MatchesContentProps> = async ({ searchParams }) => {
+export const MatchesContent: FC<Props> = async ({ searchParams }) => {
   const {
     torneo: tournamentId,
     query = '',

@@ -141,6 +141,7 @@ export const updateTeamAction = async ({
 
         // Update Cache
         revalidatePath('/admin/equipos');
+        updateTag('admin-teams');
         updateTag('public-team');
         updateTag('public-teams');
         updateTag('public-team');
