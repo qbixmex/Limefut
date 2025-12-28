@@ -2,7 +2,8 @@
 
 import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
-import type { Tournament, Coach, Pagination } from "@/shared/interfaces";
+import type { Coach, Pagination } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   page?: number;
@@ -10,53 +11,54 @@ type Options = Readonly<{
   searchTerm?: string;
 }>;
 
+export type TeamType = {
+  id: string;
+  name: string;
+  permalink: string;
+  imageUrl: string | null,
+  division: string | null;
+  group: string | null;
+  active: boolean;
+  coach: Pick<Coach, 'id' | 'name'> | null;
+  playersCount: number;
+};
+
 export type ResponseFetchTeams = Promise<{
   ok: boolean;
   message: string;
-  teams: {
-    id: string;
-    name: string;
-    permalink: string;
-    imageUrl: string | null,
-    division: string | null;
-    group: string | null;
-    active: boolean;
-    tournament: Pick<Tournament, 'id' | 'name' | 'permalink'> | null;
-    coach: Pick<Coach, 'id' | 'name'> | null;
-    playersCount: number;
-  }[] | null;
-  pagination: Pagination | null;
+  teams: TeamType[];
+  pagination: Pagination;
 }>;
 
-export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams => {
+export const fetchTeamsAction = async (
+  tournamentId: string,
+  options?: Options,
+): ResponseFetchTeams => {
+  "use cache";
+
+  cacheLife('days');
+  cacheTag('admin-teams');
+
   let { page = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
-  const whereCondition: Prisma.TeamWhereInput = options?.searchTerm ? {
-    OR: [
+  const whereCondition: Prisma.TeamWhereInput = {
+    tournamentId: tournamentId !== 'none' ? tournamentId : null,
+  };
+
+  if (options?.searchTerm) {
+    whereCondition.OR = [
       {
         name: {
           contains: options.searchTerm,
           mode: 'insensitive' as const,
         },
       },
-      {
-        division: {
-          contains: options.searchTerm,
-          mode: 'insensitive' as const,
-        },
-      },
-      {
-        group: {
-          contains: options.searchTerm,
-          mode: 'insensitive' as const,
-        },
-      },
-    ],
-  } : {};
+    ];
+  }
 
   try {
     const teams = await prisma.team.findMany({
@@ -70,13 +72,6 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
         division: true,
         group: true,
         active: true,
-        tournament: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
         coach: {
           select: {
             id: true,
@@ -111,16 +106,22 @@ export const fetchTeamsAction = async (options?: Options): ResponseFetchTeams =>
       return {
         ok: false,
         message: error.message,
-        teams: null,
-        pagination: null,
+        teams: [],
+        pagination: {
+          currentPage: 0,
+          totalPages: 0,
+        },
       };
     }
     console.log(error);
     return {
       ok: false,
       message: "Error inesperado al obtener los equipos, revise los logs del servidor",
-      teams: null,
-      pagination: null,
+      teams: [],
+      pagination: {
+        currentPage: 0,
+        totalPages: 0,
+      },
     };
   }
 };

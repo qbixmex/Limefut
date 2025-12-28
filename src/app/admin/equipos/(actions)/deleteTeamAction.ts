@@ -39,6 +39,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
 
   revalidatePath('/equipos');
   revalidatePath('/admin/equipos');
+  updateTag('admin-teams');
   updateTag('public-teams');
   updateTag('public-team');
 

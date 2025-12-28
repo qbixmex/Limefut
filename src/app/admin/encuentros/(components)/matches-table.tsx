@@ -47,7 +47,12 @@ type Props = Readonly<{
   roles: string[];
 }>;
 
-export const MatchesTable: FC<Props> = ({ matches, matchesWeeks, pagination, roles }) => {
+export const MatchesTable: FC<Props> = ({
+  matches,
+  matchesWeeks,
+  pagination,
+  roles,
+}) => {
   const searchParams = useSearchParams();
   const [sortMatchDate, setSortMatchDate] = useState<'asc' | 'desc' | undefined>(undefined);
   const [sortWeek, setSortWeek] = useState<'asc' | 'desc' | undefined>(undefined);
