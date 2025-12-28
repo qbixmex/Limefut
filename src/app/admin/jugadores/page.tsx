@@ -9,21 +9,26 @@ import {
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import { PlayersTableSkeleton } from "./(components)/players-table-skeleton";
-import { PlayersTable } from "./(components)/players-table";
 import { Search } from "@/shared/components/search";
+import { TeamsSelectorSkeleton } from "./(components)/teams-selector-skeleton";
+import { PlayersContent } from "./(components)/players-content";
+import { TeamsSelector } from "./(components)/teams-selector";
+import { fetchTeamsAction } from "~/src/shared/actions/fetchTeamsAction";
+import { TournamentsSelector } from "../(components)/tournaments-selector";
+import { fetchTournamentsAction } from "~/src/shared/actions/fetchTournamentsAction";
+import TournamentsSelectorSkeleton from "../equipos/(components)/TournamentsSelectorSkeleton";
 
 type Props = Readonly<{
-  searchParams?: Promise<{
+  searchParams: Promise<{
+    torneo?: string;
+    equipo?: string;
     query?: string;
     page?: string;
   }>;
 }>;
 
-export const PlayersPage: FC<Props> = async (props) => {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+export const PlayersPage: FC<Props> = ({ searchParams }) => {
+  const tournamentIdPromise = searchParams.then((sp) => ({ tournamentId: sp.torneo }));
 
   return (
     <>
@@ -50,11 +55,16 @@ export const PlayersPage: FC<Props> = async (props) => {
               </section>
             </CardHeader>
             <CardContent>
-              <Suspense
-                key={`${query}-${currentPage}`}
-                fallback={<PlayersTableSkeleton colCount={7} rowCount={6} />}
-              >
-                <PlayersTable query={query} currentPage={currentPage} />
+              <section className="flex flex-col gap-5 mb-10">
+                <Suspense fallback={<TournamentsSelectorSkeleton />}>
+                  <TournamentsWrapper />
+                </Suspense>
+                <Suspense fallback={<TeamsSelectorSkeleton />}>
+                  <TeamsWrapper tournamentIdPromise={tournamentIdPromise} />
+                </Suspense>
+              </section>
+              <Suspense>
+                <PlayersContent searchParams={searchParams} />
               </Suspense>
             </CardContent>
           </Card>
@@ -63,5 +73,34 @@ export const PlayersPage: FC<Props> = async (props) => {
     </>
   );
 };
+
+const TournamentsWrapper = async () => {
+  const { tournaments } = await fetchTournamentsAction();
+  return (
+    <TournamentsSelector tournaments={tournaments} />
+  );
+};
+
+type TeamsWrapperProps = Readonly<{
+  tournamentIdPromise: Promise<{
+    tournamentId: string | undefined;
+  }>;
+}>;
+
+const TeamsWrapper: FC<TeamsWrapperProps> = async ({ tournamentIdPromise }) => {
+  const { tournamentId } = await tournamentIdPromise;
+
+  if (!tournamentId) {
+    return null;
+  }
+
+  const { teams } = await fetchTeamsAction(tournamentId);
+
+  return (
+    <TeamsSelector teams={teams} />
+  );
+};
+
+
 
 export default PlayersPage;
