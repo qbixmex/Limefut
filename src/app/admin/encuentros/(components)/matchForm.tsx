@@ -207,13 +207,15 @@ export const MatchForm: FC<Props> = ({
   };
 
   const onFinishMatch = async () => {
-    const { ok, message } = await finishMatchAction({
+    const data = {
       matchId: match?.id as string,
       localScore: form.getValues('localScore') as number,
       visitorScore: form.getValues('visitorScore') as number,
       localId: match?.localTeam.id as string,
       visitorId: match?.visitorTeam.id as string,
-    });
+    };
+
+    const { ok, message } = await finishMatchAction(data);
 
     if (!ok) {
       toast.error(message);
