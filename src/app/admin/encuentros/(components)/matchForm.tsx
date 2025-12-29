@@ -670,7 +670,10 @@ export const MatchForm: FC<Props> = ({
             </Button>
           </Activity>
 
-          <Activity mode={hiddenScores ? 'hidden' : 'visible'}>
+          <Activity mode={(
+            match?.status === MATCH_STATUS.COMPLETED
+            && !hiddenScores
+          ) ? 'visible' : 'hidden'}>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
