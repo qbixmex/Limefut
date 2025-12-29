@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, type FC } from 'react';
+import { useState, useEffect, type FC, Activity } from 'react';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -51,6 +51,7 @@ import { Label } from '@/components/ui/label';
 import { finishMatchAction } from '../(actions)/finishMatchAction';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import "./match-form.css";
+import { updateMatchScoreAction } from '../(actions)/updateMatchScoreAction';
 
 type Props = Readonly<{
   session: Session;
@@ -77,6 +78,7 @@ export const MatchForm: FC<Props> = ({
   const [teams, setTeams] = useState<Team[]>(initialTeams);
   const [localTeamsOpen, setLocalTeamsOpen] = useState(false);
   const [visitorTeamsOpen, setVisitorTeamOpen] = useState(false);
+  const [hiddenScores, setHiddenScores] = useState(true);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -125,6 +127,15 @@ export const MatchForm: FC<Props> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (match) {
+      setHiddenScores(false);
+    }
+    if (match?.status === MATCH_STATUS.COMPLETED) {
+      setHiddenScores(true);
+    }
+  }, [match]);
 
   const updateTeamsForWeek = async (week: number) => {
     const response = await fetchTeamsForMatchAction({
@@ -217,6 +228,28 @@ export const MatchForm: FC<Props> = ({
     };
 
     const { ok, message } = await finishMatchAction(data);
+
+    if (!ok) {
+      toast.error(message);
+      return;
+    }
+
+    if (ok) {
+      toast.success(message);
+      route.replace(`/admin/encuentros/detalles/${match?.id}`);
+    }
+  };
+
+  const onUpdateMatchScore = async () => {
+    const data = {
+      matchId: match?.id as string,
+      localScore: form.getValues('localScore') as number,
+      visitorScore: form.getValues('visitorScore') as number,
+      localId: match?.localTeam.id as string,
+      visitorId: match?.visitorTeam.id as string,
+    };
+
+    const { ok, message } = await updateMatchScoreAction(data);
 
     if (!ok) {
       toast.error(message);
@@ -396,7 +429,7 @@ export const MatchForm: FC<Props> = ({
         </div>
 
         {/* Local Score and Visitor Score */}
-        {match && match.status !== MATCH_STATUS.COMPLETED && (
+        {!hiddenScores && (
           <div className="flex flex-col gap-5 lg:flex-row">
             <div className="w-full lg:w-1/2">
               <FormField
@@ -627,6 +660,47 @@ export const MatchForm: FC<Props> = ({
               !match ? 'crear' : 'actualizar'
             )}
           </Button>
+          <Activity mode={hiddenScores ? 'visible' : 'hidden'}>
+            <Button
+              type="button"
+              variant="outline-info"
+              onClick={() => setHiddenScores(false)}
+            >
+              Modificar Marcador
+            </Button>
+          </Activity>
+
+          <Activity mode={hiddenScores ? 'hidden' : 'visible'}>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline-success"
+                  onClick={() => { }}
+                >
+                  Actualizar Marcador
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-center">¿ Confirmas que quieres actualizar el marcador ?</AlertDialogTitle>
+                  <AlertDialogDescription className="text-center text-emerald-500 font-bold">
+                    ¡ La Tabla de Posiciones y Estadísticas serán afectadas !
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="finish-btn"
+                    onClick={onUpdateMatchScore}
+                  >
+                    Proceder
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </Activity>
+
           {match && (match.status !== MATCH_STATUS.COMPLETED) && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
