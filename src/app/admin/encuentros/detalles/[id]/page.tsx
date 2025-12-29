@@ -122,6 +122,10 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                     </TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableHead>Jornada</TableHead>
+                    <TableCell>{match.week}</TableCell>
+                  </TableRow>
+                  <TableRow>
                     <TableHead className="font-semibold">Estado</TableHead>
                     <TableCell>
                       <Badge variant={getMatchStatus(match.status).variant}>
