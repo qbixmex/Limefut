@@ -91,20 +91,20 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
 
     // Create player
     if (!player) {
-      const response = await createPlayerAction(
+      const { ok, message, player } = await createPlayerAction(
         formData,
         session?.user.roles ?? null,
       );
 
-      if (!response.ok) {
-        toast.error(response.message);
+      if (!ok) {
+        toast.error(message);
         return;
       }
 
-      if (response.ok) {
-        toast.success(response.message);
+      if (ok) {
+        toast.success(message);
         form.reset();
-        route.replace("/admin/jugadores");
+        route.replace(`/admin/jugadores/perfil/${player?.id}`);
         return;
       }
       return;
@@ -112,21 +112,21 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
 
     // Update player
     if (player) {
-      const response = await updatePlayerAction({
+      const { ok, message } = await updatePlayerAction({
         formData,
         playerId: player.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });
 
-      if (!response.ok) {
-        toast.error(response.message);
+      if (!ok) {
+        toast.error(message);
         return;
       }
 
-      if (response.ok) {
-        toast.success(response.message);
-        route.replace("/admin/jugadores");
+      if (ok) {
+        toast.success(message);
+        route.replace(`/admin/jugadores/perfil/${player.id}`);
         return;
       }
       return;
