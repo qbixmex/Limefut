@@ -20,9 +20,6 @@ type Props = {
 export const finishMatchAction = async (props: Props): ResponseAction => {
   const { matchId, localScore, visitorScore, localId, visitorId } = props;
 
-  // console.log({ matchId, localScore, visitorScore, localId, visitorId });
-  // return;
-
   let localPoints = 0;
   let visitorPoints = 0;
 
@@ -77,7 +74,11 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
 
   const updatedMatch = await prisma.match.update({
     where: { id: matchId },
-    data: { status: MATCH_STATUS.COMPLETED },
+    data: {
+      localScore,
+      visitorScore,
+      status: MATCH_STATUS.COMPLETED,
+    },
   });
 
   // Refresh Match

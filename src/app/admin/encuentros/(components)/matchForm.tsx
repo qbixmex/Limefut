@@ -89,6 +89,7 @@ export const MatchForm: FC<Props> = ({
       referee: match?.referee ?? undefined,
       matchDate: match?.matchDate ? new Date(match.matchDate) : new Date(),
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
+      week: match?.week ?? 0,
     },
   });
 
@@ -160,7 +161,7 @@ export const MatchForm: FC<Props> = ({
     formData.append('matchDate', (data.matchDate as Date).toISOString());
     formData.append('status', data.status as string);
     formData.append('tournamentId', !match ? tournamentId as string : match.tournament.id);
-    formData.append('week', !match ? `${week}` : `${match.week}`);
+    formData.append('week', !match ? `${week}` : `${data.week}`);
 
     // Reset Date and Time
     setSelectedDate(new Date());
@@ -207,13 +208,15 @@ export const MatchForm: FC<Props> = ({
   };
 
   const onFinishMatch = async () => {
-    const { ok, message } = await finishMatchAction({
+    const data = {
       matchId: match?.id as string,
       localScore: form.getValues('localScore') as number,
       visitorScore: form.getValues('visitorScore') as number,
       localId: match?.localTeam.id as string,
       visitorId: match?.visitorTeam.id as string,
-    });
+    };
+
+    const { ok, message } = await finishMatchAction(data);
 
     if (!ok) {
       toast.error(message);
@@ -480,7 +483,7 @@ export const MatchForm: FC<Props> = ({
           </div>
         </div>
 
-        {/* Match Date and Referee */}
+        {/* Match Date and Week */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <div className="flex flex-col gap-2">
@@ -543,8 +546,8 @@ export const MatchForm: FC<Props> = ({
             </div>
           </div>
 
-          {(match?.status != 'completed') && (
-            <div className='w-full lg:w-1/2 flex justify-end gap-5'>
+          <div className='w-full lg:w-1/2 flex justify-end gap-5'>
+            {(match?.status != 'completed') && (
               <FormField
                 control={form.control}
                 name="status"
@@ -570,8 +573,30 @@ export const MatchForm: FC<Props> = ({
                   </FormItem>
                 )}
               />
-            </div>
-          )}
+            )}
+            {match && (
+              <FormField
+                control={form.control}
+                name="week"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Semana</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        min={0}
+                        value={field.value}
+                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        className="w-[75px]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </div>
         </div>
 
         {/* Buttons */}
@@ -580,7 +605,10 @@ export const MatchForm: FC<Props> = ({
             type="button"
             variant="outline-secondary"
             size="lg"
-            onClick={() => route.replace('/admin/encuentros')}
+            onClick={() => {
+              form.reset();
+              route.replace('/admin/encuentros');
+            }}
           >
             cancelar
           </Button>
