@@ -117,7 +117,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       formData.append("image", data.image);
     }
 
-    formData.append('active', String(data.active ?? false));
+    formData.append('active', String(data.active));
 
     // Create team
     if (!team) {
