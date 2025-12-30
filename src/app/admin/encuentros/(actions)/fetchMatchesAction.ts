@@ -65,15 +65,11 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
     "cancelado": MATCH_STATUS.CANCELED,
   };
 
-  const whereCondition: Prisma.MatchWhereInput = {};
-
-  whereCondition.OR = [
-    {
-      tournamentId,
-      week: !isNaN(Number(sortWeek)) ? Number(sortWeek) : undefined,
-      status,
-    },
-  ];
+  const whereCondition: Prisma.MatchWhereInput = {
+    tournamentId,
+    week: !isNaN(Number(sortWeek)) ? Number(sortWeek) : undefined,
+    status,
+  };
 
   if (options?.searchTerm) {
     const searchTerm = options.searchTerm;
