@@ -24,9 +24,7 @@ export const MatchesWrapper: FC<Props> = async ({
 }) => {
   const session = await auth();
 
-  const { tournament } = await fetchTournamentAction(
-    tournamentId,
-  );
+  const { tournament } = await fetchTournamentAction(tournamentId);
 
   const { matches, pagination } = await fetchMatchesAction({
     tournamentId,
