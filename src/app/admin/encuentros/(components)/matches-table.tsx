@@ -174,10 +174,9 @@ export const MatchesTable: FC<Props> = ({
                           editar
                         </TooltipContent>
                       </Tooltip>
-                      <DeleteMatch
-                        id={match.id}
-                        roles={roles}
-                      />
+                      {match.status !== MATCH_STATUS.COMPLETED && (
+                        <DeleteMatch id={match.id} roles={roles} />
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>
