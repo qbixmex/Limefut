@@ -16,7 +16,7 @@ export type ResponseAction = Promise<{
   teams: TeamType[];
 }>;
 
-export const fetchTeamsAction = async (tournamentPermalink: string): ResponseAction => {
+export const fetchTeamsAction = async (tournamentId: string): ResponseAction => {
   "use cache";
 
   cacheLife('days');
@@ -24,14 +24,15 @@ export const fetchTeamsAction = async (tournamentPermalink: string): ResponseAct
 
   const tournament = await prisma.tournament.findUnique({
     where: {
-      permalink: tournamentPermalink,
+      id: tournamentId,
     },
+    select: { id: true },
   });
 
   if (!tournament) {
     return {
       ok: true,
-      message: `! No hay un equipo con el enlace permanente ${tournamentPermalink} ¡`,
+      message: `! No hay un equipo con el enlace permanente ${tournamentId} ¡`,
       teams: [],
     };
   }

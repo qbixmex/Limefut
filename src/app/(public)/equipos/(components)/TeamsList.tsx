@@ -5,13 +5,13 @@ import { fetchTeamsAction } from "../(actions)/fetchTeamsAction";
 import { Shield } from "lucide-react";
 
 type TeamsListProps = Readonly<{
-  permalink?: string;
+  tournamentId?: string;
 }>;
 
-export const TeamsList: FC<TeamsListProps> = async ({ permalink }) => {
-  if (!permalink) return null;
+export const TeamsList: FC<TeamsListProps> = async ({ tournamentId }) => {
+  if (!tournamentId) return null;
 
-  const { teams } = await fetchTeamsAction(permalink);
+  const { teams } = await fetchTeamsAction(tournamentId);
 
   if (teams.length == 0) {
     return (

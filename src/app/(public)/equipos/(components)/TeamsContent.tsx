@@ -9,14 +9,14 @@ type Props = Readonly<{
 }>;
 
 export const TeamsContent: FC<Props> = async ({ searchParams }) => {
-  const tournamentPermalink = (await searchParams).torneo;
+  const tournamentId = (await searchParams).torneo;
 
   return (
     <Suspense
-      key={`permalink-${tournamentPermalink}`}
+      key={`tournamentId-${tournamentId}`}
       fallback={<TeamsSkeleton />}
     >
-      <TeamsList permalink={tournamentPermalink} />
+      <TeamsList tournamentId={tournamentId} />
     </Suspense>
   );
 };
