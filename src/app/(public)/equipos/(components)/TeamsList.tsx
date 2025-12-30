@@ -24,34 +24,32 @@ export const TeamsList: FC<TeamsListProps> = async ({ tournamentId }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 lg:gap-10 mt-5">
-      {
-        teams.map((team) => (
-          <div key={team.id} className="flex flex-col items-center gap-5">
-            <figure>
-              {(!team.imageUrl) ? (
-                <div className="size-[50px] text-gray-400 bg-gray-200 dark:bg-gray-700 rounded grid place-content-center">
-                  <Shield size={40} strokeWidth={1} />
-                </div>
-              ) : (
-                <Image
-                  src={team.imageUrl as string}
-                  width={250}
-                  height={250}
-                  alt={`Equipo ${team.name}`}
-                  className="size-[250px] rounded"
-                />
-              )}
-            </figure>
-            <Link
-              href={`/equipos/${team.permalink}`}
-              className="italic font-bold"
-            >
-              {team.name}
-            </Link>
-          </div>
-        ))
-      }
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-5">
+      {teams.map((team) => (
+        <div key={team.id} className="flex flex-col items-center gap-5">
+          <figure>
+            {(!team.imageUrl) ? (
+              <div className="size-[50px] text-gray-400 bg-gray-200 dark:bg-gray-700 rounded grid place-content-center">
+                <Shield size={40} strokeWidth={1} />
+              </div>
+            ) : (
+              <Image
+                src={team.imageUrl as string}
+                width={250}
+                height={250}
+                alt={`Equipo ${team.name}`}
+                className="size-[250px] rounded"
+              />
+            )}
+          </figure>
+          <Link
+            href={`/equipos/${team.permalink}`}
+            className="italic font-bold"
+          >
+            {team.name}
+          </Link>
+        </div>
+      ))}
     </div>
   );
 };
