@@ -170,7 +170,11 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                       </TableRow>
                       <TableRow>
                         <TableHead className="w-[180px] font-semibold">Dirección</TableHead>
-                        <TableCell>{team.address ?? 'No especificada'}</TableCell>
+                        <TableCell>
+                          <span className="text-wrap">
+                            {team.address ?? 'No especificada'}
+                          </span>
+                        </TableCell>
                       </TableRow>
                       <TableRow>
                         <TableHead className="w-[180px] font-semibold">Fecha de Creación</TableHead>
