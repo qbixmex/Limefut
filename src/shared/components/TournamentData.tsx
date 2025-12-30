@@ -7,23 +7,29 @@ import {
   TableHead,
   TableRow,
 } from "@/components/ui/table";
-import type { TournamentType } from "../(actions)/fetchStandingsAction";
-import type { Team } from "@/shared/interfaces";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import type { TournamentType } from "~/src/app/admin/tabla-de-posiciones/(actions)/fetchStandingsAction";
 
 type Props = Readonly<{
-  tournament: TournamentType & { teams: Pick<Team, 'id' | 'name' | 'permalink'>[] };
+  tournament: TournamentType & {
+    teams: {
+      id: string;
+      name: string;
+      permalink: string;
+    }[];
+  };
   standings: boolean;
+  admin?: boolean;
 }>;
 
-export const TournamentData: FC<Props> = ({ tournament, standings = false }) => {
+export const TournamentData: FC<Props> = ({ tournament, standings = false, admin = false }) => {
   return (
     <>
       <section className="flex flex-col lg:flex-row gap-5">
         <div className="w-full lg:w-1/2">
-          <Table className="w-full mb-10">
+          <Table className="w-full">
             <TableBody>
               <TableRow>
                 <TableHead className="text-gray-400">Torneo</TableHead>
@@ -45,7 +51,7 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false }) => 
           </Table>
         </div>
         <div className="w-full lg:w-1/2">
-          <Table className="w-full mb-10">
+          <Table className="w-full">
             <TableBody>
               <TableRow>
                 <TableHead className="text-gray-400">Temporada</TableHead>
@@ -71,25 +77,31 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false }) => 
           </Table>
         </div>
       </section>
-      <section className="mb-10">
-        {tournament.teams.length === 0 && (
-          <div className="border-2 w-full border-amber-700 py-4 text-center rounded-lg">
-            <p className="text-amber-700 text-xl italic">Este torneo aún no tiene equipos asignados</p>
+
+      {tournament.teams.length === 0 && (
+        <div className="border-2 w-full border-blue-500 py-4 text-center rounded-lg my-10">
+          <p className="text-blue-500 text-xl font-semibold italic">
+            Este torneo aún no tiene equipos asignados
+          </p>
+        </div>
+      )}
+
+      {!standings && (tournament.teams.length > 0) && (
+        <div className="mt-5 mb-10">
+          <h2 className="text-lg mb-5">Equipos Asignados</h2>
+          <div className="flex flex-wrap gap-3">
+            {tournament.teams.map(({ id, name, permalink }) => (
+              <Link
+                key={id}
+                href={`${admin ? '/admin' : ''}/equipos/${permalink}`}
+                target="_blank"
+              >
+                <Badge variant="outline-info">{name}</Badge>
+              </Link>
+            ))}
           </div>
-        )}
-        {!standings && (
-          <>
-            <h2 className="text-lg mb-5">Equipos Asignados</h2>
-            <div className="flex flex-wrap gap-3">
-              {tournament.teams.map(({ id, name, permalink }) => (
-                <Link key={id} href={`/admin/equipos/${permalink}`} target="_blank">
-                  <Badge variant="outline-info">{name}</Badge>
-                </Link>
-              ))}
-            </div>
-          </>
-        )}
-      </section>
+        </div>
+      )}
     </>
   );
 };

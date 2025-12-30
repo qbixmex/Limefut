@@ -42,6 +42,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   updateTag('admin-teams');
   updateTag('public-teams');
   updateTag('public-team');
+  updateTag('standings');
 
   return {
     ok: true,

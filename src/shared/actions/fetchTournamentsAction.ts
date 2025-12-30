@@ -6,6 +6,7 @@ import { cacheLife, cacheTag } from "next/cache";
 export type TournamentType = {
   id: string;
   name: string;
+  permalink: string;
 };
 
 export type ResponseAction = Promise<{
@@ -18,7 +19,7 @@ export const fetchTournamentsAction = async (): ResponseAction => {
   "use cache";
 
   cacheLife('days');
-  cacheTag('admin-tournaments-list');
+  cacheTag('tournaments-list');
 
   try {
     const tournaments = await prisma.tournament.findMany({
@@ -27,6 +28,7 @@ export const fetchTournamentsAction = async (): ResponseAction => {
       select: {
         id: true,
         name: true,
+        permalink: true,
       },
     });
 

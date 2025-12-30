@@ -147,7 +147,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
       ) : (
         <div className="border border-sky-600 p-5 rounded mt-10">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay equipos registrados en el torneo seleccionado
+            No se encontraron equipos
           </p>
         </div>
       )}

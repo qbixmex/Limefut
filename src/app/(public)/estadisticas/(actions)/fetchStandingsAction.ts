@@ -49,7 +49,7 @@ export const fetchStandingsAction = async (tournamentPermalink: string): Standin
   "use cache";
 
   cacheLife("days");
-  cacheTag("public-standings");
+  cacheTag("standings");
 
   try {
     const tournament = await prisma.tournament.findUnique({

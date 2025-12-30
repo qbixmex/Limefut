@@ -3,8 +3,8 @@ import type { Metadata } from 'next/types';
 import { Heading } from '../components';
 import { Standings } from './(components)/standings';
 import { TournamentsSelectorSkeleton } from './(components)/TournamentsSelectorSkeleton';
-import { TournamentsSelector } from './(components)/TournamentsSelector';
 import "./styles.css";
+import { TournamentsSelector } from './(components)/TournamentsSelector';
 
 export const metadata: Metadata = {
   title: 'Tabla de posiciones',
