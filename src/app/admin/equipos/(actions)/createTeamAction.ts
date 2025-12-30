@@ -101,6 +101,7 @@ export const createTeamAction = async (
     updateTag('admin-teams');
     updateTag('public-teams');
     updateTag('public-team');
+    updateTag('standings');
 
     return prismaTransaction;
   } catch (error) {

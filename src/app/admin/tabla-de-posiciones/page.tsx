@@ -1,15 +1,24 @@
+import { type FC, Suspense } from "react";
+import type { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import { StandingsContainer } from "./(components)";
-import { fetchTournamentsAction, type TournamentType } from "./(actions)/fetchTournamentsAction";
-import { auth } from "@/auth";
+import { TournamentsSelectorSkeleton } from "./(components)/tournaments-selector-skeleton";
+import { TournamentsSelector } from "./(components)/tournaments-selector";
+import { StandingsContainer } from "./(components)/StandingsContainer";
 
-export const StandingsPage = async () => {
-  const session = await auth();
+export const metadata: Metadata = {
+  title: 'Tabla de posiciones',
+  description: 'Tabla de posiciones por torneo.',
+  robots: 'noindex, nofollow',
+};
 
-  const response = await fetchTournamentsAction(session?.user.roles ?? null);
-  const tournaments = response.tournaments;
+type Props = Readonly<{
+  searchParams: Promise<{
+    torneo: string;
+  }>;
+}>;
 
+export const StandingsPage: FC<Props> = ({ searchParams }) => {
   return (
     <>
       <ErrorHandler />
@@ -20,7 +29,12 @@ export const StandingsPage = async () => {
               <CardTitle>Tabla de posiciones</CardTitle>
             </CardHeader>
             <CardContent>
-               <StandingsContainer tournaments={tournaments as TournamentType[]} />
+              <Suspense fallback={<TournamentsSelectorSkeleton />}>
+                <TournamentsSelector />
+              </Suspense>
+              <Suspense>
+                <StandingsContainer searchParams={searchParams} />
+              </Suspense>
             </CardContent>
           </Card>
         </div>

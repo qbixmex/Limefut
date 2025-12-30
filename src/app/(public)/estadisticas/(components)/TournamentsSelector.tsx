@@ -1,5 +1,5 @@
-import { fetchTournamentsAction } from "@/app/(public)/(actions)/tournaments/fetchTournamentsAction";
-import SelectTournament from "./standings/select-tournament";
+import { fetchTournamentsAction } from "~/src/shared/actions/fetchTournamentsAction";
+import { SelectTournament } from "~/src/shared/components/select-tournament";
 
 export const TournamentsSelector = async () => {
   const { tournaments } = await fetchTournamentsAction();
