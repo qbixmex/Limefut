@@ -250,7 +250,9 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
                 const selectedTeams = teams.filter((t) => field.value?.includes(t.id));
                 return (
                   <FormItem>
-                    <FormLabel>Equipo</FormLabel>
+                    <FormLabel>
+                      Equipo{selectedTeams.length > 0 ? 's' : ''}
+                    </FormLabel>
                     <Popover open={teamsOpen} onOpenChange={setTeamsOpen}>
                       <PopoverTrigger asChild>
                         <Button
@@ -261,7 +263,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
                         >
                           {
                             (selectedTeams.length > 0)
-                              ? selectedTeams.map((t) => t.name).join(', ')
+                              ? `Equipos: ${selectedTeams.length}`
                               : "Selecciona uno ó más equipos ..."
                           }
                           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
