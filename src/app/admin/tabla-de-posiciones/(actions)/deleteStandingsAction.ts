@@ -11,7 +11,7 @@ export type ResponseDeleteAction = Promise<{
 export const deleteStandingsAction = async (tournamentId: string): ResponseDeleteAction => {
   await prisma.standings.deleteMany({ where: { tournamentId } });
 
-  updateTag('public-standings');
+  updateTag('standings');
 
   return {
     ok: true,
