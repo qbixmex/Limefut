@@ -129,11 +129,10 @@ export const MatchForm: FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (match) {
-      setHiddenScores(false);
-    }
-    if (match?.status === MATCH_STATUS.COMPLETED) {
+    if (match && match.status === MATCH_STATUS.COMPLETED) {
       setHiddenScores(true);
+    } else {
+      setHiddenScores(false);
     }
   }, [match]);
 
@@ -705,46 +704,48 @@ export const MatchForm: FC<Props> = ({
           </Activity>
 
           {match && (match.status !== MATCH_STATUS.COMPLETED) && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline-success"
-                  size="lg"
-                  disabled={form.formState.isSubmitting}
-                >
-                  {form.formState.isSubmitting ? (
-                    <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                      <span className="text-sm italic">Espere</span>
-                      <LoaderCircle className="size-4 animate-spin" />
-                    </span>
-                  ) : (
-                    <span>Finalizar</span>
-                  )}
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>¿ Confirmas que quieres finalizar el encuentro ?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Al finalizar el encuentro el resultado final impactará la tabla de posiciones.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="finish-btn"
-                    onClick={() => {
-                      form.handleSubmit(async () => {
-                        await onFinishMatch();
-                      })();
-                    }}
+            <div className="absolute top-5 right-5">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline-success"
+                    size="lg"
+                    disabled={form.formState.isSubmitting}
                   >
-                    Proceder
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                    {form.formState.isSubmitting ? (
+                      <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                        <span className="text-sm italic">Espere</span>
+                        <LoaderCircle className="size-4 animate-spin" />
+                      </span>
+                    ) : (
+                      <span>Finalizar Encuentro</span>
+                    )}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>¿ Confirmas que quieres finalizar el encuentro ?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Al finalizar el encuentro el resultado final impactará la tabla de posiciones.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      className="finish-btn"
+                      onClick={() => {
+                        form.handleSubmit(async () => {
+                          await onFinishMatch();
+                        })();
+                      }}
+                    >
+                      Proceder
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           )}
         </div>
       </form>
