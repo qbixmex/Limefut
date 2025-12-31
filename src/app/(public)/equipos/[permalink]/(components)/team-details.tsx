@@ -7,7 +7,6 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/componen
 import Link from 'next/link';
 import { Badge } from '~/src/components/ui/badge';
 import { Heading } from '../../../components';
-import BackButton from './back-button';
 
 type Props = Readonly<{
   params: Promise<{
@@ -26,7 +25,6 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="flex items-center gap-5 mb-5">
-        <BackButton permalink={team.tournament?.permalink ?? ''} />
         <Heading level="h1" className="text-emerald-500">
           {team.name}
         </Heading>
@@ -153,7 +151,8 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
         </section>
       </section>
 
-      <section>
+      {/* Players Section */}
+      {/* <section>
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-1/2">
             <h2 className="text-xl font-bold text-sky-600 mb-5">Jugadores</h2>
@@ -174,7 +173,7 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
             }
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

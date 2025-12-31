@@ -33,13 +33,15 @@ export const TeamsList: FC<TeamsListProps> = async ({ tournamentId }) => {
                 <Shield size={40} strokeWidth={1} />
               </div>
             ) : (
-              <Image
-                src={team.imageUrl as string}
-                width={250}
-                height={250}
-                alt={`Equipo ${team.name}`}
-                className="size-[250px] rounded"
-              />
+              <Link href={`/equipos/${team.permalink}`}>
+                <Image
+                  src={team.imageUrl as string}
+                  width={250}
+                  height={250}
+                  alt={`Equipo ${team.name}`}
+                  className="size-[250px] rounded"
+                />
+              </Link>
             )}
           </figure>
           <Link
