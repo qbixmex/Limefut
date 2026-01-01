@@ -8,13 +8,13 @@ import { TournamentData } from '~/src/shared/components/TournamentData';
 import "./standingsTableStyles.css";
 
 type Props = Readonly<{
-  permalink: string;
+  tournamentId: string;
 }>;
 
-export const StandingsTable: FC<Props> = async ({ permalink }) => {
-  if (!permalink) return null;
+export const StandingsTable: FC<Props> = async ({ tournamentId }) => {
+  if (!tournamentId) return null;
 
-  const { tournament, standings } = await fetchStandingsAction(permalink);
+  const { tournament, standings } = await fetchStandingsAction(tournamentId);
 
   return (
     <>
