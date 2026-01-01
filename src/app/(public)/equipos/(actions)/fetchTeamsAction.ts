@@ -31,8 +31,8 @@ export const fetchTeamsAction = async (tournamentId: string): ResponseAction => 
 
   if (!tournament) {
     return {
-      ok: true,
-      message: `! No hay un equipo con el enlace permanente ${tournamentId} ¡`,
+      ok: false,
+      message: `! No existe el torneo con el id ${tournamentId} ¡`,
       teams: [],
     };
   }
