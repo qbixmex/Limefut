@@ -134,7 +134,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       if (response.ok) {
         form.reset();
         toast.success(response.message);
-        route.replace(`/admin/equipos/${response.team?.permalink}`);
+        route.replace(`/admin/equipos/${response.team?.id}`);
         return;
       }
       return;
@@ -156,7 +156,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(`/admin/equipos/${response.team?.permalink}`);
+        route.replace(`/admin/equipos/${response.team?.id}`);
       }
       return;
     }

@@ -18,7 +18,7 @@ type FetchTeamResponse = Promise<{
 }>;
 
 export const fetchTeamAction = async (
-  permalink: string,
+  teamId: string,
   userRole: string[] | null,
 ): FetchTeamResponse => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
@@ -31,7 +31,7 @@ export const fetchTeamAction = async (
 
   try {
     const team = await prisma.team.findUnique({
-      where: { permalink: permalink },
+      where: { id: teamId },
       include: {
         tournament: {
           select: {
