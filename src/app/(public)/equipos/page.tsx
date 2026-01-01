@@ -1,8 +1,6 @@
 import { type FC, Suspense } from "react";
 import type { Metadata } from "next";
-import { Heading } from "../components";
-import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
-import { TournamentsSelector } from "./(components)/TournamentsSelector";
+import { Heading, TournamentsSelector, TournamentsSelectorSkeleton } from "../components";
 import { TeamsContent } from "./(components)/TeamsContent";
 
 export const metadata: Metadata = {

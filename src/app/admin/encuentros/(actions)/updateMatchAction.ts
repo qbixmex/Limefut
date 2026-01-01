@@ -143,6 +143,7 @@ export const updateMatchAction = async ({
         updateTag('admin-matches');
         updateTag('matches');
         updateTag('dashboard-results');
+        updateTag('public-results');
 
         return {
           ok: true,

@@ -9,7 +9,7 @@ export type TournamentType = {
   permalink: string;
 };
 
-export type ResponseAction = Promise<{
+type ResponseAction = Promise<{
   ok: boolean;
   message: string;
   tournaments: TournamentType[];

@@ -7,9 +7,9 @@ import Link from "next/link";
 import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
 import { TournamentsSelector } from "../(components)/tournaments-selector";
 import { Search } from "@/shared/components/search";
-import { TournamentsSelectorSkeleton } from "../../(public)/equipos/(components)/TournamentsSelectorSkeleton";
 import TeamsContent from "./(components)/teams-content";
 import { ClearFilters } from "./(components)/clear-filters";
+import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
 
 type Props = Readonly<{
   searchParams: Promise<{

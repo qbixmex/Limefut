@@ -1,7 +1,7 @@
-import { fetchTournamentsAction } from "../(actions)/fetchTournamentsAction";
+import { fetchTournamentsAction } from "../../(actions)";
 import { SelectTournament } from "./select-tournament";
 
-export const TournamentsSelector = async () => {
+const TournamentsSelector = async () => {
   const { tournaments } = await fetchTournamentsAction();
 
   return (

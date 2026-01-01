@@ -6,3 +6,4 @@ export * from "./heading";
 export * from "./horizontal-calendar";
 export * from "./latest-results";
 export * from "./skeletons";
+export * from "./tournaments";

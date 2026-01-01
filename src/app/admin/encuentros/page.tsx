@@ -13,9 +13,9 @@ import { Search } from "@/root/src/shared/components/search";
 import ClearFilters from "./(components)/clear-filters";
 import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
 import { TournamentsSelector } from "../(components)/tournaments-selector";
-import { TournamentsSelectorSkeleton } from "../../(public)/equipos/(components)/TournamentsSelectorSkeleton";
 import { MatchesContent } from "./matches-content";
 import type { MATCH_STATUS } from "~/src/shared/enums";
+import { TournamentsSelectorSkeleton } from "../../(public)/components";
 
 type Props = Readonly<{
   searchParams: Promise<{
