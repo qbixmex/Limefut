@@ -15,14 +15,14 @@ import type { Tournament } from '@/shared/interfaces';
 
 type Props = Readonly<{
   params: Promise<{
-    permalink: string;
+    id: string;
   }>;
 }>;
 
 export const EditTournament: FC<Props> = async ({ params }) => {
   const session = await auth();
-  const permalink = (await params).permalink;
-  const response = await fetchTournamentAction(permalink, session?.user.roles ?? null);
+  const tournamentId = (await params).id;
+  const response = await fetchTournamentAction(tournamentId, session?.user.roles ?? null);
 
   if (!response.ok) {
     redirect(`/admin/torneos?error=${encodeURIComponent(response.message)}`);
