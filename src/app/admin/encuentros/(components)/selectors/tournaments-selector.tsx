@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
-import { SelectTournament } from '~/src/app/(public)/equipos/(components)/select-tournament';
 import { WeekSelector } from '../week-selector';
+import { SelectTournament } from '~/src/shared/components/select-tournament';
 
 export const TournamentsSelector: FC = async () => {
   const { tournaments } = await fetchTournamentsAction();
