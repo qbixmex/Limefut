@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -56,7 +56,9 @@ export const deletePenaltyShootoutAction = async (
     });
   }
 
+  // Refresh Caches
   revalidatePath(`/admin/encuentros/detalles/${shootout.matchId}`);
+  updateTag('public-results');
 
   return {
     ok: true,

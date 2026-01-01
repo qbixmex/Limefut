@@ -4,6 +4,7 @@ import {
   TournamentsSelector,
   TournamentsSelectorSkeleton,
 } from '../components';
+import { ResultsContent } from './(components)/results-content';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -12,6 +13,8 @@ type Props = Readonly<{
 }>;
 
 export const ResultsPage: FC<Props> = ({ searchParams }) => {
+  const tournamentPromise = searchParams.then((sp) => ({ id: sp.torneo }));
+
   return (
     <div className="wrapper dark:bg-gray-600/20!">
       <Heading level="h1" className="text-emerald-600">
@@ -22,9 +25,9 @@ export const ResultsPage: FC<Props> = ({ searchParams }) => {
         <TournamentsSelector />
       </Suspense>
 
-      {/* <Suspense> */}
-        {/* COMPONENT */}
-      {/* </Suspense> */}
+      <Suspense>
+        <ResultsContent tournament={tournamentPromise} />
+      </Suspense>
     </div>
   );
 };

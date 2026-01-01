@@ -126,6 +126,7 @@ export const createMatchAction = async (
     updateTag('admin-matches');
     updateTag('matches');
     updateTag('dashboard-results');
+    updateTag('public-results');
 
     return prismaTransaction;
   } catch (error) {

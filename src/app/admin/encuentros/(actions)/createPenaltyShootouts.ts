@@ -189,6 +189,7 @@ export const createPenaltyShootoutAction = async (
 
     // Refresh Cache
     updateTag('matches');
+    updateTag('public-results');
 
     return prismaTransaction;
   } catch (error) {
