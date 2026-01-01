@@ -62,7 +62,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                 {teams.map((team) => (
                   <TableRow key={team.id}>
                     <TableCell>
-                      <Link href={`/admin/equipos/${team.permalink}`}>
+                      <Link href={`/admin/equipos/${team.id}`}>
                         {
                           !team.imageUrl ? (
                             <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
@@ -105,7 +105,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/equipos/${team.permalink}`}>
+                            <Link href={`/admin/equipos/${team.id}`}>
                               <Button variant="outline-info" size="icon">
                                 <InfoIcon />
                               </Button>
@@ -117,7 +117,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/equipos/editar/${team.permalink}`}>
+                            <Link href={`/admin/equipos/editar/${team.id}`}>
                               <Button variant="outline-warning" size="icon">
                                 <Pencil />
                               </Button>

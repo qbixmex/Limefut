@@ -105,9 +105,8 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/torneos");
+        route.replace(`/admin/torneos/${response.tournament?.id}`);
         route.refresh();
-        return;
       }
       return;
     }
@@ -115,7 +114,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     if (tournament) {
       const response = await updateTournamentAction({
         formData,
-        tournamentId: tournament.id,
+        tournamentId: tournament?.id,
         userRoles: session.user.roles,
         authenticatedUserId: session?.user.id,
       });
@@ -127,7 +126,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/torneos");
+        route.replace(`/admin/torneos/${response.tournament?.id}`);
         route.refresh();
         return;
       }
