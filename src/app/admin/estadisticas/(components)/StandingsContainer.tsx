@@ -7,14 +7,14 @@ type Props = Readonly<{
 }>;
 
 export const StandingsContainer: FC<Props> = async ({ searchParams }) => {
-  const tournamentPermalink = (await searchParams).torneo;
+  const tournamentId = (await searchParams).torneo;
 
   return (
     <Suspense
-      key={`permalink-${tournamentPermalink}`}
+      key={`tournamentId-${tournamentId}`}
       fallback={<SkeletonTable />}
     >
-      <StandingsTable permalink={tournamentPermalink} />
+      <StandingsTable tournamentId={tournamentId} />
     </Suspense>
   );
 };
