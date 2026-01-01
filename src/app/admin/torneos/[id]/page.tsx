@@ -22,15 +22,15 @@ import type { Team, Tournament } from "@/shared/interfaces";
 
 type Props = Readonly<{
   params: Promise<{
-    permalink: string;
+    id: string;
   }>;
 }>;
 
 export const TournamentPage: FC<Props> = async ({ params }) => {
   const session = await auth();
-  const permalink = (await params).permalink;
+  const tournamentId = (await params).id;
 
-  const response = await fetchTournamentAction(permalink, session?.user.roles ?? null);
+  const response = await fetchTournamentAction(tournamentId, session?.user.roles ?? null);
 
   if (!response.ok) {
     redirect(`/admin/torneos?error=${encodeURIComponent(response.message)}`);
@@ -190,7 +190,7 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/torneos/editar/${tournament.permalink}`}>
+                  <Link href={`/admin/torneos/editar/${tournament.id}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>
