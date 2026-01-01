@@ -40,7 +40,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
     },
   } = await fetchTournamentsAction({
     page: currentPage,
-    take: 6,
+    take: 12,
     searchTerm: query,
   });
 
@@ -101,7 +101,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/torneos/${tournament.permalink}`}>
+                            <Link href={`/admin/torneos/${tournament.id}`}>
                               <Button variant="outline-info" size="icon">
                                 <InfoIcon />
                               </Button>
@@ -113,7 +113,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/torneos/editar/${tournament.permalink}`}>
+                            <Link href={`/admin/torneos/editar/${tournament.id}`}>
                               <Button variant="outline-warning" size="icon">
                                 <Pencil />
                               </Button>
