@@ -39,6 +39,7 @@ export const TeamsSelector: FC<Props> = ({ teams: teams }) => {
     const params = new URLSearchParams(searchParams);
     params.set('equipo', id);
     router.push(`${pathname}?${params}`);
+    setOpen(false);
   };
 
   return (
