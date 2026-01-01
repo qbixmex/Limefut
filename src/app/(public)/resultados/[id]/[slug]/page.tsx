@@ -1,5 +1,6 @@
 import { Suspense, type FC } from "react";
-import MatchDetails from "../../(components)/match-details";
+import { MatchContent } from "../../(components)/match-content";
+import { Heading } from "../../../components";
 
 type Props = Readonly<{
   params: Promise<{
@@ -10,9 +11,14 @@ type Props = Readonly<{
 
 const ResultsPage: FC<Props> = ({ params }) => {
   return (
-    <Suspense>
-      <MatchDetails params={params} />
-    </Suspense>
+    <div className="wrapper dark:bg-gray-600/20!">
+      <Heading level="h1" className="text-emerald-600">
+        Detalles del encuentro
+      </Heading>
+      <Suspense>
+        <MatchContent params={params} />
+      </Suspense>
+    </div>
   );
 };
 

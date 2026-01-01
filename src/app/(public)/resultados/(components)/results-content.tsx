@@ -17,8 +17,8 @@ export const ResultsContent: FC<Props> = async ({ tournament }) => {
       key={`tournamentId-${tournamentId}`}
       fallback={<ResultsSkeleton />}
     >
-      <ResultsList tournamentId={tournamentId} />
       <ErrorHandler />
+      <ResultsList tournamentId={tournamentId} />
     </Suspense>
   );
 };

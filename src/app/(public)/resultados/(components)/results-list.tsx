@@ -70,7 +70,7 @@ export const ResultsList: FC<Props> = async ({ tournamentId }) => {
                 <TableRow key={match.id}>
                   <TableCell>
                     {match.matchDate ? (
-                      <div>
+                      <>
                         <p className="text-gray-200">
                           <span>
                             {`${format(match.matchDate, 'dd', { locale: es })}`}
@@ -87,7 +87,7 @@ export const ResultsList: FC<Props> = async ({ tournamentId }) => {
                         <p>
                           {format(match.matchDate, "h:mm aaa", { locale: es })}
                         </p>
-                      </div>
+                      </>
                     ) : (
                       <p className="text-gray-600">No definido</p>
                     )}
