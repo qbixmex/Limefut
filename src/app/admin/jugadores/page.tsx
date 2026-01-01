@@ -59,9 +59,7 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
                 <Suspense fallback={<TournamentsSelectorSkeleton />}>
                   <TournamentsWrapper />
                 </Suspense>
-                <Suspense fallback={<TeamsSelectorSkeleton />}>
-                  <TeamsWrapper tournamentIdPromise={tournamentIdPromise} />
-                </Suspense>
+                <TournamentsIdProvider tournamentIdPromise={tournamentIdPromise} />
               </section>
               <Suspense>
                 <PlayersContent searchParams={searchParams} />
@@ -87,20 +85,28 @@ type TeamsWrapperProps = Readonly<{
   }>;
 }>;
 
-const TeamsWrapper: FC<TeamsWrapperProps> = async ({ tournamentIdPromise }) => {
+const TournamentsIdProvider: FC<TeamsWrapperProps> = async ({ tournamentIdPromise }) => {
   const { tournamentId } = await tournamentIdPromise;
 
   if (!tournamentId) {
     return null;
   }
 
-  const { teams } = await fetchTeamsAction(tournamentId);
+  return (
+    <Suspense fallback={<TeamsSelectorSkeleton />}>
+      <TeamsWrapper tournamentIdPromise={tournamentIdPromise} />
+    </Suspense>
+  );
+};
+
+const TeamsWrapper: FC<TeamsWrapperProps> = async ({ tournamentIdPromise }) => {
+  const { tournamentId } = await tournamentIdPromise;
+
+  const { teams } = await fetchTeamsAction(tournamentId as string);
 
   return (
     <TeamsSelector teams={teams} />
   );
 };
-
-
 
 export default PlayersPage;
