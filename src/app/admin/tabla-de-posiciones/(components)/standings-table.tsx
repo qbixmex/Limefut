@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { CreateStandings } from './create-standings';
 import { DeleteStandings } from './delete-standings';
 import { TournamentData } from '~/src/shared/components/TournamentData';
+import "./standingsTableStyles.css";
 
 type Props = Readonly<{
   permalink: string;
