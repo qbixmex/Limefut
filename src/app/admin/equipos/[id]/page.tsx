@@ -22,15 +22,15 @@ import { GenerateGenericPlayers } from "../(components)/generate-generic-players
 
 type Props = Readonly<{
   params: Promise<{
-    permalink: string;
+    id: string;
   }>;
 }>;
 
 export const TeamPage: FC<Props> = async ({ params }) => {
   const session = await auth();
-  const permalink = (await params).permalink;
+  const teamId = (await params).id;
 
-  const response = await fetchTeamAction(permalink, session?.user.roles ?? null);
+  const response = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
   if (!response.ok) {
     redirect(`/admin/equipos?error=${encodeURIComponent(response.message)}`);
@@ -197,7 +197,7 @@ export const TeamPage: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/equipos/editar/${team.permalink}`}>
+                  <Link href={`/admin/equipos/editar/${team.id}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>

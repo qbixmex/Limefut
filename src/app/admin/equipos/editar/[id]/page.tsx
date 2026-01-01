@@ -16,14 +16,14 @@ import { fetchCoachesForTeam } from "../../(actions)/fetchCoachesForTeam";
 
 type Props = Readonly<{
   params: Promise<{
-    permalink: string;
+    id: string;
   }>;
 }>;
 
 export const EditTeam: FC<Props> = async ({ params }) => {
   const session = await auth();
-  const permalink = (await params).permalink;
-  const responseTeam = await fetchTeamAction(permalink, session?.user.roles ?? null);
+  const teamId = (await params).id;
+  const responseTeam = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
   if (!responseTeam.ok) {
     redirect(`/admin/users?error=${encodeURIComponent(responseTeam.message)}`);
