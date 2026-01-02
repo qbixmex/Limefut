@@ -33,6 +33,8 @@ type FetchTournamentResponse = Promise<{
 
 export const fetchTournamentAction = async (
   permalink: string,
+  category: string,
+  format: string,
 ): FetchTournamentResponse => {
   "use cache";
 
@@ -40,8 +42,12 @@ export const fetchTournamentAction = async (
   cacheTag('public-tournament');
 
   try {
-    const tournament = await prisma.tournament.findUnique({
-      where: { permalink },
+    const tournament = await prisma.tournament.findFirst({
+      where: {
+        permalink,
+        category,
+        format,
+      },
       select: {
         id: true,
         name: true,
