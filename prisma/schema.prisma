@@ -46,10 +46,8 @@ model Tournament {
   imageUrl      String?  @map("image_url")
   imagePublicID String?  @map("image_public_id")
   description   String?
-  division      String?
-  group         String?
-  category      String?
-  format        String?
+  category      String   @unique
+  format        String
   country       String?
   state         String?
   city          String?
@@ -70,6 +68,7 @@ model Tournament {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@index([category, format])
   @@map("tournaments")
 }
 
