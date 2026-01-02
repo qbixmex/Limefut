@@ -42,12 +42,14 @@ model User {
 model Tournament {
   id            String   @id @default(uuid())
   name          String
-  permalink     String   @unique
+  permalink     String
   imageUrl      String?  @map("image_url")
   imagePublicID String?  @map("image_public_id")
   description   String?
   division      String?
   group         String?
+  category      String?
+  format        String?
   country       String?
   state         String?
   city          String?
