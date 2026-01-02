@@ -12,14 +12,18 @@ export const metadata: Metadata = {
 type Props = Readonly<{
   params: Promise<{
     permalink: string;
-  }>
+  }>;
+  searchParams: Promise<{
+    categoria?: string;
+    formato?: string;
+  }>;
 }>;
 
-export const TournamentPage: FC<Props> = ({ params }) => {
+export const TournamentPage: FC<Props> = ({ params, searchParams }) => {
   return (
     <div className="wrapper dark:bg-gray-600/20!">
       <Suspense fallback={<TournamentSkeleton />}>
-        <Tournament params={params} />
+        <Tournament params={params} searchParams={searchParams} />
       </Suspense>
     </div>
   );

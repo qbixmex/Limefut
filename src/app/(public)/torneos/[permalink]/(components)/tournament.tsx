@@ -10,17 +10,30 @@ import Link from "next/link";
 import { Heading } from "../../../components";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "~/src/components/ui/table";
 import "./style.css";
+import { ErrorHandler } from "~/src/shared/components/errorHandler";
 
 type Props = Readonly<{
   params: Promise<{
     permalink: string;
   }>
+  searchParams: Promise<{
+    categoria?: string;
+    formato?: string;
+  }>;
 }>;
 
-export const Tournament: FC<Props> = async ({ params }) => {
+export const Tournament: FC<Props> = async ({ params, searchParams }) => {
   const permalink = (await params).permalink;
+  const {
+    categoria: category,
+    formato: format,
+  } = await searchParams;
 
-  const response = await fetchTournamentAction(permalink);
+  if (!category || !format) {
+    redirect(`/torneos?error=${encodeURIComponent('¡ La categoría y/o formato son obligatorios !')}`);
+  }
+
+  const response = await fetchTournamentAction(permalink, category, format);
 
   if (!response.ok) {
     redirect('/torneos');
@@ -30,6 +43,7 @@ export const Tournament: FC<Props> = async ({ params }) => {
 
   return (
     <>
+      <ErrorHandler />
       <Heading level="h1" className="text-emerald-600 mb-5">
         Torneo {tournament.name}
       </Heading>
