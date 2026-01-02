@@ -19,6 +19,17 @@ enum Role {
   user
 }
 
+enum Gender {
+  female
+  male
+}
+
+enum Stage {
+  regular
+  playoffs
+  finals
+}
+
 model User {
   id            String    @id @default(uuid())
   name          String?
@@ -48,6 +59,7 @@ model Tournament {
   description   String?
   category      String   @unique
   format        String
+  stage         Stage    @default(regular)
   country       String?
   state         String?
   city          String?
@@ -81,6 +93,9 @@ model Team {
   imagePublicID String?  @map("image_public_id")
   division      String?
   group         String?
+  category      String?
+  format        String?
+  gender        Gender   @default(male)
   country       String?
   city          String?
   state         String?
