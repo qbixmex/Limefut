@@ -16,8 +16,8 @@ export type TeamType = {
   name: string;
   permalink: string;
   imageUrl: string | null,
-  division: string | null;
-  group: string | null;
+  category: string | null;
+  format: string | null;
   active: boolean;
   coach: Pick<Coach, 'id' | 'name'> | null;
   playersCount: number;
@@ -69,8 +69,8 @@ export const fetchTeamsAction = async (
         name: true,
         permalink: true,
         imageUrl: true,
-        division: true,
-        group: true,
+        category: true,
+        format: true,
         active: true,
         coach: {
           select: {

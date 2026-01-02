@@ -35,6 +35,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { cn } from '@/root/src/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/src/components/ui/select';
 
 type Tournament = {
   id: string;
@@ -64,8 +65,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       name: team?.name ?? '',
       permalink: team?.permalink ?? '',
       headquarters: team?.headquarters ?? '',
-      division: team?.division ?? '',
-      group: team?.group ?? '',
+      category: team?.category ?? '',
+      format: team?.format ?? '',
+      gender: team?.gender ?? undefined,
       tournamentId: team?.tournament?.id ?? undefined,
       country: team?.country ?? 'México',
       state: team?.state ?? '',
@@ -92,8 +94,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
     formData.append('headquarters', data.headquarters as string);
-    formData.append('division', data.division as string);
-    formData.append('group', data.group as string);
+    formData.append('category', data.category as string);
+    formData.append('format', data.format as string);
+    formData.append('gender', data.gender as string);
 
     if (data.tournamentId) {
       formData.append('tournamentId', data.tournamentId.trim());
@@ -249,15 +252,49 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
 
         {/* Division and Group */}
         <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-5">
             <FormField
               control={form.control}
-              name="division"
+              name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Division</FormLabel>
+                  <FormLabel>Categoría</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input
+                      {...field}
+                      value={field.value ?? ''}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="format"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Formato</FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value ?? undefined}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger
+                        className={cn('w-full', {
+                          'border-destructive ring-0.5 ring-destructive': form.formState.errors.gender,
+                        })}
+                      >
+                        <SelectValue placeholder="Seleccione Formato" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="11">11 vs 11</SelectItem>
+                        <SelectItem value="9">9 vs 9</SelectItem>
+                        <SelectItem value="7">7 vs 7</SelectItem>
+                        <SelectItem value="5">5 vs 5</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -267,12 +304,27 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="group"
+              name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Grupo</FormLabel>
+                  <FormLabel>Género</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Select
+                      value={field.value ?? undefined}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger
+                        className={cn('w-full', {
+                          'border-destructive ring-0.5 ring-destructive': form.formState.errors.gender,
+                        })}
+                      >
+                        <SelectValue placeholder="Seleccione Género" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Varonil</SelectItem>
+                        <SelectItem value="female">Femenil</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

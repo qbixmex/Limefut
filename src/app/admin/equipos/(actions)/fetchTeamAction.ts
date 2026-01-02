@@ -30,7 +30,7 @@ export const fetchTeamAction = async (
   }
 
   try {
-    const team = await prisma.team.findUnique({
+    const team = await prisma.team.findFirst({
       where: { id: teamId },
       include: {
         tournament: {

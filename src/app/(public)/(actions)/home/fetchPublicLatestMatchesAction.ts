@@ -20,8 +20,8 @@ export type MatchResponse = {
     name: string;
     id: string;
     permalink: string;
-    division: string | null;
-    group: string | null;
+    category: string | null;
+    format: string | null;
     imageUrl: string | null;
   };
   visitorTeam: {
@@ -97,8 +97,8 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
             id: true,
             name: true,
             permalink: true,
-            division: true,
-            group: true,
+            category: true,
+            format: true,
             imageUrl: true,
           },
         },

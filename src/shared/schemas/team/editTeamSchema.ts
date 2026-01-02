@@ -29,15 +29,18 @@ export const editTeamSchema = z.object({
     .refine((file) => file.size <= MAX_UPLOAD_SIZE, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => ACCEPTED_FILE_TYPES.includes(file.type), `El tipo de archivo debe ser uno de los siguientes: ${ACCEPTED_FILE_TYPES.join(', ')}`)
     .nullish(),
-  division: z
-    .string('¡ La división debe ser una cadena de texto !')
-    .min(3, { message: '¡ La división debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La división debe ser menor a 200 caracteres !' })
+  category: z.string()
+    .min(3, { message: '¡ La categoría debe ser mayor a 3 caracteres !' })
+    .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' })
     .optional(),
-  group: z
-    .string('¡ El grupo debe ser una cadena de texto !')
-    .min(3, { message: '¡ El grupo debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El grupo debe ser menor a 100 caracteres !' })
+  format: z.string()
+    .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
+    .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' })
+    .optional(),
+  gender: z
+    .enum(['male', 'female'], {
+      error: '¡ Debes seleccionar al menos un género !',
+    })
     .optional(),
   tournamentId: z.union([
     z.uuid("El id del torneo debe ser un UUID válido"),
