@@ -113,7 +113,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/galerias");
+        route.replace(`/admin/galerias/${response.gallery?.id}`);
         return;
       }
       return;
@@ -134,7 +134,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/galerias");
+        route.replace(`/admin/galerias/${response.gallery?.id}`);
         return;
       }
     }

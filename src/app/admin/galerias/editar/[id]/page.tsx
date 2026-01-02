@@ -14,15 +14,15 @@ import { fetchTournamentsForGalleryAction } from "../../(actions)/fetchTournamen
 
 type Props = Readonly<{
   params: Promise<{
-    permalink: string;
+    id: string;
   }>;
 }>;
 
 export const EditGalleryPage: FC<Props> = async ({ params }) => {
-  const permalink = (await params).permalink;
+  const galleryId = (await params).id;
   const session = await auth();
 
-  const response = await fetchGalleryAction(session?.user.roles ?? [], permalink);
+  const response = await fetchGalleryAction(session?.user.roles ?? [], galleryId);
 
   if (!response.ok && !response.gallery) {
     redirect('/admin/galleries');
