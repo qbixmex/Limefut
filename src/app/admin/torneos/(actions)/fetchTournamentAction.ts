@@ -1,12 +1,37 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Tournament, Team } from "@/shared/interfaces";
+
+export type TournamentType = {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+  imagePublicID: string | null;
+  permalink: string;
+  description: string | null;
+  category: string | null;
+  format: string | null;
+  country: string | null;
+  state: string | null;
+  city: string | null;
+  season: string | null;
+  startDate: Date;
+  endDate: Date;
+  currentWeek: number | null;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  teams: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
+};
 
 type FetchTournamentResponse = Promise<{
   ok: boolean;
   message: string;
-  tournament: Tournament & { teams: Partial<Team>[] } | null;
+  tournament: TournamentType | null;
 }>;
 
 export const fetchTournamentAction = async (

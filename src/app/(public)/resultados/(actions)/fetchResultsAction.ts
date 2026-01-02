@@ -8,8 +8,8 @@ export type MatchType = {
   tournament: {
     name: string;
     permalink: string;
-    group: string | null;
-    division: string | null;
+    category: string | null;
+    format: string | null;
   };
   localScore: number | null;
   visitorScore: number | null;
@@ -70,8 +70,8 @@ export const fetchResultsAction = async (tournamentId: string): ResponseAction =
           select: {
             name: true,
             permalink: true,
-            group: true,
-            division: true,
+            category: true,
+            format: true,
           },
         },
         local: {

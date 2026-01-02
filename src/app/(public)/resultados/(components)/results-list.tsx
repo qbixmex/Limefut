@@ -92,8 +92,8 @@ export const ResultsList: FC<Props> = async ({ tournamentId }) => {
                       <p className="text-gray-600">No definido</p>
                     )}
                   </TableCell>
-                  <TableCell className="text-center">{match.tournament.division}</TableCell>
-                  <TableCell className="text-center">{match.tournament.group}</TableCell>
+                  <TableCell className="text-center">{match.tournament.category}</TableCell>
+                  <TableCell className="text-center">{match.tournament.format}</TableCell>
                   <TableCell className="text-right">
                     {
                       match.local.name.toLowerCase().includes('descanso')

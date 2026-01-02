@@ -15,8 +15,8 @@ export type MatchType = {
   tournament: {
     name: string;
     permalink: string;
-    group: string | null;
-    division: string | null;
+    category: string | null;
+    format: string | null;
     country: string | null;
     season: string | null;
   };
@@ -62,8 +62,8 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
           select: {
             name: true,
             permalink: true,
-            group: true,
-            division: true,
+            category: true,
+            format: true,
             country: true,
             season: true,
           },
