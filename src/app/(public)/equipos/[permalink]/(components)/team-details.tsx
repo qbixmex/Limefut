@@ -11,29 +11,47 @@ import { Heading } from '../../../components';
 type Props = Readonly<{
   params: Promise<{
     permalink: string;
-  }>
+  }>;
+  searchParams: Promise<{
+    torneo?: string;
+    categoria?: string;
+    formato?: string;
+  }>;
 }>;
 
-export const TeamDetails: FC<Props> = async ({ params }) => {
+export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
   const permalink = (await params).permalink;
-  const { team } = await fetchTeamAction(permalink);
+  const {
+    torneo: tournamentPermalink,
+    categoria: category,
+    formato: format,
+  } = await searchParams;
 
-  if (!team) {
-    redirect("/equipos");
-  }
+  if (!tournamentPermalink || !category || !format) {
+    redirect(`/equipos?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
+  };
+
+  const { ok, message, team } = await fetchTeamAction({
+    permalink,
+    tournamentPermalink,
+    category,
+    format,
+  });
+
+  if (!ok) redirect(`/equipos?error=${encodeURIComponent(message)}`);
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="flex items-center gap-5 mb-5">
         <Heading level="h1" className="text-emerald-500">
-          {team.name}
+          {team?.name}
         </Heading>
       </div>
       <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
         <section className="w-full md:max-w-[400px] flex justify-center">
-          {!team.imageUrl ? (
-            <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
-              <Flag size={480} strokeWidth={1} className="stroke-gray-400" />
+          {!team?.imageUrl ? (
+            <div className="bg-gray-200 dark:bg-gray-800 size-[400px] rounded-xl flex items-center justify-center">
+              <Flag size={400} strokeWidth={1} className="stroke-gray-400" />
             </div>
           ) : (
             <Image
@@ -53,26 +71,39 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
                 <TableHead className="w-[120px] font-semibold">Sede</TableHead>
                 <TableCell>
                   {
-                    team.headquarters
+                    team?.headquarters
                     ?? <span className="text-gray-500 italic">No especificado</span>
                   }
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableHead className="font-semibold">División</TableHead>
+                <TableHead className="font-semibold">Categoría</TableHead>
                 <TableCell>
                   {
-                    team.division
+                    team?.category
                     ?? <span className="text-gray-500 italic">No especificado</span>
                   }
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableHead className="font-semibold">Grupo</TableHead>
+                <TableHead className="font-semibold">Formato</TableHead>
                 <TableCell>
                   {
-                    team.group
-                    ?? <span className="text-gray-500 italic">No especificado</span>
+                    team?.format
+                      ? `${team?.format} vs ${team?.format}`
+                      : <span className="text-gray-500 italic">No especificado</span>
+                  }
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="font-semibold">Género</TableHead>
+                <TableCell>
+                  {
+                    (team?.gender === 'male')
+                      ? 'Varonil'
+                      : (team?.gender === 'female')
+                        ? 'Femenil'
+                        : 'No especificado'
                   }
                 </TableCell>
               </TableRow>
@@ -80,7 +111,7 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
                 <TableHead className="font-semibold">País</TableHead>
                 <TableCell>
                   {
-                    team.country
+                    team?.country
                     ?? <span className="text-gray-500 italic">No especificado</span>
                   }
                 </TableCell>
@@ -89,7 +120,7 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
                 <TableHead className="font-semibold">Estado</TableHead>
                 <TableCell>
                   {
-                    team.state
+                    team?.state
                     ?? <span className="text-gray-500 italic">No especificado</span>
                   }
                 </TableCell>
@@ -103,7 +134,7 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
                 <TableHead className="w-[120px] font-semibold">City</TableHead>
                 <TableCell>
                   {
-                    team.city
+                    team?.city
                     ?? <span className="text-gray-500 italic">No especificada</span>
                   }
                 </TableCell>
@@ -111,12 +142,12 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
               <TableRow>
                 <TableHead className="font-semibold">Torneo</TableHead>
                 <TableCell>
-                  {team.tournament ? (
+                  {team?.tournament ? (
                     <Link
-                      href={`/torneos/${team.tournament.permalink}`}
+                      href={`/torneos/${team?.tournament.permalink}`}
                       className="text-wrap"
                     >
-                      {team.tournament.name}
+                      {team?.tournament.name}
                     </Link>
                   ) : (
                     <Badge variant="outline-secondary">No Asignado</Badge>
@@ -126,9 +157,9 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
               <TableRow>
                 <TableHead className="font-semibold">Entrenador</TableHead>
                 <TableCell>
-                  {(team.coach) ? (
+                  {(team?.coach) ? (
                     <Link href="#">
-                      {team.coach.name}
+                      {team?.coach.name}
                     </Link>
                   ) : (
                     <Badge variant="outline-secondary">No Asignado</Badge>
@@ -140,7 +171,7 @@ export const TeamDetails: FC<Props> = async ({ params }) => {
                 <TableCell>
                   <span className="text-wrap">
                     {
-                      team.address
+                      team?.address
                       ?? <span className="text-gray-500 italic">No especificada</span>
                     }
                   </span>

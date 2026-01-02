@@ -38,7 +38,8 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
             <div className="grid grid-cols-[1fr_1fr_250px_1fr] items-center">
               <div className="flex flex-col gap-1">
                 <Heading level="h3" className="text-lg">{match.tournament.name}</Heading>
-                <p><b>Division:</b> {match.localTeam.division}</p>
+                <p><b>Categoría:</b> {match.localTeam.category}</p>
+                <p><b>Formato:</b> {match.localTeam.format}</p>
                 <p><b>Jornada:</b> {match.week}</p>
                 <p><b>Lugar:</b> {match.place ?? <span>No especificado</span>}</p>
               </div>

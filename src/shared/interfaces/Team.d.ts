@@ -5,8 +5,9 @@ export interface Team {
   headquarters: string | null;
   imageUrl: string | null;
   imagePublicID: string | null;
-  division: string | null;
-  group: string | null;
+  category: string | null;
+  format: string | null;
+  gender?: 'male' | 'female';
   country: string | null;
   city: string | null;
   state: string | null;
@@ -23,8 +24,9 @@ export interface TeamSeed {
   headquarters: string;
   imageUrl: string | null;
   imagePublicID: string | null;
-  division: string;
-  group: string;
+  category: string;
+  format: string;
+  gender?: 'male' | 'female';
   country: string;
   city: string;
   state: string;

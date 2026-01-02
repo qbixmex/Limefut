@@ -7,6 +7,8 @@ export type TournamentType = {
   id: string;
   name: string;
   permalink: string;
+  category: string;
+  format: string;
 };
 
 type ResponseAction = Promise<{
@@ -23,12 +25,18 @@ export const fetchTournamentsAction = async (): ResponseAction => {
 
   try {
     const tournaments = await prisma.tournament.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: [
+        { name: 'asc' },
+        { category: 'asc' },
+        { format: 'asc' },
+      ],
       where: { active: true },
       select: {
         id: true,
         name: true,
         permalink: true,
+        category: true,
+        format: true,
       },
     });
 

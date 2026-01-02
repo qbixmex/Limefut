@@ -75,12 +75,24 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                     <TableCell>{team.headquarters}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">División</TableHead>
-                    <TableCell>{team.division}</TableCell>
+                    <TableHead className="font-semibold">Categoría</TableHead>
+                    <TableCell>{team.category}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Grupo</TableHead>
-                    <TableCell>{team.group}</TableCell>
+                    <TableHead className="font-semibold">Formato</TableHead>
+                    <TableCell>{team.format + ' vs ' + team.format}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="font-semibold">Género</TableHead>
+                    <TableCell>
+                      {
+                        (team.gender === 'male')
+                          ? 'Varonil'
+                          : (team.gender === 'female')
+                            ? 'Femenil'
+                            : 'No definido'
+                      }
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">País</TableHead>
