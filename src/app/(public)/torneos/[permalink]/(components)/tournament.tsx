@@ -18,7 +18,8 @@ type Props = Readonly<{
 }>;
 
 export const Tournament: FC<Props> = async ({ params }) => {
-  const { permalink } = await params;
+  const permalink = (await params).permalink;
+
   const response = await fetchTournamentAction(permalink);
 
   if (!response.ok) {
