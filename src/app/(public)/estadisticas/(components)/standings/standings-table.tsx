@@ -8,9 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { fetchStandingsAction } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
+import { fetchStandingsAction, type TournamentType } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
 import { TournamentData } from "~/src/shared/components/TournamentData";
-import type { TournamentType } from "~/src/app/admin/tabla-de-posiciones/(actions)/fetchStandingsAction";
 
 type Props = {
   permalink: string;
