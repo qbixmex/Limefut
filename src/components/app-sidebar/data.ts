@@ -155,7 +155,7 @@ export const navMain: NavItem[] = [
     subItems: [
       {
         label: "Tabla de Posiciones",
-        url: "/admin/tabla-de-posiciones",
+        url: "/admin/estadisticas",
         icon: Sheet,
       },
     ],
