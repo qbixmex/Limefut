@@ -45,8 +45,8 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     defaultValues: {
       name: tournament?.name ?? '',
       permalink: tournament?.permalink ?? '',
-      division: tournament?.division ?? undefined,
-      group: tournament?.group ?? undefined,
+      category: tournament?.category ?? undefined,
+      format: tournament?.format ?? undefined,
       country: tournament?.country ?? undefined,
       state: tournament?.state ?? undefined,
       city: tournament?.city ?? undefined,
@@ -64,8 +64,8 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
-    if (data.division) formData.append('division', data.division as string);
-    if (data.group) formData.append('group', data.group as string);
+    if (data.category) formData.append('category', data.category as string);
+    if (data.format) formData.append('format', data.format as string);
     if (data.country) formData.append('country', data.country as string);
     if (data.state) formData.append('state', data.state as string);
     if (data.city) formData.append('city', data.city as string);
@@ -183,10 +183,10 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="division"
+              name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>División</FormLabel>
+                  <FormLabel>Categoría</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -198,10 +198,10 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="group"
+              name="format"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Grupo</FormLabel>
+                  <FormLabel>Formato</FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>

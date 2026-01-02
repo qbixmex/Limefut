@@ -5,8 +5,8 @@ export interface Tournament {
   imageUrl: string | null;
   imagePublicID: string | null;
   description: string | null;
-  division: string | null;
-  group: string | null;
+  category: string | null;
+  format: string | null;
   country: string | null;
   state: string | null;
   city: string | null;
@@ -26,8 +26,8 @@ export interface TournamentSeed {
   imageUrl: string | null;
   imagePublicID: string | null;
   description: string;
-  division: string;
-  group: string;
+  category: string;
+  format: string;
   country: string;
   state: string;
   city: string;

@@ -18,7 +18,7 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 import { fetchTournamentAction } from "../(actions)";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import type { Team, Tournament } from "@/shared/interfaces";
+import type { TournamentType } from "../(actions)/fetchTournamentAction";
 
 type Props = Readonly<{
   params: Promise<{
@@ -36,7 +36,7 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
     redirect(`/admin/torneos?error=${encodeURIComponent(response.message)}`);
   }
 
-  const tournament = response.tournament as Tournament & { teams: Partial<Team>[] };
+  const tournament = response.tournament as TournamentType;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -82,12 +82,12 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                       <TableCell>{tournament.season}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableHead className="font-semibold">División</TableHead>
-                      <TableCell>{tournament.division}</TableCell>
+                      <TableHead className="font-semibold">Categoría</TableHead>
+                      <TableCell>{tournament.category}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableHead className="font-semibold">Grupo</TableHead>
-                      <TableCell>{tournament.group}</TableCell>
+                      <TableHead className="font-semibold">Formato</TableHead>
+                      <TableCell>{tournament.format}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold">Descripción</TableHead>
