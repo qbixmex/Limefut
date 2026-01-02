@@ -23,7 +23,7 @@ type FetchTeamResponse = Promise<{
 
 export const fetchGalleryAction = async (
   userRoles: string[],
-  permalink: string,
+  galleryId: string,
 ): FetchTeamResponse => {
   if (!userRoles.includes('admin')) {
     return {
@@ -35,7 +35,7 @@ export const fetchGalleryAction = async (
 
   try {
     const gallery = await prisma.gallery.findUnique({
-      where: { permalink: permalink },
+      where: { id: galleryId },
       select: {
         id: true,
         title: true,

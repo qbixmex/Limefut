@@ -22,15 +22,15 @@ import { GalleryImages } from '../(components)/gallery-images';
 
 type Props = Readonly<{
   params: Promise<{
-    permalink: string;
+    id: string;
   }>;
 }>;
 
 export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
   const session = await auth();
-  const permalink = (await params).permalink;
+  const galleryId = (await params).id;
 
-  const response = await fetchGalleryAction(session?.user.roles ?? [], permalink);
+  const response = await fetchGalleryAction(session?.user.roles ?? [], galleryId);
 
   if (!response.ok) {
     redirect(`/admin/galerias?error=${encodeURIComponent(response.message)}`);
@@ -124,7 +124,7 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/galerias/editar/${gallery.permalink}`}>
+                  <Link href={`/admin/galerias/editar/${gallery.id}`}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>
