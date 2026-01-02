@@ -41,7 +41,7 @@ export const fetchTournamentAction = async (
 
   try {
     const tournament = await prisma.tournament.findUnique({
-      where: { permalink: permalink },
+      where: { permalink },
       select: {
         id: true,
         name: true,
