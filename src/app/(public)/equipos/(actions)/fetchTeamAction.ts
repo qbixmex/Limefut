@@ -14,8 +14,9 @@ export type TeamType = {
   permalink: string;
   headquarters: string | null;
   imageUrl: string | null;
-  division: string | null;
-  group: string | null;
+  category: string | null;
+  format: string | null;
+  gender: string | null;
   country: string | null;
   city: string | null;
   state: string | null;
@@ -32,25 +33,41 @@ type FetchTeamResponse = Promise<{
   } | null;
 }>;
 
-export const fetchTeamAction = async (
-  permalink: string,
-): FetchTeamResponse => {
+export const fetchTeamAction = async ({
+  permalink,
+  tournamentPermalink,
+  category,
+  format,
+}: {
+  permalink: string;
+  tournamentPermalink: string;
+  category: string;
+  format: string;
+}): FetchTeamResponse => {
   "use cache";
 
   cacheLife('days');
   cacheTag('public-team');
 
   try {
-    const team = await prisma.team.findUnique({
-      where: { permalink },
+    const team = await prisma.team.findFirst({
+      where: {
+        permalink,
+        tournament: {
+          permalink: tournamentPermalink,
+        },
+        category,
+        format,
+      },
       select: {
         id: true,
         name: true,
         permalink: true,
         headquarters: true,
         imageUrl: true,
-        division:true,
-        group:true,
+        category:true,
+        format:true,
+        gender:true,
         country:true,
         city:true,
         state:true,

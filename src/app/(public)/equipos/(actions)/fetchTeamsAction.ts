@@ -7,6 +7,8 @@ export type TeamType = {
   id: string;
   name: string;
   permalink: string;
+  category: string;
+  format: string;
   imageUrl: string | null;
 };
 
@@ -16,23 +18,32 @@ export type ResponseAction = Promise<{
   teams: TeamType[];
 }>;
 
-export const fetchTeamsAction = async (tournamentId: string): ResponseAction => {
+export const fetchTeamsAction = async (
+  permalink: string,
+  category: string,
+  format: string,
+): ResponseAction => {
   "use cache";
 
   cacheLife('days');
   cacheTag('public-teams');
 
-  const tournament = await prisma.tournament.findUnique({
+  const tournament = await prisma.tournament.findFirst({
     where: {
-      id: tournamentId,
+      permalink,
+      category,
+      format,
     },
-    select: { id: true },
+    select: {
+      id: true,
+      permalink: true,
+    },
   });
 
   if (!tournament) {
     return {
       ok: false,
-      message: `! No existe el torneo con el id ${tournamentId} ¡`,
+      message: `! No existe el torneo con el enlace permanente ${permalink} ¡`,
       teams: [],
     };
   }
@@ -49,6 +60,8 @@ export const fetchTeamsAction = async (tournamentId: string): ResponseAction => 
         name: true,
         permalink: true,
         imageUrl: true,
+        category: true,
+        format: true,
       },
     });
 
