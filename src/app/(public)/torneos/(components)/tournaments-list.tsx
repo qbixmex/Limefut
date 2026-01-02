@@ -17,8 +17,8 @@ export const TournamentsList: FC = async () => {
           </h2>
           <p>{tournament.imageUrl}</p>
           <div className="tournamentData">
-            <p><b>División:</b> {tournament.division}</p>
-            <p><b>Group:</b> {tournament.group}</p>
+            <p><b>Categoría:</b> {tournament.category}</p>
+            <p><b>Formato:</b> {tournament.format}</p>
             <p><b>Temporada:</b> {tournament.season}</p>
           </div>
         </section>

@@ -65,12 +65,12 @@ export const Tournament: FC<Props> = async ({ params }) => {
           <Table className="table">
             <TableBody>
               <TableRow>
-                <TableHead className="w-64">División:</TableHead>
-                <TableCell>{tournament.division}</TableCell>
+                <TableHead className="w-64">Categoría:</TableHead>
+                <TableCell>{tournament.category}</TableCell>
               </TableRow>
               <TableRow>
-                <TableHead>Grupo:</TableHead>
-                <TableCell>{tournament.group}</TableCell>
+                <TableHead>Formato:</TableHead>
+                <TableCell>{tournament.format}</TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>País:</TableHead>

@@ -21,14 +21,12 @@ export const createTournamentSchema = z.object({
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
-  division: z.string()
-    .min(3, { message: '¡ La división debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La división debe ser menor a 200 caracteres !' })
-    .optional(),
-  group: z.string()
-    .min(3, { message: '¡ El grupo debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El grupo debe ser menor a 100 caracteres !' })
-    .optional(),
+  category: z.string()
+    .min(3, { message: '¡ La categoría debe ser mayor a 3 caracteres !' })
+    .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' }),
+  format: z.string()
+    .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
+    .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' }),
   country: z.string()
     .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' })

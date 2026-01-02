@@ -76,12 +76,12 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 <TableCell>{tournament.name}</TableCell>
               </TableRow>
               <TableRow>
-                <TableHead>Grupo</TableHead>
-                <TableCell>{tournament.group}</TableCell>
+                <TableHead>Categoría</TableHead>
+                <TableCell>{tournament.category}</TableCell>
               </TableRow>
               <TableRow>
-                <TableHead>División</TableHead>
-                <TableCell>{tournament.division}</TableCell>
+                <TableHead>Formato</TableHead>
+                <TableCell>{tournament.format}</TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>Country</TableHead>

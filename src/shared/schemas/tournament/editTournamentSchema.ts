@@ -27,15 +27,15 @@ export const editTournamentSchema = z.object({
     .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' })
     .max(250, { message: '¡ La descripción debe ser menor a 250 caracteres !' })
     .optional(),
-  division: z
-    .string('¡ La división debe ser una cadena de texto !')
-    .min(3, { message: '¡ La división debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La división debe ser menor a 200 caracteres !' })
+  category: z
+    .string('¡ La categoría debe ser una cadena de texto !')
+    .min(3, { message: '¡ La categoría debe ser mayor a 3 caracteres !' })
+    .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' })
     .optional(),
-  group: z
-    .string('¡ El grupo debe ser una cadena de texto !')
-    .min(3, { message: '¡ El grupo debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El grupo debe ser menor a 100 caracteres !' })
+  format: z
+    .string('¡ El formato debe ser una cadena de texto !')
+    .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
+    .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' })
     .optional(),
   country: z.string()
     .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
