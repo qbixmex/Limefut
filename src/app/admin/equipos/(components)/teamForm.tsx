@@ -307,7 +307,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
               name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Género</FormLabel>
+                  <FormLabel>Rama</FormLabel>
                   <FormControl>
                     <Select
                       value={field.value ?? undefined}
