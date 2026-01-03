@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Tournament, Coach, Player } from "@/shared/interfaces";
+import type { Coach, Player } from "@/shared/interfaces";
 import { cacheLife, cacheTag } from 'next/cache';
 
 type CoachType = Pick<Coach, 'id' | 'name'>;

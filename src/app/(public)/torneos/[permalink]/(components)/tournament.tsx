@@ -30,13 +30,13 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
   } = await searchParams;
 
   if (!category || !format) {
-    redirect(`/torneos?error=${encodeURIComponent('¡ La categoría y/o formato son obligatorios !')}`);
+    redirect(`/torneos?error=${encodeURIComponent('¡ La categoría y formato son obligatorios !')}`);
   }
 
   const response = await fetchTournamentAction(permalink, category, format);
 
   if (!response.ok) {
-    redirect('/torneos');
+    redirect(`/torneos?error=${encodeURIComponent(response.message)}`);
   }
 
   const tournament = response.tournament as TournamentType;
@@ -129,7 +129,14 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
         <section className="teams">
           {tournament.teams.map((team) => (
             <section key={team.id} className="teamCard">
-              <Link href={`/equipos/${team.permalink}`}>
+              <Link
+                href={
+                  `/equipos/${team.permalink}`
+                  + `?torneo=${tournament.permalink}`
+                  + `&categoria=${team.category}`
+                  + `&formato=${team.format}`
+                }
+              >
                 {!team.imageUrl ? (
                   <Shield className="text-gray-400" />
                 ) : (
@@ -142,7 +149,12 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                   />
                 )}
               </Link>
-              <Link href={`/equipos/${team.permalink}`}>
+              <Link href={
+                `/equipos/${team.permalink}`
+                  + `?torneo=${tournament.permalink}`
+                  + `&categoria=${team.category}`
+                  + `&formato=${team.format}`
+              }>
                 {team.name}
               </Link>
             </section>
