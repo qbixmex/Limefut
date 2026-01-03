@@ -1,10 +1,10 @@
 import { type FC } from 'react';
-import { type TournamentType, fetchStandingsAction } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
 import { CreateStandings } from './create-standings';
 import { DeleteStandings } from './delete-standings';
 import { TournamentData } from '~/src/shared/components/TournamentData';
+import { fetchStandingsAction, type TournamentType } from "../(actions)/fetchStandingsAction";
 import "./standingsTableStyles.css";
 
 type Props = Readonly<{
@@ -20,12 +20,12 @@ export const StandingsTable: FC<Props> = async ({ tournamentId }) => {
     <>
       <TournamentData
         tournament={tournament as TournamentType}
-        standings={standings.length > 0}
+        standings={standings!.length > 0}
         admin
       />
 
       <section className="relative">
-        {tournament && (tournament.teams.length > 0) && (standings.length === 0) && (
+        {tournament && (tournament.teams.length > 0) && (standings!.length === 0) && (
           <>
             <div className="w-full h-0.5 my-10 bg-gray-800" />
             <div className="flex justify-center items-center gap-x-5 border-2 border-blue-500 py-5 rounded-lg">
@@ -37,7 +37,7 @@ export const StandingsTable: FC<Props> = async ({ tournamentId }) => {
           </>
         )}
 
-        {standings.length > 0 && (
+        {standings!.length > 0 && (
           <>
             <h3 className="font-medium mb-5">Estadísticas</h3>
 
@@ -59,7 +59,7 @@ export const StandingsTable: FC<Props> = async ({ tournamentId }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {standings.map((standing, index) => (
+                {standings?.map((standing, index) => (
                   <TableRow key={standing.team.id}>
                     <TableCell className="text-center">{index + 1}</TableCell>
                     <TableCell>
