@@ -24,7 +24,6 @@ export type TournamentType = {
   teams: {
     id: string;
     name: string;
-    permalink: string;
   }[];
 };
 
@@ -54,7 +53,6 @@ export const fetchTournamentAction = async (
           select: {
             id: true,
             name: true,
-            permalink: true,
           },
         },
       },

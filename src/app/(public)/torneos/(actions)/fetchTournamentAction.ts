@@ -6,6 +6,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 export type TournamentType = {
   id: string;
   name: string;
+  permalink: string;
   imageUrl: string | null;
   description: string | null;
   category: string | null;
@@ -21,6 +22,8 @@ export type TournamentType = {
     id: string;
     name: string;
     permalink: string;
+    category: string;
+    format: string;
     imageUrl: string | null;
   }[];
 };
@@ -51,6 +54,7 @@ export const fetchTournamentAction = async (
       select: {
         id: true,
         name: true,
+        permalink: true,
         imageUrl: true,
         description: true,
         category: true,
@@ -67,6 +71,8 @@ export const fetchTournamentAction = async (
             id: true,
             name: true,
             permalink: true,
+            category: true,
+            format: true,
             imageUrl: true,
           },
         },

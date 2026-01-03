@@ -110,7 +110,7 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                     <TableHead className="font-semibold">Torneo</TableHead>
                     <TableCell>
                       {team.tournament ? (
-                        <Link href={`/admin/torneos/${team.tournament.permalink}`}>
+                        <Link href={`/admin/torneos/${team.tournament.id}`}>
                           {team.tournament.name}
                         </Link>
                       ) : (
