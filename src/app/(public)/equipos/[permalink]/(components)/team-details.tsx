@@ -96,7 +96,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableHead className="font-semibold">Género</TableHead>
+                <TableHead className="font-semibold">Rama</TableHead>
                 <TableCell>
                   {
                     (team?.gender === 'male')

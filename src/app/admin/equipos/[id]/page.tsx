@@ -83,7 +83,7 @@ export const TeamPage: FC<Props> = async ({ params }) => {
                     <TableCell>{team.format + ' vs ' + team.format}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Género</TableHead>
+                    <TableHead className="font-semibold">Rama</TableHead>
                     <TableCell>
                       {
                         (team.gender === 'male')
