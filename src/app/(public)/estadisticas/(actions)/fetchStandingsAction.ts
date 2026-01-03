@@ -7,6 +7,8 @@ export type TournamentType = {
   id: string;
   name: string;
   permalink: string;
+  category: string;
+  format: string;
   country: string | null;
   state: string | null;
   city: string | null;
@@ -45,7 +47,11 @@ export type StandingPromise = Promise<{
   standings: StandingType[];
 }>;
 
-export const fetchStandingsAction = async (tournamentId: string): StandingPromise => {
+export const fetchStandingsAction = async (
+  tournamentPermalink: string,
+  category: string,
+  format: string,
+): StandingPromise => {
   "use cache";
 
   cacheLife("days");
@@ -53,11 +59,17 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
 
   try {
     const tournament = await prisma.tournament.findUnique({
-      where: { id: tournamentId },
+      where: {
+        permalink: tournamentPermalink,
+        category,
+        format,
+      },
       select: {
         id: true,
         name: true,
         permalink: true,
+        category: true,
+        format: true,
         country: true,
         state: true,
         city: true,
@@ -78,7 +90,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
     if (!tournament) {
       return {
         ok: false,
-        message: `¡ El torneo con el id "${tournamentId}" no existe !`,
+        message: `¡ No se pudo obtener el torneo ❌ !`,
         tournament: null,
         standings: [],
       };

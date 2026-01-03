@@ -3,18 +3,34 @@ import { StandingsTable } from "./standings-table";
 import { StandingsSkeleton } from "./standings-skeleton";
 
 type Props = Readonly<{
-  searchParams: Promise<{ torneo: string; }>;
+  searchParams: Promise<{
+    torneo?: string;
+    categoria?: string;
+    formato?: string;
+  }>;
 }>;
 
 export const Standings: FC<Props> = async ({ searchParams }) => {
-  const tournamentPermalink = (await searchParams).torneo;
+  const {
+    torneo: tournament,
+    categoria: category,
+    formato: format,
+  } = await searchParams;
+
+  if (!tournament && !category && !format) {
+    return null;
+  }
 
   return (
     <Suspense
-      key={`permalink-${tournamentPermalink}`}
+      key={`${tournament}-${category}-${format}`}
       fallback={<StandingsSkeleton />}
     >
-      <StandingsTable permalink={tournamentPermalink} />
+      <StandingsTable
+        tournament={tournament}
+        category={category}
+        format={format}
+      />
     </Suspense>
   );
 };

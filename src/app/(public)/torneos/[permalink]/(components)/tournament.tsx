@@ -45,7 +45,7 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
     <>
       <ErrorHandler />
       <Heading level="h1" className="text-emerald-600 mb-5">
-        Torneo {tournament.name}
+        {tournament.name}
       </Heading>
 
       <div className="flex flex-col lg:flex-row gap-10 mb-5">
@@ -96,7 +96,11 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
               </TableRow>
               <TableRow>
                 <TableHead>Ciudad:</TableHead>
-                <TableCell>{tournament.city}</TableCell>
+                <TableCell>
+                  <p className="text-wrap">
+                    {tournament.city}
+                  </p>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>Temporada:</TableHead>
