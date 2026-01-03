@@ -58,7 +58,7 @@ export const fetchStandingsAction = async (
   cacheTag("standings");
 
   try {
-    const tournament = await prisma.tournament.findUnique({
+    const tournament = await prisma.tournament.findFirst({
       where: {
         permalink: tournamentPermalink,
         category,

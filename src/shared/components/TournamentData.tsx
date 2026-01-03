@@ -10,10 +10,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { type TournamentType } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
+import { type Tournament } from '@/shared/interfaces';
 
 type Props = Readonly<{
-  tournament: TournamentType & {
+  tournament: Partial<Tournament> & {
     teams: {
       id: string;
       name: string;
