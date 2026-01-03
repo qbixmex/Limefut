@@ -1,10 +1,9 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Tournament, Coach, Player } from "@/shared/interfaces";
+import type { Coach, Player } from "@/shared/interfaces";
 import { cacheLife, cacheTag } from 'next/cache';
 
-type TournamentType = Pick<Tournament, 'id' | 'name' | 'permalink'>;
 type CoachType = Pick<Coach, 'id' | 'name'>;
 type PlayerType = Pick<Player, 'id' | 'name'>;
 
@@ -27,7 +26,13 @@ type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
   team: TeamType & {
-    tournament: TournamentType | null;
+    tournament: {
+      id: string;
+      name: string;
+      permalink: string;
+      category: string;
+      format: string;
+    } | null;
     coach: CoachType | null;
     players: PlayerType[] | null;
   } | null;
@@ -77,6 +82,8 @@ export const fetchTeamAction = async ({
             id: true,
             name: true,
             permalink: true,
+            category: true,
+            format: true,
           },
         },
         coach: {

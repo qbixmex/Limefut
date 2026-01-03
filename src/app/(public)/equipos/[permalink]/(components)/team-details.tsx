@@ -144,7 +144,11 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableCell>
                   {team?.tournament ? (
                     <Link
-                      href={`/torneos/${team?.tournament.permalink}`}
+                      href={
+                        `/torneos/${team?.tournament.permalink}`
+                        + `?categoria=${team.tournament.category}`
+                        + `&formato=${team.tournament.format}`
+                      }
                       className="text-wrap"
                     >
                       {team?.tournament.name}

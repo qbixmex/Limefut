@@ -177,8 +177,8 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-3">
-                    {tournament.teams.map(({ id, name, permalink }) => (
-                      <Link key={id} href={`/admin/equipos/${permalink}`}>
+                    {tournament.teams.map(({ id, name }) => (
+                      <Link key={id} href={`/admin/equipos/${id}`}>
                         <Badge variant="outline-info">{name}</Badge>
                       </Link>
                     ))}
