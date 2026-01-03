@@ -32,7 +32,11 @@ export type ResponseAction = Promise<{
   matches: MatchType[];
 }>;
 
-export const fetchResultsAction = async (tournamentId: string): ResponseAction => {
+export const fetchResultsAction = async (
+  tournamentPermalink: string,
+  category: string,
+  format: string,
+): ResponseAction => {
   "use cache";
 
   cacheLife('days');
@@ -40,7 +44,9 @@ export const fetchResultsAction = async (tournamentId: string): ResponseAction =
 
   const tournament = await prisma.tournament.findUnique({
     where: {
-      id: tournamentId,
+      permalink: tournamentPermalink,
+      category,
+      format,
     },
     select: { id: true },
   });
@@ -48,7 +54,7 @@ export const fetchResultsAction = async (tournamentId: string): ResponseAction =
   if (!tournament) {
     return {
       ok: false,
-      message: `! No existe el torneo con el id: ${tournamentId} ¡`,
+      message: `! No se encontró el torneo ❌ ¡`,
       matches: [],
     };
   }

@@ -1,24 +1,36 @@
 import { Suspense, type FC } from 'react';
 import { ResultsSkeleton } from './results-skeleton';
 import { ResultsList } from './results-list';
-import { ErrorHandler } from "@/shared/components/errorHandler";
 
 type Props = Readonly<{
-  tournament: Promise<{
-    id: string | undefined;
+  searchParamsPromise: Promise<{
+    torneo?: string;
+    categoria?: string;
+    formato?: string;
   }>;
 }>;
 
-export const ResultsContent: FC<Props> = async ({ tournament }) => {
-  const tournamentId = (await tournament).id;
+export const ResultsContent: FC<Props> = async ({ searchParamsPromise }) => {
+  const {
+    torneo: tournament,
+    categoria: category,
+    formato: format,
+  } = await searchParamsPromise;
+
+  if (!tournament && !category && !format) {
+    return null;
+  }
 
   return (
     <Suspense
-      key={`tournamentId-${tournamentId}`}
+      key={`${tournament}-${category}-${format}`}
       fallback={<ResultsSkeleton />}
     >
-      <ErrorHandler />
-      <ResultsList tournamentId={tournamentId} />
+      <ResultsList
+        tournament={tournament}
+        category={category}
+        format={format}
+      />
     </Suspense>
   );
 };
