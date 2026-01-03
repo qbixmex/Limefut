@@ -1,10 +1,13 @@
 import { Suspense, type FC } from 'react';
 import type { Metadata } from 'next/types';
-import { Heading } from '../components';
 import { Standings } from './(components)/standings';
-import { TournamentsSelectorSkeleton } from './(components)/TournamentsSelectorSkeleton';
+import { ErrorHandler } from "@/shared/components/errorHandler";
+import {
+  Heading,
+  TournamentsSelector,
+  TournamentsSelectorSkeleton,
+} from '../components';
 import "./styles.css";
-import { TournamentsSelector } from './(components)/TournamentsSelector';
 
 export const metadata: Metadata = {
   title: 'Tabla de posiciones',
@@ -15,10 +18,12 @@ export const metadata: Metadata = {
 type Props = Readonly<{
   searchParams: Promise<{
     torneo: string;
+    categoria: string;
+    formato: string;
   }>;
 }>;
 
-export const StandingsPage: FC<Props> = async ({ searchParams }) => {
+export const StandingsPage: FC<Props> = ({ searchParams }) => {
   return (
     <div className="wrapper dark:bg-gray-600/20!">
       <Heading level="h1" className="text-emerald-600">
@@ -30,6 +35,7 @@ export const StandingsPage: FC<Props> = async ({ searchParams }) => {
       </Suspense>
 
       <Suspense>
+        <ErrorHandler />
         <Standings searchParams={searchParams} />
       </Suspense>
     </div>

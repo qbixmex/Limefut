@@ -10,17 +10,34 @@ import {
 import Link from "next/link";
 import { fetchStandingsAction, type TournamentType } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
 import { TournamentData } from "~/src/shared/components/TournamentData";
+import { redirect } from "next/navigation";
 
 type Props = {
-  permalink: string;
+  tournament?: string;
+  category?: string;
+  format?: string;
 };
 
-export const StandingsTable: FC<Props> = async ({ permalink }) => {
-  if (!permalink) return null;
+export const StandingsTable: FC<Props> = async ({
+  tournament,
+  category,
+  format,
+}) => {
+  if (!tournament || !category || !format) {
+    redirect(`/estadisticas?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
+  }
 
-  const { tournament, standings } = await fetchStandingsAction(permalink);
+  const response = await fetchStandingsAction(
+    tournament,
+    category,
+    format,
+  );
 
-  if (standings.length == 0) {
+  if (!response.ok) {
+    redirect(`/estadisticas?error=${encodeURIComponent(response.message)}`);
+  }
+
+  if (response.standings.length == 0) {
     return (
       <div className="border-2 border-blue-500 py-5 rounded-lg">
         <p className="text-blue-500 font-bold text-center">
@@ -33,8 +50,8 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
   return (
     <>
       <TournamentData
-        tournament={tournament as TournamentType}
-        standings={standings.length > 0}
+        tournament={response.tournament as TournamentType}
+        standings={response.standings.length > 0}
       />
 
       <div className="relative">
@@ -57,11 +74,19 @@ export const StandingsTable: FC<Props> = async ({ permalink }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {standings.map((standing, index) => (
+            {response.standings.map((standing, index) => (
               <TableRow key={standing.team.id}>
                 <TableCell className="text-center">{index + 1}</TableCell>
                 <TableCell>
-                  <Link href={`/equipos/${standing.team.permalink}`} target="_blank">
+                  <Link
+                    href={
+                      `/equipos/${standing.team.permalink}`
+                      + `?torneo=${response.tournament?.permalink}`
+                      + `&categoria=${response.tournament?.category}`
+                      + `&formato=${response.tournament?.format}`
+                    }
+                      target="_blank"
+                  >
                     {standing.team.name}
                   </Link>
                 </TableCell>

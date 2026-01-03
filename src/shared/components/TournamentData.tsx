@@ -10,10 +10,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { type TournamentType } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
+import { type Tournament } from '@/shared/interfaces';
 
 type Props = Readonly<{
-  tournament: TournamentType & {
+  tournament: Partial<Tournament> & {
     teams: {
       id: string;
       name: string;
@@ -33,7 +33,18 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
             <TableBody>
               <TableRow>
                 <TableHead className="text-gray-400">Torneo</TableHead>
-                <TableCell className="text-gray-500">{tournament?.name}</TableCell>
+                <TableCell>
+                  <Link
+                    href={
+                      `/torneos/${tournament.permalink}`
+                      + `?categoria=${tournament.category}`
+                      + `&formato=${tournament.format}`
+                    }
+                    target="_blank"
+                  >
+                    {tournament?.name}
+                  </Link>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead className="text-gray-400">País</TableHead>
@@ -45,7 +56,11 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
               </TableRow>
               <TableRow>
                 <TableHead className="text-gray-400">Ciudad</TableHead>
-                <TableCell className="text-gray-500">{tournament?.city}</TableCell>
+                <TableCell>
+                  <p className="text-gray-500 text-wrap">
+                    {tournament?.city}
+                  </p>
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
