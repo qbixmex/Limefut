@@ -9,18 +9,26 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '~/src/components/ui/too
 import { getMatchStatus } from '../(helpers)/status';
 import { Badge } from '~/src/components/ui/badge';
 import type { MATCH_STATUS } from '~/src/shared/enums';
-import { format } from 'date-fns';
+import { format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { SoccerField } from '~/src/shared/components/icons';
 
 type Props = Readonly<{
-  tournamentId: string | undefined;
+  tournament?: string;
+  category?: string;
+  format?: string;
 }>;
 
-export const ResultsList: FC<Props> = async ({ tournamentId }) => {
-  if (!tournamentId) return null;
+export const ResultsList: FC<Props> = async ({
+  tournament,
+  category,
+  format,
+}) => {
+  if (!tournament || !category || !format) {
+    redirect(`/resultados?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
+  }
 
-  const { ok, message, matches } = await fetchResultsAction(tournamentId);
+  const { ok, message, matches } = await fetchResultsAction(tournament, category, format);
 
   if (!ok) {
     redirect(`/resultados?error=${encodeURIComponent(message)}`);
@@ -73,19 +81,19 @@ export const ResultsList: FC<Props> = async ({ tournamentId }) => {
                       <>
                         <p className="text-gray-200">
                           <span>
-                            {`${format(match.matchDate, 'dd', { locale: es })}`}
+                            {`${formatDate(match.matchDate, 'dd', { locale: es })}`}
                           </span>
                           <span>{' de '}</span>
                           <span className="capitalize">
-                            {format(match.matchDate, "LLLL", { locale: es })}
+                            {formatDate(match.matchDate, "LLLL", { locale: es })}
                           </span>
                           <span>{' del '}</span>
                           <span>
-                            &nbsp;{format(match.matchDate, "y", { locale: es })}
+                            &nbsp;{formatDate(match.matchDate, "y", { locale: es })}
                           </span>
                         </p>
                         <p>
-                          {format(match.matchDate, "h:mm aaa", { locale: es })}
+                          {formatDate(match.matchDate, "h:mm aaa", { locale: es })}
                         </p>
                       </>
                     ) : (
@@ -134,7 +142,8 @@ export const ResultsList: FC<Props> = async ({ tournamentId }) => {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Link
-                          href={`/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
+                          href={
+                            `/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
                           target="_blank"
                         >
                           <Button variant="outline-info" size="icon-sm">
