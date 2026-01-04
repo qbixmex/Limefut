@@ -54,9 +54,9 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                 <TableRow>
                   <TableHead className="w-[100px]">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead className="w-[100px]">Temporada</TableHead>
-                  <TableHead className="w-[200px]">Fecha de Inicio</TableHead>
-                  <TableHead className="w-[200px]">Fecha Final</TableHead>
+                  <TableHead className="w-25 text-center">Temporada</TableHead>
+                  <TableHead className="w-25 text-center">Categoría</TableHead>
+                  <TableHead className="w-25 text-center">Formato</TableHead>
                   <TableHead className="text-center">Activo</TableHead>
                   <TableHead>Acciones</TableHead>
                 </TableRow>
@@ -84,12 +84,10 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                       </Link>
                     </TableCell>
                     <TableCell>{tournament.name}</TableCell>
-                    <TableCell>{tournament.season}</TableCell>
-                    <TableCell>
-                      {format(new Date(tournament.startDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(tournament.endDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                    <TableCell className="text-center">{tournament.season}</TableCell>
+                    <TableCell className="text-center">{tournament.category}</TableCell>
+                    <TableCell className="text-center">
+                      {`${tournament.format} vs ${tournament.format}`}
                     </TableCell>
                     <TableCell className="text-center">
                       <ActiveSwitch
