@@ -17,6 +17,7 @@ import { es } from 'date-fns/locale';
 import { MatchStatus } from './match-status';
 import type { MATCH_STATUS } from '@/shared/enums';
 import "./styles.css";
+import Link from 'next/link';
 
 type Props = Readonly<{
   matchId: string;
@@ -76,7 +77,18 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             <TableBody>
               <TableRow>
                 <TableHead>Torneo</TableHead>
-                <TableCell>{tournament.name}</TableCell>
+                <TableCell>
+                  <Link
+                    href={
+                      `/torneos/${tournament.permalink}`
+                      + `?categoria=${tournament.category}`
+                      + `&formato=${tournament.format}`
+                    }
+                    target="_blank"
+                  >
+                    {tournament.name}
+                  </Link>
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>Categoría</TableHead>
