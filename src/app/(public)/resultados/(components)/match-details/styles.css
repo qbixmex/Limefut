@@ -1,0 +1,28 @@
+@reference "tailwindcss";
+
+.main-wrapper {
+  @apply flex flex-col lg:flex-row gap-5;
+}
+
+.team {
+  @apply relative flex justify-center items-center w-1/2 h-[250px];
+}
+
+.team-local {
+  @apply bg-emerald-800/60 rounded-l-xl;
+}
+
+.team-visitor {
+  @apply bg-emerald-800/70 rounded-r-xl;
+}
+
+.team-name {
+  @apply w-full text-center font-semibold absolute top-[calc(50%+70px)] -translate-y-[50%];
+}
+
+.match-results {
+  @apply absolute left-[50%] top-[50%] -translate-[50%] size-25 bg-blue-950 text-xl flex justify-center items-center rounded-xl;
+  & p {
+    @apply text-4xl text-blue-50 font-semibold;
+  }
+}

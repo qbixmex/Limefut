@@ -1,5 +1,8 @@
 import type { FC } from 'react';
-import { fetchResultDetailsAction, type MatchType } from '../(actions)/fetchResultDetailsAction';
+import {
+  type MatchType,
+  fetchResultDetailsAction,
+} from '../../(actions)/fetchResultDetailsAction';
 import { redirect } from 'next/navigation';
 import {
   Table,
@@ -11,6 +14,9 @@ import {
 import Image from "next/image";
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { MatchStatus } from './match-status';
+import type { MATCH_STATUS } from '@/shared/enums';
+import "./styles.css";
 
 type Props = Readonly<{
   matchId: string;
@@ -27,40 +33,36 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-5">
+      <div className="main-wrapper">
         <div className="w-full lg:w-1/2">
           <div className="flex relative">
-            <div className="flex justify-center items-center w-1/2 bg-emerald-800/60 h-[250px] rounded-l-xl">
-              <div className="space-y-5">
-                <Image
-                  src={localTeam.imageUrl as string}
-                  width={100}
-                  height={100}
-                  alt={`${localTeam.name} escudo`}
-                  className="size-25 rounded"
-                />
-                <p className="text-center font-semibold">
-                  {localTeam.name.slice(0, 18)} ...
-                </p>
+            <div className="team team-local">
+              <Image
+                src={localTeam.imageUrl as string}
+                width={100}
+                height={100}
+                alt={`${localTeam.name} escudo`}
+                className="size-25 rounded"
+              />
+              <div className="team-name">
+                {localTeam.name}
               </div>
             </div>
 
-            <div className="flex justify-center items-center w-1/2 bg-emerald-800/70 h-[250px] rounded-r-xl">
-              <div className="flex flex-col justify-center items-center gap-5">
-                <Image
-                  src={visitorTeam.imageUrl as string}
-                  width={100}
-                  height={100}
-                  alt={`${visitorTeam.name} escudo`}
-                  className="size-25 rounded"
-                />
-                <p className="text-center font-semibold">
-                  {visitorTeam.name.slice(0, 18)} ...
-                </p>
+            <div className="team team-visitor">
+              <Image
+                src={visitorTeam.imageUrl as string}
+                width={100}
+                height={100}
+                alt={`${visitorTeam.name} escudo`}
+                className="size-25 rounded"
+              />
+              <div className="team-name">
+                {visitorTeam.name}
               </div>
             </div>
-            <div className="absolute left-[50%] top-[50%] -translate-[50%] size-25 bg-blue-950 text-xl flex justify-center items-center rounded-xl">
-              <p className="text-4xl text-blue-50 font-semibold">
+            <div className="match-results">
+              <p>
                 <span>{match?.localScore}</span>
                 <span>-</span>
                 <span>{match?.visitorScore}</span>
@@ -68,6 +70,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             </div>
           </div>
         </div>
+
         <div className="w-full lg:w-1/2">
           <Table>
             <TableBody>
@@ -84,7 +87,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 <TableCell>{tournament.format}</TableCell>
               </TableRow>
               <TableRow>
-                <TableHead>Country</TableHead>
+                <TableHead>País</TableHead>
                 <TableCell>{tournament.country}</TableCell>
               </TableRow>
               <TableRow>
@@ -127,7 +130,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <TableRow>
                 <TableHead>Estado</TableHead>
                 <TableCell>
-                  {match?.status}
+                  <MatchStatus status={match?.status as MATCH_STATUS} />
                 </TableCell>
               </TableRow>
             </TableBody>
