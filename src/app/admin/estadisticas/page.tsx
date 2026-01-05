@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { TournamentsSelectorSkeleton } from "./(components)/tournaments-selector-skeleton";
-import { TournamentsSelector } from "./(components)/tournaments-selector";
+import { TournamentsWrapper } from "./(components)/tournaments-wrapper";
 import { StandingsContainer } from "./(components)/StandingsContainer";
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export const StandingsPage: FC<Props> = ({ searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense fallback={<TournamentsSelectorSkeleton />}>
-                <TournamentsSelector />
+                <TournamentsWrapper />
               </Suspense>
               <Suspense>
                 <StandingsContainer searchParams={searchParams} />

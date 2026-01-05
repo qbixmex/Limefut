@@ -13,7 +13,7 @@ const ResultsPage: FC<Props> = ({ params }) => {
   return (
     <div className="wrapper dark:bg-gray-600/20!">
       <Heading level="h1" className="text-emerald-600">
-        Detalles del encuentro
+        Información del encuentro
       </Heading>
       <Suspense>
         <MatchContent params={params} />
