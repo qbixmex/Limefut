@@ -14,11 +14,8 @@ export type ResponseFetch = Promise<{
     team: {
       id: string;
       name: string;
-      permalink: string;
-    };
-    tournament: {
-      name: string;
-      permalink: string;
+      category: string;
+      format: string;
     };
     points: number;
   }[];
@@ -45,13 +42,8 @@ export const fetchLeadingTeamsAction = async ({ quantity }: Options): Promise<Re
           select: {
             id: true,
             name: true,
-            permalink: true,
-          },
-        },
-        tournament: {
-          select: {
-            name: true,
-            permalink: true,
+            category: true,
+            format: true,
           },
         },
         totalPoints: true,
@@ -71,11 +63,8 @@ export const fetchLeadingTeamsAction = async ({ quantity }: Options): Promise<Re
         team: {
           id: standing.team.id,
           name: standing.team.name,
-          permalink: standing.team.permalink,
-        },
-        tournament: {
-          name: standing.tournament.name,
-          permalink: standing.tournament.permalink,
+          category: standing.team.category,
+          format: standing.team.format,
         },
         points: standing.totalPoints,
       })),

@@ -13,7 +13,8 @@ export type ResponseFetch = Promise<{
   tournaments: {
     id: string;
     name: string;
-    permalink: string | null;
+    category: string;
+    format: string;
   }[];
 }>;
 
@@ -30,7 +31,8 @@ export const fetchLatestTournamentsAction = async ({ limit }: Options): Promise<
       select: {
         id: true,
         name: true,
-        permalink: true,
+        category: true,
+        format: true,
       },
       take: limit,
     });

@@ -32,6 +32,8 @@ export const LatestResults = async () => {
                 <TableHead className="text-right">Local</TableHead>
                 <TableHead className="text-center w-[150px]">Resultado</TableHead>
                 <TableHead>Visitante</TableHead>
+                <TableHead className="text-center">Categoría</TableHead>
+                <TableHead className="text-center">Formato</TableHead>
                 <TableHead>&nbsp;</TableHead>
               </TableRow>
             </TableHeader>
@@ -58,6 +60,12 @@ export const LatestResults = async () => {
                   </TableCell>
                   <TableCell className="text-left">
                     <p className="text-pretty">{result.localTeamName}</p>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {result.category}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {result.format} vs {result.format}
                   </TableCell>
                   <TableCell>
                     <Link href={`/admin/encuentros/detalles/${result.id}`}>
