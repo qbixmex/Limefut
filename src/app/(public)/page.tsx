@@ -1,10 +1,10 @@
 import { type FC, Suspense } from "react";
 import Image from "next/image";
-import styles from "./home-styles.module.css";
 import { Heading } from "./components/heading";
 import { NextMatches } from "./components/next-matches";
 import { LatestResults, MatchesSkeleton } from "./components";
 import { HorizontalCalendarSkeleton } from "./components/horizontal-calendar/horizontal-calendar-skeleton";
+import styles from "./home-styles.module.css";
 
 type Props = Readonly<{
   searchParams: Promise<{
