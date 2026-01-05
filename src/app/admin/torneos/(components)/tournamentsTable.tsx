@@ -16,11 +16,9 @@ import {
 } from "lucide-react";
 import { fetchTournamentsAction, updateTournamentStateAction } from "../(actions)";
 import { auth } from '@/auth';
-import { format } from 'date-fns';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { DeleteTournament } from './delete-tournament';
-import { es } from 'date-fns/locale';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';

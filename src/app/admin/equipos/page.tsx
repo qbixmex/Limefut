@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
+import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
 import { TournamentsSelector } from "../(components)/tournaments-selector";
 import { Search } from "@/shared/components/search";
 import TeamsContent from "./(components)/teams-content";
