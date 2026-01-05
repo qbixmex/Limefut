@@ -27,8 +27,7 @@ export const LeadingTeams = async () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Equipo</TableHead>
-                <TableHead>Torneo</TableHead>
-                <TableHead className="text-center">Puntos</TableHead>
+                <TableHead className="w-22 text-center">Puntos</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -36,17 +35,17 @@ export const LeadingTeams = async () => {
                 <TableRow key={leading.team.id}>
                   <TableCell>
                     <Link
-                      href={`/admin/equipos/${leading.team.permalink}`}
-                      className="text-wrap">
-                      {leading.team.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      href={`/admin/torneos/${leading.tournament.permalink}`}
-                      className="text-wrap"
+                      href={`/admin/equipos/${leading.team.id}`}
+                      className="text-wrap space-x-1"
+                      target="_blank"
                     >
-                      {leading.tournament.name}
+                      <span>{leading.team.name},</span>
+                      <span>{leading.team.category},</span>
+                      <span className="space-x-1">
+                        <span>{leading.team.format}</span>
+                        <span>vs</span>
+                        <span>{leading.team.format}</span>
+                      </span>
                     </Link>
                   </TableCell>
                   <TableCell className="text-center">
