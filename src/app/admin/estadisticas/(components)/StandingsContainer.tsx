@@ -11,7 +11,7 @@ export const StandingsContainer: FC<Props> = async ({ searchParams }) => {
 
   return (
     <Suspense
-      key={`tournamentId-${tournamentId}`}
+      key={tournamentId}
       fallback={<SkeletonTable />}
     >
       <StandingsTable tournamentId={tournamentId} />

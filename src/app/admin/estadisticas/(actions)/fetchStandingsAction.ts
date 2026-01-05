@@ -6,6 +6,8 @@ export type TournamentType = {
   id: string;
   name: string;
   permalink: string;
+  category: string;
+  format: string;
   country: string | null;
   state: string | null;
   city: string | null;
@@ -21,13 +23,8 @@ export type TournamentType = {
 };
 
 export type StandingType = {
-  team: {
-    id: string;
-    name: string;
-    permalink: string;
-  };
   matchesPlayed: number;
-  wings: number;
+  wins: number;
   draws: number;
   losses: number;
   goalsFor: number;
@@ -35,6 +32,18 @@ export type StandingType = {
   goalsDifference: number;
   additionalPoints: number;
   points: number;
+  tournament: {
+    name: string;
+    id: string;
+    category: string;
+    permalink: string;
+    format: string;
+  };
+  team: {
+    name: string;
+    id: string;
+    permalink: string;
+  };
 };
 
 export type StandingPromise = Promise<{
@@ -52,6 +61,8 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
         id: true,
         name: true,
         permalink: true,
+        category: true,
+        format: true,
         country: true,
         state: true,
         city: true,
@@ -64,6 +75,8 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
             id: true,
             name: true,
             permalink: true,
+            category: true,
+            format: true,
           },
         },
       },
@@ -80,17 +93,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
 
     const standings = await prisma.standings.findMany({
       where: { tournamentId },
-      orderBy: {
-        totalPoints: 'desc',
-      },
       select: {
-        team: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
         matchesPlayed: true,
         wins: true,
         draws: true,
@@ -100,38 +103,33 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
         goalsDifference: true,
         additionalPoints: true,
         points: true,
-        tournament: {
+        team: {
           select: {
             id: true,
             name: true,
             permalink: true,
           },
         },
+        tournament: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+            category: true,
+            format: true,
+          },
+        },
+      },
+      orderBy: {
+        totalPoints: 'desc',
       },
     });
-
-    const standingsOutput = standings.map((standing) => ({
-      team: {
-        id: standing.team.id,
-        name: standing.team.name,
-        permalink: standing.team.permalink,
-      },
-      matchesPlayed: standing.matchesPlayed,
-      wings: standing.wins,
-      draws: standing.draws,
-      losses: standing.losses,
-      goalsFor: standing.goalsFor,
-      goalsAgainst: standing.goalsAgainst,
-      goalsDifference: standing.goalsDifference,
-      additionalPoints: standing.additionalPoints,
-      points: standing.points,
-    }));
 
     return {
       ok: true,
       message: '! Las estadísticas fueron obtenidas correctamente 👍',
       tournament,
-      standings: standingsOutput,
+      standings,
     };
   } catch (error) {
     if (error instanceof Error) {

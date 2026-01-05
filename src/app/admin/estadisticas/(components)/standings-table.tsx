@@ -1,9 +1,16 @@
 import { type FC } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import Link from 'next/link';
 import { CreateStandings } from './create-standings';
 import { DeleteStandings } from './delete-standings';
-import { TournamentData } from '~/src/shared/components/TournamentData';
+import { TournamentData } from '@/shared/components/TournamentData';
 import { fetchStandingsAction, type TournamentType } from "../(actions)/fetchStandingsAction";
 import "./standingsTableStyles.css";
 
@@ -63,12 +70,15 @@ export const StandingsTable: FC<Props> = async ({ tournamentId }) => {
                   <TableRow key={standing.team.id}>
                     <TableCell className="text-center">{index + 1}</TableCell>
                     <TableCell>
-                      <Link href={`/admin/equipos/${standing.team.permalink}`} target="_blank">
+                      <Link
+                        href={`/admin/equipos/${standing.team.id}`}
+                        target="_blank"
+                      >
                         {standing.team.name}
                       </Link>
                     </TableCell>
                     <TableCell className="text-blue-500 text-center">{standing.matchesPlayed}</TableCell>
-                    <TableCell className="text-blue-500 text-center">{standing.wings}</TableCell>
+                    <TableCell className="text-blue-500 text-center">{standing.wins}</TableCell>
                     <TableCell className="text-blue-500 text-center">{standing.draws}</TableCell>
                     <TableCell className="text-blue-500 text-center">{standing.losses}</TableCell>
                     <TableCell className="text-blue-500 text-center">{standing.goalsFor}</TableCell>
