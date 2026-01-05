@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import { Check, MinusIcon, XIcon } from "lucide-react";
 import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
-import Link from 'next/link';
 import { SHOOTOUT_STATUS } from '@/shared/enums';
 import { DeletePenaltyShootouts } from '@/admin/encuentros/(components)/delete-penalty-shootouts';
 
