@@ -16,6 +16,8 @@ export type ResponseFetch = Promise<{
     localTeamScore: number;
     visitorTeamName: string;
     visitorTeamScore: number;
+    category: string;
+    format: string;
   }[];
 }>;
 
@@ -42,6 +44,12 @@ export const fetchLatestResultsAction = async ({ quantity }: Options): Promise<R
         visitor: {
           select: { name: true },
         },
+        tournament: {
+          select: {
+            category: true,
+            format: true,
+          },
+        },
         visitorScore: true,
       },
       take: quantity,
@@ -56,6 +64,8 @@ export const fetchLatestResultsAction = async ({ quantity }: Options): Promise<R
         localTeamScore: match.localScore as number,
         visitorTeamName: match.visitor.name,
         visitorTeamScore: match.visitorScore as number,
+        category: match.tournament.category,
+        format: match.tournament.format,
       })),
     };
   } catch (error) {

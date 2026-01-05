@@ -23,35 +23,33 @@ export const ActiveTournaments = async () => {
           </div>
         )
       }
-      {
-        (tournaments.length > 0) && (
-          <Table>
-            <TableBody>
-              {tournaments.map(({ id, name, permalink }) => (
-                <TableRow key={id}>
-                  <TableCell>
-                    {name}
-                  </TableCell>
-                  <TableCell>
-                    <Link href={`/admin/torneos/${permalink}`}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant="outline-info" size="icon-sm">
-                            <InfoIcon />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="left">
-                          ver detalles
-                        </TooltipContent>
-                      </Tooltip>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )
-      }
+      {(tournaments.length > 0) && (
+        <Table>
+          <TableBody>
+            {tournaments.map(({ id, name, category, format }) => (
+              <TableRow key={id}>
+                <TableCell>
+                  {name}, {category}, {format} vs {format}
+                </TableCell>
+                <TableCell>
+                  <Link href={`/admin/torneos/${id}`}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="outline-info" size="icon-sm">
+                          <InfoIcon />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="left">
+                        ver detalles
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };
