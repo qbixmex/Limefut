@@ -69,7 +69,7 @@ export const StandingsTable: FC<Props> = ({ standings, tournamentId, onDeletedSt
                 </Link>
               </TableCell>
               <TableCell className="text-blue-500 text-center">{standing.matchesPlayed}</TableCell>
-              <TableCell className="text-blue-500 text-center">{standing.wings}</TableCell>
+              <TableCell className="text-blue-500 text-center">{standing.wins}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.losses}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.goalsFor}</TableCell>
               <TableCell className="text-blue-500 text-center">{standing.goalsAgainst}</TableCell>
