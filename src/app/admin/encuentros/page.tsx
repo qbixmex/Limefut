@@ -11,7 +11,7 @@ import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { Search } from "@/root/src/shared/components/search";
 import ClearFilters from "./(components)/clear-filters";
-import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
+import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
 import { TournamentsSelector } from "../(components)/tournaments-selector";
 import { MatchesContent } from "./matches-content";
 import type { MATCH_STATUS } from "~/src/shared/enums";
