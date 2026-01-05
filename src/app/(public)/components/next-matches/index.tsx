@@ -8,6 +8,7 @@ import { es } from "date-fns/locale";
 import { CurrentDayMatchesAction } from "../../(actions)/home/currentDayMatchesAction";
 import { HorizontalCalendar } from "../horizontal-calendar";
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string }>;
@@ -46,77 +47,88 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
 
       <div className="border border-green-900/90 rounded-b-lg p-5">
         {(matches.length > 0) ? matches.map((match, index) => (
-          <div key={match.id} className="flex flex-col gap-3 text-neutral-800">
-            <div className="grid grid-cols-[1fr_1fr_250px_1fr] items-center">
-              <div className="flex flex-col gap-1">
-                <Heading level="h3" className="text-lg">{match.tournament.name}</Heading>
-                <p><b>Categoría:</b> {match.localTeam.category}</p>
-                <p><b>Formato:</b> {match.localTeam.format}</p>
-                <p><b>Jornada:</b> {match.week}</p>
-                <p><b>Lugar:</b> {match.place ?? <span>No especificado</span>}</p>
-              </div>
-              <div className="flex justify-start items-center gap-5">
-                {match.localTeam.imageUrl ? (
-                  <Image
-                    src={match.localTeam.imageUrl}
-                    width={100}
-                    height={100}
-                    alt={`${match.localTeam.name} escudo`}
-                    className="size-[100px] object-cover rounded"
-                  />
-                ) : (
-                  <ShieldQuestion className="text-gray-400" />
-                )}
-                <p className="text-2xl font-semibold italic text-blue-900">{match.localTeam.name}</p>
-              </div>
-              <div className="flex flex-col items-center gap-1">
-                <div className="font-semibold italic text-center">
-                  {match.matchDate ? (
-                    <p className="text-gray-600">
-                      <span>
-                        {` ${format(match.matchDate, 'dd', { locale: es })} `}
-                      </span>
-                      <span>{' de '}</span>
-                      <span className="capitalize">
-                        {format(match.matchDate, "LLLL", { locale: es })}
-                      </span>
-                      <span>
-                        &nbsp;{format(match.matchDate, "y", { locale: es })}
-                      </span>
-                    </p>
+          <Link
+            key={match.id}
+            href={
+              `/resultados/${match.id}/`
+              + `${match.localTeam.permalink}`
+              + `-vs-`
+              + `${match.localTeam.permalink}`
+            }
+            target="_blank"
+          >
+            <div  className="flex flex-col gap-3 text-neutral-800">
+              <div className="grid grid-cols-[1fr_1fr_250px_1fr] items-center">
+                <div className="flex flex-col gap-1">
+                  <Heading level="h3" className="text-lg">{match.tournament.name}</Heading>
+                  <p><b>Categoría:</b> {match.localTeam.category}</p>
+                  <p><b>Formato:</b> {match.localTeam.format}</p>
+                  <p><b>Jornada:</b> {match.week}</p>
+                  <p><b>Lugar:</b> {match.place ?? <span>No especificado</span>}</p>
+                </div>
+                <div className="flex justify-start items-center gap-5">
+                  {match.localTeam.imageUrl ? (
+                    <Image
+                      src={match.localTeam.imageUrl}
+                      width={100}
+                      height={100}
+                      alt={`${match.localTeam.name} escudo`}
+                      className="size-[100px] object-cover rounded"
+                    />
                   ) : (
-                    <p className="text-gray-600">No definido</p>
+                    <ShieldQuestion className="text-gray-400" />
+                  )}
+                  <p className="text-2xl font-semibold italic text-blue-900">{match.localTeam.name}</p>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="font-semibold italic text-center">
+                    {match.matchDate ? (
+                      <p className="text-gray-600">
+                        <span>
+                          {` ${format(match.matchDate, 'dd', { locale: es })} `}
+                        </span>
+                        <span>{' de '}</span>
+                        <span className="capitalize">
+                          {format(match.matchDate, "LLLL", { locale: es })}
+                        </span>
+                        <span>
+                          &nbsp;{format(match.matchDate, "y", { locale: es })}
+                        </span>
+                      </p>
+                    ) : (
+                      <p className="text-gray-600">No definido</p>
+                    )}
+                  </div>
+                  {match.matchDate ? (
+                    <div className="text-2xl italic">
+                      <span className="font-bold text-blue-800">{format(new Date(match.matchDate), 'h')}</span>:
+                      <span>{format(match.matchDate, 'mm')}</span>
+                      <span>&nbsp;{format(match.matchDate, 'bbb', { locale: es })}</span>
+                    </div>
+                  ) : (
+                    <div className="text-2xl italic">No Definido</div>
                   )}
                 </div>
-                {match.matchDate ? (
-                  <div className="text-2xl italic">
-                    <span className="font-bold text-blue-800">{format(new Date(match.matchDate), 'h')}</span>:
-                    <span>{format(match.matchDate, 'mm')}</span>
-                    <span>&nbsp;{format(match.matchDate, 'bbb', { locale: es })}</span>
-                  </div>
-                ) : (
-                  <div className="text-2xl italic">No Definido</div>
-                )}
+                <div className="flex justify-start items-center gap-5">
+                  <p className="text-2xl font-semibold italic text-blue-900">{match.visitorTeam.name}</p>
+                  {match.visitorTeam.imageUrl ? (
+                    <Image
+                      src={match.visitorTeam.imageUrl}
+                      width={100}
+                      height={100}
+                      alt={`${match.visitorTeam.name} escudo`}
+                      className="size-[100px] object-cover rounded"
+                    />
+                  ) : (
+                    <ShieldQuestion className="text-gray-400" />
+                  )}
+                </div>
               </div>
-              <div className="flex justify-start items-center gap-5">
-                <p className="text-2xl font-semibold italic text-blue-900">{match.visitorTeam.name}</p>
-                {match.visitorTeam.imageUrl ? (
-                  <Image
-                    src={match.visitorTeam.imageUrl}
-                    width={100}
-                    height={100}
-                    alt={`${match.visitorTeam.name} escudo`}
-                    className="size-[100px] object-cover rounded"
-                  />
-                ) : (
-                  <ShieldQuestion className="text-gray-400" />
-                )}
-              </div>
+              {((matches.length - 1) !== index) && (
+                <div className="w-full h-0.5 bg-gray-300 my-3" />
+              )}
             </div>
-            {((matches.length - 1) !== index) && (
-              <div className="w-full h-0.5 bg-gray-300 my-3" />
-            )}
-          </div>
+          </Link>
         )): (
           <p className="text-2xl text-green-800 font-semibold italic text-center">No hay encuentros programados</p>
         )}
