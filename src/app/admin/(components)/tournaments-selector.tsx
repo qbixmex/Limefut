@@ -18,6 +18,8 @@ type Props = Readonly<{
   tournaments: {
     id: string;
     name: string;
+    category: string;
+    format: string;
   }[];
 }>;
 
@@ -48,7 +50,7 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
             key={tournament.id}
             value={tournament.id}
           >
-            {tournament.name}
+            {tournament.name}, {tournament.category}, {tournament.format} vs {tournament.format}
           </SelectItem>
         ))}
       </SelectContent>

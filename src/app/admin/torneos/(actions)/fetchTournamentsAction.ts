@@ -10,7 +10,7 @@ type Options = Readonly<{
   searchTerm?: string;
 }>;
 
-export type ResponseFetchTournaments = Promise<{
+export type ResponseFetch = Promise<{
   ok: boolean;
   message: string;
   tournaments: {
@@ -19,14 +19,14 @@ export type ResponseFetchTournaments = Promise<{
     permalink: string | null;
     imageUrl: string | null;
     season: string | null;
-    startDate: Date;
-    endDate: Date;
+    category: string;
+    format: string;
     active: boolean;
   }[] | null;
   pagination: Pagination | null;
 }>;
 
-export const fetchTournamentsAction = async (options?: Options): ResponseFetchTournaments => {
+export const fetchTournamentsAction = async (options?: Options): ResponseFetch => {
   let { page = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)
@@ -60,8 +60,8 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetchTo
         permalink: true,
         imageUrl: true,
         season: true,
-        startDate: true,
-        endDate: true,
+        category: true,
+        format: true,
         active: true,
       },
       take: take,
@@ -79,8 +79,8 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetchTo
         permalink: tournament.permalink,
         imageUrl: tournament.imageUrl,
         season: tournament.season,
-        startDate: tournament.startDate,
-        endDate: tournament.endDate,
+        category: tournament.category,
+        format: tournament.format,
         active: tournament.active,
       })),
       pagination: {

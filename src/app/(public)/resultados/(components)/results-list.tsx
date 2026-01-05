@@ -105,9 +105,17 @@ export const ResultsList: FC<Props> = async ({
                   <TableCell className="text-right">
                     {
                       match.local.name.toLowerCase().includes('descanso')
-                        ? (<span className="text-gray-400 italic">{match.local.name}</span>)
+                        ? (<span className="text-gray-400 font-semibold italic">{match.local.name}</span>)
                         : (
-                          <Link href={`/equipos/${match.local.permalink}`} target="_blank">
+                          <Link
+                            href={
+                              `/equipos/${match.local.permalink}`
+                              + `?torneo=${tournament}`
+                              + `&categoria=${category}`
+                              + `&formato=${format}`
+                            }
+                            target="_blank"
+                          >
                             {match.local.name}
                           </Link>
                         )
@@ -125,9 +133,17 @@ export const ResultsList: FC<Props> = async ({
                   <TableCell className="text-left">
                     {
                       match.visitor.name.toLowerCase().includes('descanso')
-                        ? (<span className="text-gray-400 italic">{match.visitor.name}</span>)
+                        ? (<span className="text-gray-400 font-semibold italic">{match.visitor.name}</span>)
                         : (
-                          <Link href={`/equipos/${match.visitor.permalink}`} target="_blank">
+                          <Link
+                            href={
+                              `/equipos/${match.visitor.permalink}`
+                              + `?torneo=${tournament}`
+                              + `&categoria=${category}`
+                              + `&formato=${format}`
+                            }
+                            target="_blank"
+                          >
                             {match.visitor.name}
                           </Link>
                         )
