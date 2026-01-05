@@ -45,7 +45,11 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
             key={tournament.id}
             value={tournament.id}
           >
-            {tournament.name}
+            <span className="space-x-1">
+              <span>{tournament.name},</span>
+              <span>{tournament.category},</span>
+              <span>{tournament.format} vs {tournament.format}</span>
+            </span>
           </SelectItem>
         ))}
       </SelectContent>
