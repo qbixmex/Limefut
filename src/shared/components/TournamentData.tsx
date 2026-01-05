@@ -27,7 +27,7 @@ type Props = Readonly<{
 export const TournamentData: FC<Props> = ({ tournament, standings = false, admin = false }) => {
   return (
     <>
-      <section className="flex flex-col lg:flex-row gap-5">
+      <section className="flex flex-col lg:flex-row gap-5 mb-10">
         <div className="w-full lg:w-1/2">
           <Table className="w-full">
             <TableBody>
@@ -41,9 +41,42 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
                       + `&formato=${tournament.format}`
                     }
                     target="_blank"
+                    className="font-semibold italic"
                   >
                     {tournament?.name}
                   </Link>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="text-gray-400">Temporada</TableHead>
+                <TableCell className="text-gray-500">{tournament?.season}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="text-gray-400">Categoría</TableHead>
+                <TableCell className="text-gray-500">{tournament?.category}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="text-gray-400">Formato</TableHead>
+                <TableCell className="text-gray-500">
+                  {tournament?.format} vs {tournament?.format}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="text-gray-400">Fecha de Inicio</TableHead>
+                <TableCell className="text-gray-500">
+                  {format(tournament?.startDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+        <div className="w-full lg:w-1/2">
+          <Table className="w-full">
+            <TableBody>
+              <TableRow>
+                <TableHead className="text-gray-400">Fecha Final</TableHead>
+                <TableCell className="text-gray-500">
+                  {format(tournament?.endDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -60,28 +93,6 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
                   <p className="text-gray-500 text-wrap">
                     {tournament?.city}
                   </p>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </div>
-        <div className="w-full lg:w-1/2">
-          <Table className="w-full">
-            <TableBody>
-              <TableRow>
-                <TableHead className="text-gray-400">Temporada</TableHead>
-                <TableCell className="text-gray-500">{tournament?.season}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableHead className="text-gray-400">Fecha de Inicio</TableHead>
-                <TableCell className="text-gray-500">
-                  {format(tournament?.startDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableHead className="text-gray-400">Fecha Final</TableHead>
-                <TableCell className="text-gray-500">
-                  {format(tournament?.endDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
                 </TableCell>
               </TableRow>
               <TableRow>
