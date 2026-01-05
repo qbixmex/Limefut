@@ -1,9 +1,13 @@
 import type { FC } from 'react';
+import Link from 'next/link';
+import Image from "next/image";
+import { redirect } from 'next/navigation';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import {
   type MatchType,
   fetchResultDetailsAction,
 } from '../../(actions)/fetchResultDetailsAction';
-import { redirect } from 'next/navigation';
 import {
   Table,
   TableBody,
@@ -11,13 +15,10 @@ import {
   TableHead,
   TableRow,
 } from '@/components/ui/table';
-import Image from "next/image";
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { MatchStatus } from './match-status';
-import type { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_STATUS } from '@/shared/enums';
+import { PenaltyShootout } from "@/shared/components/penalty-shootouts";
 import "./styles.css";
-import Link from 'next/link';
 
 type Props = Readonly<{
   matchId: string;
@@ -34,32 +35,74 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
 
   return (
     <>
-      <div className="main-wrapper">
-        <div className="w-full lg:w-1/2">
+      <section className="main-wrapper">
+        <section className="w-full lg:w-1/2">
           <div className="flex relative">
             <div className="team team-local">
-              <Image
-                src={localTeam.imageUrl as string}
-                width={100}
-                height={100}
-                alt={`${localTeam.name} escudo`}
-                className="size-25 rounded"
-              />
+              <Link
+                href={
+                  `/equipos/${localTeam.permalink}`
+                  + `?torneo=${tournament.permalink}`
+                  + `&categoria=${localTeam.category}`
+                  + `&formato=${localTeam.format}`
+                }
+                target="_blank"
+              >
+                <Image
+                  src={localTeam.imageUrl as string}
+                  width={100}
+                  height={100}
+                  alt={`${localTeam.name} escudo`}
+                  className="size-25 rounded"
+                />
+              </Link>
               <div className="team-name">
-                {localTeam.name}
+                <Link
+                  href={
+                    `/equipos/${localTeam.permalink}`
+                    + `?torneo=${tournament.permalink}`
+                    + `&categoria=${localTeam.category}`
+                    + `&formato=${localTeam.format}`
+                  }
+                  className="text-gray-100"
+                  target="_blank"
+                >
+                  {localTeam.name}
+                </Link>
               </div>
             </div>
 
             <div className="team team-visitor">
-              <Image
-                src={visitorTeam.imageUrl as string}
-                width={100}
-                height={100}
-                alt={`${visitorTeam.name} escudo`}
-                className="size-25 rounded"
-              />
+              <Link
+                href={
+                  `/equipos/${visitorTeam.permalink}`
+                  + `?torneo=${tournament.permalink}`
+                  + `&categoria=${visitorTeam.category}`
+                  + `&formato=${visitorTeam.format}`
+                }
+                target="_blank"
+              >
+                <Image
+                  src={visitorTeam.imageUrl as string}
+                  width={100}
+                  height={100}
+                  alt={`${visitorTeam.name} escudo`}
+                  className="size-25 rounded"
+                />
+              </Link>
               <div className="team-name">
-                {visitorTeam.name}
+                <Link
+                  href={
+                    `/equipos/${visitorTeam.permalink}`
+                    + `?torneo=${tournament.permalink}`
+                    + `&categoria=${visitorTeam.category}`
+                    + `&formato=${visitorTeam.format}`
+                  }
+                  className="text-gray-100"
+                  target="_blank"
+                >
+                  {visitorTeam.name}
+                </Link>
               </div>
             </div>
             <div className="match-results">
@@ -70,9 +113,9 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               </p>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className="w-full lg:w-1/2">
+        <section className="w-full lg:w-1/2">
           <Table>
             <TableBody>
               <TableRow>
@@ -108,10 +151,10 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               </TableRow>
             </TableBody>
           </Table>
-        </div>
-      </div>
+        </section>
+      </section>
 
-      <div className="flex flex-col lg:flex-row gap-5">
+      <section className="flex flex-col lg:flex-row gap-5">
         <div className="w-full lg:w-1/2">
           <Table>
             <TableBody>
@@ -166,7 +209,26 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             </TableBody>
           </Table>
         </div>
-      </div>
+      </section>
+
+      <section>
+        {
+          (
+            (match?.status === MATCH_STATUS.COMPLETED)
+            && (match.localScore === match.visitorScore)
+          ) && (
+            <>
+              <div className="w-full h-0.25 bg-gray-600 my-5"></div>
+              <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
+              <section className="flex flex-col lg:flex-row gap-5">
+                <div className="w-full lg:w-1/2">
+                  <PenaltyShootout shootout={match.penaltyShootout} />
+                </div>
+              </section>
+            </>
+          )
+        }
+      </section>
     </>
   );
 };

@@ -24,12 +24,41 @@ export type MatchType = {
     name: string;
     permalink: string;
     imageUrl: string | null;
+    category: string;
+    format: string;
   };
   visitor: {
     name: string;
     permalink: string;
     imageUrl: string | null;
+    category: string;
+    format: string;
   };
+  penaltyShootout: {
+    id: string;
+    status: string;
+    localGoals: number;
+    visitorGoals: number;
+    winnerTeamId: string | null;
+    localTeam: {
+      name: string;
+      id: string;
+      permalink: string;
+    };
+    visitorTeam: {
+      name: string;
+      id: string;
+      permalink: string;
+    };
+    kicks: {
+      id: string;
+      teamId: string;
+      playerId: string | null;
+      shooterName: string | null;
+      order: number;
+      isGoal: boolean | null;
+    }[];
+  } | null | undefined;
 };
 
 export type ResponseAction = Promise<{
@@ -73,6 +102,8 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
             name: true,
             permalink: true,
             imageUrl: true,
+            category: true,
+            format: true,
           },
         },
         visitor: {
@@ -80,13 +111,44 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
             name: true,
             permalink: true,
             imageUrl: true,
+            category: true,
+            format: true,
           },
         },
-        // penaltyShootout: {
-        //   select: {
-
-        //   },
-        // },
+        penaltyShootout: {
+          select: {
+            id: true,
+            localTeam: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+            visitorTeam: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+            localGoals: true,
+            visitorGoals: true,
+            winnerTeamId: true,
+            status: true,
+            kicks: {
+              select: {
+                id: true,
+                teamId: true,
+                playerId: true,
+                shooterName: true,
+                order: true,
+                isGoal: true,
+              },
+              orderBy: { order: 'asc' },
+            },
+          },
+        },
       },
     });
 

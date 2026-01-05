@@ -3,8 +3,8 @@ import { Check, MinusIcon, XIcon } from "lucide-react";
 import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
-import { SHOOTOUT_STATUS } from '~/src/shared/enums';
-import { DeletePenaltyShootouts } from '../delete-penalty-shootouts';
+import { SHOOTOUT_STATUS } from '@/shared/enums';
+import { DeletePenaltyShootouts } from '@/admin/encuentros/(components)/delete-penalty-shootouts';
 
 type Shootout = {
   id: string;
@@ -33,10 +33,11 @@ type Kick = {
 };
 
 type Props = Readonly<{
-  shootout: Shootout | null;
+  shootout: Shootout | null | undefined;
+  admin?: boolean;
 }>;
 
-export const PenaltyShootout: FC<Props> = ({ shootout }) => {
+export const PenaltyShootout: FC<Props> = ({ shootout, admin = false }) => {
   return (
     <>
       {(shootout) ? (
@@ -63,26 +64,28 @@ export const PenaltyShootout: FC<Props> = ({ shootout }) => {
                 </TableRow>
               </TableBody>
             </Table>
-            <div className="absolute -top-5 -right-10">
-              <DeletePenaltyShootouts
-                penaltyShootoutsId={shootout.id}
-                winnerTeamId={shootout.winnerTeamId}
-              />
-            </div>
+            {admin && (
+              <div className="absolute -top-5 -right-10">
+                <DeletePenaltyShootouts
+                  penaltyShootoutsId={shootout.id}
+                  winnerTeamId={shootout.winnerTeamId}
+                />
+              </div>
+            )}
           </section>
 
           <div className="w-full lg:max-w-md flex flex-col gap-5">
             <div className="grid grid-cols-2 items-center gap-5">
               <span className="justify-self-end space-x-2">
                 <span className="text-sm text-gray-500">( {shootout.localGoals} )</span>
-                <Link href={`/admin/equipos/${shootout.localTeam.permalink}`} className="font-semibold">
+                <span className="text-gray-200 font-semibold">
                   {shootout.localTeam.name}
-                </Link>
+                </span>
               </span>
               <span className="justify-self-start space-x-2">
-                <Link href={`/admin/equipos/${shootout.visitorTeam.permalink}`} className="font-semibold">
+                <span className="text-gray-200 font-semibold">
                   {shootout.visitorTeam.name}
-                </Link>
+                </span>
                 <span className="text-sm text-gray-500">( {shootout.visitorGoals} )</span>
               </span>
             </div>
@@ -133,20 +136,14 @@ const ShootoutWinner: FC<{
       {winnerTeamId ? (
         <>
           {(winnerTeamId === localTeam.id) && (
-            <Link
-              href={`/admin/equipos/${localTeam.permalink}`}
-              className="font-semibold"
-            >
+            <p className="text-emerald-500 font-semibold">
               {localTeam.name}
-            </Link>
+            </p>
           )}
           {(winnerTeamId === visitorTeam.id) && (
-            <Link
-              href={`/admin/equipos/${visitorTeam.permalink}`}
-              className="font-semibold"
-            >
+            <p className="text-emerald-500 font-semibold">
               {visitorTeam.name}
-            </Link>
+            </p>
           )}
         </>
       ) : (

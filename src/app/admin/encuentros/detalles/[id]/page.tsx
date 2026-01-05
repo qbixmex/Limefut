@@ -22,7 +22,7 @@ import { MATCH_STATUS } from "~/src/shared/enums";
 import { SHOOTOUT_STATUS } from '~/src/shared/enums/shoutout-status.enum';
 import { getMatchStatus } from "../../(helpers)/place";
 import type { MatchType } from "../../(actions)/fetchMatchAction";
-import { PenaltyShootout } from "../../(components)/penalty-shootouts";
+import { PenaltyShootout } from "@/shared/components/penalty-shootouts";
 import { PenaltiesForm } from "../../(components)/penalties-form";
 
 type Props = Readonly<{
@@ -59,7 +59,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
         <Card className="w-full shadow-none bg-neutral-100 dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800 relative">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>
-              <h1 className="text-xl font-bold text-green-500">Detalles del Encuentro</h1>
+              <h1 className="text-xl font-bold text-green-500">Información del Encuentro</h1>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -72,13 +72,21 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="font-semibold w-[180px]">Encuentro</TableHead>
                     <TableCell className="flex items-center gap-3 font-semibold text-gray-200">
-                      <Link href={`/admin/equipos/${match.localTeam.permalink}`} className="text-wrap">
+                      <Link
+                        href={`/admin/equipos/${match.localTeam.id}`}
+                        className="text-wrap"
+                        target="_blank"
+                      >
                         {match.localTeam.name}
                       </Link>
                       <Badge variant="outline-info">{match.localScore}</Badge>
                       <Minus strokeWidth={2} />
                       <Badge variant="outline-info">{match.visitorScore}</Badge>
-                      <Link href={`/admin/equipos/${match.localTeam.permalink}`} className="text-wrap">
+                      <Link
+                        href={`/admin/equipos/${match.visitorTeam.id}`}
+                        className="text-wrap"
+                        target="_blank"
+                      >
                         {match.visitorTeam.name}
                       </Link>
                     </TableCell>
@@ -145,7 +153,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
                   <section className="flex flex-col lg:flex-row gap-5">
                     <div className="w-full lg:w-1/2">
-                      <PenaltyShootout shootout={match.penaltyShootout} />
+                      <PenaltyShootout shootout={match.penaltyShootout} admin />
                     </div>
                     {(
                       match.penaltyShootout === null
