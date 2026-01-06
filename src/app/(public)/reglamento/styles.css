@@ -1,0 +1,37 @@
+@reference "tailwindcss";
+
+.level-1 {
+  @apply text-5xl text-emerald-600 mb-5 font-bold;
+}
+
+.text, .list, .sub-list {
+  @apply
+    text-pretty
+    font-medium
+    text-xl
+    tracking-wide
+    leading-relaxed
+  ;
+}
+
+.level-2 {
+  @apply text-sky-500 text-3xl font-semibold;
+}
+
+.level-3 {
+  @apply text-indigo-500 text-2xl font-semibold;
+}
+
+.list {
+  @apply ml-5;
+  & li {
+    @apply list-decimal;
+  }
+}
+
+.sub-list {
+  @apply ml-5;
+  & li {
+    @apply list-disc;
+  }
+}
