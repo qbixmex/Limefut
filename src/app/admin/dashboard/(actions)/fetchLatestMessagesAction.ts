@@ -20,7 +20,7 @@ export const fetchLatestMessagesAction = async ({ quantity }: Options): Promise<
   "use cache";
 
   cacheLife('days');
-  cacheTag('dashboard-messages');
+  cacheTag('contact-messages');
 
   try {
     const now = new Date();
@@ -38,6 +38,7 @@ export const fetchLatestMessagesAction = async ({ quantity }: Options): Promise<
           gte: startDate,
           lte: endDate,
         },
+        read: false,
       },
       select: {
         id: true,

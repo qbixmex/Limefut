@@ -70,6 +70,7 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
         name: true,
         email: true,
         message: true,
+        read: true,
         createdAt: true,
       },
     });
