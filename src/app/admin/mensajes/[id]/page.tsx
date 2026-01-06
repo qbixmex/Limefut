@@ -13,6 +13,8 @@ import { Mail } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { fetchMessageAction } from "../(actions)/fetchMessageAction";
+import { ActiveSwitch } from "@/shared/components/active-switch";
+import { updateMessageStatusAction } from "../(actions)/updateMessageStatusAction";
 
 type Props = Readonly<{
   params: Promise<{
@@ -61,6 +63,21 @@ export const MessagePage: FC<Props> = async ({ params }) => {
                       <TableHead className="w-[180px] font-semibold">Fecha</TableHead>
                       <TableCell>
                         {format(new Date(message?.createdAt as Date), "EEEE dd 'de' MMMM, yyyy", { locale: es })}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead>Leído</TableHead>
+                      <TableCell className="italic font-bold">
+                        <div className="flex items-center gap-5">
+                          <ActiveSwitch
+                            resource={{ id: message.id as string, state: message.read }}
+                            updateResourceStateAction={updateMessageStatusAction}
+                          />
+                          {message.read
+                            ? <span className="text-emerald-500">Si</span>
+                            : <span className="text-amber-500">No</span>
+                          }
+                        </div>
                       </TableCell>
                     </TableRow>
                   </TableBody>

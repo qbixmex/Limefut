@@ -31,7 +31,7 @@ export const LatestMessages = async () => {
               {(latestMessages.length > 0) && latestMessages.map(({ id, message }) => (
                 <TableRow key={id}>
                   <TableCell>
-                    <p className="text-gray-500 italic text-pretty">
+                    <p className="italic text-pretty">
                       {message}
                     </p>
                   </TableCell>
