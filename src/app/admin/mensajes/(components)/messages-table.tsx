@@ -19,6 +19,8 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { fetchMessagesAction } from '../(actions)/fetchMessagesAction';
 import { DeleteMessage } from './delete-message';
+import { ActiveSwitch } from '~/src/shared/components/active-switch';
+import { updateMessageStatusAction } from '../(actions)/updateMessageStatusAction';
 
 type Props = Readonly<{
   query: string;
@@ -52,6 +54,7 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
                   <TableHead className="w-[250px]">Email</TableHead>
                   <TableHead className="w-[120px]">Mensaje</TableHead>
                   <TableHead className="w-[100px] text-center">Fecha</TableHead>
+                  <TableHead className="w-[100px]">Leído</TableHead>
                   <TableHead>Acciones</TableHead>
                 </TableRow>
               </TableHeader>
@@ -67,7 +70,21 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
                           : message.message
                       }
                     </TableCell>
-                    <TableCell>{format(message.createdAt as Date, "EEEE dd 'de' MMMM, yyyy", { locale: es })}</TableCell>
+                    <TableCell>
+                      {format(message.createdAt as Date, "EEEE dd 'de' MMMM, yyyy", { locale: es })}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-5">
+                        <ActiveSwitch
+                          resource={{ id: message.id as string, state: message.read }}
+                          updateResourceStateAction={updateMessageStatusAction}
+                        />
+                        {message.read
+                          ? <span className="text-emerald-500">Si</span>
+                          : <span className="text-amber-500">No</span>
+                        }
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
                         <Tooltip>

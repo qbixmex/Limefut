@@ -315,10 +315,11 @@ model Standings {
 }
 
 model ContactMessage {
-  id      String @id @default(uuid())
+  id      String  @id @default(uuid())
   name    String
   email   String
-  message String @db.Text
+  message String  @db.Text
+  read    Boolean @default(false)
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
