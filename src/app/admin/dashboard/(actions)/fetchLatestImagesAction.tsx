@@ -1,4 +1,3 @@
-
 'use server';
 
 import prisma from "@/lib/prisma";
@@ -14,7 +13,7 @@ export type ResponseFetch = Promise<{
   latestImages: {
     id: string;
     title: string;
-    permalink: string;
+    permalink: string | null;
     imageUrl: string;
   }[];
 }>;
