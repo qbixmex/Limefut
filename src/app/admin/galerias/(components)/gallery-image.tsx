@@ -24,14 +24,14 @@ type Props = Readonly<{
   galleyImage: {
     id: string;
     title: string;
-    permalink: string;
+    permalink: string | null;
     imageUrl: string;
     active: boolean;
   };
 }>;
 
 export const GalleryImage: FC<Props> = ({ galleyImage }) => {
-  const { id, title, permalink, imageUrl, active } = galleyImage;
+  const { id, title, permalink = '', imageUrl, active } = galleyImage;
   const { setGalleryImage } = useImageGallery();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -73,7 +73,12 @@ export const GalleryImage: FC<Props> = ({ galleyImage }) => {
             variant="warning"
             className="absolute top-1 left-2 z-20"
             size="icon"
-            onClick={() => setGalleryImage({ id, title, permalink, active })}
+            onClick={() => setGalleryImage({
+              id,
+              title,
+              permalink: permalink as string,
+              active,
+            })}
           >
             <Pencil />
           </Button>
