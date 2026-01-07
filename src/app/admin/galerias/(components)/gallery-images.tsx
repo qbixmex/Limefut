@@ -18,7 +18,7 @@ type GalleryImageProps = Readonly<{
   images: {
     id: string;
     title: string;
-    permalink: string;
+    permalink: string | null;
     imageUrl: string;
     active: boolean;
   }[];

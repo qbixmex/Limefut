@@ -1,7 +1,7 @@
 export interface GalleryImage {
   id?: string;
   title: string;
-  permalink: string;
+  permalink: string | null;
   imageUrl: string;
   imagePublicID: string;
   active: boolean;
