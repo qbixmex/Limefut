@@ -5,6 +5,7 @@ type GalleryImage = {
   id: string;
   title: string;
   active: boolean;
+  position: number;
 };
 
 export interface GalleryStore {

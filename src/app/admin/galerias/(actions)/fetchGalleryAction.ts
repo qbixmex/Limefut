@@ -8,14 +8,25 @@ type GalleryImageType = {
   title: string;
   imageUrl: string;
   active: boolean;
+  position: number;
 };
 
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
   gallery: Gallery & {
-    tournament: { id: string; } | null;
-    team: { id: string; } | null;
+    tournament: {
+      id: string;
+      name: string;
+      category: string;
+      format: string;
+    } | null;
+    team: {
+      id: string;
+      name: string;
+      category: string;
+      format: string;
+    } | null;
     images: GalleryImageType[];
   } | null;
 }>;
@@ -46,11 +57,17 @@ export const fetchGalleryAction = async (
         tournament: {
           select: {
             id: true,
+            name: true,
+            category: true,
+            format: true,
           },
         },
         team: {
           select: {
             id: true,
+            name: true,
+            category: true,
+            format: true,
           },
         },
         images: {
@@ -59,6 +76,10 @@ export const fetchGalleryAction = async (
             title: true,
             imageUrl: true,
             active: true,
+            position: true,
+          },
+          orderBy: {
+            position: 'asc',
           },
         },
       },

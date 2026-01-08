@@ -33,7 +33,7 @@ export type ResponseAction = Promise<{
   gallery: GalleryType | null;
 }>;
 
-export const fetchGalleryAction = async (permalink: string): ResponseAction => {
+export const fetchGalleryAction = async (galleryPermalink: string): ResponseAction => {
   "use cache";
 
   cacheLife('days');
@@ -41,7 +41,10 @@ export const fetchGalleryAction = async (permalink: string): ResponseAction => {
 
   try {
     const gallery = await prisma.gallery.findUnique({
-      where: { permalink, active: true },
+      where: {
+        permalink: galleryPermalink,
+        active: true,
+      },
       select: {
         title: true,
         permalink: true,
@@ -63,6 +66,9 @@ export const fetchGalleryAction = async (permalink: string): ResponseAction => {
             id: true,
             title: true,
             imageUrl: true,
+          },
+          orderBy: {
+            position: 'asc',
           },
         },
       },

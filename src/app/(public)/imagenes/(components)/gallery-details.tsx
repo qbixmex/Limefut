@@ -27,14 +27,20 @@ export const GalleryDetails: FC<Props> = async ({ paramsPromise }) => {
       <Heading
         level="h1"
         className="text-emerald-600 mb-10"
-      >{gallery?.title}</Heading>
+      >
+        {gallery?.title}
+      </Heading>
 
       <Table className="mb-10 w-full md:w-1/2">
         <TableBody>
           <TableRow>
             <TableHead>Fecha</TableHead>
             <TableCell>
-              {format(gallery?.galleryDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
+              {format(
+                gallery?.galleryDate as Date,
+                "d 'de' MMMM 'del' yyyy",
+                { locale: es },
+              )}
             </TableCell>
           </TableRow>
           {gallery?.tournament?.permalink && (

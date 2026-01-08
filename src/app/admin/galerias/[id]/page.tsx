@@ -68,6 +68,18 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
                       <TableHead className="w-[180px] font-semibold">Enlace Permanente</TableHead>
                       <TableCell>{gallery.permalink}</TableCell>
                     </TableRow>
+                    <TableRow>
+                      <TableHead>Torneo</TableHead>
+                      <TableCell>
+                        {
+                          gallery.tournament
+                            ? `${gallery.tournament.name}`
+                                + `, ${gallery.tournament.category}`
+                                + `, ${gallery.tournament.format} vs ${gallery.tournament.format}`
+                            : 'No definido'
+                        }
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </div>
@@ -96,6 +108,18 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
                         }
                       </TableCell>
                     </TableRow>
+                    <TableRow>
+                      <TableHead>Equipo</TableHead>
+                      <TableCell>
+                        {
+                          gallery.team
+                            ? `${gallery.team.name}`
+                                + `, ${gallery.team.category}`
+                                + `, ${gallery.team.format} vs ${gallery.team.format}`
+                            : 'No definido'
+                        }
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </div>
@@ -106,10 +130,12 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
               {
                 gallery.images.length === 0 ? (
                   <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
-                    <p className="text-cyan-600 text-center font-bold">La galería aún no tiene imágenes</p>
+                    <p className="text-cyan-600 text-center font-bold">
+                      La galería aún no tiene imágenes
+                    </p>
                   </div>
                 ) : (
-                  <div className="flex flex-wrap gap-3">
+                  <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     <GalleryImages images={gallery.images} />
                   </div>
                 )
@@ -120,8 +146,8 @@ export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
               <GalleryImageForm
                 session={session as Session}
                 galleryId={gallery.id as string}
+                imagesQuantity={gallery.images.length}
               />
-
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link href={`/admin/galerias/editar/${gallery.id}`}>
