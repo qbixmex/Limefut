@@ -1,12 +1,12 @@
 import { Suspense, type FC } from 'react';
-import { ErrorHandler } from '~/src/shared/components/errorHandler';
+import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { GalleriesTable } from './(components)/galleries-table';
-import Search from '~/src/shared/components/search';
+import Search from '@/shared/components/search';
 import { GalleriesTableSkeleton } from './(components)/galleries-table-skeleton';
 
 type Props = Readonly<{

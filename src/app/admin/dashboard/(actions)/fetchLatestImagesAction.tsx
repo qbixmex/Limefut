@@ -13,7 +13,6 @@ export type ResponseFetch = Promise<{
   latestImages: {
     id: string;
     title: string;
-    permalink: string | null;
     imageUrl: string;
   }[];
 }>;
@@ -45,7 +44,6 @@ export const fetchLatestImagesAction = async ({ quantity }: Options): Promise<Re
       select: {
         id: true,
         title: true,
-        permalink: true,
         imageUrl: true,
       },
       orderBy: {

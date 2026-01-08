@@ -24,14 +24,13 @@ type Props = Readonly<{
   galleyImage: {
     id: string;
     title: string;
-    permalink: string | null;
     imageUrl: string;
     active: boolean;
   };
 }>;
 
 export const GalleryImage: FC<Props> = ({ galleyImage }) => {
-  const { id, title, permalink = '', imageUrl, active } = galleyImage;
+  const { id, title, imageUrl, active } = galleyImage;
   const { setGalleryImage } = useImageGallery();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -76,7 +75,6 @@ export const GalleryImage: FC<Props> = ({ galleyImage }) => {
             onClick={() => setGalleryImage({
               id,
               title,
-              permalink: permalink as string,
               active,
             })}
           >
