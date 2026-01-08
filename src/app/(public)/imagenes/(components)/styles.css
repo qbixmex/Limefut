@@ -11,17 +11,25 @@
 }
 
 .gallery-item {
-  @apply relative cursor-pointer h-[300px] rounded overflow-hidden;
+  @apply
+    relative
+    bg-emerald-700
+    cursor-pointer
+    h-[200px]
+    rounded
+    overflow-hidden
+  ;
 }
 
 .gallery-image {
   @apply
-    w-auto
-    h-[300px]
+    w-full
+    h-[200px]
     object-cover
     mb-2
     cursor-pointer
-    md:w-[300px]
+    md:max-w-[300px]
+    md:mb-0
     lg:w-full
     lg:h-auto;
 }
@@ -38,9 +46,9 @@
     & p {
       @apply
         text-gray-200
-        text-sm
+        text-lg
         italic
-        font-semibold
+        font-bold
         p-2
         duration-300
         ease-in-out
@@ -119,17 +127,21 @@
     justify-center
     p-2
     rounded
-    bg-zinc-600
+    bg-blue-600
+    hover:bg-blue-700
     transition-colors
     duration-300
     ease-in-out
     lg:w-16
-    hover:bg-zinc-700
     text-blue-50;
 }
 
 .navigation-btn.selected {
-  @apply bg-blue-600 hover:bg-blue-700 active:bg-blue-400;
+  @apply
+    bg-blue-600
+    hover:bg-blue-700
+    active:bg-blue-400
+  ;
 }
 
 .close-btn {

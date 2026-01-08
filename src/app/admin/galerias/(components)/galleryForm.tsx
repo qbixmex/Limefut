@@ -44,7 +44,12 @@ import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   session: Session;
-  tournaments: { id: string; name: string; }[],
+  tournaments: {
+    id: string;
+    name: string;
+    category: string;
+    format: string;
+  }[],
   teams: { id: string; name: string; }[],
   gallery?: Gallery & {
     tournament: { id: string; } | null,
@@ -72,8 +77,8 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     form.getValues('galleryDate'),
   );
-  const [selectedTournament, setSelectedTournament] = useState(false);
-  const [selectedTeam, setSelectedTeam] = useState(false);
+  const [selectedTournament, setSelectedTournament] = useState(!!gallery?.tournament?.id);
+  const [selectedTeam, setSelectedTeam] = useState(!!gallery?.team?.id);
   const [tournamentsOpen, setTournamentsOpen] = useState(false);
   const [teamsOpen, setTeamsOpen] = useState(false);
 
@@ -89,7 +94,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
     );
 
     if (data.tournamentId) {
-      formData.append('teamId', data.teamId as string);
+      formData.append('tournamentId', data.tournamentId as string);
     }
 
     if (data.teamId) {
@@ -112,7 +117,8 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
 
       if (response.ok) {
         toast.success(response.message);
-        form.reset();
+        if (!data.tournamentId) setSelectedTournament(false);
+        if (!data.teamId) setSelectedTeam(false);
         route.replace(`/admin/galerias/${response.gallery?.id}`);
         return;
       }
@@ -134,6 +140,8 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
 
       if (response.ok) {
         toast.success(response.message);
+        if (!data.tournamentId) setSelectedTournament(false);
+        if (!data.teamId) setSelectedTeam(false);
         route.replace(`/admin/galerias/${response.gallery?.id}`);
         return;
       }
@@ -212,12 +220,16 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                             variant="outline-secondary"
                             role="combobox"
                             aria-expanded={tournamentsOpen}
-                            className="w-[250px] justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+                            className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                           >
                             {
                               field.value && selectedTournament
-                                ? selectedTournament.name
-                                : "Seleccione un torneo"
+                                ? `${selectedTournament.name},`
+                                + ` ${selectedTournament.category}`
+                                + ` ${selectedTournament.format} vs ${selectedTournament.format}`
+                                : field.value === undefined
+                                  ? "Sin torneo"
+                                  : "Seleccione un torneo"
                             }
                             <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
@@ -230,11 +242,11 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                               <CommandGroup>
                                 <CommandItem
                                   onSelect={() => {
-                                    form.setValue('tournamentId', '');
+                                    form.setValue('tournamentId', null);
                                     setTournamentsOpen(false);
                                   }}
                                 >
-                                  Seleccione un torneo
+                                  Sin Torneo
                                   <Check
                                     className={cn(
                                       'ml-auto',
@@ -252,7 +264,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                                       setTournamentsOpen(false);
                                     }}
                                   >
-                                    {tournament.name}
+                                    {tournament.name}, {tournament.category}, {tournament.format} vs {tournament.format}
                                     <Check
                                       className={cn(
                                         "ml-auto",
@@ -301,7 +313,9 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                             {
                               field.value && selectedTeam
                                 ? selectedTeam.name
-                                : "Seleccione un equipo"
+                                : field.value === undefined
+                                  ? "Seleccione un equipo"
+                                  : "Sin Equipo"
                             }
                             <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
@@ -310,15 +324,15 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                           <Command>
                             <CommandInput placeholder="Buscar equipo ..." className="h-9" />
                             <CommandList>
-                              <CommandEmpty>No se encontró equipo.</CommandEmpty>
+                              <CommandEmpty>No se encontró Equipo</CommandEmpty>
                               <CommandGroup>
                                 <CommandItem
                                   onSelect={() => {
-                                    form.setValue('teamId', '');
+                                    form.setValue('teamId', null);
                                     setTeamsOpen(false);
                                   }}
                                 >
-                                  Seleccione un equipo
+                                  Sin Equipo
                                   <Check
                                     className={cn(
                                       'ml-auto',
@@ -419,7 +433,15 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
             type="button"
             variant="outline-secondary"
             size="lg"
-            onClick={() => route.back()}
+            onClick={() => {
+              setSelectedTeam(false);
+              setSelectedTournament(false);
+              if (gallery) {
+                route.replace(`/admin/galerias/${gallery.id}`);
+              } else {
+                route.replace('/admin/galerias');
+              }
+            }}
           >
             cancelar
           </Button>

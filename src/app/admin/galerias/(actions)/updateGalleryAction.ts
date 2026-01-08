@@ -43,7 +43,8 @@ export const updateGalleryAction = async ({
   const rawData = {
     title: formData.get('title') as string,
     permalink: formData.get('permalink') ?? '',
-    teamId: formData.get('teamId') as string,
+    tournamentId: formData.get('tournamentId'),
+    teamId: formData.get('teamId'),
     galleryDate: new Date(formData.get('galleryDate') as string),
     active: (formData.get('active') === 'true')
       ? true
@@ -84,6 +85,7 @@ export const updateGalleryAction = async ({
           data: {
             title: galleryToSave.title,
             galleryDate: galleryToSave.galleryDate,
+            tournamentId: galleryToSave.tournamentId,
             teamId: galleryToSave.teamId,
             active: galleryToSave.active,
           },

@@ -8,6 +8,8 @@ export type ResponseAction = Promise<{
   tournaments: {
     id: string;
     name: string;
+    category: string;
+    format: string;
   }[];
 }>;
 
@@ -18,7 +20,8 @@ export const fetchTournamentsForGalleryAction = async (): ResponseAction => {
       select: {
         id: true,
         name: true,
-        permalink: true,
+        category: true,
+        format: true,
       },
     });
 

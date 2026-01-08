@@ -5,7 +5,10 @@ import prisma from "@/lib/prisma";
 export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  teams: { id: string; name: string; }[];
+  teams: {
+    id: string;
+    name: string;
+  }[];
 }>;
 
 export const fetchTeamsForGalleryAction = async (): ResponseAction => {

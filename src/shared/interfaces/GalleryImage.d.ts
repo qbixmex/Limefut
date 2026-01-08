@@ -5,6 +5,7 @@ export interface GalleryImage {
   imagePublicID: string;
   active: boolean;
   galleryId: string;
+  position: number;
   createdAt?: Date,
   updatedAt?: Date,
 }

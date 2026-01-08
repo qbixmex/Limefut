@@ -26,11 +26,12 @@ type Props = Readonly<{
     title: string;
     imageUrl: string;
     active: boolean;
+    position: number;
   };
 }>;
 
 export const GalleryImage: FC<Props> = ({ galleyImage }) => {
-  const { id, title, imageUrl, active } = galleyImage;
+  const { id, title, imageUrl, active, position } = galleyImage;
   const { setGalleryImage } = useImageGallery();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -43,13 +44,13 @@ export const GalleryImage: FC<Props> = ({ galleyImage }) => {
 
   return (
     <figure className="space-y-2 relative">
-      {<Image
+      <Image
         src={imageUrl}
-        width={250}
+        width={450}
         height={250}
         alt={title}
-        className="size-[250px] rounded object-cover"
-      />}
+        className="w-full lg:max-w-[400px] h-[250px] rounded object-cover"
+      />
 
       {!active && (
         <>
@@ -76,6 +77,7 @@ export const GalleryImage: FC<Props> = ({ galleyImage }) => {
               id,
               title,
               active,
+              position,
             })}
           >
             <Pencil />

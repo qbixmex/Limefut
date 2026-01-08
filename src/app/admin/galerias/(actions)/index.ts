@@ -7,3 +7,4 @@ export { updateGalleryStateAction } from "./updateGalleryStateAction";
 export { deleteGalleryAction } from "./deleteGalleryAction";
 export { createGalleryImageAction } from "./createGalleryImageAction";
 export { updateGalleryImageAction } from "./updateGalleryImageAction";
+export { updateGalleryImagesPositionAction } from "./updateGalleryImagesPosition";
