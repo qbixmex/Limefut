@@ -48,6 +48,12 @@ export const createGalleryImageAction = async ({
   const rawData = {
     title: formData.get('title') as string,
     image: formData.get('image') as File,
+    position: Number(formData.get('position')),
+    active: (formData.get('active') === 'true')
+      ? true
+      : (formData.get('active') === 'false')
+        ? false
+        : false,
   };
 
   const galleryVerified = createGalleryImageSchema.safeParse(rawData);
@@ -79,7 +85,8 @@ export const createGalleryImageAction = async ({
           title: data.title,
           imageUrl: cloudinaryResponse?.secureUrl as string,
           imagePublicID: cloudinaryResponse?.publicId as string,
-          active: false,
+          active: data.active,
+          position: data.position,
           galleryId: gallery.id,
         },
       });

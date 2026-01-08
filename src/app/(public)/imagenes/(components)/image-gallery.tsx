@@ -127,14 +127,16 @@ export const ImageGallery: FC<Props> = ({ galleryImages }) => {
             >
               <Image
                 src={image.imageUrl}
-                width={300}
-                height={300}
+                width={200}
+                height={200}
                 alt={image.title}
                 className="gallery-image"
                 loading="eager"
               />
               <figcaption className="image-caption opacity-0 group-hover:opacity-100 group-hover:bg-black/50">
-                <p className="scale-x-50 group-hover:scale-x-100">{image.title}</p>
+                <p className="scale-x-50 group-hover:scale-x-100">
+                  {image.title}
+                </p>
               </figcaption>
             </motion.div>
           ))}

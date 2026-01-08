@@ -14,8 +14,14 @@ export const createGalleryImageSchema = z.object({
     .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
     .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' }),
   image: z
-    .instanceof(File, { message: "La imagen debe ser un archivo" })
-    .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
-    .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp'),
+    .instanceof(File, { message: '¡ La imagen debe ser un archivo !' })
+    .refine((file) => !file || file.size <= MAX_UPLOAD_SIZE,
+      '! El tamaño máximo de la imagen deber ser menor a 1MB',
+    )
+    .refine(
+      (file) => file && ACCEPTED_FILE_TYPES.includes(file.type),
+      '¡ El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp !',
+    ),
+  position: z.number('¡ La posición debe ser un número válido !'),
   active: z.boolean().optional(),
 });
