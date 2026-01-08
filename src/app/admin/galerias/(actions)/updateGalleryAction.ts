@@ -83,7 +83,6 @@ export const updateGalleryAction = async ({
           where: { id: galleryId },
           data: {
             title: galleryToSave.title,
-            permalink: galleryToSave.permalink,
             galleryDate: galleryToSave.galleryDate,
             teamId: galleryToSave.teamId,
             active: galleryToSave.active,

@@ -22,12 +22,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { useForm } from "react-hook-form";
 import type z from "zod";
-import { createGalleryImageSchema, editGalleryImageSchema } from "~/src/shared/schemas";
+import { createGalleryImageSchema, editGalleryImageSchema } from "@/shared/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { createGalleryImageAction, updateGalleryImageAction } from "../(actions)";
 import { toast } from "sonner";
-import { useImageGallery } from "~/src/store";
+import { useImageGallery } from "@/store";
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 
@@ -47,7 +47,6 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
-      permalink: '',
       active: false,
     },
   });
@@ -56,13 +55,11 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
     if (galleryImage) {
       form.reset({
         title: galleryImage.title,
-        permalink: galleryImage.permalink,
         active: galleryImage.active,
       });
     } else {
       form.reset({
         title: '',
-        permalink: '',
         active: false,
       });
     }
@@ -71,7 +68,6 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
     formData.append('title', data.title as string);
-    formData.append('permalink', data.permalink as string);
 
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
@@ -127,12 +123,15 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
   };
 
   return (
-    <Sheet open={galleryImage !== null || isOpen} onOpenChange={(open) => {
-      if (!open && galleryImage !== null) {
-        clearGalleryImage();
-      }
-      setIsOpen(open);
-    }}>
+    <Sheet
+      open={galleryImage !== null || isOpen}
+      onOpenChange={(open) => {
+        if (!open && galleryImage !== null) {
+          clearGalleryImage();
+        }
+        setIsOpen(open);
+      }}
+    >
       <Tooltip>
         <TooltipTrigger asChild>
           <SheetTrigger asChild>
@@ -178,21 +177,6 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
                 />
                 <FormField
                   control={form.control}
-                  name="permalink"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Enlace Permanente
-                      </FormLabel>
-                      <FormControl>
-                        <Input {...field} value={field.value ?? ''} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="image"
                   render={({ field }) => (
                     <FormItem>
@@ -211,30 +195,28 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId }) => {
                   )}
                 />
 
-                {galleryImage && (
-                  <div className="inline-flex justify-end">
-                    <FormField
-                      control={form.control}
-                      name="active"
-                      render={({ field }) => (
-                        <FormItem>
-                          <div className="flex items-center gap-3">
-                            <FormControl>
-                              <Switch
-                                id="active"
-                                checked={field.value ?? false}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <Label htmlFor="active">
-                              {field.value ? 'Visible' : 'Oculta'}
-                            </Label>
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
+                <div className="inline-flex justify-end">
+                  <FormField
+                    control={form.control}
+                    name="active"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center gap-3">
+                          <FormControl>
+                            <Switch
+                              id="active"
+                              checked={field.value ?? false}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <Label htmlFor="active">
+                            {field.value ? 'Visible' : 'Oculta'}
+                          </Label>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
               <Button

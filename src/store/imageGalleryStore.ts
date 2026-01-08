@@ -4,7 +4,6 @@ import { devtools } from "zustand/middleware";
 type GalleryImage = {
   id: string;
   title: string;
-  permalink: string;
   active: boolean;
 };
 

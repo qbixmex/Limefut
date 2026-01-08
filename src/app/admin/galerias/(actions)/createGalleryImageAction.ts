@@ -47,7 +47,6 @@ export const createGalleryImageAction = async ({
 
   const rawData = {
     title: formData.get('title') as string,
-    permalink: formData.get('permalink') ?? '',
     image: formData.get('image') as File,
   };
 
@@ -62,18 +61,6 @@ export const createGalleryImageAction = async ({
   }
 
   const { image, ...data } = galleryVerified.data;
-
-  const imageExists = await prisma.galleryImage.count({
-    where: { permalink: data.permalink },
-  });
-
-  if (imageExists > 0) {
-    return {
-      ok: false,
-      message: `¡ El enlace permanente "${data.permalink}", Elija Otro !`,
-      galleryImage: null,
-    };
-  }
 
   // Upload Image to third-party storage (cloudinary).
   let cloudinaryResponse: CloudinaryResponse | null = null;
@@ -90,7 +77,6 @@ export const createGalleryImageAction = async ({
       const createdImageGallery = await transaction.galleryImage.create({
         data: {
           title: data.title,
-          permalink: data.permalink,
           imageUrl: cloudinaryResponse?.secureUrl as string,
           imagePublicID: cloudinaryResponse?.publicId as string,
           active: false,

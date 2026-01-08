@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath, updateTag } from 'next/cache';
-import { editGalleryImageSchema } from '~/src/shared/schemas';
+import { editGalleryImageSchema } from '@/shared/schemas';
 import type { GalleryImage } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '~/src/shared/actions';
 
@@ -43,7 +43,6 @@ export const updateGalleryImageAction = async ({
 
   const rawData = {
     title: formData.get('title') as string,
-    permalink: formData.get('permalink') ?? '',
     image: formData.get('image') as File,
     active: (formData.get('active') === 'true')
       ? true
@@ -83,7 +82,6 @@ export const updateGalleryImageAction = async ({
           where: { id: galleryImageId },
           data: {
             title: data.title,
-            permalink: data.permalink,
             active: data.active,
           },
         });

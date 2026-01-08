@@ -4,9 +4,9 @@ import { type FC, useEffect, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from "motion/react";
 import type { GalleryImageType } from '../(actions)/fetchGalleryAction';
 import Image from "next/image";
-import "./styles.css";
 import { ChevronLeft, ChevronRight, XIcon } from 'lucide-react';
-import { Button } from '~/src/components/ui/button';
+import { Button } from '@/components/ui/button';
+import "./styles.css";
 
 type SelectedImage = {
   id: string;
