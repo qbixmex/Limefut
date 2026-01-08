@@ -37,30 +37,34 @@ export const GalleryDetails: FC<Props> = async ({ paramsPromise }) => {
               {format(gallery?.galleryDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
             </TableCell>
           </TableRow>
-          <TableRow>
-            <TableHead>Torneo</TableHead>
-            <TableCell>
-              {gallery?.tournament ? (
-                <Link href={`/torneo/${gallery?.tournament.permalink}`}>
-                  {gallery?.tournament.name}
-                </Link>
-              ) : (
-                <p>No asignado</p>
-              )}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableHead>Equipo</TableHead>
-            <TableCell>
-              {gallery?.team ? (
-                <Link href={`/equipos/${gallery?.team.permalink}`}>
-                  {gallery?.team.name}
-                </Link>
-              ) : (
-                <p>No asignado</p>
-              )}
-            </TableCell>
-          </TableRow>
+          {gallery?.tournament?.permalink && (
+            <TableRow>
+              <TableHead>Torneo</TableHead>
+              <TableCell>
+                {gallery?.tournament ? (
+                  <Link href={`/torneo/${gallery?.tournament.permalink}`}>
+                    {gallery?.tournament.name}
+                  </Link>
+                ) : (
+                  <p>No asignado</p>
+                )}
+              </TableCell>
+            </TableRow>
+          )}
+          {gallery?.team?.permalink && (
+            <TableRow>
+              <TableHead>Equipo</TableHead>
+              <TableCell>
+                {gallery?.team ? (
+                  <Link href={`/equipos/${gallery?.team.permalink}`}>
+                    {gallery?.team.name}
+                  </Link>
+                ) : (
+                  <p>No asignado</p>
+                )}
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
 

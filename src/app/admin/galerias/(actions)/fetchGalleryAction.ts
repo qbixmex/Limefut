@@ -6,7 +6,6 @@ import type { Gallery } from "@/shared/interfaces";
 type GalleryImageType = {
   id: string;
   title: string;
-  permalink: string | null;
   imageUrl: string;
   active: boolean;
 };
@@ -58,7 +57,6 @@ export const fetchGalleryAction = async (
           select: {
             id: true,
             title: true,
-            permalink: true,
             imageUrl: true,
             active: true,
           },

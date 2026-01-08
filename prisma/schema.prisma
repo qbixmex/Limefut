@@ -352,10 +352,10 @@ model Gallery {
 model GalleryImage {
   id            String  @id @default(uuid())
   title         String
-  permalink     String?
   imageUrl      String  @unique
   imagePublicID String  @map("image_public_id")
   active        Boolean @default(false)
+  position      Int     @default(0)   
 
   // Relations
   galleryId String  @map("gallery_id")

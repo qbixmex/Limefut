@@ -5,7 +5,6 @@ import { cacheLife, cacheTag } from "next/cache";
 
 export type GalleryType = {
   title: string;
-  permalink: string;
   galleryDate: Date;
   tournament: TournamentType | null;
   team: TeamType | null;
