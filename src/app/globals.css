@@ -126,11 +126,11 @@
   }
 
   a {
-    @apply text-sky-500 transition-colors duration-300 ease-in-out;
+    @apply text-blue-500 dark:text-sky-500 transition-colors duration-300 ease-in-out;
   }
 
   a:hover {
-    @apply text-sky-600;
+    @apply text-blue-600 dark:text-sky-600;
   }
 
   button {
