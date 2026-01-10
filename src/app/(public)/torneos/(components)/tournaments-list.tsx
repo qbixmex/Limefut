@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { fetchTournamentsAction } from '../(actions)/fetchTournamentsAction';
-import Link from 'next/link';
-import { ErrorHandler } from '~/src/shared/components/errorHandler';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { Tournament } from './tournament';
 import "./styles.css";
 
 export const TournamentsList: FC = async () => {
@@ -12,27 +12,16 @@ export const TournamentsList: FC = async () => {
       <ErrorHandler />
       <div className="tournaments">
         {tournaments.map((tournament) => (
-          <section key={tournament.id} className="tournament">
-            <h2 className="tournamentName">
-              <Link href={
-                `torneos/${tournament.permalink}`
-                + `?categoria=${tournament.category}`
-                +`&formato=${tournament.format}`
-              }>
-                {tournament.name}
-              </Link>
-            </h2>
-            <p>{tournament.imageUrl}</p>
-            <div className="tournamentData">
-              <p><b>Categoría:</b> {tournament.category}</p>
-              <p><b>Formato:</b> {tournament.format}</p>
-              <p><b>Temporada:</b> {tournament.season}</p>
-            </div>
-          </section>
+          <Tournament
+            key={tournament.id}
+            tournament={tournament}
+          />
         ))}
       </div>
     </>
   );
 };
+
+
 
 export default TournamentsList;
