@@ -7,7 +7,6 @@ export type TournamentType = {
   id: string;
   name: string;
   permalink: string;
-  imageUrl: string | null;
   category: string | null;
   format: string | null;
   season: string | null;
@@ -33,7 +32,6 @@ export const fetchTournamentsAction = async (): ResponseAction => {
         id: true,
         name: true,
         permalink: true,
-        imageUrl: true,
         category: true,
         format: true,
         season: true,
