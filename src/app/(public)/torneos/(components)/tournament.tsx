@@ -28,7 +28,6 @@ export const Tournament: FC<Props> = ({ tournament }) => {
       <h2 className="tournamentName">
         {tournament.name}
       </h2>
-      <p>{tournament.imageUrl}</p>
       <div className="tournamentData">
         <p><b>Categoría:</b> {tournament.category}</p>
         <p><b>Formato:</b> {tournament.format}</p>
