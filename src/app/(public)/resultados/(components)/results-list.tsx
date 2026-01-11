@@ -64,8 +64,8 @@ export const ResultsList: FC<Props> = async ({
             <TableHeader>
               <TableRow>
                 <TableHead>Fecha</TableHead>
-                <TableHead className="text-center w-20">División</TableHead>
-                <TableHead className="text-center w-20">Grupo</TableHead>
+                <TableHead className="text-center w-20">Categoría</TableHead>
+                <TableHead className="text-center w-20">Formato</TableHead>
                 <TableHead className="text-right">Equipo visitante</TableHead>
                 <TableHead>&nbsp;</TableHead>
                 <TableHead className="text-left">Equipo Visitante</TableHead>
@@ -76,10 +76,10 @@ export const ResultsList: FC<Props> = async ({
             <TableBody>
               {matchesByWeek[week].map((match) => (
                 <TableRow key={match.id}>
-                  <TableCell>
+                  <TableCell className="text-gray-600 dark:text-gray-200">
                     {match.matchDate ? (
                       <>
-                        <p className="text-gray-200">
+                        <p>
                           <span>
                             {`${formatDate(match.matchDate, 'dd', { locale: es })}`}
                           </span>
@@ -97,11 +97,15 @@ export const ResultsList: FC<Props> = async ({
                         </p>
                       </>
                     ) : (
-                      <p className="text-gray-600">No definido</p>
+                      <p className="text-gray-600">No definida</p>
                     )}
                   </TableCell>
-                  <TableCell className="text-center">{match.tournament.category}</TableCell>
-                  <TableCell className="text-center">{match.tournament.format}</TableCell>
+                  <TableCell className="text-gray-600 dark:text-gray-200 text-center">
+                    {match.tournament.category}
+                  </TableCell>
+                  <TableCell className="text-gray-600 dark:text-gray-200 text-center">
+                    {match.tournament.format} vs {match.tournament.format}
+                  </TableCell>
                   <TableCell className="text-right">
                     {
                       match.local.name.toLowerCase().includes('descanso')
@@ -115,6 +119,7 @@ export const ResultsList: FC<Props> = async ({
                               + `&formato=${format}`
                             }
                             target="_blank"
+                            className="font-semibold italic"
                           >
                             {match.local.name}
                           </Link>
@@ -143,6 +148,7 @@ export const ResultsList: FC<Props> = async ({
                               + `&formato=${format}`
                             }
                             target="_blank"
+                            className="font-semibold italic"
                           >
                             {match.visitor.name}
                           </Link>

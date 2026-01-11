@@ -6,7 +6,8 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { cn } from "~/src/lib/utils";
+import { cn } from "@/lib/utils";
+import "./styles.css";
 
 type Props = Readonly<{
   tournaments: {
@@ -46,18 +47,20 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
 
   return (
     <>
-      { !sp.permalink && !sp.category && !sp.format && (
-        <h2 className="text-2xl text-sky-500 font-semibold italic">Seleccione un torneo</h2>
+      {!sp.permalink && !sp.category && !sp.format && (
+        <h2 className="text-2xl text-sky-500 font-semibold italic">
+          Seleccione un torneo
+        </h2>
       )}
 
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <section className="tournaments">
         {tournaments.map(({ id, name, permalink, category, format }) => (
           <div
             key={id}
             role="button"
             tabIndex={0}
-            className={cn('bg-gray-800 p-5 rounded-lg cursor-pointer', {
-              'border border-blue-500': (sp.permalink === permalink)
+            className={cn('tournament', {
+              'tournamentSelected': (sp.permalink === permalink)
                 && (sp.category === category)
                 && sp.format === format
                 ,
@@ -68,9 +71,11 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
               format,
             })}
           >
-            <p className="font-medium">{name}</p>
-            <p className="text-sm"><b>Categoría</b>: {category}</p>
-            <p className="text-sm"><b>Formato</b>: {`${format} vs ${format}`}</p>
+            <p className="tournamentName">{name}</p>
+            <div className="tournamentData">
+              <p><b>Categoría</b>: {category}</p>
+              <p><b>Formato</b>: {`${format} vs ${format}`}</p>
+            </div>
           </div>
         ))}
       </section>
