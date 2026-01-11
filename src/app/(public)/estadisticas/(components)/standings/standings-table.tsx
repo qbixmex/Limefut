@@ -55,22 +55,24 @@ export const StandingsTable: FC<Props> = async ({
       />
 
       <div className="relative">
-        <h2 className="text-xl text-gray-200 mb-5">Tabla de posiciones</h2>
+        <h2 className="text-xl font-semibold text-emerald-700 dark:text-gray-200 mb-5">
+          Tabla de posiciones
+        </h2>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center">Posición</TableHead>
-              <TableHead className="text-gray-400">Equipo</TableHead>
-              <TableHead className="text-gray-400 text-center">JJ</TableHead>
-              <TableHead className="text-gray-400 text-center">JG</TableHead>
-              <TableHead className="text-gray-400 text-center">JE</TableHead>
-              <TableHead className="text-gray-400 text-center">JP</TableHead>
-              <TableHead className="text-gray-400 text-center">GF</TableHead>
-              <TableHead className="text-gray-400 text-center">GC</TableHead>
-              <TableHead className="text-gray-400 text-center">DIF</TableHead>
-              <TableHead className="text-gray-400 text-center">PTS</TableHead>
-              <TableHead className="text-gray-400 text-center">PTA</TableHead>
-              <TableHead className="text-gray-400 text-center">PTT</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">Posición</TableHead>
+              <TableHead className="dark:text-gray-400">Equipo</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">JJ</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">JG</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">JE</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">JP</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">GF</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">GC</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">DIF</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">PTS</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">PTA</TableHead>
+              <TableHead className="dark:text-gray-400 text-center">PTT</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -86,6 +88,7 @@ export const StandingsTable: FC<Props> = async ({
                       + `&formato=${response.tournament?.format}`
                     }
                       target="_blank"
+                    className="font-semibold italic"
                   >
                     {standing.team.name}
                   </Link>
