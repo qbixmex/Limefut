@@ -30,7 +30,7 @@ export const Tournament: FC<Props> = ({ tournament }) => {
       </h2>
       <div className="tournamentData">
         <p><b>Categoría:</b> {tournament.category}</p>
-        <p><b>Formato:</b> {tournament.format}</p>
+        <p><b>Formato:</b> {tournament.format} vs {tournament.format}</p>
         <p><b>Temporada:</b> {tournament.season}</p>
       </div>
     </section>
