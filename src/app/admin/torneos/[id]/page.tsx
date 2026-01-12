@@ -44,12 +44,12 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
         <Card className="w-full shadow-none bg-neutral-100 dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800 relative">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>
-              <h1 className="text-xl font-bold">Detalles del Torneo</h1>
+              <h1 className="text-xl font-bold">Información del Torneo</h1>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
-              <div className="w-full lg:w-1/2">
+              <div className="w-full xl:max-w-lg flex justify-center">
                 {
                   !tournament.imageUrl ? (
                     <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
@@ -58,115 +58,112 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                   ) : (
                     <Image
                       src={tournament.imageUrl}
-                      width={512}
-                      height={512}
-                      alt={`imagen de perfil de ${tournament.name}`}
-                      className="rounded-lg size-[512px] object-cover"
+                      width={500}
+                      height={500}
+                      alt={tournament.name}
+                      className="w-full max-w-lg h-auto rounded-lg object-cover"
                     />
                   )
                 }
               </div>
-              <div className="w-full lg:w-1/2">
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Nombre</TableHead>
-                      <TableCell>{tournament.name}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Enlace Permanente</TableHead>
-                      <TableCell>{tournament.permalink}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold">Temporada</TableHead>
-                      <TableCell>{tournament.season}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold">Categoría</TableHead>
-                      <TableCell>{tournament.category}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold">Formato</TableHead>
-                      <TableCell>
-                        {tournament.format} vs {tournament.format}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold">Descripción</TableHead>
-                      <TableCell className="whitespace-break-spaces">{tournament.description}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold">País</TableHead>
-                      <TableCell>{tournament.country}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold">Estado</TableHead>
-                      <TableCell>{tournament.state}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold">City</TableHead>
-                      <TableCell>{tournament.city}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold">Jornada</TableHead>
-                      <TableCell>{tournament.currentWeek}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-medium w-[180px]">Activo</TableHead>
-                      <TableCell>
-                        {
-                          tournament.active
-                            ? <Badge variant="outline-info">Activo</Badge>
-                            : <Badge variant="outline-warning">No Activo</Badge>
-                        }
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </section>
-
-            <section className="flex gap-5 mb-5">
-              <div className="w-full lg:w-1/2">
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Fecha de Inicio</TableHead>
-                      <TableCell>
-                        {format(new Date(tournament.startDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Fecha Final</TableHead>
-                      <TableCell>
-                        {format(new Date(tournament.endDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-              <div className="w-full lg:w-1/2">
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Fecha de Creación</TableHead>
-                      <TableCell>
-                        {format(new Date(tournament.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Última actualización</TableHead>
-                      <TableCell>
-                        {format(new Date(tournament.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+              <div className="w-full">
+                <div className="w-full flex flex-col gap-0 lg:flex-row lg:gap-5 mb-5">
+                  <div className="w-full lg:w-1/2">
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableHead className="w-auto md:w-28 font-semibold">Nombre</TableHead>
+                          <TableCell>
+                            <p className="text-pretty">{tournament.name}</p>
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">
+                            <p className="text-wrap">Enlace Permanente</p>
+                          </TableHead>
+                          <TableCell>
+                            <p className="whitespace-break-spaces">{tournament.permalink}</p>
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">Temporada</TableHead>
+                          <TableCell>{tournament.season}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">Categoría</TableHead>
+                          <TableCell>{tournament.category}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">Formato</TableHead>
+                          <TableCell>
+                            {tournament.format} vs {tournament.format}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">Jornada</TableHead>
+                          <TableCell>{tournament.currentWeek}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+                  <div className="w-full lg:w-1/2">
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableHead className="w-auto md:w-28 font-semibold">País</TableHead>
+                          <TableCell>{tournament.country}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">Estado</TableHead>
+                          <TableCell>{tournament.state}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">City</TableHead>
+                          <TableCell>
+                            <p className="text-wrap">{tournament.city}</p>
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">
+                            <p className="text-wrap">Fecha Inicial</p>
+                          </TableHead>
+                          <TableCell>
+                            <p className="text-pretty">
+                              {format(new Date(tournament.startDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                            </p>
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">Fecha Final</TableHead>
+                          <TableCell>
+                            <p className="text-pretty">
+                              {format(new Date(tournament.endDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                            </p>
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-medium">Activo</TableHead>
+                          <TableCell>
+                            {
+                              tournament.active
+                                ? <Badge variant="outline-info">Activo</Badge>
+                                : <Badge variant="outline-warning">No Activo</Badge>
+                            }
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+                <section>
+                  <p className="font-semibold mb-2">Descripción</p>
+                  <p className="text-pretty">{tournament.description}</p>
+                </section>
               </div>
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-sky-600 mb-5">
+              <h2 className="text-lg font-semibold text-sky-600 mb-5">
                 Equipos Registrados&nbsp;
                 <span className="text-gray-500 text-base font-semibold">
                   ({tournament.teams.length})
