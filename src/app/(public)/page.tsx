@@ -25,7 +25,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
 
       <section className={styles.banners}>
         <Image
-          src="/images/inscription.jpg"
+          src="/images/kid-playing-football.png"
           width={640}
           height={640}
           alt="Inscripciones"
