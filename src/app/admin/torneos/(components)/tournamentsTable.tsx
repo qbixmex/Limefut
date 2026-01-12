@@ -50,23 +50,24 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Imagen</TableHead>
+                  <TableHead className="w-[100px] hidden lg:table-cell">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead className="w-25 text-center">Temporada</TableHead>
                   <TableHead className="w-25 text-center">Categoría</TableHead>
                   <TableHead className="w-25 text-center">Formato</TableHead>
-                  <TableHead className="text-center">Activo</TableHead>
+                  <TableHead className="hidden lg:table-cell w-25 text-center">Temporada</TableHead>
+                  <TableHead className="hidden lg:table-cell w-25 text-center">Jornada</TableHead>
+                  <TableHead className="hidden lg:table-cell text-center">Activo</TableHead>
                   <TableHead>Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {tournaments.map((tournament) => (
                   <TableRow key={tournament.id}>
-                    <TableCell>
+                    <TableCell className="hidden lg:table-cell">
                       <Link href={`/admin/torneos/${tournament.id}`}>
                         {
                           !tournament.imageUrl ? (
-                            <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
+                            <figure className="border border-gray-400 dark:border-0 dark:bg-gray-800 size-[60px] rounded-lg flex items-center justify-center">
                               <Trophy size={35} className="stroke-gray-400" />
                             </figure>
                           ) : (
@@ -82,12 +83,15 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                       </Link>
                     </TableCell>
                     <TableCell>{tournament.name}</TableCell>
-                    <TableCell className="text-center">{tournament.season}</TableCell>
                     <TableCell className="text-center">{tournament.category}</TableCell>
                     <TableCell className="text-center">
                       {`${tournament.format} vs ${tournament.format}`}
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="hidden lg:table-cell text-center">{tournament.season}</TableCell>
+                    <TableCell className="hidden lg:table-cell text-center">
+                      {tournament.currentWeek}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell text-center">
                       <ActiveSwitch
                         resource={{ id: tournament.id, state: tournament.active }}
                         updateResourceStateAction={updateTournamentStateAction}
