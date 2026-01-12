@@ -1,27 +1,31 @@
-import type { FC } from 'react';
-import { fetchTournamentsAction } from '../(actions)/fetchTournamentsAction';
-import { ErrorHandler } from '@/shared/components/errorHandler';
-import { Tournament } from './tournament';
-import "./styles.css";
+'use client';
 
-export const TournamentsList: FC = async () => {
-  const { tournaments } = await fetchTournamentsAction();
+import { type FC, useRef } from 'react';
+import type { TournamentType } from '../(actions)/fetchTournamentsAction';
+import { Tournament } from './tournament';
+import { useGrabScroll } from '@/shared/hooks/use-grab-scroll';
+
+type Props = Readonly<{
+  tournaments: TournamentType[];
+}>;
+
+export const TournamentsList: FC<Props> = ({ tournaments }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useGrabScroll(scrollRef);
 
   return (
-    <>
-      <ErrorHandler />
-      <div className="tournaments">
-        {tournaments.map((tournament) => (
+    <div className="tournaments" ref={scrollRef}>
+      {tournaments.map((tournament) => (
+        <div key={tournament.id}>
           <Tournament
             key={tournament.id}
             tournament={tournament}
           />
-        ))}
-      </div>
-    </>
+        </div>
+      ))}
+    </div>
   );
+
 };
-
-
 
 export default TournamentsList;

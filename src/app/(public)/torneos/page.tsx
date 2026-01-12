@@ -1,6 +1,6 @@
 import { Suspense, type FC } from 'react';
 import type { Metadata } from 'next/types';
-import { TournamentsList } from './(components)/tournaments-list';
+import { Tournaments } from './(components)/tournaments';
 import { Heading } from '../components';
 import { TournamentsSkeleton } from './(components)/tournaments.skeleton';
 
@@ -18,7 +18,7 @@ export const TournamentsPage: FC = () => {
       </Heading>
 
       <Suspense fallback={<TournamentsSkeleton />}>
-        <TournamentsList />
+        <Tournaments />
       </Suspense>
     </div>
   );
