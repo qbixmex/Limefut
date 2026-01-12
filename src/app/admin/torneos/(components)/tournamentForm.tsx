@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FC } from 'react';
+import { ChangeEvent, useRef, useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -28,6 +28,8 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { cn, slugify } from '@/lib/utils';
 
 type Props = Readonly<{
   session: Session;
@@ -37,6 +39,7 @@ type Props = Readonly<{
 export const TournamentForm: FC<Props> = ({ session, tournament }) => {
   const route = useRouter();
   const formSchema = !tournament ? createTournamentSchema : editTournamentSchema;
+  const isPermalinkEdited = useRef(false);
   const [openInitDateCalendar, setOpenInitDateCalendar] = useState(false);
   const [openEndDateCalendar, setOpenEndDateCalendar] = useState(false);
 
@@ -58,6 +61,18 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       active: tournament?.active ?? false,
     },
   });
+
+  const handlePermalinkChange = (event: ChangeEvent<HTMLInputElement>) => {
+    isPermalinkEdited.current = true;
+    form.setValue('permalink', event.target.value, { shouldValidate: true });
+  };
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    form.setValue('name', event.target.value, { shouldValidate: true });
+    if (!isPermalinkEdited.current) {
+      form.setValue('permalink', slugify(event.target.value), { shouldValidate: true });
+    }
+  };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
@@ -151,7 +166,11 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                     Nombre <span className="text-amber-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={handleNameChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -169,7 +188,11 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                     Enlace Permanente <span className="text-amber-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={handlePermalinkChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -203,7 +226,24 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                 <FormItem>
                   <FormLabel>Formato</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Select
+                      value={field.value ?? undefined}
+                      onValueChange={(value) => field.onChange(value)}
+                    >
+                      <SelectTrigger
+                        className={cn('w-full', {
+                          'border-destructive ring-0.5 ring-destructive': form.formState.errors.format,
+                        })}
+                      >
+                        <SelectValue placeholder="Seleccione Formato" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="11">11 vs 11</SelectItem>
+                        <SelectItem value="9">9 vs 9</SelectItem>
+                        <SelectItem value="7">7 vs 7</SelectItem>
+                        <SelectItem value="5">5 vs 5</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

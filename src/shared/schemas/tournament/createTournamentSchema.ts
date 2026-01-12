@@ -15,7 +15,23 @@ export const createTournamentSchema = z.object({
     .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' }),
   permalink: z.string()
     .min(3, { message: '¡ El enlace permanente debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' }),
+    .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' })
+    .refine(
+      (value) => !/\s/.test(value),
+      { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
+    )
+    .refine(
+      (value) => !/[áéíóúÁÉÍÓÚ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener acentos (á, é, í, ó, ú) !' },
+    )
+    .refine(
+      (value) => !/[ñÑ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener la letra ñ !' },
+    )
+    .refine(
+      (value) => /^[a-zA-Z0-9_-]+$/.test(value),
+      { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
+    ),
   image: z
     .instanceof(File, { message: "La imagen debe ser un archivo" })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
@@ -23,7 +39,23 @@ export const createTournamentSchema = z.object({
     .nullish(),
   category: z.string()
     .min(3, { message: '¡ La categoría debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' }),
+    .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' })
+    .refine(
+      (value) => !/\s/.test(value),
+      { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
+    )
+    .refine(
+      (value) => !/[áéíóúÁÉÍÓÚ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener acentos (á, é, í, ó, ú) !' },
+    )
+    .refine(
+      (value) => !/[ñÑ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener la letra ñ !' },
+    )
+    .refine(
+      (value) => /^[a-zA-Z0-9_-]+$/.test(value),
+      { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
+    ),
   format: z.string()
     .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
     .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' }),
