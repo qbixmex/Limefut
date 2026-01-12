@@ -34,7 +34,7 @@ export const WeekSelector = () => {
       }}>
         <div className="flex gap-5">
           <Label className="space-x-5">
-            <span>Semana</span>
+            <span>Jornada</span>
             <Input
               id="week"
               type="number"

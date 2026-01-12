@@ -464,7 +464,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center gap-3">
-                    <Label htmlFor="currentWeek">Semana Actual</Label>
+                    <Label htmlFor="currentWeek">Jornada</Label>
                     <FormControl>
                       <Input
                         type="number"

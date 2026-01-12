@@ -2,23 +2,28 @@
 
 import prisma from "@/lib/prisma";
 
+export type TournamentType = {
+  id: string;
+  name: string;
+  category: string;
+  format: string;
+};
+
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
-  tournaments: {
-    id: string;
-    name: string;
-  }[] | null;
+  tournaments: TournamentType[];
 }>;
 
 export const fetchTournamentsForTeam = async (): ResponseFetchAction => {
   try {
     const tournaments = await prisma.tournament.findMany({
       orderBy: { name: 'asc' },
-      // where: { active: true },
       select: {
         id: true,
         name: true,
+        category: true,
+        format: true,
       },
     });
 
@@ -33,14 +38,14 @@ export const fetchTournamentsForTeam = async (): ResponseFetchAction => {
       return {
         ok: false,
         message: error.message,
-        tournaments: null,
+        tournaments: [],
       };
     }
     console.log(error);
     return {
       ok: false,
       message: "Error inesperado al obtener los torneos, revise los logs del servidor",
-      tournaments: null,
+      tournaments: [],
     };
   }
 };

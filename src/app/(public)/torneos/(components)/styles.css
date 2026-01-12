@@ -1,15 +1,31 @@
 @reference "../../../globals.css";
 
 .tournaments {
-  @apply
-    grid
-    grid-cols-1
-    md:grid-cols-2
-    lg:grid-cols-4
-    gap-5;
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.4);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.6);
+  }
+
+  @apply flex gap-5 py-5 overflow-x-scroll scroll-smooth;
+  cursor: grab;
+
+  &.grabbing {
+    cursor: grabbing;
+  }
 }
 
 .tournament {
+  width: 100%;
+  min-width: 250px;
+  max-width: 300px;
   @apply
     border
    border-gray-600
@@ -18,6 +34,7 @@
     hover:border-blue-500
     dark:hover:border-blue-600
     p-5;
+  user-select: none;
 }
 
 .tournamentName {
@@ -29,7 +46,5 @@
 }
 
 .tournamentData {
-  @apply
-    text-gray-700
-    dark:text-gray-200;
+  @apply text-gray-700 dark:text-gray-200;
 }

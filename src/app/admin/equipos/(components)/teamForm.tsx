@@ -19,8 +19,8 @@ import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
-import type { Coach, Team } from '@/shared/interfaces';
-import { createTeamAction, updateTeamAction } from '../(actions)';
+import type { Coach, Team, Tournament } from '@/shared/interfaces';
+import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { EmailInput } from './email-input';
@@ -43,14 +43,9 @@ import {
   SelectValue,
 } from '~/src/components/ui/select';
 
-type Tournament = {
-  id: string;
-  name: string;
-};
-
 type Props = Readonly<{
   session: Session;
-  tournaments: Tournament[];
+  tournaments: TournamentType[];
   coaches: Coach[];
   team?: Team & {
     tournament: Pick<Tournament, 'id' | 'name'> | null;
@@ -380,7 +375,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                         >
                           {field.value && selectedTournament
-                            ? selectedTournament.name
+                            ? `${selectedTournament.name}`
+                            + `, ${selectedTournament.category}`
+                            + `, ${selectedTournament.format} vs ${selectedTournament.format}`
                             : "Sin torneo asignado"}
                           <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -414,7 +411,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                     setTournamentsOpen(false);
                                   }}
                                 >
-                                  {tournament.name}
+                                  <span>{tournament.name},</span>
+                                  <span>{tournament.category},</span>
+                                  <span>{tournament.format} vs {tournament.format}</span>
                                   <Check
                                     className={cn(
                                       "ml-auto",

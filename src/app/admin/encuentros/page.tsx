@@ -9,7 +9,7 @@ import {
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import { Search } from "@/root/src/shared/components/search";
+import { Search } from "@/shared/components/search";
 import ClearFilters from "./(components)/clear-filters";
 import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
 import { TournamentsSelector } from "../(components)/tournaments-selector";

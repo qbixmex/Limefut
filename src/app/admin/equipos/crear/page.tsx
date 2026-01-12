@@ -10,7 +10,6 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { fetchTournamentsForTeam } from "../(actions)";
 import type { Coach} from "@/shared/interfaces";
-import { type Tournament } from "@/shared/interfaces";
 import { fetchCoachesForTeam } from "../(actions)/fetchCoachesForTeam";
 
 export const CreateTeam = async () => {
@@ -54,7 +53,7 @@ export const CreateTeam = async () => {
           <CardContent>
             <TeamForm
               session={session as Session}
-              tournaments={tournaments as Tournament[]}
+              tournaments={tournaments}
               coaches={coaches as Coach[]}
             />
           </CardContent>

@@ -18,6 +18,7 @@ export type TeamType = {
   imageUrl: string | null,
   category: string | null;
   format: string | null;
+  gender: string | null;
   active: boolean;
   coach: Pick<Coach, 'id' | 'name'> | null;
   playersCount: number;
@@ -71,6 +72,7 @@ export const fetchTeamsAction = async (
         imageUrl: true,
         category: true,
         format: true,
+        gender: true,
         active: true,
         coach: {
           select: {

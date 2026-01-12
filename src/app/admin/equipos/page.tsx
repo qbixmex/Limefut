@@ -1,13 +1,13 @@
 import { type FC, Suspense } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Plus } from "lucide-react";
-import Link from "next/link";
-import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
 import { TournamentsSelector } from "../(components)/tournaments-selector";
+import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
 import { Search } from "@/shared/components/search";
-import TeamsContent from "./(components)/teams-content";
+import { TeamsContent } from "./(components)/teams-content";
 import { ClearFilters } from "./(components)/clear-filters";
 import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
 

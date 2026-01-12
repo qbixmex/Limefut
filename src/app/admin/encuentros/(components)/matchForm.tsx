@@ -612,7 +612,7 @@ export const MatchForm: FC<Props> = ({
                 name="week"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Semana</FormLabel>
+                    <FormLabel>Jornada</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
