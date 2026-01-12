@@ -96,7 +96,7 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableHead className="text-gray-400">Semana Actual</TableHead>
+                <TableHead className="text-gray-400">Jornada</TableHead>
                 <TableCell className="text-gray-500">{tournament?.currentWeek}</TableCell>
               </TableRow>
             </TableBody>
