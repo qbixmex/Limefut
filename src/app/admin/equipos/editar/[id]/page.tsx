@@ -9,9 +9,9 @@ import {
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import type { Session } from "next-auth";
-import { fetchTeamAction, fetchTournamentsForTeam } from "../../(actions)";
+import { fetchTeamAction, fetchTournamentsForTeam, type TournamentType } from "../../(actions)";
 import { TeamForm } from "../../(components)/teamForm";
-import type { Coach, Tournament } from '@/shared/interfaces';
+import type { Coach } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from "../../(actions)/fetchCoachesForTeam";
 
 type Props = Readonly<{
@@ -54,7 +54,7 @@ export const EditTeam: FC<Props> = async ({ params }) => {
             <TeamForm
               session={session as Session}
               team={responseTeam.team!}
-              tournaments={tournaments as Tournament[]}
+              tournaments={tournaments as TournamentType[]}
               coaches={coaches as Coach[]}
             />
           </CardContent>

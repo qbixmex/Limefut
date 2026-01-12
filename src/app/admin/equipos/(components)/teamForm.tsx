@@ -19,8 +19,8 @@ import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
-import type { Coach, Team } from '@/shared/interfaces';
-import { createTeamAction, updateTeamAction } from '../(actions)';
+import type { Coach, Team, Tournament } from '@/shared/interfaces';
+import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { EmailInput } from './email-input';
@@ -43,16 +43,9 @@ import {
   SelectValue,
 } from '~/src/components/ui/select';
 
-type Tournament = {
-  id: string;
-  name: string;
-  category: string;
-  format: string;
-};
-
 type Props = Readonly<{
   session: Session;
-  tournaments: Tournament[];
+  tournaments: TournamentType[];
   coaches: Coach[];
   team?: Team & {
     tournament: Pick<Tournament, 'id' | 'name'> | null;

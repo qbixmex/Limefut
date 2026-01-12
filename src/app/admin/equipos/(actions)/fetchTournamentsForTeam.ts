@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 
-type TournamentType = {
+export type TournamentType = {
   id: string;
   name: string;
   category: string;
