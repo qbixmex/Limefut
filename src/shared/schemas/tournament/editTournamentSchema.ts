@@ -12,11 +12,11 @@ const ACCEPTED_FILE_TYPES = [
 export const editTournamentSchema = z.object({
   name: z.string()
     .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' })
+    .max(250, { message: '¡ El nombre debe ser menor a 250 caracteres !' })
     .optional(),
   permalink: z.string()
     .min(3, { message: '¡ El enlace permanente debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' })
+    .max(250, { message: '¡ El enlace permanente debe ser menor a 250 caracteres !' })
     .refine(
       (value) => !/\s/.test(value),
       { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
