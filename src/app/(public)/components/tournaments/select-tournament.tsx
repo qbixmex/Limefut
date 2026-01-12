@@ -1,12 +1,13 @@
 'use client';
 
-import type { FC } from "react";
+import { useRef, type FC } from "react";
 import {
   usePathname,
   useRouter,
   useSearchParams,
 } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useGrabScroll } from "@/shared/hooks/use-grab-scroll";
 import "./styles.css";
 
 type Props = Readonly<{
@@ -20,6 +21,7 @@ type Props = Readonly<{
 }>;
 
 export const SelectTournament: FC<Props> = ({ tournaments }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const sp = {
     permalink: searchParams.get('torneo'),
@@ -28,6 +30,8 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
   };
   const pathname = usePathname();
   const router = useRouter();
+
+  useGrabScroll(scrollRef);
 
   const setTournamentIdParam = ({
     permalink,
@@ -53,7 +57,7 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
         </h2>
       )}
 
-      <section className="tournaments">
+      <section className="tournaments" ref={scrollRef}>
         {tournaments.map(({ id, name, permalink, category, format }) => (
           <div
             key={id}
