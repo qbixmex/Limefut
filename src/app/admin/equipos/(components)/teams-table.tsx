@@ -50,8 +50,8 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                 <TableRow>
                   <TableHead className="w-[100px]">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead>Categoría</TableHead>
-                  <TableHead>Formato</TableHead>
+                  <TableHead className="text-center">Categoría</TableHead>
+                  <TableHead className="text-center">Formato</TableHead>
                   <TableHead>Entrenador</TableHead>
                   <TableHead className="text-center">Jugadores</TableHead>
                   <TableHead className="text-center">Activo</TableHead>
@@ -81,8 +81,10 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                       </Link>
                     </TableCell>
                     <TableCell>{team.name}</TableCell>
-                    <TableCell>{team.category}</TableCell>
-                    <TableCell>{team.format}</TableCell>
+                    <TableCell className="text-center">{team.category}</TableCell>
+                    <TableCell className="text-center">
+                      {team.format} vs {team.format}
+                    </TableCell>
                     <TableCell>
                       {team.coach ? (
                         <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>

@@ -15,10 +15,25 @@ export const editTeamSchema = z.object({
     .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
     .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' })
     .optional(),
-  permalink: z
-    .string('¡ El enlace permanente debe ser una cadena de texto !')
+  permalink: z.string()
     .min(3, { message: '¡ El enlace permanente debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' })
+    .max(250, { message: '¡ El enlace permanente debe ser menor a 250 caracteres !' })
+    .refine(
+      (value) => !/\s/.test(value),
+      { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
+    )
+    .refine(
+      (value) => !/[áéíóúÁÉÍÓÚ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener acentos (á, é, í, ó, ú) !' },
+    )
+    .refine(
+      (value) => !/[ñÑ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener la letra ñ !' },
+    )
+    .refine(
+      (value) => /^[a-zA-Z0-9_-]+$/.test(value),
+      { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
+    )
     .optional(),
   headquarters: z
     .string('¡ La sede debe ser una cadena de texto !')
@@ -32,6 +47,22 @@ export const editTeamSchema = z.object({
   category: z.string()
     .min(3, { message: '¡ La categoría debe ser mayor a 3 caracteres !' })
     .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' })
+    .refine(
+      (value) => !/\s/.test(value),
+      { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
+    )
+    .refine(
+      (value) => !/[áéíóúÁÉÍÓÚ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener acentos (á, é, í, ó, ú) !' },
+    )
+    .refine(
+      (value) => !/[ñÑ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener la letra ñ !' },
+    )
+    .refine(
+      (value) => /^[a-zA-Z0-9_-]+$/.test(value),
+      { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
+    )
     .optional(),
   format: z.string()
     .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
