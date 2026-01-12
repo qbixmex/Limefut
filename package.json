@@ -1,13 +1,13 @@
 {
   "name": "limefut",
-  "version": "0.54.7",
+  "version": "0.54.9",
   "private": true,
   "scripts": {
     "dev": "next dev --port=3000",
     "build": "next build",
     "preview": "next start",
     "lint": "eslint",
-    "postinstall": "npx prisma generate",
+    "postinstall": "npx prisma migrate deploy && npx prisma generate",
     "seed": "NODE_ENV=development tsx ./src/seed/seed-database.ts"
   },
   "dependencies": {
