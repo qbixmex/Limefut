@@ -18,7 +18,7 @@ export const cn = (...inputs: ClassValue[]) => {
 export const pad = (n: number, d = 2) => n.toString().padStart(d, '0');
 
 /**
- * Slugifies a string by converting it to a URL-friendly format.
+ * Slugify a string by converting it to a URL-friendly format.
  * @param name - The name to slugify
  * @example ```typescript
  * slugify("how to use the best image ever.png");
@@ -28,11 +28,11 @@ export const pad = (n: number, d = 2) => n.toString().padStart(d, '0');
  */
 export const slugify = (name: string): string => {
   return name
+    .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "") // remove accents
     .replace(/\.[^/.]+$/, "") // removes extension
     .trim() // removes trailing spaces
-    .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-") // replace non-alphanumeric characters with dashes
     .replace(/^-+|-+$/g, ""); // remove leading and trailing dashes
 };
