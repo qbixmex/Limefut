@@ -13,7 +13,7 @@ import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { CredentialsTableSkeleton } from "./(components)/CredentialsTableSkeleton";
 import { CredentialsTable } from "./(components)/CredentialsTable";
-import { Search } from "@/root/src/shared/components/search";
+import { Search } from "@/shared/components/search";
 
 type Props = Readonly<{
   searchParams?: Promise<{

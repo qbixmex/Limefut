@@ -11,7 +11,7 @@ import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { CoachesTable } from './(components)/coaches-table';
 import { CoachesTableSkeleton } from './(components)/coaches-table-skeleton';
-import { Search } from '@/root/src/shared/components/search';
+import { Search } from '@/shared/components/search';
 
 type Props = Readonly<{
   searchParams: Promise<{

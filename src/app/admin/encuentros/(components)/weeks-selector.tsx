@@ -23,15 +23,15 @@ export const WeeksSelector: FC<Props> = ({ weeks }) => {
       value={sortWeek ?? ''}
     >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Semana" />
+        <SelectValue placeholder="Jornada" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="asc">Semana <ArrowUp /></SelectItem>
-        <SelectItem value="desc">Semana <ArrowDown /></SelectItem>
+        <SelectItem value="asc">Ascendente <ArrowUp /></SelectItem>
+        <SelectItem value="desc">Descendente <ArrowDown /></SelectItem>
         {
           (weeks.length > 0) && weeks.map((week) => (
               <SelectItem key={week} value={`${week}`}>
-                Semana {week}
+                Jornada {week}
               </SelectItem>
             ))
         }
