@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import { Container, Footer, Header } from "./components";
 
+const DOMAIN = process.env.DOMAIN ?? 'http://localhost:3000';
+
 export const metadata: Metadata = {
   title: {
     default: "Limefut - Liga menor de futbol",
@@ -19,9 +21,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
      {
-       url: "https://limefut.netlify.app/liga-menor-de-futbol-black.webp",
-       width: 500,
-       height: 500,
+       url: `${DOMAIN}/limefut-logo-1200-x-630.webp`,
+       width: 1200,
+       height: 630,
        alt: "Liga menor de fútbol",
      },
     ],
@@ -32,9 +34,9 @@ export const metadata: Metadata = {
     description: "Liga menor de futbol para niños y jóvenes en México",
     images: [
       {
-        url: "https://limefut.netlify.app/liga-menor-de-futbol-black.webp",
-        width: 500,
-        height: 500,
+        url: `${DOMAIN}/limefut-logo-1200-x-630.webp`,
+        width: 1200,
+        height: 630,
         alt: "Liga menor de futbol Limefut",
       },
     ],
