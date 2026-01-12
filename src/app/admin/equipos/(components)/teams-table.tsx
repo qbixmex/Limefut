@@ -48,13 +48,14 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Imagen</TableHead>
+                  <TableHead className="w-25">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead className="text-center">Categoría</TableHead>
-                  <TableHead className="text-center">Formato</TableHead>
-                  <TableHead>Entrenador</TableHead>
-                  <TableHead className="text-center">Jugadores</TableHead>
-                  <TableHead className="text-center">Activo</TableHead>
+                  <TableHead className="w-25 text-center">Categoría</TableHead>
+                  <TableHead className="w-25 text-center">Formato</TableHead>
+                  <TableHead className="w-25 text-center">Rama</TableHead>
+                  <TableHead className="w-25">Entrenador</TableHead>
+                  <TableHead className="w-25 text-center">Jugadores</TableHead>
+                  <TableHead className="w-25 text-center">Activo</TableHead>
                   <TableHead>Acciones</TableHead>
                 </TableRow>
               </TableHeader>
@@ -85,10 +86,19 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                     <TableCell className="text-center">
                       {team.format} vs {team.format}
                     </TableCell>
+                    <TableCell className="text-center">
+                      {
+                        (team.gender === 'male')
+                          ? 'Varonil'
+                          : (team.gender === 'female')
+                            ? 'Femenil'
+                            : 'desconocida'
+                      }
+                    </TableCell>
                     <TableCell>
                       {team.coach ? (
                         <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
-                          {team.coach.name}
+                          <p className="text-wrap">{team.coach.name}</p>
                         </Link>
                       ) : (
                         <Badge variant="outline-secondary">No Asignado</Badge>

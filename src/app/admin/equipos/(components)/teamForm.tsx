@@ -46,6 +46,8 @@ import {
 type Tournament = {
   id: string;
   name: string;
+  category: string;
+  format: string;
 };
 
 type Props = Readonly<{
@@ -380,7 +382,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                         >
                           {field.value && selectedTournament
-                            ? selectedTournament.name
+                            ? `${selectedTournament.name}`
+                            + `, ${selectedTournament.category}`
+                            + `, ${selectedTournament.format} vs ${selectedTournament.format}`
                             : "Sin torneo asignado"}
                           <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -414,7 +418,9 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                     setTournamentsOpen(false);
                                   }}
                                 >
-                                  {tournament.name}
+                                  <span>{tournament.name},</span>
+                                  <span>{tournament.category},</span>
+                                  <span>{tournament.format} vs {tournament.format}</span>
                                   <Check
                                     className={cn(
                                       "ml-auto",

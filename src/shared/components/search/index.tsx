@@ -4,6 +4,7 @@ import { type FC, useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { SearchIcon, XIcon } from 'lucide-react';
+import "./styles.css";
 
 type Props = Readonly<{
   placeholder?: string;
@@ -31,7 +32,7 @@ export const Search: FC<Props> = ({ placeholder }) => {
       params.delete('query');
     }
     router.replace(`${pathname}?${params.toString()}`);
-  }, 300);
+  }, 500);
 
   const handleClearSearch = () => {
     setInputValue('');
@@ -39,10 +40,12 @@ export const Search: FC<Props> = ({ placeholder }) => {
   };
 
   return (
-    <div className="relative flex flex-1 shrink-0">
-      <label htmlFor="search" className="sr-only">Search</label>
+    <div className="main-wrapper">
+      <label htmlFor="search" className="sr-only">
+        Search
+      </label>
       <input
-        className="peer block w-80 rounded-md border border-gray-500 focus:border-blue-500 py-[9px] pl-10 text-sm outline-0 placeholder:text-gray-500 text-gray-400 italic"
+        className="peer input"
         placeholder={placeholder}
         onChange={(event) => {
           setInputValue(event.target.value);
@@ -50,12 +53,12 @@ export const Search: FC<Props> = ({ placeholder }) => {
         }}
         value={inputValue}
       />
-      <SearchIcon className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-blue-400" />
+      <SearchIcon className="searchIcon" />
       <button
-        className="absolute right-3 top-1/2 -translate-y-1/2"
+        className="button"
         onClick={handleClearSearch}
       >
-        <XIcon className="size-4.5 text-gray-500" />
+        <XIcon className="closeIcon" />
       </button>
     </div>
   );

@@ -1,0 +1,49 @@
+@reference "tailwindcss";
+
+.main-wrapper {
+  @apply relative flex flex-1 shrink-0;
+}
+
+.input {
+  @apply
+    block
+    w-full
+    lg:min-w-[300px]
+    rounded-md
+    border
+    border-gray-500
+    focus:border-blue-500
+    py-2
+    pl-10
+    text-sm
+    outline-0
+    placeholder:text-gray-500
+    text-gray-400
+    italic
+  ;
+}
+
+.searchIcon {
+  @apply
+    absolute
+    left-3
+    top-1/2
+    size-5
+    -translate-y-1/2
+    text-gray-500
+    peer-focus:text-blue-400
+  ;
+}
+
+.closeIcon {
+  @apply size-4.5 text-gray-500;
+}
+
+.button {
+  @apply
+    absolute
+    right-3
+    top-1/2
+    -translate-y-1/2
+  ;
+}

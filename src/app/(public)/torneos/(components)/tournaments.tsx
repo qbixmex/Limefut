@@ -1,0 +1,18 @@
+import type { FC } from 'react';
+import { fetchTournamentsAction } from '../(actions)/fetchTournamentsAction';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { TournamentsList } from './tournaments-list';
+import "./styles.css";
+
+export const Tournaments: FC = async () => {
+  const { tournaments } = await fetchTournamentsAction();
+
+  return (
+    <>
+      <ErrorHandler />
+      <TournamentsList tournaments={tournaments} />
+    </>
+  );
+};
+
+export default TournamentsList;

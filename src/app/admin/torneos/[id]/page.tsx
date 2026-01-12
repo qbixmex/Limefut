@@ -87,7 +87,9 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold">Formato</TableHead>
-                      <TableCell>{tournament.format}</TableCell>
+                      <TableCell>
+                        {tournament.format} vs {tournament.format}
+                      </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold">Descripción</TableHead>

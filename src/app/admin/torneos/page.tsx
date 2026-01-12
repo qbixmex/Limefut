@@ -8,10 +8,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Plus } from "lucide-react";
-import { ErrorHandler } from "@/shared/components/errorHandler";
 import { TournamentsTable } from "./(components)/tournamentsTable";
-import { Search } from "@/shared/components/search";
 import { TournamentsTableSkeleton } from "./(components)/tournaments-table-skeleton";
+import { ErrorHandler } from "@/shared/components/errorHandler";
+import { Search } from "@/shared/components/search";
 
 type Props = Readonly<{
   searchParams?: Promise<{
@@ -31,9 +31,9 @@ export const TournamentPage: FC<Props> = async (props) => {
       <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
         <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
           <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
-            <CardHeader className="flex items-center justify-between">
+            <CardHeader className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <CardTitle>Lista de Torneos</CardTitle>
-              <section className="flex gap-5 items-center">
+              <section className="flex gap-5 mt-3 lg:mt-0 items-center">
                 <Search placeholder="Buscar torneo ..." />
                 <Tooltip>
                   <TooltipTrigger asChild>

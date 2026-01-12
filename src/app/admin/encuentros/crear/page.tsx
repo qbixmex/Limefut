@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MatchWrapper } from "./create-match-content";
-import TournamentsSelector from "../(components)/selectors/tournaments-selector";
+import { TournamentsSelector } from "../(components)/selectors/tournaments-selector";
 import { TournamentsSelectorSkeleton } from "~/src/app/(public)/components";
 
 type Props = Readonly<{
