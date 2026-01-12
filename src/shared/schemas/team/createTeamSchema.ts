@@ -12,10 +12,26 @@ const ACCEPTED_FILE_TYPES = [
 export const createTeamSchema = z.object({
   name: z.string()
     .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' }),
+    .max(250, { message: '¡ El nombre debe ser menor a 250 caracteres !' }),
   permalink: z.string()
     .min(3, { message: '¡ El enlace permanente debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' }),
+    .max(250, { message: '¡ El enlace permanente debe ser menor a 250 caracteres !' })
+    .refine(
+      (value) => !/\s/.test(value),
+      { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
+    )
+    .refine(
+      (value) => !/[áéíóúÁÉÍÓÚ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener acentos (á, é, í, ó, ú) !' },
+    )
+    .refine(
+      (value) => !/[ñÑ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener la letra ñ !' },
+    )
+    .refine(
+      (value) => /^[a-zA-Z0-9_-]+$/.test(value),
+      { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
+    ),
   headquarters: z.string()
     .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
     .max(200, { message: '¡ La sede debe ser menor a 200 caracteres !' }),
@@ -26,7 +42,23 @@ export const createTeamSchema = z.object({
     .nullish(),
   category: z.string()
     .min(3, { message: '¡ La categoría debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' }),
+    .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' })
+    .refine(
+      (value) => !/\s/.test(value),
+      { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
+    )
+    .refine(
+      (value) => !/[áéíóúÁÉÍÓÚ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener acentos (á, é, í, ó, ú) !' },
+    )
+    .refine(
+      (value) => !/[ñÑ]/.test(value),
+      { message: '¡ El enlace permanente no debe contener la letra ñ !' },
+    )
+    .refine(
+      (value) => /^[a-zA-Z0-9_-]+$/.test(value),
+      { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
+    ),
   format: z.string()
     .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
     .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' }),

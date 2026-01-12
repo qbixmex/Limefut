@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type FC } from 'react';
+import { type ChangeEvent, useEffect, useRef, useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -34,8 +34,14 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { cn } from '@/root/src/lib/utils';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/src/components/ui/select';
+import { cn, slugify } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/src/components/ui/select';
 
 type Tournament = {
   id: string;
@@ -55,6 +61,7 @@ type Props = Readonly<{
 export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => {
   const route = useRouter();
   const formSchema = !team ? createTeamSchema : editTeamSchema;
+  const isPermalinkEdited = useRef(false);
   const [tournamentsOpen, setTournamentsOpen] = useState(false);
   const [coachesOpen, setCoachesOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -87,6 +94,18 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   }, [team, form]);
+
+  const handlePermalinkChange = (event: ChangeEvent<HTMLInputElement>) => {
+    isPermalinkEdited.current = true;
+    form.setValue('permalink', event.target.value, { shouldValidate: true });
+  };
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    form.setValue('name', event.target.value, { shouldValidate: true });
+    if (!isPermalinkEdited.current) {
+      form.setValue('permalink', slugify(event.target.value), { shouldValidate: true });
+    }
+  };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
@@ -183,7 +202,11 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                     Nombre
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={handleNameChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -199,7 +222,11 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                 <FormItem>
                   <FormLabel>Enlace Permanente</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={handlePermalinkChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -283,7 +310,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                     >
                       <SelectTrigger
                         className={cn('w-full', {
-                          'border-destructive ring-0.5 ring-destructive': form.formState.errors.gender,
+                          'border-destructive ring-0.5 ring-destructive': form.formState.errors.format,
                         })}
                       >
                         <SelectValue placeholder="Seleccione Formato" />
