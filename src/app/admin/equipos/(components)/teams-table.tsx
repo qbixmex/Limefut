@@ -52,6 +52,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                   <TableHead>Nombre</TableHead>
                   <TableHead className="w-25 text-center">Categoría</TableHead>
                   <TableHead className="w-25 text-center">Formato</TableHead>
+                  <TableHead className="w-25 text-center">Rama</TableHead>
                   <TableHead className="w-25">Entrenador</TableHead>
                   <TableHead className="w-25 text-center">Jugadores</TableHead>
                   <TableHead className="w-25 text-center">Activo</TableHead>
@@ -84,6 +85,15 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                     <TableCell className="text-center">{team.category}</TableCell>
                     <TableCell className="text-center">
                       {team.format} vs {team.format}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {
+                        (team.gender === 'male')
+                          ? 'Varonil'
+                          : (team.gender === 'female')
+                            ? 'Femenil'
+                            : 'desconocida'
+                      }
                     </TableCell>
                     <TableCell>
                       {team.coach ? (
