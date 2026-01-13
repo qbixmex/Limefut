@@ -41,6 +41,7 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
   revalidatePath('/admin/torneos');
   updateTag("admin-tournaments-list");
   updateTag("public-tournaments-list");
+  updateTag("tournaments-list");
   updateTag("public-tournaments");
   updateTag("public-tournament");
   updateTag("dashboard-tournaments");
