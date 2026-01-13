@@ -87,7 +87,9 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell className="text-center">
                       {`${tournament.format} vs ${tournament.format}`}
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell text-center">{tournament.season}</TableCell>
+                    <TableCell className="hidden lg:table-cell text-center">
+                      {tournament.season}
+                    </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">
                       {tournament.currentWeek}
                     </TableCell>
