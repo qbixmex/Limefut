@@ -42,7 +42,7 @@ export const fetchResultsAction = async (
   cacheLife('days');
   cacheTag('public-results');
 
-  const tournament = await prisma.tournament.findUnique({
+  const tournament = await prisma.tournament.findFirst({
     where: {
       permalink: tournamentPermalink,
       category,
