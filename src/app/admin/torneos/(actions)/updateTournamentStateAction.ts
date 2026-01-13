@@ -34,6 +34,7 @@ export const updateTournamentStateAction = async (id: string, state: boolean): R
   // Update Cache
   updateTag("admin-tournaments-list");
   updateTag("public-tournaments-list");
+  updateTag("tournaments-list");
   updateTag("public-tournaments");
   updateTag("public-tournament");
   updateTag("dashboard-tournaments");
