@@ -61,21 +61,6 @@ export const createTournamentAction = async (
 
   const { image, ...tournamentToSave } = tournamentVerified.data;
 
-  // Verify tournament existence by permalink
-  const foundTournament = await prisma.tournament.count({
-    where: {
-      permalink: tournamentToSave.permalink,
-    },
-  });
-
-  if (foundTournament > 0) {
-    return {
-      ok: false,
-      message: `¡ El enlace permanente, "${tournamentToSave.permalink}", ya existe, elija otro !`,
-      tournament: null,
-    };
-  }
-
   // Upload Image to third-party storage (cloudinary).
   let cloudinaryResponse: CloudinaryResponse | null = null;
 
