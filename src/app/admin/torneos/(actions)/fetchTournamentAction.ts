@@ -25,6 +25,8 @@ export type TournamentType = {
     id: string;
     name: string;
   }[];
+  stage: string;
+  teamsQuantity: number;
 };
 
 type FetchTournamentResponse = Promise<{
@@ -55,6 +57,9 @@ export const fetchTournamentAction = async (
             name: true,
           },
         },
+        _count: {
+          select: { teams: true },
+        },
       },
     });
 
@@ -69,7 +74,10 @@ export const fetchTournamentAction = async (
     return {
       ok: true,
       message: '¡ Torneo obtenido correctamente 👍 !',
-      tournament,
+      tournament: {
+        ...tournament,
+        teamsQuantity: tournament._count.teams ?? 0,
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

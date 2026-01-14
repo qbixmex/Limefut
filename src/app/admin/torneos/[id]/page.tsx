@@ -19,6 +19,7 @@ import { fetchTournamentAction } from "../(actions)";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import type { TournamentType } from "../(actions)/fetchTournamentAction";
+import { getStageTranslation } from "@/lib/utils";
 
 type Props = Readonly<{
   params: Promise<{
@@ -101,7 +102,25 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                         </TableRow>
                         <TableRow>
                           <TableHead className="font-semibold">Jornada</TableHead>
-                          <TableCell>{tournament.currentWeek}</TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={
+                                (tournament.currentWeek as number > 0)
+                                  ? 'outline-info'
+                                  : 'outline-secondary'
+                              }
+                            >
+                              {tournament.currentWeek}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableHead className="font-semibold">Fase</TableHead>
+                          <TableCell>
+                            <Badge variant={getStageTranslation(tournament.stage).variant}>
+                              {getStageTranslation(tournament.stage).label}
+                            </Badge>
+                          </TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -142,12 +161,27 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                           </TableCell>
                         </TableRow>
                         <TableRow>
+                          <TableHead className="font-semibold">
+                            Equipos
+                          </TableHead>
+                          <TableCell>
+                            <Badge
+                              variant={(tournament.teamsQuantity > 0)
+                                ? "outline-info"
+                                : "outline-secondary"
+                              }
+                            >
+                              {tournament.teamsQuantity}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
                           <TableHead className="font-medium">Activo</TableHead>
                           <TableCell>
                             {
                               tournament.active
-                                ? <Badge variant="outline-info">Activo</Badge>
-                                : <Badge variant="outline-warning">No Activo</Badge>
+                                ? <Badge variant="outline-info">activo</Badge>
+                                : <Badge variant="outline-secondary">desactivado</Badge>
                             }
                           </TableCell>
                         </TableRow>
