@@ -23,6 +23,7 @@ export type ResponseFetch = Promise<{
     format: string;
     currentWeek: number | null;
     active: boolean;
+    teamsQuantity: number;
   }[] | null;
   pagination: Pagination | null;
 }>;
@@ -65,6 +66,9 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
         format: true,
         currentWeek: true,
         active: true,
+        _count: {
+          select: { teams: true },
+        },
       },
       take: take,
       skip: (page - 1) * take,
@@ -85,6 +89,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
         format: tournament.format,
         currentWeek: tournament.currentWeek,
         active: tournament.active,
+        teamsQuantity: tournament._count?.teams ?? 0,
       })),
       pagination: {
         currentPage: page,
