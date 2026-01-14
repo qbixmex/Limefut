@@ -1,6 +1,7 @@
 'use client';
 
-import { type ChangeEvent, useRef, useState, type FC } from 'react';
+import type { FC, ChangeEvent } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -79,6 +80,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
+
     if (data.category) formData.append('category', data.category as string);
     if (data.format) formData.append('format', data.format as string);
     if (data.country) formData.append('country', data.country as string);
@@ -105,7 +107,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     formData.append('currentWeek', String(data.currentWeek ?? 0));
     formData.append('active', String(data.active ?? false));
 
-    // Create tournament
+    // Create Tournament
     if (!tournament) {
       const response = await createTournamentAction(
         formData,
@@ -121,7 +123,6 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
         toast.success(response.message);
         form.reset();
         route.replace(`/admin/torneos/${response.tournament?.id}`);
-        route.refresh();
       }
       return;
     }
@@ -141,8 +142,8 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
       if (response.ok) {
         toast.success(response.message);
+        form.reset();
         route.replace(`/admin/torneos/${response.tournament?.id}`);
-        route.refresh();
         return;
       }
     }
@@ -227,6 +228,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                   <FormLabel>Formato</FormLabel>
                   <FormControl>
                     <Select
+                      key={String(field.value ?? 'none')}
                       value={field.value ?? undefined}
                       onValueChange={(value) => field.onChange(value)}
                     >
@@ -508,7 +510,10 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
             type="button"
             variant="outline-secondary"
             size="lg"
-            onClick={() => route.back()}
+            onClick={() => {
+              form.reset();
+              route.back();
+            }}
           >
             cancelar
           </Button>

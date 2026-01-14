@@ -13,6 +13,8 @@ import { ErrorHandler } from "~/src/shared/components/errorHandler";
 import { format as formatDate } from "date-fns";
 import { es } from "date-fns/locale";
 import "./style.css";
+import { Badge } from "~/src/components/ui/badge";
+import { getStageTranslation } from "~/src/lib/utils";
 
 type Props = Readonly<{
   params: Promise<{
@@ -95,7 +97,25 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Jornada</TableHead>
-                    <TableCell>{tournament.currentWeek}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          (tournament.currentWeek as number > 0)
+                            ? 'outline-info'
+                            : 'outline-secondary'
+                        }
+                      >
+                        {tournament.currentWeek}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="font-semibold">Fase</TableHead>
+                    <TableCell>
+                      <Badge variant={getStageTranslation(tournament.stage).variant}>
+                        {getStageTranslation(tournament.stage).label}
+                      </Badge>
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -103,6 +123,20 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
             <div className="w-full lg:w-1/2">
               <Table>
                 <TableBody>
+                  <TableRow>
+                    <TableHead className="w-auto md:w-28 font-semibold">Equipos</TableHead>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          (tournament.teamsQuantity > 0)
+                            ? 'outline-info'
+                            : 'outline-secondary'
+                        }
+                      >
+                        {tournament.teamsQuantity}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
                   <TableRow>
                     <TableHead className="w-auto md:w-28 font-semibold">País</TableHead>
                     <TableCell>{tournament.country}</TableCell>

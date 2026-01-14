@@ -29,7 +29,9 @@ export const ActiveTournaments = async () => {
             {tournaments.map(({ id, name, category, format }) => (
               <TableRow key={id}>
                 <TableCell>
-                  {name}, {category}, {format} vs {format}
+                  <p className="text-pretty">
+                    {name}, {category}, {format} vs {format}
+                  </p>
                 </TableCell>
                 <TableCell>
                   <Link href={`/admin/torneos/${id}`}>
