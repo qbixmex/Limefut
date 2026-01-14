@@ -20,7 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import { DeleteTournament } from './delete-tournament';
 import { Pagination } from '@/shared/components/pagination';
-import { cn } from '@/lib/utils';
+import { cn, getStageTranslation } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '~/src/components/ui/badge';
 
@@ -58,6 +58,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                   <TableHead className="hidden lg:table-cell w-25 text-center">Temporada</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Jornada</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Equipos</TableHead>
+                  <TableHead className="hidden lg:table-cell w-25 text-center">Fase</TableHead>
                   <TableHead className="hidden lg:table-cell text-center">Activo</TableHead>
                   <TableHead>Acciones</TableHead>
                 </TableRow>
@@ -110,6 +111,11 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         }
                       >
                         {tournament.teamsQuantity}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell text-center">
+                      <Badge variant={getStageTranslation(tournament.stage).variant}>
+                        {getStageTranslation(tournament.stage).label}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">

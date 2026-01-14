@@ -1,6 +1,7 @@
 'use client';
 
-import { type ChangeEvent, useRef, useState, type FC, useEffect } from 'react';
+import type { FC, ChangeEvent } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {

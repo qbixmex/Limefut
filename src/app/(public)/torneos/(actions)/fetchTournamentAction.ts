@@ -18,6 +18,7 @@ export type TournamentType = {
   startDate: Date;
   endDate: Date;
   currentWeek: number | null;
+  stage: string;
   teams: {
     id: string;
     name: string;
@@ -26,6 +27,7 @@ export type TournamentType = {
     format: string;
     imageUrl: string | null;
   }[];
+  teamsQuantity: number;
 };
 
 type FetchTournamentResponse = Promise<{
@@ -66,6 +68,7 @@ export const fetchTournamentAction = async (
         startDate: true,
         endDate: true,
         currentWeek: true,
+        stage: true,
         teams: {
           select: {
             id: true,
@@ -74,6 +77,11 @@ export const fetchTournamentAction = async (
             category: true,
             format: true,
             imageUrl: true,
+          },
+        },
+        _count: {
+          select: {
+            teams: true,
           },
         },
       },
@@ -90,7 +98,10 @@ export const fetchTournamentAction = async (
     return {
       ok: true,
       message: '¡ Torneo obtenido correctamente 👍 !',
-      tournament,
+      tournament: {
+        ...tournament,
+        teamsQuantity: tournament._count.teams ?? 0,
+      },
     };
   } catch (error) {
     if (error instanceof Error) {
