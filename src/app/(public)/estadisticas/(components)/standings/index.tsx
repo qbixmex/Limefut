@@ -23,7 +23,11 @@ export const Standings: FC<Props> = async ({ searchParams }) => {
 
   return (
     <Suspense
-      key={`${tournament}-${category}-${format}`}
+      key={
+        `${tournament ?? 'tournament'}`
+        + `-${category ?? 'category'}`
+        + `-${format ?? 'format'}`
+      }
       fallback={<StandingsSkeleton />}
     >
       <StandingsTable

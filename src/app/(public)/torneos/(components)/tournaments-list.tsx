@@ -1,20 +1,17 @@
 'use client';
 
-import { type FC, useRef } from 'react';
+import { type FC } from 'react';
 import type { TournamentType } from '../(actions)/fetchTournamentsAction';
 import { Tournament } from './tournament';
-import { useGrabScroll } from '@/shared/hooks/use-grab-scroll';
+import "./styles.css";
 
 type Props = Readonly<{
   tournaments: TournamentType[];
 }>;
 
 export const TournamentsList: FC<Props> = ({ tournaments }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  useGrabScroll(scrollRef);
-
   return (
-    <div className="tournaments" ref={scrollRef}>
+    <div className="tournaments">
       {tournaments.map((tournament) => (
         <div key={tournament.id}>
           <Tournament
@@ -25,7 +22,6 @@ export const TournamentsList: FC<Props> = ({ tournaments }) => {
       ))}
     </div>
   );
-
 };
 
 export default TournamentsList;

@@ -1,13 +1,13 @@
 import { Suspense, type FC } from 'react';
 import type { Metadata } from 'next/types';
-import { Tournaments } from './(components)/tournaments';
+import { TournamentsContainer } from './(components)/tournaments-container';
 import { Heading } from '../components';
 import { TournamentsSkeleton } from './(components)/tournaments.skeleton';
 
 export const metadata: Metadata = {
   title: 'Torneos',
   description: 'Torneos en marcha de la liga menores de fútbol',
-  robots: 'noindex, nofollow',
+  robots: 'index, follow',
 };
 
 export const TournamentsPage: FC = () => {
@@ -16,9 +16,8 @@ export const TournamentsPage: FC = () => {
       <Heading level="h1" className="text-emerald-600">
         Torneos
       </Heading>
-
       <Suspense fallback={<TournamentsSkeleton />}>
-        <Tournaments />
+        <TournamentsContainer />
       </Suspense>
     </div>
   );
