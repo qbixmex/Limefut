@@ -2,9 +2,8 @@ import type { FC } from 'react';
 import { fetchTournamentsAction } from '../(actions)/fetchTournamentsAction';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { TournamentsList } from './tournaments-list';
-import "./styles.css";
 
-export const Tournaments: FC = async () => {
+export const TournamentsContainer: FC = async () => {
   const { tournaments } = await fetchTournamentsAction();
 
   return (
@@ -15,4 +14,4 @@ export const Tournaments: FC = async () => {
   );
 };
 
-export default TournamentsList;
+export default TournamentsContainer;

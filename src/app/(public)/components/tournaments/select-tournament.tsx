@@ -1,37 +1,36 @@
 'use client';
 
-import { useRef, type FC } from "react";
-import {
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useEffect, useState, type FC } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useGrabScroll } from "@/shared/hooks/use-grab-scroll";
+import { Button } from "@/components/ui/button";
 import "./styles.css";
 
+type SelectedTournament = {
+  id: string;
+  name: string;
+  permalink?: string;
+  category: string;
+  format: string;
+};
+
 type Props = Readonly<{
-  tournaments: {
-    id: string;
-    name: string;
-    permalink: string;
-    category: string;
-    format: string;
-  }[];
+  tournaments: SelectedTournament[];
 }>;
 
 export const SelectTournament: FC<Props> = ({ tournaments }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const searchParams = useSearchParams();
-  const sp = {
-    permalink: searchParams.get('torneo'),
-    category: searchParams.get('categoria'),
-    format: searchParams.get('formato'),
-  };
+  const [showTournaments, setShowTournaments] = useState(true);
+  const [selectedTournament, setSelectedTournament] = useState<SelectedTournament | null>(null);
   const pathname = usePathname();
   const router = useRouter();
 
-  useGrabScroll(scrollRef);
+  useEffect(() => {
+    return () => {
+      setShowTournaments(true);
+      // setParams(null);
+      setSelectedTournament(null);
+    };
+  }, []);
 
   const setTournamentIdParam = ({
     permalink,
@@ -46,43 +45,70 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
     params.set('torneo', permalink);
     params.set('categoria', category);
     params.set('formato', format);
+    setShowTournaments(false);
     router.push(`${pathname}?${params}`);
   };
 
   return (
     <>
-      {!sp.permalink && !sp.category && !sp.format && (
+      {showTournaments && (
         <h2 className="text-2xl text-sky-500 font-semibold italic">
           Seleccione un torneo
         </h2>
       )}
 
-      <section className="tournaments" ref={scrollRef}>
-        {tournaments.map(({ id, name, permalink, category, format }) => (
-          <div
-            key={id}
-            role="button"
-            tabIndex={0}
-            className={cn('tournament', {
-              'tournamentSelected': (sp.permalink === permalink)
-                && (sp.category === category)
-                && sp.format === format
-                ,
-            })}
-            onClick={() => setTournamentIdParam({
-              permalink,
-              category,
-              format,
-            })}
-          >
-            <p className="tournamentName">{name}</p>
-            <div className="tournamentData">
-              <p><b>Categoría</b>: {category}</p>
-              <p><b>Formato</b>: {`${format} vs ${format}`}</p>
+      {showTournaments && (
+        <section className="tournaments-selector">
+          {tournaments.map(({ id, name, permalink, category, format }) => (
+            <div
+              key={id}
+              role="button"
+              tabIndex={0}
+              className={cn('tournament', {
+                'tournamentSelected': selectedTournament?.id === id,
+              })}
+              onClick={() => {
+                setSelectedTournament({
+                  id,
+                  name,
+                  category,
+                  format,
+                });
+                setTournamentIdParam({
+                  permalink: permalink as string,
+                  category,
+                  format,
+                });
+              }}
+            >
+              <p className="tournamentName">{name}</p>
+              <div className="tournamentData">
+                <p><b>Categoría</b>: {category}</p>
+                <p><b>Formato</b>: {`${format} vs ${format}`}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      )}
+
+      {!showTournaments && (
+        <section className="w-full lg:max-w-1/4 space-y-5 mb-5">
+          {pathname !== '/estadisticas' && (
+            <section className="selected-tournament">
+              <p className="tournamentName">{selectedTournament?.name}</p>
+              <div className="tournamentData">
+                <p><b>Categoría</b>: {selectedTournament?.category}</p>
+                <p><b>Formato</b>: {`${selectedTournament?.format} vs ${selectedTournament?.format}`}</p>
+              </div>
+            </section>
+          )}
+          <Button
+            variant="outline-primary"
+            onClick={() => setShowTournaments(true)}
+            className="w-full"
+          >Cambiar Torneo</Button>
+        </section>
+      )}
     </>
   );
 };

@@ -20,7 +20,7 @@ export const ResultsPage: FC<Props> = ({ searchParams }) => {
     <>
       <div className="wrapper dark:bg-gray-600/20!">
         <Heading level="h1" className="text-emerald-600">
-          Roles de Juego y Resultados
+          Rol de Juegos y Resultados
         </Heading>
         <Suspense fallback={<TournamentsSelectorSkeleton />}>
           <TournamentsSelector />
