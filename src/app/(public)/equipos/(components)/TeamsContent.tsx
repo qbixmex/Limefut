@@ -15,7 +15,11 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
 
   return (
     <Suspense
-      key={`tournament-${params.torneo}-category-${params.categoria}-formato-${params.formato}`}
+      key={
+        `${params.torneo ?? 'tournament'}`
+        + `-${params.categoria ?? 'category'}`
+        + `-${params.formato ?? 'format'}`
+      }
       fallback={<TeamsSkeleton />}
     >
       <TeamsList
