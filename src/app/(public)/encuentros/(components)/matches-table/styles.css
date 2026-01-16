@@ -4,35 +4,35 @@
   @apply w-full overflow-auto md:w-full md:overflow-x-visible pb-10 mb-5;
 }
 
-table {
+table.concentrated-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 8px;
   margin-bottom: 40px;
 }
 
-table thead tr th,
-table tbody tr td {
+table.concentrated-table thead tr th,
+table.concentrated-table tbody tr td {
   @apply text-gray-600 dark:text-gray-300;
 }
 
-table thead tr th {
+table.concentrated-table thead tr th {
   text-align: center;
   padding: 8px 14px;
   font-weight: bold;
 }
 
-table thead tr th:nth-child(1) {
+table.concentrated-table thead tr th:nth-child(1) {
   text-align: right;
   width: 250px;
 }
 
-table thead tr th:nth-child(2) {
+table.concentrated-table thead tr th:nth-child(2) {
   width: 50px;
 }
 
-table thead tr th:nth-child(n+3),
-table tbody tr td:nth-child(n+3) {
+table.concentrated-table thead tr th:nth-child(n+3),
+table.concentrated-table tbody tr td:nth-child(n+3) {
   width: 100px !important;
   max-width: 100px;
   overflow: hidden;
@@ -40,7 +40,7 @@ table tbody tr td:nth-child(n+3) {
   white-space: nowrap;
 }
 
-table tbody tr td {
+table.concentrated-table tbody tr td {
   text-align: center;
   font-weight: 600;
   @apply
@@ -53,30 +53,30 @@ table tbody tr td {
   ;
 }
 
-table tbody tr td:nth-child(1),
-table tbody tr td:nth-child(2) {
+table.concentrated-table tbody tr td:nth-child(1),
+table.concentrated-table tbody tr td:nth-child(2) {
   border: none;
   border-radius: 0px;
 }
 
-table tbody tr td:nth-child(1) {
+table.concentrated-table tbody tr td:nth-child(1) {
   text-align: right;
 }
 
-table tbody tr td:nth-child(2) {
+table.concentrated-table tbody tr td:nth-child(2) {
   width: 50px;
 }
 
-table tbody tr td.empty {
+table.concentrated-table tbody tr td.empty {
   font-weight: normal;
   @apply bg-gray-400 dark:bg-gray-800;
 }
 
-table tbody tr:hover td[data-row-label] {
-  @apply underline;
+table.concentrated-table tbody tr:hover td[data-row-label] a {
+  @apply underline text-amber-500! dark:text-amber-500!;
 }
 
-table tbody td:hover {
+table.concentrated-table tbody td:nth-child(n+3):hover {
   @apply bg-gray-200 dark:bg-gray-700;
 }
 
@@ -88,8 +88,8 @@ table tbody td:hover {
   @apply bg-amber-500! dark:bg-amber-600!;
 }
 
-.highlight-team {
-  @apply underline;
+.highlight-team a {
+  @apply underline text-amber-500! dark:text-amber-500!;
 }
 
 .status {
@@ -134,13 +134,13 @@ table tbody td:hover {
 }
 
 .status-canceled {
-  @apply bg-rose-500 dark:bg-rose-600 text-rose-50;
+  @apply bg-red-500 dark:bg-red-700 text-red-50;
 }
 
 .status-postposed {
   @apply bg-indigo-400 dark:bg-indigo-500 text-indigo-50;
 }
 
-.status-finished {
+.status-completed {
   @apply bg-emerald-500 dark:bg-emerald-600 text-emerald-50;
 }
