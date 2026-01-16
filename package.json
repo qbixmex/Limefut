@@ -1,6 +1,6 @@
 {
   "name": "limefut",
-  "version": "0.57.6",
+  "version": "0.57.7",
   "private": true,
   "scripts": {
     "dev": "next dev --port=3000",
