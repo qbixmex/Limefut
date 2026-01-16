@@ -41,7 +41,6 @@ export const editTournamentSchema = z.object({
     .nullish(),
   description: z.string()
     .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' })
-    .max(250, { message: '¡ La descripción debe ser menor a 250 caracteres !' })
     .optional(),
   category: z
     .string('¡ La categoría debe ser una cadena de texto !')
