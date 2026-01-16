@@ -3,13 +3,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@/auth";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableHead, TableCell, TableRow } from "@/components/ui/table";
 import { Pencil, Trophy } from "lucide-react";
 import { Badge } from "@/root/src/components/ui/badge";
 import Link from "next/link";
@@ -103,13 +97,7 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                         <TableRow>
                           <TableHead className="font-semibold">Jornada</TableHead>
                           <TableCell>
-                            <Badge
-                              variant={
-                                (tournament.currentWeek as number > 0)
-                                  ? 'outline-info'
-                                  : 'outline-secondary'
-                              }
-                            >
+                            <Badge variant={(tournament.currentWeek as number > 0) ? 'outline-info' : 'outline-secondary'}>
                               {tournament.currentWeek}
                             </Badge>
                           </TableCell>
@@ -137,7 +125,9 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
                           <TableCell>{tournament.state}</TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableHead className="font-semibold">City</TableHead>
+                          <TableHead className="font-semibold">
+                            Ciudad<span className="text-gray-400">es</span>
+                          </TableHead>
                           <TableCell>
                             <p className="text-wrap">{tournament.city}</p>
                           </TableCell>

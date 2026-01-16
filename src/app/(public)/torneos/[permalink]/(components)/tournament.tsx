@@ -126,13 +126,7 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                   <TableRow>
                     <TableHead className="w-auto md:w-28 font-semibold">Equipos</TableHead>
                     <TableCell>
-                      <Badge
-                        variant={
-                          (tournament.teamsQuantity > 0)
-                            ? 'outline-info'
-                            : 'outline-secondary'
-                        }
-                      >
+                      <Badge variant={(tournament.teamsQuantity > 0) ? 'outline-info' : 'outline-secondary'}>
                         {tournament.teamsQuantity}
                       </Badge>
                     </TableCell>
@@ -146,7 +140,9 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                     <TableCell>{tournament.state}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">City</TableHead>
+                    <TableHead className="font-semibold">
+                      Ciudad<span className="text-gray-400">es</span>
+                    </TableHead>
                     <TableCell>
                       <p className="text-wrap">{tournament.city}</p>
                     </TableCell>
