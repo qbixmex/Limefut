@@ -18,11 +18,13 @@ export type ResponseFetch = Promise<{
   }[];
 }>;
 
-export const fetchLatestTournamentsAction = async ({ limit }: Options): Promise<ResponseFetch> => {
+export const fetchLatestTournamentsAction = async (options?: Options): Promise<ResponseFetch> => {
   "use cache";
 
   cacheLife('days');
   cacheTag('dashboard-tournaments');
+
+  const { limit } = options ?? {};
 
   try {
     const tournaments = await prisma.tournament.findMany({
