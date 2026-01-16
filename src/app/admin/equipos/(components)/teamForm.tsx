@@ -413,18 +413,20 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                               {tournaments.map((tournament) => (
                                 <CommandItem
                                   key={tournament.id}
-                                  value={tournament.name}
+                                  value={String(tournament.id)}
                                   onSelect={(currentValue) => {
-                                    const matched = tournaments.find(t => {
-                                      return normalize(`${t.name} ${t.category} ${t.format}`)
-                                        .includes(normalize(currentValue));
-                                    });
+                                    const matched = tournaments.find(t => String(t.id) === String(currentValue));
                                     if (!matched) {
                                       form.setValue('tournamentId', '');
                                       setTournamentsOpen(false);
                                       return;
                                     }
-                                    form.setValue('tournamentId', matched.id === field.value ? '' : matched.id);
+                                    form.setValue(
+                                      'tournamentId',
+                                      (String(matched.id) === String(field.value))
+                                        ? ''
+                                        : String(matched.id),
+                                    );
                                     setTournamentsOpen(false);
                                   }}
                                 >
