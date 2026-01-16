@@ -1,8 +1,13 @@
 'use client';
 
-import { type ChangeEvent, useEffect, useRef, useState, type FC } from 'react';
+import { useEffect, useRef, useState, type FC, type ChangeEvent } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { Session } from 'next-auth';
+import { toast } from 'sonner';
+import { EmailInput } from './email-input';
+import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -12,20 +17,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from "@/components/ui/textarea";
 import type z from 'zod';
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from '@/components/ui/button';
-import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from 'next-auth';
-import { toast } from 'sonner';
-import type { Coach, Team, Tournament } from '@/shared/interfaces';
-import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { EmailInput } from './email-input';
-import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Command,
   CommandEmpty,
@@ -34,14 +31,17 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { cn, slugify } from '@/lib/utils';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '~/src/components/ui/select';
+} from '@/components/ui/select';
+import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
+import type { Coach, Team, Tournament } from '@/shared/interfaces';
+import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
+import { cn, slugify } from '@/lib/utils';
 
 type Props = Readonly<{
   session: Session;
@@ -362,7 +362,13 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
               control={form.control}
               name="tournamentId"
               render={({ field }) => {
-                const selectedTournament = tournaments.find((t) => t.id === field.value);
+                const selectedTournament = tournaments.find((t) => String(t.id) === String(field.value));
+                const normalize = (text: string) =>
+                  text
+                    .toLowerCase()
+                    .normalize('NFC')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .trim();
                 return (
                   <FormItem>
                     <FormLabel>Torneo</FormLabel>
@@ -372,13 +378,15 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                           variant="outline-secondary"
                           role="combobox"
                           aria-expanded={tournamentsOpen}
-                          className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+                          className="w-full overflow-hidden justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                         >
-                          {field.value && selectedTournament
-                            ? `${selectedTournament.name}`
-                            + `, ${selectedTournament.category}`
-                            + `, ${selectedTournament.format} vs ${selectedTournament.format}`
-                            : "Sin torneo asignado"}
+                          {
+                            field.value && selectedTournament
+                              ? `${selectedTournament.name}`
+                              + `, ${selectedTournament.category}`
+                              + `, ${selectedTournament.format} vs ${selectedTournament.format}`
+                              : "Sin torneo asignado"
+                          }
                           <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -405,9 +413,18 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                               {tournaments.map((tournament) => (
                                 <CommandItem
                                   key={tournament.id}
-                                  value={tournament.id}
-                                  onSelect={(currentId) => {
-                                    form.setValue('tournamentId', currentId === field.value ? '' : currentId);
+                                  value={tournament.name}
+                                  onSelect={(currentValue) => {
+                                    const matched = tournaments.find(t => {
+                                      return normalize(`${t.name} ${t.category} ${t.format}`)
+                                        .includes(normalize(currentValue));
+                                    });
+                                    if (!matched) {
+                                      form.setValue('tournamentId', '');
+                                      setTournamentsOpen(false);
+                                      return;
+                                    }
+                                    form.setValue('tournamentId', matched.id === field.value ? '' : matched.id);
                                     setTournamentsOpen(false);
                                   }}
                                 >
@@ -417,7 +434,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value === tournament.id ? "opacity-100" : "opacity-0",
+                                      String(field.value) === String(tournament.id) ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>
