@@ -5,7 +5,7 @@ export const ConcentratedMatchesSkeleton: FC = () => {
 
   return (
     <div className="animate-pulse">
-      <table>
+      <table className="concentrated-table">
         <thead>
           <tr>
             <th>
