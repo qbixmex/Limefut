@@ -13,7 +13,7 @@ export const DashboardPage = () => {
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="grid auto-rows-min gap-5 md:grid-cols-3">
-        <section className="bg-muted/50 min-h-[300px] rounded-xl p-5">
+        <section className="bg-muted/50 max-h-[300px] rounded-xl p-5">
           <Suspense fallback={<TournamentsSkeleton />}>
             <ActiveTournaments />
           </Suspense>

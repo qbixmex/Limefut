@@ -1,0 +1,25 @@
+@reference "tailwindcss";
+
+.tournaments-list {
+  /* Firefox */
+  scrollbar-width: thin;
+  /* thumb track */
+  scrollbar-color: var(--color-gray-600) var(--color-gray-800);
+  @apply overflow-y-scroll;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.tournaments-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tournaments-list::-webkit-scrollbar-track {
+  background: var(--color-gray-800);
+  border-radius: 10px;
+}
+
+.tournaments-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-800);
+  border-radius: 8px;
+  border: 2px solid var(--color-gray-600);
+}
