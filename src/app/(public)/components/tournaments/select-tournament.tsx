@@ -31,24 +31,24 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
 
   const selectedTournament = useMemo<SelectedTournament | null>(() => {
     if (!tournamentParam || !categoryParam || !formatParam) return null;
-    return tournaments.find(t => t.permalink === tournamentParam || t.id === tournamentParam) ?? null;
+    return tournaments.find(
+      t => t.permalink === tournamentParam
+      && t.category === categoryParam
+      && t.format === formatParam,
+    ) ?? null;
   }, [tournamentParam, categoryParam, formatParam, tournaments]);
 
   const showTournaments = manualShow || selectedTournament === null;
 
-  const setTournamentIdParam = ({
-    permalink,
-    category,
-    format,
-  }: {
+  const setTournamentIdParam = (param: {
     permalink: string;
     category: string;
     format: string;
   }) => {
     const params = new URLSearchParams();
-    params.set('torneo', permalink);
-    params.set('categoria', category);
-    params.set('formato', format);
+    params.set('torneo', param.permalink);
+    params.set('categoria', param.category);
+    params.set('formato', param.format);
     // hide selector immediately; selection will be derived from search params
     setManualShow(false);
     router.push(`${pathname}?${params}`);
@@ -64,28 +64,26 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
 
       {showTournaments && (
         <section className="tournaments-selector">
-          {tournaments.map(({ id, name, permalink, category, format }) => (
+          {tournaments.map((tournament) => (
             <div
-              key={id}
+              key={tournament.id}
               role="button"
               tabIndex={0}
               className={cn('tournament', {
-                'tournamentSelected': selectedTournament?.id === id,
+                'tournament-selected': selectedTournament?.id === tournament.id,
               })}
               onClick={() => {
-                // seleccionar torneo: actualizamos la URL; el componente se actualizará desde los search params
-                setManualShow(false);
                 setTournamentIdParam({
-                  permalink: permalink as string,
-                  category,
-                  format,
+                  permalink: tournament.permalink as string,
+                  category: tournament.category,
+                  format: tournament.format,
                 });
               }}
             >
-              <p className="tournamentName">{name}</p>
+              <p className="tournamentName">{tournament.name}</p>
               <div className="tournamentData">
-                <p><b>Categoría</b>: {category}</p>
-                <p><b>Formato</b>: {`${format} vs ${format}`}</p>
+                <p><b>Categoría</b>: {tournament.category}</p>
+                <p><b>Formato</b>: {`${tournament.format} vs ${tournament.format}`}</p>
               </div>
             </div>
           ))}

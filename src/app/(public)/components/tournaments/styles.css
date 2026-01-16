@@ -24,7 +24,7 @@
     cursor-pointer;
 }
 
-.tournamentSelected {
+.tournament-selected {
   @apply
     border-blue-500
     dark:border-blue-600;
