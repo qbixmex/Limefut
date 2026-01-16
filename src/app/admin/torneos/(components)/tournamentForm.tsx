@@ -368,8 +368,8 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
         {/* Dates and Active */}
         <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2 flex items-center">
-            <div className="w-1/2 flex items-center gap-5">
+          <div className="w-full lg:w-1/2 flex flex-col md:flex-row items-center gap-5">
+            <div className="w-full md:w-1/2">
               <FormField
                 control={form.control}
                 name="startDate"
@@ -378,12 +378,15 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                     <Label htmlFor="date-picker" className="px-1">
                       Fecha Inicial
                     </Label>
-                    <Popover open={openInitDateCalendar} onOpenChange={setOpenInitDateCalendar}>
+                    <Popover
+                      open={openInitDateCalendar}
+                      onOpenChange={setOpenInitDateCalendar}
+                    >
                       <PopoverTrigger asChild>
                         <Button
                           id="date-picker"
                           variant="secondary"
-                          className="w-[225px] justify-between font-normal"
+                          className="w-full justify-between font-normal"
                         >
                           {field.value
                             ? format(field.value as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
@@ -412,7 +415,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                 )}
               />
             </div>
-            <div className="w-1/2 flex items-center gap-5">
+            <div className="w-full md:w-1/2">
               <FormField
                 control={form.control}
                 name="endDate"
@@ -429,7 +432,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                         <Button
                           id="date-picker"
                           variant="secondary"
-                          className="w-[225px] justify-between font-normal"
+                          className="w-full justify-between font-normal"
                         >
                           {field.value
                             ? format(field.value as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
