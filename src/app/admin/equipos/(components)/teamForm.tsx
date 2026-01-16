@@ -363,12 +363,6 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
               name="tournamentId"
               render={({ field }) => {
                 const selectedTournament = tournaments.find((t) => String(t.id) === String(field.value));
-                const normalize = (text: string) =>
-                  text
-                    .toLowerCase()
-                    .normalize('NFC')
-                    .replace(/[\u0300-\u036f]/g, '')
-                    .trim();
                 return (
                   <FormItem>
                     <FormLabel>Torneo</FormLabel>
