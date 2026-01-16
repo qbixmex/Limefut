@@ -1,17 +1,17 @@
 import type { FC } from 'react';
 import { fetchResultsAction } from '../(actions)/fetchResultsAction';
 import { redirect } from 'next/navigation';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
 import { Info } from 'lucide-react';
-import { Button } from '~/src/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '~/src/components/ui/tooltip';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { SoccerField } from '@/shared/components/icons';
 import { getMatchStatus } from '../(helpers)/status';
-import { Badge } from '~/src/components/ui/badge';
-import type { MATCH_STATUS } from '~/src/shared/enums';
+import type { MATCH_STATUS } from '@/shared/enums';
 import { format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { SoccerField } from '~/src/shared/components/icons';
 
 type Props = Readonly<{
   tournament?: string;

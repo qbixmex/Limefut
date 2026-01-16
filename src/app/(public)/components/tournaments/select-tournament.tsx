@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, type FC } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { type FC, useState, useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import "./styles.css";
@@ -19,18 +19,22 @@ type Props = Readonly<{
 }>;
 
 export const SelectTournament: FC<Props> = ({ tournaments }) => {
-  const [showTournaments, setShowTournaments] = useState(true);
-  const [selectedTournament, setSelectedTournament] = useState<SelectedTournament | null>(null);
+  const [manualShow, setManualShow] = useState<boolean>(false);
+
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    return () => {
-      setShowTournaments(true);
-      // setParams(null);
-      setSelectedTournament(null);
-    };
-  }, []);
+  const tournamentParam = searchParams?.get('torneo');
+  const categoryParam = searchParams?.get('categoria');
+  const formatParam = searchParams?.get('formato');
+
+  const selectedTournament = useMemo<SelectedTournament | null>(() => {
+    if (!tournamentParam || !categoryParam || !formatParam) return null;
+    return tournaments.find(t => t.permalink === tournamentParam || t.id === tournamentParam) ?? null;
+  }, [tournamentParam, categoryParam, formatParam, tournaments]);
+
+  const showTournaments = manualShow || selectedTournament === null;
 
   const setTournamentIdParam = ({
     permalink,
@@ -45,7 +49,8 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
     params.set('torneo', permalink);
     params.set('categoria', category);
     params.set('formato', format);
-    setShowTournaments(false);
+    // hide selector immediately; selection will be derived from search params
+    setManualShow(false);
     router.push(`${pathname}?${params}`);
   };
 
@@ -68,12 +73,8 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
                 'tournamentSelected': selectedTournament?.id === id,
               })}
               onClick={() => {
-                setSelectedTournament({
-                  id,
-                  name,
-                  category,
-                  format,
-                });
+                // seleccionar torneo: actualizamos la URL; el componente se actualizará desde los search params
+                setManualShow(false);
                 setTournamentIdParam({
                   permalink: permalink as string,
                   category,
@@ -104,7 +105,7 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
           )}
           <Button
             variant="outline-primary"
-            onClick={() => setShowTournaments(true)}
+            onClick={() => setManualShow(true)}
             className="w-full"
           >Cambiar Torneo</Button>
         </section>

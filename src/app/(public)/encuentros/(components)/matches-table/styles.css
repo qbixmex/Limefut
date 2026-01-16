@@ -1,0 +1,146 @@
+@reference "../../../../globals.css";
+
+.table-scroll {
+  @apply w-full overflow-auto md:w-full md:overflow-x-visible pb-10 mb-5;
+}
+
+table.concentrated-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 8px;
+  margin-bottom: 40px;
+}
+
+table.concentrated-table thead tr th,
+table.concentrated-table tbody tr td {
+  @apply text-gray-600 dark:text-gray-300;
+}
+
+table.concentrated-table thead tr th {
+  text-align: center;
+  padding: 8px 14px;
+  font-weight: bold;
+}
+
+table.concentrated-table thead tr th:nth-child(1) {
+  text-align: right;
+  width: 250px;
+}
+
+table.concentrated-table thead tr th:nth-child(2) {
+  width: 50px;
+}
+
+table.concentrated-table thead tr th:nth-child(n+3),
+table.concentrated-table tbody tr td:nth-child(n+3) {
+  width: 100px !important;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+table.concentrated-table tbody tr td {
+  text-align: center;
+  font-weight: 600;
+  @apply
+    border
+    border-gray-400
+    dark:border-gray-600
+    rounded-lg
+    py-2
+    px-3
+  ;
+}
+
+table.concentrated-table tbody tr td:nth-child(1),
+table.concentrated-table tbody tr td:nth-child(2) {
+  border: none;
+  border-radius: 0px;
+}
+
+table.concentrated-table tbody tr td:nth-child(1) {
+  text-align: right;
+}
+
+table.concentrated-table tbody tr td:nth-child(2) {
+  width: 50px;
+}
+
+table.concentrated-table tbody tr td.empty {
+  font-weight: normal;
+  @apply bg-gray-400 dark:bg-gray-800;
+}
+
+table.concentrated-table tbody tr:hover td[data-row-label] a {
+  @apply underline text-amber-500! dark:text-amber-500!;
+}
+
+table.concentrated-table tbody td:nth-child(n+3):hover {
+  @apply bg-gray-200 dark:bg-gray-700;
+}
+
+.highlight-col {
+  @apply bg-amber-500! dark:bg-amber-600!;
+}
+
+.highlight-match {
+  @apply bg-amber-500! dark:bg-amber-600!;
+}
+
+.highlight-team a {
+  @apply underline text-amber-500! dark:text-amber-500!;
+}
+
+.status {
+  @apply
+    w-full
+    grid
+    grid-cols-2
+    grid-rows-2
+    m-auto
+    max-w-2/3
+    gap-5
+    md:grid-cols-3
+    md:gap-8
+    lg:max-w-[768px]
+    lg:grid-cols-5
+    lg:grid-rows-1
+  ;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-item span:first-of-type {
+  @apply w-25 text-gray-500 dark:text-gray-400 italic font-semibold;
+}
+
+.status-color {
+  width: 25px;
+  height: 25px;
+  @apply rounded;
+}
+
+.status-scheduled {
+  @apply bg-stone-300 dark:bg-stone-600 text-stone-50 dark:text-stone-200;
+}
+
+.status-in_progress {
+  @apply bg-sky-500 dark:bg-sky-600 text-sky-50;
+}
+
+.status-canceled {
+  @apply bg-red-500 dark:bg-red-700 text-red-50;
+}
+
+.status-postposed {
+  @apply bg-indigo-400 dark:bg-indigo-500 text-indigo-50;
+}
+
+.status-completed {
+  @apply bg-emerald-500 dark:bg-emerald-600 text-emerald-50;
+}
