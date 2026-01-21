@@ -86,6 +86,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
   useEffect(() => {
     if (!team) {
       form.setValue('image', undefined);
+      form.setValue('gender', undefined);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   }, [team, form]);
