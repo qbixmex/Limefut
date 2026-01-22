@@ -1,4 +1,4 @@
-export enum Robots {
+export enum ROBOTS {
   INDEX_FOLLOW = "index, follow",
   INDEX_NO_FOLLOW = "index, nofollow",
   NO_INDEX_FOLLOW = "noindex, follow",
@@ -14,7 +14,7 @@ export interface Page {
 
   seoTitle: string | null;
   seoDescription: string | null;
-  seoRobots: Robots | null;
+  seoRobots: ROBOTS | null;
   
   createdAt?: Date;
   updatedAt?: Date;

@@ -9,7 +9,7 @@ import { auth } from '@/auth';
 import { updatePageStateAction } from '../(actions)/updatePageStateAction';
 import { fetchPagesAction } from '../(actions)/fetchPagesAction';
 import { SeoRobots } from './seo-robots';
-import type { Robots } from '@/shared/interfaces';
+import type { ROBOTS } from '@/shared/interfaces';
 
 type Props = Readonly<{
   query?: string;
@@ -57,7 +57,7 @@ export const PagesTable: FC<Props> = async ({
                       <p className="text-pretty">{page.permalink}</p>
                     </TableCell>
                     <TableCell>
-                      <SeoRobots robots={page.seoRobots as Robots} />
+                      <SeoRobots robots={page.seoRobots as ROBOTS} />
                     </TableCell>
                     <TableCell className="text-center">
                       <ActiveSwitch

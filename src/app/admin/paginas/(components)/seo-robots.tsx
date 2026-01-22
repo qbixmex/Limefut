@@ -1,16 +1,16 @@
 import type { FC } from "react";
-import type { Robots } from "@/shared/interfaces";
+import type { ROBOTS } from "@/shared/interfaces";
 import { Badge } from "@/components/ui/badge";
 import { getBadgeRobotsVariant, getRobots } from '@/lib/utils';
 
 type Props = Readonly<{
-  robots: Robots;
+  robots: ROBOTS;
 }>;
 
 export const SeoRobots: FC<Props> = ({ robots }) => {
   return (
     <>
-      <Badge variant={getBadgeRobotsVariant(robots as Robots)}>
+      <Badge variant={getBadgeRobotsVariant(robots as ROBOTS)}>
         {getRobots(robots)}
       </Badge>
     </>

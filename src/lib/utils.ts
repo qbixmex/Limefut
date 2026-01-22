@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Robots } from "../shared/interfaces";
+import { ROBOTS } from "../shared/interfaces";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -123,15 +123,15 @@ export const getStageTranslation = (stage: string): {
  * ```
  * @returns The variant for the SEO robots badge.
  */
-export const getBadgeRobotsVariant = (robots: Robots) => {
+export const getBadgeRobotsVariant = (robots: ROBOTS) => {
   switch (robots) {
-    case Robots.INDEX_FOLLOW:
+    case ROBOTS.INDEX_FOLLOW:
       return 'outline-success';
-    case Robots.INDEX_NO_FOLLOW:
+    case ROBOTS.INDEX_NO_FOLLOW:
       return 'outline-info';
-    case Robots.NO_INDEX_FOLLOW:
+    case ROBOTS.NO_INDEX_FOLLOW:
       return 'outline-info';
-    case Robots.NO_INDEX_NO_FOLLOW:
+    case ROBOTS.NO_INDEX_NO_FOLLOW:
       return 'outline-secondary';
     default:
       return 'outline-warning';
@@ -148,15 +148,15 @@ export const getBadgeRobotsVariant = (robots: Robots) => {
  * ```
  * @returns A string representing the SEO robots in a user friendly format.
  */
-export const getRobots = (robots: Robots) => {
+export const getRobots = (robots: ROBOTS) => {
   switch (robots) {
-    case Robots.INDEX_FOLLOW:
+    case ROBOTS.INDEX_FOLLOW:
       return "Indexar y Seguir";
-    case Robots.INDEX_NO_FOLLOW:
+    case ROBOTS.INDEX_NO_FOLLOW:
       return "Indexar y No Seguir";
-    case Robots.NO_INDEX_FOLLOW:
+    case ROBOTS.NO_INDEX_FOLLOW:
       return "No Indexar y No Seguir";
-    case Robots.NO_INDEX_NO_FOLLOW:
+    case ROBOTS.NO_INDEX_NO_FOLLOW:
       return "No Indexar y No Seguir";
     default:
       return "No Indexar y No Seguir";

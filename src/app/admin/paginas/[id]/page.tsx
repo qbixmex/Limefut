@@ -8,7 +8,11 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { fetchPageAction, type PageType } from '../(actions)/fetchPageAction';
 import { SeoRobots } from '../(components)/seo-robots';
-import type { Robots } from '@/shared/interfaces';
+import type { ROBOTS } from '@/shared/interfaces';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Pencil } from 'lucide-react';
 
 type Props = Readonly<{
   params: Promise<{
@@ -94,13 +98,33 @@ export const PageDetails: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Robots SEO</TableHead>
                       <TableCell>
-                        <SeoRobots robots={page.seoRobots as Robots} />
+                        <SeoRobots robots={page.seoRobots as ROBOTS} />
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
               </div>
             </section>
+
+            <h2 className="text-xl font-semibold text-sky-500">Contenido</h2>
+            <section className="mb-10">
+              {page.content}
+            </section>
+
+            <div className="absolute top-5 right-5">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={`/admin/paginas/editar/${page.id}`}>
+                    <Button variant="outline-warning" size="icon">
+                      <Pencil />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <p>editar</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </CardContent>
         </Card>
       </div>
