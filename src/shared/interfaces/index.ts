@@ -12,5 +12,7 @@ export type { Standing } from "./Standing";
 export type { ContactMessage } from "./ContactMessage";
 export type { Gallery } from "./Gallery";
 export type { GalleryImage } from "./GalleryImage";
+export type { Page } from "./Page";
+export { Robots } from "./Page";
 
 export type { CloudinaryResponse } from "./Cloudinary";

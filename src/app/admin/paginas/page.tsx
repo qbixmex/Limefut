@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { Suspense, type FC } from 'react';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import Search from '@/shared/components/search';
+import { PagesTableSkeleton } from './(components)/pages-table-skeleton';
+import { PagesTable } from './(components)/pages-table';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -15,8 +17,8 @@ type Props = Readonly<{
 }>;
 
 export const CustomPagesPage: FC<Props> = async ({ searchParams }) => {
-  // const query = (await searchParams).query;
-  // const currentPage = (await searchParams).page;
+  const query = (await searchParams).query;
+  const currentPage = (await searchParams).page;
 
   return (
     <>
@@ -41,7 +43,7 @@ export const CustomPagesPage: FC<Props> = async ({ searchParams }) => {
               </section>
             </CardHeader>
             <CardContent>
-              {/* <Suspense
+              <Suspense
                 key={`${query}-${currentPage}`}
                 fallback={<PagesTableSkeleton />}
               >
@@ -49,8 +51,7 @@ export const CustomPagesPage: FC<Props> = async ({ searchParams }) => {
                   query={query}
                   currentPage={currentPage}
                 />
-              </Suspense> */}
-              <h1>Lista de Páginas</h1>
+              </Suspense>
             </CardContent>
           </Card>
         </div>
