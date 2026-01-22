@@ -8,7 +8,7 @@ import {
   Flag,
   Trophy,
   IdCard,
-  ClipboardList,
+  Files,
   Sheet,
   TrendingUp,
   Inbox,
@@ -111,24 +111,37 @@ export const navMain: NavItem[] = [
       },
     ],
   },
-  // {
-  //   label: "Cédulas",
-  //   url: "#",
-  //   icon: ClipboardList,
-  //   isActive: false,
-  //   subItems: [
-  //     {
-  //       label: "Lista",
-  //       url: "#",
-  //       icon: ListIcon,
-  //     },
-  //     {
-  //       label: "Crear",
-  //       url: "#",
-  //       icon: PlusIcon,
-  //     },
-  //   ],
-  // },
+  {
+    label: "Estadísticas",
+    url: "#",
+    icon: TrendingUp,
+    isActive: false,
+    subItems: [
+      {
+        label: "Tabla de Posiciones",
+        url: "/admin/estadisticas",
+        icon: Sheet,
+      },
+    ],
+  },
+  {
+    label: "Páginas",
+    url: "#",
+    icon: Files,
+    isActive: false,
+    subItems: [
+      {
+        label: "Lista",
+        url: "/admin/paginas",
+        icon: ListIcon,
+      },
+      {
+        label: "Crear",
+        url: "/admin/paginas/crear",
+        icon: PlusIcon,
+      },
+    ],
+  },
   {
     label: "Credenciales",
     url: "#",
@@ -144,19 +157,6 @@ export const navMain: NavItem[] = [
         label: "Crear",
         url: "/admin/credenciales/crear",
         icon: PlusIcon,
-      },
-    ],
-  },
-  {
-    label: "Estadísticas",
-    url: "#",
-    icon: TrendingUp,
-    isActive: false,
-    subItems: [
-      {
-        label: "Tabla de Posiciones",
-        url: "/admin/estadisticas",
-        icon: Sheet,
       },
     ],
   },
