@@ -12,6 +12,7 @@ import { SeoRobots } from './seo-robots';
 import type { ROBOTS } from '@/shared/interfaces';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
+import { DeletePage } from './delete-page';
 
 type Props = Readonly<{
   query?: string;
@@ -93,10 +94,10 @@ export const PagesTable: FC<Props> = async ({
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        {/* <DeletePage
-                          galleryId={gallery.id}
+                        <DeletePage
+                          pageId={page.id}
                           roles={session?.user.roles as string[]}
-                        /> */}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

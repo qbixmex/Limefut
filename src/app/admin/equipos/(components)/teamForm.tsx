@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type FC, type ChangeEvent } from 'react';
+import { useRef, useState, type FC, type ChangeEvent } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -80,16 +80,6 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       active: team?.active ?? false,
     },
   });
-
-  // Clean Input Image if exists
-  // from previous team creation
-  useEffect(() => {
-    if (!team) {
-      form.setValue('image', undefined);
-      form.setValue('gender', undefined);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
-  }, [team, form]);
 
   const handlePermalinkChange = (event: ChangeEvent<HTMLInputElement>) => {
     isPermalinkEdited.current = true;

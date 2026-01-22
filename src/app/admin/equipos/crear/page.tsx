@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import {
   Card,
   CardContent,
@@ -52,6 +53,7 @@ export const CreateTeam = async () => {
           </CardHeader>
           <CardContent>
             <TeamForm
+              key={crypto.randomUUID()}
               session={session as Session}
               tournaments={tournaments}
               coaches={coaches as Coach[]}

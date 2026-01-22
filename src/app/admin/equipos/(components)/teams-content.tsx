@@ -1,6 +1,5 @@
 import { type FC, Suspense } from "react";
 import { TeamsTableSkeleton } from "./teams-table-skeleton";
-import { ErrorHandler } from "@/shared/components/errorHandler";
 import { TeamsWrapper } from "../../encuentros/(components)/teams-wrapper";
 
 type Props = Readonly<{
@@ -22,7 +21,6 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
 
   return (
     <>
-      <ErrorHandler />
       <Suspense
         key={`${query ?? 'query'}-${currentPage}`}
         fallback={<TeamsTableSkeleton colCount={9} rowCount={6} />}

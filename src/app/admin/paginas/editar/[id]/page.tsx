@@ -28,6 +28,11 @@ export const EditCustomPage: FC<Props> = async ({ params }) => {
     redirect(`/admin/paginas?error=${encodeURIComponent(message)}`);
   }
 
+  if (!response.page) {
+    const message = `¡ La página con el id: "${pageId}", no existe ❌ !`;
+    redirect(`/admin/paginas?error=${encodeURIComponent(message)}`);
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
@@ -37,6 +42,7 @@ export const EditCustomPage: FC<Props> = async ({ params }) => {
           </CardHeader>
           <CardContent>
             <PageForm
+              key={response.page.id}
               session={session as Session}
               page={response.page!}
             />

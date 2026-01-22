@@ -21,8 +21,7 @@ export const createPageSchema = z.object({
   seoRobots: z
     .enum(
       Object.values(ROBOTS) as [string, ...string[]],
-      { message: "¡ El valor de SEO Robots no es válido !" },
-    )
-    .optional(),
+      { message: "¡ Seleccione una opción de Robots SEO !" },
+    ),
   active: z.boolean().optional(),
 });

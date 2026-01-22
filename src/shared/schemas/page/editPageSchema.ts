@@ -33,7 +33,7 @@ export const editPageSchema = z.object({
   seoRobots: z
     .enum(
       Object.values(ROBOTS) as [string, ...string[]],
-      { message: "¡ El valor de SEO Robots no es válido !" },
+      { message: "¡ Seleccione una opción de Robots SEO !" },
     )
     .optional(),
   active: z.boolean().optional(),

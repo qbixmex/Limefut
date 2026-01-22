@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageForm } from '../(components)/page-form';
@@ -6,6 +7,7 @@ import type { Session } from 'next-auth';
 
 export const CrateCustomPage: FC = async () => {
   const session = await auth();
+  const pageId = crypto.randomUUID();
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -15,7 +17,7 @@ export const CrateCustomPage: FC = async () => {
             <CardTitle>Crear Página</CardTitle>
           </CardHeader>
           <CardContent>
-            <PageForm session={session as Session} />
+            <PageForm key={pageId} session={session as Session} />
           </CardContent>
         </Card>
       </div>

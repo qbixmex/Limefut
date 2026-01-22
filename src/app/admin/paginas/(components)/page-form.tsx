@@ -2,6 +2,7 @@
 
 import { type FC } from 'react';
 import { useRouter } from "next/navigation";
+import type { Session } from 'next-auth';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -14,23 +15,18 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Input } from '@/components/ui/input';
-import type z from 'zod';
 import { Button } from '@/components/ui/button';
-import { createPageSchema, editPageSchema } from '@/shared/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-// import { createUserAction } from '../(actions)';
-import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import { LoaderCircle } from 'lucide-react';
-import type { Page } from '@/shared/interfaces';
-import { ROBOTS } from '@/shared/interfaces';
-import { Textarea } from '~/src/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/src/components/ui/select';
-import { cn } from '~/src/lib/utils';
-import { createPageAction } from '../(actions)/createPageAction';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 import type { PageType } from '../(actions)/fetchPageAction';
+import type z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createPageAction } from '../(actions)/createPageAction';
 import { updatePageAction } from '../(actions)/updatePageAction';
-// import { updateUserAction } from '../(actions)/updateUserAction';
+import { createPageSchema, editPageSchema } from '@/shared/schemas';
 
 type Props = Readonly<{
   session: Session;
@@ -39,7 +35,6 @@ type Props = Readonly<{
 
 export const PageForm: FC<Props> = ({ session, page }) => {
   const route = useRouter();
-
   const formSchema = !page ? createPageSchema : editPageSchema;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,7 +46,7 @@ export const PageForm: FC<Props> = ({ session, page }) => {
       seoTitle: page?.seoTitle ?? undefined,
       seoDescription: page?.seoDescription ??  undefined,
       seoRobots: page?.seoRobots ?? undefined,
-      active: page?.active ?? true,
+      active: page?.active ?? false,
     },
   });
 
@@ -195,7 +190,6 @@ export const PageForm: FC<Props> = ({ session, page }) => {
                   <FormLabel>Robots SEO</FormLabel>
                   <FormControl>
                     <Select
-                      defaultValue={undefined}
                       value={field.value ?? undefined}
                       onValueChange={(value) => field.onChange(value)}
                     >
