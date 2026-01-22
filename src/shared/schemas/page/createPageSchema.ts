@@ -23,5 +23,6 @@ export const createPageSchema = z.object({
       Object.values(ROBOTS) as [string, ...string[]],
       { message: "¡ Seleccione una opción de Robots SEO !" },
     ),
+  position: z.number('¡ La posición debe ser un número válido !'),
   active: z.boolean().optional(),
 });

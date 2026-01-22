@@ -4,6 +4,7 @@ CREATE TABLE "custom_pages" (
     "title" TEXT NOT NULL,
     "permalink" TEXT NOT NULL,
     "content" TEXT NOT NULL,
+    "position" INTEGER NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT false,
     "seo_title" TEXT,
     "seo_description" TEXT,

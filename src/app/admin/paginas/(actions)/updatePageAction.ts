@@ -59,6 +59,7 @@ export const updatePageAction = async ({
     seoTitle: formData.get('seoTitle') ?? '',
     seoDescription: formData.get('seoDescription') ?? '',
     seoRobots: formData.get('seoRobots') ?? '',
+    position: Number(formData.get('position') ?? 0),
     active: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
@@ -91,9 +92,71 @@ export const updatePageAction = async ({
           };
         }
 
+        const pages = await transaction.customPage.findMany({
+          select: {
+            id: true,
+            position: true,
+          },
+          orderBy: {
+            position: 'asc',
+          },
+        });
+
+        const maxPosition = pages.length;
+        const updatedPosition = Math.max(1, Math.min(rawData.position, maxPosition));
+        const currentPosition = pages.find((page) => page.id === pageId)?.position ?? 0;
+
+        // If position unchanged, just update the page fields (ensure position kept)
+        if (updatedPosition === currentPosition) {
+          const updatedPage = await transaction.customPage.update({
+            where: { id: pageId },
+            data: { ...pageVerified.data, position: updatedPosition },
+          });
+
+          // Update Cache
+          revalidatePath('/admin/paginas');
+          updateTag('admin-pages');
+          updateTag('public-page');
+          updateTag('public-pages');
+
+          return {
+            ok: true,
+            message: '¡ La página fue actualizada correctamente 👍 !',
+            page: updatedPage,
+          };
+        }
+
+        // When moving up (to a smaller number): increment affected positions,
+        // update in descending order to avoid unique position conflicts.
+        if (updatedPosition < currentPosition) {
+          const affected = pages
+            .filter((p) => p.position >= updatedPosition && p.position < currentPosition)
+            .sort((a, b) => b.position - a.position); // descending
+
+          for (const p of affected) {
+            await transaction.customPage.update({
+              where: { id: p.id },
+              data: { position: p.position + 1 },
+            });
+          }
+        } else {
+          // Moving down (to a larger number): decrement affected positions,
+          // update in ascending order to avoid unique position conflicts.
+          const affected = pages
+            .filter((p) => p.position <= updatedPosition && p.position > currentPosition)
+            .sort((a, b) => a.position - b.position); // ascending
+
+          for (const p of affected) {
+            await transaction.customPage.update({
+              where: { id: p.id },
+              data: { position: p.position - 1 },
+            });
+          }
+        }
+
         const updatedPage = await transaction.customPage.update({
           where: { id: pageId },
-          data: pageVerified.data,
+          data: { ...pageVerified.data, position: updatedPosition },
         });
 
         // Update Cache

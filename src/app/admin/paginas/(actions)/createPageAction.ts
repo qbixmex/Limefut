@@ -42,6 +42,7 @@ export const createPageAction = async (
     seoTitle: formData.get('seoTitle') ?? '',
     seoDescription: formData.get('seoDescription') ?? '',
     seoRobots: formData.get('seoRobots') ?? '',
+    position: Number(formData.get('position') ?? 0),
     active: (formData.get('active') === 'true')
       ? true
       : (formData.get('active') === 'false')
@@ -62,9 +63,9 @@ export const createPageAction = async (
       page: null,
     };
   }
-
+  
   const pageVerified = createPageSchema.safeParse(rawData);
-
+  
   if (!pageVerified.success) {
     return {
       ok: false,
@@ -72,11 +73,16 @@ export const createPageAction = async (
       page: null,
     };
   }
+  
+  const pagesCount = await prisma.customPage.count();
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdPage = await transaction.customPage.create({
-        data: pageVerified.data,
+        data: {
+          ...pageVerified.data,
+          position: pagesCount + 1,
+        },
       });
 
       return {

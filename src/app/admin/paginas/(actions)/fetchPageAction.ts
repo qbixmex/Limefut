@@ -11,6 +11,7 @@ export type PageType = {
   seoTitle: string | null;
   seoDescription: string | null;
   seoRobots: string | null;
+  position: number;
   createdAt: Date;
   updatedAt: Date;
 };

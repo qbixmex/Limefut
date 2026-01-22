@@ -24,9 +24,9 @@ import { cn } from '@/lib/utils';
 import type { PageType } from '../(actions)/fetchPageAction';
 import type z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { createPageSchema, editPageSchema } from '@/shared/schemas';
 import { createPageAction } from '../(actions)/createPageAction';
 import { updatePageAction } from '../(actions)/updatePageAction';
-import { createPageSchema, editPageSchema } from '@/shared/schemas';
 
 type Props = Readonly<{
   session: Session;
@@ -40,12 +40,13 @@ export const PageForm: FC<Props> = ({ session, page }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: page?.title ?? '',
-      permalink: page?.permalink ?? '',
-      content: page?.content ?? '',
-      seoTitle: page?.seoTitle ?? undefined,
-      seoDescription: page?.seoDescription ??  undefined,
-      seoRobots: page?.seoRobots ?? undefined,
+      title: page?.title ?? 'Página de ejemplo',
+      permalink: page?.permalink ?? 'pagina-de-ejemplo',
+      content: page?.content ?? 'Lorem ipsum dolor sit amet',
+      seoTitle: page?.seoTitle ?? 'Página de ejemplo', // undefined
+      seoDescription: page?.seoDescription ?? 'Lorem ipsum dolor sit amet', // undefined
+      seoRobots: page?.seoRobots ?? 'index, follow',
+      position: page?.position ?? 0,
       active: page?.active ?? false,
     },
   });
@@ -59,6 +60,7 @@ export const PageForm: FC<Props> = ({ session, page }) => {
     formData.append('seoTitle', data.seoTitle as string);
     formData.append('seoDescription', data.seoDescription as string);
     formData.append('seoRobots', data.seoRobots as string);
+    formData.append('position', String(data.position ?? 0));
     formData.append('active', String(data.active ?? false));
 
     // Create Page
@@ -234,12 +236,36 @@ export const PageForm: FC<Props> = ({ session, page }) => {
           </div>
         </section>
 
-        {/* Active */}
+        {/* Position and Active */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             {/* EMPTY FOR UI */}
           </div>
-          <div className="w-full lg:w-1/2 flex justify-end">
+          <div className="w-full lg:w-1/2 flex justify-end gap-5">
+            {true && (
+              <FormField
+                control={form.control}
+                name="position"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="position">Posición</Label>
+                      <FormControl>
+                        <Input
+                          id="position"
+                          type="number"
+                          min={1}
+                          {...field}
+                          value={field.value ?? '0'}
+                          onChange={(e) => field.onChange(parseInt(e.target.value))}
+                          className="w-20"
+                        />
+                      </FormControl>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="active"

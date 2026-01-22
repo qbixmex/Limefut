@@ -374,6 +374,7 @@ model CustomPage {
   title     String
   permalink String  @unique
   content   String  @db.Text
+  position  Int
   active    Boolean @default(false)
 
   seoTitle       String? @map("seo_title")

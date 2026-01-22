@@ -16,6 +16,7 @@ type PageType = {
   title: string;
   permalink: string;
   seoRobots: string | null;
+  position: number;
   active: boolean;
 };
 
@@ -58,13 +59,14 @@ export const fetchPagesAction = async (options: Options): ResponseAction => {
   try {
     const pages = await prisma.customPage.findMany({
       where: whereCondition,
-      orderBy: { title: 'asc' },
+      orderBy: { position: 'asc' },
       select: {
         id: true,
         title: true,
         permalink: true,
         active: true,
         seoRobots: true,
+        position: true,
       },
       take: take,
       skip: (page - 1) * take,

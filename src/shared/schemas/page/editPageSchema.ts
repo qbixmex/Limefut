@@ -36,5 +36,8 @@ export const editPageSchema = z.object({
       { message: "¡ Seleccione una opción de Robots SEO !" },
     )
     .optional(),
+  position: z
+    .number('¡ La posición debe ser un número válido !')
+    .optional(),
   active: z.boolean().optional(),
 });

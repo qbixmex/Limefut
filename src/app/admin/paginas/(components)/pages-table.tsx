@@ -13,6 +13,7 @@ import type { ROBOTS } from '@/shared/interfaces';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { DeletePage } from './delete-page';
+import { Badge } from '~/src/components/ui/badge';
 
 type Props = Readonly<{
   query?: string;
@@ -46,6 +47,7 @@ export const PagesTable: FC<Props> = async ({
                   <TableHead>Título</TableHead>
                   <TableHead>Enlace Permanente</TableHead>
                   <TableHead className="w-25">Robots</TableHead>
+                  <TableHead className="w-25 text-center">Posición</TableHead>
                   <TableHead className="w-25 text-center">Activo</TableHead>
                   <TableHead className="w-[200px]">Acciones</TableHead>
                 </TableRow>
@@ -61,6 +63,9 @@ export const PagesTable: FC<Props> = async ({
                     </TableCell>
                     <TableCell>
                       <SeoRobots robots={page.seoRobots as ROBOTS} />
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Badge variant="outline-info">{page.position}</Badge>
                     </TableCell>
                     <TableCell className="text-center">
                       <ActiveSwitch
