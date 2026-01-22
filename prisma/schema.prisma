@@ -367,3 +367,22 @@ model GalleryImage {
 
   @@map("gallery_image")
 }
+
+model CustomPage {
+  id String  @id @default(uuid())
+
+  title     String
+  permalink String  @unique
+  content   String  @db.Text
+  active    Boolean @default(false)
+
+  seoTitle       String? @map("seo_title")
+  seoDescription String? @map("seo_description")
+  seoRobots      String? @default("noindex, nofollow") @map("seo_robots")
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("custom_pages")
+}
