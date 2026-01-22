@@ -111,24 +111,24 @@ export const navMain: NavItem[] = [
       },
     ],
   },
-  {
-    label: "Cédulas",
-    url: "#",
-    icon: ClipboardList,
-    isActive: false,
-    subItems: [
-      {
-        label: "Lista",
-        url: "#",
-        icon: ListIcon,
-      },
-      {
-        label: "Crear",
-        url: "#",
-        icon: PlusIcon,
-      },
-    ],
-  },
+  // {
+  //   label: "Cédulas",
+  //   url: "#",
+  //   icon: ClipboardList,
+  //   isActive: false,
+  //   subItems: [
+  //     {
+  //       label: "Lista",
+  //       url: "#",
+  //       icon: ListIcon,
+  //     },
+  //     {
+  //       label: "Crear",
+  //       url: "#",
+  //       icon: PlusIcon,
+  //     },
+  //   ],
+  // },
   {
     label: "Credenciales",
     url: "#",
