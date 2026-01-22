@@ -49,6 +49,20 @@ export const createPageAction = async (
         : false,
   };
 
+  const pageExists = await prisma.customPage.count({
+    where: {
+      permalink: rawData.permalink as string,
+    },
+  });
+
+  if (pageExists) {
+    return {
+      ok: false,
+      message: '¡ Ya existe una página con el "Enlace Permanente" ingresado, por favor utilice otro !',
+      page: null,
+    };
+  }
+
   const pageVerified = createPageSchema.safeParse(rawData);
 
   if (!pageVerified.success) {

@@ -43,12 +43,12 @@ export const PageForm: FC<Props> = ({ session, page }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: page?.title ?? 'Términos y Condiciones',
-      permalink: page?.permalink ?? 'terminos-y-condiciones',
-      content: page?.content ?? 'Velit occaecat aute et reprehenderit dolore cillum consequat. Eu quis cupidatat sunt qui est irure tempor dolore eu. Quis laborum et pariatur dolore sit eiusmod consectetur cupidatat minim. Magna eu occaecat duis labore officia tempor. Voluptate voluptate excepteur pariatur aliquip fugiat nostrud eu fugiat nulla laboris fugiat.',
-      seoTitle: page?.seoTitle ?? 'Términos y Condiciones', // TODO: regresar a undefined
-      seoDescription: page?.seoDescription ?? 'Quis est quis qui fugiat nisi proident ea proident ex deserunt. Nostrud velit aliqua ea ad nostrud proident enim fugiat dolore nulla culpa exercitation.', // TODO: regresar a undefined
-      seoRobots: page?.seoRobots ?? 'index, follow', // TODO: regresar a undefined
+      title: page?.title ?? '',
+      permalink: page?.permalink ?? '',
+      content: page?.content ?? '',
+      seoTitle: page?.seoTitle ?? undefined,
+      seoDescription: page?.seoDescription ??  undefined,
+      seoRobots: page?.seoRobots ?? undefined,
       active: page?.active ?? true,
     },
   });
