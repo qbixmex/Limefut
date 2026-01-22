@@ -14,7 +14,7 @@ export interface Page {
 
   seoTitle: string | null;
   seoDescription: string | null;
-  seoRobots: Robots;
+  seoRobots: Robots | null;
   
   createdAt?: Date;
   updatedAt?: Date;

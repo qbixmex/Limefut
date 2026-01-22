@@ -1,18 +1,15 @@
 import type { FC } from 'react';
-import { auth } from '@/auth';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ActiveSwitch } from '~/src/shared/components/active-switch';
-import type { Robots } from '~/src/shared/interfaces';
-import { Tooltip, TooltipContent, TooltipTrigger } from '~/src/components/ui/tooltip';
 import Link from 'next/link';
-import { Button } from '~/src/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { InfoIcon, Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ActiveSwitch } from '@/shared/components/active-switch';
+import { auth } from '@/auth';
 import { updatePageStateAction } from '../(actions)/updatePageStateAction';
 import { fetchPagesAction } from '../(actions)/fetchPagesAction';
-import { Badge } from '~/src/components/ui/badge';
-import { getRobots } from '~/src/lib/utils';
-import { getBadgeRobotsVariant } from '../../../../lib/utils';
 import { SeoRobots } from './seo-robots';
+import type { Robots } from '@/shared/interfaces';
 
 type Props = Readonly<{
   query?: string;
@@ -72,7 +69,7 @@ export const PagesTable: FC<Props> = async ({
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/galerias/${page.id}`}>
+                            <Link href={`/admin/paginas/${page.id}`}>
                               <Button variant="outline-info" size="icon">
                                 <InfoIcon />
                               </Button>
