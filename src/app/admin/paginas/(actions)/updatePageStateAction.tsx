@@ -1,12 +1,41 @@
-"use server";
+'use server';
 
-export const updatePageStateAction = async (id: string, state: boolean): Promise<{
+import prisma from "@/lib/prisma";
+import { revalidatePath, updateTag } from "next/cache";
+
+export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-}> => {
-  console.log(id);
-  console.log(state);
-  return new Promise((resolve) => {
-    resolve({ ok: true, message: 'ok' });
+}>;
+
+export const updatePageStateAction = async (id: string, state: boolean): ResponseAction => {
+  const pageExists = await prisma.customPage.count({
+    where: { id },
   });
+
+  if (pageExists === 0) {
+    return {
+      ok: false,
+      message: '¡ No se pudo actualizar la página, quizás fue eliminada ó no existe !',
+    };
+  }
+
+  const updatedTeam = await prisma.customPage.update({
+    where: { id },
+    data: { active: state },
+    select: {
+      title: true,
+      active: true,
+    },
+  });
+
+  revalidatePath('/admin/equipos');
+  updateTag('admin-pages');
+  updateTag('public-pages');
+  updateTag('public-page');
+
+  return {
+    ok: true,
+    message: `¡ La página "${updatedTeam.title}" fue ${updatedTeam.active ? 'activada' : 'desactivada'} correctamente 👍 !`,
+  };
 };
