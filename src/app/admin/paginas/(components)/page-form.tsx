@@ -28,11 +28,13 @@ import { Textarea } from '~/src/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/src/components/ui/select';
 import { cn } from '~/src/lib/utils';
 import { createPageAction } from '../(actions)/createPageAction';
+import type { PageType } from '../(actions)/fetchPageAction';
+import { updatePageAction } from '../(actions)/updatePageAction';
 // import { updateUserAction } from '../(actions)/updateUserAction';
 
 type Props = Readonly<{
   session: Session;
-  page?: Page;
+  page?: PageType;
 }>;
 
 export const PageForm: FC<Props> = ({ session, page }) => {
@@ -86,24 +88,23 @@ export const PageForm: FC<Props> = ({ session, page }) => {
     }
 
     if (page) {
-      // const response = await updateUserAction({
-      //   formData,
-      //   userId: user.id,
-      //   userRoles: session.user.roles,
-      //   authenticatedUserId: session?.user.id,
-      // });
+      const response = await updatePageAction({
+        formData,
+        pageId: page.id,
+        userRoles: session.user.roles,
+        authenticatedUserId: session?.user.id,
+      });
 
-      // if (!response.ok) {
-      //   toast.error(response.message);
-      //   return;
-      // }
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
 
-      // if (response.ok) {
-      //   toast.success(response.message);
-      //   route.replace("/admin/usuarios");
-      //   return;
-      // }
-      return;
+      if (response.ok) {
+        toast.success(response.message);
+        route.replace("/admin/paginas");
+        return;
+      }
     }
   };
 

@@ -130,11 +130,11 @@ export const getBadgeRobotsVariant = (robots: ROBOTS) => {
     case ROBOTS.INDEX_NO_FOLLOW:
       return 'outline-info';
     case ROBOTS.NO_INDEX_FOLLOW:
-      return 'outline-info';
+      return 'outline-warning';
     case ROBOTS.NO_INDEX_NO_FOLLOW:
       return 'outline-secondary';
     default:
-      return 'outline-warning';
+      return 'outline-danger';
   }
 };
 
@@ -155,7 +155,7 @@ export const getRobots = (robots: ROBOTS) => {
     case ROBOTS.INDEX_NO_FOLLOW:
       return "Indexar y No Seguir";
     case ROBOTS.NO_INDEX_FOLLOW:
-      return "No Indexar y No Seguir";
+      return "No Indexar y Seguir";
     case ROBOTS.NO_INDEX_NO_FOLLOW:
       return "No Indexar y No Seguir";
     default:

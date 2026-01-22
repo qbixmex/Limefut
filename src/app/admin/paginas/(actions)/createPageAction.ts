@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createPageSchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export type PageType = {
   id: string;
@@ -86,7 +86,8 @@ export const createPageAction = async (
       };
     });
 
-    // Revalidate Paths
+    // Update Cache
+    revalidatePath('/admin/paginas');
     updateTag('admin-pages');
     updateTag('public-pages');
     updateTag('public-page');

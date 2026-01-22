@@ -7,6 +7,9 @@ import {
 } from "@/components/ui/card";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { fetchPageAction } from "../../(actions)/fetchPageAction";
+import { PageForm } from "../../(components)/page-form";
+import type { Session } from "next-auth";
 
 type Props = Readonly<{
   params: Promise<{
@@ -18,15 +21,7 @@ export const EditCustomPage: FC<Props> = async ({ params }) => {
   const pageId = (await params).id;
   const session = await auth();
 
-  console.log("PAGE ID:", pageId);
-
-  // const response = await fetchPageAction(session?.user.roles ?? [], galleryId);
-
-  // if (!response.ok && !response.gallery) {
-  //   redirect('/admin/paginas');
-  // }
-
-  // const { teams } = await fetchPagesForGalleryAction();
+  const response = await fetchPageAction(session?.user.roles ?? [], pageId);
 
   if (!session?.user.roles.includes('admin')) {
     const message = '¡ No tienes permisos administrativos para actualizar páginas !';
@@ -41,10 +36,10 @@ export const EditCustomPage: FC<Props> = async ({ params }) => {
             <CardTitle>Editar Página</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* <PageForm
+            <PageForm
               session={session as Session}
               page={response.page!}
-            /> */}
+            />
           </CardContent>
         </Card>
       </div>

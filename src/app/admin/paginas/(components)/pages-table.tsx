@@ -10,6 +10,8 @@ import { updatePageStateAction } from '../(actions)/updatePageStateAction';
 import { fetchPagesAction } from '../(actions)/fetchPagesAction';
 import { SeoRobots } from './seo-robots';
 import type { ROBOTS } from '@/shared/interfaces';
+import { Pagination } from '@/shared/components/pagination';
+import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   query?: string;
@@ -28,7 +30,7 @@ export const PagesTable: FC<Props> = async ({
   } = await fetchPagesAction({
     userRole: session?.user.roles ?? [],
     page: currentPage as number,
-    take: 8,
+    take: 12,
     searchTerm: query,
   });
 
@@ -102,11 +104,11 @@ export const PagesTable: FC<Props> = async ({
               </TableBody>
             </Table>
           </div>
-          {/* <div className={cn("flex justify-center mt-10", {
+          <div className={cn("flex justify-center mt-10", {
             'hidden': pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
-          </div> */}
+          </div>
         </div>
       ) : (
         <div className="border border-sky-600 p-5 rounded">
