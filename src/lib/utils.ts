@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Robots } from "../shared/interfaces";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -110,3 +111,54 @@ export const getStageTranslation = (stage: string): {
         };
     }
   };
+
+
+/**
+ * Gets the variant for the SEO robots badge.
+ * 
+ * @param robots - The SEO robots value.
+ * @example ```typescript
+ * getVariant("index, follow");
+ * // Returns "outline-success"
+ * ```
+ * @returns The variant for the SEO robots badge.
+ */
+export const getBadgeRobotsVariant = (robots: Robots) => {
+  switch (robots) {
+    case Robots.INDEX_FOLLOW:
+      return 'outline-success';
+    case Robots.INDEX_NO_FOLLOW:
+      return 'outline-info';
+    case Robots.NO_INDEX_FOLLOW:
+      return 'outline-info';
+    case Robots.NO_INDEX_NO_FOLLOW:
+      return 'outline-secondary';
+    default:
+      return 'outline-warning';
+  }
+};
+
+/**
+ * Translates the SEO robots to a user friendly string.
+ * 
+ * @param robots - The SEO robots value.
+ * @example ```typescript
+ * getRobots("index, follow");
+ * // Returns "Indexar, Seguir"
+ * ```
+ * @returns A string representing the SEO robots in a user friendly format.
+ */
+export const getRobots = (robots: Robots) => {
+  switch (robots) {
+    case Robots.INDEX_FOLLOW:
+      return "Indexar y Seguir";
+    case Robots.INDEX_NO_FOLLOW:
+      return "Indexar y No Seguir";
+    case Robots.NO_INDEX_FOLLOW:
+      return "No Indexar y No Seguir";
+    case Robots.NO_INDEX_NO_FOLLOW:
+      return "No Indexar y No Seguir";
+    default:
+      return "No Indexar y No Seguir";
+  }
+};
