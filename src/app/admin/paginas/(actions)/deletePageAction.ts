@@ -37,6 +37,8 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
       revalidatePath('/admin/paginas');
       updateTag('admin-pages');
       updateTag('public-page-links');
+      updateTag('public-page-metadata');
+      updateTag('public-custom-page');
 
       return {
         ok: true,

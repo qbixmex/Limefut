@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -141,5 +142,119 @@
 @layer utilities {
   .wrapper {
     @apply bg-neutral-50 md:rounded p-5 flex-1 flex flex-col gap-5;
+  }
+
+  .prose h1 {
+    @apply text-emerald-500 font-semibold text-5xl mb-2;
+  }
+
+  .prose h2 {
+    @apply text-blue-500 font-semibold text-4xl;
+  }
+
+  .prose h3 {
+    @apply text-pink-500 text-3xl;
+  }
+
+  .prose h4 {
+    @apply text-orange-500 text-2xl;
+  }
+
+  .prose h5 {
+    @apply text-emerald-500 text-xl;
+  }
+
+  .prose h6 {
+    @apply text-sky-500 text-lg;
+  }
+
+  .prose p {
+    @apply text-muted-foreground text-xl leading-8 text-pretty;
+  }
+
+  .prose b,
+  .prose strong {
+    @apply text-stone-500 font-bold;
+  }
+
+  .prose hr {
+    @apply border-stone-400! my-10;
+  }
+
+  .dark .prose hr {
+    @apply border-stone-700!;
+  }
+
+  .prose ul,
+  .prose ol {
+    @apply ml-2;
+  }
+
+  .prose li {
+    @apply text-muted-foreground leading-8;
+    &:before {
+      @apply top-[7px]!;
+    }
+  }
+
+  .prose table {
+    @apply inline-block border-0 mx-0 text-[1rem];
+  }
+
+  .prose tr {
+    @apply rounded-t-lg border-0;
+  }
+
+  .prose thead {
+    @apply border-0;
+  }
+
+  .prose thead tr th {
+    @apply bg-slate-900/80;
+  }
+
+  .prose thead tr th:first-child {
+    @apply rounded-tl;
+  }
+
+  .prose thead tr th:last-child {
+    @apply rounded-tr;
+  }
+
+  .prose tr:nth-child(odd) {
+    @apply bg-slate-800/20;
+  }
+
+  .prose tr:nth-child(even) {
+    @apply bg-slate-800/40;
+  }
+
+  .prose th,
+  .prose td {
+    @apply border-0 px-6 py-3 text-left;
+  }
+
+  .prose tbody tr:last-child td:first-child {
+    @apply rounded-bl;
+  }
+
+  .prose tbody tr:last-child td:last-child {
+    @apply rounded-br;
+  }
+
+  .prose a {
+    @apply text-sky-500 hover:underline;
+  }
+
+  .prose blockquote {
+    @apply bg-slate-900 inline-block italic rounded-r-lg py-5 pr-5 text-slate-100;
+  }
+
+  .prose blockquote p {
+    @apply py-2 mr-10;
+  }
+
+  .hide-element {
+    @apply absolute -top-[9999px] -left-[9999px];
   }
 }

@@ -27,6 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createPageSchema, editPageSchema } from '@/shared/schemas';
 import { createPageAction } from '../(actions)/createPageAction';
 import { updatePageAction } from '../(actions)/updatePageAction';
+import { MdEditorField } from "./md-editor-field";
 
 type Props = Readonly<{
   session: Session;
@@ -155,10 +156,11 @@ export const PageForm: FC<Props> = ({ session, page }) => {
               <FormItem>
                 <FormLabel>Contenido</FormLabel>
                 <FormControl>
-                  <Textarea
-                    {...field}
-                    value={field.value ?? ''}
-                    className="min-h-[400px]"
+                  <MdEditorField
+                    markdownString={field.value}
+                    setContent={value => field.onChange(value)}
+                    articleId={page?.id ?? undefined}
+                    // updateContentImage={updateContentImage}
                   />
                 </FormControl>
                 <FormMessage />

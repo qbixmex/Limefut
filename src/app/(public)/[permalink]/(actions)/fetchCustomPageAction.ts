@@ -18,8 +18,8 @@ type ResponseAction = Promise<{
 export const fetchCustomPageAction = async (permalink: string): ResponseAction => {
   "use cache";
 
-  cacheLife('weeks');
-  cacheTag('public-custom-page');
+  cacheLife('max');
+  cacheTag(`public-page-${permalink}`);
 
   try {
     const customPage = await prisma.customPage.findUnique({
@@ -28,8 +28,17 @@ export const fetchCustomPageAction = async (permalink: string): ResponseAction =
         id: true,
         title: true,
         content: true,
+        active: true,
       },
     });
+
+    if (!customPage?.active) {
+      return {
+        ok: false,
+        message: '¡ La página personalizada no está disponible !',
+        customPage: null,
+      };
+    }
 
     return {
       ok: true,
@@ -38,7 +47,7 @@ export const fetchCustomPageAction = async (permalink: string): ResponseAction =
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener la página personalizada");
+      console.log("¡ Error al intentar obtener la página personalizada ❌ !");
       return {
         ok: false,
         message: error.message,
@@ -48,7 +57,7 @@ export const fetchCustomPageAction = async (permalink: string): ResponseAction =
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener la página personalizada, revise los logs del servidor",
+      message: "¡ Error inesperado al obtener la página personalizada, revise los logs del servidor ❌ !",
       customPage: null,
     };
   }

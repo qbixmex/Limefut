@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath, updateTag } from 'next/cache';
-import { editPageSchema } from '@/root/src/shared/schemas';
+import { editPageSchema } from '@/shared/schemas';
 
 export type PageType = {
   id: string;
@@ -117,6 +117,8 @@ export const updatePageAction = async ({
           revalidatePath('/admin/paginas');
           updateTag('admin-pages');
           updateTag('public-page-links');
+          updateTag(`public-page-${updatedPage.permalink}`);
+          updateTag(`public-page-metadata-${updatedPage.permalink}`);
 
           return {
             ok: true,
@@ -162,6 +164,8 @@ export const updatePageAction = async ({
         revalidatePath('/admin/paginas');
         updateTag('admin-pages');
         updateTag('public-page-links');
+        updateTag(`public-page-${updatedPage.permalink}`);
+        updateTag(`public-page-metadata-${updatedPage.permalink}`);
 
         return {
           ok: true,

@@ -1,6 +1,7 @@
 import { Suspense, type FC } from 'react';
 import { PageWrapper } from './page-wrapper';
-// import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
+import { fetchCustomPageMetadataAction } from './(actions)/fetchCustomPageMetadata';
 import "./styles.css";
 
 type Props = Readonly<{
@@ -9,26 +10,19 @@ type Props = Readonly<{
   }>;
 }>;
 
-// TODO: METADATA
-// export const generateMetadata = async (
-//   props: Props,
-//   parent: ResolvingMetadata,
-// ): Promise<Metadata> => {
-//   const { permalink } = await props.params;
+export const generateMetadata = async (
+  props: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> => {
+  const { permalink } = await props.params;
+  const { pageMetadata } = await fetchCustomPageMetadataAction(permalink);
 
-//   // fetch data
-//   const customPage = await fetch(`https://.../${id}`).then((res) => res.json())
-
-//   // optionally access and extend (rather than replace) parent metadata
-//   const previousImages = (await parent).openGraph?.images || []
-
-//   return {
-//     title: customPage.title,
-//     openGraph: {
-//       images: ['/some-specific-page-image.jpg', ...previousImages],
-//     },
-//   };
-// };
+  return {
+    title: pageMetadata?.seoTitle ?? (await parent).title,
+    description: pageMetadata?.seoDescription ?? (await parent).description,
+    robots: pageMetadata?.seoRobots ?? "index, follow",
+  };
+};
 
 export const CustomPage: FC<Props> = ({ params }) => {
   const permalinkPromise = params.then((p) => ({ permalink: p.permalink }));

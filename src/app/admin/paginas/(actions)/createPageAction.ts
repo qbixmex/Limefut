@@ -96,6 +96,8 @@ export const createPageAction = async (
     revalidatePath('/admin/paginas');
     updateTag('admin-pages');
     updateTag('public-page-links');
+    updateTag('public-page-metadata');
+    updateTag('public-custom-page');
 
     return prismaTransaction;
   } catch (error) {
