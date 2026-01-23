@@ -116,8 +116,7 @@ export const updatePageAction = async ({
           // Update Cache
           revalidatePath('/admin/paginas');
           updateTag('admin-pages');
-          updateTag('public-page');
-          updateTag('public-pages');
+          updateTag('public-page-links');
 
           return {
             ok: true,
@@ -162,8 +161,7 @@ export const updatePageAction = async ({
         // Update Cache
         revalidatePath('/admin/paginas');
         updateTag('admin-pages');
-        updateTag('public-page');
-        updateTag('public-pages');
+        updateTag('public-page-links');
 
         return {
           ok: true,

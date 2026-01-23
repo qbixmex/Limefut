@@ -31,8 +31,7 @@ export const updatePageStateAction = async (id: string, state: boolean): Respons
 
   revalidatePath('/admin/equipos');
   updateTag('admin-pages');
-  updateTag('public-pages');
-  updateTag('public-page');
+  updateTag('public-page-links');
 
   return {
     ok: true,

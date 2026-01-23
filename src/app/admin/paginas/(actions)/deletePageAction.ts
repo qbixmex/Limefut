@@ -36,8 +36,7 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
       // Update Cache
       revalidatePath('/admin/paginas');
       updateTag('admin-pages');
-      updateTag('public-pages');
-      updateTag('public-page');
+      updateTag('public-page-links');
 
       return {
         ok: true,
