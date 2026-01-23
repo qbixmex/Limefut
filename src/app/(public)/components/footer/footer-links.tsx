@@ -10,11 +10,7 @@ export const FooterLinks: FC = async () => {
       <ul className="flex flex-col md:flex-row justify-start items-center gap-5">
         {pageLinks.map(({ id, title, permalink }) => (
           <li key={id}>
-            <Link
-              className="font-semibold italic"
-              href={`/${permalink}`}
-              target="_blank"
-            >
+            <Link className="font-semibold italic" href={`/${permalink}`}>
               {title}
             </Link>
           </li>

@@ -10,12 +10,11 @@ export interface Page {
   title: string;
   permalink: string;
   content: string;
+  position: number;
   active: boolean;
-
   seoTitle: string | null;
   seoDescription: string | null;
-  seoRobots: ROBOTS | null;
-  
+  seoRobots: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
