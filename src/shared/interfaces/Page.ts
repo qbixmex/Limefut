@@ -18,3 +18,11 @@ export interface Page {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface CustomPageImage {
+  id?: string;
+  imageUrl: string;
+  publicId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

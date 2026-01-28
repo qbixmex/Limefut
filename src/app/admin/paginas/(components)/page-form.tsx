@@ -1,6 +1,6 @@
 'use client';
 
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useRouter } from "next/navigation";
 import type { Session } from 'next-auth';
 import { useForm } from 'react-hook-form';
@@ -28,15 +28,23 @@ import { createPageSchema, editPageSchema } from '@/shared/schemas';
 import { createPageAction } from '../(actions)/createPageAction';
 import { updatePageAction } from '../(actions)/updatePageAction';
 import { MdEditorField } from "./md-editor-field";
+import type { CustomPageImage } from '@/shared/interfaces/Page';
+import { deleteContentImageAction } from '../(actions)/deleteContentImageAction';
 
 type Props = Readonly<{
   session: Session;
-  page?: PageType;
+  page?: PageType & { images: CustomPageImage[] };
 }>;
 
 export const PageForm: FC<Props> = ({ session, page }) => {
   const route = useRouter();
   const formSchema = !page ? createPageSchema : editPageSchema;
+  const [contentImages, setContentImages] = useState<CustomPageImage[]>(page?.images ?? []);
+  const [isDeletingImage, setIsDeletingImage] = useState<string | null>(null);
+
+  const updateContentImage = (customPageImage: CustomPageImage) => {
+    setContentImages((prev) => [...prev, customPageImage]);
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,6 +59,25 @@ export const PageForm: FC<Props> = ({ session, page }) => {
       active: page?.active ?? false,
     },
   });
+
+  const handleDeleteImage = async (customPageImage: CustomPageImage) => {
+    setIsDeletingImage(customPageImage.imageUrl);
+
+    const response = await deleteContentImageAction(customPageImage?.id as string, customPageImage.publicId);
+
+    if (response.ok) {
+      setContentImages(prevImages => prevImages.filter(({ imageUrl }) => {
+        return imageUrl !== customPageImage.imageUrl;
+      }));
+      setIsDeletingImage(null);
+      toast.success("Imagen eliminada correctamente 👍");
+    }
+
+    if (!response.ok) {
+      setIsDeletingImage(null);
+      toast.error("¡ No se pudo eliminar la imagen !");
+    }
+  };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
@@ -159,8 +186,8 @@ export const PageForm: FC<Props> = ({ session, page }) => {
                   <MdEditorField
                     markdownString={field.value}
                     setContent={value => field.onChange(value)}
-                    articleId={page?.id ?? undefined}
-                    // updateContentImage={updateContentImage}
+                    pageId={page?.id ?? undefined}
+                    updateContentImage={updateContentImage}
                   />
                 </FormControl>
                 <FormMessage />
