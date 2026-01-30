@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, type FC } from "react";
+import { type FC } from "react";
 import type { CustomPageImage } from "@/shared/interfaces/Page";
 import { ForwardRefEditor } from "@/shared/components/mdx-editor/forward-ref-editor-component";
 import { uploadPageContentImageAction } from "../(actions)/uploadPageContentImageAction";

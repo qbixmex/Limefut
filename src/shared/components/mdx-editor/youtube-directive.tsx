@@ -1,6 +1,6 @@
-import { DirectiveDescriptor } from '@mdxeditor/editor';
+import type { DirectiveDescriptor } from '@mdxeditor/editor';
+import type { LeafDirective } from 'mdast-util-directive';
 import { Trash2 } from 'lucide-react';
-import { LeafDirective } from 'mdast-util-directive';
 
 interface YoutubeDirectiveNode extends LeafDirective {
   name: 'youtube'
@@ -11,7 +11,7 @@ export const YoutubeDirectiveDescriptor: DirectiveDescriptor<YoutubeDirectiveNod
   name: 'youtube',
   type: 'leafDirective',
   testNode(node) {
-    return node.name === 'youtube'
+    return node.name === 'youtube';
   },
   attributes: ['id'],
   hasChildren: false,
@@ -32,15 +32,15 @@ export const YoutubeDirectiveDescriptor: DirectiveDescriptor<YoutubeDirectiveNod
         <button
           onClick={() => {
             parentEditor.update(() => {
-              lexicalNode.selectNext()
-              lexicalNode.remove()
-            })
+              lexicalNode.selectNext();
+              lexicalNode.remove();
+            });
           }}
           className="absolute bottom-5 opacity-70 hover:opacity-100 right-5 bg-red-500 text-pink-50 font-bold p-2 rounded cursor-pointer"
         >
           <Trash2 size={20} />
         </button>
       </div>
-    )
-  }
-}
+    );
+  },
+};

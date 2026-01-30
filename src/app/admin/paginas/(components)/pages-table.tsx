@@ -4,9 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { InfoIcon, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ActiveSwitch } from '@/shared/components/active-switch';
 import { auth } from '@/auth';
-import { updatePageStateAction } from '../(actions)/updatePageStateAction';
 import { fetchPagesAction } from '../(actions)/fetchPagesAction';
 import { SeoRobots } from './seo-robots';
 import type { ROBOTS } from '@/shared/interfaces';

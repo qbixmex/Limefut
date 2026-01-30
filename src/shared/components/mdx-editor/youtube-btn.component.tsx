@@ -1,5 +1,5 @@
 import { usePublisher, insertDirective$, DialogButton } from '@mdxeditor/editor';
-import { Youtube } from 'lucide-react';
+import { FaYoutube as Youtube } from 'react-icons/fa6';
 import type { LeafDirective } from 'mdast-util-directive';
 
 const extractYouTubeId = (input: string) => {
@@ -23,7 +23,7 @@ const extractYouTubeId = (input: string) => {
 };
 
 export const YouTubeButton = () => {
-  const insertDirective = usePublisher(insertDirective$)
+  const insertDirective = usePublisher(insertDirective$);
 
   return (
     <DialogButton
@@ -38,7 +38,7 @@ export const YouTubeButton = () => {
             name: 'youtube',
             type: 'leafDirective',
             attributes: { id },
-            children: []
+            children: [],
           } as unknown as LeafDirective);
         } else {
           alert('URL de YouTube inválida');

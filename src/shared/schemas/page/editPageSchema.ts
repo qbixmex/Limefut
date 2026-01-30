@@ -1,15 +1,6 @@
 import z from "zod";
 import { ROBOTS, PAGE_STATUS } from "../../interfaces";
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 1; // 1MB
-const ACCEPTED_FILE_TYPES = [
-  'image/png',
-  'image/jpeg',
-  'image/jpg',
-  'image/gif',
-  'image/webp',
-];
-
 export const editPageSchema = z.object({
   title: z.string('¡ El título debe ser una cadena de texto !')
     .min(3, { message: '¡ El título debe ser mayor a 3 caracteres !' })
