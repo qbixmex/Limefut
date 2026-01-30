@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { ROBOTS } from "../shared/interfaces";
+import { PAGE_STATUS } from "../shared/interfaces/Page";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -110,3 +112,103 @@ export const getStageTranslation = (stage: string): {
         };
     }
   };
+
+
+/**
+ * Gets the variant for the SEO robots badge.
+ * 
+ * @param robots - The SEO robots value.
+ * @example ```typescript
+ * getVariant("index, follow");
+ * // Returns "outline-success"
+ * ```
+ * @returns The variant for the SEO robots badge.
+ */
+export const getBadgeRobotsVariant = (robots: ROBOTS) => {
+  switch (robots) {
+    case ROBOTS.INDEX_FOLLOW:
+      return 'outline-success';
+    case ROBOTS.INDEX_NO_FOLLOW:
+      return 'outline-info';
+    case ROBOTS.NO_INDEX_FOLLOW:
+      return 'outline-warning';
+    case ROBOTS.NO_INDEX_NO_FOLLOW:
+      return 'outline-secondary';
+    default:
+      return 'outline-danger';
+  }
+};
+
+/**
+ * Translates the SEO robots to a user friendly string.
+ * 
+ * @param robots - The SEO robots value.
+ * @example ```typescript
+ * getRobots("index, follow");
+ * // Returns "Indexar, Seguir"
+ * ```
+ * @returns A string representing the SEO robots in a user friendly format.
+ */
+export const getRobots = (robots: ROBOTS) => {
+  switch (robots) {
+    case ROBOTS.INDEX_FOLLOW:
+      return "Indexar y Seguir";
+    case ROBOTS.INDEX_NO_FOLLOW:
+      return "Indexar y No Seguir";
+    case ROBOTS.NO_INDEX_FOLLOW:
+      return "No Indexar y Seguir";
+    case ROBOTS.NO_INDEX_NO_FOLLOW:
+      return "No Indexar y No Seguir";
+    default:
+      return "No Indexar y No Seguir";
+  }
+};
+
+/**
+ * Translates the page status to a user friendly string.
+ * 
+ * @param status - The page status value.
+ * @example ```typescript
+ * getPageStatus(PageStatus.DRAFT);
+ * // Returns "Borrador"
+ * getPageStatus(PageStatus.PUBLISHED);
+ * // Returns "Publicada"
+ * ```
+ * @returns A string representing the page status in a user friendly format.
+ */
+export const getPageStatus = (status: PAGE_STATUS): {
+  label: string;
+  variant:
+    | 'outline-info'
+    | 'outline-warning'
+    | 'outline-success'
+    | 'outline-secondary';
+} => {
+  switch (status) {
+    case PAGE_STATUS.DRAFT:
+      return {
+        label: "Borrador",
+        variant: 'outline-secondary',
+      };
+    case PAGE_STATUS.HOLD:
+      return {
+        label: "Retenido",
+        variant: "outline-warning",
+      };
+    case PAGE_STATUS.UNPUBLISHED:
+      return {
+        label: "No Publicado",
+        variant: "outline-info",
+      };
+    case PAGE_STATUS.PUBLISHED:
+      return {
+        label: "Publicado",
+        variant: "outline-success",
+      };
+    default:
+      return {
+        label: "Desconocido",
+        variant: "outline-secondary",
+      };
+  }
+};

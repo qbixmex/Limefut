@@ -30,6 +30,13 @@ enum Stage {
   finals
 }
 
+enum PageStatus {
+  draft
+  hold
+  unpublished
+  published
+}
+
 model User {
   id            String    @id @default(uuid())
   name          String?
@@ -355,7 +362,7 @@ model GalleryImage {
   imageUrl      String  @unique
   imagePublicID String  @map("image_public_id")
   active        Boolean @default(false)
-  position      Int     @default(0)   
+  position      Int     @default(0)
 
   // Relations
   galleryId String  @map("gallery_id")
@@ -366,4 +373,39 @@ model GalleryImage {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("gallery_image")
+}
+
+model CustomPage {
+  id             String     @id @default(uuid())
+  title          String?
+  permalink      String?    @unique
+  content        String?    @db.Text
+  position       Int?
+  seoTitle       String?    @map("seo_title")
+  seoDescription String?    @map("seo_description")
+  seoRobots      String?    @default("noindex, nofollow") @map("seo_robots")
+  status         PageStatus @default(draft)
+
+  // Relations
+  images CustomPageImage[]
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("custom_pages")
+}
+
+model CustomPageImage {
+  id        String   @id @default(uuid())
+  imageUrl  String   @map("image_url")
+  publicId  String   @map("image_public_id")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  customPageId String     @map("custom_page_id")
+  customPage   CustomPage @relation(fields: [customPageId], references: [id], onDelete: Cascade)
+
+  @@map("custom_page_images")
 }

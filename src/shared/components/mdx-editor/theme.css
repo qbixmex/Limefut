@@ -1,0 +1,103 @@
+@import url('@radix-ui/colors/tomato-dark.css');
+@import url('@radix-ui/colors/gray-dark.css');
+
+.mdxeditor-popup-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.prose {
+  position: relative;
+  font-family: "Inter", sans-serif;
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.light-editor {
+  background-color: var(--color-gray-50);
+  border-radius: 8px;
+  border: solid 1px var(--color-gray-200);
+  overflow: hidden;
+}
+
+.dark-editor {
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: solid 1px var(--color-gray-800);
+  overflow: hidden;
+
+  --accentBase: var(--tomato-1);
+  --accentBgSubtle: var(--tomato-2);
+  --accentBg: var(--tomato-3);
+  --accentBgHover: var(--tomato-4);
+  --accentBgActive: var(--tomato-5);
+  --accentLine: var(--tomato-6);
+  --accentBorder: var(--tomato-7);
+  --accentBorderHover: var(--tomato-8);
+  --accentSolid: var(--tomato-9);
+  --accentSolidHover: var(--tomato-10);
+  --accentText: var(--tomato-11);
+  --accentTextContrast: var(--tomato-12);
+
+  --baseBase: var(--gray-1);
+  --baseBgSubtle: var(--gray-2);
+  --baseBg: var(--gray-3);
+  --baseBgHover: var(--gray-4);
+  --baseBgActive: var(--gray-5);
+  --baseLine: var(--gray-6);
+  --baseBorder: var(--gray-7);
+  --baseBorderHover: var(--gray-8);
+  --baseSolid: var(--gray-9);
+  --baseSolidHover: var(--gray-10);
+  --baseText: var(--gray-11);
+  --baseTextContrast: var(--gray-12);
+
+  --admonitionTipBg: var(--cyan4);
+  --admonitionTipBorder: var(--cyan8);
+  
+  --admonitionInfoBg: var(--grass4);
+  --admonitionInfoBorder: var(--grass8);
+
+  --admonitionCautionBg: var(--amber4);
+  --admonitionCautionBorder: var(--amber8);
+
+  --admonitionDangerBg: var(--red4);
+  --admonitionDangerBorder: var(--red8);
+
+  --admonitionNoteBg: var(--gray-4);
+  --admonitionNoteBorder: var(--gray-8);
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  color: var(--baseText);
+  --basePageBg: var(--color-stone-950);
+  background: var(--basePageBg);
+  border-radius: 8px;
+
+  min-height: 300px;
+  max-height: clamp(320px, 80vh, 800px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dark-editor .prose::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dark-editor .prose::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+}
+
+.cm-matchingBracket {
+  background-color: transparent !important;
+  color: var(--color-amber-500) !important;
+}

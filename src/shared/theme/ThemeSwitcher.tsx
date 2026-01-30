@@ -14,7 +14,7 @@ type Props = Readonly<{
 }>;
 
 export const ThemeSwitcher: FC<Props> = ({ className }) => {
-  const [mounted, setMounted] = useState(false);
+  const [ mounted, setMounted ] = useState(false);
   const { setTheme, resolvedTheme } = useTheme();
   
   useEffect(() => {

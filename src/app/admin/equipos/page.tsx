@@ -10,6 +10,7 @@ import { Search } from "@/shared/components/search";
 import { TeamsContent } from "./(components)/teams-content";
 import { ClearFilters } from "./(components)/clear-filters";
 import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
+import { ErrorHandler } from "~/src/shared/components/errorHandler";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -49,6 +50,7 @@ export const TeamsPage: FC<Props> = ({ searchParams }) => {
                 <TournamentsWrapper />
               </Suspense>
               <Suspense>
+                <ErrorHandler />
                 <TeamsContent searchParams={searchParams} />
               </Suspense>
             </CardContent>

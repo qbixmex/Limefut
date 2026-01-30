@@ -25,7 +25,7 @@ export const EditGalleryPage: FC<Props> = async ({ params }) => {
   const response = await fetchGalleryAction(session?.user.roles ?? [], galleryId);
 
   if (!response.ok && !response.gallery) {
-    redirect('/admin/galleries');
+    redirect('/admin/gallerias');
   }
 
   const { tournaments } = await fetchTournamentsForGalleryAction();
