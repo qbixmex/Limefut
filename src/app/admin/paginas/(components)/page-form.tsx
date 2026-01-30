@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useState, type FC } from 'react';
+import type { ChangeEvent, FC } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useForm } from 'react-hook-form';
@@ -19,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { Copy, LoaderCircle, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, slugify } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
 import { createPageSchema, editPageSchema } from '@/shared/schemas';
@@ -36,7 +37,7 @@ type Props = Readonly<{
 export const PageForm: FC<Props> = ({ page }) => {
   const route = useRouter();
   const formSchema = !page ? createPageSchema : editPageSchema;
-
+  const isPermalinkEdited = useRef(false);
   const [contentImages, setContentImages] = useState<CustomPageImage[]>(page.images);
   const [isDeletingImage, setIsDeletingImage] = useState<string | null>(null);
   const [isDraft, setIsDraft] = useState(false);
@@ -55,6 +56,18 @@ export const PageForm: FC<Props> = ({ page }) => {
       status: page.status ?? 'draft',
     },
   });
+
+  const handlePermalinkChange = (event: ChangeEvent<HTMLInputElement>) => {
+    isPermalinkEdited.current = true;
+    form.setValue('permalink', event.target.value, { shouldValidate: true });
+  };
+
+  const handleNameTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    form.setValue('title', event.target.value, { shouldValidate: true });
+    if (!isPermalinkEdited.current) {
+      form.setValue('permalink', slugify(event.target.value), { shouldValidate: true });
+    }
+  };
 
   const updateContentImage = useCallback((customPageImage: CustomPageImage) => {
     setContentImages((prev) => [...prev, customPageImage]);
@@ -147,7 +160,11 @@ export const PageForm: FC<Props> = ({ page }) => {
                   <FormItem>
                     <FormLabel>Título de la Página</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value ?? ''} />
+                      <Input
+                        {...field}
+                        value={field.value ?? ''}
+                        onChange={handleNameTitle}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -162,7 +179,11 @@ export const PageForm: FC<Props> = ({ page }) => {
                   <FormItem>
                     <FormLabel>Enlace Permanente</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value ?? ''} />
+                      <Input
+                        {...field}
+                        value={field.value ?? ''}
+                        onChange={handlePermalinkChange}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -179,7 +200,6 @@ export const PageForm: FC<Props> = ({ page }) => {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contenido</FormLabel>
                   <FormControl>
                     <MdEditorField
                       markdownString={field.value}

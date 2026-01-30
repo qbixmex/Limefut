@@ -101,10 +101,10 @@ export const PagesTable: FC<Props> = async ({
                               <p>editar</p>
                             </TooltipContent>
                           </Tooltip>
-                          {/* <DeletePage
-                            pageId={page.id}
+                          <DeletePage
+                            pageId={page.id as string}
                             roles={session?.user.roles as string[]}
-                          /> */}
+                          />
                         </div>
                       </TableCell>
                     </TableRow>

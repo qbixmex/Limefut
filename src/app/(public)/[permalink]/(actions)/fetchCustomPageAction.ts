@@ -28,11 +28,11 @@ export const fetchCustomPageAction = async (permalink: string): ResponseAction =
         id: true,
         title: true,
         content: true,
-        state: true,
+        status: true,
       },
     });
 
-    if (customPage?.state !== 'published') {
+    if (customPage?.status !== 'published') {
       return {
         ok: false,
         message: '¡ La página personalizada no está disponible !',

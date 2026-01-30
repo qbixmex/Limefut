@@ -135,11 +135,6 @@ export const navMain: NavItem[] = [
         url: "/admin/paginas",
         icon: ListIcon,
       },
-      {
-        label: "Crear",
-        url: "/admin/paginas/crear",
-        icon: PlusIcon,
-      },
     ],
   },
   {

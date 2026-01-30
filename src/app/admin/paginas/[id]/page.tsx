@@ -13,6 +13,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
+import { rehypeYoutube } from "@/lib/rehype-youtube";
+import "highlight.js/styles/tokyo-night-dark.min.css";
 import type { PAGE_STATUS } from '@/shared/interfaces/Page';
 import { getPageStatus } from '@/lib/utils';
 
@@ -107,8 +113,17 @@ export const PageDetails: FC<Props> = async ({ params }) => {
 
             <h2 className="text-xl font-semibold text-sky-500 mb-2">Contenido</h2>
 
-            <section className="mb-10">
-              {page.content ?? <span className="text-gray-400">No definido</span>}
+            <section className={"prose prose-lg dark:prose-invert max-w-none mb-10"}>
+              {page.content ? (
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeYoutube]}
+                >
+                  {page.content}
+                </ReactMarkdown>
+              ) : (
+                <span className="text-gray-400">No definido</span>
+              )}
             </section>
 
             <div className="absolute top-5 right-5">

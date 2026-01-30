@@ -23,7 +23,7 @@ export const fetchPagesAction = async (): ResponseFetchPagesLink => {
 
   try {
     const pages = await prisma.customPage.findMany({
-      where: { state: 'published' },
+      where: { status: 'published' },
       select: {
         id: true,
         title: true,

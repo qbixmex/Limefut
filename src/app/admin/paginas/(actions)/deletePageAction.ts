@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath, updateTag } from "next/cache";
+import deleteImage from "./deleteImageAction";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -13,7 +14,16 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
     const result = await prisma.$transaction(async (tx) => {
       const page = await tx.customPage.findUnique({
         where: { id: pageId },
-        select: { title: true, position: true },
+        select: {
+          title: true,
+          position: true,
+          images: {
+            select: {
+              id: true,
+              publicId: true,
+            },
+          },
+        },
       });
 
       if (!page) {
@@ -23,8 +33,17 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
         };
       }
 
+      // Delete Content Images from Cloudinary
+      if (page.images.length > 0) {
+        await Promise.all(page.images.map(async (image) => {
+          await deleteImage(image.publicId);
+        }));
+      }
+
       // Delete the page
-      await tx.customPage.delete({ where: { id: pageId } });
+      await tx.customPage.delete({
+        where: { id: pageId },
+      });
 
       // Shift up positions for pages that were after the deleted one
       // Use updateMany with decrement to avoid unique conflicts and for performance
