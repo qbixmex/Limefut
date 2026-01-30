@@ -1,25 +1,18 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import type { Page } from '@/shared/interfaces';
 
-export type PageType = {
-  title: string;
+type Image = {
   id: string;
-  content: string;
-  permalink: string;
-  active: boolean;
-  seoTitle: string | null;
-  seoDescription: string | null;
-  seoRobots: string | null;
-  position: number;
-  createdAt: Date;
-  updatedAt: Date;
+  imageUrl: string;
+  publicId: string;
 };
 
 type FetchResponse = Promise<{
   ok: boolean;
   message: string;
-  page: PageType | null;
+  page: Page & { images: Image[] } | null;
 }>;
 
 export const fetchPageAction = async (
@@ -37,6 +30,15 @@ export const fetchPageAction = async (
   try {
     const page = await prisma.customPage.findFirst({
       where: { id: pageId },
+      include: {
+        images: {
+          select: {
+            id: true,
+            imageUrl: true,
+            publicId: true,
+          },
+        },
+      },
     });
 
     if (!page) {

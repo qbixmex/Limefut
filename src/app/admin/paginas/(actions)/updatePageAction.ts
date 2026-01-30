@@ -3,68 +3,32 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath, updateTag } from 'next/cache';
 import { editPageSchema } from '@/shared/schemas';
-
-export type PageType = {
-  id: string;
-  title: string;
-  permalink: string;
-  content: string;
-  seoTitle: string | null;
-  seoDescription: string | null;
-  seoRobots: string | null;
-  active: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import type { Page, PAGE_STATUS } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;
   pageId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
 };
 
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
-  page: PageType | null;
+  page: Page | null;
 }>;
 
 export const updatePageAction = async ({
   formData,
   pageId,
-  userRoles,
-  authenticatedUserId,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      page: null,
-    };
-  }
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      page: null,
-    };
-  }
-
   const rawData = {
     title: formData.get('title') as string,
     permalink: formData.get('permalink') ?? '',
     content: formData.get('content') ?? '',
     seoTitle: formData.get('seoTitle') ?? '',
+    status: formData.get('status') ?? 'draft',
     seoDescription: formData.get('seoDescription') ?? '',
     seoRobots: formData.get('seoRobots') ?? '',
     position: Number(formData.get('position') ?? 0),
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
   };
 
   const pageVerified = editPageSchema.safeParse(rawData);
@@ -92,6 +56,21 @@ export const updatePageAction = async ({
           };
         }
 
+        const isPageDuplicated = await transaction.customPage.count({
+          where: {
+            permalink: pageVerified.data.permalink as string,
+            id: { not: pageId }, // Exclude current page 
+          },
+        });
+
+        if (isPageDuplicated > 0) {
+          return {
+            ok: false,
+            message: '¡ Ya existe ese enlace permanente !',
+            page: null,
+          };
+        }
+
         const pages = await transaction.customPage.findMany({
           select: {
             id: true,
@@ -110,7 +89,11 @@ export const updatePageAction = async ({
         if (updatedPosition === currentPosition) {
           const updatedPage = await transaction.customPage.update({
             where: { id: pageId },
-            data: { ...pageVerified.data, position: updatedPosition },
+            data: {
+              ...pageVerified.data,
+              position: updatedPosition,
+              status: pageVerified.data.status as PAGE_STATUS,
+            },
           });
 
           // Update Cache
@@ -122,7 +105,7 @@ export const updatePageAction = async ({
 
           return {
             ok: true,
-            message: '¡ La página fue actualizada correctamente 👍 !',
+            message: '¡ La página fue guardada correctamente 👍 !',
             page: updatedPage,
           };
         }
@@ -131,33 +114,37 @@ export const updatePageAction = async ({
         // update in descending order to avoid unique position conflicts.
         if (updatedPosition < currentPosition) {
           const affected = pages
-            .filter((p) => p.position >= updatedPosition && p.position < currentPosition)
-            .sort((a, b) => b.position - a.position); // descending
+            .filter((p) => p.position! >= updatedPosition && p.position! < currentPosition)
+            .sort((a, b) => b.position! - a.position!); // descending
 
           for (const p of affected) {
             await transaction.customPage.update({
               where: { id: p.id },
-              data: { position: p.position + 1 },
+              data: { position: p.position! + 1 },
             });
           }
         } else {
           // Moving down (to a larger number): decrement affected positions,
           // update in ascending order to avoid unique position conflicts.
           const affected = pages
-            .filter((p) => p.position <= updatedPosition && p.position > currentPosition)
-            .sort((a, b) => a.position - b.position); // ascending
+            .filter((p) => p.position! <= updatedPosition && p.position! > currentPosition)
+            .sort((a, b) => a.position! - b.position!); // ascending
 
           for (const p of affected) {
             await transaction.customPage.update({
               where: { id: p.id },
-              data: { position: p.position - 1 },
+              data: { position: p.position! - 1 },
             });
           }
         }
 
         const updatedPage = await transaction.customPage.update({
           where: { id: pageId },
-          data: { ...pageVerified.data, position: updatedPosition },
+          data: {
+            ...pageVerified.data,
+            position: updatedPosition,
+            status: pageVerified.data.status as PAGE_STATUS,
+          },
         });
 
         // Update Cache
@@ -169,7 +156,7 @@ export const updatePageAction = async ({
 
         return {
           ok: true,
-          message: '¡ La página fue actualizada correctamente 👍 !',
+          message: '¡ La página fue guardada correctamente 👍 !',
           page: updatedPage,
         };
       } catch (error) {
@@ -185,7 +172,7 @@ export const updatePageAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar la página, revise los logs del servidor !',
+            message: '¡ Error al guardar la página, revise los logs del servidor !',
             page: null,
           };
         }

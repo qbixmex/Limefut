@@ -5,18 +5,25 @@ export enum ROBOTS {
   NO_INDEX_NO_FOLLOW = "noindex, nofollow",
 }
 
+export enum PAGE_STATUS {
+  DRAFT = 'draft',
+  HOLD = 'hold',
+  UNPUBLISHED = 'unpublished',
+  PUBLISHED = 'published',
+}
+
 export interface Page {
-  id?: string;
-  title: string;
-  permalink: string;
-  content: string;
-  position: number;
-  active: boolean;
+  id: string;
+  title: string | null;
+  permalink: string | null;
+  content: string | null;
+  position: number | null;
+  status: string;
   seoTitle: string | null;
   seoDescription: string | null;
   seoRobots: string | null;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CustomPageImage {

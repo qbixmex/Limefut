@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -11,9 +11,10 @@ import { fetchPagesAction } from '../(actions)/fetchPagesAction';
 import { SeoRobots } from './seo-robots';
 import type { ROBOTS } from '@/shared/interfaces';
 import { Pagination } from '@/shared/components/pagination';
-import { cn } from '@/lib/utils';
+import { cn, getPageStatus } from '@/lib/utils';
 import { DeletePage } from './delete-page';
-import { Badge } from '~/src/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
+import type { PAGE_STATUS } from '@/shared/interfaces/Page';
 
 type Props = Readonly<{
   query?: string;
@@ -47,66 +48,68 @@ export const PagesTable: FC<Props> = async ({
                   <TableHead>Título</TableHead>
                   <TableHead>Enlace Permanente</TableHead>
                   <TableHead className="w-25">Robots</TableHead>
+                  <TableHead className="w-25 text-center">Estado</TableHead>
                   <TableHead className="w-25 text-center">Posición</TableHead>
-                  <TableHead className="w-25 text-center">Activo</TableHead>
-                  <TableHead className="w-[200px]">Acciones</TableHead>
+                  <TableHead className="w-50">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {customPages.map((page) => (
-                  <TableRow key={page.id}>
-                    <TableCell>
-                      <p className="text-pretty">{page.title}</p>
-                    </TableCell>
-                    <TableCell>
-                      <p className="text-pretty">{page.permalink}</p>
-                    </TableCell>
-                    <TableCell>
-                      <SeoRobots robots={page.seoRobots as ROBOTS} />
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="outline-info">{page.position}</Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <ActiveSwitch
-                        resource={{ id: page.id as string, state: page.active }}
-                        updateResourceStateAction={updatePageStateAction}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/paginas/${page.id}`}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            detalles
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/paginas/editar/${page.id}`}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <DeletePage
-                          pageId={page.id}
-                          roles={session?.user.roles as string[]}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {customPages.map((page) => {
+                  const pageStatus = getPageStatus(page.status as PAGE_STATUS);
+                  return (
+                    <TableRow key={page.id}>
+                      <TableCell>
+                        <p className="text-pretty">{page.title ?? 'No especificado'}</p>
+                      </TableCell>
+                      <TableCell>
+                        <p className="text-pretty">{page.permalink ?? 'No especificado'}</p>
+                      </TableCell>
+                      <TableCell>
+                        <SeoRobots robots={page.seoRobots as ROBOTS} />
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant={pageStatus.variant}>
+                          {pageStatus.label}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant="outline-info">{page.position}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-3">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Link href={`/admin/paginas/${page.id}`}>
+                                <Button variant="outline-info" size="icon">
+                                  <InfoIcon />
+                                </Button>
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                              detalles
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Link href={`/admin/paginas/editar/${page.id}`}>
+                                <Button variant="outline-warning" size="icon">
+                                  <Pencil />
+                                </Button>
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                              <p>editar</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          {/* <DeletePage
+                            pageId={page.id}
+                            roles={session?.user.roles as string[]}
+                          /> */}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>

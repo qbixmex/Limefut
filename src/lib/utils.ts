@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ROBOTS } from "../shared/interfaces";
+import { PAGE_STATUS } from "../shared/interfaces/Page";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -160,5 +161,54 @@ export const getRobots = (robots: ROBOTS) => {
       return "No Indexar y No Seguir";
     default:
       return "No Indexar y No Seguir";
+  }
+};
+
+/**
+ * Translates the page status to a user friendly string.
+ * 
+ * @param status - The page status value.
+ * @example ```typescript
+ * getPageStatus(PageStatus.DRAFT);
+ * // Returns "Borrador"
+ * getPageStatus(PageStatus.PUBLISHED);
+ * // Returns "Publicada"
+ * ```
+ * @returns A string representing the page status in a user friendly format.
+ */
+export const getPageStatus = (status: PAGE_STATUS): {
+  label: string;
+  variant:
+    | 'outline-info'
+    | 'outline-warning'
+    | 'outline-success'
+    | 'outline-secondary';
+} => {
+  switch (status) {
+    case PAGE_STATUS.DRAFT:
+      return {
+        label: "Borrador",
+        variant: 'outline-secondary',
+      };
+    case PAGE_STATUS.HOLD:
+      return {
+        label: "Retenido",
+        variant: "outline-warning",
+      };
+    case PAGE_STATUS.UNPUBLISHED:
+      return {
+        label: "No Publicado",
+        variant: "outline-info",
+      };
+    case PAGE_STATUS.PUBLISHED:
+      return {
+        label: "Publicado",
+        variant: "outline-success",
+      };
+    default:
+      return {
+        label: "Desconocido",
+        variant: "outline-secondary",
+      };
   }
 };

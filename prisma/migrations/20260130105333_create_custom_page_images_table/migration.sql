@@ -1,11 +1,11 @@
 -- CreateTable
 CREATE TABLE "custom_page_images" (
     "id" TEXT NOT NULL,
-    "custom_page_id" TEXT NOT NULL,
     "image_url" TEXT NOT NULL,
     "image_public_id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "custom_page_id" TEXT NOT NULL,
 
     CONSTRAINT "custom_page_images_pkey" PRIMARY KEY ("id")
 );

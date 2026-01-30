@@ -1,5 +1,5 @@
 import z from "zod";
-import { ROBOTS } from "../../interfaces";
+import { ROBOTS, PAGE_STATUS } from "../../interfaces";
 
 export const createPageSchema = z.object({
   title: z.string('¡ El título debe ser una cadena de texto !')
@@ -24,5 +24,9 @@ export const createPageSchema = z.object({
       { message: "¡ Seleccione una opción de Robots SEO !" },
     ),
   position: z.number('¡ La posición debe ser un número válido !'),
-  active: z.boolean().optional(),
+  status: z
+    .enum(
+      Object.values(PAGE_STATUS) as [string, ...string[]],
+      { message: "¡ Seleccione un estado !" },
+    ).optional(),
 });

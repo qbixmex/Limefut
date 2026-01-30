@@ -30,6 +30,13 @@ enum Stage {
   finals
 }
 
+enum PageStatus {
+  draft
+  hold
+  unpublished
+  published
+}
+
 model User {
   id            String    @id @default(uuid())
   name          String?
@@ -369,17 +376,15 @@ model GalleryImage {
 }
 
 model CustomPage {
-  id String @id @default(uuid())
-
-  title     String
-  permalink String  @unique
-  content   String  @db.Text
-  position  Int
-  active    Boolean @default(false)
-
-  seoTitle       String? @map("seo_title")
-  seoDescription String? @map("seo_description")
-  seoRobots      String? @default("noindex, nofollow") @map("seo_robots")
+  id             String     @id @default(uuid())
+  title          String?
+  permalink      String?    @unique
+  content        String?    @db.Text
+  position       Int?
+  seoTitle       String?    @map("seo_title")
+  seoDescription String?    @map("seo_description")
+  seoRobots      String?    @default("noindex, nofollow") @map("seo_robots")
+  status         PageStatus @default(draft)
 
   // Relations
   images CustomPageImage[]

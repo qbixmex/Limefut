@@ -9,7 +9,6 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { fetchPageAction } from "../../(actions)/fetchPageAction";
 import { PageForm } from "../../(components)/page-form";
-import type { Session } from "next-auth";
 
 type Props = Readonly<{
   params: Promise<{
@@ -21,12 +20,12 @@ export const EditCustomPage: FC<Props> = async ({ params }) => {
   const pageId = (await params).id;
   const session = await auth();
 
-  const response = await fetchPageAction(session?.user.roles ?? [], pageId);
-
   if (!session?.user.roles.includes('admin')) {
     const message = '¡ No tienes permisos administrativos para actualizar páginas !';
     redirect(`/admin/paginas?error=${encodeURIComponent(message)}`);
   }
+
+  const response = await fetchPageAction(session?.user.roles ?? [], pageId);
 
   if (!response.page) {
     const message = `¡ La página con el id: "${pageId}", no existe ❌ !`;
@@ -43,8 +42,7 @@ export const EditCustomPage: FC<Props> = async ({ params }) => {
           <CardContent>
             <PageForm
               key={response.page.id}
-              session={session as Session}
-              page={response.page!}
+              page={response.page}
             />
           </CardContent>
         </Card>

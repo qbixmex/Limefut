@@ -1,5 +1,5 @@
 import z from "zod";
-import { ROBOTS } from "../../interfaces";
+import { ROBOTS, PAGE_STATUS } from "../../interfaces";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 1; // 1MB
 const ACCEPTED_FILE_TYPES = [
@@ -39,5 +39,9 @@ export const editPageSchema = z.object({
   position: z
     .number('¡ La posición debe ser un número válido !')
     .optional(),
-  active: z.boolean().optional(),
+  status: z
+    .enum(
+      Object.values(PAGE_STATUS) as [string, ...string[]],
+      { message: "¡ Seleccione un estado !" },
+    ).optional(),
 });

@@ -5,8 +5,8 @@ import prisma from "@/lib/prisma";
 
 type PageType = {
   id: string;
-  title: string;
-  content: string;
+  title: string | null;
+  content: string | null;
 };
 
 type ResponseAction = Promise<{
@@ -28,11 +28,11 @@ export const fetchCustomPageAction = async (permalink: string): ResponseAction =
         id: true,
         title: true,
         content: true,
-        active: true,
+        state: true,
       },
     });
 
-    if (!customPage?.active) {
+    if (customPage?.state !== 'published') {
       return {
         ok: false,
         message: '¡ La página personalizada no está disponible !',

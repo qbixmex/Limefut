@@ -15,8 +15,18 @@
   font-weight: 600;
 }
 
+.light-editor {
+  background-color: var(--color-gray-50);
+  border-radius: 8px;
+  border: solid 1px var(--color-gray-200);
+  overflow: hidden;
+}
+
 .dark-editor {
   box-sizing: border-box;
+  border-radius: 8px;
+  border: solid 1px var(--color-gray-800);
+  overflow: hidden;
 
   --accentBase: var(--tomato-1);
   --accentBgSubtle: var(--tomato-2);

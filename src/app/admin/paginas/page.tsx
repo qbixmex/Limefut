@@ -1,13 +1,10 @@
 import { Suspense, type FC } from 'react';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 import Search from '@/shared/components/search';
 import { PagesTableSkeleton } from './(components)/pages-table-skeleton';
 import { PagesTable } from './(components)/pages-table';
+import { CreatePage } from './(components)/create-page';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -30,16 +27,7 @@ export const CustomPagesPage: FC<Props> = async ({ searchParams }) => {
               <CardTitle>Lista de Páginas</CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar página ..." />
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link href="/admin/paginas/crear">
-                      <Button variant="outline-primary" size="icon">
-                        <Plus strokeWidth={3} />
-                      </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">crear</TooltipContent>
-                </Tooltip>
+                <CreatePage />
               </section>
             </CardHeader>
             <CardContent>
@@ -47,10 +35,7 @@ export const CustomPagesPage: FC<Props> = async ({ searchParams }) => {
                 key={`${query}-${currentPage}`}
                 fallback={<PagesTableSkeleton />}
               >
-                <PagesTable
-                  query={query}
-                  currentPage={currentPage}
-                />
+                <PagesTable query={query} currentPage={currentPage} />
               </Suspense>
             </CardContent>
           </Card>

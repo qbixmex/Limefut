@@ -6,13 +6,15 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/u
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { fetchPageAction, type PageType } from '../(actions)/fetchPageAction';
+import { fetchPageAction } from '../(actions)/fetchPageAction';
 import { SeoRobots } from '../(components)/seo-robots';
-import type { ROBOTS } from '@/shared/interfaces';
+import type { Page, ROBOTS } from '@/shared/interfaces';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
+import type { PAGE_STATUS } from '@/shared/interfaces/Page';
+import { getPageStatus } from '@/lib/utils';
 
 type Props = Readonly<{
   params: Promise<{
@@ -30,7 +32,8 @@ export const PageDetails: FC<Props> = async ({ params }) => {
     redirect(`/admin/paginas?error=${encodeURIComponent(response.message)}`);
   }
 
-  const page = response.page as PageType;
+  const page = response.page as Page;
+  const pageStatus = getPageStatus(page.status as PAGE_STATUS);
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
@@ -50,32 +53,28 @@ export const PageDetails: FC<Props> = async ({ params }) => {
                   <TableBody>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Título</TableHead>
-                      <TableCell>{page.title}</TableCell>
+                      <TableCell className="text-gray-400 italic">{page.title ?? 'No definido'}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="w-[180px] font-semibold">Enlace Permanente</TableHead>
-                      <TableCell>{page.permalink}</TableCell>
+                      <TableCell className="text-gray-400 italic">{page.permalink ?? 'No definido'}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="w-[180px] font-semibold">Fecha de Creación</TableHead>
-                      <TableCell>
+                      <TableCell className="text-gray-300 italic">
                         {format(new Date(page?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="w-[180px] font-semibold">Última actualización</TableHead>
-                      <TableCell>
+                      <TableCell className="text-gray-300 italic">
                         {format(new Date(page?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-medium w-[180px]">Estado</TableHead>
                       <TableCell>
-                        {
-                          page.active
-                            ? <Badge variant="outline-info">Activa</Badge>
-                            : <Badge variant="outline-warning">No Activa</Badge>
-                        }
+                        {<Badge variant={pageStatus.variant}>{pageStatus.label}</Badge>}
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -87,12 +86,12 @@ export const PageDetails: FC<Props> = async ({ params }) => {
                   <TableBody>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Título SEO</TableHead>
-                      <TableCell>{page.seoTitle}</TableCell>
+                      <TableCell className="text-gray-300 italic">{page.seoTitle ?? 'No definido'}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Descripción SEO</TableHead>
-                      <TableCell>
-                        <p className="text-pretty">{page.seoDescription}</p>
+                      <TableCell className="text-gray-300 italic">
+                        <p className="text-pretty">{page.seoDescription ?? 'No definida'}</p>
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -106,9 +105,10 @@ export const PageDetails: FC<Props> = async ({ params }) => {
               </div>
             </section>
 
-            <h2 className="text-xl font-semibold text-sky-500">Contenido</h2>
+            <h2 className="text-xl font-semibold text-sky-500 mb-2">Contenido</h2>
+
             <section className="mb-10">
-              {page.content}
+              {page.content ?? <span className="text-gray-400">No definido</span>}
             </section>
 
             <div className="absolute top-5 right-5">

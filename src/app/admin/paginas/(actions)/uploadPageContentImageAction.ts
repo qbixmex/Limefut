@@ -6,21 +6,20 @@ import type { CloudinaryResponse } from "@/shared/interfaces/Cloudinary";
 
 type UploadArticleImageResponse = Promise<{
   message: string;
-  cloudinaryResponse: CloudinaryResponse;
+  cloudinaryResponse: CloudinaryResponse | null;
 }>;
 
 export const uploadPageContentImageAction = async (
   file: File,
   pageId: string,
 ): UploadArticleImageResponse => {
-  if (!pageId) {
-    throw new Error("¡ El ID de la página no fue proporcionado !");
-  }
-
-  const imageUploaded = await uploadImage(file!, 'pages');
+  const imageUploaded = await uploadImage(file, 'pages');
 
   if (!imageUploaded) {
-    throw new Error('Error uploading image to cloudinary');
+    return {
+      message: '¡ No se pudo subir la imagen ❌ !',
+      cloudinaryResponse: null,
+    };
   }
 
   await prisma.customPage.update({
@@ -36,7 +35,7 @@ export const uploadPageContentImageAction = async (
   });
 
   return {
-    message: 'Image uploaded successfully 👍',
+    message: '¡ Imagen cargada satisfactoriamente 👍 !',
     cloudinaryResponse: imageUploaded,
   };
 };

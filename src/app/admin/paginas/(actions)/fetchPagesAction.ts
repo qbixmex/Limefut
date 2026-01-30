@@ -2,7 +2,7 @@
 
 import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
-import type { Pagination } from "@/shared/interfaces";
+import type { Page, Pagination } from "@/shared/interfaces";
 
 type Options = Readonly<{
   userRole: string[] | null;
@@ -11,19 +11,10 @@ type Options = Readonly<{
   searchTerm?: string;
 }>;
 
-type PageType = {
-  id: string;
-  title: string;
-  permalink: string;
-  seoRobots: string | null;
-  position: number;
-  active: boolean;
-};
-
 export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  customPages: PageType[];
+  customPages: Partial<Page>[];
   pagination: Pagination;
 }>;
 
@@ -64,7 +55,7 @@ export const fetchPagesAction = async (options: Options): ResponseAction => {
         id: true,
         title: true,
         permalink: true,
-        active: true,
+        status: true,
         seoRobots: true,
         position: true,
       },

@@ -29,7 +29,7 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
       // Shift up positions for pages that were after the deleted one
       // Use updateMany with decrement to avoid unique conflicts and for performance
       await tx.customPage.updateMany({
-        where: { position: { gt: page.position } },
+        where: { position: { gt: page.position as number } },
         data: { position: { decrement: 1 } },
       });
 

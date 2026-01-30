@@ -5,8 +5,8 @@ import prisma from "@/lib/prisma";
 
 export type PageType = {
   id: string;
-  title: string;
-  permalink: string;
+  title: string | null;
+  permalink: string | null;
 };
 
 type ResponseFetchPagesLink = Promise<{
@@ -23,7 +23,7 @@ export const fetchPagesAction = async (): ResponseFetchPagesLink => {
 
   try {
     const pages = await prisma.customPage.findMany({
-      where: { active: true },
+      where: { state: 'published' },
       select: {
         id: true,
         title: true,

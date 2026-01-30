@@ -12,6 +12,7 @@ import {
 import { ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { validate as isUUID } from "uuid";
+import Link from "next/link";
 
 export const Breadcrumbs = () => {
   const path = usePathname();
@@ -29,8 +30,10 @@ export const Breadcrumbs = () => {
         </BreadcrumbSeparator>
         <BreadcrumbItem>
           <BreadcrumbPage>
-            <BreadcrumbLink href={`/${pathSegments[0]}/${pathSegments[1]}`}>
-              <span className="capitalize">{pathSegments[1].replaceAll('-', ' ')}</span>
+            <BreadcrumbLink asChild>
+              <Link href={`/${pathSegments[0]}/${pathSegments[1]}`}>
+                <span className="capitalize">{pathSegments[1].replaceAll('-', ' ')}</span>
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbPage>
         </BreadcrumbItem>

@@ -144,32 +144,57 @@
     @apply bg-neutral-50 md:rounded p-5 flex-1 flex flex-col gap-5;
   }
 
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6,
+  .prose p {
+    @apply text-gray-600 dark:text-gray-200;
+  } 
+
   .prose h1 {
-    @apply text-emerald-500 font-semibold text-5xl mb-2;
+    margin-bottom: 0.5em;
+    @apply font-semibold text-5xl;
   }
 
   .prose h2 {
-    @apply text-blue-500 font-semibold text-4xl;
+    margin-bottom: 0.5em;
+    @apply font-semibold text-4xl;
   }
 
   .prose h3 {
-    @apply text-pink-500 text-3xl;
+    margin-bottom: 0.5em;
+    @apply text-3xl;
   }
 
   .prose h4 {
-    @apply text-orange-500 text-2xl;
+    margin-bottom: 0.5em;
+    @apply text-2xl;
   }
 
   .prose h5 {
-    @apply text-emerald-500 text-xl;
+    margin-bottom: 0.5em;
+    @apply text-xl;
   }
 
   .prose h6 {
-    @apply text-sky-500 text-lg;
+    margin-bottom: 0.5em;
+    @apply text-lg;
   }
 
   .prose p {
-    @apply text-muted-foreground text-xl leading-8 text-pretty;
+    margin: 0 0 1rem 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    @apply dark:text-muted-foreground text-xl leading-8 text-pretty;
+  }
+
+  .prose img {
+    margin: 0px;
+    border-radius: 0.25rem;
   }
 
   .prose b,
@@ -187,14 +212,11 @@
 
   .prose ul,
   .prose ol {
-    @apply ml-2;
+    margin: 0 8px 0 0;
   }
 
   .prose li {
     @apply text-muted-foreground leading-8;
-    &:before {
-      @apply top-[7px]!;
-    }
   }
 
   .prose table {

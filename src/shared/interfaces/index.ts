@@ -13,6 +13,6 @@ export type { ContactMessage } from "./ContactMessage";
 export type { Gallery } from "./Gallery";
 export type { GalleryImage } from "./GalleryImage";
 export type { Page } from "./Page";
-export { ROBOTS } from "./Page";
+export { ROBOTS, PAGE_STATUS } from "./Page";
 
 export type { CloudinaryResponse } from "./Cloudinary";

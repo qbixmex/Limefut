@@ -1,27 +1,23 @@
 'use server';
 
-import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
-import { deleteImage } from "@/shared/actions";
+import deleteImage from "./deleteImageAction";
+import type { CustomPageImage } from "@/shared/interfaces/Page";
 
 type DeleteContentImageResponse = {
   ok: boolean;
   message: string;
-  customPageImages: {
-    imageUrl: string;
-    publicId: string;
-  }[] | null;
+  customPageImages?: CustomPageImage[];
 };
 
 export const deleteContentImageAction = async (
   pageId: string,
   publicId: string,
 ): Promise<DeleteContentImageResponse> => {
-  const customPageImage = await prisma.customPage.findFirst({
+  const page = await prisma.customPage.findUnique({
     where: { id: pageId },
     select: {
       id: true,
-      permalink: true,
       images: {
         select: {
           publicId: true,
@@ -31,47 +27,43 @@ export const deleteContentImageAction = async (
     },
   });
 
-  if (!customPageImage) {
+  if (!page) {
     return {
       ok: false,
-      message: '¡ La página no existe ❌ !',
-      customPageImages: null,
+      message: '¡ La página no existe !',
     };
   }
 
-  if (customPageImage.images.length === 0) {
+  if (page.images.length === 0) {
     return {
       ok: false,
       message: '¡ No hay imágenes para eliminar !',
-      customPageImages: null,
     };
   }
 
   // Get the image URL before deleting the record
-  const imageToDelete = customPageImage.images.find((customPageImage) => {
+  const imageToDelete = page.images.find((customPageImage) => {
     return customPageImage.publicId === publicId;
   });
 
   if (!imageToDelete) {
     return {
       ok: false,
-      message: `¡ La imagen con el ID ${publicId} no existe ❌ !`,
-      customPageImages: null,
+      message: `¡ La imagen con el ID ${publicId} no existe !`,
     };
   }
 
   // Delete from database first
   await prisma.$transaction(async (transaction) => {
-    // Remove from CustomPageImage table
+    // Remove from ArticleImage table
     await transaction.customPageImage.deleteMany({
       where: { publicId },
     });
   });
 
-  // Delete Image from Cloudinary.
   await deleteImage(publicId);
 
-  const updatedCustomPage = await prisma.customPage.findUnique({
+  const updatedPage = await prisma.customPage.findUnique({
     where: { id: pageId },
     select: {
       images: {
@@ -83,13 +75,11 @@ export const deleteContentImageAction = async (
     },
   });
 
-  revalidatePath(`/${customPageImage.permalink}`);
-  revalidatePath(`/admin/paginas/${customPageImage.id}`);
-  revalidatePath(`/admin/paginas/${customPageImage.id}/edit`);
-
   return {
     ok: true,
     message: 'La imagen del contenido ha sido eliminada 👍',
-    customPageImages: updatedCustomPage?.images ?? null,
+    customPageImages: updatedPage?.images ?? [],
   };
 };
+
+export default deleteContentImageAction;
