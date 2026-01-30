@@ -25,8 +25,8 @@ export const EditTeam: FC<Props> = async ({ params }) => {
   const teamId = (await params).id;
   const responseTeam = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
-  if (!responseTeam.ok) {
-    redirect(`/admin/users?error=${encodeURIComponent(responseTeam.message)}`);
+  if (!responseTeam.team) {
+    redirect(`/admin/equipos?error=${encodeURIComponent(responseTeam.message)}`);
   }
 
   const responseTeams = await fetchTournamentsForTeam();
@@ -52,6 +52,7 @@ export const EditTeam: FC<Props> = async ({ params }) => {
           </CardHeader>
           <CardContent>
             <TeamForm
+              key={teamId}
               session={session as Session}
               team={responseTeam.team!}
               tournaments={tournaments as TournamentType[]}

@@ -59,7 +59,7 @@ export const fetchTeamAction = async (
     if (!team) {
       return {
         ok: false,
-        message: '¡ Equipo no encontrado ❌ !',
+        message: `¡ El equipo con el ID: "${teamId}" no existe ❌ !`,
         team: null,
       };
     }

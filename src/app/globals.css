@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -141,5 +142,141 @@
 @layer utilities {
   .wrapper {
     @apply bg-neutral-50 md:rounded p-5 flex-1 flex flex-col gap-5;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6,
+  .prose p {
+    @apply text-gray-600 dark:text-gray-200;
+  } 
+
+  .prose h1 {
+    margin-bottom: 0.5em;
+    @apply font-semibold text-5xl;
+  }
+
+  .prose h2 {
+    margin-bottom: 0.5em;
+    @apply font-semibold text-4xl;
+  }
+
+  .prose h3 {
+    margin-bottom: 0.5em;
+    @apply text-3xl;
+  }
+
+  .prose h4 {
+    margin-bottom: 0.5em;
+    @apply text-2xl;
+  }
+
+  .prose h5 {
+    margin-bottom: 0.5em;
+    @apply text-xl;
+  }
+
+  .prose h6 {
+    margin-bottom: 0.5em;
+    @apply text-lg;
+  }
+
+  .prose p {
+    margin: 0 0 1rem 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    @apply dark:text-muted-foreground text-xl leading-8 text-pretty;
+  }
+
+  .prose img {
+    margin: 0px;
+    border-radius: 0.25rem;
+  }
+
+  .prose b,
+  .prose strong {
+    @apply text-stone-500 font-bold;
+  }
+
+  .prose hr {
+    @apply border-stone-400! my-10;
+  }
+
+  .dark .prose hr {
+    @apply border-stone-700!;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin: 0 8px 0 0;
+  }
+
+  .prose li {
+    @apply text-muted-foreground leading-8;
+  }
+
+  .prose table {
+    @apply inline-block border-0 mx-0 text-[1rem];
+  }
+
+  .prose tr {
+    @apply rounded-t-lg border-0;
+  }
+
+  .prose thead {
+    @apply border-0;
+  }
+
+  .prose thead tr th {
+    @apply bg-slate-900/80;
+  }
+
+  .prose thead tr th:first-child {
+    @apply rounded-tl;
+  }
+
+  .prose thead tr th:last-child {
+    @apply rounded-tr;
+  }
+
+  .prose tr:nth-child(odd) {
+    @apply bg-slate-800/20;
+  }
+
+  .prose tr:nth-child(even) {
+    @apply bg-slate-800/40;
+  }
+
+  .prose th,
+  .prose td {
+    @apply border-0 px-6 py-3 text-left;
+  }
+
+  .prose tbody tr:last-child td:first-child {
+    @apply rounded-bl;
+  }
+
+  .prose tbody tr:last-child td:last-child {
+    @apply rounded-br;
+  }
+
+  .prose a {
+    @apply text-sky-500 hover:underline;
+  }
+
+  .prose blockquote {
+    @apply bg-slate-900 inline-block italic rounded-r-lg py-5 pr-5 text-slate-100;
+  }
+
+  .prose blockquote p {
+    @apply py-2 mr-10;
+  }
+
+  .hide-element {
+    @apply absolute -top-[9999px] -left-[9999px];
   }
 }

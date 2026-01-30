@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { auth } from '~/src/auth';
+import { auth } from '@/auth';
 import { fetchGalleriesAction, updateGalleryStateAction } from '../(actions)';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
