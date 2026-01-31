@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export const ContactPage: FC = () => {
   return (
-    <div className="wrapper justify-center dark:bg-gray-600/20!">
+    <div className="wrapper justify-center">
       <h1>Contacto</h1>
       <ContactForm />
     </div>
