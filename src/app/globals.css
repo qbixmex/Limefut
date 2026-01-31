@@ -279,4 +279,25 @@
   .hide-element {
     @apply absolute -top-[9999px] -left-[9999px];
   }
+
+  .admin-page {
+    @apply flex flex-1 flex-col gap-5 p-5 pt-0
+  }
+
+  .admin-page-container {
+    @apply bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10;
+  }
+
+  .admin-page-card {
+    @apply w-full shadow-none bg-neutral-100;
+    @apply dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800 relative;
+  }
+
+  .admin-page-card-header {
+    @apply flex items-center justify-between;
+  }
+
+  .admin-page-card-title {
+    @apply text-2xl lg:text-4xl text-emerald-500!;
+  }
 }
