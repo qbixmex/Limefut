@@ -21,7 +21,7 @@ export const links: Link[] = [
   {
     id: "2d166a1a-3852-40bf-98de-31725a5c7ab7",
     url: "/encuentros",
-    label: "Encuentros",
+    label: "Rol de Juegos y Encuentros",
     position: 3,
   },
   {
