@@ -151,7 +151,7 @@
   .prose h5,
   .prose h6,
   .prose p {
-    @apply text-gray-600 dark:text-gray-200;
+    @apply m-0 text-gray-600 dark:text-gray-200;
   } 
 
   .prose h1 {
