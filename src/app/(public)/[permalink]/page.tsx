@@ -28,7 +28,7 @@ export const CustomPage: FC<Props> = ({ params }) => {
   const permalinkPromise = params.then((p) => ({ permalink: p.permalink }));
 
   return (
-    <div className="wrapper justify-start dark:bg-gray-600/20">
+    <div className="wrapper justify-start dark:bg-gray-600/20!">
       <Suspense>
         <PageWrapper permalinkPromise={permalinkPromise} />
       </Suspense>

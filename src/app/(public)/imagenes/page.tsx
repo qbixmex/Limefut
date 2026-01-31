@@ -10,7 +10,7 @@ const GalleriesPage = async () => {
   const galleries = response.galleries;
 
   return (
-    <section className="flex-1 rounded flex flex-col item-center justify-center">
+    <section className="wrapper justify-center">
       <Card className="p-10 flex-1">
         <CardContent>
           <Heading
