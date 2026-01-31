@@ -29,10 +29,16 @@ import { MdEditorField } from "./md-editor-field";
 import type { CustomPageImage, Page } from '@/shared/interfaces/Page';
 import { deleteContentImageAction } from '../(actions)/deleteContentImageAction';
 import "./styles.css";
+import { CharactersCounter } from '@/shared/components/characters-counter';
 
 type Props = Readonly<{
   page: Page & { images: CustomPageImage[] };
 }>;
+
+type CountCharacters = {
+  count: number;
+  focused: boolean;
+};
 
 export const PageForm: FC<Props> = ({ page }) => {
   const route = useRouter();
@@ -42,6 +48,16 @@ export const PageForm: FC<Props> = ({ page }) => {
   const [isDeletingImage, setIsDeletingImage] = useState<string | null>(null);
   const [isDraft, setIsDraft] = useState(false);
   const onSaveDraft = () => setIsDraft(true);
+
+  const [seoTitleChars, setSeoTitleChars] = useState<CountCharacters>({
+    count: page.seoTitle ? page.seoTitle?.length : 0,
+    focused: false,
+  });
+
+  const [seoDescriptionChars, setSeoDescriptionChars] = useState<CountCharacters>({
+    count: page.seoDescription ? page.seoDescription?.length : 0,
+    focused: false,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -218,19 +234,47 @@ export const PageForm: FC<Props> = ({ page }) => {
 
           <section className="flex flex-col gap-5 lg:flex-row">
             <div className="w-full lg:w-1/2 flex flex-col gap-5">
-              <FormField
-                control={form.control}
-                name="seoTitle"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Título SEO</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value ?? ''} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="seoTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Título SEO</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          value={field.value ?? ''}
+                          onFocus={() => setSeoTitleChars((prev) => ({
+                            ...prev,
+                            focused: true,
+                          }))}
+                          onBlur={() => setSeoTitleChars((prev) => ({
+                            ...prev,
+                            focused: false,
+                          }))}
+                          onChange={(event) => {
+                            field.onChange(event);
+                            setSeoTitleChars((prev => ({
+                              ...prev,
+                              count: event.target.value.length,
+                            })));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {seoTitleChars.focused && (
+                  <div className="mt-3 ml-2">
+                    <CharactersCounter
+                      charactersCount={seoTitleChars.count}
+                      limit={70}
+                    />
+                  </div>
                 )}
-              />
+              </div>
               <FormField
                 control={form.control}
                 name="seoRobots"
@@ -274,12 +318,35 @@ export const PageForm: FC<Props> = ({ page }) => {
                         {...field}
                         value={field.value ?? ''}
                         className="h-[115px] resize-none"
+                        onFocus={() => setSeoDescriptionChars((prev) => ({
+                          ...prev,
+                          focused: true,
+                        }))}
+                        onBlur={() => setSeoDescriptionChars((prev) => ({
+                          ...prev,
+                          focused: false,
+                        }))}
+                        onChange={(event) => {
+                          field.onChange(event);
+                          setSeoDescriptionChars((prev => ({
+                            ...prev,
+                            count: event.target.value.length,
+                          })));
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              {seoDescriptionChars.focused && (
+                <div className="mt-3 ml-2">
+                  <CharactersCounter
+                    charactersCount={seoDescriptionChars.count}
+                    limit={160}
+                  />
+                </div>
+              )}
             </div>
           </section>
 
