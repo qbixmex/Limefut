@@ -14,7 +14,7 @@ type Props = Readonly<{
 export const ResultsPage: FC<Props> = ({ searchParams }) => {
   return (
     <>
-      <div className="wrapper dark:bg-gray-600/20!">
+      <div className="wrapper">
         <Heading level="h1" className="text-emerald-600">
           Concentrado de Encuentros
         </Heading>

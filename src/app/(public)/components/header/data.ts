@@ -21,13 +21,13 @@ export const links: Link[] = [
   {
     id: "2d166a1a-3852-40bf-98de-31725a5c7ab7",
     url: "/encuentros",
-    label: "Rol de Juegos y Encuentros",
+    label: "Encuentros",
     position: 3,
   },
   {
     id: "7838bf7e-1f40-40bd-9559-e9ef808559b6",
     url: "/resultados",
-    label: "Resultados",
+    label: "Rol de juegos y Resultados",
     position: 4,
   },
   {
