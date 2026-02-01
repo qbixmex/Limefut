@@ -623,6 +623,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center gap-3">
+                    <Label htmlFor="active">Activo</Label>
                     <FormControl>
                       <Switch
                         id="active"
@@ -630,7 +631,6 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <Label htmlFor="active">Activo</Label>
                   </div>
                 </FormItem>
               )}

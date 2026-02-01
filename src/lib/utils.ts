@@ -212,3 +212,29 @@ export const getPageStatus = (status: PAGE_STATUS): {
       };
   }
 };
+
+/**
+ * Translates the alignment value to Spanish.
+ * @param alignment - The alignment value ("left", "center", "right").
+ * @example ```typescript
+ * getAlignmentTranslation("left");
+ * // Returns "a la izquierda"
+ * getAlignmentTranslation("center");
+ * // Returns "al centro"
+ * getAlignmentTranslation("right");
+ * // Returns "a la derecha"
+ * ```
+ * @returns The alignment in Spanish.
+ */
+export const getAlignmentTranslation = (alignment: string) => {
+  switch(alignment) {
+    case "left":
+      return "a la izquierda";
+    case "center":
+      return "al centro";
+    case "right":
+      return "a la derecha";
+    default:
+      return "desconocida";
+  }
+};

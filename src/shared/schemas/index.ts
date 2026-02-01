@@ -11,3 +11,4 @@ export { sendMessageSchema } from "./contact/sendEmailSchema";
 export { createGallerySchema, editGallerySchema } from "./gallery";
 export { createGalleryImageSchema, editGalleryImageSchema } from "./galleryImage";
 export { createPageSchema, editPageSchema } from "./page";
+export { createHeroBannerSchema, editHeroBannerSchema } from "./hero-banner";

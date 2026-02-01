@@ -350,7 +350,7 @@ export const PageForm: FC<Props> = ({ page }) => {
             </div>
           </section>
 
-          {/* Position and Active */}
+          {/* Position and Status */}
           <div className="flex flex-col gap-5 lg:flex-row">
             <div className="w-full lg:w-1/2">
               {/* EMPTY FOR UI */}

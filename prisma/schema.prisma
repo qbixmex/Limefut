@@ -37,6 +37,12 @@ enum PageStatus {
   published
 }
 
+enum Alignment {
+  left
+  center
+  right
+}
+
 model User {
   id            String    @id @default(uuid())
   name          String?
@@ -408,4 +414,20 @@ model CustomPageImage {
   customPage   CustomPage @relation(fields: [customPageId], references: [id], onDelete: Cascade)
 
   @@map("custom_page_images")
+}
+
+model HeroBanner {
+  id            String    @id @default(uuid())
+  title         String    @unique @db.VarChar
+  description   String    @db.Text
+  imageUrl      String    @map("image_url")
+  imagePublicId String    @map("image_public_id")
+  dataAlignment Alignment @map("data_alignment") @default(left)
+  showData      Boolean   @map("show_data") @default(false)
+  position      Int?      @default(0)
+  active        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("hero_banners")
 }
