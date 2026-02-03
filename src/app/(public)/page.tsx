@@ -1,11 +1,9 @@
 import { type FC, Suspense } from "react";
-import Image from "next/image";
 import { Heading } from "./components/heading";
 import { NextMatches } from "./components/next-matches";
-import { LatestResults, MatchesSkeleton } from "./components";
+import { HeroCarousel, LatestResults, MatchesSkeleton } from "./components";
 import { HorizontalCalendarSkeleton } from "./components/horizontal-calendar/horizontal-calendar-skeleton";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import styles from "./home-styles.module.css";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -13,6 +11,29 @@ type Props = Readonly<{
     "latest-results"?: string;
   }>;
 }>;
+
+const heroImages = [
+  {
+    id: "abc",
+    url: '/images/kid-playing-football.png',
+    title: 'Niño jugando fútbol',
+  },
+  {
+    id: "ghi",
+    url: '/images/kids-playing-football.webp',
+    title: 'Niño jugando fútbol',
+  },
+  {
+    id: 'def',
+    url: '/images/girl-football.jpg',
+    title: 'Niña jugando fútbol',
+  },
+  {
+    id: 'jkl',
+    url: '/images/kids-team.webp',
+    title: 'Niña jugando fútbol',
+  },
+];
 
 const HomePage: FC<Props> = ({ searchParams }) => {
   const matchesPromise = searchParams.then((sp) => ({ matchesPage: sp['next-matches'] }));
@@ -23,26 +44,25 @@ const HomePage: FC<Props> = ({ searchParams }) => {
       <Suspense>
         <ErrorHandler />
       </Suspense>
-      <div className="bg-neutral-50 md:rounded p-5 flex-1 flex flex-col gap-5">
-        <Heading level="h1" className="text-green-900">
+
+      <div className="bg-zinc-100 dark:bg-zinc-900 md:rounded p-5 flex-1 flex flex-col gap-5">
+        <Heading level="h1" className="text-emerald-900 dark:text-emerald-500 text-center">
           Bienvenidos a LIMEFUT
         </Heading>
-        <section className={styles.banners}>
-          <Image
-            src="/images/kid-playing-football.png"
-            width={640}
-            height={640}
-            alt="Inscripciones"
-            className="rounded"
-          />
-          <Image
-            src="/images/set-aside-spot.jpg"
-            width={640}
-            height={640}
-            alt="Aparta tu lugar"
-            className="rounded"
-          />
-        </section>
+
+        <HeroCarousel
+          slides={Array.from(Array(heroImages.length).keys())}
+          options={{
+            align: 'center',
+            dragFree: true,
+            loop: false,
+            slidesToScroll: 'auto',
+          }}
+          images={heroImages}
+          time={8000}
+          play={true}
+        />
+
         <Suspense fallback={
           <>
             <HorizontalCalendarSkeleton />
@@ -53,6 +73,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
             matchesPromise as Promise<{ matchesPage: string }>
           } />
         </Suspense>
+
         <Suspense fallback={<MatchesSkeleton />}>
           <LatestResults
             resultsPromise={
