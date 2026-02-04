@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,14 +6,17 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/u
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import type { HeroBanner } from '@/shared/interfaces';
+import type { ALIGNMENT, HeroBanner } from '@/shared/interfaces';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
-import { fetchHeroBannerAction } from '../(actions)';
-import { getAlignmentTranslation } from '@/lib/utils';
+import { fetchHeroBannerAction, updateHeroBannerStateAction } from '../(actions)';
 import { BannerImage } from '@/shared/components/banner-image';
+import { ActiveSwitch } from '~/src/shared/components/active-switch';
+import { updateHeroBannerShowDataAction } from '../(actions)/updateHeroBannerShowDataAction';
+import { BannerAlignment } from '../(components)/banner-alignment';
+import { CircleQuestionMarkIcon } from "lucide-react";
 
 type Props = Readonly<{
   params: Promise<{
@@ -46,27 +49,53 @@ export const HeroBannerPage: FC<Props> = async ({ params }) => {
               description={heroBanner.description}
               imageUrl={heroBanner.imageUrl}
               dataAlignment={heroBanner.dataAlignment}
+              showData={heroBanner.showData}
             />
             <section className="flex flex-col lg:flex-row gap-5 mt-10">
               <div className="w-full xl:w-1/2">
                 <Table>
                   <TableBody>
                     <TableRow>
+                      <TableHead className="font-semibold w-[180px]">Título</TableHead>
+                      <TableCell className="dark:text-gray-400 italic">
+                        {heroBanner.title}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead className="font-semibold w-[180px]">Descripción</TableHead>
+                      <TableCell className="dark:text-gray-400 italic">
+                        <p className="text-wrap">{heroBanner.description}</p>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableHead className="font-semibold w-[180px]">Alineación</TableHead>
-                      <TableCell className="text-gray-400 italic">
-                        <Badge variant="outline-info">
-                          {getAlignmentTranslation(heroBanner.dataAlignment)}
-                        </Badge>
+                      <TableCell>
+                        <BannerAlignment
+                          bannerId={heroBanner.id}
+                          alignment={heroBanner.dataAlignment as ALIGNMENT}
+                        />
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">
-                        <p className="text-wrap">Visibilidad de Información</p>
+                        <div className="inline-flex justify-around gap-1 text-wrap py-5">
+                          <span>Visibilidad de Información</span>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <CircleQuestionMarkIcon
+                                className="stroke-gray-600 -mt-5"
+                                size={18}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent>Solo se mostrará la imagen</TooltipContent>
+                          </Tooltip>
+                        </div>
                       </TableHead>
                       <TableCell className="text-gray-400 italic">
-                        <Badge variant={heroBanner.showData ? "outline-success" : 'outline-secondary'}>
-                          {heroBanner.showData ? 'Visible' : 'Oculta'}
-                        </Badge>
+                        <ActiveSwitch
+                          resource={{ id: heroBanner.id, state: heroBanner.showData }}
+                          updateResourceStateAction={updateHeroBannerShowDataAction}
+                        />
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -76,13 +105,19 @@ export const HeroBannerPage: FC<Props> = async ({ params }) => {
                 <Table>
                   <TableBody>
                     <TableRow>
-                      <TableHead className="font-medium w-[180px]">Estado</TableHead>
+                      <TableHead className="font-medium w-[180px]">
+                        Visibilidad del banner
+                      </TableHead>
                       <TableCell>
-                        {
-                          heroBanner.active
-                            ? <Badge variant="outline-info">activo</Badge>
-                            : <Badge variant="outline-secondary">desactivado</Badge>
-                        }
+                        <div className="inline-flex items-center gap-2">
+                          <ActiveSwitch
+                            resource={{ id: heroBanner.id, state: heroBanner.active }}
+                            updateResourceStateAction={updateHeroBannerStateAction}
+                          />
+                          <span className="dark:text-gray-300 italic">
+                            {heroBanner.active ? 'visible' : 'oculto'}
+                          </span>
+                        </div>
                       </TableCell>
                     </TableRow>
                     <TableRow>
