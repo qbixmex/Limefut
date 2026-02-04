@@ -14,6 +14,7 @@ import {
   Inbox,
   ImageIcon,
 } from "lucide-react";
+import { PiFlagBannerFoldBold } from "react-icons/pi";
 import { GiWhistle } from "react-icons/gi";
 import {
   SoccerPlayer,
@@ -151,6 +152,24 @@ export const navMain: NavItem[] = [
       {
         label: "Crear",
         url: "/admin/credenciales/crear",
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: "Banners",
+    url: "#",
+    icon: PiFlagBannerFoldBold,
+    isActive: false,
+    subItems: [
+      {
+        label: "Lista",
+        url: "/admin/banners",
+        icon: ListIcon,
+      },
+      {
+        label: "Crear",
+        url: "/admin/banners/crear",
         icon: PlusIcon,
       },
     ],

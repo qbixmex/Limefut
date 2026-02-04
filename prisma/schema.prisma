@@ -30,11 +30,30 @@ enum Stage {
   finals
 }
 
+enum Status {
+  scheduled
+  inProgress
+  completed
+  postPosed
+  canceled
+}
+
 enum PageStatus {
   draft
   hold
   unpublished
   published
+}
+
+enum ShootoutStatus {
+  in_progress
+  completed
+}
+
+enum Alignment {
+  left
+  center
+  right
 }
 
 model User {
@@ -175,19 +194,6 @@ model Player {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("players")
-}
-
-enum Status {
-  scheduled
-  inProgress
-  completed
-  postPosed
-  canceled
-}
-
-enum ShootoutStatus {
-  in_progress
-  completed
 }
 
 model Match {
@@ -408,4 +414,33 @@ model CustomPageImage {
   customPage   CustomPage @relation(fields: [customPageId], references: [id], onDelete: Cascade)
 
   @@map("custom_page_images")
+}
+
+model Carousel {
+  id           String   @id @default(uuid())
+  time         Int      @default(5)
+  play         Boolean  @default(false)
+  loop         Boolean  @default(false)
+  section      String
+  showControls Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("carousels")
+}
+
+model HeroBanner {
+  id            String    @id @default(uuid())
+  title         String    @unique @db.VarChar
+  description   String    @db.Text
+  imageUrl      String    @map("image_url")
+  imagePublicId String    @map("image_public_id")
+  dataAlignment Alignment @default(left) @map("data_alignment")
+  showData      Boolean   @default(false) @map("show_data")
+  position      Int       @default(0)
+  active        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("hero_banners")
 }

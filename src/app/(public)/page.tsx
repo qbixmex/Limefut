@@ -1,11 +1,11 @@
 import { type FC, Suspense } from "react";
-import Image from "next/image";
 import { Heading } from "./components/heading";
 import { NextMatches } from "./components/next-matches";
 import { LatestResults, MatchesSkeleton } from "./components";
 import { HorizontalCalendarSkeleton } from "./components/horizontal-calendar/horizontal-calendar-skeleton";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import styles from "./home-styles.module.css";
+import { Hero } from "./components/hero/hero";
+import { CarouselSkeleton } from "./components/carousel/carousel-skeleton";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -23,26 +23,16 @@ const HomePage: FC<Props> = ({ searchParams }) => {
       <Suspense>
         <ErrorHandler />
       </Suspense>
-      <div className="bg-neutral-50 md:rounded p-5 flex-1 flex flex-col gap-5">
-        <Heading level="h1" className="text-green-900">
+
+      <div className="bg-zinc-100 dark:bg-zinc-900 md:rounded p-5 flex-1 flex flex-col gap-5">
+        <Heading level="h1" className="text-emerald-900 dark:text-emerald-500 text-center">
           Bienvenidos a LIMEFUT
         </Heading>
-        <section className={styles.banners}>
-          <Image
-            src="/images/kid-playing-football.png"
-            width={640}
-            height={640}
-            alt="Inscripciones"
-            className="rounded"
-          />
-          <Image
-            src="/images/set-aside-spot.jpg"
-            width={640}
-            height={640}
-            alt="Aparta tu lugar"
-            className="rounded"
-          />
-        </section>
+
+        <Suspense fallback={<CarouselSkeleton />}>
+          <Hero />
+        </Suspense>
+
         <Suspense fallback={
           <>
             <HorizontalCalendarSkeleton />
@@ -53,6 +43,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
             matchesPromise as Promise<{ matchesPage: string }>
           } />
         </Suspense>
+
         <Suspense fallback={<MatchesSkeleton />}>
           <LatestResults
             resultsPromise={

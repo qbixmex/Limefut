@@ -1,0 +1,6 @@
+time: z
+  .number('¡ El tiempo debe ser un número válido !')
+  .min(1)
+  .optional(),
+play: z.boolean("¡ La reproducción automática debe ser un valor boleano !").optional(),
+loop: z.boolean("¡ El bucle debe ser un valor boleano !").optional(),
