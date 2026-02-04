@@ -12,8 +12,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
 import { fetchHeroBannerAction } from '../(actions)';
-import Image from "next/image";
 import { getAlignmentTranslation } from '@/lib/utils';
+import { BannerImage } from '@/shared/components/banner-image';
 
 type Props = Readonly<{
   params: Promise<{
@@ -41,59 +41,40 @@ export const HeroBannerPage: FC<Props> = async ({ params }) => {
             <CardTitle className="admin-page-card-title">Detalles del Banner</CardTitle>
           </CardHeader>
           <CardContent>
-            <section className="flex flex-col lg:flex-row gap-5 mb-10">
-              <div className="w-full xl:w-1/2">
-                <Image
-                  src={heroBanner.imageUrl}
-                  width={1024}
-                  height={1024}
-                  alt={heroBanner.title ?? 'Imagen del Banner'}
-                  className="rounded w-full lg:max-w-[768px] m-auto"
-                />
-              </div>
+            <BannerImage
+              title={heroBanner.title}
+              description={heroBanner.description}
+              imageUrl={heroBanner.imageUrl}
+              dataAlignment={heroBanner.dataAlignment}
+            />
+            <section className="flex flex-col lg:flex-row gap-5 mt-10">
               <div className="w-full xl:w-1/2">
                 <Table>
                   <TableBody>
                     <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Título</TableHead>
-                      <TableCell className="text-gray-400 italic">
-                        {heroBanner.title}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Descripción</TableHead>
-                      <TableCell className="text-gray-400 italic">
-                        <p className="text-pretty">{heroBanner.description}</p>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
                       <TableHead className="font-semibold w-[180px]">Alineación</TableHead>
                       <TableCell className="text-gray-400 italic">
-                        <p className="text-pretty">
+                        <Badge variant="outline-info">
                           {getAlignmentTranslation(heroBanner.dataAlignment)}
-                        </p>
+                        </Badge>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Visibilidad de Información</TableHead>
+                      <TableHead className="font-semibold w-[180px]">
+                        <p className="text-wrap">Visibilidad de Información</p>
+                      </TableHead>
                       <TableCell className="text-gray-400 italic">
                         <Badge variant={heroBanner.showData ? "outline-success" : 'outline-secondary'}>
                           {heroBanner.showData ? 'Visible' : 'Oculta'}
                         </Badge>
                       </TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Posición</TableHead>
-                      <TableCell className="text-gray-300 italic">
-                        {heroBanner.position}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Última actualización</TableHead>
-                      <TableCell className="text-gray-300 italic">
-                        {format(new Date(heroBanner.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+              <div className="w-full xl:w-1/2">
+                <Table>
+                  <TableBody>
                     <TableRow>
                       <TableHead className="font-medium w-[180px]">Estado</TableHead>
                       <TableCell>
@@ -102,6 +83,22 @@ export const HeroBannerPage: FC<Props> = async ({ params }) => {
                             ? <Badge variant="outline-info">activo</Badge>
                             : <Badge variant="outline-secondary">desactivado</Badge>
                         }
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead className="w-[180px] font-semibold">Posición</TableHead>
+                      <TableCell className="text-gray-300 italic">
+                        <Badge variant="outline-info">
+                          {heroBanner.position}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead className="w-[180px] font-semibold">
+                        <p className="text-wrap">Última actualización</p>
+                      </TableHead>
+                      <TableCell className="dark:text-gray-300 italic">
+                        {format(new Date(heroBanner.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                       </TableCell>
                     </TableRow>
                   </TableBody>

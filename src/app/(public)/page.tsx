@@ -1,9 +1,11 @@
 import { type FC, Suspense } from "react";
 import { Heading } from "./components/heading";
 import { NextMatches } from "./components/next-matches";
-import { HeroCarousel, LatestResults, MatchesSkeleton } from "./components";
+import { LatestResults, MatchesSkeleton } from "./components";
 import { HorizontalCalendarSkeleton } from "./components/horizontal-calendar/horizontal-calendar-skeleton";
 import { ErrorHandler } from "@/shared/components/errorHandler";
+import { Hero } from "./components/hero/hero";
+import { CarouselSkeleton } from "./components/carousel/carousel-skeleton";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -11,29 +13,6 @@ type Props = Readonly<{
     "latest-results"?: string;
   }>;
 }>;
-
-const heroImages = [
-  {
-    id: "abc",
-    url: '/images/kid-playing-football.png',
-    title: 'Niño jugando fútbol',
-  },
-  {
-    id: "ghi",
-    url: '/images/kids-playing-football.webp',
-    title: 'Niño jugando fútbol',
-  },
-  {
-    id: 'def',
-    url: '/images/girl-football.jpg',
-    title: 'Niña jugando fútbol',
-  },
-  {
-    id: 'jkl',
-    url: '/images/kids-team.webp',
-    title: 'Niña jugando fútbol',
-  },
-];
 
 const HomePage: FC<Props> = ({ searchParams }) => {
   const matchesPromise = searchParams.then((sp) => ({ matchesPage: sp['next-matches'] }));
@@ -50,18 +29,9 @@ const HomePage: FC<Props> = ({ searchParams }) => {
           Bienvenidos a LIMEFUT
         </Heading>
 
-        <HeroCarousel
-          slides={Array.from(Array(heroImages.length).keys())}
-          options={{
-            align: 'center',
-            dragFree: true,
-            loop: false,
-            slidesToScroll: 'auto',
-          }}
-          images={heroImages}
-          time={8000}
-          play={true}
-        />
+        <Suspense fallback={<CarouselSkeleton />}>
+          <Hero />
+        </Suspense>
 
         <Suspense fallback={
           <>

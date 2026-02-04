@@ -15,11 +15,11 @@ import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createHeroBannerSchema, editHeroBannerSchema } from '@/shared/schemas';
+import { createHeroBannerAction, updateHeroBannerAction } from '../(actions)';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import type { HeroBanner } from '@/shared/interfaces';
-import { createHeroBannerAction, updateHeroBannerAction } from '../(actions)';
 import { LoaderCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -51,7 +51,7 @@ export const BannerForm: FC<Props> = ({ session, heroBanner }) => {
     defaultValues: {
       title: heroBanner?.title ?? '',
       description: heroBanner?.description ?? '',
-      dataAlignment: heroBanner?.dataAlignment ?? undefined,
+      dataAlignment: heroBanner?.dataAlignment ?? 'left',
       position: heroBanner?.position ?? 0,
       showData: heroBanner?.showData ?? false,
       active: heroBanner?.active ?? false,
@@ -65,8 +65,8 @@ export const BannerForm: FC<Props> = ({ session, heroBanner }) => {
     if (data.image && typeof data.image === 'object') {
       formData.append("image", data.image);
     }
-    if (data.dataAlignment) formData.append('dataAlignment', data.dataAlignment as string);
-    if (data.showData) formData.append('showData', String(data.showData ?? false));
+    formData.append('dataAlignment', data.dataAlignment as string);
+    formData.append('showData', String(data.showData ?? false));
     formData.append('position', String(data.position ?? 0));
     formData.append('active', String(data.active ?? false));
 

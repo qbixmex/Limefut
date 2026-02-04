@@ -12,7 +12,7 @@ export interface HeroBanner {
   imagePublicId: string;
   dataAlignment: string;
   showData: boolean;
-  position: number | null;
+  position: number;
   active: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -10,7 +10,7 @@ CREATE TABLE "hero_banners" (
     "image_public_id" TEXT NOT NULL,
     "data_alignment" "Alignment" NOT NULL DEFAULT 'left',
     "show_data" BOOLEAN NOT NULL DEFAULT false,
-    "position" INTEGER DEFAULT 0,
+    "position" INTEGER NOT NULL DEFAULT 0,
     "active" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

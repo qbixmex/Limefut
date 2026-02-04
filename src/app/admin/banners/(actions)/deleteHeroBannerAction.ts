@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { deleteImage } from "@/shared/actions";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -39,6 +39,7 @@ export const deleteHeroBannerAction = async (heroBannerId: string): ResponseDele
 
   // Update Cache
   revalidatePath('/admin/banners');
+  updateTag('public-banners');
 
   return {
     ok: true,

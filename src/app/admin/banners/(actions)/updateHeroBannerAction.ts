@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { editHeroBannerSchema } from '@/shared/schemas';
 import type { ALIGNMENT, CloudinaryResponse, HeroBanner } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
@@ -256,6 +256,9 @@ export const updateHeroBannerAction = async ({
         };
       }
     });
+
+    // Update Cache
+    updateTag('public-banners');
 
     return prismaTransaction;
   } catch (error) {

@@ -50,6 +50,7 @@ export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
                 <TableRow>
                   <TableHead className="w-[200px] hidden lg:table-cell">Imagen</TableHead>
                   <TableHead>Título</TableHead>
+                  <TableHead className="w-25 text-center">Información</TableHead>
                   <TableHead className="w-25 text-center">Posición</TableHead>
                   <TableHead className="w-25 hidden lg:table-cell text-center">Activo</TableHead>
                   <TableHead className="w-40">Acciones</TableHead>
@@ -78,9 +79,14 @@ export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
                       </Link>
                     </TableCell>
                     <TableCell className="text-xl font-semibold italic text-gray-200">
-                      {banner.title ?? 'No definido'}
+                      {banner.title}
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="text-xl font-semibold italic text-gray-200 text-center">
+                      <Badge variant="outline-info">
+                        {banner.showData ? 'visible' : 'oculta'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell text-center">
                       <Badge variant="outline-primary">{banner.position}</Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">

@@ -3,28 +3,28 @@
 import type { FC } from 'react';
 import { useCallback, useEffect } from 'react';
 import type { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel';
-import { DotButton, useDotButton } from './carousel-dot-button';
 import { PrevButton, NextButton, usePrevNextButtons } from './carousel-arrow-buttons';
 import Autoplay from 'embla-carousel-autoplay';
 import ClassNames from 'embla-carousel-class-names';
 import useEmblaCarousel from 'embla-carousel-react';
+import { BannerImage } from '~/src/shared/components/banner-image';
+import type { HeroBanner } from '../../(actions)/home/fetchPublicHeroBannersAction';
+import { DotButton, useDotButton } from './carousel-dot-button';
 import "./embla.css";
 
-type HeroImage = {
-  id: string;
-  url: string;
-  title: string;
-};
-
 type Props = Readonly<{
-  slides: number[];
-  images: HeroImage[];
+  banners: HeroBanner[];
   play?: boolean;
   time?: number;
   options?: EmblaOptionsType;
 }>;
 
-export const HeroCarousel: FC<Props> = ({ slides, time = 5000, images, options, play = false }) => {
+export const HeroCarousel: FC<Props> = ({
+  banners,
+  time = 5000,
+  options,
+  play = false,
+}) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
     Autoplay({
       active: play,
@@ -41,7 +41,7 @@ export const HeroCarousel: FC<Props> = ({ slides, time = 5000, images, options, 
     autoplay.stop();
   }, []);
 
-  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
+  const { selectedIndex, onDotButtonClick } = useDotButton(
     emblaApi,
     onNavButtonClick,
   );
@@ -64,13 +64,15 @@ export const HeroCarousel: FC<Props> = ({ slides, time = 5000, images, options, 
     <section className="embla">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map((index) => (
-            <div className="embla__slide" key={index}>
+          {banners.map((banner) => (
+            <div className="embla__slide" key={banner.id}>
               <div className="embla__slide__number">
-                <img
-                  src={images[index % images.length].url}
-                  alt={images[index % images.length].title}
-                  className="embla__slide__img"
+                <BannerImage
+                  title={banner.title}
+                  description={banner.description}
+                  imageUrl={banner.imageUrl}
+                  dataAlignment={banner.dataAlignment}
+                  showData={banner.showData}
                 />
               </div>
             </div>
@@ -85,9 +87,9 @@ export const HeroCarousel: FC<Props> = ({ slides, time = 5000, images, options, 
         </div>
 
         <div className="embla__dots">
-          {scrollSnaps.map((_, index) => (
+          {banners.map(({ id }, index) => (
             <DotButton
-              key={index}
+              key={id}
               onClick={() => onDotButtonClick(index)}
               className={'embla__dot'.concat(
                 index === selectedIndex ? ' embla__dot--selected' : '',
@@ -96,8 +98,6 @@ export const HeroCarousel: FC<Props> = ({ slides, time = 5000, images, options, 
           ))}
         </div>
       </div>
-
-      <div className="embla__live-region" />
     </section>
   );
 };

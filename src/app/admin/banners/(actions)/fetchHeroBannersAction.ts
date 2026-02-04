@@ -13,7 +13,13 @@ type Options = Readonly<{
 export type ResponseFetch = Promise<{
   ok: boolean;
   message: string;
-  heroBanners: Pick<HeroBanner, 'id' | 'title' | 'imageUrl' | 'position' | 'active'>[];
+  heroBanners: Omit<HeroBanner,
+    | 'dataAlignment'
+    | 'description'
+    | 'imagePublicId'
+    | 'createdAt'
+    | 'updatedAt'
+  >[];
   pagination: Pagination | null;
 }>;
 
@@ -42,6 +48,7 @@ export const fetchHeroBannersAction = async (options?: Options): ResponseFetch =
         id: true,
         title: true,
         imageUrl: true,
+        showData: true,
         position: true,
         active: true,
       },

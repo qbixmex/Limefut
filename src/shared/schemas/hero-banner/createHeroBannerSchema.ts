@@ -32,6 +32,8 @@ export const createHeroBannerSchema = z.object({
     .nullish()
     .optional(),
   showData: z.boolean().optional(),
-  position: z.number('¡ La posición debe ser un número válido !'),
-  active: z.boolean().optional(),
+  position: z
+    .number('¡ La posición debe ser un número válido !')
+    .optional(),
+  active: z.boolean("¡ Activo debe ser un valor boleano !").optional(),
 });

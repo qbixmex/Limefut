@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { uploadImage } from "@/shared/actions";
 import type { ALIGNMENT, CloudinaryResponse, HeroBanner } from "@/shared/interfaces";
 import { createHeroBannerSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -78,11 +78,11 @@ export const createHeroBannerAction = async (
         data: {
           title: data.title,
           description: data.description,
-          position: newPosition,
           imageUrl: cloudinaryResponse?.secureUrl as string,
           imagePublicId: cloudinaryResponse?.publicId as string,
           dataAlignment: data.dataAlignment as ALIGNMENT ?? undefined,
           showData: data.showData ?? undefined,
+          position: newPosition,
           active: data.active,
         },
       });
@@ -96,6 +96,7 @@ export const createHeroBannerAction = async (
 
     // Refresh Cache
     revalidatePath('/admin/banners');
+    updateTag('public-banners');
 
     return prismaTransaction;
   } catch (error) {

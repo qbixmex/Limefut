@@ -34,6 +34,7 @@ export const updateHeroBannerStateAction = async (id: string, state: boolean): R
   revalidatePath(`/admin/banners/${id}`);
   revalidatePath(`/admin/banners/editar/${id}`);
   updateTag("admin-hero-banner");
+  updateTag('public-banners');
 
   return {
     ok: true,

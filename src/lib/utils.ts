@@ -229,11 +229,11 @@ export const getPageStatus = (status: PAGE_STATUS): {
 export const getAlignmentTranslation = (alignment: string) => {
   switch(alignment) {
     case "left":
-      return "a la izquierda";
+      return "izquierda";
     case "center":
-      return "al centro";
+      return "centro";
     case "right":
-      return "a la derecha";
+      return "derecha";
     default:
       return "desconocida";
   }
