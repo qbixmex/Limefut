@@ -539,7 +539,6 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       </form>
     </Form>
   );
-
 };
 
 export default TournamentForm;

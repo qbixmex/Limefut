@@ -34,13 +34,11 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
   const tournament = response.tournament as TournamentType;
 
   return (
-    <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
-      <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
-        <Card className="w-full shadow-none bg-neutral-100 dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800 relative">
-          <CardHeader className="flex items-center justify-between">
-            <CardTitle>
-              <h1 className="text-xl font-bold">Información del Torneo</h1>
-            </CardTitle>
+    <div className="admin-page">
+      <div className="admin-page-container">
+        <Card className="admin-page-card">
+          <CardHeader className="admin-page-card-header">
+            <CardTitle className="admin-page-card-title">Información del Torneo</CardTitle>
           </CardHeader>
           <CardContent>
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">

@@ -22,11 +22,11 @@ export const StandingsPage: FC<Props> = ({ searchParams }) => {
   return (
     <>
       <ErrorHandler />
-      <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
-        <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
-          <Card className="w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-950 dark:to-zinc-800 shadow-none">
-            <CardHeader>
-              <CardTitle>Tabla de posiciones</CardTitle>
+      <div className="admin-page">
+      <div className="admin-page-container">
+        <Card className="admin-page-card">
+          <CardHeader className="admin-page-card-header">
+            <CardTitle className="admin-page-card-title">Tabla de posiciones</CardTitle>
             </CardHeader>
             <CardContent>
               <Suspense fallback={<TournamentsSelectorSkeleton />}>

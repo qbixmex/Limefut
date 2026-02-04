@@ -56,14 +56,14 @@ export const updatePageAction = async ({
           };
         }
 
-        const isPageDuplicated = await transaction.customPage.count({
+        const pageDuplicated = await transaction.customPage.count({
           where: {
             permalink: pageVerified.data.permalink as string,
             id: { not: pageId }, // Exclude current page 
           },
         });
 
-        if (isPageDuplicated > 0) {
+        if (pageDuplicated > 0) {
           return {
             ok: false,
             message: '¡ Ya existe ese enlace permanente !',
@@ -76,9 +76,7 @@ export const updatePageAction = async ({
             id: true,
             position: true,
           },
-          orderBy: {
-            position: 'asc',
-          },
+          orderBy: { position: 'asc' },
         });
 
         const maxPosition = pages.length;

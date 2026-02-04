@@ -3,12 +3,12 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath, updateTag } from "next/cache";
 
-export type ResponseDeleteAction = Promise<{
+export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
 }>;
 
-export const updateTournamentStateAction = async (id: string, state: boolean): ResponseDeleteAction => {
+export const updateTournamentStateAction = async (id: string, state: boolean): ResponseAction => {
   const tournamentExists = await prisma.tournament.count({
     where: { id },
   });

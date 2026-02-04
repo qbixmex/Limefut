@@ -7,3 +7,4 @@ export * from "./horizontal-calendar";
 export * from "./latest-results";
 export * from "./skeletons";
 export * from "./tournaments";
+export * from "./carousel/hero-carousel";
