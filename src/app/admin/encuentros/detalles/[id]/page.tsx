@@ -54,13 +54,11 @@ export const MatchPage: FC<Props> = async ({ params }) => {
     .map(({ id, name }) => ({ id, name })) ?? [];
 
   return (
-    <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
-      <div className="bg-muted/50 min-h-screen flex-1 flex rounded-xl md:min-h-min p-10">
-        <Card className="w-full shadow-none bg-neutral-100 dark:bg-linear-to-br dark:from-zinc-950 dark:to-zinc-800 relative">
-          <CardHeader className="flex items-center justify-between">
-            <CardTitle>
-              <h1 className="text-xl font-bold text-green-500">Información del Encuentro</h1>
-            </CardTitle>
+    <div className="admin-page">
+      <div className="admin-page-container">
+        <Card className="admin-page-card">
+          <CardHeader className="admin-page-card-header">
+            <CardTitle className="admin-page-card-title">Información del Encuentro</CardTitle>
           </CardHeader>
           <CardContent>
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
@@ -105,7 +103,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                       {match.place ?? (
                         <span className="text-gray-500 italic">No definida</span>
                       )}
-                      </TableCell>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Fecha del Encuentro</TableHead>
@@ -159,24 +157,24 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                       match.penaltyShootout === null
                       || match.penaltyShootout?.status === SHOOTOUT_STATUS.IN_PROGRESS
                     ) && (
-                      <div className="w-full lg:w-1/2">
-                        <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda de Penales</h3>
-                        <PenaltiesForm
-                          session={session}
-                          currentMatchId={match.id}
-                          localTeam={{
-                            id: match.localTeam.id,
-                            name: match.localTeam.name,
-                            players: availableLocalPlayers,
-                          }}
-                          visitorTeam={{
-                            id: match.visitorTeam.id,
-                            name: match.visitorTeam.name,
-                            players: availableVisitorPlayers,
-                          }}
-                        />
-                      </div>
-                    )}
+                        <div className="w-full lg:w-1/2">
+                          <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda de Penales</h3>
+                          <PenaltiesForm
+                            session={session}
+                            currentMatchId={match.id}
+                            localTeam={{
+                              id: match.localTeam.id,
+                              name: match.localTeam.name,
+                              players: availableLocalPlayers,
+                            }}
+                            visitorTeam={{
+                              id: match.visitorTeam.id,
+                              name: match.visitorTeam.name,
+                              players: availableVisitorPlayers,
+                            }}
+                          />
+                        </div>
+                      )}
                   </section>
                 </>
               )}

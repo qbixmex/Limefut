@@ -13,7 +13,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-
 import { navMain, navLinks } from "./data";
 import { NavMain } from "@/components/nav-main";
 import { NavLinks } from "@/components/nav-links";
@@ -31,10 +30,10 @@ export const AppSidebar: FC<Props> = ({ ...props }) => {
                 <div className="bg-green-600 dark:bg-primary-foreground flex aspect-square size-8 items-center justify-center rounded">
                   <Image
                     src="/limefut-logo-white.webp"
-                    width={72}
-                    height={80}
+                    width={20}
+                    height={20}
                     alt="Limefut Logo"
-                    className="w-auto h-4"
+                    className="w-5 h-auto"
                   />
                 </div>
                 <div className="leading-none">
