@@ -11,7 +11,7 @@ export const Hero = async () => {
       banners={heroBanners}
       options={{
         align: 'center',
-        dragFree: true,
+        dragFree: false,
         loop: false,
         slidesToScroll: 'auto',
       }}

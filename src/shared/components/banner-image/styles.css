@@ -1,0 +1,37 @@
+@reference "../../../app/globals.css";
+
+.figure-container {
+  @apply w-full max-w-[1280px] mx-auto overflow-hidden rounded-lg relative;
+}
+
+.data-wrapper {
+  @apply absolute w-full h-full px-5 lg:px-20 bg-black/20;
+  @apply flex flex-col justify-center gap-3;
+}
+
+.heading {
+  @apply text-2xl text-white/95 font-open-sans uppercase text-pretty lg:w-2/3;
+  @apply text-shadow-md/50 text-shadow-black font-black text-wrap;
+  @apply md:text-3xl lg:text-5xl xl:text-6xl;
+}
+
+.description {
+  @apply text-lg md:text-xl lg:text-2xl font-medium text-pretty lg:w-2/3;
+  @apply text-white text-shadow-xs text-shadow-black;
+}
+
+.image {
+  @apply w-full h-[548px] lg:max-w-[1280px] object-cover object-center m-auto;
+}
+
+.align-left {
+  @apply mr-auto text-left;
+}
+
+.align-center {
+  @apply mx-auto text-center;
+}
+
+.align-right {
+  @apply ml-auto text-right;
+}
