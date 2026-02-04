@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import type { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel';
 import { PrevButton, NextButton, usePrevNextButtons } from './carousel-arrow-buttons';
 import Autoplay from 'embla-carousel-autoplay';
@@ -25,21 +25,31 @@ export const HeroCarousel: FC<Props> = ({
   options,
   play = false,
 }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [
-    Autoplay({
-      active: play,
-      delay: time,
-      stopOnInteraction: false,
-    }),
-    ClassNames({ active: true }),
-  ]);
+  const shouldEnableAutoplayPlugin = play && banners.length > 1;
+
+  const plugins = useMemo(() => {
+    const activePlugins = [
+      ClassNames({ active: true }),
+    ];
+    if (shouldEnableAutoplayPlugin) {
+      activePlugins.push(Autoplay({
+        delay: time,
+        stopOnInteraction: false,
+      }));
+    }
+    return activePlugins;
+  }, [shouldEnableAutoplayPlugin, time]);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, plugins);
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
-    const autoplay = emblaApi?.plugins()?.autoplay;
-    if (!autoplay) return;
-
-    autoplay.stop();
-  }, []);
+    if (shouldEnableAutoplayPlugin) {
+      const autoplay = emblaApi?.plugins()?.autoplay;
+      if (autoplay && typeof autoplay.stop === 'function') {
+        autoplay.stop();
+      }
+    }
+  }, [shouldEnableAutoplayPlugin]);
 
   const { selectedIndex, onDotButtonClick } = useDotButton(
     emblaApi,
@@ -54,11 +64,36 @@ export const HeroCarousel: FC<Props> = ({
   } = usePrevNextButtons(emblaApi, onNavButtonClick);
 
   useEffect(() => {
-    if (!emblaApi) return;
-    const autoplay = emblaApi?.plugins()?.autoplay;
-    if (!play) return;
-    autoplay.play();
-  }, [emblaApi, play]);
+    if (!emblaApi || !shouldEnableAutoplayPlugin) return;
+
+    const autoplayPlugin = emblaApi.plugins().autoplay;
+
+    if (
+      !autoplayPlugin
+      || typeof autoplayPlugin.play !== 'function'
+      || typeof autoplayPlugin.stop !== 'function'
+    ) {
+      return;
+    }
+
+    if (play) {
+      autoplayPlugin.play();
+    } else {
+      autoplayPlugin.stop();
+    }
+
+    return () => {
+      if (autoplayPlugin && typeof autoplayPlugin.stop === 'function') {
+        autoplayPlugin.stop();
+      }
+    };
+  }, [emblaApi, play, shouldEnableAutoplayPlugin]);
+
+  const showControls = banners.length > 1;
+
+  if (banners.length === 0) {
+    return null;
+  }
 
   return (
     <section className="embla">
@@ -80,24 +115,26 @@ export const HeroCarousel: FC<Props> = ({
         </div>
       </div>
 
-      <div className="embla__controls">
-        <div className="embla__buttons">
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
-        </div>
+      {showControls && (
+        <div className="embla__controls">
+          <div className="embla__buttons">
+            <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+            <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          </div>
 
-        <div className="embla__dots">
-          {banners.map(({ id }, index) => (
-            <DotButton
-              key={id}
-              onClick={() => onDotButtonClick(index)}
-              className={'embla__dot'.concat(
-                index === selectedIndex ? ' embla__dot--selected' : '',
-              )}
-            />
-          ))}
+          <div className="embla__dots">
+            {banners.map(({ id }, index) => (
+              <DotButton
+                key={id}
+                onClick={() => onDotButtonClick(index)}
+                className={'embla__dot'.concat(
+                  index === selectedIndex ? ' embla__dot--selected' : '',
+                )}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

@@ -4,7 +4,7 @@ import { HeroCarousel } from "../carousel/hero-carousel";
 export const Hero = async () => {
   const { heroBanners } = await fetchPublicHeroBannersAction();
 
-  if (heroBanners.length > 0) return null;
+  if (heroBanners.length === 0) return null;
 
   return (
     <HeroCarousel
