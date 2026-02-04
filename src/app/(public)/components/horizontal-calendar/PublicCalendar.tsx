@@ -4,8 +4,8 @@ import type { FC } from 'react';
 import { useEffect, useRef } from 'react';
 import { addDays, format, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
-import styles from './styles.module.css';
 import { cn } from '@/lib/utils';
+import './styles.css';
 
 type Props = Readonly<{
   matchesDates: string[];
@@ -35,10 +35,10 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
   }, [RANGE]);
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.header}>Calendario de partidos</div>
+    <div className="calendar-wrapper">
+      <div className="calendar-header">Calendario de partidos</div>
 
-      <div className={styles.calendar} ref={containerRef} role="list">
+      <div className="calendar-body" ref={containerRef} role="list">
         {days.map((d, index) => {
           const isToday = isSameDay(d, today);
           const matchesOnThisDay = matchesDates.filter(
@@ -49,16 +49,16 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
             <div key={d.toISOString()}>
               <div
                 ref={(element) => { dayRefs.current[index] = element; }}
-                className={cn(styles.day, { [styles.today]: isToday })}
+                className={cn("calendar-day", { "calendar-today": isToday })}
                 role="listitem"
                 aria-current={isToday ? 'date' : undefined}
               >
-                <p className={styles.weekday}>{format(d, 'EEE', { locale: es }).toLowerCase()}</p>
-                <p className={styles['day-num']}>{format(d, 'd')}</p>
-                <p className={styles.month}>{format(d, 'MMM', { locale: es }).toLowerCase()}</p>
+                <p className="calendar-weekday">{format(d, 'EEE', { locale: es }).toLowerCase()}</p>
+                <p className="calendar-day-num">{format(d, 'd')}</p>
+                <p className="calendar-month">{format(d, 'MMM', { locale: es }).toLowerCase()}</p>
               </div>
-              <p className={cn(styles.gamesCount, {
-                [styles.todayGamesCount]: (matchesOnThisDay > 0) && isToday,
+              <p className={cn("calendar-games-count", {
+                ["calendar-today-games-count"]: (matchesOnThisDay > 0) && isToday,
               })}>
                 {matchesOnThisDay}
               </p>
