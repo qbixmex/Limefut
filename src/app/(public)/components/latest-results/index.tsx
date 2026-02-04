@@ -3,8 +3,8 @@ import { fetchPublicLatestMatchesAction } from "@/app/(public)/(actions)";
 import { Pagination } from "@/shared/components/pagination";
 import { GameScore } from "@/shared/components/icons";
 import Link from "next/link";
-import { Team } from "./team";
-import MatchMetadata from "./match-metadata";
+import { Team } from "../results/team";
+import { MatchMetadata } from "../results/match-metadata";
 
 type Props = Readonly<{
   resultsPromise: Promise<{ latestResultsPage: string }>;
@@ -26,7 +26,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
 
       <div className="border border-green-900/90 rounded-b-lg p-5">
         {(matches.length === 0) && (
-          <div className="text-emerald-800 text-center font-bold text-xl italic">
+          <div className="text-emerald-800 dark:text-emerald-600 text-center font-bold text-xl italic">
             ¡ No hay encuentros recientes !
           </div>
         )}
@@ -42,28 +42,9 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
             }
             target="_blank"
           >
-            <div className="flex flex-col gap-3 text-neutral-800">
+            <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
               <div className="flex flex-col gap-5 md:flex-row md:gap-5">
-                <div className="w-full md:w-1/2 lg:w-2/3 grid grid-cols-3">
-                  <Team
-                    imageUrl={match.localTeam.imageUrl}
-                    name={match.localTeam.name}
-                  />
-                  <div className="flex justify-center items-center gap-2 font-bold text-2xl">
-                    <span className="text-blue-600">
-                      {match.localScore}
-                    </span>
-                    <span>-</span>
-                    <span className="text-blue-600">
-                      {match.visitorScore}
-                    </span>
-                  </div>
-                  <Team
-                    imageUrl={match.visitorTeam.imageUrl}
-                    name={match.visitorTeam.name}
-                  />
-                </div>
-                <div className="w-full md:w-1/2 lg:w-1/3">
+                <div className="w-full lg:w-1/2">
                   <MatchMetadata
                     tournamentName={match.tournament.name}
                     category={match.localTeam.category}
@@ -71,6 +52,25 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                     week={match.week}
                     place={match.place}
                     date={match.matchDate}
+                  />
+                </div>
+                <div className="w-full lg:w-1/2 grid grid-cols-3">
+                  <Team
+                    imageUrl={match.localTeam.imageUrl}
+                    name={match.localTeam.name}
+                  />
+                  <div className="flex justify-center items-center gap-2 font-bold text-2xl">
+                    <span className="text-blue-700 dark:text-blue-600">
+                      {match.localScore}
+                    </span>
+                    <span>-</span>
+                    <span className="text-blue-700 dark:text-blue-600">
+                      {match.visitorScore}
+                    </span>
+                  </div>
+                  <Team
+                    imageUrl={match.visitorTeam.imageUrl}
+                    name={match.visitorTeam.name}
                   />
                 </div>
               </div>
