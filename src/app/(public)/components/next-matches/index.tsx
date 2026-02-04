@@ -1,14 +1,12 @@
 import type { FC } from "react";
-import Heading from "../heading";
+import Link from "next/link";
 import { fetchPublicMatchesAction } from "@/app/(public)/(actions)";
 import { Pagination } from "@/shared/components/pagination";
-import { CalendarDaysIcon, ShieldQuestion } from "lucide-react";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { CalendarDaysIcon } from "lucide-react";
 import { CurrentDayMatchesAction } from "../../(actions)/home/currentDayMatchesAction";
 import { HorizontalCalendar } from "../horizontal-calendar";
-import Image from "next/image";
-import Link from "next/link";
+import { Team } from "../results/team";
+import { MatchMetadata } from "../results/match-metadata";
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string }>;
@@ -57,71 +55,36 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
             }
             target="_blank"
           >
-            <div  className="flex flex-col gap-3 text-neutral-800">
-              <div className="grid grid-cols-[1fr_1fr_250px_1fr] items-center">
-                <div className="flex flex-col gap-1">
-                  <Heading level="h3" className="text-lg">{match.tournament.name}</Heading>
-                  <p><b>Categoría:</b> {match.localTeam.category}</p>
-                  <p><b>Formato:</b> {match.localTeam.format}</p>
-                  <p><b>Jornada:</b> {match.week}</p>
-                  <p><b>Lugar:</b> {match.place ?? <span>No especificado</span>}</p>
+            <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
+              <div className="flex flex-col gap-5 md:flex-row md:gap-5">
+                <div className="w-full lg:w-1/2">
+                  <MatchMetadata
+                    tournamentName={match.tournament.name}
+                    category={match.localTeam.category}
+                    format={match.localTeam.format}
+                    week={match.week}
+                    place={match.place}
+                    date={match.matchDate}
+                  />
                 </div>
-                <div className="flex justify-start items-center gap-5">
-                  {match.localTeam.imageUrl ? (
-                    <Image
-                      src={match.localTeam.imageUrl}
-                      width={100}
-                      height={100}
-                      alt={`${match.localTeam.name} escudo`}
-                      className="size-[100px] object-cover rounded"
-                    />
-                  ) : (
-                    <ShieldQuestion className="text-gray-400" />
-                  )}
-                  <p className="text-2xl font-semibold italic text-blue-900">{match.localTeam.name}</p>
-                </div>
-                <div className="flex flex-col items-center gap-1">
-                  <div className="font-semibold italic text-center">
-                    {match.matchDate ? (
-                      <p className="text-gray-600">
-                        <span>
-                          {` ${format(match.matchDate, 'dd', { locale: es })} `}
-                        </span>
-                        <span>{' de '}</span>
-                        <span className="capitalize">
-                          {format(match.matchDate, "LLLL", { locale: es })}
-                        </span>
-                        <span>
-                          &nbsp;{format(match.matchDate, "y", { locale: es })}
-                        </span>
-                      </p>
-                    ) : (
-                      <p className="text-gray-600">No definido</p>
-                    )}
+                <div className="w-full lg:w-1/2 grid grid-cols-3">
+                  <Team
+                    imageUrl={match.localTeam.imageUrl}
+                    name={match.localTeam.name}
+                  />
+                  <div className="flex justify-center items-center gap-2 font-bold text-2xl">
+                    <span className="text-blue-700 dark:text-blue-600">
+                      {match.localScore}
+                    </span>
+                    <span>-</span>
+                    <span className="text-blue-700 dark:text-blue-600">
+                      {match.visitorScore}
+                    </span>
                   </div>
-                  {match.matchDate ? (
-                    <div className="text-2xl italic">
-                      <span className="font-bold text-blue-800">{format(new Date(match.matchDate), 'h')}</span>:
-                      <span>{format(match.matchDate, 'mm')}</span>
-                      <span>&nbsp;{format(match.matchDate, 'bbb', { locale: es })}</span>
-                    </div>
-                  ) : (
-                    <div className="text-2xl italic">No Definido</div>
-                  )}
-                </div>
-                <div className="flex justify-start items-center gap-5">
-                  <p className="text-2xl font-semibold italic text-blue-900">{match.visitorTeam.name}</p>
-                  {match.visitorTeam.imageUrl ? (
-                    <Image
-                      src={match.visitorTeam.imageUrl}
-                      width={100}
-                      height={100}
-                      alt={`${match.visitorTeam.name} escudo`}
-                      className="size-[100px] object-cover rounded"
-                    />
-                  ) : (
-                    <ShieldQuestion className="text-gray-400" />
-                  )}
+                  <Team
+                    imageUrl={match.visitorTeam.imageUrl}
+                    name={match.visitorTeam.name}
+                  />
                 </div>
               </div>
               {((matches.length - 1) !== index) && (
@@ -129,7 +92,7 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
               )}
             </div>
           </Link>
-        )): (
+        )) : (
           <p className="text-2xl text-green-800 font-semibold italic text-center">No hay encuentros programados</p>
         )}
       </div>
