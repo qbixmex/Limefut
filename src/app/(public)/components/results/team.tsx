@@ -26,7 +26,7 @@ export const Team: FC<Props> = ({
             />
           )}
         </figure>
-        <p className="leading-tight text-sm md:leading-relaxed md:text-xl text-center font-semibold italic text-green-900">
+        <p className="leading-tight text-sm md:leading-relaxed md:text-xl text-center font-semibold italic text-gray-700 dark:text-gray-200">
           {name}
         </p>
       </div>
