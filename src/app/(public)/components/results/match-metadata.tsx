@@ -1,6 +1,8 @@
 import type { FC } from "react";
-import { format as formatDate } from "date-fns";
 import { es } from "date-fns/locale";
+import { formatInTimeZone } from "date-fns-tz";
+
+const TIME_ZONE = "America/Mexico_City";
 
 type Props = Readonly<{
   tournamentName: string;
@@ -29,9 +31,8 @@ export const MatchMetadata: FC<Props> = ({
           <p><b>Lugar:</b> {place ?? <span>No especificado</span>}</p>
         </div>
         <div className="w-full md:1/2">
-          {/* <p><b>Fecha:</b> 12 / Oct / 2025</p> */}
-          <p><b>Fecha:</b> {formatDate(date as Date, "dd / LLL / yyyy", { locale: es })}</p>
-          <p><b>Hora:</b> {formatDate(date as Date, "h:mm a", { locale: es })}</p>
+          <p><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, "dd / LLL / yyyy", { locale: es })}</p>
+          <p><b>Hora:</b> {formatInTimeZone(date as Date, TIME_ZONE, "h:mm a", { locale: es })}</p>
           <p><b>Jornada:</b> {week}</p>
         </div>
       </section>
