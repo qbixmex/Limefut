@@ -131,7 +131,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                     }
                     target="_blank"
                   >
-                    {tournament.name}
+                    <p className='text-balance'>{tournament.name}</p>
                   </Link>
                 </TableCell>
               </TableRow>
@@ -163,7 +163,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <TableRow>
                 <TableHead>Fecha</TableHead>
                 <TableCell>
-                  <p className="text-gray-200">
+                  <p className="dark:text-gray-200">
                     <span>
                       {`${formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'dd', { locale: es })}`}
                     </span>

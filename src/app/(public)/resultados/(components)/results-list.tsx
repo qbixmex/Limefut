@@ -68,7 +68,7 @@ export const ResultsList: FC<Props> = async ({
                 <TableHead>Fecha</TableHead>
                 <TableHead className="text-center w-20">Categoría</TableHead>
                 <TableHead className="text-center w-20">Formato</TableHead>
-                <TableHead className="text-right">Equipo visitante</TableHead>
+                <TableHead className="text-right">Equipo Local</TableHead>
                 <TableHead>&nbsp;</TableHead>
                 <TableHead className="text-left">Equipo Visitante</TableHead>
                 <TableHead className="text-left">Estado</TableHead>
@@ -128,14 +128,16 @@ export const ResultsList: FC<Props> = async ({
                         )
                     }
                   </TableCell>
-                  <TableCell className="text-center flex justify-center items-center gap-2">
-                    <span className="text-xl text-sky-500 font-medium">
-                      {match.localScore}
-                    </span>
-                    <span>-</span>
-                    <span className="text-xl text-sky-500 font-medium">
-                      {match.visitorScore}
-                    </span>
+                  <TableCell>
+                    <div className="text-center flex justify-center items-center gap-2">
+                      <span className="text-xl text-sky-500 font-medium">
+                        {match.localScore}
+                      </span>
+                      <span>-</span>
+                      <span className="text-xl text-sky-500 font-medium">
+                        {match.visitorScore}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell className="text-left">
                     {
