@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import Link from 'next/link';
 import Image from "next/image";
 import { redirect } from 'next/navigation';
-import { format } from 'date-fns';
+import { formatInTimeZone } from "date-fns-tz";
 import { es } from 'date-fns/locale';
 import {
   type MatchType,
@@ -19,6 +19,8 @@ import { MatchStatus } from './match-status';
 import { MATCH_STATUS } from '@/shared/enums';
 import { PenaltyShootout } from "@/shared/components/penalty-shootouts";
 import "./styles.css";
+
+const TIME_ZONE = "America/Mexico_City";
 
 type Props = Readonly<{
   matchId: string;
@@ -163,15 +165,15 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 <TableCell>
                   <p className="text-gray-200">
                     <span>
-                      {`${format(match?.matchDate as Date, 'dd', { locale: es })}`}
+                      {`${formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'dd', { locale: es })}`}
                     </span>
                     <span>{' de '}</span>
                     <span className="capitalize">
-                      {format(match?.matchDate as Date, "LLLL", { locale: es })}
+                      {formatInTimeZone(match?.matchDate as Date, TIME_ZONE, "LLLL", { locale: es })}
                     </span>
                     <span>{' del '}</span>
                     <span>
-                      &nbsp;{format(match?.matchDate as Date, "y", { locale: es })}
+                      &nbsp;{formatInTimeZone(match?.matchDate as Date, TIME_ZONE, "y", { locale: es })}
                     </span>
                   </p>
                 </TableCell>
@@ -179,7 +181,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <TableRow>
                 <TableHead>Hora</TableHead>
                 <TableCell>
-                  {format(match?.matchDate as Date, "h:mm aaa", { locale: es })}
+                  {formatInTimeZone(match?.matchDate as Date, TIME_ZONE, "h:mm aaa", { locale: es })}
                 </TableCell>
               </TableRow>
               <TableRow>

@@ -10,8 +10,10 @@ import { Badge } from '@/components/ui/badge';
 import { SoccerField } from '@/shared/components/icons';
 import { getMatchStatus } from '../(helpers)/status';
 import type { MATCH_STATUS } from '@/shared/enums';
-import { format as formatDate } from 'date-fns';
+import { formatInTimeZone } from "date-fns-tz";
 import { es } from 'date-fns/locale';
+
+const TIME_ZONE = "America/Mexico_City";
 
 type Props = Readonly<{
   tournament?: string;
@@ -81,19 +83,19 @@ export const ResultsList: FC<Props> = async ({
                       <>
                         <p>
                           <span>
-                            {`${formatDate(match.matchDate, 'dd', { locale: es })}`}
+                            {`${formatInTimeZone(match.matchDate, TIME_ZONE, 'dd', { locale: es })}`}
                           </span>
                           <span>{' de '}</span>
                           <span className="capitalize">
-                            {formatDate(match.matchDate, "LLLL", { locale: es })}
+                            {formatInTimeZone(match.matchDate, TIME_ZONE, "LLLL", { locale: es })}
                           </span>
                           <span>{' del '}</span>
                           <span>
-                            &nbsp;{formatDate(match.matchDate, "y", { locale: es })}
+                            &nbsp;{formatInTimeZone(match.matchDate, TIME_ZONE, "y", { locale: es })}
                           </span>
                         </p>
                         <p>
-                          {formatDate(match.matchDate, "h:mm aaa", { locale: es })}
+                          {formatInTimeZone(match.matchDate, TIME_ZONE, "h:mm aaa", { locale: es })}
                         </p>
                       </>
                     ) : (
