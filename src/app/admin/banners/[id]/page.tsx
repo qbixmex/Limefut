@@ -50,6 +50,7 @@ export const HeroBannerPage: FC<Props> = async ({ params }) => {
               imageUrl={heroBanner.imageUrl}
               dataAlignment={heroBanner.dataAlignment}
               showData={heroBanner.showData}
+              className="rounded-lg"
             />
             <section className="flex flex-col lg:flex-row gap-5 mt-10">
               <div className="w-full xl:w-1/2">

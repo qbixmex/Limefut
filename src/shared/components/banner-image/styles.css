@@ -1,7 +1,7 @@
 @reference "../../../app/globals.css";
 
 .figure-container {
-  @apply w-full max-w-[1280px] mx-auto overflow-hidden rounded-lg relative;
+  @apply w-full max-w-[1280px] mx-auto overflow-hidden relative;
 }
 
 .data-wrapper {

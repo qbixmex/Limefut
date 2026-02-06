@@ -21,8 +21,9 @@
 }
 
 .match-results {
-  @apply absolute left-[50%] top-[50%] -translate-[50%] size-25 bg-blue-950 text-xl flex justify-center items-center rounded-xl;
+  @apply absolute left-[50%] top-[50%] -translate-[50%] size-16 lg:size-25;
+  @apply bg-blue-950 text-xl flex justify-center items-center rounded-xl;
   & p {
-    @apply text-4xl text-blue-50 font-semibold;
+    @apply text-2xl lg:text-4xl text-blue-50 font-semibold;
   }
 }
