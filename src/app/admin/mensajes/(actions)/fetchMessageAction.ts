@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import type { ContactMessage } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from 'next/cache';
 
 type FetchResponse = Promise<{
   ok: boolean;
@@ -13,6 +14,11 @@ export const fetchMessageAction = async (
   id: string,
   userRole: string[] | null,
 ): FetchResponse => {
+  "use cache";
+
+  cacheLife("weeks");
+  cacheTag("admin-message");
+
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,

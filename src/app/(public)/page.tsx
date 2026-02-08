@@ -1,10 +1,10 @@
 import { type FC, Suspense } from "react";
+import { Hero } from "./components/hero/hero";
+import { CarouselSkeleton } from "./components/carousel/carousel-skeleton";
 import { NextMatches } from "./components/next-matches";
 import { LatestResults, MatchesSkeleton } from "./components";
 import { HorizontalCalendarSkeleton } from "./components/horizontal-calendar/horizontal-calendar-skeleton";
 import { ErrorHandler } from "@/shared/components/errorHandler";
-import { Hero } from "./components/hero/hero";
-import { CarouselSkeleton } from "./components/carousel/carousel-skeleton";
 
 type Props = Readonly<{
   searchParams: Promise<{

@@ -17,7 +17,7 @@ import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createCoachSchema, editCoachSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from 'next-auth';
+import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { Coach, Team } from '@/shared/interfaces';
 import { createCoachAction, updateCoachAction } from '../(actions)';
@@ -26,7 +26,7 @@ import { Label } from '@/components/ui/label';
 import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { cn } from '@/root/src/lib/utils';
+import { cn } from '@/lib/utils';
 
 type TeamType = Pick<Team, 'id' | 'name'>;
 
@@ -101,7 +101,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
       const response = await updateCoachAction({
         formData,
         coachId: coach.id,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles!,
         authenticatedUserId: session?.user.id,
       });
 

@@ -13,14 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { Tournament } from "~/src/shared/interfaces";
 
 type Props = Readonly<{
-  tournaments: {
-    id: string;
-    name: string;
-    category: string;
-    format: string;
-  }[];
+  tournaments: Partial<Tournament>[];
 }>;
 
 export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
@@ -48,7 +44,7 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
         {tournaments.map((tournament) => (
           <SelectItem
             key={tournament.id}
-            value={tournament.id}
+            value={tournament.id!}
           >
             {tournament.name}, {tournament.category}, {tournament.format} vs {tournament.format}
           </SelectItem>

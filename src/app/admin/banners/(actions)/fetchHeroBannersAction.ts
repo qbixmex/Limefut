@@ -1,6 +1,7 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma";
+import { cacheLife, cacheTag } from "next/cache";
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import type { HeroBanner, Pagination } from "@/shared/interfaces";
 
@@ -24,6 +25,11 @@ export type ResponseFetch = Promise<{
 }>;
 
 export const fetchHeroBannersAction = async (options?: Options): ResponseFetch => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-banners");
+
   let { page = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)

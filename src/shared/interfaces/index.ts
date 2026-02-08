@@ -1,4 +1,4 @@
-export type { Role } from "./User";
+export { ROLE, type ROLE_TYPE, type User } from "./User";
 export type { Pagination } from "./Pagination";
 export type { Tournament, TournamentSeed } from "./Tournament";
 export type { Team, TeamSeed } from "./Team";

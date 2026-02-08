@@ -1,10 +1,15 @@
 import { type FC } from 'react';
-import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
+import { fetchTournamentsForStandingsAction } from '../(actions)/fetchTournamentsForStandingsAction';
 import TournamentsSelector from '../../(components)/tournaments-selector';
-// import { SelectTournament } from "@/shared/components/select-tournament";
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 export const TournamentsWrapper: FC = async () => {
-  const { tournaments } = await fetchTournamentsAction();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const userRoles = session?.user.roles as string[];
+  const { tournaments } = await fetchTournamentsForStandingsAction(userRoles);
 
   return (
     <section className="mb-10">

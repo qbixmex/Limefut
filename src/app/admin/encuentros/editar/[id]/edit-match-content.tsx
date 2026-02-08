@@ -1,19 +1,20 @@
 import type { FC } from "react";
-import { auth } from "~/src/auth";
+import { auth } from "@/lib/auth";
 import { MatchForm } from "../../(components)/matchForm";
 import { fetchMatchAction } from "../../(actions)";
 import { redirect } from "next/navigation";
 import { fetchTeamsForMatchAction } from "../../(actions)/fetchTeamsForMatchAction";
 import type { MatchType } from "../../(actions)/fetchMatchAction";
-import type { Team } from "~/src/shared/interfaces";
-import type { Session } from "next-auth";
+import type { Team } from "@/shared/interfaces";
+import type { Session } from "@/lib/auth-client";
+import { headers } from "next/headers";
 
-type Props = {
+type Props = Readonly<{
   matchId: string;
-};
+}>;
 
 export const EditMatchContent: FC<Props> = async ({ matchId }) => {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
   
   const responseMatch = await fetchMatchAction(matchId, session?.user.roles ?? null);
 

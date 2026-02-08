@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import {
   Card,
   CardContent,
@@ -5,18 +6,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TournamentForm } from "../(components)/tournamentForm";
-import type { Session } from "next-auth";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import type { Session } from "@/lib/auth-client";
+import { Suspense } from "react";
 
-export const CreateUser = async () => {
-  const session = await auth();
-
-  if (!session?.user.roles.includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear usuarios !';
-    redirect(`/admin/usuarios?error=${encodeURIComponent(message)}`);
-  }
-
+const CreateTournamentPage = async () => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -25,7 +21,9 @@ export const CreateUser = async () => {
             <CardTitle className="admin-page-card-title">Crear Torneo</CardTitle>
           </CardHeader>
           <CardContent>
-            <TournamentForm session={session as Session} />
+            <Suspense>
+              <CreateUserContent />
+            </Suspense>
           </CardContent>
         </Card>
       </div>
@@ -33,4 +31,22 @@ export const CreateUser = async () => {
   );
 };
 
-export default CreateUser;
+const CreateUserContent = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session && !(session.user.roles as string[]).includes('admin')) {
+    const message = '¡ No tienes permisos administrativos para crear torneos !';
+    redirect(`/admin/torneos?error=${encodeURIComponent(message)}`);
+  }
+
+  return (
+    <TournamentForm
+      key={randomUUID()}
+      session={session as Session}
+    />
+  );
+};
+
+export default CreateTournamentPage;

@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createStandingsSchema } from "@/shared/schemas";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -39,7 +39,8 @@ export const createStandingsAction = async ( data: DataType ): CreateResponseAct
     });
 
     // Update Cache
-    revalidatePath('/admin/tabla-de-posiciones');
+    updateTag('admin-standings');
+    updateTag('admin-tournaments-for-standings');
     updateTag('public-standings');
 
     return prismaTransaction;

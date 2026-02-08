@@ -1,12 +1,16 @@
-import type { DefaultSession } from 'next-auth';
-import type { Role } from './src/shared/interfaces';
+export const ROLE = {
+  USER: 'user',
+  ADMIN: 'admin',
+} as const;
+
+export type ROLE_TYPE = typeof ROLE[keyof typeof ROLE];
 
 export interface User {
   id: string;
   name: string | null;
   email: string;
   username: string | null;
-  emailVerified?: Date | null;
+  emailVerified: boolean | null;
   roles: string[],
   isActive: boolean,
   imageUrl?: string | null,
@@ -21,24 +25,8 @@ export interface UserSeed {
   username: string | null;
   emailVerified?: Date | null;
   password: string;
-  roles: Role[],
+  roles: ROLE_TYPE[],
   imageUrl: string | null,
   imagePublicID: string | null,
   isActive: boolean,
-}
-
-export interface SessionUser {
-  id: string;
-  name: string | null;
-  email: string;
-  username: string | null;
-  roles: string[],
-  imageUrl: string | null,
-  isActive: boolean,
-}
-
-declare module 'next-auth' {
-  interface Session {
-    user: User & DefaultSession['user'];
-  };
 }

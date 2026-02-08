@@ -1,6 +1,7 @@
-import { type FC } from 'react';
+import { Suspense, type FC } from 'react';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -18,15 +19,24 @@ import { updateHeroBannerShowDataAction } from '../(actions)/updateHeroBannerSho
 import { BannerAlignment } from '../(components)/banner-alignment';
 import { CircleQuestionMarkIcon } from "lucide-react";
 
+
 type Props = Readonly<{
   params: Promise<{
     id: string;
   }>;
 }>;
 
-export const HeroBannerPage: FC<Props> = async ({ params }) => {
-  const session = await auth();
+const HeroBannerPage: FC<Props> = ({ params }) => {
+  return (
+    <Suspense>
+      <HeroBannerContent params={params} />
+    </Suspense>
+  );
+};
+
+const HeroBannerContent: FC<Props> = async ({ params }) => {
   const pageId = (await params).id;
+  const session = await auth.api.getSession({ headers: await headers() });
 
   const response = await fetchHeroBannerAction(session?.user?.roles ?? [], pageId);
 

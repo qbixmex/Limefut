@@ -26,7 +26,7 @@ type Props = Readonly<{
 
 export const DeleteTournament: FC<Props> = ({ tournamentId, roles }) => {
   const onDeleteTeam = async (tournamentId: string) => {
-    if (!roles.includes('admin')) {
+    if (roles && !roles.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar torneos !');
       return;
     }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, type FC } from "react";
-import type { Session } from "next-auth";
+import type { Session } from "@/lib/auth-client";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -112,7 +112,7 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, imagesQuantity
           await updateGalleryImagesPositionAction({
             newPosition: data.position as number,
             authenticatedUserId: session?.user.id,
-            userRoles: session.user.roles,
+            userRoles: session.user.roles!,
             galleryId,
             galleryImageId: response.galleryImage?.id as string,
           });
@@ -132,7 +132,7 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, imagesQuantity
         await updateGalleryImagesPositionAction({
           newPosition: data.position as number,
           authenticatedUserId: session?.user.id,
-          userRoles: session.user.roles,
+          userRoles: session.user.roles!,
           galleryId,
           galleryImageId: galleryImage.id,
         });
@@ -141,7 +141,7 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, imagesQuantity
       const response = await updateGalleryImageAction({
         formData,
         authenticatedUserId: session?.user.id,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles!,
         galleryImageId: galleryImage.id,
       });
 

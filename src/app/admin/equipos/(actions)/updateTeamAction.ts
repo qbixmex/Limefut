@@ -1,9 +1,9 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
-import { editTeamSchema } from '@/root/src/shared/schemas';
+import { editTeamSchema } from '@/shared/schemas';
 import type { Team } from '@/shared/interfaces';
 
 type Options = {
@@ -142,8 +142,11 @@ export const updateTeamAction = async ({
         }
 
         // Update Cache
-        revalidatePath('/admin/equipos');
         updateTag('admin-teams');
+        updateTag('admin-teams-for-coach');
+        updateTag('admin-teams-for-player');
+        updateTag("admin-teams-for-gallery");
+        updateTag('admin-team');
         updateTag('public-team');
         updateTag('public-teams');
         updateTag('standings');

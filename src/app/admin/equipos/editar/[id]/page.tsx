@@ -1,18 +1,18 @@
-import type { FC } from "react";
-
+import { Suspense, type FC } from "react";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import type { Session } from "next-auth";
+import type { Session } from "@/lib/auth-client";
 import { fetchTeamAction, fetchTournamentsForTeam, type TournamentType } from "../../(actions)";
 import { TeamForm } from "../../(components)/teamForm";
 import type { Coach } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from "../../(actions)/fetchCoachesForTeam";
+import { headers } from "next/headers";
 
 type Props = Readonly<{
   params: Promise<{
@@ -20,8 +20,18 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const EditTeam: FC<Props> = async ({ params }) => {
-  const session = await auth();
+const EditTeamPage: FC<Props> = async ({ params }) => {
+  return (
+    <Suspense>
+      <EditTeamPageContent params={params} />
+    </Suspense>
+  );
+};
+
+const EditTeamPageContent: FC<Props> = async ({ params }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   const teamId = (await params).id;
   const responseTeam = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
@@ -65,4 +75,4 @@ export const EditTeam: FC<Props> = async ({ params }) => {
   );
 };
 
-export default EditTeam;
+export default EditTeamPage;

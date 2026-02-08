@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from "next/cache";
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -14,6 +15,11 @@ export type ResponseAction = Promise<{
 }>;
 
 export const fetchTournamentsForGalleryAction = async (): ResponseAction => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-tournaments-for-gallery");
+
   try {
     const tournaments = await prisma.tournament.findMany({
       orderBy: { name: 'asc' },

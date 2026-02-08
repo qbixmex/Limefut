@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import type { ALIGNMENT } from "@/shared/interfaces";
 
 export type ResponseAction = Promise<{
@@ -31,9 +31,8 @@ export const updateHeroBannerAlignmentAction = async (
   });
 
   // Update Cache
-  revalidatePath('/admin/banners');
-  revalidatePath(`/admin/banners/${bannerId}`);
-  revalidatePath(`/admin/banners/editar/${bannerId}`);
+  updateTag('admin-banners');
+  updateTag('admin-banner');
   updateTag("admin-hero-banner");
   updateTag('public-banners');
 

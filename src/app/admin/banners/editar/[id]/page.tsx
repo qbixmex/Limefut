@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto";
 import type { FC } from "react";
+import { headers } from "next/headers";
+import type { Session } from "@/lib/auth-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { fetchHeroBannerAction } from "../../(actions)";
 import { BannerForm } from "../../(components)/banner-form";
-import type { Session } from "next-auth";
 
 type Props = Readonly<{
   params: Promise<{
@@ -13,9 +14,15 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const EditHeroBannerPage: FC<Props> = async ({ params }) => {
+const EditHeroBannerPage: FC<Props> = ({ params }) => {
+  return (
+    <EditHeroBannerContent params={params} />
+  );
+};
+
+const EditHeroBannerContent: FC<Props> = async ({ params }) => {
   const heroBannerId = (await params).id;
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   const response = await fetchHeroBannerAction(session?.user.roles ?? [], heroBannerId);
 

@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { deleteImage } from "~/src/shared/actions";
 
 export type ResponseDeleteAction = Promise<{
@@ -21,7 +21,7 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
     };
   }
 
-  const { imagePublicID, gallery } = await prisma.galleryImage.delete({
+  const { imagePublicID } = await prisma.galleryImage.delete({
     where: { id: galleryImageId },
     select: {
       imagePublicID: true,
@@ -41,8 +41,9 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
     }
   }
 
-  // Refresh Cache
-  revalidatePath(`/admin/galerias/${gallery.permalink}`);
+  // Update Cache
+  updateTag('admin-galleries');
+  updateTag('admin-gallery');
   updateTag('dashboard-images');
   updateTag('public-galleries');
   updateTag('public-gallery');

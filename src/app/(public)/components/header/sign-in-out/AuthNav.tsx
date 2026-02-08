@@ -1,6 +1,6 @@
 'use client';
 
-import type { FC} from "react";
+import type { FC } from "react";
 import { useState } from "react";
 import {
   Avatar,
@@ -8,23 +8,23 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import Link from "next/link";
-import React from "react";
 import {
   ChevronsUpDown,
   LayoutDashboard,
   UserCircle,
   LogOut,
 } from "lucide-react";
-import { logoutAction } from '@/app/(auth)/handleLogout';
 import { toast } from "sonner";
+import { signOutAction } from "@/app/(auth)/signOutAction";
 
 type Props = Readonly<{
   user: {
     id: string;
-    name: string | null;
-    username: string | null;
+    name: string;
+    username?: string | null;
     email: string;
-    imageUrl?: string | null;
+    image?: string | null;
+    roles?: string[] | null;
   }
 }>;
 
@@ -32,9 +32,9 @@ export const AuthNav: FC<Props> = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onLogout = async () => {
+    await signOutAction();
     toast.success('¡ Has cerrado sesión correctamente 👍 !');
     setIsOpen(false);
-    await logoutAction();
   };
 
   return (
@@ -52,7 +52,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
         )}
         <Avatar className="h-8 w-8 rounded-lg">
           <AvatarImage
-            src={user.imageUrl ?? undefined}
+            src={user.image ?? undefined}
             alt={user.name ? `${user.name} profile image` : ''}
           />
           <AvatarFallback className="rounded-lg bg-emerald-900 font-medium text-sm">{(user.name as string).at(0)}</AvatarFallback>
@@ -67,14 +67,16 @@ export const AuthNav: FC<Props> = ({ user }) => {
               href="/admin/dashboard"
               className="flex items-center gap-3 w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors"
               onClick={() => setIsOpen(false)}
+              target="_blank"
             >
               <LayoutDashboard />
               <span>Dashboard</span>
             </Link>
             <Link
-              href={`/admin/users/profile/${user.id}`}
+              href={`/admin/usuarios/perfil/${user.id}`}
               className="flex items-center gap-3 w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors"
               onClick={() => setIsOpen(false)}
+              target="_blank"
             >
               <UserCircle />
               <span>Perfil</span>

@@ -188,6 +188,9 @@ export const createPenaltyShootoutAction = async (
     });
 
     // Refresh Cache
+    updateTag('admin-matches');
+    updateTag('admin-match');
+    updateTag('matches');
     updateTag('matches');
     updateTag('public-results');
 

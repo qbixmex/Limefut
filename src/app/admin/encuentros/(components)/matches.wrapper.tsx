@@ -1,9 +1,9 @@
 import type { FC } from "react";
-import { auth } from "~/src/auth";
-import { fetchMatchesAction } from "../(actions)";
+import { auth } from "@/lib/auth";
+import { fetchMatchesAction, fetchTournamentForMatchAction } from "../(actions)";
 import { MatchesTable } from "./matches-table";
-import { fetchTournamentAction } from "../(actions)/fetchTournamentAction";
-import type { MATCH_STATUS } from "~/src/shared/enums";
+import type { MATCH_STATUS } from "@/shared/enums";
+import { headers } from "next/headers";
 
 type Props = Readonly<{
   tournamentId: string;
@@ -22,9 +22,8 @@ export const MatchesWrapper: FC<Props> = async ({
   sortWeek,
   status,
 }) => {
-  const session = await auth();
-
-  const { tournament } = await fetchTournamentAction(tournamentId);
+  const session = await auth.api.getSession({ headers: await headers() });
+  const { tournament } = await fetchTournamentForMatchAction(tournamentId);
 
   const { matches, pagination } = await fetchMatchesAction({
     tournamentId,

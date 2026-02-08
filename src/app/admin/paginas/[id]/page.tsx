@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { redirect } from 'next/navigation';
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +21,7 @@ import { rehypeYoutube } from "@/lib/rehype-youtube";
 import "highlight.js/styles/tokyo-night-dark.min.css";
 import type { PAGE_STATUS } from '@/shared/interfaces/Page';
 import { getPageStatus } from '@/lib/utils';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   params: Promise<{
@@ -29,7 +30,9 @@ type Props = Readonly<{
 }>;
 
 export const PageDetails: FC<Props> = async ({ params }) => {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   const pageId = (await params).id;
 
   const response = await fetchPageAction(session?.user.roles ?? [], pageId);
@@ -132,7 +135,7 @@ export const PageDetails: FC<Props> = async ({ params }) => {
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  <p>editar</p>
+                  <span>editar</span>
                 </TooltipContent>
               </Tooltip>
             </div>

@@ -8,8 +8,19 @@ import { LatestImages } from "./(components)/latest-images";
 import { LatestMessages } from "./(components)/latest-messages";
 import { MessagesSkeleton } from "./(components)/latest-messages/messages-skeleton";
 import { ImagesSkeleton } from "./(components)/latest-images/images-skeleton";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export const DashboardPage = () => {
+export const DashboardPage = async () => {
+  const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
+  if (!session) {
+		redirect("/login");
+	}
+
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
       <div className="grid auto-rows-min gap-5 md:grid-cols-3">

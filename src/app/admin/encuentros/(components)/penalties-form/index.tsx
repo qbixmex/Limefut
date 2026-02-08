@@ -2,7 +2,7 @@
 
 import { type FC } from 'react';
 import { useForm } from 'react-hook-form';
-import type { Session } from 'next-auth';
+import type { Session } from '@/lib/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,

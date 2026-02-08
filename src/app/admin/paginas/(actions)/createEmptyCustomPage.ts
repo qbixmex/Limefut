@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -33,7 +33,9 @@ export const createEmptyCustomPage = async (): CreateResponseAction => {
       };
     });
 
-    revalidatePath('admin/paginas');
+    // Update Cache
+    updateTag('admin-pages');
+    updateTag('admin-page');
     updateTag('public-page-links');
 
     return prismaTransaction;

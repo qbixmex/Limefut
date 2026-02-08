@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -31,7 +31,8 @@ export const updateGalleryStateAction = async (id: string, state: boolean)
   });
 
   updateTag('dashboard-images');
-  revalidatePath('/admin/galerias');
+  updateTag('admin-galleries');
+  updateTag('admin-gallery');
   updateTag('public-gallery');
   updateTag('public-galleries');
   updateTag('public-gallery');

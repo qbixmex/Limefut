@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { editTournamentSchema } from '@/shared/schemas';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
@@ -139,9 +139,12 @@ export const updateTournamentAction = async ({
         }
 
         // Update Cache
-        revalidatePath('/admin/torneos');
-        updateTag("admin-tournaments-list");
-        updateTag("tournaments-list");
+        updateTag("admin-tournaments");
+        updateTag("admin-tournaments-selector");
+        updateTag("admin-tournaments-for-match");
+        updateTag("admin-tournament-for-match");
+        updateTag("admin-tournaments-for-gallery");
+        updateTag("admin-tournament");
         updateTag("public-tournaments-list");
         updateTag("public-tournaments");
         updateTag("public-tournament");

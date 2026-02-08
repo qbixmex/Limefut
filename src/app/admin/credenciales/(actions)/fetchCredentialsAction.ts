@@ -1,6 +1,6 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma";
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import type { Pagination, Credential } from "@/shared/interfaces";
 

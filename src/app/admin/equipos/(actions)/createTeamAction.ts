@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createTeamSchema } from "@/shared/schemas";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { uploadImage } from "@/shared/actions";
 import type { CloudinaryResponse, Team } from "@/shared/interfaces";
 
@@ -98,9 +98,12 @@ export const createTeamAction = async (
       };
     });
 
-    // Revalidate Paths
-    revalidatePath('/admin/equipos');
+    // Update Cache
     updateTag('admin-teams');
+    updateTag('admin-teams-for-player');
+    updateTag('admin-teams-for-coach');
+    updateTag("admin-teams-for-gallery");
+    updateTag('admin-team');
     updateTag('public-teams');
     updateTag('public-team');
     updateTag('standings');

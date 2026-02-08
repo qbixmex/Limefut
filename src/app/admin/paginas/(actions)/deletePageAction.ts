@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import deleteImage from "./deleteImageAction";
 
 export type ResponseDeleteAction = Promise<{
@@ -53,8 +53,8 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
       });
 
       // Update Cache
-      revalidatePath('/admin/paginas');
       updateTag('admin-pages');
+      updateTag('admin-page');
       updateTag('public-page-links');
       updateTag('public-page-metadata');
       updateTag('public-custom-page');

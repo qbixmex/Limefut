@@ -37,7 +37,7 @@ import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createMatchSchema, editMatchSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from 'next-auth';
+import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { Match, Team } from '@/shared/interfaces';
 import { createMatchAction, updateMatchAction } from '../(actions)';
@@ -201,7 +201,7 @@ export const MatchForm: FC<Props> = ({
       const response = await updateMatchAction({
         formData,
         id: match.id,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles!,
         authenticatedUserId: session?.user.id,
       });
 

@@ -6,16 +6,23 @@ import { MessagesTableSkeleton } from "./(components)/messages-table-skeleton";
 import { MessagesTable } from "./(components)/messages-table";
 
 type Props = Readonly<{
-  searchParams?: Promise<{
+  searchParams: Promise<{
     query?: string;
     page?: string;
   }>;
 }>;
 
-export const MessagesPage: FC<Props> = async (props) => {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+const MessagesPage: FC<Props> = ({ searchParams }) => {
+  return (
+    <Suspense>
+      <MessagesContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+const MessagesContent: FC<Props> = async ({ searchParams }) => {
+  const query = (await searchParams).query ?? '';
+  const currentPage = (await searchParams).page ?? '1';
 
   return (
     <>
@@ -34,7 +41,10 @@ export const MessagesPage: FC<Props> = async (props) => {
                 key={`${query}-${currentPage}`}
                 fallback={<MessagesTableSkeleton />}
               >
-                <MessagesTable query={query} currentPage={currentPage} />
+                <MessagesTable
+                  query={query}
+                  currentPage={currentPage}
+                />
               </Suspense>
             </CardContent>
           </Card>
