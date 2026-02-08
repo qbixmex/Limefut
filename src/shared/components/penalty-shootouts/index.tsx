@@ -3,7 +3,7 @@ import { Check, MinusIcon, XIcon } from "lucide-react";
 import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { SHOOTOUT_STATUS } from '@/shared/enums';
-import { DeletePenaltyShootouts } from '@/admin/encuentros/(components)/delete-penalty-shootouts';
+import { DeletePenaltyShootouts } from '@/app/admin/encuentros/(components)/delete-penalty-shootouts';
 
 type Shootout = {
   id: string;

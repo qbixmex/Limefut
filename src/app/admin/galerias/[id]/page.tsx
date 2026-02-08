@@ -1,7 +1,7 @@
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
+import type { Session } from '@/lib/auth-client';
 import { redirect } from 'next/navigation';
-import { auth } from '~/src/auth';
-import type { Session } from 'next-auth';
+import { auth } from '@/lib/auth';
 import {
   Card,
   CardContent,
@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { GalleryImageForm } from '../(components)/galleryImageForm';
 import { fetchGalleryAction } from '../(actions)';
 import { GalleryImages } from '../(components)/gallery-images';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   params: Promise<{
@@ -26,8 +27,16 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const GalleryDetailsPage: FC<Props> = async ({ params }) => {
-  const session = await auth();
+const GalleryDetailsPage: FC<Props> = ({ params }) => {
+  return (
+    <Suspense>
+      <GalleryDetailsContent params={params} />
+    </Suspense>
+  );
+};
+
+const GalleryDetailsContent: FC<Props> = async ({ params }) => {
+  const session = await auth.api.getSession({ headers: await headers() });
   const galleryId = (await params).id;
 
   const response = await fetchGalleryAction(session?.user.roles ?? [], galleryId);

@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 type Options = {
   newPosition: number;
@@ -109,8 +109,8 @@ export const updateGalleryImagesPositionAction = async ({
 
         // Update Cache
         updateTag('dashboard-images');
-        revalidatePath('/admin/galerias');
-        revalidatePath(`/admin/galerias/`);
+        updateTag('admin-galleries');
+        updateTag('admin-gallery');
         updateTag('public-galleries');
         updateTag('public-gallery');
 

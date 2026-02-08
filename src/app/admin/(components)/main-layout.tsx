@@ -6,23 +6,18 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { auth } from '@/auth';
 import { Breadcrumbs } from '../(components)/breadcrumbs';
 import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
 import { NavUser } from '@/components/nav-user';
-import type { User } from '~/next-auth';
-import { redirect } from 'next/navigation';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{ children: ReactNode; }>;
 
-export const MainLayout:FC<Props> = async ({ children }) => {
-  const session = await auth();
-
-  if (!session || !session.user.roles.includes('admin')) {
-    redirect('/login');
-  }
-
-  const user = session!.user as User;
+export const MainLayout: FC<Props> = async ({ children }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
     <SidebarProvider>
@@ -41,11 +36,11 @@ export const MainLayout:FC<Props> = async ({ children }) => {
             <ThemeSwitcher />
             <NavUser
               user={{
-                id: user.id,
-                name: user.name,
-                username: user.username,
-                email: user.email,
-                imageUrl: user.imageUrl,
+                id: session?.user?.id as string,
+                name: session?.user?.name as string,
+                email: session?.user?.email as string,
+                username: session?.user?.username,
+                image: session?.user?.image,
               }}
             />
           </section>

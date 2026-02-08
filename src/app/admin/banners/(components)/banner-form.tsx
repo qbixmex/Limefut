@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { createHeroBannerSchema, editHeroBannerSchema } from '@/shared/schemas';
 import { createHeroBannerAction, updateHeroBannerAction } from '../(actions)';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from 'next-auth';
+import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { HeroBanner } from '@/shared/interfaces';
 import { LoaderCircle } from 'lucide-react';
@@ -94,7 +94,7 @@ export const BannerForm: FC<Props> = ({ session, heroBanner }) => {
       const response = await updateHeroBannerAction({
         formData,
         heroBannerId: heroBanner?.id as string,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles!,
         authenticatedUserId: session?.user.id,
       });
 

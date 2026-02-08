@@ -27,23 +27,26 @@ import {
   SidebarMenuItem,
   // useSidebar,
 } from "@/components/ui/sidebar";
-import { logoutAction } from "@/app/(auth)/handleLogout";
 import { toast } from "sonner";
+import { signOutAction } from "../app/(auth)/signOutAction";
+import { useRouter } from "next/navigation";
 
 type Props = { user: {
   id: string;
-  name: string | null;
-  username: string | null;
+  name: string;
   email: string;
-  imageUrl?: string | null;
+  username?: string | null;
+  image?: string | null;
 }};
 
 export const NavUser: FC<Props> = ({ user }) => {
+  const route = useRouter();
   // const { isMobile } = useSidebar();
 
   const handleLogout = async () => {
-    await logoutAction();
-    toast.success("Has Cerrado Sesión Satisfactoriamente");
+    const { message } = await signOutAction();
+    toast.success(message);
+    route.replace('/login');
   };
 
   return (
@@ -57,7 +60,7 @@ export const NavUser: FC<Props> = ({ user }) => {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={user.imageUrl ?? undefined}
+                  src={user.image ?? undefined}
                   alt={user.name ? `${user.name} profile image` : ''}
                 />
                 <AvatarFallback className="rounded-lg">{(user.name as string).at(0)}</AvatarFallback>

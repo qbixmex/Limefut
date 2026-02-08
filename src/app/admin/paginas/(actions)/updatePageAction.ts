@@ -95,8 +95,8 @@ export const updatePageAction = async ({
           });
 
           // Update Cache
-          revalidatePath('/admin/paginas');
           updateTag('admin-pages');
+          updateTag('admin-page');
           updateTag('public-page-links');
           updateTag(`public-page-${updatedPage.permalink}`);
           updateTag(`public-page-metadata-${updatedPage.permalink}`);

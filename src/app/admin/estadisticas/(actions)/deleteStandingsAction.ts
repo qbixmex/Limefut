@@ -18,6 +18,9 @@ export const deleteStandingsAction = async (tournamentId: string): ResponseDelet
   // Delete Standings from database
   await prisma.standings.deleteMany({ where: { tournamentId } });
 
+  // Update Cache
+  updateTag('admin-standings');
+  updateTag('admin-tournaments-for-standings');
   updateTag('standings');
 
   return {

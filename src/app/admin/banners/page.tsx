@@ -10,16 +10,23 @@ import BannersTableSkeleton from "./(components)/banners-table-skeleton";
 import BannersTable from "./(components)/banners-table";
 
 type Props = Readonly<{
-  searchParams?: Promise<{
+  searchParams: Promise<{
     query?: string;
     page?: string;
   }>;
 }>;
 
-export const BannersPage: FC<Props> = async (props) => {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+const BannersPage: FC<Props> = ({ searchParams }) => {
+  return (
+    <Suspense>
+      <BannersContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+const BannersContent: FC<Props> = async ({ searchParams }) => {
+  const query = (await searchParams).query ?? '';
+  const currentPage = (await searchParams).page ?? '1';
 
   return (
     <>
@@ -28,7 +35,9 @@ export const BannersPage: FC<Props> = async (props) => {
         <div className="admin-page-container">
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
-              <CardTitle className="admin-page-card-title">Lista de Banners</CardTitle>
+              <CardTitle className="admin-page-card-title">
+                Lista de Banners
+              </CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar banner ..." />
                 <Tooltip>
@@ -47,10 +56,13 @@ export const BannersPage: FC<Props> = async (props) => {
             </CardHeader>
             <CardContent>
               <Suspense
-                key={`${query}-${currentPage}`}
+                key={`${query ?? 'query'}-${currentPage}`}
                 fallback={<BannersTableSkeleton />}
               >
-                <BannersTable query={query} currentPage={currentPage} />
+                <BannersTable
+                  query={query}
+                  currentPage={currentPage}
+                />
               </Suspense>
             </CardContent>
           </Card>

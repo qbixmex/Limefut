@@ -14,16 +14,23 @@ import { ErrorHandler } from "@/shared/components/errorHandler";
 import { Search } from "@/shared/components/search";
 
 type Props = Readonly<{
-  searchParams?: Promise<{
+  searchParams: Promise<{
     query?: string;
     page?: string;
   }>;
 }>;
 
-export const TournamentPage: FC<Props> = async (props) => {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+const TournamentPage: FC<Props> = ({ searchParams }) => {
+  return (
+    <Suspense>
+      <TournamentContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+const TournamentContent: FC<Props> = async ({ searchParams }) => {
+  const query = (await searchParams).query || '';
+  const currentPage = (await searchParams).page || '1';
 
   return (
     <>
@@ -51,7 +58,7 @@ export const TournamentPage: FC<Props> = async (props) => {
             </CardHeader>
             <CardContent>
               <Suspense
-                key={`${query}-${currentPage}`}
+                key={`${query ?? 'query'}-${currentPage}`}
                 fallback={<TournamentsTableSkeleton colCount={7} rowCount={8} />}
               >
                 <TournamentsTable query={query} currentPage={currentPage} />

@@ -2,9 +2,8 @@
 
 import type { FC } from "react";
 import { LogIn } from "lucide-react";
-import type { Session } from "next-auth";
+import type { Session } from "@/lib/auth-client";
 import Link from "next/link";
-import "./styles.css";
 import { usePathname } from 'next/navigation';
 import { AuthNav } from "./AuthNav";
 import {
@@ -12,6 +11,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import "./styles.css";
 
 type Props = { session: Session | null };
 
@@ -36,7 +36,7 @@ export const SignInOut: FC<Props> = ({ session }) => {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-              <p>Ingresar</p>
+              <span>Ingresar</span>
             </TooltipContent>
           </Tooltip>
         )}

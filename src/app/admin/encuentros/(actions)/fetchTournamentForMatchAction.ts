@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type TournamentType = {
   weeks: number[];
@@ -12,7 +13,12 @@ type FetchResponse = Promise<{
   tournament: TournamentType | null,
 }>;
 
-export const fetchTournamentAction = async (id: string): FetchResponse => {
+export const fetchTournamentForMatchAction = async (id: string): FetchResponse => {
+  "use cache";
+  
+  cacheLife("days");
+  cacheTag("admin-tournament-for-match");
+
   try {
     const tournament = await prisma.tournament.findUnique({
       where: { id },

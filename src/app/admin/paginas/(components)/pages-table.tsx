@@ -1,10 +1,11 @@
 import { type FC } from 'react';
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { InfoIcon, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import { fetchPagesAction } from '../(actions)/fetchPagesAction';
 import { SeoRobots } from './seo-robots';
 import type { ROBOTS } from '@/shared/interfaces';
@@ -23,7 +24,9 @@ export const PagesTable: FC<Props> = async ({
   query = '',
   currentPage = 1,
 }) => {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   const {
     customPages = [],
@@ -127,5 +130,3 @@ export const PagesTable: FC<Props> = async ({
     </>
   );
 };
-
-export default PagesTable;

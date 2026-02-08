@@ -5,41 +5,16 @@ import { revalidatePath } from 'next/cache';
 import { editCredentialSchema } from '@/shared/schemas';
 import { type Credential } from '@/shared/interfaces';
 
-type Options = {
-  formData: FormData;
-  id: string;
-  userRoles: string[];
-  authenticatedUserId: string;
-};
-
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
   credential: Credential | null;
 }>;
 
-export const updateCredentialAction = async ({
-  formData,
-  id,
-  userRoles,
-  authenticatedUserId,
-}: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      credential: null,
-    };
-  }
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      credential: null,
-    };
-  }
-
+export const updateCredentialAction = async (
+  credentialId: string,
+  formData: FormData,
+): EditResponseAction => {
   const rawData = {
     fullName: formData.get('fullName') ?? '',
     playerId: formData.get('playerId') ?? '',
@@ -101,7 +76,7 @@ export const updateCredentialAction = async ({
         }
 
         const updatedCredential = await transaction.credential.update({
-          where: { id },
+          where: { id: credentialId },
           data: {
             fullName: data.fullName,
             birthdate: player.birthday as Date ?? undefined,

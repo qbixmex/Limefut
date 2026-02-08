@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -29,9 +29,12 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
     },
   });
 
-  revalidatePath('/equipo');
-  revalidatePath('/admin/equipo');
+  // Update Cache
   updateTag('admin-teams');
+  updateTag('admin-teams-for-coach');
+  updateTag('admin-teams-for-player');
+  updateTag("admin-teams-for-gallery");
+  updateTag('admin-team');
   updateTag('public-team');
   updateTag('public-teams');
   updateTag('standings');

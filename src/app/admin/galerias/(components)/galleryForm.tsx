@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/form';
 import { createGallerySchema, editGallerySchema } from '@/shared/schemas';
 import { createGalleryAction, updateGalleryAction } from '../(actions)';
-import type { Session } from 'next-auth';
+import type { Session } from '@/lib/auth-client';
 import type { Gallery } from '@/shared/interfaces';
 import type z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -128,7 +128,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
     if (gallery) {
       const response = await updateGalleryAction({
         formData,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles!,
         authenticatedUserId: session?.user.id,
         galleryId: gallery.id as string,
       });

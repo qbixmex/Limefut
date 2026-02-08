@@ -1,11 +1,11 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { User } from "@/root/next-auth";
-import type { Role } from '@/root/src/shared/interfaces';
-import { editUserSchema } from "@/root/src/shared/schemas";
+import type { User } from "@/shared/interfaces";
+import type { ROLE_TYPE } from '@/shared/interfaces';
+import { editUserSchema } from "@/shared/schemas";
 import bcrypt from 'bcryptjs';
-import { revalidatePath } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from '@/shared/actions';
 
 type Options = {
@@ -105,7 +105,7 @@ export const updateUserAction = async ({
             name: userToSave.name as string,
             username: userToSave.username,
             email: userToSave.email as string,
-            roles: userToSave.roles as Role[],
+            roles: userToSave.roles as ROLE_TYPE[],
             isActive: userToSave.isActive as boolean,
             password: hashedPassword,
           },
@@ -152,8 +152,9 @@ export const updateUserAction = async ({
           updatedUser.imageUrl = imageUploaded.secureUrl;
         }
 
-        // Revalidate Cache
-        revalidatePath('/admin/usuarios');
+        // Update Cache
+        updateTag('admin-users');
+        updateTag('admin-user');
         
         return {
           ok: true,

@@ -1,6 +1,6 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma";
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { MATCH_STATUS } from "@/shared/enums";
 import type { Pagination } from "@/shared/interfaces";

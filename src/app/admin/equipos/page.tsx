@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Plus } from "lucide-react";
 import { TournamentsSelector } from "../(components)/tournaments-selector";
-import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
-import { Search } from "@/shared/components/search";
 import { TeamsContent } from "./(components)/teams-content";
 import { ClearFilters } from "./(components)/clear-filters";
 import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
-import { ErrorHandler } from "~/src/shared/components/errorHandler";
+import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
+import { Search } from "@/shared/components/search";
+import { ErrorHandler } from "@/shared/components/errorHandler";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -20,7 +20,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const TeamsPage: FC<Props> = ({ searchParams }) => {
+const TeamsPage: FC<Props> = ({ searchParams }) => {
   return (
     <>
       <div className="admin-page">
@@ -47,11 +47,11 @@ export const TeamsPage: FC<Props> = ({ searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense fallback={<TournamentsSelectorSkeleton />}>
-                <TournamentsWrapper />
+                <TournamentsContent />
               </Suspense>
               <Suspense>
                 <ErrorHandler />
-                <TeamsContent searchParams={searchParams} />
+                <TeamsContent searchParamsPromise={searchParams} />
               </Suspense>
             </CardContent>
           </Card>
@@ -61,7 +61,7 @@ export const TeamsPage: FC<Props> = ({ searchParams }) => {
   );
 };
 
-const TournamentsWrapper = async () => {
+const TournamentsContent = async () => {
   const { tournaments } = await fetchTournamentsAction();
 
   return (

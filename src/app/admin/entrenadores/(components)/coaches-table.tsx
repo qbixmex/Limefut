@@ -1,8 +1,6 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
+import Link from 'next/link';
 import Image from "next/image";
-import { fetchCoachesAction, updateCoachStateAction } from "../(actions)";
-import { auth } from "@/auth";
-import { DeleteCoach } from "../(components)/delete-coach";
 import {
   Table,
   TableBody,
@@ -12,28 +10,28 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from '@/components/ui/button';
-import {
-  Pencil,
-  InfoIcon,
-} from "lucide-react";
+import { Pencil, InfoIcon } from "lucide-react";
 import { GiWhistle } from "react-icons/gi";
 import { Badge } from "@/components/ui/badge";
-import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { fetchCoachesAction, updateCoachStateAction } from "../(actions)";
+import { DeleteCoach } from "../(components)/delete-coach";
 import { Pagination } from '@/shared/components/pagination';
-import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
+import { auth } from "@/lib/auth";
+import { cn } from '@/lib/utils';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
-  paramsPromise: Promise<{
-    query: string;
-    currentPage: number;
-  }>;
+  query: string;
+  currentPage: number;
 }>;
 
-export const CoachesTable: FC<Props> = async ({ paramsPromise }) => {
-  const session = await auth();
-  const { query, currentPage } = await paramsPromise;
+export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   const {
     coaches = [],
     pagination = {
@@ -42,7 +40,7 @@ export const CoachesTable: FC<Props> = async ({ paramsPromise }) => {
     },
   } = await fetchCoachesAction({
     page: currentPage,
-    take: 6,
+    take: 12,
     searchTerm: query,
   });
 
@@ -149,7 +147,4 @@ export const CoachesTable: FC<Props> = async ({ paramsPromise }) => {
       )}
     </>
   );
-
 };
-
-export default CoachesTable;

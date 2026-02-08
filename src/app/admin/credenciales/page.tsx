@@ -6,9 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Plus,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { CredentialsTableSkeleton } from "./(components)/CredentialsTableSkeleton";
@@ -16,16 +14,23 @@ import { CredentialsTable } from "./(components)/CredentialsTable";
 import { Search } from "@/shared/components/search";
 
 type Props = Readonly<{
-  searchParams?: Promise<{
+  searchParams: Promise<{
     query?: string;
     page?: string;
   }>;
 }>;
 
-export const CredentialsPage: FC<Props> = async (props) => {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+const CredentialsPage: FC<Props> = ({ searchParams }) => {
+  return (
+    <Suspense>
+      <CredentialsContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+const CredentialsContent: FC<Props> = async ({ searchParams }) => {
+  const query = (await searchParams).query ?? '';
+  const currentPage = (await searchParams).page ?? '1';
 
   return (
     <>
@@ -56,7 +61,10 @@ export const CredentialsPage: FC<Props> = async (props) => {
                 key={`${query}-${currentPage}`}
                 fallback={<CredentialsTableSkeleton colCount={5} rowCount={6} />}
               >
-                <CredentialsTable query={query} currentPage={currentPage} />
+                <CredentialsTable
+                  query={query}
+                  currentPage={currentPage}
+                />
               </Suspense>
             </CardContent>
           </Card>

@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from "next/cache";
 
 type OptionsType = {
   currentWeek?: number;
@@ -12,10 +13,17 @@ export type ResponseFetchAction = Promise<{
   tournaments: {
     id: string;
     name: string;
-  }[] | null;
+    category: string;
+    format: string;
+  }[];
 }>;
 
-export const fetchTournamentsAction = async (options?: OptionsType): ResponseFetchAction => {
+export const fetchTournamentsForMatchAction = async (options?: OptionsType): ResponseFetchAction => {
+  "use cache";
+  
+  cacheLife("days");
+  cacheTag("admin-tournaments-for-match");
+
   const { currentWeek } = options ?? {};
 
   try {
@@ -28,6 +36,8 @@ export const fetchTournamentsAction = async (options?: OptionsType): ResponseFet
       select: {
         id: true,
         name: true,
+        category: true,
+        format: true,
       },
     });
 
@@ -42,14 +52,14 @@ export const fetchTournamentsAction = async (options?: OptionsType): ResponseFet
       return {
         ok: false,
         message: error.message,
-        tournaments: null,
+        tournaments: [],
       };
     }
     console.log(error);
     return {
       ok: false,
       message: "Error inesperado, revise los logs del servidor",
-      tournaments: null,
+      tournaments: [],
     };
   }
 };

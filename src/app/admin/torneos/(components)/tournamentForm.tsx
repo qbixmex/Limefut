@@ -17,7 +17,6 @@ import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createTournamentSchema, editTournamentSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import type { Tournament } from '@/shared/interfaces';
 import { createTournamentAction, updateTournamentAction } from '../(actions)';
@@ -31,6 +30,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn, slugify } from '@/lib/utils';
+import type { Session } from "@/lib/auth-client";
 
 type Props = Readonly<{
   session: Session;
@@ -121,7 +121,6 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        form.reset();
         route.replace(`/admin/torneos/${response.tournament?.id}`);
       }
       return;
@@ -131,7 +130,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       const response = await updateTournamentAction({
         formData,
         tournamentId: tournament?.id,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles as string[] ?? null,
         authenticatedUserId: session?.user.id,
       });
 
@@ -142,7 +141,6 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        form.reset();
         route.replace(`/admin/torneos/${response.tournament?.id}`);
         return;
       }

@@ -11,10 +11,10 @@ import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { Search } from "@/shared/components/search";
 import ClearFilters from "./(components)/clear-filters";
-import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
+import { fetchTournamentsForMatchAction } from './(actions)/fetchTournamentsForMatchAction';
 import { TournamentsSelector } from "../(components)/tournaments-selector";
 import { MatchesContent } from "./matches-content";
-import type { MATCH_STATUS } from "~/src/shared/enums";
+import type { MATCH_STATUS } from "@/shared/enums";
 import { TournamentsSelectorSkeleton } from "../../(public)/components";
 
 type Props = Readonly<{
@@ -72,7 +72,7 @@ export const MatchesPage: FC<Props> = (props) => {
 };
 
 const TournamentsWrapper = async () => {
-  const { tournaments } = await fetchTournamentsAction();
+  const { tournaments } = await fetchTournamentsForMatchAction();
 
   return (
     <TournamentsSelector tournaments={tournaments} />

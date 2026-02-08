@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import prisma from "@/lib/prisma";
 import { deleteImage } from "@/shared/actions";
 
@@ -83,9 +83,9 @@ export const deleteContentImageAction = async (
     },
   });
 
-  revalidatePath(`/${customPageImage.permalink}`);
-  revalidatePath(`/admin/paginas/${customPageImage.id}`);
-  revalidatePath(`/admin/paginas/${customPageImage.id}/edit`);
+  // Update Cache
+  updateTag('admin-pages');
+  updateTag('admin-page');
 
   return {
     ok: true,

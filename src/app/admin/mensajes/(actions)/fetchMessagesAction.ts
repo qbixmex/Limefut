@@ -1,6 +1,6 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma";
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import type { ContactMessage, Pagination } from "@/shared/interfaces";
 import { cacheLife, cacheTag } from "next/cache";
@@ -22,8 +22,8 @@ export type ResponseFetchAction = Promise<{
 export const fetchMessagesAction = async (options?: Options): ResponseFetchAction => {
   "use cache";
 
-  cacheLife('hours');
-  cacheTag('contact-messages');
+  cacheLife("weeks");
+  cacheTag("admin-messages");
 
   if ((options?.userRoles !== null) && (!options?.userRoles.includes('admin'))) {
     return {

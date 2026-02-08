@@ -1,11 +1,12 @@
 import type { FC } from "react";
+import { headers } from "next/headers";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { fetchPageAction } from "../../(actions)/fetchPageAction";
 import { PageForm } from "../../(components)/page-form";
@@ -18,9 +19,11 @@ type Props = Readonly<{
 
 export const EditCustomPage: FC<Props> = async ({ params }) => {
   const pageId = (await params).id;
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user.roles.includes('admin')) {
+  if (session && !(session.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para actualizar páginas !';
     redirect(`/admin/paginas?error=${encodeURIComponent(message)}`);
   }

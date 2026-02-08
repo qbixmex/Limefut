@@ -1,8 +1,9 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma";
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import type { Page, Pagination } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   userRole: string[] | null;
@@ -19,6 +20,11 @@ export type ResponseAction = Promise<{
 }>;
 
 export const fetchPagesAction = async (options: Options): ResponseAction => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-pages");
+
   if ((options.userRole !== null) && (!options.userRole.includes('admin'))) {
     return {
       ok: false,

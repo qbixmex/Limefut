@@ -4,9 +4,9 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { createUserSchema } from "@/shared/schemas";
 import { uploadImage } from '@/shared/actions';
-import { revalidatePath } from "next/cache";
-import type { CloudinaryResponse, Role } from "@/shared/interfaces";
-import type { User } from "@/root/next-auth";
+import { updateTag } from "next/cache";
+import type { CloudinaryResponse, ROLE_TYPE } from "@/shared/interfaces";
+import type { User } from "@/shared/interfaces";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -87,7 +87,7 @@ export const createUserAction = async (
         data: {
           ...userToSave,
           password: hashedPassword,
-          roles: userToSave.roles as Role[],
+          roles: userToSave.roles as ROLE_TYPE[],
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
         },
@@ -100,8 +100,9 @@ export const createUserAction = async (
       };
     });
 
-    // Revalidate Paths
-    revalidatePath('/admin/usuarios');
+    // Update Cache
+    updateTag('admin-users');
+    updateTag('admin-user');
 
     return prismaTransaction;
   } catch (error) {

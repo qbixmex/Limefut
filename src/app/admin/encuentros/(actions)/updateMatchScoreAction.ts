@@ -174,6 +174,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
 
     // Refresh caches
     updateTag('admin-matches');
+    updateTag('admin-match');
     updateTag('matches');
     updateTag('public-standings');
     updateTag('dashboard-results');

@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type TournamentType = {
   id: string;
@@ -39,6 +40,11 @@ export const fetchTournamentAction = async (
   tournamentId: string,
   userRole: string[] | null,
 ): FetchTournamentResponse => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-tournament");
+
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,

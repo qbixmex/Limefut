@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import type { Metadata } from "next";
-import "@/app/globals.css";
 import { Container, Footer, Header } from "./components";
+import "@/app/globals.css";
 
 const DOMAIN = process.env.DOMAIN ?? 'http://localhost:3000';
 

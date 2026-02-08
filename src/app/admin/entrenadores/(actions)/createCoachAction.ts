@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createCoachSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import { uploadImage } from "@/shared/actions";
 import type { CloudinaryResponse } from "@/shared/interfaces";
 import type { Coach } from "@/shared/interfaces";
@@ -95,8 +95,10 @@ export const createCoachAction = async (
       };
     });
 
-    // Revalidate Paths
-    revalidatePath('/admin/entrenadores');
+    // Update Cache
+    updateTag("admin-coaches");
+    updateTag("admin-coach");
+    updateTag("admin-coaches-for-team");
 
     return prismaTransaction;
   } catch (error) {

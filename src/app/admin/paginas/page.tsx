@@ -13,7 +13,15 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const CustomPagesPage: FC<Props> = async ({ searchParams }) => {
+const CustomPagesPage: FC<Props> = ({ searchParams }) => {
+  return (
+    <Suspense>
+      <CustomPagesContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+const CustomPagesContent: FC<Props> = async ({ searchParams }) => {
   const query = (await searchParams).query;
   const currentPage = (await searchParams).page;
 

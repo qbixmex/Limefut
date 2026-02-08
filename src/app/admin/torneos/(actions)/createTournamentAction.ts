@@ -91,6 +91,10 @@ export const createTournamentAction = async (
     // Refresh Cache
     revalidatePath('/admin/torneos');
     updateTag("dashboard-tournaments");
+    updateTag("admin-tournaments-selector");
+    updateTag("admin-tournaments-for-match");
+    updateTag("admin-tournament-for-match");
+    updateTag("admin-tournaments-for-gallery");
     updateTag("tournaments-list");
     updateTag("admin-tournaments-list");
     updateTag("public-tournaments-list");

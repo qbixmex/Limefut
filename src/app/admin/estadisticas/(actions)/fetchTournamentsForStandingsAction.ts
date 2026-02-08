@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from "next/cache";
 
 export type TournamentType = {
   id: string;
@@ -15,15 +16,21 @@ export type TournamentType = {
 export type ResponseFetchTournaments = Promise<{
   ok: boolean;
   message: string;
-  tournaments: TournamentType[] | null;
+  tournaments: TournamentType[];
 }>;
 
-export const fetchTournamentsAction = async (userRole: string[] | null): ResponseFetchTournaments => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+export const fetchTournamentsForStandingsAction = async (userRoles: string[] | null)
+  : ResponseFetchTournaments => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-tournaments-for-standings");
+
+  if ((userRoles !== null) && (!userRoles.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos !',
-      tournaments: null,
+      tournaments: [],
     };
   }
 
@@ -53,14 +60,14 @@ export const fetchTournamentsAction = async (userRole: string[] | null): Respons
       return {
         ok: false,
         message: error.message,
-        tournaments: null,
+        tournaments: [],
       };
     }
     console.log(error);
     return {
       ok: false,
       message: "Error inesperado al obtener los torneos, revise los logs del servidor",
-      tournaments: null,
+      tournaments: [],
     };
   }
 };

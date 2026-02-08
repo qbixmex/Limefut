@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import type { Gallery } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from 'next/cache';
 
 type GalleryImageType = {
   id: string;
@@ -35,6 +36,11 @@ export const fetchGalleryAction = async (
   userRoles: string[],
   galleryId: string,
 ): FetchTeamResponse => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-gallery");
+
   if (!userRoles.includes('admin')) {
     return {
       ok: false,

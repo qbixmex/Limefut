@@ -14,16 +14,23 @@ import { UsersTable } from "./(components)/users-table";
 import { UsersTableSkeleton } from "./(components)/users-table-skeleton";
 
 type Props = Readonly<{
-  searchParams?: Promise<{
+  searchParams: Promise<{
     query?: string;
     page?: string;
   }>;
 }>;
 
-export const UsersPage: FC<Props> = async (props) => {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+const UsersPage: FC<Props> = ({ searchParams }) => {
+  return (
+    <Suspense>
+      <UsersContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+const UsersContent: FC<Props> = async ({ searchParams }) => {
+  const query = (await searchParams).query || '';
+  const currentPage = (await searchParams).page ?? '1';
 
   return (
     <>
@@ -54,7 +61,10 @@ export const UsersPage: FC<Props> = async (props) => {
                 key={`${query}-${currentPage}`}
                 fallback={<UsersTableSkeleton colCount={7} rowCount={6} />}
               >
-                <UsersTable query={query} currentPage={currentPage} />
+                <UsersTable
+                  query={query}
+                  currentPage={currentPage}
+                />
               </Suspense>
             </CardContent>
           </Card>

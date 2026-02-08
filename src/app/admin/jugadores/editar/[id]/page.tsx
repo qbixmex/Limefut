@@ -1,14 +1,14 @@
-import type { FC } from "react";
-
+import { Suspense, type FC } from "react";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
-import type { Session } from "next-auth";
+import { auth } from "@/lib/auth";
+import type { Session } from "@/lib/auth-client";
 import { fetchPlayerAction, fetchTeamsForPlayer } from "../../(actions)";
 import { PlayerForm } from "../../(components)/playerForm";
 
@@ -18,8 +18,18 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const EditCoach: FC<Props> = async ({ params }) => {
-  const session = await auth();
+const EditPlayerPage: FC<Props> = ({ params }) => {
+  return (
+    <Suspense>
+      <EditPlayerContent params={params} />
+    </Suspense>
+  );
+};
+
+export const EditPlayerContent: FC<Props> = async ({ params }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   const coachId = (await params).id;
   const responsePlayer = await fetchPlayerAction(coachId, session?.user.roles ?? null);
 
@@ -56,4 +66,4 @@ export const EditCoach: FC<Props> = async ({ params }) => {
   );
 };
 
-export default EditCoach;
+export default EditPlayerPage;
