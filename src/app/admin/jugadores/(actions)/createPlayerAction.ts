@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createPlayerSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import { uploadImage } from "@/shared/actions";
 import type { CloudinaryResponse } from "@/shared/interfaces";
 import type { Player } from "@/shared/interfaces";
@@ -81,8 +81,9 @@ export const createPlayerAction = async (
       };
     });
 
-    // Revalidate Paths
-    revalidatePath('/admin/jugadores');
+    // Update Cache
+    updateTag('admin-players');
+    updateTag('admin-player');
 
     return prismaTransaction;
   } catch (error) {

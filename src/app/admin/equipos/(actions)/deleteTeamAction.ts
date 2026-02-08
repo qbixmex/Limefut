@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import deleteImage from "@/shared/actions/deleteImageAction";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -37,9 +37,12 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
     }
   }
 
-  revalidatePath('/equipos');
-  revalidatePath('/admin/equipos');
+  // Update Cache
   updateTag('admin-teams');
+  updateTag('admin-teams-for-coach');
+  updateTag('admin-teams-for-player');
+  updateTag("admin-teams-for-gallery");
+  updateTag('admin-team');
   updateTag('public-teams');
   updateTag('public-team');
   updateTag('standings');

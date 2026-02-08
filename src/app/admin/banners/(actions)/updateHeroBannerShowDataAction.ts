@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -30,9 +30,8 @@ export const updateHeroBannerShowDataAction = async (id: string, showData: boole
   });
 
   // Update Cache
-  revalidatePath('/admin/banners');
-  revalidatePath(`/admin/banners/${id}`);
-  revalidatePath(`/admin/banners/editar/${id}`);
+  updateTag('admin-banners');
+  updateTag('admin-banner');
   updateTag("admin-hero-banner");
   updateTag('public-banners');
 

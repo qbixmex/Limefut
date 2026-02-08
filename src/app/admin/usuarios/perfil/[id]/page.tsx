@@ -1,10 +1,8 @@
-import type { FC } from "react";
+import { Suspense, type FC } from "react";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchUserAction } from "../../(actions)/fetchUserAction";
-import { auth } from "@/auth";
 import Image from "next/image";
-import { type User } from "@/root/next-auth";
 import {
   Table,
   TableBody,
@@ -13,10 +11,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Pencil, UserIcon } from "lucide-react";
-import { Badge } from "@/root/src/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { type User } from "@/shared/interfaces";
 
 type Props = Readonly<{
   params: Promise<{
@@ -24,11 +25,21 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const UserProfilePage: FC<Props> = async ({ params }) => {
-  const session = await auth();
-  const userId = (await params).id;
+const UserProfilePage: FC<Props> = ({ params }) => {
+  return (
+    <Suspense>
+      <UserProfileContent params={params} />
+    </Suspense>
+  );
+};
 
-  const response = await fetchUserAction(userId, session?.user.roles ?? null);
+const UserProfileContent: FC<Props> = async ({ params }) => {
+  const session = await auth.api.getSession({ headers: await headers() });
+  const userId = (await params).id;
+  const response = await fetchUserAction(
+    userId,
+    session?.user.roles as string[],
+  );
 
   if (!response.ok) {
     redirect(`/admin/users?error=${encodeURIComponent(response.message)}`);
@@ -117,14 +128,14 @@ export const UserProfilePage: FC<Props> = async ({ params }) => {
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  <p>editar</p>
+                  <span>editar</span>
                 </TooltipContent>
               </Tooltip>
             </div>
           </CardContent>
         </Card>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 

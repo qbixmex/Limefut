@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { editGalleryImageSchema } from '@/shared/schemas';
 import type { GalleryImage } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '~/src/shared/actions';
@@ -120,9 +120,9 @@ export const updateGalleryImageAction = async ({
         }
 
         // Update Cache
+        updateTag('admin-galleries');
+        updateTag('admin-gallery');
         updateTag('dashboard-images');
-        revalidatePath('/admin/galerias');
-        revalidatePath(`/admin/galerias/`);
         updateTag('public-galleries');
         updateTag('public-gallery');
 

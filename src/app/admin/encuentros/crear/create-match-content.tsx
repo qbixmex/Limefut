@@ -1,11 +1,12 @@
 import { Suspense, type FC } from 'react';
 import { MatchForm } from '../(components)/matchForm';
-import type { Session } from "next-auth";
 import { redirect } from 'next/navigation';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
 import type { Team } from '~/src/shared/interfaces';
-import { auth } from '~/src/auth';
+import { auth } from '@/lib/auth';
 import { FormSkeleton } from '../(components)/form-skeleton';
+import { headers } from 'next/headers';
+import type { Session } from '@/lib/auth-client';
 
 type MatchWrapperProps = Readonly<{
   searchParams: Promise<{
@@ -40,9 +41,11 @@ type CreateMatchContentProps = Readonly<{
 
 const CreateMatchContent: FC<CreateMatchContentProps> = async ({ tournamentId, week }) => {
   if (!tournamentId || !week) return null;
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (!session?.user.roles.includes('admin')) {
+  if (!(session?.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear encuentros !';
     redirect(`/admin/encuentros?error=${encodeURIComponent(message)}`);
   }

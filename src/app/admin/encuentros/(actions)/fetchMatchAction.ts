@@ -1,7 +1,8 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS } from '@/root/src/shared/enums';
+import type { MATCH_STATUS } from '@/shared/enums';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type MatchType = {
   id: string;
@@ -75,6 +76,11 @@ export const fetchMatchAction = async (
   id: string,
   userRole: string[] | null,
 ): FetchResponse => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-match");
+
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,

@@ -1,7 +1,8 @@
 'use server';
 
-import { type User } from "@/root/next-auth";
+import type { User } from "@/shared/interfaces";
 import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from "next/cache";
 
 type FetchUserResponse = Promise<{
   ok: boolean;
@@ -13,6 +14,11 @@ export const fetchUserAction = async (
   userId: string,
   userRole: string[] | null,
 ): FetchUserResponse => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-user");
+
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,

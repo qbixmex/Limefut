@@ -4,7 +4,6 @@ import { useRef, useState, type FC, type ChangeEvent } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from 'next-auth';
 import { toast } from 'sonner';
 import { EmailInput } from './email-input';
 import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
@@ -41,6 +40,7 @@ import {
 import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
 import type { Coach, Team, Tournament } from '@/shared/interfaces';
 import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
+import type { Session } from '@/lib/auth-client';
 import { cn, slugify } from '@/lib/utils';
 
 type Props = Readonly<{
@@ -153,7 +153,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       const response = await updateTeamAction({
         formData,
         teamId: team.id,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles as string[],
         authenticatedUserId: session?.user.id,
       });
 

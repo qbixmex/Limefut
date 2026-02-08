@@ -1,4 +1,4 @@
-import { cn } from "@/root/src/lib/utils";
+import { cn } from "@/lib/utils";
 import { type FC } from "react";
 
 export const SkeletonTable: FC = () => (

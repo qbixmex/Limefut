@@ -1,8 +1,9 @@
-import type { FC } from "react";
+import { Suspense, type FC } from "react";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import {
   Table,
   TableBody,
@@ -25,9 +26,17 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const CredentialPage: FC<Props> = async ({ params }) => {
-  const session = await auth();
+const CredentialPage: FC<Props> = ({ params }) => {
+  return (
+    <Suspense>
+      <CredentialContent params={params} />
+    </Suspense>
+  );
+};
+
+const CredentialContent: FC<Props> = async ({ params }) => {
   const id = (await params).id;
+  const session = await auth.api.getSession({ headers: await headers() });
 
   const response = await fetchCredentialAction(id, session?.user.roles ?? null);
 

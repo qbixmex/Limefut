@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeClosed, LoaderCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { handleLoginCredentials } from '@/app/(auth)/handleLoginCredentials';
+import { signInAction } from '@/app/(auth)/signInAction';
 import { toast } from 'sonner';
 import './styles.css';
 
@@ -46,16 +46,21 @@ export const LoginForm = () => {
   });
 
   const onSubmit = async ({ email, password }: z.infer<typeof loginSchema>) => {
-    const response = await handleLoginCredentials({ email, password });
+    const formData = new FormData();
 
-    if (response === 'Success') {
-      form.reset();
-      toast.success('¡ Has iniciado sesión correctamente !');
-      router.push('/admin/dashboard');
-    } else {
-      toast.error(response);
+    formData.append("email", email);
+    formData.append("password", password);
+
+    const { ok, message } = await signInAction(formData);
+
+    if (!ok) {
+      toast.error(message);
       return;
     }
+
+    form.reset();
+    toast.success(message);
+    router.replace('/admin/dashboard');
   };
 
   return (

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
   Card,
   CardContent,
@@ -5,15 +6,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { PlayerForm } from "../(components)/playerForm";
-import type { Session } from "next-auth";
-import { auth } from "@/auth";
+import type { Session } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { fetchTeamsForPlayer } from "../(actions)";
+import { headers } from "next/headers";
 
-const CreatePlayerPage = async () => {
-  const session = await auth();
+const CreatePlayerPage = () => {
+  return (
+    <Suspense>
+      <CreatePlayerContent />
+    </Suspense>
+  );
+};
 
-  if (!session?.user.roles.includes('admin')) {
+const CreatePlayerContent = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session && !(session?.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear jugadores !';
     redirect(`/admin/jugadores?error=${encodeURIComponent(message)}`);
   }

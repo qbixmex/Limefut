@@ -1,7 +1,7 @@
-import type { FC } from "react";
+import { Suspense, type FC } from "react";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import {
   Table,
   TableBody,
@@ -15,6 +15,7 @@ import { es } from "date-fns/locale";
 import { fetchMessageAction } from "../(actions)/fetchMessageAction";
 import { ActiveSwitch } from "@/shared/components/active-switch";
 import { updateMessageStatusAction } from "../(actions)/updateMessageStatusAction";
+import { headers } from "next/headers";
 
 type Props = Readonly<{
   params: Promise<{
@@ -22,9 +23,17 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const MessagePage: FC<Props> = async ({ params }) => {
-  const session = await auth();
+const MessagePage: FC<Props> = ({ params }) => {
+  return (
+    <Suspense>
+      <MessageContent params={params} />
+    </Suspense>
+  );
+};
+
+const MessageContent: FC<Props> = async ({ params }) => {
   const id = (await params).id;
+  const session = await auth.api.getSession({ headers: await headers() });
 
   const response = await fetchMessageAction(id, session?.user.roles ?? null);
 

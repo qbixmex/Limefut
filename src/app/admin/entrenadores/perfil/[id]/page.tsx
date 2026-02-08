@@ -1,7 +1,7 @@
-import type { FC } from "react";
+import { Suspense, type FC } from "react";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import Image from "next/image";
 import {
   Table,
@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Pencil } from "lucide-react";
-import { Badge } from "@/root/src/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
@@ -19,6 +19,7 @@ import { fetchCoachAction } from "../../(actions)";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { GiWhistle } from "react-icons/gi";
+import { headers } from "next/headers";
 
 type Props = Readonly<{
   params: Promise<{
@@ -26,8 +27,18 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const CoachPage: FC<Props> = async ({ params }) => {
-  const session = await auth();
+const CoachPage: FC<Props> = async ({ params }) => {
+  return (
+    <Suspense>
+      <CoachPageContent params={params} />
+    </Suspense>
+  );
+};
+
+const CoachPageContent: FC<Props> = async ({ params }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   const coachId = (await params).id;
 
   const response = await fetchCoachAction(coachId, session?.user.roles ?? null);

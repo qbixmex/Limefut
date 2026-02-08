@@ -1,7 +1,7 @@
 'use client';
 
 import { startTransition, useOptimistic, type FC } from 'react';
-import { Switch } from '@/root/src/components/ui/switch';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 
 type Props = Readonly<{

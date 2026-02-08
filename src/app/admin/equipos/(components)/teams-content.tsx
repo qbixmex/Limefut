@@ -3,19 +3,19 @@ import { TeamsTableSkeleton } from "./teams-table-skeleton";
 import { TeamsWrapper } from "../../encuentros/(components)/teams-wrapper";
 
 type Props = Readonly<{
-  searchParams: Promise<{
+  searchParamsPromise: Promise<{
     query?: string;
     page?: string;
     torneo?: string;
   }>;
 }>;
 
-export const TeamsContent: FC<Props> = async ({ searchParams }) => {
+export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
   const {
     torneo: tournamentId,
     query = '',
     page: currentPage = 1,
-  } = await searchParams;
+  } = await searchParamsPromise;
 
   if (!tournamentId) return null;
 

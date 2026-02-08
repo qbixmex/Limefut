@@ -1,5 +1,6 @@
 'use server';
 
+import { cacheLife, cacheTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 import type { HeroBanner } from '@/shared/interfaces';
 
@@ -13,6 +14,11 @@ export const fetchHeroBannerAction = async (
   userRoles: string[] | null,
   heroBannerId: string,
 ): FetchTournamentResponse => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-banner");
+
   if ((userRoles !== null) && (!userRoles.includes('admin'))) {
     return {
       ok: false,

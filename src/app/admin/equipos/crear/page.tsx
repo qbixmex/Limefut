@@ -1,4 +1,6 @@
 import crypto from "node:crypto";
+import { Suspense, type FC } from "react";
+import { headers } from "next/headers";
 import {
   Card,
   CardContent,
@@ -6,17 +8,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TeamForm } from "../(components)/teamForm";
-import type { Session } from "next-auth";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { fetchTournamentsForTeam } from "../(actions)";
 import type { Coach } from "@/shared/interfaces";
 import { fetchCoachesForTeam } from "../(actions)/fetchCoachesForTeam";
+import type { Session } from "@/lib/auth-client";
 
-export const CreateTeam = async () => {
-  const session = await auth();
+const CreateTeamPage = () => {
+  return (
+    <Suspense>
+      <CreateTeamPageContent />
+    </Suspense>
+  );
+};
 
-  if (!session?.user.roles.includes('admin')) {
+const CreateTeamPageContent: FC = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session && !(session.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear equipos !';
     redirect(`/admin/equipos?error=${encodeURIComponent(message)}`);
   }
@@ -65,4 +77,4 @@ export const CreateTeam = async () => {
   );
 };
 
-export default CreateTeam;
+export default CreateTeamPage;

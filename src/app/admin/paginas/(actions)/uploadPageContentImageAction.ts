@@ -1,5 +1,6 @@
 'use server';
 
+import { updateTag } from "next/cache";
 import prisma from "@/lib/prisma";
 import { uploadImage } from "@/shared/actions";
 import type { CloudinaryResponse } from "@/shared/interfaces/Cloudinary";
@@ -33,6 +34,9 @@ export const uploadPageContentImageAction = async (
       },
     },
   });
+
+  // Update Cache
+  updateTag('admin-page');
 
   return {
     message: '¡ Imagen cargada satisfactoriamente 👍 !',

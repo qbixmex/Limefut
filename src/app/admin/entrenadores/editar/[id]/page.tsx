@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { Suspense, type FC } from "react";
 
 import {
   Card,
@@ -6,12 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import type { Session } from "next-auth";
+import type { Session } from "@/lib/auth-client";
 import { fetchCoachAction } from "../../(actions)";
 import { CoachForm } from "../../(components)/coachForm";
 import { fetchTeamsForCoach } from "../../(actions)/fetchTeamsForCoach";
+import { headers } from "next/headers";
 
 type Props = Readonly<{
   params: Promise<{
@@ -19,8 +20,18 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const EditCoach: FC<Props> = async ({ params }) => {
-  const session = await auth();
+const EditCoachPage: FC<Props> = ({ params }) => {
+  return (
+    <Suspense>
+      <EditCoachPageContent params={params} />
+    </Suspense>
+  );
+};
+
+const EditCoachPageContent: FC<Props> = async ({ params }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   const coachId = (await params).id;
   const response = await fetchCoachAction(coachId, session?.user.roles ?? null);
 
@@ -56,4 +67,4 @@ export const EditCoach: FC<Props> = async ({ params }) => {
   );
 };
 
-export default EditCoach;
+export default EditCoachPage;

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
   Card,
   CardContent,
@@ -5,15 +6,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CoachForm } from "../(components)/coachForm";
-import type { Session } from "next-auth";
-import { auth } from "@/auth";
+import type { Session } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { fetchTeamsForCoach } from "../(actions)/fetchTeamsForCoach";
+import { headers } from "next/headers";
 
-export const CreateCoach = async () => {
-  const session = await auth();
+const CreateCoachPage = () => {
+  return (
+    <Suspense>
+      <CreateCoachPageContent />
+    </Suspense>
+  );
+};
 
-  if (!session?.user.roles.includes('admin')) {
+const CreateCoachPageContent = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session && !(session.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear entrenadores !';
     redirect(`/admin/entrenadores?error=${encodeURIComponent(message)}`);
   }
@@ -45,4 +57,4 @@ export const CreateCoach = async () => {
   );
 };
 
-export default CreateCoach;
+export default CreateCoachPage;

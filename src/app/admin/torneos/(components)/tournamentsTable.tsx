@@ -15,7 +15,7 @@ import {
   Trophy,
 } from "lucide-react";
 import { fetchTournamentsAction, updateTournamentStateAction } from "../(actions)";
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { DeleteTournament } from './delete-tournament';
@@ -23,14 +23,18 @@ import { Pagination } from '@/shared/components/pagination';
 import { cn, getStageTranslation } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '~/src/components/ui/badge';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   query: string;
-  currentPage: number;
+  currentPage: string;
 }>;
 
 export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   const {
     tournaments = [],
     pagination = {
@@ -38,7 +42,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
       totalPages: 1,
     },
   } = await fetchTournamentsAction({
-    page: currentPage,
+    page: Number(currentPage),
     take: 12,
     searchTerm: query,
   });
@@ -152,7 +156,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         </Tooltip>
                         <DeleteTournament
                           tournamentId={tournament.id}
-                          roles={session?.user.roles as string[]}
+                          roles={session?.user.roles as string[] ?? null}
                         />
                       </div>
                     </TableCell>

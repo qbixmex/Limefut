@@ -11,18 +11,7 @@ type CreateResponseAction = Promise<{
   credential: Credential | null;
 }>;
 
-export const createCredentialAction = async (
-  formData: FormData,
-  userRole: string[] | null,
-): CreateResponseAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      credential: null,
-    };
-  }
-
+export const createCredentialAction = async (formData: FormData): CreateResponseAction => {
   const rawData = {
     fullName: formData.get('fullName') ?? '',
     playerId: formData.get('playerId') ?? '',

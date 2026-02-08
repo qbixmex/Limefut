@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { randomUUID } from "node:crypto";
 
 type Options = {
@@ -64,8 +64,9 @@ export const generatePlayersAction = async ({
     });
 
     // Revalidate Paths
-    revalidatePath('/admin/equipos');
     updateTag('admin-teams');
+    updateTag('admin-teams-for-player');
+    updateTag('admin-team');
     updateTag('public-teams');
     updateTag('public-team');
 

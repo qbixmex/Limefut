@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Link from 'next/link';
 import Image from "next/image";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { fetchPlayersAction, updatePlayerStateAction } from "../(actions)";
 import {
   Table,
@@ -24,6 +24,7 @@ import { DeletePlayer } from "../(components)/delete-player";
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   teamId: string;
@@ -32,7 +33,10 @@ type Props = Readonly<{
 }>;
 
 export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) => {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   const {
     players = [],
     pagination = {

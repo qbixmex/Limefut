@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from "next/cache";
 
 type OptionsType = {
   tournamentId: string;
@@ -16,7 +17,13 @@ export type ResponseFetchTeams = Promise<{
   }[];
 }>;
 
-export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsType): ResponseFetchTeams => {
+export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsType)
+  : ResponseFetchTeams => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-teams-for-match");
+
   try {
     // Get teams that are already scheduled for the specified tournament and week.
     const scheduledTeams = await prisma.match.findMany({

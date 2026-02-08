@@ -1,9 +1,9 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
-import { editCoachSchema } from '@//shared/schemas';
+import { editCoachSchema } from '@/shared/schemas';
 import type { Coach } from '@/shared/interfaces';
 
 type Options = {
@@ -129,8 +129,10 @@ export const updateCoachAction = async ({
         }
 
 
-        // Revalidate Cache
-        revalidatePath('/admin/entrenadores');
+        // Update Cache
+        updateTag("admin-coaches");
+        updateTag("admin-coach");
+        updateTag("admin-coaches-for-team");
 
         return {
           ok: true,

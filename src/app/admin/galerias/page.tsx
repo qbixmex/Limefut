@@ -16,7 +16,15 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const GalleryPage: FC<Props> = async ({ searchParams }) => {
+const GalleryPage: FC<Props> = ({ searchParams }) => {
+  return (
+    <Suspense>
+      <GalleryContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+const GalleryContent: FC<Props> = async ({ searchParams }) => {
   const query = (await searchParams).query;
   const currentPage = (await searchParams).page;
 
@@ -44,7 +52,7 @@ export const GalleryPage: FC<Props> = async ({ searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense
-                key={`${query}-${currentPage}`}
+                key={`${query ?? 'query'}-${currentPage}`}
                 fallback={<GalleriesTableSkeleton />}
               >
                 <GalleriesTable

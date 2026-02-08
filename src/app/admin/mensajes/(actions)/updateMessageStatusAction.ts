@@ -23,7 +23,9 @@ export const updateMessageStatusAction = async (id: string, state: boolean): Res
     data: { read: state },
   });
 
-  updateTag('contact-messages');
+  // Update Cache
+  updateTag('admin-messages');
+  updateTag('admin-message');
 
   return {
     ok: true,

@@ -32,13 +32,13 @@ import { Button } from '@/components/ui/button';
 import { createUserSchema, editUserSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createUserAction } from '../(actions)';
-import type { Session } from 'next-auth';
-import { type User } from '@/root/next-auth';
+import type { Session } from '@/lib/auth-client';
+import type { User } from '@/shared/interfaces';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, Eye, EyeClosed, LoaderCircle } from 'lucide-react';
-import type { Role } from '@/shared/interfaces';
+import type { ROLE_TYPE } from '@/shared/interfaces';
 import { updateUserAction } from '../(actions)/updateUserAction';
 
 const roles = [
@@ -66,8 +66,8 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
       email: user?.email ?? '',
       password: '',
       passwordConfirmation: '',
-      roles: (user?.roles && (user?.roles as string[]).length > 0)
-        ? user.roles.map((role) => role as Role)
+      roles: (user?.roles && (user?.roles as ROLE_TYPE[]).length > 0)
+        ? user.roles.map((role) => role as ROLE_TYPE)
         : ['user'],
       isActive: user?.isActive ?? false,
     },
@@ -112,7 +112,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
       const response = await updateUserAction({
         formData,
         userId: user.id,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles!,
         authenticatedUserId: session?.user.id,
       });
 
@@ -310,7 +310,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
                                   value={role.value}
                                   onSelect={(currentValue) => {
                                     const currentRoles = field.value || [];
-                                    if (currentRoles.includes(currentValue as Role)) {
+                                    if (currentRoles.includes(currentValue as ROLE_TYPE)) {
                                       // Remove if already selected
                                       field.onChange(currentRoles.filter(r => r !== currentValue));
                                     } else {
@@ -323,7 +323,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
                                   <Check
                                     className={cn(
                                       "ml-auto",
-                                      field.value?.includes(role.value as Role) ? "opacity-100" : "opacity-0",
+                                      field.value?.includes(role.value as ROLE_TYPE) ? "opacity-100" : "opacity-0",
                                     )}
                                   />
                                 </CommandItem>

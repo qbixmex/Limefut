@@ -138,8 +138,8 @@ export const updateHeroBannerAction = async ({
           });
 
           // Update Cache
-          revalidatePath('/admin/banners');
-          revalidatePath(`/admin/banners/${heroBannerId}`);
+          updateTag('admin-banners');
+          updateTag('admin-banner');
 
           return {
             ok: true,

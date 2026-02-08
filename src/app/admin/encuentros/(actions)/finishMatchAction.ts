@@ -83,6 +83,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
 
   // Refresh Match
   updateTag('admin-matches');
+  updateTag('admin-match');
   updateTag('matches');
   updateTag('public-standings');
   updateTag('dashboard-results');

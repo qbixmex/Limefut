@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import type { Page } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Image = {
   id: string;
@@ -19,6 +20,11 @@ export const fetchPageAction = async (
   userRoles: string[],
   pageId: string,
 ): FetchResponse => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-page");
+
   if (!userRoles.includes('admin')) {
     return {
       ok: false,

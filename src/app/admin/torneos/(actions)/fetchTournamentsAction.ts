@@ -1,8 +1,9 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma";
 import prisma from "@/lib/prisma";
+import type { Prisma } from "@/generated/prisma/client";
 import type { Pagination } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   page?: number;
@@ -30,6 +31,11 @@ export type ResponseFetch = Promise<{
 }>;
 
 export const fetchTournamentsAction = async (options?: Options): ResponseFetch => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-tournaments");
+
   let { page = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)

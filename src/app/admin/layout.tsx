@@ -1,8 +1,11 @@
 import { Suspense, type FC, type ReactNode } from 'react';
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import type { Metadata } from 'next';
-import './layout.styles.css';
 import { MainLayout } from './(components)/main-layout';
 import DashboardSkeleton from './(components)/dashboard-skeleton';
+import { auth } from "@/lib/auth";
+import './layout.styles.css';
 
 export const metadata: Metadata = {
   title: 'Limefut - Admin',
@@ -12,15 +15,29 @@ export const metadata: Metadata = {
 
 type Props = Readonly<{ children: ReactNode; }>;
 
-export const AdminLayout: FC<Props> = ({ children }) => {
+const AdminLayout: FC<Props> = ({ children }) => {
   return (
-    <>
-      <Suspense fallback={<DashboardSkeleton />}>
-        <MainLayout>
-          {children}
-        </MainLayout>
-      </Suspense>
-    </>
+    <Suspense fallback={<DashboardSkeleton />}>
+      <AdminLayoutContent>
+        {children}
+      </AdminLayoutContent>
+    </Suspense>
+  );
+};
+
+const AdminLayoutContent: FC<Props> = async ({ children }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect('/login');
+  }
+
+  return (
+    <MainLayout>
+      {children}
+    </MainLayout>
   );
 };
 

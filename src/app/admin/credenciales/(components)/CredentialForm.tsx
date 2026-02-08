@@ -1,19 +1,15 @@
 'use client';
 
-import { useState, type FC } from 'react';
+import { type FC } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-import type { Session } from 'next-auth';
 import { Button } from '@/components/ui/button';
 import { createCredentialSchema, editCredentialSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import type { PlayerForCredential } from '../(actions)/fetchPlayersForCredentialForm';
 import type { Credential } from '@/shared/interfaces';
 import { createCredentialAction, updateCredentialAction } from '../(actions)';
-import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import {
   Form,
   FormControl,
@@ -22,33 +18,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/root/src/components/ui/popover';
 import type z from 'zod';
+import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
-  session: Session;
-  players: PlayerForCredential[];
   credential?: Credential;
 }>;
 
-export const CredentialForm: FC<Props> = ({ session, credential, players }) => {
+export const CredentialForm: FC<Props> = ({ credential }) => {
   const route = useRouter();
   const formSchema = !credential ? createCredentialSchema : editCredentialSchema;
-
-  // Full Name Combobox state
-  const [comboBoxOpen, setComboBoxOpen] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,10 +51,7 @@ export const CredentialForm: FC<Props> = ({ session, credential, players }) => {
 
     // Create credential
     if (!credential) {
-      const response = await createCredentialAction(
-        formData,
-        session?.user.roles ?? null,
-      );
+      const response = await createCredentialAction(formData);
 
       if (!response.ok) {
         toast.error(response.message);
@@ -93,12 +69,7 @@ export const CredentialForm: FC<Props> = ({ session, credential, players }) => {
     
     // Update credential
     if (credential) {
-      const response = await updateCredentialAction({
-        formData,
-        id: credential.id,
-        userRoles: session.user.roles,
-        authenticatedUserId: session?.user.id,
-      });
+      const response = await updateCredentialAction(credential.id, formData);
 
       if (!response.ok) {
         toast.error(response.message);
@@ -127,55 +98,10 @@ export const CredentialForm: FC<Props> = ({ session, credential, players }) => {
               control={form.control}
               name="fullName"
               render={({ field }) => {
-                const selectedPlayer = players.find((p) => p.name === field.value);
                 return (
                   <FormItem>
                     <FormLabel>Nombre Completo</FormLabel>
-                    <Popover open={comboBoxOpen} onOpenChange={setComboBoxOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline-secondary"
-                          role="combobox"
-                          aria-expanded={comboBoxOpen}
-                          className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
-                        >
-                          {selectedPlayer ? selectedPlayer.name : "Selecciona un jugador..."}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command>
-                          <CommandInput placeholder="Buscar jugador..." className="h-9" />
-                          <CommandList>
-                            <CommandEmpty>No se encontró jugador.</CommandEmpty>
-                            <CommandGroup>
-                              {players.map((player) => (
-                                <CommandItem
-                                  key={player.id}
-                                  value={player.name}
-                                  onSelect={(currentValue) => {
-                                    field.onChange(currentValue);
-                                    const selected = players.find((player) => player.name === currentValue);
-                                    if (selected) {
-                                      form.setValue('playerId', selected.id);
-                                    }
-                                    setComboBoxOpen(false);
-                                  }}
-                                >
-                                  {player.name}
-                                  <Check
-                                    className={cn(
-                                      "ml-auto",
-                                      field.value === player.name ? "opacity-100" : "opacity-0",
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <Input {...field} value={field.value ?? ''} />
                     <FormMessage />
                   </FormItem>
                 );

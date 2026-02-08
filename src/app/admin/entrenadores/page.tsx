@@ -20,11 +20,18 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const CoachesPage: FC<Props> = async ({ searchParams }) => {
-  const paramsPromise = searchParams.then((sp) => ({
-    query: sp.query ?? '',
-    currentPage: Number(sp.page) ?? 1,
-  }));
+const CoachesPage: FC<Props> = ({ searchParams }) => {
+  return (
+    <Suspense>
+      <CoachesPageContent searchParams={searchParams} />
+    </Suspense>
+  );
+};
+
+const CoachesPageContent: FC<Props> = async ({ searchParams }) => {
+
+  const query = (await searchParams).query ?? '';
+  const currentPage = (await searchParams).page ?? '1';
 
   return (
     <>
@@ -51,10 +58,14 @@ export const CoachesPage: FC<Props> = async ({ searchParams }) => {
               </section>
             </CardHeader>
             <CardContent>
-              <Suspense fallback={
-                <CoachesTableSkeleton colCount={7} rowCount={6} />
-              }>
-                <CoachesTable paramsPromise={paramsPromise} />
+              <Suspense
+                key={`${query ?? 'query'}-${currentPage}`}
+                fallback={<CoachesTableSkeleton colCount={7} rowCount={6} />}
+              >
+                <CoachesTable
+                  query={query}
+                  currentPage={Number(currentPage)}
+                />
               </Suspense>
             </CardContent>
           </Card>

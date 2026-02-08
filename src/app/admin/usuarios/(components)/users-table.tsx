@@ -1,9 +1,8 @@
 import type { FC } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import { fetchUsersAction, updateUserStateAction } from '../(actions)';
-import { cn } from '@/lib/utils';
-import { auth } from '@/auth';
 import {
   Table,
   TableBody,
@@ -23,14 +22,16 @@ import { Button } from '@/components/ui/button';
 import { TooltipContent } from '@/components/ui/tooltip';
 import Pagination from '@/shared/components/pagination';
 import { ActiveSwitch } from '@/shared/components/active-switch';
+import { auth } from '@/lib/auth';
+import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   query: string;
-  currentPage: number;
+  currentPage: string;
 }>;
 
 export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
   const {
     users = [],
     pagination = {
@@ -38,13 +39,14 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
       totalPages: 1,
     },
   } = await fetchUsersAction({
-    page: currentPage,
-    take: 8,
+    page: Number(currentPage),
+    take: 12,
     searchTerm: query,
   });
+
   return (
     <>
-      {users && users.length > 0 ? (
+      {users && (users.length > 0) ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
             <Table>
@@ -125,7 +127,7 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                         </Tooltip>
                         <DeleteUser
                           userId={user.id}
-                          roles={session?.user?.roles ?? []}
+                          roles={session?.user.roles as string[]}
                         />
                       </div>
                     </TableCell>

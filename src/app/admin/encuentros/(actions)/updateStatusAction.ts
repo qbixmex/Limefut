@@ -23,6 +23,7 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS):
   }
 
   updateTag('admin-matches');
+  updateTag('admin-match');
   updateTag('matches');
   updateTag('dashboard-results');
   updateTag('public-results');

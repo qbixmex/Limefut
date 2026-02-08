@@ -1,8 +1,8 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { updateTag } from "next/cache";
 import { deleteImage } from "@/shared/actions";
-import { revalidatePath, updateTag } from "next/cache";
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -10,7 +10,7 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteTournamentAction = async (tournamentId: string): ResponseDeleteAction => {
-  const tournament = await prisma.tournament.findUnique({
+  const tournament = await prisma.tournament.findFirst({
     where: { id: tournamentId },
     select: {
       name: true,
@@ -38,8 +38,12 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
   }
 
   // Update Cache
-  revalidatePath('/admin/torneos');
-  updateTag("admin-tournaments-list");
+  updateTag("admin-tournaments");
+  updateTag("admin-tournaments-selector");
+  updateTag("admin-tournaments-for-match");
+  updateTag("admin-tournament-for-match");
+  updateTag("admin-tournaments-for-gallery");
+  updateTag("admin-tournament");
   updateTag("public-tournaments-list");
   updateTag("tournaments-list");
   updateTag("public-tournaments");

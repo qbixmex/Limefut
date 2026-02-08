@@ -124,6 +124,7 @@ export const createMatchAction = async (
 
     // Update Cache
     updateTag('admin-matches');
+    updateTag('admin-match');
     updateTag('matches');
     updateTag('dashboard-results');
     updateTag('public-results');

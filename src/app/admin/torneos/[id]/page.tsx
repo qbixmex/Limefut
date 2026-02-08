@@ -1,11 +1,11 @@
-import type { FC } from "react";
+import { Suspense, type FC } from "react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { Table, TableBody, TableHead, TableCell, TableRow } from "@/components/ui/table";
 import { Pencil, Trophy } from "lucide-react";
-import { Badge } from "@/root/src/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
@@ -14,16 +14,32 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import type { TournamentType } from "../(actions)/fetchTournamentAction";
 import { getStageTranslation } from "@/lib/utils";
+import { headers } from "next/headers";
 
-type Props = Readonly<{
+type TournamentPageProps = Readonly<{
   params: Promise<{
     id: string;
   }>;
 }>;
 
-export const TournamentPage: FC<Props> = async ({ params }) => {
-  const session = await auth();
-  const tournamentId = (await params).id;
+type TournamentContentProps = Readonly<{
+  paramsPromise: Promise<{ id: string }>;
+}>;
+
+const TournamentPage: FC<TournamentPageProps> = ({ params }) => {
+  return (
+    <Suspense>
+      <TournamentContent paramsPromise={params} />
+    </Suspense>
+  );
+};
+
+const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) => {
+  const tournamentId = (await paramsPromise).id;
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   const response = await fetchTournamentAction(tournamentId, session?.user.roles ?? null);
 
@@ -225,7 +241,7 @@ export const TournamentPage: FC<Props> = async ({ params }) => {
           </CardContent>
         </Card>
       </div>
-    </div >
+    </div>
   );
 };
 

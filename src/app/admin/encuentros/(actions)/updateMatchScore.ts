@@ -27,6 +27,7 @@ export const updateStatusAction = async (params: Params): ResponseAction => {
   });
 
   updateTag('admin-matches');
+  updateTag('admin-match');
   updateTag('matches');
   updateTag('dashboard-results');
   updateTag('public-results');

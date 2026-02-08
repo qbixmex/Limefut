@@ -1,10 +1,10 @@
 'use server';
 
+import { updateTag } from "next/cache";
 import prisma from "@/lib/prisma";
 import { uploadImage } from "@/shared/actions";
 import type { ALIGNMENT, CloudinaryResponse, HeroBanner } from "@/shared/interfaces";
 import { createHeroBannerSchema } from "@/shared/schemas";
-import { revalidatePath, updateTag } from "next/cache";
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -95,7 +95,8 @@ export const createHeroBannerAction = async (
     });
 
     // Refresh Cache
-    revalidatePath('/admin/banners');
+    updateTag('admin-banners');
+    updateTag('admin-banner');
     updateTag('public-banners');
 
     return prismaTransaction;

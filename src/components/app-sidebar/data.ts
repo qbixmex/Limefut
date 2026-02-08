@@ -7,7 +7,7 @@ import {
   PlusIcon,
   Flag,
   Trophy,
-  IdCard,
+  // IdCard,
   Files,
   Sheet,
   TrendingUp,
@@ -138,24 +138,24 @@ export const navMain: NavItem[] = [
       },
     ],
   },
-  {
-    label: "Credenciales",
-    url: "#",
-    icon: IdCard,
-    isActive: false,
-    subItems: [
-      {
-        label: "Lista",
-        url: "/admin/credenciales",
-        icon: ListIcon,
-      },
-      {
-        label: "Crear",
-        url: "/admin/credenciales/crear",
-        icon: PlusIcon,
-      },
-    ],
-  },
+  // {
+  //   label: "Credenciales",
+  //   url: "#",
+  //   icon: IdCard,
+  //   isActive: false,
+  //   subItems: [
+  //     {
+  //       label: "Lista",
+  //       url: "/admin/credenciales",
+  //       icon: ListIcon,
+  //     },
+  //     {
+  //       label: "Crear",
+  //       url: "/admin/credenciales/crear",
+  //       icon: PlusIcon,
+  //     },
+  //   ],
+  // },
   {
     label: "Banners",
     url: "#",

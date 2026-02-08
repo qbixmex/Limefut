@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Pencil, InfoIcon } from "lucide-react";
 import { fetchHeroBannersAction, updateHeroBannerStateAction } from "../(actions)";
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Pagination } from '@/shared/components/pagination';
@@ -20,14 +20,15 @@ import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '@/components/ui/badge';
 import { PiFlagBannerFoldBold as BannerFlag } from "react-icons/pi";
 import { DeleteHeroBanner } from './delete-hero-banner';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   query: string;
-  currentPage: number;
+  currentPage: string;
 }>;
 
 export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
   const {
     heroBanners = [],
     pagination = {
@@ -35,7 +36,7 @@ export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
       totalPages: 1,
     },
   } = await fetchHeroBannersAction({
-    page: currentPage,
+    page: Number(currentPage),
     take: 12,
     searchTerm: query,
   });

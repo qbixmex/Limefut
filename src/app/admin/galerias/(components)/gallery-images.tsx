@@ -9,10 +9,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-
-import "./styles.css";
 import { GalleryImage } from "./gallery-image";
 import { Maximize2 } from "lucide-react";
+import "./styles.css";
 
 type GalleryImageProps = Readonly<{
   images: {

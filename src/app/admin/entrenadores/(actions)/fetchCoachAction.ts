@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import type { Coach, Team } from "@/shared/interfaces";
+import { cacheLife, cacheTag } from 'next/cache';
 
 type FetchCoachResponse = Promise<{
   ok: boolean;
@@ -15,6 +16,11 @@ export const fetchCoachAction = async (
   coachId: string,
   userRole: string[] | null,
 ): FetchCoachResponse => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-coach");
+
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,

@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from "next/cache";
 
 export type TournamentType = {
   id: string;
@@ -54,6 +55,11 @@ export type StandingPromise = Promise<{
 }>;
 
 export const fetchStandingsAction = async (tournamentId: string): StandingPromise => {
+  "use cache";
+
+  cacheLife("days");
+  cacheTag("admin-standings");
+
   try {
     const tournament = await prisma.tournament.findUnique({
       where: { id: tournamentId },

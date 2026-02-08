@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from "@/shared/actions";
 import { editPlayerSchema } from '@/shared/schemas';
 import type { Player } from '@/shared/interfaces';
@@ -69,7 +69,7 @@ export const updatePlayerAction = async ({
       player: null,
     };
   }
-  
+
   const { image, ...playerToSave } = playerVerified.data;
 
   try {
@@ -123,8 +123,9 @@ export const updatePlayerAction = async ({
           updatedPlayer.imagePublicID = imageUploaded.publicId;
         }
 
-        // Revalidate Cache
-        revalidatePath('/admin/jugadores');
+        // Update Cache
+        updateTag('admin-players');
+        updateTag('admin-player');
 
         return {
           ok: true,

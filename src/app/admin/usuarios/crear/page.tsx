@@ -5,14 +5,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { UsersForm } from "../(components)/usersForm";
-import type { Session } from "next-auth";
-import { auth } from "@/auth";
+import type { Session } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { headers } from "next/headers";
 
-export const CreateUser = async () => {
-  const session = await auth();
+const CreateUserPage = () => {
+  return (
+    <Suspense>
+      <CreateUserContent />
+    </Suspense>
+  );
+};
 
-  if (!session?.user.roles.includes('admin')) {
+const CreateUserContent = async () => {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (session && !(session?.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear usuarios !';
     redirect(`/admin/users?error=${encodeURIComponent(message)}`);
   }
@@ -33,4 +43,4 @@ export const CreateUser = async () => {
   );
 };
 
-export default CreateUser;
+export default CreateUserPage;

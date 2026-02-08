@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm, useWatch } from 'react-hook-form';
 import { createPlayerSchema, editPlayerSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from 'next-auth';
+import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { Player, Team } from '@/shared/interfaces';
 import { createPlayerAction, updatePlayerAction } from '../(actions)';
@@ -115,7 +115,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
       const { ok, message } = await updatePlayerAction({
         formData,
         playerId: player.id,
-        userRoles: session.user.roles,
+        userRoles: session.user.roles as string[],
         authenticatedUserId: session?.user.id,
       });
 

@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { headers } from "next/headers";
 import {
   Card,
   CardContent,
@@ -6,8 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { GalleryForm } from "../../(components)/galleryForm";
-import type { Session } from "next-auth";
-import { auth } from "@/auth";
+import type { Session } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { fetchTeamsForGalleryAction, fetchGalleryAction } from "../../(actions)";
 import { fetchTournamentsForGalleryAction } from "../../(actions)/fetchTournamentsForGalleryAction";
@@ -20,7 +21,7 @@ type Props = Readonly<{
 
 export const EditGalleryPage: FC<Props> = async ({ params }) => {
   const galleryId = (await params).id;
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
 
   const response = await fetchGalleryAction(session?.user.roles ?? [], galleryId);
 
@@ -31,7 +32,7 @@ export const EditGalleryPage: FC<Props> = async ({ params }) => {
   const { tournaments } = await fetchTournamentsForGalleryAction();
   const { teams } = await fetchTeamsForGalleryAction();
 
-  if (!session?.user.roles.includes('admin')) {
+  if (session && !(session.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para actualizar galerías !';
     redirect(`/admin/galerias?error=${encodeURIComponent(message)}`);
   }
