@@ -3,7 +3,6 @@ import { fetchGalleryAction, type GalleryType } from "../(actions)/fetchGalleryA
 import { redirect } from 'next/navigation';
 import { ImageGallery } from './image-gallery';
 import { Heading } from '../../components/heading';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/components/ui/table';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -31,48 +30,27 @@ export const GalleryDetails: FC<Props> = async ({ paramsPromise }) => {
         {gallery?.title}
       </Heading>
 
-      <Table className="mb-10 w-full md:w-1/2">
-        <TableBody>
-          <TableRow>
-            <TableHead>Fecha</TableHead>
-            <TableCell>
-              {format(
-                gallery?.galleryDate as Date,
-                "d 'de' MMMM 'del' yyyy",
-                { locale: es },
-              )}
-            </TableCell>
-          </TableRow>
-          {gallery?.tournament?.permalink && (
-            <TableRow>
-              <TableHead>Torneo</TableHead>
-              <TableCell>
-                {gallery?.tournament ? (
-                  <Link href={`/torneo/${gallery?.tournament.permalink}`}>
-                    {gallery?.tournament.name}
-                  </Link>
-                ) : (
-                  <p>No asignado</p>
-                )}
-              </TableCell>
-            </TableRow>
-          )}
-          {gallery?.team?.permalink && (
-            <TableRow>
-              <TableHead>Equipo</TableHead>
-              <TableCell>
-                {gallery?.team ? (
-                  <Link href={`/equipos/${gallery?.team.permalink}`}>
-                    {gallery?.team.name}
-                  </Link>
-                ) : (
-                  <p>No asignado</p>
-                )}
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <div className="w-full max-w-100 flex flex-col gap-5 bg-gray-200 dark:bg-gray-800 px-4 py-2 rounded-lg mb-10">
+        {gallery?.team?.name && (
+          <Link href={
+            `/equipos/${gallery.team.permalink}`
+            + `?torneo=${gallery.tournament?.permalink}`
+            + `&categoria=${gallery.team.category}`
+            + `&formato=${gallery.team.format}`
+          }>
+            <p className="text-gray-700 dark:text-gray-200">
+              <b>Equipo</b>&nbsp;
+              <span className="italic">{gallery?.team?.name}</span>
+            </p>
+          </Link>
+        )}
+        <p className="text-gray-700 dark:text-gray-200">
+          <b>Fecha</b>&nbsp;
+          <span className="italic">
+            {format( gallery?.galleryDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
+          </span>
+        </p>
+      </div>
 
       <ImageGallery
         galleryImages={(gallery as GalleryType).images}

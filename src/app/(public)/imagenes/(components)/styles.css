@@ -13,10 +13,10 @@
 .gallery-item {
   @apply
     relative
-    bg-gray-700
+    bg-gray-800
     cursor-pointer
     w-full
-    h-[200px]
+    h-auto
     rounded
     overflow-hidden
   ;
@@ -25,9 +25,9 @@
 .gallery-image {
   @apply
     w-full
-    h-[200px]
+    h-auto
     object-cover
-    object-top
+    object-center
     cursor-pointer
     md:mb-0
     lg:w-full
