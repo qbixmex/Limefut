@@ -19,6 +19,8 @@ type TournamentType = {
 type TeamType = {
   name: string;
   permalink: string;
+  category: string;
+  format: string;
 };
 
 export type GalleryImageType = {
@@ -59,6 +61,8 @@ export const fetchGalleryAction = async (galleryPermalink: string): ResponseActi
           select: {
             name: true,
             permalink: true,
+            category: true,
+            format: true,
           },
         },
         images: {
