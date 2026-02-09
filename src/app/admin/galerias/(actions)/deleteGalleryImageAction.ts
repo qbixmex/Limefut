@@ -47,9 +47,11 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
   updateTag('dashboard-images');
   updateTag('public-galleries');
   updateTag('public-gallery');
+  updateTag("public-galleries");
+  updateTag("public-gallery");
 
   return {
     ok: true,
-    message: `¡ La galería ha sido eliminada correctamente 👍 !`,
+    message: `¡ La imagen de la galería ha sido eliminada correctamente 👍 !`,
   };
 };

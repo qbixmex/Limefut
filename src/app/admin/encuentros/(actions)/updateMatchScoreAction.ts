@@ -178,7 +178,9 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
     updateTag('matches');
     updateTag('public-standings');
     updateTag('dashboard-results');
-    updateTag('public-results');
+    updateTag('public-matches');
+    updateTag("public-results-roles");
+    updateTag("public-result-details");
 
     if (!updatedMatch) {
       return {

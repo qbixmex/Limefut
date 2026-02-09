@@ -144,7 +144,9 @@ export const updateMatchAction = async ({
         updateTag('admin-match');
         updateTag('matches');
         updateTag('dashboard-results');
-        updateTag('public-results');
+        updateTag('public-matches');
+        updateTag("public-results-roles");
+        updateTag("public-result-details");
 
         return {
           ok: true,

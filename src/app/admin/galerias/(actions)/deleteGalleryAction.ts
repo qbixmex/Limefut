@@ -42,6 +42,8 @@ export const deleteGalleryAction = async (galleryId: string): ResponseDeleteActi
   updateTag('dashboard-images');
   updateTag('public-galleries');
   updateTag('public-gallery');
+  updateTag("public-galleries");
+  updateTag("public-gallery");
 
   return {
     ok: true,

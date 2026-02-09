@@ -5,7 +5,7 @@ import {
 } from "../../(actions)/fetchTournamentAction";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { Trophy, Shield } from "lucide-react";
+import { Trophy, ShieldBan } from "lucide-react";
 import Link from "next/link";
 import { Heading } from "../../../components";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "~/src/components/ui/table";
@@ -191,7 +191,11 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                 }
               >
                 {!team.imageUrl ? (
-                  <Shield className="text-gray-400" />
+                  <ShieldBan
+                    className="text-gray-400"
+                    size={200}
+                    strokeWidth={1}
+                  />
                 ) : (
                   <Image
                     src={team.imageUrl}
