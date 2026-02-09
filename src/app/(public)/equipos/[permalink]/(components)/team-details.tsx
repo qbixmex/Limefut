@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import Image from "next/image";
 import { fetchTeamAction } from '../../(actions)/fetchTeamAction';
 import { redirect } from 'next/navigation';
-import { Flag } from 'lucide-react';
+import { ShieldBan } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/components/ui/table';
 import Link from 'next/link';
 import { Badge } from '~/src/components/ui/badge';
@@ -51,7 +51,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
         <section className="w-full md:max-w-[400px] flex justify-center">
           {!team?.imageUrl ? (
             <div className="bg-gray-200 dark:bg-gray-800 size-[400px] rounded-xl flex items-center justify-center">
-              <Flag size={400} strokeWidth={1} className="stroke-gray-400" />
+              <ShieldBan size={400} strokeWidth={1} className="stroke-gray-400" />
             </div>
           ) : (
             <Image
@@ -70,10 +70,9 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
               <TableRow>
                 <TableHead className="w-[120px] font-semibold">Sede</TableHead>
                 <TableCell>
-                  {
-                    team?.headquarters
-                    ?? <span className="text-gray-500 italic">No especificado</span>
-                  }
+                  <span className="text-wrap dark:text-gray-200 italic">
+                    { team?.headquarters ?? 'No especificado' }
+                  </span>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -173,11 +172,8 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
               <TableRow>
                 <TableHead className="font-semibold">Dirección</TableHead>
                 <TableCell>
-                  <span className="text-wrap">
-                    {
-                      team?.address
-                      ?? <span className="text-gray-500 italic">No especificada</span>
-                    }
+                  <span className="text-wrap dark:text-gray-200 italic">
+                    { team?.address ?? 'No especificada' }
                   </span>
                 </TableCell>
               </TableRow>
@@ -185,30 +181,6 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
           </Table>
         </section>
       </section>
-
-      {/* Players Section */}
-      {/* <section>
-        <div className="flex flex-col lg:flex-row gap-10">
-          <div className="w-full lg:w-1/2">
-            <h2 className="text-xl font-bold text-sky-600 mb-5">Jugadores</h2>
-            {
-              !team.players ? (
-                <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
-                  <p className="text-cyan-600 text-center font-bold">Aún no hay jugadores registrados</p>
-                </div>
-              ) : (
-                <div className="flex flex-wrap gap-3">
-                  {team.players.map(({ id, name }) => (
-                    <Link key={id} href={`/admin/jugadores/perfil/${id}`}>
-                      <Badge variant="outline-info">{name}</Badge>
-                    </Link>
-                  ))}
-                </div>
-              )
-            }
-          </div>
-        </div>
-      </section> */}
     </div>
   );
 };
