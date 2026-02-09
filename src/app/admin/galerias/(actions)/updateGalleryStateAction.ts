@@ -33,7 +33,6 @@ export const updateGalleryStateAction = async (id: string, state: boolean)
   updateTag('dashboard-images');
   updateTag('admin-galleries');
   updateTag('admin-gallery');
-  updateTag('public-gallery');
   updateTag('public-galleries');
   updateTag('public-gallery');
 

@@ -7,6 +7,7 @@ import { uploadImage } from '@/shared/actions';
 import { updateTag } from "next/cache";
 import type { CloudinaryResponse, ROLE_TYPE } from "@/shared/interfaces";
 import type { User } from "@/shared/interfaces";
+import { isPasswordInsecure } from "@/lib/passwords_check";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -57,6 +58,14 @@ export const createUserAction = async (
     return {
       ok: false,
       message: userVerified.error.message,
+      user: null,
+    };
+  }
+
+  if (isPasswordInsecure(userVerified.data.password)) {
+    return {
+      ok: false,
+      message: '¡ La contraseña es insegura, elija otra por favor !',
       user: null,
     };
   }

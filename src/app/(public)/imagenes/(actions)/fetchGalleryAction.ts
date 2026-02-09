@@ -37,7 +37,7 @@ export const fetchGalleryAction = async (galleryPermalink: string): ResponseActi
   "use cache";
 
   cacheLife('days');
-  cacheTag('public-galleries');
+  cacheTag('public-gallery');
 
   try {
     const gallery = await prisma.gallery.findUnique({

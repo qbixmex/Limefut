@@ -22,7 +22,7 @@ export const updateStatusAction = async (params: Params): ResponseAction => {
     where: { id: matchId },
     data: {
       localScore: local ? score : undefined,
-      visitorScore: visitor ? score: undefined,
+      visitorScore: visitor ? score : undefined,
     },
   });
 
@@ -30,7 +30,9 @@ export const updateStatusAction = async (params: Params): ResponseAction => {
   updateTag('admin-match');
   updateTag('matches');
   updateTag('dashboard-results');
-  updateTag('public-results');
+  updateTag('public-matches');
+  updateTag("public-results-roles");
+  updateTag("public-result-details");
 
   if (!updatedMatch) {
     return {

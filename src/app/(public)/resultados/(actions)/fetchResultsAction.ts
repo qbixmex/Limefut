@@ -40,7 +40,7 @@ export const fetchResultsAction = async (
   "use cache";
 
   cacheLife('days');
-  cacheTag('public-results');
+  cacheTag('public-results-roles');
 
   const tournament = await prisma.tournament.findFirst({
     where: {

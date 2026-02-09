@@ -55,7 +55,8 @@ export const fetchStandingsAction = async (
   "use cache";
 
   cacheLife("days");
-  cacheTag("standings");
+  cacheTag("admin-standings");
+  cacheTag("public-standings");
 
   try {
     const tournament = await prisma.tournament.findFirst({

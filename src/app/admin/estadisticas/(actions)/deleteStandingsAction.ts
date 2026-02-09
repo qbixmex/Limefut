@@ -21,7 +21,7 @@ export const deleteStandingsAction = async (tournamentId: string): ResponseDelet
   // Update Cache
   updateTag('admin-standings');
   updateTag('admin-tournaments-for-standings');
-  updateTag('standings');
+  updateTag('public-standings');
 
   return {
     ok: true,

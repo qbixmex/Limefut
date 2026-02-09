@@ -7,6 +7,7 @@ import { editUserSchema } from "@/shared/schemas";
 import bcrypt from 'bcryptjs';
 import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from '@/shared/actions';
+import { isPasswordInsecure } from '@/lib/passwords_check';
 
 type Options = {
   formData: FormData;
@@ -70,6 +71,17 @@ export const updateUserAction = async ({
     return {
       ok: false,
       message: userVerified.error.message,
+      user: null,
+    };
+  }
+
+  if (
+    userVerified.data.password && userVerified.data.password !== ''
+    && isPasswordInsecure(userVerified.data.password)
+  ) {
+    return {
+      ok: false,
+      message: '¡ La contraseña es insegura, elija otra por favor !',
       user: null,
     };
   }
@@ -155,7 +167,7 @@ export const updateUserAction = async ({
         // Update Cache
         updateTag('admin-users');
         updateTag('admin-user');
-        
+
         return {
           ok: true,
           message: '¡ Usuario actualizado satisfactoriamente 👍 !',

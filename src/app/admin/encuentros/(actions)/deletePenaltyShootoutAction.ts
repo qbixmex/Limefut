@@ -59,10 +59,12 @@ export const deletePenaltyShootoutAction = async (
   // Update Cache
   updateTag('admin-matches');
   updateTag('admin-match');
-  updateTag('public-results');
+  updateTag('public-matches');
+  updateTag("public-results-roles");
+  updateTag("public-result-details");
 
   return {
     ok: true,
-    message: `¡ El encuentro ha sido eliminado correctamente 👍 !`,
+    message: `¡ La tanda de penales ha sido eliminada correctamente 👍 !`,
   };
 };

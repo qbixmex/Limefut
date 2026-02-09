@@ -71,7 +71,7 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
   "use cache";
 
   cacheLife('days');
-  cacheTag('public-result');
+  cacheTag('public-result-details');
 
   try {
     const match = await prisma.match.findUnique({

@@ -248,9 +248,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
               name="passwordConfirmation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Contraseña
-                  </FormLabel>
+                  <FormLabel>Confirmación de Contraseña</FormLabel>
                   <div className="relative">
                     <FormControl>
                       <Input
