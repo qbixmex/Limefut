@@ -12,11 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { createGalleryImageSchema, editGalleryImageSchema } from "@/shared/schemas";
-import {
-  createGalleryImageAction,
-  updateGalleryImageAction,
-  updateGalleryImagesPositionAction,
-} from "../(actions)";
+import { createGalleryImageAction, updateGalleryImageAction } from "../(actions)";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -105,19 +101,6 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, imagesQuantity
       }
 
       if (response.ok) {
-        if (
-          response.galleryImage &&
-          (data.position as number) < (response.galleryImage.position as number)
-        ) {
-          await updateGalleryImagesPositionAction({
-            newPosition: data.position as number,
-            authenticatedUserId: session?.user.id,
-            userRoles: session.user.roles!,
-            galleryId,
-            galleryImageId: response.galleryImage?.id as string,
-          });
-        }
-
         toast.success(response.message);
         form.reset();
         setIsOpen(false);
@@ -127,17 +110,6 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, imagesQuantity
 
     // Update Gallery Image
     if (galleryImage) {
-      // Update Position if is not the same
-      if (galleryImage.position !== data.position) {
-        await updateGalleryImagesPositionAction({
-          newPosition: data.position as number,
-          authenticatedUserId: session?.user.id,
-          userRoles: session.user.roles!,
-          galleryId,
-          galleryImageId: galleryImage.id,
-        });
-      }
-
       const response = await updateGalleryImageAction({
         formData,
         authenticatedUserId: session?.user.id,
