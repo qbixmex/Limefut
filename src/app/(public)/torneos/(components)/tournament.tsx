@@ -4,7 +4,7 @@ import type { FC } from "react";
 import type { TournamentType } from "../(actions)/fetchTournamentsAction";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ShieldBan } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 type Props = Readonly<{
   tournament: TournamentType;
@@ -30,7 +30,7 @@ export const Tournament: FC<Props> = ({ tournament }) => {
       {
         (!tournament.imageUrl) ? (
           <div className="tournamentFigure">
-            <ShieldBan
+            <Trophy
               strokeWidth={1}
               className="tournamentIcon"
             />
