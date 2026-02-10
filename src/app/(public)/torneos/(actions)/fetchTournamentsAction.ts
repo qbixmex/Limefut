@@ -10,6 +10,7 @@ export type TournamentType = {
   category: string | null;
   format: string | null;
   season: string | null;
+  imageUrl: string | null;
 };
 
 export type ResponseAction = Promise<{
@@ -35,6 +36,7 @@ export const fetchTournamentsAction = async (): ResponseAction => {
         category: true,
         format: true,
         season: true,
+        imageUrl: true,
       },
     });
 

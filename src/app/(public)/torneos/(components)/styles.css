@@ -30,3 +30,17 @@
 .tournamentData {
   @apply text-gray-700 dark:text-gray-200;
 }
+
+.tournamentFigure {
+  @apply flex justify-center mb-5;
+}
+
+.tournamentIcon {
+  @apply w-full max-w-[512px] h-auto max-h-[512px];
+  @apply stroke-gray-600 dark:stroke-gray-500;
+}
+
+.tournamentImage {
+  @apply border border-transparent dark:border-gray-600/80;
+  @apply rounded-lg w-full max-w-[512px] h-auto;
+}
