@@ -63,16 +63,16 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     },
   });
 
-  const handlePermalinkChange = (event: ChangeEvent<HTMLInputElement>) => {
-    isPermalinkEdited.current = true;
-    form.setValue('permalink', event.target.value, { shouldValidate: true });
-  };
-
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     form.setValue('name', event.target.value, { shouldValidate: true });
     if (!isPermalinkEdited.current) {
       form.setValue('permalink', slugify(event.target.value), { shouldValidate: true });
     }
+  };
+
+  const handlePermalinkChange = (event: ChangeEvent<HTMLInputElement>) => {
+    isPermalinkEdited.current = true;
+    form.setValue('permalink', event.target.value, { shouldValidate: true });
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {

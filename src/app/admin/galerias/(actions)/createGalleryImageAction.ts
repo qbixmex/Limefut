@@ -80,13 +80,21 @@ export const createGalleryImageAction = async ({
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
+      // Find the maximum position
+      const maxPositionResult = await transaction.galleryImage.aggregate({
+        _max: { position: true },
+      });
+
+      // Calculate the new position
+      const newPosition = (maxPositionResult._max.position || 0) + 1;
+
       const createdImageGallery = await transaction.galleryImage.create({
         data: {
           title: data.title,
           imageUrl: cloudinaryResponse?.secureUrl as string,
           imagePublicID: cloudinaryResponse?.publicId as string,
           active: data.active,
-          position: data.position,
+          position: newPosition,
           galleryId: gallery.id,
         },
       });
