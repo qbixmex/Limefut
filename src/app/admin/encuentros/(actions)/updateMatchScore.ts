@@ -33,6 +33,7 @@ export const updateStatusAction = async (params: Params): ResponseAction => {
   updateTag('public-matches');
   updateTag("public-results-roles");
   updateTag("public-result-details");
+  updateTag("public-matches-count");
 
   if (!updatedMatch) {
     return {

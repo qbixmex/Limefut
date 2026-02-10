@@ -29,6 +29,7 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS):
   updateTag('public-matches');
   updateTag("public-results-roles");
   updateTag("public-result-details");
+  updateTag("public-matches-count");
 
   return {
     ok: true,

@@ -30,6 +30,7 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
   updateTag('public-matches');
   updateTag("public-results-roles");
   updateTag("public-result-details");
+  updateTag("public-matches-count");
 
   return {
     ok: true,

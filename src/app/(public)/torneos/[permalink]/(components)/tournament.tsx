@@ -12,9 +12,9 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "~/src/componen
 import { ErrorHandler } from "~/src/shared/components/errorHandler";
 import { format as formatDate } from "date-fns";
 import { es } from "date-fns/locale";
+import { Badge } from "@/components/ui/badge";
+import { getStageTranslation } from "@/lib/utils";
 import "./style.css";
-import { Badge } from "~/src/components/ui/badge";
-import { getStageTranslation } from "~/src/lib/utils";
 
 type Props = Readonly<{
   params: Promise<{
