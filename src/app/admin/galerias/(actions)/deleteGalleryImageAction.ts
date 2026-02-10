@@ -21,10 +21,11 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
     };
   }
 
-  const { imagePublicID } = await prisma.galleryImage.delete({
+  const galleryImage = await prisma.galleryImage.delete({
     where: { id: galleryImageId },
     select: {
       imagePublicID: true,
+      position: true,
       gallery: {
         select: {
           permalink: true,
@@ -34,12 +35,19 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
   });
 
   // Delete image from cloudinary.
-  if (imagePublicID) {
-    const response = await deleteImage(imagePublicID);
+  if (galleryImage.imagePublicID) {
+    const response = await deleteImage(galleryImage.imagePublicID);
     if (!response.ok) {
       throw 'Error al eliminar la imagen de cloudinary';
     }
   }
+
+  // Shift up positions for pages that were after the deleted one
+  // Use updateMany with decrement to avoid unique conflicts and for performance
+  await prisma.galleryImage.updateMany({
+    where: { position: { gt: galleryImage.position as number } },
+    data: { position: { decrement: 1 } },
+  });
 
   // Update Cache
   updateTag('admin-galleries');

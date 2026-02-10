@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, type FC } from 'react';
+import type { ChangeEvent, FC } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import {
@@ -40,7 +41,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { es } from "date-fns/locale";
-import { cn } from '@/lib/utils';
+import { cn, slugify } from '@/lib/utils';
 
 type Props = Readonly<{
   session: Session;
@@ -60,6 +61,7 @@ type Props = Readonly<{
 export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery }) => {
   const route = useRouter();
   const formSchema = !gallery ? createGallerySchema : editGallerySchema;
+  const isPermalinkEdited = useRef(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,6 +74,18 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
       active: gallery?.active ?? false,
     },
   });
+
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    form.setValue('title', event.target.value, { shouldValidate: true });
+    if (!isPermalinkEdited.current) {
+      form.setValue('permalink', slugify(event.target.value), { shouldValidate: true });
+    }
+  };
+
+  const handlePermalinkChange = (event: ChangeEvent<HTMLInputElement>) => {
+    isPermalinkEdited.current = true;
+    form.setValue('permalink', event.target.value, { shouldValidate: true });
+  };
 
   const [openCalendar, setOpenCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -154,7 +168,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
       >
-        {/* Name and Permalink */}
+        {/* Title and Permalink */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
@@ -163,10 +177,14 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Título
+                    Título <span className="text-amber-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={handleTitleChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -181,10 +199,14 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Enlace Permanente
+                    Enlace Permanente <span className="text-amber-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={handlePermalinkChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
