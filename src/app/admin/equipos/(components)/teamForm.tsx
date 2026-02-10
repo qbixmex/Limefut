@@ -601,13 +601,6 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
                     <Textarea
                       {...field}
                       value={field.value ?? ''}
-                      onChange={({ target }) => {
-                        field.onChange(
-                          (target.value === '')
-                            ? undefined
-                            : target.value,
-                        );
-                      }}
                       className="resize-none"
                     />
                   </FormControl>
