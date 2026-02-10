@@ -19,10 +19,10 @@ export const Team: FC<Props> = ({
           {imageUrl && (
             <Image
               src={imageUrl}
-              width={100}
-              height={100}
+              width={150}
+              height={150}
               alt={`${name} escudo`}
-              className="size-[75px] md:size-[100px] object-cover rounded"
+              className="size-[150px] object-cover rounded"
             />
           )}
         </figure>

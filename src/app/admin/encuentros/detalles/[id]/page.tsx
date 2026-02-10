@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import type { FC } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,8 +19,8 @@ import { fetchMatchAction } from "../../(actions)";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { TbSoccerField } from "react-icons/tb";
-import { MATCH_STATUS } from "~/src/shared/enums";
-import { SHOOTOUT_STATUS } from '~/src/shared/enums/shoutout-status.enum';
+import { MATCH_STATUS } from "@/shared/enums";
+import { SHOOTOUT_STATUS } from '@/shared/enums/shoutout-status.enum';
 import { getMatchStatus } from "../../(helpers)/place";
 import type { MatchType } from "../../(actions)/fetchMatchAction";
 import { PenaltyShootout } from "@/shared/components/penalty-shootouts";
