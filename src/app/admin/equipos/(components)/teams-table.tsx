@@ -42,12 +42,13 @@ type Props = Readonly<{
 export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
   return (
     <>
-      {teams.length > 0 ? (
+      {(teams.length > 0) ? (
         <div className="flex-1 flex flex-col mt-10">
           <div className="flex-1">
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-12 text-center">#</TableHead>
                   <TableHead className="w-25">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
                   <TableHead className="w-25 text-center">Categoría</TableHead>
@@ -60,8 +61,9 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {teams.map((team) => (
+                {teams.map((team, index) => (
                   <TableRow key={team.id}>
+                    <TableCell className="font-bold text-center">{index + 1}</TableCell>
                     <TableCell>
                       <Link href={`/admin/equipos/${team.id}`}>
                         {
