@@ -26,13 +26,11 @@ export const TeamsWrapper: FC<Props> = async ({
   });
 
   return (
-    <>
-      <TeamsTable
-        teams={teams}
-        pagination={pagination}
-        roles={session?.user.roles as string[]}
-      />
-    </>
+    <TeamsTable
+      teams={teams}
+      pagination={pagination}
+      roles={session?.user.roles as string[]}
+    />
   );
 
 };
