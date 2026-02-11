@@ -13,7 +13,7 @@ import { fetchTournamentAction } from "../(actions)";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import type { TournamentType } from "../(actions)/fetchTournamentAction";
-import { getStageTranslation } from "@/lib/utils";
+import { getGenderTranslation, getStageTranslation } from "@/lib/utils";
 import { headers } from "next/headers";
 
 type TournamentPageProps = Readonly<{
@@ -109,6 +109,12 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                           </TableCell>
                         </TableRow>
                         <TableRow>
+                          <TableHead className="font-semibold">Rama</TableHead>
+                          <TableCell>
+                            {getGenderTranslation(tournament.gender)}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
                           <TableHead className="font-semibold">Jornada</TableHead>
                           <TableCell>
                             <Badge variant={(tournament.currentWeek as number > 0) ? 'outline-info' : 'outline-secondary'}>
@@ -140,7 +146,7 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                         </TableRow>
                         <TableRow>
                           <TableHead className="font-semibold">
-                            Ciudad<span className="text-gray-400">es</span>
+                            Ciudad
                           </TableHead>
                           <TableCell>
                             <p className="text-wrap">{tournament.city}</p>

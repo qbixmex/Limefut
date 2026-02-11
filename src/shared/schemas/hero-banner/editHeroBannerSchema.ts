@@ -1,5 +1,5 @@
 import z from "zod";
-import { ALIGNMENT } from "@/shared/interfaces";
+import { ALIGNMENT } from "@/shared/enums";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
 const ACCEPTED_FILE_TYPES = [

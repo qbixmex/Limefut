@@ -59,6 +59,9 @@ export const createTournamentSchema = z.object({
   format: z.string('¡ El formato debe ser una cadena de texto !')
     .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
     .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' }),
+  gender: z.string('¡ El género debe ser una cadena de texto !')
+    .min(1, { message: '¡ El género debe ser mayor a 1 caracteres !' })
+    .max(50, { message: '¡ El género debe ser menor a 50 caracteres !' }),
   country: z.string('¡ El país debe ser una cadena de texto !')
     .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' })

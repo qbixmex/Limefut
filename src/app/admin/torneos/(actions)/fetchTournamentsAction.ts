@@ -22,6 +22,7 @@ export type ResponseFetch = Promise<{
     season: string | null;
     category: string;
     format: string;
+    gender: string;
     currentWeek: number | null;
     active: boolean;
     stage: string;
@@ -71,6 +72,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
         season: true,
         category: true,
         format: true,
+        gender: true,
         currentWeek: true,
         stage: true,
         active: true,
@@ -95,6 +97,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
         season: tournament.season,
         category: tournament.category,
         format: tournament.format,
+        gender: tournament.gender,
         currentWeek: tournament.currentWeek,
         active: tournament.active,
         stage: tournament.stage,

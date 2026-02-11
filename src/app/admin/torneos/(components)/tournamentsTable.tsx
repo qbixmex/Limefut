@@ -20,7 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import { DeleteTournament } from './delete-tournament';
 import { Pagination } from '@/shared/components/pagination';
-import { cn, getStageTranslation } from '@/lib/utils';
+import { cn, getGenderTranslation, getStageTranslation } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '~/src/components/ui/badge';
 import { headers } from 'next/headers';
@@ -59,6 +59,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                   <TableHead>Nombre</TableHead>
                   <TableHead className="w-25 text-center">Categoría</TableHead>
                   <TableHead className="w-25 text-center">Formato</TableHead>
+                  <TableHead className="w-25 text-center">Rama</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Temporada</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Jornada</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Equipos</TableHead>
@@ -93,6 +94,17 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell className="text-center">{tournament.category}</TableCell>
                     <TableCell className="text-center">
                       {`${tournament.format} vs ${tournament.format}`}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Badge variant={
+                        (tournament.gender === "male")
+                          ? 'outline-info'
+                          : (tournament.gender === 'female')
+                            ? "outline-danger"
+                            : 'outline-secondary'
+                      }>
+                        {getGenderTranslation(tournament.gender)}
+                      </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">
                       {tournament.season}

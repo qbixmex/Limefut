@@ -135,6 +135,7 @@ model Tournament {
   imagePublicID String?  @map("image_public_id")
   description   String?
   category      String
+  gender        Gender   @default(male)
   format        String
   stage         Stage    @default(regular)
   country       String?

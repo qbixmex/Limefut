@@ -10,7 +10,8 @@ export type TournamentType = {
   imageUrl: string | null;
   description: string | null;
   category: string | null;
-  format: string | null;
+  format: string;
+  gender: string;
   country: string | null;
   state: string | null;
   city: string | null;
@@ -61,6 +62,7 @@ export const fetchTournamentAction = async (
         description: true,
         category: true,
         format: true,
+        gender: true,
         country: true,
         state: true,
         city: true,

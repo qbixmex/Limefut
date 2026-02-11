@@ -5,6 +5,7 @@ import { updateTag } from 'next/cache';
 import { editTournamentSchema } from '@/shared/schemas';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
+import type { GENDER_TYPE } from '@/shared/enums';
 
 type Options = {
   formData: FormData;
@@ -51,7 +52,8 @@ export const updateTournamentAction = async ({
     image: formData.get('image'),
     description: formData.get('description') ?? undefined,
     category: formData.get('category') ?? undefined,
-    format: formData.get('format') ?? undefined,
+    format: formData.get('format') as string,
+    gender: formData.get('gender') as string,
     country: formData.get('country') ?? undefined,
     state: formData.get('state') ?? undefined,
     city: formData.get('city') ?? undefined,
@@ -105,7 +107,12 @@ export const updateTournamentAction = async ({
 
         const updatedTournament = await transaction.tournament.update({
           where: { id: tournamentId },
-          data: tournamentToSave,
+          data: {
+            ...tournamentToSave,
+            gender: tournamentToSave.gender as GENDER_TYPE ?? undefined,
+            imageUrl: cloudinaryResponse?.secureUrl ?? undefined,
+            imagePublicID: cloudinaryResponse?.publicId ?? undefined,
+          },
         });
 
         if (image !== null) {
