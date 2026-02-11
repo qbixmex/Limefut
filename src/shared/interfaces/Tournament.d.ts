@@ -7,6 +7,7 @@ export interface Tournament {
   description: string | null;
   category: string | null;
   format: string | null;
+  gender: GENDER_TYPE;
   country: string | null;
   state: string | null;
   city: string | null;
@@ -18,21 +19,4 @@ export interface Tournament {
   currentWeek: number | null;
   createdAt?: Date;
   updatedAt?: Date;
-}
-
-export interface TournamentSeed {
-  name: string;
-  permalink: string;
-  imageUrl: string | null;
-  imagePublicID: string | null;
-  description: string;
-  category: string;
-  format: string;
-  country: string;
-  state: string;
-  city: string;
-  season: string;
-  startDate: Date;
-  endDate: Date;
-  active: boolean;
 }

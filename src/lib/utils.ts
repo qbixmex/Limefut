@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ROBOTS } from "../shared/interfaces";
 import { PAGE_STATUS } from "../shared/interfaces/Page";
+import { GENDER } from "../shared/enums";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -236,5 +237,29 @@ export const getAlignmentTranslation = (alignment: string) => {
       return "derecha";
     default:
       return "desconocida";
+  }
+};
+
+/**
+ * Translates the gender to "Varonil" o "Femenil".
+ * 
+ * @param gender - The gender value as "male" or "female".
+ * @example ```typescript
+ * getGenderTranslation("male");
+ * // Returns "Varonil"
+ * getGenderTranslation("female");
+ * // Returns "Femenil"
+ * ```
+ * 
+ * @returns The translated gender in Spanish.
+ */
+export const getGenderTranslation = (gender: string) => {
+  switch(gender) {
+    case GENDER.FEMALE:
+      return "femenil";
+    case GENDER.MALE:
+      return "varonil";
+    default:
+      return "desconocido";
   }
 };

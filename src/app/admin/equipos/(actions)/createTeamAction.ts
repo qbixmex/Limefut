@@ -5,6 +5,7 @@ import { createTeamSchema } from "@/shared/schemas";
 import { updateTag } from "next/cache";
 import { uploadImage } from "@/shared/actions";
 import type { CloudinaryResponse, Team } from "@/shared/interfaces";
+import type { GENDER_TYPE } from "@/shared/enums";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -79,7 +80,7 @@ export const createTeamAction = async (
           imagePublicID: cloudinaryResponse?.publicId ?? undefined,
           category: teamToSave.category,
           format: teamToSave.format,
-          gender: teamToSave.gender,
+          gender: teamToSave.gender as GENDER_TYPE,
           country: teamToSave.country,
           city: teamToSave.city,
           state: teamToSave.state,

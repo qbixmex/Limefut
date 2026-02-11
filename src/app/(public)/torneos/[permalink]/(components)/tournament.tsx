@@ -13,7 +13,7 @@ import { ErrorHandler } from "~/src/shared/components/errorHandler";
 import { format as formatDate } from "date-fns";
 import { es } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
-import { getStageTranslation } from "@/lib/utils";
+import { getGenderTranslation, getStageTranslation } from "@/lib/utils";
 import "./style.css";
 
 type Props = Readonly<{
@@ -93,6 +93,20 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                     <TableHead className="font-semibold">Formato</TableHead>
                     <TableCell>
                       {tournament.format} vs {tournament.format}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="font-semibold">Rama</TableHead>
+                    <TableCell>
+                      <Badge variant={
+                        (tournament.gender === 'male')
+                          ? 'outline-info'
+                          : (tournament.gender === 'female')
+                            ? 'outline-danger'
+                            : 'outline-secondary'
+                      }>
+                        {getGenderTranslation(tournament.gender)}
+                      </Badge>
                     </TableCell>
                   </TableRow>
                   <TableRow>

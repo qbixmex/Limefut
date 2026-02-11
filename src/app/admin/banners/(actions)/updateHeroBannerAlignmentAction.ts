@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { updateTag } from "next/cache";
-import type { ALIGNMENT } from "@/shared/interfaces";
+import type { ALIGNMENT_TYPE } from "@/shared/enums";
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -11,7 +11,7 @@ export type ResponseAction = Promise<{
 
 export const updateHeroBannerAlignmentAction = async (
   bannerId: string,
-  newAlignment: ALIGNMENT,
+  newAlignment: ALIGNMENT_TYPE,
 ): ResponseAction => {
   const heroBannerExists = await prisma.heroBanner.count({
     where: { id: bannerId },

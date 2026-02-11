@@ -3,7 +3,8 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath, updateTag } from 'next/cache';
 import { editHeroBannerSchema } from '@/shared/schemas';
-import type { ALIGNMENT, CloudinaryResponse, HeroBanner } from '@/shared/interfaces';
+import type { CloudinaryResponse, HeroBanner } from '@/shared/interfaces';
+import type { ALIGNMENT_TYPE } from '@/shared/enums';
 import { deleteImage, uploadImage } from '@/shared/actions';
 
 type Options = {
@@ -130,7 +131,7 @@ export const updateHeroBannerAction = async ({
             data: {
               title: data.title,
               description: data.description,
-              dataAlignment: data.dataAlignment as ALIGNMENT ?? undefined,
+              dataAlignment: data.dataAlignment as ALIGNMENT_TYPE ?? undefined,
               showData: data.showData ?? undefined,
               position: updatedPosition,
               active: data.active,
@@ -181,7 +182,7 @@ export const updateHeroBannerAction = async ({
           data: {
             title: data.title,
             description: data.description,
-            dataAlignment: data.dataAlignment as ALIGNMENT ?? undefined,
+            dataAlignment: data.dataAlignment as ALIGNMENT_TYPE ?? undefined,
             showData: data.showData ?? undefined,
             position: updatedPosition,
             active: data.active,

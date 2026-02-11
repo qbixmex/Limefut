@@ -10,16 +10,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ALIGNMENT } from "@/shared/interfaces";
+import { ALIGNMENT, type ALIGNMENT_TYPE } from "@/shared/enums";
 import { updateHeroBannerAlignmentAction } from "../../(actions)/updateHeroBannerAlignmentAction";
 
 type Props = Readonly<{
   bannerId: string;
-  alignment: ALIGNMENT;
+  alignment: ALIGNMENT_TYPE;
 }>;
 
 export const BannerAlignment: FC<Props> = ({ bannerId, alignment }) => {
-  const onUpdateAlignment = async (newAlignment: ALIGNMENT) => {
+  const onUpdateAlignment = async (newAlignment: ALIGNMENT_TYPE) => {
     const response = await updateHeroBannerAlignmentAction(bannerId, newAlignment);
 
     if (response.ok) {
