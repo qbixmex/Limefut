@@ -1,10 +1,10 @@
 export { ROLE, type ROLE_TYPE, type User } from "./User";
 export type { Pagination } from "./Pagination";
-export type { Tournament, TournamentSeed } from "./Tournament";
-export type { Team, TeamSeed } from "./Team";
-export type { Coach, CoachSeed } from "./Coach";
-export type { Player, PlayerSeed } from "./Player";
-export type { Match, MatchSeed } from "./Match";
+export type { Tournament } from "./Tournament";
+export type { Team } from "./Team";
+export type { Coach } from "./Coach";
+export type { Player } from "./Player";
+export type { Match } from "./Match";
 export type { PenaltyShootout } from "./PenaltyShootout";
 export type { PenaltyKick } from "./PenaltyKick";
 export type { Credential } from "./Credential";
@@ -14,6 +14,6 @@ export type { Gallery } from "./Gallery";
 export type { GalleryImage } from "./GalleryImage";
 export type { Page } from "./Page";
 export { ROBOTS, PAGE_STATUS } from "./Page";
-export { type HeroBanner, ALIGNMENT } from "./HeroBanner";
+export { type HeroBanner } from "./HeroBanner";
 
 export type { CloudinaryResponse } from "./Cloudinary";

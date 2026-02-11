@@ -7,7 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/u
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import type { ALIGNMENT, HeroBanner } from '@/shared/interfaces';
+import type { HeroBanner } from '@/shared/interfaces';
+import type { ALIGNMENT_TYPE } from '@/shared/enums';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -83,7 +84,7 @@ const HeroBannerContent: FC<Props> = async ({ params }) => {
                       <TableCell>
                         <BannerAlignment
                           bannerId={heroBanner.id}
-                          alignment={heroBanner.dataAlignment as ALIGNMENT}
+                          alignment={heroBanner.dataAlignment as ALIGNMENT_TYPE}
                         />
                       </TableCell>
                     </TableRow>

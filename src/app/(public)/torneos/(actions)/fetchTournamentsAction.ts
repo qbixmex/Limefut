@@ -8,6 +8,7 @@ export type TournamentType = {
   name: string;
   permalink: string;
   category: string | null;
+  gender: string;
   format: string | null;
   season: string | null;
   imageUrl: string | null;
@@ -27,13 +28,19 @@ export const fetchTournamentsAction = async (): ResponseAction => {
 
   try {
     const tournaments = await prisma.tournament.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: [
+        { name: 'asc' },
+        { season: 'asc' },
+        { category: 'asc' },
+        { format: 'asc' },
+      ],
       where: { active: true },
       select: {
         id: true,
         name: true,
         permalink: true,
         category: true,
+        gender: true,
         format: true,
         season: true,
         imageUrl: true,

@@ -7,7 +7,7 @@ export interface Team {
   imagePublicID: string | null;
   category: string | null;
   format: string | null;
-  gender?: 'male' | 'female';
+  gender: GENDER_TYPE;
   country: string | null;
   city: string | null;
   state: string | null;
@@ -16,23 +16,4 @@ export interface Team {
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
-}
-
-export interface TeamSeed {
-  name: string;
-  permalink: string;
-  headquarters: string;
-  imageUrl: string | null;
-  imagePublicID: string | null;
-  category: string;
-  format: string;
-  gender?: 'male' | 'female';
-  country: string;
-  city: string;
-  state: string;
-  emails: string[];
-  address: string | null;
-  active: boolean;
-  tournamentId: string;
-  coachId?: string | null;
 }

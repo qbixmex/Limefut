@@ -5,6 +5,7 @@ import { uploadImage } from "@/shared/actions";
 import type { CloudinaryResponse, Tournament } from "@/shared/interfaces";
 import { createTournamentSchema } from "@/shared/schemas";
 import { revalidatePath, updateTag } from "next/cache";
+import type { GENDER_TYPE } from "@/shared/enums";
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -33,7 +34,8 @@ export const createTournamentAction = async (
     permalink: formData.get('permalink') ?? '',
     image: formData.get('image') as File,
     category: formData.get('category') ?? undefined,
-    format: formData.get('format') ?? undefined,
+    format: formData.get('format') ?? '',
+    gender: formData.get('gender') ?? '',
     country: formData.get('country') ?? undefined,
     state: formData.get('state') ?? undefined,
     city: formData.get('city') ?? undefined,
@@ -76,6 +78,7 @@ export const createTournamentAction = async (
       const createdTournament = await transaction.tournament.create({
         data: {
           ...tournamentToSave,
+          gender: tournamentToSave.gender as GENDER_TYPE,
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
         },

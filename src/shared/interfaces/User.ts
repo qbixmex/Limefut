@@ -18,15 +18,3 @@ export interface User {
   createdAt?: Date,
   updatedAt?: Date,
 }
-
-export interface UserSeed {
-  name: string;
-  email: string;
-  username: string | null;
-  emailVerified?: Date | null;
-  password: string;
-  roles: ROLE_TYPE[],
-  imageUrl: string | null,
-  imagePublicID: string | null,
-  isActive: boolean,
-}

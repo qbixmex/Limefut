@@ -3,7 +3,8 @@
 import { updateTag } from "next/cache";
 import prisma from "@/lib/prisma";
 import { uploadImage } from "@/shared/actions";
-import type { ALIGNMENT, CloudinaryResponse, HeroBanner } from "@/shared/interfaces";
+import type { CloudinaryResponse, HeroBanner } from "@/shared/interfaces";
+import type { ALIGNMENT_TYPE } from "@/shared/enums";
 import { createHeroBannerSchema } from "@/shared/schemas";
 
 type ResponseCreateAction = Promise<{
@@ -80,7 +81,7 @@ export const createHeroBannerAction = async (
           description: data.description,
           imageUrl: cloudinaryResponse?.secureUrl as string,
           imagePublicId: cloudinaryResponse?.publicId as string,
-          dataAlignment: data.dataAlignment as ALIGNMENT ?? undefined,
+          dataAlignment: data.dataAlignment as ALIGNMENT_TYPE ?? undefined,
           showData: data.showData ?? undefined,
           position: newPosition,
           active: data.active,

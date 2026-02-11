@@ -1,9 +1,3 @@
-export enum ALIGNMENT {
-  LEFT = "left",
-  CENTER = "center",
-  RIGHT = "right",
-};
-
 export interface HeroBanner {
   id: string;
   title: string;

@@ -11,7 +11,8 @@ export type TournamentType = {
   permalink: string;
   description: string | null;
   category: string | null;
-  format: string | null;
+  format: string;
+  gender: string;
   country: string | null;
   state: string | null;
   city: string | null;

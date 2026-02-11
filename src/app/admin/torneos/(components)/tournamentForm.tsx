@@ -51,6 +51,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       permalink: tournament?.permalink ?? '',
       category: tournament?.category ?? undefined,
       format: tournament?.format ?? undefined,
+      gender: tournament?.gender ?? undefined,
       country: tournament?.country ?? undefined,
       state: tournament?.state ?? undefined,
       city: tournament?.city ?? undefined,
@@ -82,7 +83,8 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     formData.append('permalink', data.permalink as string);
 
     if (data.category) formData.append('category', data.category as string);
-    if (data.format) formData.append('format', data.format as string);
+    formData.append('format', data.format as string);
+    formData.append('gender', data.gender as string);
     if (data.country) formData.append('country', data.country as string);
     if (data.state) formData.append('state', data.state as string);
     if (data.city) formData.append('city', data.city as string);
@@ -217,38 +219,71 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               )}
             />
           </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="format"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Formato</FormLabel>
-                  <FormControl>
-                    <Select
-                      key={String(field.value ?? 'none')}
-                      value={field.value ?? undefined}
-                      onValueChange={(value) => field.onChange(value)}
-                    >
-                      <SelectTrigger
-                        className={cn('w-full', {
-                          'border-destructive ring-0.5 ring-destructive': form.formState.errors.format,
-                        })}
+          <div className="w-full lg:w-1/2 flex flex-col lg:flex-row gap-5">
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="format"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Formato</FormLabel>
+                    <FormControl>
+                      <Select
+                        key={String(field.value ?? 'none')}
+                        value={field.value ?? undefined}
+                        onValueChange={(value) => field.onChange(value)}
                       >
-                        <SelectValue placeholder="Seleccione Formato" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="11">11 vs 11</SelectItem>
-                        <SelectItem value="9">9 vs 9</SelectItem>
-                        <SelectItem value="7">7 vs 7</SelectItem>
-                        <SelectItem value="5">5 vs 5</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                        <SelectTrigger
+                          className={cn('w-full', {
+                            'border-destructive ring-0.5 ring-destructive': form.formState.errors.format,
+                          })}
+                        >
+                          <SelectValue placeholder="Seleccione Formato" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="11">11 vs 11</SelectItem>
+                          <SelectItem value="9">9 vs 9</SelectItem>
+                          <SelectItem value="7">7 vs 7</SelectItem>
+                          <SelectItem value="5">5 vs 5</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Género</FormLabel>
+                    <FormControl>
+                      <Select
+                        key={String(field.value ?? 'none')}
+                        value={field.value ?? undefined}
+                        onValueChange={(value) => field.onChange(value)}
+                      >
+                        <SelectTrigger
+                          className={cn('w-full', {
+                            'border-destructive ring-0.5 ring-destructive': form.formState.errors.format,
+                          })}
+                        >
+                          <SelectValue placeholder="Seleccione Género" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="male">Varonil</SelectItem>
+                          <SelectItem value="female">Femenil</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
         </div>
 
