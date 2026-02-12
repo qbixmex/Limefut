@@ -41,7 +41,7 @@ export const MobileMenu: FC = () => {
     <>
       {!visible && (
         <button onClick={() => setVisible(true)}>
-          <Menu className="md:hidden size-5 text-green-50" />
+          <Menu className="lg:hidden size-5 text-green-50" />
         </button>
       )}
 

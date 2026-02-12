@@ -34,7 +34,7 @@ export const signInAction = async (formData: FormData): Promise<{
 
     return {
       ok: true,
-      message: '¡ Datos correctos 👍 !',
+      message: '¡ Has accedido correctamente 👍 !',
     };
   } catch (error) {
     console.error('Login error:', error);

@@ -22,7 +22,7 @@ export const Team: FC<Props> = ({
               width={150}
               height={150}
               alt={`${name} escudo`}
-              className="size-[150px] object-cover rounded"
+              className="size-25 object-cover rounded"
             />
           )}
         </figure>

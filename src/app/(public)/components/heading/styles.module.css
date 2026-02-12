@@ -1,11 +1,11 @@
 @reference "tailwindcss";
 
 .headingOne {
-  @apply text-5xl;
+  @apply text-3xl lg:text-5xl;
 }
 
 .headingTwo {
-  @apply text-4xl;
+  @apply text-2xl lg:text-4xl;
 }
 
 .headingThree {
@@ -13,13 +13,13 @@
 }
 
 .headingFour {
-  @apply text-2xl;
+  @apply text-xl lg:text-2xl;
 }
 
 .headingFive {
-  @apply text-xl;
+  @apply text-lg lg:text-xl;
 }
 
 .headingSix {
-  @apply text-lg;
+  @apply text-base font-semibold lg:text-lg lg:font-normal;
 }

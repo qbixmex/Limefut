@@ -44,7 +44,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
           >
             <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
               <div className="flex flex-col gap-5 md:flex-row md:gap-5">
-                <div className="w-full lg:w-1/2">
+                <div className="w-full lg:w-1/2 order-2 lg:order-1">
                   <MatchMetadata
                     tournamentName={match.tournament.name}
                     category={match.localTeam.category}
@@ -54,17 +54,17 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                     date={match.matchDate}
                   />
                 </div>
-                <div className="w-full lg:w-1/2 grid grid-cols-3">
+                <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 lg:order-2">
                   <Team
                     imageUrl={match.localTeam.imageUrl}
                     name={match.localTeam.name}
                   />
                   <div className="flex justify-center items-center gap-2 font-bold text-2xl">
-                    <span className="text-blue-700 dark:text-blue-600">
+                    <span className="text-blue-700 dark:text-blue-500">
                       {match.localScore}
                     </span>
                     <span>-</span>
-                    <span className="text-blue-700 dark:text-blue-600">
+                    <span className="text-blue-700 dark:text-blue-500">
                       {match.visitorScore}
                     </span>
                   </div>

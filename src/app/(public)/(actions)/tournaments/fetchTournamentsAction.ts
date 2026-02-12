@@ -9,6 +9,7 @@ export type TournamentType = {
   permalink: string;
   category: string;
   format: string;
+  gender: string;
 };
 
 type ResponseAction = Promise<{
@@ -37,6 +38,7 @@ export const fetchTournamentsAction = async (): ResponseAction => {
         permalink: true,
         category: true,
         format: true,
+        gender: true,
       },
     });
 

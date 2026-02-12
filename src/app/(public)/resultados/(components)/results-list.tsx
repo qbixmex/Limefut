@@ -51,8 +51,8 @@ export const ResultsList: FC<Props> = async ({
   return (
     <>
       {(matches.length === 0) && (
-        <div className="flex-1 w-full flex flex-col gap-5 justify-center items-center border-2 border-blue-500 rounded">
-          <SoccerField size={250} strokeWidth={1} className="text-emerald-600!" />
+        <div className="flex-1 w-full flex flex-col gap-5 justify-center items-center rounded">
+          <SoccerField size={300} strokeWidth={1} className="text-emerald-600!" />
           <p className="text-sky-500 font-semibold text-2xl italic">
             Aún no hay encuentros programados
           </p>

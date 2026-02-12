@@ -2,7 +2,7 @@
 
 import { type FC, useState, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn, getGenderTranslation } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import "./styles.css";
 
@@ -12,6 +12,7 @@ type SelectedTournament = {
   permalink?: string;
   category: string;
   format: string;
+  gender: string;
 };
 
 type Props = Readonly<{
@@ -98,6 +99,10 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
               <div className="tournamentData">
                 <p><b>Categoría</b>: {selectedTournament?.category}</p>
                 <p><b>Formato</b>: {`${selectedTournament?.format} vs ${selectedTournament?.format}`}</p>
+                <p>
+                  <b>Rama</b>:&nbsp;
+                  {getGenderTranslation(selectedTournament.gender)}
+                </p>
               </div>
             </section>
           )}
