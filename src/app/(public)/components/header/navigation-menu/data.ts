@@ -48,8 +48,8 @@ export const navigation: Navigation[] = [
       },
       {
         id: "2d166a1a-3852-40bf-98de-31725a5c7ab7",
-        url: "/encuentros",
-        label: "Encuentros",
+        url: "/concentrado",
+        label: "Concentrado",
         position: 2,
       },
       {
