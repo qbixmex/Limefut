@@ -1,9 +1,9 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { revalidatePath, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { editHeroBannerSchema } from '@/shared/schemas';
-import type { CloudinaryResponse, HeroBanner } from '@/shared/interfaces';
+import type { HeroBanner } from '@/shared/interfaces';
 import type { ALIGNMENT_TYPE } from '@/shared/enums';
 import { deleteImage, uploadImage } from '@/shared/actions';
 
@@ -72,16 +72,6 @@ export const updateHeroBannerAction = async ({
 
   const { image, ...data } = heroBannerVerified.data;
 
-  // Upload Image to third-party storage (cloudinary).
-  let cloudinaryResponse: CloudinaryResponse | null = null;
-
-  if (image) {
-    cloudinaryResponse = await uploadImage(image!, 'teams');
-    if (!cloudinaryResponse) {
-      throw new Error('Error subiendo imagen a cloudinary');
-    }
-  }
-
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
@@ -126,7 +116,7 @@ export const updateHeroBannerAction = async ({
 
         // If position unchanged, just update the page fields (ensure position kept)
         if (updatedPosition === currentPosition) {
-          const updatedPage = await transaction.heroBanner.update({
+          const updatedBanner = await transaction.heroBanner.update({
             where: { id: heroBannerId },
             data: {
               title: data.title,
@@ -138,6 +128,22 @@ export const updateHeroBannerAction = async ({
             },
           });
 
+          if (image !== null) {
+            const updatedImage = await updateBannerImage(
+              image as File,
+              updatedBanner.imagePublicId,
+            );
+
+            // Update hero banner image data.
+            await transaction.heroBanner.update({
+              where: { id: heroBannerId },
+              data: {
+                imageUrl: updatedImage.imageUrl,
+                imagePublicId: updatedImage.imagePublicId,
+              },
+            });
+          }
+
           // Update Cache
           updateTag('admin-banners');
           updateTag('admin-banner');
@@ -145,7 +151,7 @@ export const updateHeroBannerAction = async ({
           return {
             ok: true,
             message: '¡ El banner fue guardado correctamente 👍 !',
-            heroBanner: updatedPage,
+            heroBanner: updatedBanner,
           };
         }
 
@@ -190,38 +196,24 @@ export const updateHeroBannerAction = async ({
         });
 
         if (image !== null) {
-          // Delete previous image from cloudinary.
-          if (updatedHeroBanner.imagePublicId) {
-            const cloudinaryResponse = await deleteImage(updatedHeroBanner.imagePublicId);
-            if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
-            }
-          }
+          const updatedImage = await updateBannerImage(
+            image as File,
+            updatedHeroBanner.imagePublicId,
+          );
 
-          // Upload Image to third-party storage (cloudinary).
-          const imageUploaded = await uploadImage(image as File, 'hero-banners');
-
-          if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
-          }
-
-          // Update image data to database.
+          // Update hero banner image data.
           await transaction.heroBanner.update({
             where: { id: heroBannerId },
             data: {
-              imageUrl: imageUploaded.secureUrl,
-              imagePublicId: imageUploaded.publicId,
+              imageUrl: updatedImage.imageUrl,
+              imagePublicId: updatedImage.imagePublicId,
             },
           });
-
-          // Update event object to return.
-          updatedHeroBanner.imageUrl = imageUploaded.secureUrl;
-          updatedHeroBanner.imagePublicId = imageUploaded.publicId;
         }
 
         // Update Cache
-        revalidatePath('/admin/banners');
-        revalidatePath(`/admin/banners/${heroBannerId}`);
+        updateTag('admin-banners');
+        updateTag('admin-banner');
 
         return {
           ok: true,
@@ -270,4 +262,26 @@ export const updateHeroBannerAction = async ({
       heroBanner: null,
     };
   }
+};
+
+const updateBannerImage = async (image: File, imagePublicId: string) => {
+  // Delete previous image from cloudinary.
+  if (imagePublicId) {
+    const cloudinaryResponse = await deleteImage(imagePublicId);
+    if (!cloudinaryResponse.ok) {
+      throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+    }
+  }
+
+  // Upload Image to third-party storage (cloudinary).
+  const imageUploaded = await uploadImage(image as File, 'hero-banners');
+
+  if (!imageUploaded) {
+    throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+  }
+
+  return {
+    imageUrl: imageUploaded.secureUrl,
+    imagePublicId: imageUploaded.publicId,
+  };
 };
