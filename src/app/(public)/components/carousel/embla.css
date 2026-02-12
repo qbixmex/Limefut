@@ -3,7 +3,7 @@
 .embla {
   --slide-height: 720;
   --slide-spacing: 2rem;
-  @apply w-full max-w-[1280px] my-5 mx-auto lg:my-10;
+  @apply w-full max-w-[1280px] mb-5 mx-auto;
 }
 
 .embla__viewport {

@@ -123,7 +123,7 @@
 
   body {
     min-height: 100vh;
-    @apply bg-background text-neutral-900 dark:text-neutral-50;
+    @apply bg-gray-200! dark:bg-gray-950! text-neutral-900 dark:text-gray-100;
   }
 
   a {
@@ -141,7 +141,7 @@
 
 @layer utilities {
   .wrapper {
-    @apply bg-neutral-50 dark:bg-neutral-900 md:rounded p-10 flex-1 flex flex-col gap-5;
+    @apply bg-gray-50! dark:bg-gray-900! md:rounded p-10 flex-1 flex flex-col gap-5;
   }
 
   .prose h1,
