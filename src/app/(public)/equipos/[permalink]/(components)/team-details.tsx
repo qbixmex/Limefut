@@ -59,7 +59,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
               width={400}
               height={400}
               alt={`imagen de perfil de ${team.name}`}
-              className="rounded-lg size-[400px] object-cover"
+              className="rounded-lg w-full lg:max-w-100 h-auto object-cover"
             />
           )}
         </section>
@@ -130,7 +130,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
           <Table>
             <TableBody>
               <TableRow>
-                <TableHead className="w-[120px] font-semibold">City</TableHead>
+                <TableHead className="w-[120px] font-semibold">Ciudad</TableHead>
                 <TableCell>
                   {
                     team?.city

@@ -155,7 +155,7 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">
-                      Ciudad<span className="text-gray-400">es</span>
+                      Ciudad
                     </TableHead>
                     <TableCell>
                       <p className="text-wrap">{tournament.city}</p>

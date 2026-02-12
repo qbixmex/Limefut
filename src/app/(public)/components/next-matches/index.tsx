@@ -72,12 +72,12 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
                     imageUrl={match.localTeam.imageUrl}
                     name={match.localTeam.name}
                   />
-                  <div className="flex justify-center items-center gap-2 font-bold text-4xl">
-                    <span className="text-blue-700 dark:text-blue-600">
+                  <div className="flex justify-center items-center gap-2 font-bold text-3xl lg:text-4xl">
+                    <span className="text-blue-700 dark:text-blue-500">
                       {match.localScore}
                     </span>
                     <span>-</span>
-                    <span className="text-blue-700 dark:text-blue-600">
+                    <span className="text-blue-700 dark:text-blue-500">
                       {match.visitorScore}
                     </span>
                   </div>
