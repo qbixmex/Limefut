@@ -44,7 +44,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
         className="flex items-center gap-2 bg-transparent hover:bg-emerald-500/20 rounded-lg px-4 py-2 transition-colors focus:outline-none"
       >
         {user.username && (
-          <div className="grid flex-1 text-left text-sm leading-tight">
+          <div className="hidden lg:grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-medium text-green-50">
               {user.username ?? user.name?.split(" ").at(0)}
             </span>
@@ -55,7 +55,9 @@ export const AuthNav: FC<Props> = ({ user }) => {
             src={user.image ?? undefined}
             alt={user.name ? `${user.name} profile image` : ''}
           />
-          <AvatarFallback className="rounded-lg bg-emerald-900 font-medium text-sm">{(user.name as string).at(0)}</AvatarFallback>
+          <AvatarFallback className="rounded-lg bg-emerald-900 font-medium text-sm">
+            {(user.name as string).at(0)}
+          </AvatarFallback>
         </Avatar>
         <ChevronsUpDown className="ml-auto size-4 stroke-green-50" />
       </button>

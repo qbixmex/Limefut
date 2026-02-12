@@ -1,15 +1,15 @@
 @reference "../../../globals.css";
 
 .footer {
-  @apply text-center py-10;
+  @apply lg:rounded-t text-center p-8;
 }
 
 .links {
-  @apply flex flex-col md:flex-row items-center mb-10;
+  @apply flex flex-col md:flex-row items-center mb-0;
 }
 
 .social-media {
-  @apply w-full md:w-1/2 flex justify-end items-center gap-2 pr-5;
+  @apply w-full md:w-1/2 flex justify-end items-center gap-2;
 }
 
 .social-link {

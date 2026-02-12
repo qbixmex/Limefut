@@ -1,19 +1,18 @@
 import { Suspense } from "react";
-import { MobileMenu } from "./MobileMenu";
-import { DesktopMenu } from "./DesktopMenu";
+import { NavigationMenu } from "./navigation-menu";
 import { ThemeSwitcher } from "@/shared/theme/ThemeSwitcher";
 import { Logo } from "@/app/(public)/components";
-import styles from "./styles.module.css";
 import { AuthSession } from "./AuthSession";
 import { Loader2 } from "lucide-react";
+import styles from "./styles.module.css";
+import MobileMenu from "./MobileMenu";
 
 export const Header = () => {
   return (
     <header className={styles.header}>
       <Logo />
-      <DesktopMenu />
+      <NavigationMenu />
       <div className="flex items-center gap-4 lg:gap-2">
-        <MobileMenu />
         <Suspense fallback={
           <div className="animate-spin">
             <Loader2 />
@@ -21,6 +20,7 @@ export const Header = () => {
         }>
           <AuthSession />
         </Suspense>
+        <MobileMenu />
         <ThemeSwitcher className="text-green-50" />
       </div>
     </header>
