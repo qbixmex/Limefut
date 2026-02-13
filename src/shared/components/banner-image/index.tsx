@@ -8,6 +8,7 @@ type Props = Readonly<{
   imageUrl: string;
   dataAlignment: string;
   description: string;
+  position: number;
   showData?: boolean;
   className?: string;
 }>;
@@ -18,8 +19,9 @@ export const BannerImage: FC<Props> = (props) => {
     imageUrl,
     dataAlignment,
     description,
+    position,
     showData = false,
-    className='',
+    className = '',
   } = props;
 
   return (
@@ -30,6 +32,7 @@ export const BannerImage: FC<Props> = (props) => {
         height={548}
         alt={title ?? 'Imagen del Banner'}
         className={cn("image", className)}
+        loading={position == 1 ? "eager" : "lazy"}
       />
       <section className={cn("data-wrapper", {
         "top-0 left-0": showData,
@@ -55,3 +58,4 @@ export const BannerImage: FC<Props> = (props) => {
     </figure>
   );
 };
+

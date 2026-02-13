@@ -15,8 +15,8 @@ export const Hero = async () => {
         loop: false,
         slidesToScroll: 'auto',
       }}
-      time={8000}
-      play={true}
+      time={10_000}
+      play={false}
     />
   );
 };
