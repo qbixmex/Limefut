@@ -108,6 +108,7 @@ export const HeroCarousel: FC<Props> = ({
                   imageUrl={banner.imageUrl}
                   dataAlignment={banner.dataAlignment}
                   showData={banner.showData}
+                  position={banner.position}
                 />
               </div>
             </div>

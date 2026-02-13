@@ -8,10 +8,10 @@ export const Logo = () => {
       <Link href="/">
         <Image
           src="/limefut-logo.png"
-          width={256}
-          height={256}
+          width={150}
+          height={40}
           alt="Limefut Logo"
-          className="w-full max-w-[256px]"
+          className="w-full max-w-[150px]"
         />
       </Link>
     </div>
