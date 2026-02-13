@@ -62,6 +62,7 @@ const HeroBannerContent: FC<Props> = async ({ params }) => {
               dataAlignment={heroBanner.dataAlignment}
               showData={heroBanner.showData}
               className="rounded-lg"
+              position={heroBanner.position}
             />
             <section className="flex flex-col lg:flex-row gap-5 mt-10">
               <div className="w-full xl:w-1/2">
