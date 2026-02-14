@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from "react";
-import { MATCH_STATUS } from "@/shared/enums";
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
 import {
   Select,
   SelectContent,
@@ -15,11 +15,11 @@ import { toast } from "sonner";
 
 type Props = Readonly<{
   matchId: string;
-  status: MATCH_STATUS;
+  status: MATCH_STATUS_TYPE;
 }>;
 
 export const MatchStatus: FC<Props> = ({ matchId, status }) => {
-  const onUpdateStatus = async (newStatus: MATCH_STATUS) => {
+  const onUpdateStatus = async (newStatus: MATCH_STATUS_TYPE) => {
     const response = await updateStatusAction(matchId, newStatus);
 
     if (response.ok) {
@@ -40,7 +40,7 @@ export const MatchStatus: FC<Props> = ({ matchId, status }) => {
       <SelectContent>
         <SelectGroup>
           <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
-          <SelectItem value={MATCH_STATUS.INPROGRESS}>En Progreso</SelectItem>
+          <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
           <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
           <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
         </SelectGroup>

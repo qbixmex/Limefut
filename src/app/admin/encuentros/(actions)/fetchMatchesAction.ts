@@ -2,7 +2,7 @@
 
 import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
-import { MATCH_STATUS } from "@/shared/enums";
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
 import type { Pagination } from "@/shared/interfaces";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -13,7 +13,7 @@ type Options = Readonly<{
   take?: number;
   sortMatchDate?: 'asc' | 'desc';
   sortWeek?: string;
-  status?: MATCH_STATUS;
+  status?: MATCH_STATUS_TYPE;
 }>;
 
 export type Match = {
@@ -22,7 +22,7 @@ export type Match = {
   visitorTeam: Team;
   localScore: number;
   visitorScore: number;
-  status: MATCH_STATUS;
+  status: MATCH_STATUS_TYPE;
   week: number | null;
   place: string | null;
   matchDate: Date | null;
@@ -57,9 +57,9 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
-  const statusMap: Record<string, MATCH_STATUS> = {
+  const statusMap: Record<string, MATCH_STATUS_TYPE> = {
     "programado": MATCH_STATUS.SCHEDULED,
-    "en progreso": MATCH_STATUS.INPROGRESS,
+    "en progreso": MATCH_STATUS.IN_PROGRESS,
     "finalizado": MATCH_STATUS.COMPLETED,
     "pospuesto": MATCH_STATUS.POST_POSED,
     "cancelado": MATCH_STATUS.CANCELED,
@@ -144,7 +144,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         visitorTeam: match.visitor,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
-        status: match.status as MATCH_STATUS,
+        status: match.status as MATCH_STATUS_TYPE,
         week: match.week,
         place: match.place,
         matchDate: match.matchDate,

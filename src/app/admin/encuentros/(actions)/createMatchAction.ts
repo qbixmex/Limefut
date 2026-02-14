@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { createMatchSchema } from "@/shared/schemas";
 import { updateTag } from "next/cache";
 import type { Match } from "@/shared/interfaces";
-import { MATCH_STATUS } from "@/shared/enums";
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -26,7 +26,9 @@ export const createMatchAction = async (
 
   const rawData = {
     localTeamId: formData.get('localTeamId') ?? '',
+    localScore: parseInt(formData.get('localScore') as string ?? '0'),
     visitorTeamId: formData.get('visitorTeamId') ?? '',
+    visitorScore: parseInt(formData.get('visitorScore') as string ?? '0') ?? '',
     place: formData.get('place') ?? undefined,
     referee: formData.get('referee') ?? undefined,
     matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
@@ -64,14 +66,14 @@ export const createMatchAction = async (
       const createdMatch = await transaction.match.create({
         data: {
           localId: matchToSave.localTeamId,
+          localScore: matchToSave.localScore,
           visitorId: matchToSave.visitorTeamId,
+          visitorScore: matchToSave.visitorScore,
           place: matchToSave.place ?? undefined,
           week: matchToSave.week as number,
           referee: matchToSave.referee,
           matchDate: matchToSave.matchDate,
-          localScore: 0,
-          visitorScore: 0,
-          status: matchToSave.status as MATCH_STATUS,
+          status: matchToSave.status as MATCH_STATUS_TYPE,
           tournamentId: tournamentId as string,
         },
         select: {
@@ -117,7 +119,7 @@ export const createMatchAction = async (
           visitorTeam: createdMatch.visitor,
           localScore: createdMatch.localScore as number,
           visitorScore: createdMatch.visitorScore as number,
-          status: createdMatch.status as MATCH_STATUS,
+          status: createdMatch.status as MATCH_STATUS_TYPE,
         },
       };
     });

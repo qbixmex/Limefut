@@ -40,7 +40,6 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
         <SelectValue placeholder="¡ Seleccione una opción !" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="none">Sin torneo asignado</SelectItem>
         {tournaments.map((tournament) => (
           <SelectItem
             key={tournament.id}

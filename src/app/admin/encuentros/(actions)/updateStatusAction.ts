@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import type { MATCH_STATUS } from "@/shared/enums";
+import type { MATCH_STATUS_TYPE } from "@/shared/enums";
 import { updateTag } from "next/cache";
 
 export type ResponseAction = Promise<{
@@ -9,7 +9,7 @@ export type ResponseAction = Promise<{
   message: string;
 }>;
 
-export const updateStatusAction = async (matchId: string, status: MATCH_STATUS): ResponseAction => {
+export const updateStatusAction = async (matchId: string, status: MATCH_STATUS_TYPE): ResponseAction => {
   const updatedMatch = await prisma.match.update({
     where: { id: matchId },
     data: { status },

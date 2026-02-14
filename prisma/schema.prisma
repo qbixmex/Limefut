@@ -158,7 +158,7 @@ model Tournament {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@index([permalink, category, format])
+  @@index([permalink, category, format, gender])
   @@map("tournaments")
 }
 

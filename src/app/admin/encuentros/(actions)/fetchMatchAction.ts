@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS } from '@/shared/enums';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type MatchType = {
@@ -30,7 +30,7 @@ export type MatchType = {
   referee: string | null;
   localScore: number;
   visitorScore: number;
-  status: MATCH_STATUS;
+  status: MATCH_STATUS_TYPE;
   tournament: TournamentType;
   penaltyShootout: {
     id: string;
@@ -193,7 +193,7 @@ export const fetchMatchAction = async (
         referee: match.referee,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
-        status: match.status as MATCH_STATUS,
+        status: match.status as MATCH_STATUS_TYPE,
         tournament: {
           id: match.tournament.id,
           name: match.tournament.name,

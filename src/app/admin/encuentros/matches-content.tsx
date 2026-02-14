@@ -1,7 +1,7 @@
 import { Suspense, type FC } from 'react';
 import { MatchesTableSkeleton } from './(components)/matches-table-skeleton';
 import { MatchesWrapper } from './(components)/matches.wrapper';
-import type { MATCH_STATUS } from '~/src/shared/enums';
+import type { MATCH_STATUS_TYPE } from '~/src/shared/enums';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -10,7 +10,7 @@ type Props = Readonly<{
     sortMatchDate?: 'asc' | 'desc';
     sortWeek?: 'asc' | 'desc';
     torneo?: string;
-    status?: MATCH_STATUS;
+    status?: MATCH_STATUS_TYPE;
   }>;
 }>;
 
@@ -38,7 +38,7 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
           currentPage={+currentPage}
           sortMatchDate={sortMatchDate}
           sortWeek={sortWeek}
-          status={status as MATCH_STATUS}
+          status={status as MATCH_STATUS_TYPE}
         />
       </Suspense>
     </section>
