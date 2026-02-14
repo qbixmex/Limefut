@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import type { MATCH_STATUS } from "@/shared/enums";
+import type { MATCH_STATUS_TYPE } from "@/shared/enums";
 import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
@@ -32,7 +32,7 @@ export type MatchResponse = {
   };
   localScore: number;
   visitorScore: number;
-  status: MATCH_STATUS;
+  status: MATCH_STATUS_TYPE;
   week: number | null;
   place: string | null;
   matchDate: Date | null;
@@ -74,7 +74,10 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
 
     const data = await prisma.match.findMany({
       where: {
-        status: "completed",
+        OR: [
+          { status: "completed" },
+          { status: "canceled" },
+        ],
         matchDate: {
           gte: startDate,
           lte: endDate,
@@ -139,7 +142,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         visitorTeam: match.visitor,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
-        status: match.status as MATCH_STATUS,
+        status: match.status as MATCH_STATUS_TYPE,
         week: match.week,
         place: match.place,
         matchDate: match.matchDate,

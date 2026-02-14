@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { SoccerField } from '@/shared/components/icons';
 import { getMatchStatus } from '../(helpers)/status';
-import type { MATCH_STATUS } from '@/shared/enums';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { formatInTimeZone } from "date-fns-tz";
 import { es } from 'date-fns/locale';
 
@@ -160,8 +160,8 @@ export const ResultsList: FC<Props> = async ({
                     }
                   </TableCell>
                   <TableCell>
-                    <Badge variant={getMatchStatus(match.status as MATCH_STATUS).variant}>
-                      {getMatchStatus(match.status as MATCH_STATUS).label}
+                    <Badge variant={getMatchStatus(match.status as MATCH_STATUS_TYPE).variant}>
+                      {getMatchStatus(match.status as MATCH_STATUS_TYPE).label}
                     </Badge>
                   </TableCell>
                   <TableCell>

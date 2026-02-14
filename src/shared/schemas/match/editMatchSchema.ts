@@ -18,7 +18,7 @@ export const editMatchSchema = z.object({
     .optional(),
   week: z
     .int()
-    .min(1, { message: '¡ La sede debe ser mínimo 1 !' })
+    .min(0, { message: '¡ La jornada debe ser mínimo 0 !' })
     .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],
@@ -27,11 +27,11 @@ export const editMatchSchema = z.object({
     .optional(),
   localScore: z
     .int()
-    .min(0, { message: '¡ El marcador local debe ser mayor a 0 !' })
+    .min(0, { message: '¡ El marcador local debe ser un número positivo !' })
     .optional(),
   visitorScore: z
     .int()
-    .min(0, { message: '¡ El marcador visitante debe ser mayor a 0 !' })
+    .min(0, { message: '¡ El marcador visitante debe ser un número positivo !' })
     .optional(),
   matchDate: z
     .date({ message: "La fecha del encuentro debe ser una fecha válida" })

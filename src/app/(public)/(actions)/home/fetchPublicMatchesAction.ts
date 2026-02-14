@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import type { MATCH_STATUS } from "@/shared/enums";
+import type { MATCH_STATUS_TYPE } from "@/shared/enums";
 import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
@@ -32,7 +32,7 @@ export type MatchResponse = {
   };
   localScore: number;
   visitorScore: number;
-  status: MATCH_STATUS;
+  status: MATCH_STATUS_TYPE;
   week: number | null;
   place: string | null;
   matchDate: Date | null;
@@ -64,8 +64,14 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
 
   try {
     const data = await prisma.match.findMany({
-      where: { status: "scheduled" },
-      orderBy: { matchDate: 'asc' },
+      where: {
+        OR: [
+          { status: "scheduled" },
+          { status: "inProgress" },
+          { status: "postPosed" },
+        ],
+      },
+      orderBy: { matchDate: 'desc' },
       take: take,
       skip: (nextMatches - 1) * take,
       select: {
@@ -75,7 +81,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
             name: true,
             permalink: true,
             currentWeek: true,
-
+            state: true,
           },
         },
         local: {
@@ -119,7 +125,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         visitorTeam: match.visitor,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
-        status: match.status as MATCH_STATUS,
+        status: match.status as MATCH_STATUS_TYPE,
         week: match.week,
         place: match.place,
         matchDate: match.matchDate,

@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { editMatchSchema } from '@/shared/schemas';
 import { type Match } from '@/shared/interfaces';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
 type Options = {
   formData: FormData;
@@ -44,8 +44,8 @@ export const updateMatchAction = async ({
   const rawData = {
     localTeamId: formData.get('localTeamId') ?? '',
     visitorTeamId: formData.get('visitorTeamId') ?? undefined,
-    localScore: parseInt(formData.get('localScore') as string) ?? undefined,
-    visitorScore: parseInt(formData.get('visitorScore') as string) ?? undefined,
+    localScore: parseInt(formData.get('localScore') as string ?? '0') ?? undefined,
+    visitorScore: parseInt(formData.get('visitorScore') as string ?? '0') ?? undefined,
     place: formData.get('place') ?? undefined,
     referee: formData.get('referee') ?? undefined,
     matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
@@ -104,7 +104,7 @@ export const updateMatchAction = async ({
             localScore: matchToSave.localScore,
             visitorScore: matchToSave.visitorScore,
             matchDate: matchToSave.matchDate,
-            status: matchToSave.status as MATCH_STATUS,
+            status: matchToSave.status as MATCH_STATUS_TYPE,
             tournamentId,
           },
           select: {
@@ -158,7 +158,7 @@ export const updateMatchAction = async ({
             visitorTeam: updatedMatch.visitor,
             localScore: updatedMatch.localScore as number,
             visitorScore: updatedMatch.visitorScore as number,
-            status: updatedMatch.status as MATCH_STATUS,
+            status: updatedMatch.status as MATCH_STATUS_TYPE,
             tournament: {
               id: updatedMatch.tournament.id,
               name: updatedMatch.tournament.name,

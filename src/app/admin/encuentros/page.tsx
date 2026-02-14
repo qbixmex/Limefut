@@ -14,7 +14,7 @@ import ClearFilters from "./(components)/clear-filters";
 import { fetchTournamentsForMatchAction } from './(actions)/fetchTournamentsForMatchAction';
 import { TournamentsSelector } from "../(components)/tournaments-selector";
 import { MatchesContent } from "./matches-content";
-import type { MATCH_STATUS } from "@/shared/enums";
+import type { MATCH_STATUS_TYPE } from "@/shared/enums";
 import { TournamentsSelectorSkeleton } from "../../(public)/components";
 
 type Props = Readonly<{
@@ -24,7 +24,7 @@ type Props = Readonly<{
     sortMatchDate?: 'asc' | 'desc';
     sortWeek?: 'asc' | 'desc';
     torneo?: string;
-    status?: MATCH_STATUS;
+    status?: MATCH_STATUS_TYPE;
   }>;
 }>;
 
