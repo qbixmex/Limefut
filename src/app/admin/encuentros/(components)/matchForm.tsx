@@ -597,7 +597,7 @@ export const MatchForm: FC<Props> = ({
                       </FormControl>
                       <SelectContent>
                         <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
-                        <SelectItem value={MATCH_STATUS.INPROGRESS}>En Progreso</SelectItem>
+                        <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
                         <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
                         <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
                       </SelectContent>

@@ -18,7 +18,8 @@ export type ResponseFetchAction = Promise<{
   }[];
 }>;
 
-export const fetchTournamentsForMatchAction = async (options?: OptionsType): ResponseFetchAction => {
+export const fetchTournamentsForMatchAction = async (options?: OptionsType)
+  : ResponseFetchAction => {
   "use cache";
   
   cacheLife("days");
@@ -32,7 +33,11 @@ export const fetchTournamentsForMatchAction = async (options?: OptionsType): Res
         active: true,
         ...(currentWeek && (currentWeek > 0) && { currentWeek }),
       },
-      orderBy: { name: 'asc' },
+      orderBy: [
+        { name: 'asc' },
+        { category: 'desc' },
+        { format: 'desc' },
+      ],
       select: {
         id: true,
         name: true,

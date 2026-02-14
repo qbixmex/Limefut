@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { MATCH_STATUS } from "~/src/shared/enums";
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "~/src/shared/enums";
 
 export const StatusSelector = () => {
   const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ export const StatusSelector = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const setStatus = (filter: MATCH_STATUS) => {
+  const setStatus = (filter: MATCH_STATUS_TYPE) => {
     const params = new URLSearchParams(searchParams);
     params.set('status', filter);
     router.push(`${pathname}?${params}`);
@@ -32,7 +32,7 @@ export const StatusSelector = () => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
-        <SelectItem value={MATCH_STATUS.INPROGRESS}>En Progreso</SelectItem>
+        <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
         <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
         <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
         <SelectItem value={MATCH_STATUS.COMPLETED}>Finalizado</SelectItem>

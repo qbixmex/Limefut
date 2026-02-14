@@ -16,7 +16,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MatchStatus } from './match-status';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { PenaltyShootout } from "@/shared/components/penalty-shootouts";
 import "./styles.css";
 
@@ -141,7 +141,9 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               </TableRow>
               <TableRow>
                 <TableHead>Formato</TableHead>
-                <TableCell>{tournament.format}</TableCell>
+                <TableCell>
+                  {tournament.format} vs {tournament.format}
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>País</TableHead>
@@ -187,7 +189,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <TableRow>
                 <TableHead>Estado</TableHead>
                 <TableCell>
-                  <MatchStatus status={match?.status as MATCH_STATUS} />
+                  <MatchStatus status={match?.status as MATCH_STATUS_TYPE} />
                 </TableCell>
               </TableRow>
             </TableBody>

@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ROBOTS } from "../shared/interfaces";
 import { PAGE_STATUS } from "../shared/interfaces/Page";
-import { GENDER } from "../shared/enums";
+import { GENDER, MATCH_STATUS, type MATCH_STATUS_TYPE } from "../shared/enums";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -259,6 +259,40 @@ export const getGenderTranslation = (gender: string) => {
       return "femenil";
     case GENDER.MALE:
       return "varonil";
+    default:
+      return "desconocido";
+  }
+};
+
+/**
+ * Translates the match status to Spanish.
+ * @param status - The match status value.
+ * @example ```typescript
+ * getStatusTranslation(MATCH_STATUS.SCHEDULED);
+ * // Returns "programado"
+ * getStatusTranslation(MATCH_STATUS.IN_PROGRESS);
+ * // Returns "en progreso"
+ * getStatusTranslation(MATCH_STATUS.POST_POSED);
+ * // Returns "pospuesto"
+ * getStatusTranslation(MATCH_STATUS.CANCELED);
+ * // Returns "cancelado"
+ * getStatusTranslation(MATCH_STATUS.COMPLETED);
+ * // Returns "completado"
+ * ```
+ * @returns The status translated in Spanish.
+ */
+export const getStatusTranslation = (status: MATCH_STATUS_TYPE): string => {
+  switch(status) {
+    case MATCH_STATUS.SCHEDULED:
+      return "programado";
+    case MATCH_STATUS.IN_PROGRESS:
+      return "en progreso";
+    case MATCH_STATUS.POST_POSED:
+      return "pospuesto";
+    case MATCH_STATUS.CANCELED:
+      return "cancelado";
+    case MATCH_STATUS.COMPLETED:
+      return "completado";
     default:
       return "desconocido";
   }

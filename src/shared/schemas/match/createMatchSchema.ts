@@ -27,11 +27,11 @@ export const createMatchSchema = z.object({
     .optional(),
   localScore: z
     .int()
-    .min(0, { message: '¡ El marcador local debe ser mayor a 0 !' })
+    .min(0, { message: '¡ El marcador local debe ser un número positivo !' })
     .optional(),
   visitorScore: z
     .int()
-    .min(0, { message: '¡ El marcador visitante debe ser mayor a 0 !' })
+    .min(0, { message: '¡ El marcador visitante debe ser un número positivo !' })
     .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],

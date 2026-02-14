@@ -1,4 +1,4 @@
-import type { MATCH_STATUS } from "../enums";
+import type { MATCH_STATUS_TYPE } from "../enums";
 import type { Team } from "./Team";
 
 export interface Match {
@@ -11,7 +11,7 @@ export interface Match {
   referee: string | null;
   localScore: number;
   visitorScore: number;
-  status: MATCH_STATUS;
+  status: MATCH_STATUS_TYPE;
   createdAt?: Date;
   updatedAt?: Date;
 }

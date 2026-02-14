@@ -65,6 +65,7 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
                     week={match.week}
                     place={match.place}
                     date={match.matchDate}
+                    status={match.status}
                   />
                 </div>
                 <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 md:order-2">
