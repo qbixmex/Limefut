@@ -1,9 +1,5 @@
 import { Suspense, type FC } from 'react';
-import {
-  Heading,
-  TournamentsSelector,
-  TournamentsSelectorSkeleton,
-} from '../components';
+import { Heading, TournamentsSelector } from '../components';
 import { ResultsContent } from './(components)/results-content';
 import { ErrorHandler } from "@/shared/components/errorHandler";
 
@@ -22,7 +18,7 @@ export const ResultsPage: FC<Props> = ({ searchParams }) => {
         <Heading level="h1" className="text-emerald-600">
           Rol de Juegos y Resultados
         </Heading>
-        <Suspense fallback={<TournamentsSelectorSkeleton />}>
+        <Suspense fallback={<p>{'<<'} CAMBIA ESTE POR UN SKELETON {'>>'}</p>}>
           <TournamentsSelector />
         </Suspense>
         <Suspense>
