@@ -1,11 +1,11 @@
 import { fetchTournamentsAction } from "../../(actions)";
-import { SelectTournament } from "./select-tournament";
+import { SelectorInputs } from "./selector";
 
 const TournamentsSelector = async () => {
   const { tournaments } = await fetchTournamentsAction();
 
   return (
-    <SelectTournament tournaments={tournaments} />
+    <SelectorInputs tournaments={tournaments} />
   );
 };
 

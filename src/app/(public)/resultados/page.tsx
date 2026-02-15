@@ -1,9 +1,5 @@
 import { Suspense, type FC } from 'react';
-import {
-  Heading,
-  TournamentsSelector,
-  TournamentsSelectorSkeleton,
-} from '../components';
+import { Heading, TournamentsSelector, TournamentsSelectorSkeleton } from '../components';
 import { ResultsContent } from './(components)/results-content';
 import { ErrorHandler } from "@/shared/components/errorHandler";
 
