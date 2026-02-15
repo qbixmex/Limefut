@@ -5,9 +5,7 @@ const TournamentsSelector = async () => {
   const { tournaments } = await fetchTournamentsAction();
 
   return (
-    <>
-      <SelectorInputs tournaments={tournaments} />
-    </>
+    <SelectorInputs tournaments={tournaments} />
   );
 };
 
