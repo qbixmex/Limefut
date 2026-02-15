@@ -34,6 +34,7 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
   updateTag('admin-teams-for-coach');
   updateTag('admin-teams-for-player');
   updateTag("admin-teams-for-gallery");
+  updateTag('admin-teams-for-match');
   updateTag('admin-team');
   updateTag('public-teams');
   updateTag('public-team');
