@@ -79,7 +79,7 @@ export const fetchMatchAction = async (
   "use cache";
 
   cacheLife("days");
-  cacheTag("admin-match");
+  cacheTag("admin-teams-for-match");
 
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
