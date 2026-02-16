@@ -1,5 +1,5 @@
 import { type FC, Suspense } from "react";
-import { Hero } from "./components/hero/hero";
+import { Hero } from "./components/hero";
 import { CarouselSkeleton } from "./components/carousel/carousel-skeleton";
 import { NextMatches } from "./components/next-matches";
 import { LatestResults, MatchesSkeleton } from "./components";
@@ -24,7 +24,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
       </Suspense>
 
       <div className="wrapper">
-        <h1 className="hidden">LIMEFUT - Liga menor de fútbol</h1>
+        <h1 className="hideElement">Limefut - Liga menor de fútbol</h1>
 
         <Suspense fallback={<CarouselSkeleton />}>
           <Hero />
