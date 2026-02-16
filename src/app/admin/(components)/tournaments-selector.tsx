@@ -21,20 +21,23 @@ type Props = Readonly<{
 
 export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   const searchParams = useSearchParams();
-  const tournamentPermalink = searchParams.get('torneo');
+  const tournamentId = searchParams.get('torneo');
   const pathname = usePathname();
   const router = useRouter();
 
-  const setTournamentPermalinkParam = (permalink: string) => {
-    const params = new URLSearchParams();
-    params.set('torneo', permalink);
-    router.push(`${pathname}?${params}`);
+  const setTournamentParam = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (!params.has('torneo') || value.length > 0) {
+      params.set('torneo', value);
+      router.push(`${pathname}?${params}`);
+    }
   };
 
   return (
     <Select
-      onValueChange={setTournamentPermalinkParam}
-      value={tournamentPermalink ?? ""}
+      onValueChange={setTournamentParam}
+      value={tournamentId ?? ""}
     >
       <SelectTrigger className="w-full max-w-[400px]">
         <SelectValue placeholder="¡ Seleccione una opción !" />
