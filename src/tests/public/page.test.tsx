@@ -28,4 +28,4 @@ describe("Tests on <HomePage />", async () => {
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent(/limefut/i);
   });
-})
+});

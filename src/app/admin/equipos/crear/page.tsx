@@ -33,13 +33,13 @@ const CreateTeamPageContent: FC = async () => {
     redirect(`/admin/equipos?error=${encodeURIComponent(message)}`);
   }
 
-  const responseTeams = await fetchTournamentsForTeam();
+  const responseTournaments = await fetchTournamentsForTeam();
 
-  if (!responseTeams.ok) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(responseTeams.message)}`);
+  if (!responseTournaments.ok) {
+    redirect(`/admin/equipos?error=${encodeURIComponent(responseTournaments.message)}`);
   }
 
-  if (responseTeams.ok && responseTeams.tournaments?.length === 0) {
+  if (responseTournaments.ok && responseTournaments.tournaments?.length === 0) {
     redirect(`/admin/equipos?error=${encodeURIComponent('¡ No puedes crear un equipo sin torneos activos !')}`);
   }
 
@@ -53,7 +53,7 @@ const CreateTeamPageContent: FC = async () => {
     redirect(`/admin/equipos?error=${encodeURIComponent('¡ No puedes crear un equipo sin entrenadores activos !')}`);
   }
 
-  const tournaments = responseTeams.tournaments;
+  const tournaments = responseTournaments.tournaments;
   const coaches = responseCoaches.coaches;
 
   return (
