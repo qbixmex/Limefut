@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, type FC, type ChangeEvent } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -19,9 +19,17 @@ import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Command,
   CommandEmpty,
@@ -30,13 +38,6 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
 import type { Coach, Team, Tournament } from '@/shared/interfaces';
 import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
@@ -53,13 +54,23 @@ type Props = Readonly<{
   };
 }>;
 
-export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => {
+export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => {
   const route = useRouter();
+  const params = useSearchParams();
   const formSchema = !team ? createTeamSchema : editTeamSchema;
   const isPermalinkEdited = useRef(false);
-  const [tournamentsOpen, setTournamentsOpen] = useState(false);
   const [coachesOpen, setCoachesOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  let tournamentId: string | undefined = '';
+
+  if (team && team.tournament) {
+    tournamentId = team.tournament.id;
+  } else if (params.has('torneo')) {
+    tournamentId = params.get('torneo') as string;
+  } else {
+    tournamentId = undefined;
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,7 +81,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
       category: team?.category ?? '',
       format: team?.format ?? '',
       gender: team?.gender ?? undefined,
-      tournamentId: team?.tournament?.id ?? undefined,
+      tournamentId,
       country: team?.country ?? 'México',
       state: team?.state ?? '',
       city: team?.city ?? '',
@@ -167,6 +178,18 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
         route.replace(`/admin/equipos/${response.team?.id}`);
       }
       return;
+    }
+  };
+
+  const handleNavigateBack = () => {
+    const baseUrl = '/admin/equipos';
+
+    if (team && team.tournament) {
+      route.replace(`${baseUrl}?torneo=${team.tournament.id}`);
+    } else if (tournamentId) {
+      route.replace(`${baseUrl}?torneo=${tournamentId}`);
+    } else {
+      route.replace(baseUrl);
     }
   };
 
@@ -352,89 +375,31 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
             <FormField
               control={form.control}
               name="tournamentId"
-              render={({ field }) => {
-                const selectedTournament = tournaments.find((t) => String(t.id) === String(field.value));
-                return (
-                  <FormItem>
-                    <FormLabel>Torneo</FormLabel>
-                    <Popover open={tournamentsOpen} onOpenChange={setTournamentsOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline-secondary"
-                          role="combobox"
-                          aria-expanded={tournamentsOpen}
-                          className="w-full overflow-hidden justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
-                        >
-                          {
-                            field.value && selectedTournament
-                              ? `${selectedTournament.name}`
-                              + `, ${selectedTournament.category}`
-                              + `, ${selectedTournament.format} vs ${selectedTournament.format}`
-                              : "Sin torneo asignado"
-                          }
-                          <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command>
-                          <CommandInput placeholder="Buscar torneo ..." className="h-9" />
-                          <CommandList>
-                            <CommandEmpty>No se encontró el torneo.</CommandEmpty>
-                            <CommandGroup>
-                              <CommandItem
-                                onSelect={() => {
-                                  form.setValue('tournamentId', '');
-                                  setTournamentsOpen(false);
-                                }}
-                              >
-                                Sin torneo asignado
-                                <Check
-                                  className={cn(
-                                    'ml-auto',
-                                    field.value === '' ? 'opacity-100' : 'opacity-0',
-                                  )}
-                                />
-                              </CommandItem>
-                              {tournaments.map((tournament) => (
-                                <CommandItem
-                                  key={tournament.id}
-                                  value={String(tournament.id)}
-                                  onSelect={(currentValue) => {
-                                    const matched = tournaments.find(t => String(t.id) === String(currentValue));
-                                    if (!matched) {
-                                      form.setValue('tournamentId', '');
-                                      setTournamentsOpen(false);
-                                      return;
-                                    }
-                                    form.setValue(
-                                      'tournamentId',
-                                      (String(matched.id) === String(field.value))
-                                        ? ''
-                                        : String(matched.id),
-                                    );
-                                    setTournamentsOpen(false);
-                                  }}
-                                >
-                                  <span>{tournament.name},</span>
-                                  <span>{tournament.category},</span>
-                                  <span>{tournament.format} vs {tournament.format}</span>
-                                  <Check
-                                    className={cn(
-                                      "ml-auto",
-                                      String(field.value) === String(tournament.id) ? "opacity-100" : "opacity-0",
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Torneo</FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value ?? ''}
+                      onValueChange={(value) => field.onChange(value || undefined)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Seleccione Torneo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {tournaments.map((tournament) => (
+                            <SelectItem key={tournament.id} value={tournament.id}>
+                              {tournament.name}, {tournament.category}, {tournament.format} vs {tournament.format}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div className="w-full lg:w-1/2">
@@ -637,7 +602,7 @@ export const TeamForm: FC<Props> = ({ session, team, tournaments, coaches }) => 
             type="button"
             variant="outline-secondary"
             size="lg"
-            onClick={() => route.back()}
+            onClick={handleNavigateBack}
           >
             cancelar
           </Button>

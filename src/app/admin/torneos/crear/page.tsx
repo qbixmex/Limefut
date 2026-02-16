@@ -22,7 +22,7 @@ const CreateTournamentPage = async () => {
           </CardHeader>
           <CardContent>
             <Suspense>
-              <CreateUserContent />
+              <CreateTournamentContent />
             </Suspense>
           </CardContent>
         </Card>
@@ -31,7 +31,7 @@ const CreateTournamentPage = async () => {
   );
 };
 
-const CreateUserContent = async () => {
+const CreateTournamentContent = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

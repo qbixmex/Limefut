@@ -24,7 +24,11 @@ export const fetchTournamentsForTeam = async (): ResponseFetchAction => {
 
   try {
     const tournaments = await prisma.tournament.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: [
+        { name: 'asc' },
+        { category: 'desc' },
+        { format: 'desc' },
+      ],
       select: {
         id: true,
         name: true,
