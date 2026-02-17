@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "../../../../globals.css";
 
 .main-wrapper {
   @apply flex flex-col lg:flex-row gap-5;
@@ -9,21 +9,37 @@
 }
 
 .team-local {
-  @apply bg-emerald-800/60 rounded-l-xl;
+  @apply bg-emerald-700 dark:bg-emerald-800/80 rounded-l-xl;
+}
+
+.field-dot {
+  @apply absolute top-1/2 left-1/2 -translate-1/2 size-2 bg-white rounded-full;
+}
+
+.field-divider {
+  @apply absolute top-1/2 left-1/2 -translate-1/2 w-0.5 h-full bg-white;
 }
 
 .team-visitor {
-  @apply bg-emerald-800/70 rounded-r-xl;
+  @apply bg-emerald-700 dark:bg-emerald-800/80 rounded-r-xl;
 }
 
 .team-name {
   @apply w-full text-center font-semibold absolute top-[calc(50%+70px)] -translate-y-[50%];
 }
 
+.team .team-shield {
+  object-fit: cover;
+  object-position: center;
+  @apply size-25 rounded-lg;
+}
+
 .match-results {
-  @apply absolute left-[50%] top-[50%] -translate-[50%] size-16 lg:size-25;
-  @apply bg-blue-950 text-xl flex justify-center items-center rounded-xl;
+  @apply absolute left-[50%] top-[50%] -translate-[50%] size-18 md:size-25 xl:size-26;
+  @apply border-2 bg-emerald-950 border-white text-xl rounded-full;
+  @apply flex justify-center items-center;
   & p {
-    @apply text-2xl lg:text-4xl text-blue-50 font-semibold;
+    @apply flex justify-center items-center gap-4 lg:gap-5;
+    @apply text-xl lg:text-2xl text-green-50 font-bold;
   }
 }
