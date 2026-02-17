@@ -136,7 +136,7 @@ export const getBadgeRobotsVariant = (robots: ROBOTS) => {
     case ROBOTS.NO_INDEX_NO_FOLLOW:
       return 'outline-secondary';
     default:
-      return 'outline-danger';
+      return 'outline-secondary';
   }
 };
 
@@ -153,15 +153,15 @@ export const getBadgeRobotsVariant = (robots: ROBOTS) => {
 export const getRobots = (robots: ROBOTS) => {
   switch (robots) {
     case ROBOTS.INDEX_FOLLOW:
-      return "Indexar y Seguir";
+      return "indexar, seguir";
     case ROBOTS.INDEX_NO_FOLLOW:
-      return "Indexar y No Seguir";
+      return "indexar, no seguir";
     case ROBOTS.NO_INDEX_FOLLOW:
-      return "No Indexar y Seguir";
+      return "no indexar, seguir";
     case ROBOTS.NO_INDEX_NO_FOLLOW:
-      return "No Indexar y No Seguir";
+      return "no indexar, no seguir";
     default:
-      return "No Indexar y No Seguir";
+      return "no indexar, no seguir";
   }
 };
 
@@ -216,6 +216,7 @@ export const getPageStatus = (status: PAGE_STATUS): {
 
 /**
  * Translates the alignment value to Spanish.
+ * 
  * @param alignment - The alignment value ("left", "center", "right").
  * @example ```typescript
  * getAlignmentTranslation("left");
@@ -266,6 +267,7 @@ export const getGenderTranslation = (gender: string) => {
 
 /**
  * Translates the match status to Spanish.
+ * 
  * @param status - The match status value.
  * @example ```typescript
  * getStatusTranslation(MATCH_STATUS.SCHEDULED);
