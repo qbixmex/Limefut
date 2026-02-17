@@ -55,7 +55,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   width={100}
                   height={100}
                   alt={`${localTeam.name} escudo`}
-                  className="size-25 rounded"
+                  className="team-shield"
                 />
               </Link>
               <div className="team-name">
@@ -89,7 +89,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   width={100}
                   height={100}
                   alt={`${visitorTeam.name} escudo`}
-                  className="size-25 rounded"
+                  className="team-shield"
                 />
               </Link>
               <div className="team-name">
@@ -110,10 +110,11 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             <div className="match-results">
               <p>
                 <span>{match?.localScore}</span>
-                <span>-</span>
                 <span>{match?.visitorScore}</span>
               </p>
             </div>
+            <span className="field-divider" />
+            <span className="field-dot" />
           </div>
         </section>
 
@@ -203,7 +204,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 <TableCell>{match?.week ?? 'No especificada'}</TableCell>
               </TableRow>
               <TableRow>
-                <TableHead>Lugar</TableHead>
+                <TableHead>Sede</TableHead>
                 <TableCell>{match?.place ?? 'No especificado'}</TableCell>
               </TableRow>
               <TableRow>
