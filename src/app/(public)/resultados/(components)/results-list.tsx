@@ -65,111 +65,95 @@ export const ResultsList: FC<Props> = async ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Fecha</TableHead>
-                <TableHead className="text-center w-20">Categoría</TableHead>
-                <TableHead className="text-center w-20">Formato</TableHead>
-                <TableHead className="text-right">Equipo Local</TableHead>
-                <TableHead>&nbsp;</TableHead>
-                <TableHead className="text-left">Equipo Visitante</TableHead>
-                <TableHead className="text-left">Estado</TableHead>
-                <TableHead>&nbsp;</TableHead>
+                <TableHead className="hidden lg:table-cell">Fecha</TableHead>
+                <TableHead className="hidden lg:table-cell">Hora</TableHead>
+                <TableHead>
+                  <div className="grid grid-cols-[1fr_100px_1fr]">
+                    <span className="text-right">Equipo Local</span>
+                    <span>{' '}</span>
+                    <span className="text-left">Equipo Visitante</span>
+                  </div>
+                </TableHead>
+                <TableHead className="hidden md:table-cell text-left">Estado</TableHead>
+                <TableHead className="hidden lg:table-cell">&nbsp;</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {matchesByWeek[week].map((match) => (
                 <TableRow key={match.id}>
-                  <TableCell className="text-gray-600 dark:text-gray-200">
+                  <TableCell className="hidden lg:table-cell">
                     {match.matchDate ? (
-                      <>
-                        <p>
-                          <span>
-                            {`${formatInTimeZone(match.matchDate, TIME_ZONE, 'dd', { locale: es })}`}
-                          </span>
-                          <span>{' de '}</span>
-                          <span className="capitalize">
-                            {formatInTimeZone(match.matchDate, TIME_ZONE, "LLLL", { locale: es })}
-                          </span>
-                          <span>{' del '}</span>
-                          <span>
-                            &nbsp;{formatInTimeZone(match.matchDate, TIME_ZONE, "y", { locale: es })}
-                          </span>
-                        </p>
-                        <p>
-                          {formatInTimeZone(match.matchDate, TIME_ZONE, "h:mm aaa", { locale: es })}
-                        </p>
-                      </>
+                      <div className="text-gray-600 dark:text-gray-200">
+                        <span>
+                          {`${formatInTimeZone(match.matchDate, TIME_ZONE, 'dd', { locale: es })}`}
+                        </span>
+                        <span>{' de '}</span>
+                        <span className="capitalize">
+                          {formatInTimeZone(match.matchDate, TIME_ZONE, "LLLL", { locale: es })}
+                        </span>
+                        <span>{' del '}</span>
+                        <span>
+                          &nbsp;{formatInTimeZone(match.matchDate, TIME_ZONE, "y", { locale: es })}
+                        </span>
+                      </div>
                     ) : (
                       <p className="text-gray-600">No definida</p>
                     )}
                   </TableCell>
-                  <TableCell className="text-gray-600 dark:text-gray-200 text-center">
-                    {match.tournament.category}
-                  </TableCell>
-                  <TableCell className="text-gray-600 dark:text-gray-200 text-center">
-                    {match.tournament.format} vs {match.tournament.format}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {
-                      match.local.name.toLowerCase().includes('descanso')
-                        ? (<span className="text-gray-400 font-semibold italic">{match.local.name}</span>)
-                        : (
-                          <Link
-                            href={
-                              `/equipos/${match.local.permalink}`
-                              + `?torneo=${tournament}`
-                              + `&categoria=${category}`
-                              + `&formato=${format}`
-                            }
-                            target="_blank"
-                            className="font-semibold italic"
-                          >
-                            {match.local.name}
-                          </Link>
-                        )
-                    }
+                  <TableCell className="hidden lg:table-cell">
+                    {match.matchDate ? (
+                      <div className="text-gray-600 dark:text-gray-200">
+                        <p>
+                          {formatInTimeZone(match.matchDate, TIME_ZONE, "h:mm aaa", { locale: es })}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-gray-600">No definida</p>
+                    )}
                   </TableCell>
                   <TableCell>
-                    <div className="text-center flex justify-center items-center gap-2">
-                      <span className="text-xl text-sky-500 font-medium">
-                        {match.localScore}
-                      </span>
-                      <span>-</span>
-                      <span className="text-xl text-sky-500 font-medium">
-                        {match.visitorScore}
-                      </span>
-                    </div>
+                    <Link
+                      href={`/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
+                      className="font-semibold italic"
+                      target="_blank"
+                    >
+                      <div className="grid grid-cols-[1fr_100px_1fr]">
+                        <span className="text-right">
+                          {
+                            match.local.name.toLowerCase().includes('descanso')
+                              ? <span className="text-gray-400 font-semibold italic">{match.local.name}</span>
+                              : <span>{match.local.name}</span>
+                          }
+                        </span>
+                        <span className="text-center flex justify-center items-center gap-2">
+                          <span className="text-xl text-sky-500 font-medium">
+                            {match.localScore}
+                          </span>
+                          <span>-</span>
+                          <span className="text-xl text-sky-500 font-medium">
+                            {match.visitorScore}
+                          </span>
+                        </span>
+                        <span>
+                          {
+                            match.visitor.name.toLowerCase().includes('descanso')
+                              ? (<span className="text-gray-400 font-semibold italic">{match.visitor.name}</span>)
+                              : (<span>{match.visitor.name}</span>)
+                          }
+                        </span>
+                      </div>
+                    </Link>
                   </TableCell>
-                  <TableCell className="text-left">
-                    {
-                      match.visitor.name.toLowerCase().includes('descanso')
-                        ? (<span className="text-gray-400 font-semibold italic">{match.visitor.name}</span>)
-                        : (
-                          <Link
-                            href={
-                              `/equipos/${match.visitor.permalink}`
-                              + `?torneo=${tournament}`
-                              + `&categoria=${category}`
-                              + `&formato=${format}`
-                            }
-                            target="_blank"
-                            className="font-semibold italic"
-                          >
-                            {match.visitor.name}
-                          </Link>
-                        )
-                    }
-                  </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     <Badge variant={getMatchStatus(match.status as MATCH_STATUS_TYPE).variant}>
                       {getMatchStatus(match.status as MATCH_STATUS_TYPE).label}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden lg:table-cell">
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Link
-                          href={
-                            `/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
+                          href={`/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
                           target="_blank"
                         >
                           <Button variant="outline-info" size="icon-sm">
