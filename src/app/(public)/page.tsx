@@ -24,7 +24,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
       </Suspense>
 
       <div className="wrapper">
-        <h1 className="hideElement">Limefut - Liga menor de fútbol</h1>
+        <h1 className="visually-hidden">Limefut - Liga menor de fútbol</h1>
 
         <Suspense fallback={<CarouselSkeleton />}>
           <Hero />
