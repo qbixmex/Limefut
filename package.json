@@ -8,6 +8,7 @@
     "preview": "next start",
     "lint": "eslint",
     "test": "vitest",
+    "test:ui": "vitest --ui",
     "postinstall": "npx prisma migrate deploy && npx prisma generate"
   },
   "dependencies": {
