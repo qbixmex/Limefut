@@ -36,6 +36,7 @@ import { useSearchParams } from "next/navigation";
 import { WeeksSelector } from './weeks-selector';
 import { DateSelector } from './date-selector';
 import { StatusSelector } from './status-selector';
+import { formatInTimeZone } from 'date-fns-tz';
 
 type Props = Readonly<{
   matches: Match[];
@@ -77,7 +78,7 @@ export const MatchesTable: FC<Props> = ({
           <Table>
             <TableHeader>
               <TableRow className="h-16">
-                <TableHead className="w-2/3">Encuentro</TableHead>
+                <TableHead className="w-full md:w-1/2">Encuentro</TableHead>
                 <TableHead className="w-[100px] text-center">
                   <DateSelector />
                 </TableHead>
@@ -95,37 +96,45 @@ export const MatchesTable: FC<Props> = ({
             <TableBody>
               {(matches.length > 0) && matches.map((match) => (
                 <TableRow key={match.id}>
-                  <TableCell className="grid grid-cols-[1fr_180px_1fr] gap-2 font-semibold text-gray-500">
-                    <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
-                      {match.localTeam.name}
-                    </Link>
-                    <div className="flex justify-center items-center gap-2">
-                      {match.status != MATCH_STATUS.COMPLETED ? (
-                        <MatchScoreInput
-                          matchId={match.id}
-                          score={match.localScore}
-                          local
-                        />
-                      ) : (
-                        <Badge variant="outline">{match.localScore}</Badge>
-                      )}
-                      <Minus strokeWidth={2} />
-                      {match.status != MATCH_STATUS.COMPLETED ? (
-                        <MatchScoreInput
-                          matchId={match.id}
-                          score={match.visitorScore}
-                          visitor
-                        />
-                      ) : (
-                        <Badge variant="outline">{match.visitorScore}</Badge>
-                      )}
+                  <TableCell className="w-25">
+                    <div className="grid grid-cols-[1fr_120px_1fr] gap-2 font-semibold text-gray-500">
+                      <div className="text-right">
+                        <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                          {match.localTeam.name}
+                        </Link>
+                      </div>
+                      <div className="flex justify-center items-center gap-2">
+                        {match.status != MATCH_STATUS.COMPLETED ? (
+                          <MatchScoreInput
+                            matchId={match.id}
+                            score={match.localScore}
+                            local
+                          />
+                        ) : (
+                          <Badge variant="outline">{match.localScore}</Badge>
+                        )}
+                        <Minus strokeWidth={2} />
+                        {match.status != MATCH_STATUS.COMPLETED ? (
+                          <MatchScoreInput
+                            matchId={match.id}
+                            score={match.visitorScore}
+                            visitor
+                          />
+                        ) : (
+                          <Badge variant="outline">{match.visitorScore}</Badge>
+                        )}
+                      </div>
+                      <div className="text-left">
+                        <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                          {match.visitorTeam.name}
+                        </Link>
+                      </div>
                     </div>
-                    <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
-                      {match.visitorTeam.name}
-                    </Link>
                   </TableCell>
                   <TableCell className="text-center">
-                    {format(match.matchDate as Date, "dd / MMM / y", { locale: es })}
+                    {format(match.matchDate as Date, "dd / MMM / y", { locale: es }).toUpperCase()},
+                    {' '}
+                    {formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', "h:mm a", { locale: es })}
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge variant="outline-info">{match.week}</Badge>
