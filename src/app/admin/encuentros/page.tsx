@@ -1,13 +1,5 @@
 import { Suspense, type FC } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Plus } from "lucide-react";
-import Link from "next/link";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { Search } from "@/shared/components/search";
 import ClearFilters from "./(components)/clear-filters";
@@ -16,6 +8,7 @@ import { TournamentsSelector } from "../(components)/tournaments-selector";
 import { MatchesContent } from "./matches-content";
 import type { MATCH_STATUS_TYPE } from "@/shared/enums";
 import { TournamentsSelectorSkeleton } from "../../(public)/components";
+import { CreateMatch } from "./(components)/create-match";
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -42,18 +35,7 @@ export const MatchesPage: FC<Props> = (props) => {
               <section className="flex gap-5 items-center">
                 <ClearFilters />
                 <Search placeholder="Buscar encuentro ..." />
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link href="/admin/encuentros/crear">
-                      <Button variant="outline-primary" size="icon">
-                        <Plus strokeWidth={3} />
-                      </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">
-                    <p>crear</p>
-                  </TooltipContent>
-                </Tooltip>
+                <CreateMatch />
               </section>
             </CardHeader>
             <CardContent>
