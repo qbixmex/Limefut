@@ -34,7 +34,8 @@ export const createTeamSchema = z.object({
     ),
   headquarters: z.string()
     .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La sede debe ser menor a 200 caracteres !' }),
+    .max(200, { message: '¡ La sede debe ser menor a 200 caracteres !' })
+    .optional(),
   image: z
     .instanceof(File, { message: "La imagen debe ser un archivo" })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
@@ -72,13 +73,16 @@ export const createTeamSchema = z.object({
   ]).optional(),
   country: z.string()
     .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),
+    .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' })
+    .optional(),
   state: z.string()
     .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' }),
+    .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' })
+    .optional(),
   city: z.string()
     .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' }),
+    .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' })
+    .optional(),
   coachId: z.union([
     z.uuid("El id del entrenador debe ser un UUID válido"),
     z.literal(''),

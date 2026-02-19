@@ -100,7 +100,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                     <TableCell>
                       {team.coach ? (
                         <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
-                          <p className="text-wrap">{team.coach.name}</p>
+                          <Badge variant="outline-info"><p className="text-wrap">{team.coach.name}</p></Badge>
                         </Link>
                       ) : (
                         <Badge variant="outline-secondary">No Asignado</Badge>

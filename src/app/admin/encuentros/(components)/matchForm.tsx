@@ -49,7 +49,17 @@ import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { Label } from '@/components/ui/label';
 import { finishMatchAction } from '../(actions)/finishMatchAction';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import "./match-form.css";
 import { updateMatchScoreAction } from '../(actions)/updateMatchScoreAction';
 
@@ -258,6 +268,18 @@ export const MatchForm: FC<Props> = ({
     if (ok) {
       toast.success(message);
       route.replace(`/admin/encuentros/detalles/${match?.id}`);
+    }
+  };
+
+  const handleNavigateBack = () => {
+    const baseUrl = '/admin/equipos';
+
+    if (match && match.tournament) {
+      route.replace(`${baseUrl}?torneo=${match.tournament.id}`);
+    } else if (tournamentId) {
+      route.replace(`${baseUrl}?torneo=${tournamentId}`);
+    } else {
+      route.replace(baseUrl);
     }
   };
 
@@ -637,10 +659,7 @@ export const MatchForm: FC<Props> = ({
             type="button"
             variant="outline-secondary"
             size="lg"
-            onClick={() => {
-              form.reset();
-              route.replace('/admin/encuentros');
-            }}
+            onClick={handleNavigateBack}
           >
             cancelar
           </Button>

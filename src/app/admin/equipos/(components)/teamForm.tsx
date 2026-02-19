@@ -77,14 +77,14 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
     defaultValues: {
       name: team?.name ?? '',
       permalink: team?.permalink ?? '',
-      headquarters: team?.headquarters ?? '',
+      headquarters: team?.headquarters ?? undefined,
       category: team?.category ?? '',
       format: team?.format ?? '',
       gender: team?.gender ?? undefined,
       tournamentId,
-      country: team?.country ?? 'México',
-      state: team?.state ?? '',
-      city: team?.city ?? '',
+      country: team?.country ?? undefined,
+      state: team?.state ?? undefined,
+      city: team?.city ?? undefined,
       coachId: team?.coach?.id ?? undefined,
       emails: team?.emails ?? [],
       address: team?.address ?? undefined,
@@ -208,7 +208,7 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Nombre
+                    Nombre <span className="text-orange-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -229,7 +229,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
               name="permalink"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Enlace Permanente</FormLabel>
+                  <FormLabel>
+                    Enlace Permanente <span className="text-orange-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -294,7 +296,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Categoría</FormLabel>
+                  <FormLabel>
+                    Categoría <span className="text-orange-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -311,7 +315,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
               name="format"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Formato</FormLabel>
+                  <FormLabel>
+                    Formato <span className="text-orange-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Select
                       value={field.value ?? undefined}
@@ -343,7 +349,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
               name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Rama</FormLabel>
+                  <FormLabel>
+                    Rama <span className="text-orange-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <Select
                       value={field.value ?? undefined}
