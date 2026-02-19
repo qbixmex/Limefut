@@ -6,6 +6,14 @@ import { cacheLife, cacheTag } from 'next/cache';
 
 export type MatchType = {
   id: string;
+  place: string | null;
+  matchDate: Date | null;
+  week: number | null;
+  referee: string | null;
+  localScore: number;
+  visitorScore: number;
+  status: MATCH_STATUS_TYPE;
+  createdAt: Date;
   localTeam: {
     name: string;
     id: string;
@@ -24,13 +32,6 @@ export type MatchType = {
       id: string;
     }[];
   }
-  place: string | null;
-  matchDate: Date | null;
-  week: number | null;
-  referee: string | null;
-  localScore: number;
-  visitorScore: number;
-  status: MATCH_STATUS_TYPE;
   tournament: TournamentType;
   penaltyShootout: {
     id: string;
@@ -57,13 +58,13 @@ export type MatchType = {
       isGoal: boolean | null;
     }[];
   } | null;
-  createdAt: Date;
-  updatedAt: Date;
 };
 
 export type TournamentType = {
   id: string;
   name: string;
+  category: string;
+  format: string;
 };
 
 type FetchResponse = Promise<{
@@ -94,6 +95,14 @@ export const fetchMatchAction = async (
       where: { id },
       select: {
         id: true,
+        place: true,
+        matchDate: true,
+        week: true,
+        referee: true,
+        localScore: true,
+        visitorScore: true,
+        status: true,
+        createdAt: true,
         local: {
           select: {
             id: true,
@@ -120,17 +129,12 @@ export const fetchMatchAction = async (
             },
           },
         },
-        place: true,
-        matchDate: true,
-        week: true,
-        referee: true,
-        localScore: true,
-        visitorScore: true,
-        status: true,
         tournament: {
           select: {
             id: true,
             name: true,
+            category: true,
+            format: true,
           },
         },
         penaltyShootout: {
@@ -167,8 +171,6 @@ export const fetchMatchAction = async (
             },
           },
         },
-        createdAt: true,
-        updatedAt: true,
       },
     });
 
@@ -191,16 +193,17 @@ export const fetchMatchAction = async (
         matchDate: match.matchDate,
         week: match.week,
         referee: match.referee,
+        createdAt: match.createdAt,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS_TYPE,
         tournament: {
           id: match.tournament.id,
           name: match.tournament.name,
+          category: match.tournament.category,
+          format: match.tournament.format,
         },
         penaltyShootout: match.penaltyShootout,
-        createdAt: match.createdAt,
-        updatedAt: match.updatedAt,
       },
     };
   } catch (error) {

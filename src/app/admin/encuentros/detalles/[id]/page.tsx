@@ -25,6 +25,8 @@ import { getMatchStatus } from "../../(helpers)/place";
 import type { MatchType } from "../../(actions)/fetchMatchAction";
 import { PenaltyShootout } from "@/shared/components/penalty-shootouts";
 import { PenaltiesForm } from "../../(components)/penalties-form";
+import { formatInTimeZone } from "date-fns-tz";
+const TIME_ZONE = "America/Mexico_City";
 
 type Props = Readonly<{
   params: Promise<{
@@ -117,15 +119,11 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
+                    <TableHead className="font-semibold">Hora</TableHead>
                     <TableCell>
-                      {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="w-[180px] font-semibold">Última Actualización</TableHead>
-                    <TableCell>
-                      {format(new Date(match.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                      {
+                        formatInTimeZone(match.matchDate as Date as Date, TIME_ZONE, "h:mm a", { locale: es })
+                      }
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -138,6 +136,32 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                       <Badge variant={getMatchStatus(match.status).variant}>
                         {getMatchStatus(match.status).label}
                       </Badge>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="w-[180px] font-semibold">Torneo</TableHead>
+                    <TableCell>
+                      <Link href={`/admin/torneos/${match.tournament.id}`} target="_blank">
+                        {match.tournament.name}
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="w-[180px] font-semibold">Categoría</TableHead>
+                    <TableCell>
+                      {match.tournament.category}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="w-[180px] font-semibold">Formato</TableHead>
+                    <TableCell>
+                      {match.tournament.format} vs {match.tournament.format}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
+                    <TableCell>
+                      {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
                     </TableCell>
                   </TableRow>
                 </TableBody>
