@@ -15,6 +15,11 @@ export const deletePlayerAction = async (playerId: string): ResponseDeleteAction
     select: {
       imagePublicID: true,
       name: true,
+      _count: {
+        select: {
+          penaltyKicks: true,
+        },
+      },
     },
   });
 
@@ -22,6 +27,14 @@ export const deletePlayerAction = async (playerId: string): ResponseDeleteAction
     return {
       ok: false,
       message: '¡ No se puede eliminar el jugador, quizás fue eliminado ó no existe !',
+    };
+  }
+
+  // Check if the player has registered penalty kicks.
+  if (player._count.penaltyKicks > 0) {
+    return {
+      ok: false,
+      message: '¡ No se puede eliminar el jugador porque tiene penales registrados !',
     };
   }
 

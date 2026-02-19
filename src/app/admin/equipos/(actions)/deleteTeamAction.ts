@@ -10,22 +10,35 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => {
-  const teamDeleted = await prisma.team.findUnique({
+  const team = await prisma.team.findFirst({
     where: { id: teamId },
     select: {
-      imagePublicID: true,
       name: true,
+      imagePublicID: true,
+      _count: {
+        select: {
+          players: true,
+        },
+      },
     },
   });
 
-  if (!teamDeleted) {
+  if (!team) {
     return {
       ok: false,
       message: '¡ No se puede eliminar el equipo, quizás fue eliminado ó no existe !',
     };
   }
 
-  await prisma.team.delete({
+  // Verify if team contains associated players
+  if (team._count.players > 0) {
+    return {
+      ok: false,
+      message: '¡ No se puede eliminar el equipo porque tiene jugadores asociados !',
+    };
+  }
+
+  const teamDeleted = await prisma.team.delete({
     where: { id: teamId },
   });
 
