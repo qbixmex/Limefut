@@ -9,12 +9,6 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteStandingsAction = async (tournamentId: string): ResponseDeleteAction => {
-  // Put tournament matches back to default 'scheduled'
-  await prisma.match.updateMany({
-    where: { tournamentId },
-    data: { status: 'scheduled' },
-  });
-
   // Delete Standings from database
   await prisma.standings.deleteMany({ where: { tournamentId } });
 

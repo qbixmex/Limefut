@@ -1,5 +1,5 @@
 import { type FC, Suspense } from 'react';
-import { StandingsTable } from './standings-table';
+import { StandingsContent } from './standings-content';
 import { SkeletonTable } from './SkeletonTable';
 
 type Props = Readonly<{
@@ -10,11 +10,8 @@ export const StandingsContainer: FC<Props> = async ({ searchParams }) => {
   const tournamentId = (await searchParams).torneo;
 
   return (
-    <Suspense
-      key={tournamentId}
-      fallback={<SkeletonTable />}
-    >
-      <StandingsTable tournamentId={tournamentId} />
+    <Suspense key={tournamentId} fallback={<SkeletonTable />}>
+      <StandingsContent tournamentId={tournamentId} />
     </Suspense>
   );
 };

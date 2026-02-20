@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { TournamentsSelectorSkeleton } from "./(components)/tournaments-selector-skeleton";
 import { TournamentsWrapper } from "./(components)/tournaments-wrapper";
-import { StandingsContainer } from "./(components)/StandingsContainer";
+import { StandingsContainer } from "./(components)/standings-container";
 
 export const metadata: Metadata = {
   title: 'Tabla de posiciones',
