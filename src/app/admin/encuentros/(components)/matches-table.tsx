@@ -15,11 +15,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Pencil,
-  InfoIcon,
-  Minus,
-} from "lucide-react";
+import { InfoIcon, Minus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { DeleteMatch } from "../(components)/delete-match";
@@ -37,6 +33,7 @@ import { WeeksSelector } from './weeks-selector';
 import { DateSelector } from './date-selector';
 import { StatusSelector } from './status-selector';
 import { formatInTimeZone } from 'date-fns-tz';
+import { EditMatch } from './edit-match';
 
 type Props = Readonly<{
   matches: Match[];
@@ -171,18 +168,7 @@ export const MatchesTable: FC<Props> = ({
                           detalles
                         </TooltipContent>
                       </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link href={`/admin/encuentros/editar/${match.id}`}>
-                            <Button variant="outline-warning" size="icon">
-                              <Pencil />
-                            </Button>
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">
-                          editar
-                        </TooltipContent>
-                      </Tooltip>
+                      <EditMatch matchId={match.id} />
                       {match.status !== MATCH_STATUS.COMPLETED && (
                         <DeleteMatch id={match.id} roles={roles} />
                       )}

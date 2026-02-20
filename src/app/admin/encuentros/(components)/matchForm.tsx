@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type FC, Activity } from 'react';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -83,6 +83,7 @@ export const MatchForm: FC<Props> = ({
   week,
   match,
 }) => {
+  const searchParams = useSearchParams();
   const route = useRouter();
   const formSchema = !match ? createMatchSchema : editMatchSchema;
   const [teams, setTeams] = useState<Team[]>(initialTeams);
@@ -272,14 +273,22 @@ export const MatchForm: FC<Props> = ({
   };
 
   const handleNavigateBack = () => {
-    const baseUrl = '/admin/equipos';
+    const params = new URLSearchParams(searchParams);
+    const baseURL = '/admin/encuentros';
 
-    if (match && match.tournament) {
-      route.replace(`${baseUrl}?torneo=${match.tournament.id}`);
-    } else if (tournamentId) {
-      route.replace(`${baseUrl}?torneo=${tournamentId}`);
+    if (params.has('semana')) params.delete('semana');
+
+    const queryString = params.toString();
+
+    if (match) {
+      route.replace(`${baseURL}`
+        + `?torneo=${match.tournament.id}`
+        + `&${queryString}`,
+      );
+    } else if (queryString.length > 0) {
+      route.replace(`${baseURL}?${queryString}`);
     } else {
-      route.replace(baseUrl);
+      route.replace(baseURL);
     }
   };
 
