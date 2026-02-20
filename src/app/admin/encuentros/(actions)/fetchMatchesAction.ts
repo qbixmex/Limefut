@@ -26,6 +26,7 @@ export type Match = {
   week: number | null;
   place: string | null;
   matchDate: Date | null;
+  penaltyShootout: PenaltyShootout | null;
 };
 
 type Team = {
@@ -41,9 +42,17 @@ export type ResponseFetchAction = Promise<{
   pagination: Pagination;
 }>;
 
+export type PenaltyShootout = {
+  id: string;
+  status: string;
+  localGoals: number;
+  visitorGoals: number;
+  winnerTeamId: string | null;
+};
+
 export const fetchMatchesAction = async (options?: Options): ResponseFetchAction => {
   "use cache";
-  
+
   cacheLife('days');
   cacheTag('admin-matches');
 
@@ -110,6 +119,12 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       skip: (page - 1) * take,
       select: {
         id: true,
+        localScore: true,
+        visitorScore: true,
+        status: true,
+        week: true,
+        place: true,
+        matchDate: true,
         local: {
           select: {
             id: true,
@@ -124,12 +139,15 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
             permalink: true,
           },
         },
-        localScore: true,
-        visitorScore: true,
-        status: true,
-        week: true,
-        place: true,
-        matchDate: true,
+        penaltyShootout: {
+          select: {
+            id: true,
+            localGoals: true,
+            visitorGoals: true,
+            winnerTeamId: true,
+            status: true,
+          },
+        },
       },
     });
 
@@ -148,6 +166,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         week: match.week,
         place: match.place,
         matchDate: match.matchDate,
+        penaltyShootout: match.penaltyShootout,
       })),
       pagination: {
         currentPage: page,
