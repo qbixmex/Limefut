@@ -25,15 +25,15 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const setTournamentIdParam = (tournamentId: string) => {
+  const setTournamentParam = (value: string) => {
     const params = new URLSearchParams();
-    params.set('torneo', tournamentId);
+    params.set('torneo', value);
     router.replace(`${pathname}?${params}`);
   };
 
   return (
     <Select
-      onValueChange={setTournamentIdParam}
+      onValueChange={setTournamentParam}
       value={tournamentId ?? ""}
     >
       <SelectTrigger className="w-full max-w-lg">

@@ -7,14 +7,20 @@ import { Plus } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 export const CreateMatch = () => {
-  const params = useSearchParams();
-  const tournamentId = params.get('torneo');
-  const baseURL = '/admin/encuentros/crear';
+  const searchParams = useSearchParams();
+  
+  const getURL = () => {
+    const params = new URLSearchParams(searchParams);
+    const baseURL = '/admin/encuentros/crear';
+
+    const queryString = params.toString();
+    return queryString ? `${baseURL}?${queryString}` : baseURL;
+  };
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Link href={!tournamentId ? baseURL : `${baseURL}?torneo=${tournamentId}`}>
+        <Link href={getURL()}>
           <Button variant="outline-primary" size="icon">
             <Plus strokeWidth={3} />
           </Button>

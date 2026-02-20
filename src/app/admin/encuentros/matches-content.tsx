@@ -15,14 +15,13 @@ type Props = Readonly<{
 }>;
 
 export const MatchesContent: FC<Props> = async ({ searchParams }) => {
-  const {
-    torneo: tournamentId,
-    query = '',
-    page: currentPage = 1,
-    sortMatchDate,
-    sortWeek = 'desc',
-    status,
-  } = await searchParams;
+  const sp = await searchParams;
+  const tournamentId = sp.torneo;
+  const query = sp.query ?? '';
+  const currentPage = sp.page ?? '1';
+  const sortMatchDate = sp.sortMatchDate ?? 'desc';
+  const sortWeek = sp.sortWeek ?? 'desc';
+  const status = sp.status;
 
   if (!tournamentId) return null;
 
