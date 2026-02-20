@@ -82,10 +82,7 @@ export const MatchesTable: FC<Props> = ({
                 <TableHead className="w-[100px] text-center">
                   <WeeksSelector weeks={matchesWeeks} />
                 </TableHead>
-                <TableHead
-                  className="w-[120px]"
-                  colSpan={2}
-                >
+                <TableHead className="w-[120px]" colSpan={2}>
                   <StatusSelector />
                 </TableHead>
               </TableRow>
@@ -97,7 +94,14 @@ export const MatchesTable: FC<Props> = ({
                     <div className="grid grid-cols-[1fr_120px_1fr] gap-2 font-semibold text-gray-500">
                       <div className="text-right">
                         <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
-                          {match.localTeam.name}
+                          <div className="space-x-2">
+                            {(match.penaltyShootout?.status == MATCH_STATUS.COMPLETED) && (
+                              <Badge variant="outline-secondary">
+                                {match.penaltyShootout.localGoals}
+                              </Badge>
+                            )}
+                            <span>{match.localTeam.name}</span>
+                          </div>
                         </Link>
                       </div>
                       <div className="flex justify-center items-center gap-2">
@@ -123,7 +127,14 @@ export const MatchesTable: FC<Props> = ({
                       </div>
                       <div className="text-left">
                         <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
-                          {match.visitorTeam.name}
+                          <div className="space-x-2">
+                            <span>{match.visitorTeam.name}</span>
+                            {(match.penaltyShootout?.status == MATCH_STATUS.COMPLETED) && (
+                              <Badge variant="outline-secondary">
+                                {match.penaltyShootout.visitorGoals}
+                              </Badge>
+                            )}
+                          </div>
                         </Link>
                       </div>
                     </div>

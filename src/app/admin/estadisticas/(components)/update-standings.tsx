@@ -48,7 +48,7 @@ export const UpdateStandings: FC<Props> = ({ tournamentId }) => {
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="left">
-          <span>eliminar</span>
+          <span>recalcular</span>
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>

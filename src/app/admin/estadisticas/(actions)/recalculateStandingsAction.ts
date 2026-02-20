@@ -14,9 +14,11 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
     await prisma.$transaction(async (tx) => {
       // Get all teams in the tournament
       const teams = await tx.team.findMany({
-        where: { tournamentId },
+        where: {
+          tournamentId,
+          active: true,
+        },
       });
-
 
       if (teams.length === 0) {
         throw new Error('No hay equipos en este torneo');
@@ -56,6 +58,12 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
           visitorId: true,
           localScore: true,
           visitorScore: true,
+          penaltyShootout: {
+            where: { status: 'completed' },
+            select: {
+              winnerTeamId: true,
+            },
+          },
         },
       });
 
@@ -63,18 +71,33 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
       for (const match of completedMatches) {
         const localScore = match.localScore ?? 0;
         const visitorScore = match.visitorScore ?? 0;
+        const shootout = match.penaltyShootout;
 
         let localPoints = 0;
         let visitorPoints = 0;
+        let localAdditionalPoints = 0;
+        let visitorAdditionalPoints = 0;
 
+        // Determine points from regular match score
         if (localScore > visitorScore) {
           localPoints = 3;
-        } else if (localScore < visitorScore) {
+        } else if (visitorScore > localScore) {
           visitorPoints = 3;
-        } else if (localScore === visitorScore && localScore !== 0) {
-          // Just count as a draw if both teams scored goals
+        } else {
+          // Draw in regular time
           localPoints = 1;
           visitorPoints = 1;
+
+          // Check penalty shootout winner
+          if (shootout) {
+            if (shootout.winnerTeamId === match.localId) {
+              localAdditionalPoints = 1;
+            }
+
+            if (shootout.winnerTeamId === match.visitorId) {
+              visitorAdditionalPoints = 1;
+            }
+          }
         }
 
         // Update local team
@@ -92,7 +115,8 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
             goalsAgainst: { increment: visitorScore },
             goalsDifference: { increment: localScore - visitorScore },
             points: { increment: localPoints },
-            totalPoints: { increment: localPoints },
+            additionalPoints: { increment: localAdditionalPoints },
+            totalPoints: { increment: localPoints + localAdditionalPoints },
           },
         });
 
@@ -111,7 +135,8 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
             goalsAgainst: { increment: localScore },
             goalsDifference: { increment: visitorScore - localScore },
             points: { increment: visitorPoints },
-            totalPoints: { increment: visitorPoints },
+            additionalPoints: { increment: visitorAdditionalPoints },
+            totalPoints: { increment: visitorPoints + visitorAdditionalPoints },
           },
         });
       }

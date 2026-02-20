@@ -47,7 +47,7 @@ export const DeleteStandings: FC<Props> = ({ tournamentId }) => {
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="left">
-          <span>recalcular estadísticas</span>
+          <span>eliminar</span>
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
