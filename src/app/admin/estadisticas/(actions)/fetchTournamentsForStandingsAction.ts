@@ -7,6 +7,8 @@ export type TournamentType = {
   id: string;
   name: string;
   permalink: string;
+  category: string;
+  format: string;
   imageUrl: string | null;
   season: string | null;
   startDate: Date;
@@ -42,6 +44,8 @@ export const fetchTournamentsForStandingsAction = async (userRoles: string[] | n
         id: true,
         name: true,
         permalink: true,
+        category: true,
+        format: true,
         imageUrl: true,
         season: true,
         startDate: true,
