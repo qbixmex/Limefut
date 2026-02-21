@@ -77,6 +77,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
         endDate: true,
         currentWeek: true,
         teams: {
+          where: { active: true },
           select: {
             id: true,
             name: true,

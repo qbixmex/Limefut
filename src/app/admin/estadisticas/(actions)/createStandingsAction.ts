@@ -1,8 +1,8 @@
 'use server';
 
+import { updateTag } from "next/cache";
 import prisma from "@/lib/prisma";
 import { createStandingsSchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -27,8 +27,8 @@ export const createStandingsAction = async ( data: DataType ): CreateResponseAct
   const standingsData = standingsVerified.data;
 
   try {
-    const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      await transaction.standings.createMany({
+    const prismaTransaction = await prisma.$transaction(async (tx) => {
+      await tx.standings.createMany({
         data: standingsData,
       });
 
