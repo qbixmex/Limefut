@@ -14,23 +14,25 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
     await prisma.$transaction(async (tx) => {
       // Get all teams in the tournament
       const teams = await tx.team.findMany({
-        where: {
-          tournamentId,
-          active: true,
-        },
+        where: { tournamentId },
+        select: { id: true },
       });
 
-      if (teams.length === 0) {
-        throw new Error('No hay equipos en este torneo');
+      if (teams.length == 0) {
+        throw new Error('¡ No hay equipos en este torneo !');
       }
 
       // Delete existing standings
-      await tx.standings.deleteMany({
+      const { count } = await tx.standings.deleteMany({
         where: { tournamentId },
       });
 
+      if (count == 0) {
+        throw new Error('¡ No se pudo limpiar la tabla de posiciones !');
+      }
+
       // Create standings for all teams (with default values)
-      await tx.standings.createMany({
+      const newStandings = await tx.standings.createMany({
         data: teams.map(team => ({
           teamId: team.id,
           tournamentId,
@@ -46,6 +48,10 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
           totalPoints: 0,
         })),
       });
+
+      if (newStandings.count == 0) {
+        throw new Error('¡ No se pudo crear las estadísticas !');
+      }
 
       // Get all completed matches
       const completedMatches = await tx.match.findMany({
@@ -101,12 +107,26 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
         }
 
         // Update local team
-        await tx.standings.update({
+        await tx.standings.upsert({
           where: {
             teamId: match.localId,
             tournamentId,
           },
-          data: {
+          create: {
+            teamId: match.localId,
+            tournamentId,
+            matchesPlayed: 1,
+            wins: localPoints === 3 ? 1 : 0,
+            draws: localPoints === 1 ? 1 : 0,
+            losses: localPoints === 0 ? 1 : 0,
+            goalsFor: localScore,
+            goalsAgainst: visitorScore,
+            goalsDifference: localScore - visitorScore,
+            points: localPoints,
+            additionalPoints: localAdditionalPoints,
+            totalPoints: localPoints + localAdditionalPoints,
+          },
+          update: {
             matchesPlayed: { increment: 1 },
             wins: { increment: localPoints === 3 ? 1 : 0 },
             draws: { increment: localPoints === 1 ? 1 : 0 },
@@ -121,12 +141,26 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
         });
 
         // Update visitor team
-        await tx.standings.update({
+        await tx.standings.upsert({
           where: {
             teamId: match.visitorId,
             tournamentId,
           },
-          data: {
+          create: {
+            teamId: match.visitorId,
+            tournamentId,
+            matchesPlayed: 1,
+            wins: visitorPoints === 3 ? 1 : 0,
+            draws: visitorPoints === 1 ? 1 : 0,
+            losses: visitorPoints === 0 ? 1 : 0,
+            goalsFor: visitorScore,
+            goalsAgainst: localScore,
+            goalsDifference: visitorScore - localScore,
+            points: visitorPoints,
+            additionalPoints: visitorAdditionalPoints,
+            totalPoints: visitorPoints + visitorAdditionalPoints,
+          },
+          update: {
             matchesPlayed: { increment: 1 },
             wins: { increment: visitorPoints === 3 ? 1 : 0 },
             draws: { increment: visitorPoints === 1 ? 1 : 0 },
