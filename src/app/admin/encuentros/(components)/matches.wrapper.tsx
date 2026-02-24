@@ -10,7 +10,7 @@ type Props = Readonly<{
   currentPage: number;
   query: string;
   sortMatchDate: 'asc' | 'desc' | undefined;
-  sortWeek: 'asc' | 'desc';
+  sortWeek: `${number}` | 'asc' | 'desc' | undefined;
   status: MATCH_STATUS_TYPE;
 }>;
 

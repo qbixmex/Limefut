@@ -90,6 +90,7 @@ export const MatchForm: FC<Props> = ({
   const [localTeamsOpen, setLocalTeamsOpen] = useState(false);
   const [visitorTeamsOpen, setVisitorTeamOpen] = useState(false);
   const [hiddenScores, setHiddenScores] = useState(true);
+  const baseURL = '/admin/encuentros';
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -202,12 +203,15 @@ export const MatchForm: FC<Props> = ({
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(`/admin/encuentros/detalles/${response.match?.id}`);
+        route.replace(baseURL
+          + `?torneo=${response.match?.tournament.id}`
+          + `&sortWeek=${response.match?.week}`,
+        );
         return;
       }
     }
 
-    // Update match
+    // Update Match
     if (match) {
       const response = await updateMatchAction({
         formData,
@@ -223,7 +227,10 @@ export const MatchForm: FC<Props> = ({
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(`/admin/encuentros/detalles/${match.id}`);
+        route.replace(baseURL
+          + `?torneo=${match.tournament.id}`
+          + `&sortWeek=${response.match?.week}`,
+        );
       }
     }
   };
@@ -274,14 +281,13 @@ export const MatchForm: FC<Props> = ({
 
   const handleNavigateBack = () => {
     const params = new URLSearchParams(searchParams);
-    const baseURL = '/admin/encuentros';
 
     if (params.has('semana')) params.delete('semana');
 
     const queryString = params.toString();
 
     if (match) {
-      route.replace(`${baseURL}`
+      route.replace(baseURL
         + `?torneo=${match.tournament.id}`
         + `&${queryString}`,
       );

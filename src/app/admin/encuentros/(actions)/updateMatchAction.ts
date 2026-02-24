@@ -3,7 +3,6 @@
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { editMatchSchema } from '@/shared/schemas';
-import { type Match } from '@/shared/interfaces';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
 type Options = {
@@ -16,7 +15,28 @@ type Options = {
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
-  match: Match | null;
+  match: {
+    id: string;
+    localScore: number | null;
+    visitorScore: number | null;
+    place: string | null;
+    referee: string | null;
+    matchDate: Date | null;
+    week: number | null;
+    status: string;
+    tournament: {
+      id: string;
+      name: string;
+    };
+    local: {
+      id: string;
+      name: string;
+    };
+    visitor: {
+      id: string;
+      name: string;
+    };
+  } | null;
 }>;
 
 export const updateMatchAction = async ({
@@ -109,6 +129,13 @@ export const updateMatchAction = async ({
           },
           select: {
             id: true,
+            localScore: true,
+            visitorScore: true,
+            place: true,
+            matchDate: true,
+            week: true,
+            referee: true,
+            status: true,
             local: {
               select: {
                 id: true,
@@ -121,15 +148,6 @@ export const updateMatchAction = async ({
                 name: true,
               },
             },
-            localScore: true,
-            visitorScore: true,
-            place: true,
-            matchDate: true,
-            week: true,
-            referee: true,
-            status: true,
-            createdAt: true,
-            updatedAt: true,
             tournament: {
               select: {
                 id: true,
@@ -145,9 +163,10 @@ export const updateMatchAction = async ({
         updateTag('matches');
         updateTag('dashboard-results');
         updateTag('public-matches');
-        updateTag("public-results-roles");
-        updateTag("public-result-details");
-        updateTag("public-matches-count");
+        updateTag('public-results-roles');
+        updateTag('public-result-details');
+        updateTag('public-matches-count');
+        updateTag('admin-tournament-for-match');
 
         return {
           ok: true,
