@@ -7,7 +7,8 @@
     "build": "next build",
     "preview": "next start",
     "lint": "eslint",
-    "test": "vitest",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
     "postinstall": "npx prisma migrate deploy && npx prisma generate"
   },
