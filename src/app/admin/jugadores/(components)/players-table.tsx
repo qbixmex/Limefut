@@ -72,7 +72,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                 {players.map((player) => (
                   <TableRow key={player.id}>
                     <TableCell>
-                      <Link href={`/admin/jugadores/${player.id}`}>
+                      <Link href={`/admin/jugadores/perfil/${player.id}`}>
                         {
                           !player.imageUrl ? (
                             <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">

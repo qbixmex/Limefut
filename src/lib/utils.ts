@@ -299,3 +299,25 @@ export const getStatusTranslation = (status: MATCH_STATUS_TYPE): string => {
       return "desconocido";
   }
 };
+
+/**
+ * Shuffles an array in place using the Fisher-Yates algorithm.
+ * 
+ * @param array - The array to shuffle.
+ * @see https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+ * @example ```typescript
+ * const arr = [1, 2, 3, 4, 5];
+ * shuffleArray(arr);
+ * // Returns a shuffled version of the array, e.g. [3, 1, 5, 2, 4]
+ * ```
+ * @returns The shuffled array.
+ */
+export const shuffleArray = <T>(array: T[]): T[] => {
+  for (let i = array.length - 1; i > 0; i--) {
+    // Generate a random index between 0 and i
+    const j = Math.floor(Math.random() * (i + 1));
+    // Interchange elements (Swap)
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};

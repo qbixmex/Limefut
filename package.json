@@ -1,13 +1,14 @@
 {
   "name": "limefut",
-  "version": "0.68.4",
+  "version": "0.69.0",
   "private": true,
   "scripts": {
     "dev": "next dev --port=3000",
     "build": "next build",
     "preview": "next start",
     "lint": "eslint",
-    "test": "vitest",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
     "postinstall": "npx prisma migrate deploy && npx prisma generate"
   },

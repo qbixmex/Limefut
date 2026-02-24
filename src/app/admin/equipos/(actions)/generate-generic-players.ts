@@ -2,12 +2,14 @@
 
 import prisma from "@/lib/prisma";
 import { updateTag } from "next/cache";
-import { randomUUID } from "node:crypto";
+import { malePlayers } from "@/shared/data/male-players";
+import { femalePlayers } from "@/shared/data/female-players";
+import { shuffleArray } from "@/lib/utils";
 
 type Options = {
   userRoles: string[] | undefined;
+  gender: 'male' | 'female';
   teamId: string;
-  quantity: number;
 };
 
 type CreateResponseAction = Promise<{
@@ -17,8 +19,8 @@ type CreateResponseAction = Promise<{
 
 export const generatePlayersAction = async ({
   userRoles,
+  gender,
   teamId,
-  quantity,
 }: Options): CreateResponseAction => {
   if ((userRoles !== null) && (!userRoles?.includes('admin'))) {
     return {
@@ -36,13 +38,12 @@ export const generatePlayersAction = async ({
     };
   }
 
-  const newPlayers = Array.from({ length: quantity }).map((_, index) => {
-    return {
-      id: randomUUID(),
-      name: `Jugador ${String(index + 1).padStart(2, '0')}`,
-      active: true,
-    };
-  });
+  const genericPlayers = (gender === 'male')
+    ? malePlayers
+    : (gender === 'female')
+      ? femalePlayers
+      : malePlayers;
+  const shuffledPlayers = shuffleArray(genericPlayers);
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -51,7 +52,7 @@ export const generatePlayersAction = async ({
         data: {
           players: {
             createMany: {
-              data: newPlayers,
+              data: shuffledPlayers,
             },
           },
         },
@@ -69,6 +70,7 @@ export const generatePlayersAction = async ({
     updateTag('admin-team');
     updateTag('public-teams');
     updateTag('public-team');
+    updateTag('admin-players');
 
     return prismaTransaction;
   } catch (error) {
