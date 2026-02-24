@@ -12,7 +12,6 @@ export const TournamentsSelector: FC = async () => {
       <WeekSelector />
     </div>
   );
-
 };
 
 export default TournamentsSelector;

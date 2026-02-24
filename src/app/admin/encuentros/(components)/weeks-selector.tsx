@@ -26,12 +26,12 @@ export const WeeksSelector: FC<Props> = ({ weeks }) => {
         <SelectValue placeholder="Jornada" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="asc">Ascendente <ArrowUp /></SelectItem>
-        <SelectItem value="desc">Descendente <ArrowDown /></SelectItem>
+        <SelectItem value="asc">ascendente <ArrowUp /></SelectItem>
+        <SelectItem value="desc">descendente <ArrowDown /></SelectItem>
         {
           (weeks.length > 0) && weeks.map((week) => (
               <SelectItem key={week} value={`${week}`}>
-                Jornada {week}
+                jornada {week}
               </SelectItem>
             ))
         }

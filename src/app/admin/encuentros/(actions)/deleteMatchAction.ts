@@ -28,9 +28,10 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
   updateTag('matches');
   updateTag('dashboard-results');
   updateTag('public-matches');
-  updateTag("public-results-roles");
-  updateTag("public-result-details");
-  updateTag("public-matches-count");
+  updateTag('public-results-roles');
+  updateTag('public-result-details');
+  updateTag('public-matches-count');
+  updateTag('admin-tournament-for-match');
 
   return {
     ok: true,

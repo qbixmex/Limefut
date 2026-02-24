@@ -25,7 +25,7 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const setTournamentParam = (value: string) => {
+  const setParams = (value: string) => {
     const params = new URLSearchParams(searchParams);
 
     if (!params.has('torneo') || value.length > 0) {
@@ -36,7 +36,7 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
 
   return (
     <Select
-      onValueChange={setTournamentParam}
+      onValueChange={setParams}
       value={tournamentId ?? ""}
     >
       <SelectTrigger className="w-full max-w-[400px]">

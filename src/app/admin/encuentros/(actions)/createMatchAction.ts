@@ -3,13 +3,35 @@
 import prisma from "@/lib/prisma";
 import { createMatchSchema } from "@/shared/schemas";
 import { updateTag } from "next/cache";
-import type { Match } from "@/shared/interfaces";
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
 
 type CreateResponseAction = Promise<{
   ok: boolean;
   message: string;
-  match: Match | null;
+  match: {
+    id: string;
+    week: number | null;
+    status: string;
+    place: string | null;
+    referee: string | null;
+    localScore: number | null;
+    visitorScore: number | null;
+    matchDate: Date | null;
+    localId: string;
+    visitorId: string;
+    tournament: {
+      id: string;
+      name: string;
+    };
+    local: {
+      id: string;
+      name: string;
+    };
+    visitor: {
+      id: string;
+      name: string;
+    };
+  } | null;
 }>;
 
 export const createMatchAction = async (
@@ -87,8 +109,6 @@ export const createMatchAction = async (
           localScore: true,
           visitorScore: true,
           status: true,
-          createdAt: true,
-          updatedAt: true,
           local: {
             select: {
               id: true,
@@ -130,9 +150,10 @@ export const createMatchAction = async (
     updateTag('matches');
     updateTag('dashboard-results');
     updateTag('public-matches');
-    updateTag("public-results-roles");
-    updateTag("public-result-details");
-    updateTag("public-matches-count");
+    updateTag('public-results-roles');
+    updateTag('public-result-details');
+    updateTag('public-matches-count');
+    updateTag('admin-tournament-for-match');
 
     return prismaTransaction;
   } catch (error) {

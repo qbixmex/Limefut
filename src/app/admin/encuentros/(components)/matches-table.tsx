@@ -77,10 +77,10 @@ export const MatchesTable: FC<Props> = ({
               <TableRow className="h-16">
                 <TableHead className="w-full md:w-1/2">Encuentro</TableHead>
                 <TableHead className="w-[100px] text-center">
-                  <DateSelector />
+                  <WeeksSelector weeks={matchesWeeks} />
                 </TableHead>
                 <TableHead className="w-[100px] text-center">
-                  <WeeksSelector weeks={matchesWeeks} />
+                  <DateSelector />
                 </TableHead>
                 <TableHead className="w-[120px]" colSpan={2}>
                   <StatusSelector />
@@ -91,9 +91,9 @@ export const MatchesTable: FC<Props> = ({
               {(matches.length > 0) && matches.map((match) => (
                 <TableRow key={match.id}>
                   <TableCell className="w-25">
-                    <div className="grid grid-cols-[1fr_120px_1fr] gap-2 font-semibold text-gray-500">
+                    <div className="grid grid-cols-[1fr_120px_1fr] gap-2 items-center font-semibold text-gray-500">
                       <div className="text-right">
-                        <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                        <Link href={`/admin/equipos/${match.localTeam.id}`}>
                           <div className="space-x-2">
                             {(match.penaltyShootout?.status == MATCH_STATUS.COMPLETED) && (
                               <Badge variant="outline-secondary">
@@ -126,7 +126,7 @@ export const MatchesTable: FC<Props> = ({
                         )}
                       </div>
                       <div className="text-left">
-                        <Link href={`/admin/equipos/${match.localTeam.permalink}`}>
+                        <Link href={`/admin/equipos/${match.visitorTeam.id}`}>
                           <div className="space-x-2">
                             <span>{match.visitorTeam.name}</span>
                             {(match.penaltyShootout?.status == MATCH_STATUS.COMPLETED) && (
@@ -140,12 +140,12 @@ export const MatchesTable: FC<Props> = ({
                     </div>
                   </TableCell>
                   <TableCell className="text-center">
+                    <Badge variant="outline-info">{match.week}</Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
                     {format(match.matchDate as Date, "dd / MMM / y", { locale: es }).toUpperCase()},
                     {' '}
                     {formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', "h:mm a", { locale: es })}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Badge variant="outline-info">{match.week}</Badge>
                   </TableCell>
                   <TableCell>
                     {match.status === MATCH_STATUS.COMPLETED ? (
