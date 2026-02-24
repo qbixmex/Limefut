@@ -3,7 +3,6 @@
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { editMatchSchema } from '@/shared/schemas';
-import { type Match } from '@/shared/interfaces';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
 type Options = {
