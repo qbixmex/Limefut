@@ -12,7 +12,7 @@ type Options = Readonly<{
   page?: number;
   take?: number;
   sortMatchDate?: 'asc' | 'desc';
-  sortWeek?: string;
+  sortWeek?: `${number}` | 'asc' | 'desc' | undefined;
   status?: MATCH_STATUS_TYPE;
 }>;
 
@@ -112,8 +112,8 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
     const matches = await prisma.match.findMany({
       where: whereCondition,
       orderBy: [
+        { week: isNaN(parseInt(sortWeek as string)) ? sortWeek as 'asc' | 'desc' : undefined },
         { matchDate: sortMatchDate },
-        { week: isNaN(Number(sortWeek)) ? (sortWeek as 'asc' | 'desc') : 'desc' },
       ],
       take: take,
       skip: (page - 1) * take,

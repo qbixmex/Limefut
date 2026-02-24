@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, type ChangeEvent } from 'react';
+import type { SubmitEvent, ChangeEvent } from 'react';
+import { useState} from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '~/src/components/ui/label';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -26,12 +27,14 @@ export const WeekSelector = () => {
     router.push(`${pathname}?${params}`);
   };
 
+  const handleSubmit = (event: SubmitEvent) => {
+    event.preventDefault();
+    setWeekParam(`${week}`);
+  };
+
   return (
     <>
-      <form onSubmit={(event) => {
-        event.preventDefault();
-        setWeekParam(`${week}`);
-      }}>
+      <form onSubmit={handleSubmit}>
         <div className="flex gap-5">
           <Label className="space-x-5">
             <span>Jornada</span>
