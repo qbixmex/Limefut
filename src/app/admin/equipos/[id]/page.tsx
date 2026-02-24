@@ -168,6 +168,7 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
                         <GenerateGenericPlayers
                           teamId={team.id}
                           userRoles={session?.user.roles as string[]}
+                          gender={team.gender}
                         />
                       </section>
                     ) : (

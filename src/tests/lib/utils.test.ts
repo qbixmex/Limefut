@@ -6,6 +6,7 @@ import {
   getRobots,
   getStageTranslation,
   getStatusTranslation,
+  shuffleArray,
   sleep,
   slugify,
 } from "@/lib/utils";
@@ -118,5 +119,16 @@ describe('Test on Utils', () => {
       .toBe('completado');
     expect(getStatusTranslation('lorem' as MATCH_STATUS_TYPE))
       .toBe('desconocido');
+  });
+
+  test('Should shuffle an array', () => {
+    const originalArray = [1, 2, 3, 4, 5];
+    const shuffledArray = shuffleArray(originalArray);
+    
+    // Check if the shuffled array has the same length as the original
+    expect(shuffledArray).toHaveLength(originalArray.length);
+
+    // Check if the shuffled array contains the same elements as the original
+    expect(shuffledArray).toEqual(expect.arrayContaining(originalArray));
   });
 });

@@ -10,9 +10,10 @@ import { Loader } from 'lucide-react';
 type Props = {
   userRoles: string[] | undefined;
   teamId: string;
+  gender: 'male' | 'female',
 };
 
-export const GenerateGenericPlayers: FC<Props> = ({ userRoles, teamId }) => {
+export const GenerateGenericPlayers: FC<Props> = ({ userRoles, teamId, gender }) => {
   const [ generatingPlayers, setGeneratingPlayers ] = useState(false);
 
   const handleGeneratePlayers = async () => {
@@ -21,7 +22,7 @@ export const GenerateGenericPlayers: FC<Props> = ({ userRoles, teamId }) => {
     const { ok, message } = await generatePlayersAction({
       userRoles,
       teamId,
-      quantity: 12,
+      gender,
     });
 
     if (!ok) {
