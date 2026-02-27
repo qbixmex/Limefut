@@ -58,6 +58,22 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
 
   let { nextMatches = 1, take = 12 } = options ?? {};
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const dayOfWeek = today.getDay();
+  // Set midnight of the last day of the week (Sunday)
+  const diffToEndOfWeek = (7 - dayOfWeek) % 7;
+
+  // Calculate the end of the week date
+  const endOfWeek = new Date(today);
+
+  // Set the time to the end of the day (23:59:59.999)
+  endOfWeek.setDate(today.getDate() + diffToEndOfWeek);
+
+  // Set the time to the end of the day (23:59:59.999)
+  endOfWeek.setHours(23, 59, 59, 999);
+
   // In case is an invalid number like (lorem)
   if (isNaN(nextMatches)) nextMatches = 1;
   if (isNaN(take)) take = 12;
@@ -70,8 +86,12 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
           { status: "inProgress" },
           { status: "postPosed" },
         ],
+        matchDate: {
+          gte: today,
+          lte: endOfWeek,
+        },
       },
-      orderBy: { matchDate: 'desc' },
+      orderBy: { matchDate: 'asc' },
       take: take,
       skip: (nextMatches - 1) * take,
       select: {
@@ -112,7 +132,17 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     });
 
     const totalCount = await prisma.match.count({
-      where: { status: "scheduled" },
+      where: {
+        OR: [
+          { status: "scheduled" },
+          { status: "inProgress" },
+          { status: "postPosed" },
+        ],
+        matchDate: {
+          gte: today,
+          lte: endOfWeek,
+        },
+      },
     });
 
     return {
