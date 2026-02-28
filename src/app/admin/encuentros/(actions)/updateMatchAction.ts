@@ -167,6 +167,7 @@ export const updateMatchAction = async ({
         updateTag('public-result-details');
         updateTag('public-matches-count');
         updateTag('admin-tournament-for-match');
+        updateTag('public-team-matches');
 
         return {
           ok: true,
