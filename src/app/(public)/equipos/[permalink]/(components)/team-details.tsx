@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import Image from "next/image";
+import Image from 'next/image';
 import { fetchTeamAction } from '../../(actions)/fetchTeamAction';
 import { redirect } from 'next/navigation';
 import { ShieldBan } from 'lucide-react';
@@ -7,6 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/componen
 import Link from 'next/link';
 import { Badge } from '~/src/components/ui/badge';
 import { Heading } from '../../../components';
+import { NextMatch } from './next-match';
+import { fetchNextMatchesAction } from '../(actions)/fetchNextMatchesAction';
 
 type Props = Readonly<{
   params: Promise<{
@@ -38,10 +40,21 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
     format,
   });
 
-  if (!ok) redirect(`/equipos?error=${encodeURIComponent(message)}`);
+  if (!team && !ok) {
+    redirect(`/equipos?error=${encodeURIComponent(message)}`);
+  }
+
+  const responseNextMatches = await fetchNextMatchesAction({
+    teamId: team!.id,
+    count: 3,
+  });
+
+  if (!responseNextMatches.ok) {
+    redirect(`/equipos?error=${encodeURIComponent(responseNextMatches.message)}`);
+  }
 
   return (
-    <div className="flex flex-1 flex-col gap-5 p-5 pt-0">
+    <div className="flex flex-1 flex-col gap-5 p-0 lg:p-5">
       <div className="flex items-center gap-5 mb-5">
         <Heading level="h1" className="text-emerald-500">
           {team?.name}
@@ -58,7 +71,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
               src={team.imageUrl}
               width={400}
               height={400}
-              alt={`imagen de perfil de ${team.name}`}
+              alt={`${team.name} equipo`}
               className="rounded-lg w-full lg:max-w-100 h-auto object-cover"
             />
           )}
@@ -71,7 +84,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="w-[120px] font-semibold">Sede</TableHead>
                 <TableCell>
                   <span className="text-wrap dark:text-gray-200 italic">
-                    { team?.headquarters ?? 'No especificado' }
+                    {team?.headquarters ?? 'No especificado'}
                   </span>
                 </TableCell>
               </TableRow>
@@ -173,13 +186,31 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="font-semibold">Dirección</TableHead>
                 <TableCell>
                   <span className="text-wrap dark:text-gray-200 italic">
-                    { team?.address ?? 'No especificada' }
+                    {team?.address ?? 'No especificada'}
                   </span>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </section>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold mb-5">Próximos encuentros:</h2>
+
+        {(responseNextMatches.matches.length === 0) && (
+          <div className="w-fit px-5 py-2.5 border border-sky-500 rounded mb-5">
+            <p className="text-sky-500 font-bold italic">Aún no hay encuentros programados</p>
+          </div>
+        )}
+
+        {(responseNextMatches.matches.length > 0) && (
+          <div className="space-y-5">
+            {responseNextMatches.matches.map((match) => (
+              <NextMatch key={match.id} match={match} />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
