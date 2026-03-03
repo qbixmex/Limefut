@@ -3,26 +3,17 @@
 import prisma from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 
-type Options = Readonly<{
-  take?: number;
-}>;
-
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
   matchesDates: string[];
 }>;
 
-export const fetchPublicMatchesAction = async (options?: Options): ResponseFetchAction => {
+export const fetchPublicMatchesAction = async (): ResponseFetchAction => {
   "use cache";
 
   cacheLife('days');
   cacheTag('public-matches-count');
-
-  let { take = 12 } = options ?? {};
-
-  // In case is an invalid number like (lorem)
-  if (isNaN(take)) take = 12;
 
   try {
     const now = new Date();
@@ -42,8 +33,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
           lte: endDate,
         },
       },
-      orderBy: { matchDate: 'desc' },
-      take,
+      orderBy: { matchDate: 'asc' },
       select: {
         matchDate: true,
       },
