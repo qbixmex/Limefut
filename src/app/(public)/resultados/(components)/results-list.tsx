@@ -67,6 +67,7 @@ export const ResultsList: FC<Props> = async ({
               <TableRow>
                 <TableHead className="hidden lg:table-cell">Fecha</TableHead>
                 <TableHead className="hidden lg:table-cell">Hora</TableHead>
+                <TableHead className="hidden lg:table-cell">Sede</TableHead>
                 <TableHead>
                   <div className="grid grid-cols-[1fr_100px_1fr]">
                     <span className="text-right">Equipo Local</span>
@@ -110,6 +111,9 @@ export const ResultsList: FC<Props> = async ({
                     ) : (
                       <p className="text-gray-600">No definida</p>
                     )}
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    <p className="text-balance">{match.place ?? 'No definido'}</p>
                   </TableCell>
                   <TableCell>
                     <Link

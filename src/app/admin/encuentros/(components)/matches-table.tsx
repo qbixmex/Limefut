@@ -76,10 +76,11 @@ export const MatchesTable: FC<Props> = ({
             <TableHeader>
               <TableRow className="h-16">
                 <TableHead className="w-full md:w-1/2">Encuentro</TableHead>
-                <TableHead className="w-[100px] text-center">
+                <TableHead className="hidden md:table-cell md:min-w-[150px]">Sede</TableHead>
+                <TableHead className="w-25 text-center">
                   <WeeksSelector weeks={matchesWeeks} />
                 </TableHead>
-                <TableHead className="w-[100px] text-center">
+                <TableHead className="w-25 text-center">
                   <DateSelector />
                 </TableHead>
                 <TableHead className="w-[120px]" colSpan={2}>
@@ -138,6 +139,9 @@ export const MatchesTable: FC<Props> = ({
                         </Link>
                       </div>
                     </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <p className="text-balance">{match.place}</p>
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge variant="outline-info">{match.week}</Badge>
