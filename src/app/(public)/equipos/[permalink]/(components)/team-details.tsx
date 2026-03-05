@@ -1,14 +1,15 @@
 import type { FC } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { fetchTeamAction } from '../../(actions)/fetchTeamAction';
 import { redirect } from 'next/navigation';
 import { ShieldBan } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/components/ui/table';
-import Link from 'next/link';
 import { Badge } from '~/src/components/ui/badge';
 import { Heading } from '../../../components';
-import { NextMatch } from './next-match';
+import { Match } from './next-match';
 import { fetchNextMatchesAction } from '../(actions)/fetchNextMatchesAction';
+import { fetchLastMatchesAction } from '../(actions)/fetchLastMatchesAction';
 
 type Props = Readonly<{
   params: Promise<{
@@ -45,6 +46,11 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
   }
 
   const responseNextMatches = await fetchNextMatchesAction({
+    teamId: team!.id,
+    count: 3,
+  });
+
+    const responseLastMatches = await fetchLastMatchesAction({
     teamId: team!.id,
     count: 3,
   });
@@ -195,22 +201,47 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
         </section>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-semibold mb-5">Próximos encuentros:</h2>
+      <section className="flex flex-col md:flex-row gap-5">
+        <div className="w-full md:w-1/2">
+          <h2 className="text-2xl font-semibold mb-5">Próximos encuentros:</h2>
 
-        {(responseNextMatches.matches.length === 0) && (
-          <div className="w-fit px-5 py-2.5 border border-sky-500 rounded mb-5">
-            <p className="text-sky-500 font-bold italic">Aún no hay encuentros programados</p>
-          </div>
-        )}
+          {(responseNextMatches.matches.length === 0) && (
+            <div className="w-fit px-5 py-2.5 border border-sky-500 rounded mb-5">
+              <p className="text-sky-500 font-bold italic">Aún no hay encuentros programados</p>
+            </div>
+          )}
 
-        {(responseNextMatches.matches.length > 0) && (
-          <div className="space-y-5">
-            {responseNextMatches.matches.map((match) => (
-              <NextMatch key={match.id} match={match} />
-            ))}
-          </div>
-        )}
+          {(responseNextMatches.matches.length > 0) && (
+            <div className="space-y-5">
+              {responseNextMatches.matches.map((match) => (
+                <Match key={match.id} match={match} />
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="w-full md:w-1/2">
+          <h2 className="text-2xl font-semibold mb-5">Últimos resultados:</h2>
+
+          {(responseLastMatches.matches.length === 0) && (
+            <div className="w-fit px-5 py-2.5 border border-sky-500 rounded mb-5">
+              <p className="text-sky-500 font-bold italic">
+                No hay encuentros completados
+              </p>
+            </div>
+          )}
+
+          {(responseLastMatches.matches.length > 0) && (
+            <div className="space-y-5">
+              {responseLastMatches.matches.map((match) => (
+                <Match
+                  key={match.id}
+                  match={match}
+                  showScore
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );

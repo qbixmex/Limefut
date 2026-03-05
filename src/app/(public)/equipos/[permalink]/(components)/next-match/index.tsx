@@ -1,22 +1,30 @@
-import type { FC } from 'react';
+'use client';
+
+import { useState, type FC } from 'react';
 import Image from 'next/image';
 import { ShieldBan } from 'lucide-react';
-import './next-match.css';
 import { formatInTimeZone } from 'date-fns-tz';
 import { es } from 'date-fns/locale';
-import { getStatusTranslation } from '@/lib/utils';
+import { cn, getStatusTranslation } from '@/lib/utils';
 import type { NEXT_MATCH_TYPE } from '../../(actions)/fetchNextMatchesAction';
+import type { LAST_MATCH_TYPE } from '../../(actions)/fetchLastMatchesAction';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import './styles.css';
 
 type Props = Readonly<{
-  match: NEXT_MATCH_TYPE;
+  match: NEXT_MATCH_TYPE | LAST_MATCH_TYPE;
+  showScore?: boolean;
 }>;
 
-export const NextMatch: FC<Props> = ({ match }) => {
+export const Match: FC<Props> = ({ match, showScore }) => {
   const { localTeam, visitorTeam, matchDetails } = match;
+  const [showData, setShowData] = useState(false);
 
   return (
-    <section className="next-match">
+    <section
+      className="next-match group"
+      onClick={() => setShowData(prev => !prev)}
+    >
       <div className="teams">
         <div className="team-image-name">
           {
@@ -42,7 +50,23 @@ export const NextMatch: FC<Props> = ({ match }) => {
             {localTeam.name}
           </p>
         </div>
-        <div className="versus">VS</div>
+        <div className="versus">
+          {
+            showScore ? (
+              <div className="match-score">
+                <span className="local-score">
+                  {(localTeam as LAST_MATCH_TYPE['visitorTeam']).score}
+                </span>
+                <span className="score-separator">-</span>
+                <span className="visitor-score">
+                  {(visitorTeam as LAST_MATCH_TYPE['visitorTeam']).score}
+                </span>
+              </div>
+            ) : (
+              <span>VS</span>
+            )
+          }
+        </div>
         <div className="team-image-name">
           {
             !visitorTeam.imageUrl ? (
@@ -68,7 +92,9 @@ export const NextMatch: FC<Props> = ({ match }) => {
           </p>
         </div>
       </div>
-      <div className="match-data">
+      <div className={cn('match-data', {
+        'show-data': showData,
+      })}>
         <p className="match-date">
           <b>Fecha:</b>&nbsp;
           <i>
