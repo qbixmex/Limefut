@@ -38,7 +38,11 @@ export const fetchTournamentsForStandingsAction = async (userRoles: string[] | n
 
   try {
     const tournaments = await prisma.tournament.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: [
+        { name: 'asc' },
+        { category: 'desc' },
+        { format: 'desc' },
+      ],
       where: { active: true },
       select: {
         id: true,

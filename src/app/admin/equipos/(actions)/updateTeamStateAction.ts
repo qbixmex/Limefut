@@ -38,6 +38,7 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
   updateTag('admin-team');
   updateTag('public-teams');
   updateTag('public-team');
+  updateTag('admin-standings');
   updateTag('standings');
 
   return {
