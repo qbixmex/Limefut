@@ -25,6 +25,7 @@ import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { headers } from 'next/headers';
+import { DeletePlayers } from '@/shared/components/delete-players';
 
 type Props = Readonly<{
   teamId: string;
@@ -56,7 +57,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
     <>
       {players && players.length > 0 ? (
         <div className="flex-1 flex flex-col">
-          <div className="flex-1">
+          <div className="flex-1 relative">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -149,6 +150,11 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                 ))}
               </TableBody>
             </Table>
+            <DeletePlayers
+              teamId={teamId}
+              roles={session?.user.roles as string[]}
+              className="absolute -top-5 right-0"
+            />
           </div>
           <div className={cn("flex justify-center mt-10", {
             'hidden': pagination!.totalPages === 1,

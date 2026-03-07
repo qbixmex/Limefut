@@ -20,6 +20,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { GenerateGenericPlayers } from "../(components)/generate-generic-players";
 import { headers } from "next/headers";
+import { DeletePlayers } from "@/shared/components/delete-players";
 
 type Props = Readonly<{
   params: Promise<{
@@ -156,7 +157,13 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
             <section>
               <div className="flex flex-col lg:flex-row gap-10">
                 <div className="w-full lg:w-1/2">
-                  <h2 className="text-xl font-bold text-sky-600 mb-5">Jugadores</h2>
+                  <div className="flex justify-between">
+                    <h2 className="text-xl font-bold text-sky-600 mb-5">Jugadores</h2>
+                    <DeletePlayers
+                      teamId={teamId}
+                      roles={session?.user.roles as string[]}
+                    />
+                  </div>
                   {
                     team.players && (team.players.length === 0) ? (
                       <section className="space-y-5">
