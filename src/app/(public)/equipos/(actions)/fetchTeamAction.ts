@@ -77,6 +77,7 @@ export const fetchTeamAction = async ({
         city:true,
         state:true,
         address: true,
+        active: true,
         tournament: {
           select: {
             id: true,
@@ -104,7 +105,15 @@ export const fetchTeamAction = async ({
     if (!team) {
       return {
         ok: false,
-        message: '¡ Equipo no encontrado ❌ !',
+        message: '¡ El equipo no se encuentra en la base de datos ❌ !',
+        team: null,
+      };
+    }
+
+    if (!team.active) {
+      return {
+        ok: false,
+        message: `¡ El equipo ${team.name} está desactivado ❌ !`,
         team: null,
       };
     }
