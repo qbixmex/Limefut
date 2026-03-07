@@ -2,6 +2,7 @@ import { type FC, Suspense } from "react";
 import type { Metadata } from "next";
 import { Heading, TournamentsSelector, TournamentsSelectorSkeleton } from "../components";
 import { TeamsContent } from "./(components)/TeamsContent";
+import { ErrorHandler } from "@/shared/components/errorHandler";
 
 export const metadata: Metadata = {
   title: 'Equipos',
@@ -27,6 +28,7 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
       </Suspense>
 
       <Suspense>
+        <ErrorHandler />
         <TeamsContent searchParams={searchParams} />
       </Suspense>
     </div>
