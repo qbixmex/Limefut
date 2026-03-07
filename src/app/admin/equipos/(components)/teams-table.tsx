@@ -141,10 +141,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        <DeleteTeam
-                          teamId={team.id}
-                          roles={roles}
-                        />
+                        <DeleteTeam teamId={team.id} roles={roles} />
                       </div>
                     </TableCell>
                   </TableRow>
