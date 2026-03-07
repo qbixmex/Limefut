@@ -4,7 +4,7 @@ import { TournamentsSelector } from "../(components)/tournaments-selector";
 import { TeamsContent } from "./(components)/teams-content";
 import { ClearFilters } from "./(components)/clear-filters";
 import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
-import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
+import { fetchTournamentsAction } from "@/shared/actions/fetchTournamentsAction";
 import { Search } from "@/shared/components/search";
 import { ErrorHandler } from "@/shared/components/errorHandler";
 import { CreateTeam } from "./(components)/create-team.tsx";
