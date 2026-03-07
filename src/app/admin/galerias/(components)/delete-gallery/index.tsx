@@ -64,6 +64,7 @@ export const DeleteGallery: FC<Props> = ({ galleryId, roles }) => {
           <AlertDialogAction
             className="delete-btn"
             onClick={() => onDeleteGallery(galleryId)}
+            autoFocus
           >
             eliminar
           </AlertDialogAction>

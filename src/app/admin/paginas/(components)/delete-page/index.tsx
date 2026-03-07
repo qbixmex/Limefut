@@ -60,6 +60,7 @@ export const DeletePage: FC<Props> = ({ pageId, roles }) => {
           <AlertDialogAction
             className="delete-btn"
             onClick={onDeletePage}
+            autoFocus
           >
             eliminar
           </AlertDialogAction>

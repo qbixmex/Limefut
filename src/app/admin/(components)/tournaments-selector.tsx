@@ -39,7 +39,7 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
       onValueChange={setParams}
       value={tournamentId ?? ""}
     >
-      <SelectTrigger className="w-full max-w-[400px]">
+      <SelectTrigger className="w-full lg:w-1/2">
         <SelectValue placeholder="¡ Seleccione una opción !" />
       </SelectTrigger>
       <SelectContent>

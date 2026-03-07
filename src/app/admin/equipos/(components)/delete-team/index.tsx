@@ -69,6 +69,7 @@ export const DeleteTeam: FC<Props> = ({ teamId, roles }) => {
           <AlertDialogAction
             className="delete-btn"
             onClick={() => onDeleteTeam(teamId)}
+            autoFocus
           >
             eliminar
           </AlertDialogAction>

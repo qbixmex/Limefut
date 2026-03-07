@@ -60,6 +60,7 @@ export const DeleteHeroBanner: FC<Props> = ({ heroBannerId, roles }) => {
           <AlertDialogAction
             className="delete-btn"
             onClick={onDeletePage}
+            autoFocus
           >
             eliminar
           </AlertDialogAction>

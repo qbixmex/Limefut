@@ -64,6 +64,7 @@ export const DeleteMatch: FC<Props> = ({ id, roles }) => {
           <AlertDialogAction
             className="delete-btn"
             onClick={() => onDeleteMatch(id)}
+            autoFocus
           >
             eliminar
           </AlertDialogAction>

@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useState, type FC, type ChangeEvent } from 'react';
+import { useRef, useState, type FC, type ChangeEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
-import { EmailInput } from './email-input';
-import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { EmailInput } from "./email-input";
+import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -14,13 +14,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import type z from 'zod';
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -28,8 +28,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+} from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -37,12 +37,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
-import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
-import type { Coach, Team, Tournament } from '@/shared/interfaces';
-import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
-import type { Session } from '@/lib/auth-client';
-import { cn, slugify } from '@/lib/utils';
+} from "@/components/ui/command";
+import { createTeamSchema, editTeamSchema } from "@/shared/schemas";
+import type { Coach, Team, Tournament } from "@/shared/interfaces";
+import { type TournamentType, createTeamAction, updateTeamAction } from "../(actions)";
+import type { Session } from "@/lib/auth-client";
+import { cn, slugify } from "@/lib/utils";
 
 type Props = Readonly<{
   session: Session;

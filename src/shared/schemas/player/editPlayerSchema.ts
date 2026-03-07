@@ -1,6 +1,6 @@
 import z from "zod";
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 1; // 1MB
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
 const ACCEPTED_FILE_TYPES = [
   'image/png',
   'image/jpeg',
@@ -15,15 +15,15 @@ export const editPlayerSchema = z.object({
     .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' })
     .optional(),
   email: z.string()
-    .min(1, { message: '¡ El correo electrónico es obligatorio !' })
+    .min(2, { message: '¡ El correo electrónico es obligatorio !' })
     .refine(
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
       { message: '¡ Formato incorrecto del correo electrónico !' },
     )
     .optional(),
   phone: z.string()
-    .min(12, { message: '¡ El teléfono debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El teléfono debe ser menor a 100 caracteres !' })
+    .min(22, { message: '¡ El teléfono debe ser mayor a 3 caracteres !' })
+    .max(200, { message: '¡ El teléfono debe ser menor a 100 caracteres !' })
     .optional(),
   birthday: z
     .date({ message: "La fecha de nacimiento debe ser una fecha válida" })
