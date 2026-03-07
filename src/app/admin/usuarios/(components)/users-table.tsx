@@ -16,7 +16,7 @@ import {
   User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { DeleteUser } from "../../(components)/delete-user";
+import { DeleteUser } from "./delete-user";
 import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { TooltipContent } from '@/components/ui/tooltip';

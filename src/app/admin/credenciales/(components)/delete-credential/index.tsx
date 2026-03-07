@@ -64,6 +64,7 @@ export const DeleteCredential: FC<Props> = ({ id, roles }) => {
           <AlertDialogAction
             className="delete-btn"
             onClick={() => onDeleteCredential(id)}
+            autoFocus
           >
             eliminar
           </AlertDialogAction>
