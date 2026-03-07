@@ -1,4 +1,4 @@
-@reference '../../../globals.css';
+@reference '../../../../globals.css';
 
 .cancel-btn {
   border-color: var(--color-gray-600);
