@@ -30,8 +30,17 @@ export const DeleteTeam: FC<Props> = ({ teamId, roles }) => {
       toast.error('¡ No tienes permisos administrativos para eliminar equipos !');
       return;
     }
-    const response = await deleteTeamAction(teamId);
-    toast.success(response.message);
+    const { ok, message } = await deleteTeamAction(teamId);
+
+    if (!ok) {
+      toast.error('Error', {
+        description: <p className="text-pretty">{message}</p>,
+        duration: 6000,
+      });
+      return;
+    }
+
+    toast.success(message);
   };
 
   return (

@@ -14,6 +14,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
     where: { id: teamId },
     select: {
       name: true,
+      tournamentId: true,
       imagePublicID: true,
       _count: {
         select: {
@@ -34,7 +35,38 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   if (team._count.players > 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el equipo porque tiene jugadores asociados !',
+      message: '¡ No se puede eliminar el equipo porque tiene jugadores registrados !',
+    };
+  }
+
+  const matchesCount = await prisma.match.count({
+    where: {
+      OR : [
+        { localId: teamId },
+        { visitorId: teamId },
+      ],
+    },
+  });
+
+  if (matchesCount > 0) {
+    return {
+      ok: false,
+      message: '¡ No se puede eliminar el equipo'
+        + ` porque aparece en ( ${matchesCount} )`
+        + ` encuentro${matchesCount > 0 ? 's' : ''} !`,
+    };
+  }
+
+  const standingsCount = await prisma.standings.count({
+    where: { teamId },
+  });
+
+  if (standingsCount > 0) {
+    return {
+      ok: false,
+      message: '¡ No se puede eliminar el equipo'
+        + ` porque aparece en la tabla de posiciones`
+        + ` y probablemente contenga estadísticas !`,
     };
   }
 
@@ -63,6 +95,6 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
 
   return {
     ok: true,
-    message: `¡ El equipo "${teamDeleted.name}" ha sido eliminado correctamente 👍 !`,
+    message: `¡ El equipo ha sido eliminado correctamente 👍 !`,
   };
 };
