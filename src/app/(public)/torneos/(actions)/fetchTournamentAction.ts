@@ -72,6 +72,9 @@ export const fetchTournamentAction = async (
         currentWeek: true,
         stage: true,
         teams: {
+          where: {
+            active: true,
+          },
           select: {
             id: true,
             name: true,
