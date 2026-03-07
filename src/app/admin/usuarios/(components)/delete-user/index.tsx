@@ -17,7 +17,7 @@ import { Trash2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import "./styles.css";
-import { deleteUserAction } from "../../usuarios/(actions)";
+import { deleteUserAction } from "../../(actions)";
 
 type Props = Readonly<{
   userId: string;
@@ -60,6 +60,7 @@ export const DeleteUser: FC<Props> = ({ userId, roles }) => {
           <AlertDialogAction
             className="delete-btn"
             onClick={() => onDeleteUser(userId)}
+            autoFocus
           >
             eliminar
           </AlertDialogAction>
