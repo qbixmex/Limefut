@@ -15,6 +15,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
+import './styles.css';
 
 type Props = Readonly<{
   onDeleteImage: () => void;
@@ -28,11 +29,7 @@ export const DeleteImage: FC<Props> = ({ onDeleteImage, className = '' }) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <AlertDialogTrigger asChild>
-              <Button
-                variant="outline-danger"
-                size="icon"
-                className="opacity-50 hover:opacity-100"
-              >
+              <Button type="button" variant="outline-danger" size="icon" >
                 <Trash2 />
               </Button>
             </AlertDialogTrigger>

@@ -1,9 +1,9 @@
 'use client';
 
 import type { FC } from 'react';
-import { DeleteImage } from "@/shared/components/delete-image";
+import { DeleteImage } from '@/shared/components/delete-image';
 import { toast } from 'sonner';
-import { deleteTeamImageAction } from '../../(actions)/deleteTeamImageAction';
+import { deleteTournamentImageAction } from '../../(actions)/deleteTournamentImageAction';
 
 type Props = Readonly<{
   roles: string[];
@@ -11,14 +11,14 @@ type Props = Readonly<{
   className?: string;
 }>;
 
-export const DeleteTeamImage: FC<Props> = ({ roles, teamId, className }) => {
+export const DeleteTournamentImage: FC<Props> = ({ roles, teamId, className }) => {
   const onDeleteImage = async () => {
     if (!roles?.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar la imagen !');
       return;
     }
 
-    const response = await deleteTeamImageAction(teamId);
+    const response = await deleteTournamentImageAction(teamId);
 
     if (!response.ok) {
       toast.error(response.message);
