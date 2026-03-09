@@ -20,7 +20,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { GiWhistle } from 'react-icons/gi';
 import { headers } from 'next/headers';
-import { DeleteCoachImage } from '@/app/admin/torneos/(components)/delete-coach-image';
+import { DeleteCoachImage } from '../../(components)/delete-coach-image';
 
 type Props = Readonly<{
   params: Promise<{
@@ -75,7 +75,7 @@ const CoachPageContent: FC<Props> = async ({ params }) => {
                         className="rounded-lg size-[512px] object-cover"
                       />
                       <DeleteCoachImage
-                        teamId={coach.id}
+                        coachId={coach.id}
                         roles={session?.user.roles as string[]}
                         className="absolute top-2 right-2"
                       />
