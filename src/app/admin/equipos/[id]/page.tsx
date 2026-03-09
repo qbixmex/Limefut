@@ -10,7 +10,7 @@ import {
   TableCell,
   TableRow,
 } from "@/components/ui/table";
-import { Flag, Pencil } from "lucide-react";
+import { Pencil, ShieldBan } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ import { es } from "date-fns/locale";
 import { GenerateGenericPlayers } from "../(components)/generate-generic-players";
 import { headers } from "next/headers";
 import { DeletePlayers } from "@/shared/components/delete-players";
+import { DeleteTeamImage } from "../(components)/delete-team-image";
 
 type Props = Readonly<{
   params: Promise<{
@@ -61,17 +62,26 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
               {
                 !team.imageUrl ? (
-                  <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
-                    <Flag size={480} strokeWidth={1} className="stroke-gray-400" />
+                  <div className="bg-gray-200 dark:bg-gray-800 w-full max-w-[512px] h-auto rounded-xl flex items-center justify-center">
+                    <ShieldBan size={512} strokeWidth={1} className="stroke-gray-400" />
                   </div>
                 ) : (
-                  <Image
-                    src={team.imageUrl}
-                    width={512}
-                    height={512}
-                    alt={`imagen de perfil de ${team.name}`}
-                    className="rounded-lg size-[512px] object-cover"
-                  />
+                  <div className="w-full">
+                    <div className="w-full max-w-[512px] h-auto relative">
+                      <Image
+                        src={team.imageUrl}
+                        width={512}
+                        height={512}
+                        alt={`imagen de perfil de ${team.name}`}
+                        className="rounded-lg size-[512px] object-cover"
+                      />
+                      <DeleteTeamImage
+                        teamId={team.id}
+                        roles={session?.user.roles as string[]}
+                        className="absolute top-2 right-2"
+                      />
+                    </div>
+                  </div>
                 )
               }
               <Table>
