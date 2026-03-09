@@ -62,18 +62,18 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
               <div className="w-full xl:max-w-lg flex justify-center">
                 {
                   !tournament.imageUrl ? (
-                    <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
-                      <Trophy size={480} strokeWidth={1} className="stroke-gray-400" />
+                    <div className="bg-gray-200 dark:bg-gray-800 w-full max-w-[512px] h-auto rounded-xl flex items-center justify-center">
+                      <Trophy size={512} strokeWidth={1} className="stroke-gray-400" />
                     </div>
                   ) : (
                     <div className="w-full">
                       <div className="w-full max-w-[512px] h-auto relative">
                         <Image
                           src={tournament.imageUrl}
-                          width={500}
-                          height={500}
+                          width={512}
+                          height={512}
                           alt={tournament.name}
-                          className="w-full max-w-lg h-auto rounded-lg object-cover"
+                          className="w-full max-w-[512px] h-auto rounded-lg object-cover"
                         />
                         <DeleteTournamentImage
                           teamId={tournament.id}
