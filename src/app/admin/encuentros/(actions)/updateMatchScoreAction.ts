@@ -182,6 +182,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
     updateTag('public-results-roles');
     updateTag('public-result-details');
     updateTag('public-matches-count');
+    updateTag("public-team-standings");
 
     if (!updatedMatch) {
       return {

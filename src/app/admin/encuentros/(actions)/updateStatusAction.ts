@@ -31,6 +31,7 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS_T
   updateTag('public-result-details');
   updateTag('public-matches-count');
   updateTag('public-team-matches');
+  updateTag("public-team-standings");
 
   return {
     ok: true,
