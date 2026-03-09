@@ -12,11 +12,11 @@ import { redirect } from "next/navigation";
 
 export const DashboardPage = async () => {
   const session = await auth.api.getSession({
-		headers: await headers(),
+    headers: await headers(),
 	});
-
+  
   if (!session) {
-		redirect("/login");
+    redirect("/login");
 	}
 
   return (
