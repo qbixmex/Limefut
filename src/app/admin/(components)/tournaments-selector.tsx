@@ -28,6 +28,11 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   const setParams = (value: string) => {
     const params = new URLSearchParams(searchParams);
 
+    // Clear all params
+    if (params.size > 0) {
+      Array.from(params.keys()).forEach(key => params.delete(key));
+    }
+
     if (!params.has('torneo') || value.length > 0) {
       params.set('torneo', value);
       router.push(`${pathname}?${params}`);
