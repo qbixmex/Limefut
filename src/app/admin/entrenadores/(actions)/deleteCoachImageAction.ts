@@ -21,7 +21,7 @@ export const deleteCoachImageAction = async (coachId: string): ResponseDeleteAct
   if (!coach) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la imagen del torneo, quizás fue eliminada ó no existe !',
+      message: '¡ No se puede eliminar la imagen del entrenador, quizás fue eliminada ó no existe !',
     };
   }
 
