@@ -9,24 +9,24 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deleteTeamImageAction = async (teamId: string): ResponseDeleteAction => {
-  const team = await prisma.team.findFirst({
-    where: { id: teamId },
+export const deleteTournamentImageAction = async (tournamentId: string): ResponseDeleteAction => {
+  const tournament = await prisma.tournament.findFirst({
+    where: { id: tournamentId },
     select: {
       name: true,
       imagePublicID: true,
     },
   });
 
-  if (!team) {
+  if (!tournament) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la imagen, quizás fue eliminada ó no existe !',
+      message: '¡ No se puede eliminar la imagen del torneo, quizás fue eliminada ó no existe !',
     };
   }
 
-  await prisma.team.update({
-    where: { id: teamId },
+  await prisma.tournament.update({
+    where: { id: tournamentId },
     data: {
       imageUrl: null,
       imagePublicID: null,
@@ -34,18 +34,18 @@ export const deleteTeamImageAction = async (teamId: string): ResponseDeleteActio
   });
 
   // Delete image from cloudinary.
-  if (team.imagePublicID) {
-    const response = await deleteImage(team.imagePublicID);
+  if (tournament.imagePublicID) {
+    const response = await deleteImage(tournament.imagePublicID);
     if (!response.ok) {
       throw 'Error al eliminar la imagen de cloudinary';
     }
   }
 
   // Update Cache
-  updateTag('admin-teams');
-  updateTag('admin-team');
-  updateTag('public-teams');
-  updateTag('public-team');
+  updateTag('admin-tournaments');
+  updateTag('admin-tournament');
+  updateTag('public-tournaments');
+  updateTag('public-tournament');
 
   return {
     ok: true,

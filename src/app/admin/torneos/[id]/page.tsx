@@ -1,20 +1,21 @@
-import { Suspense, type FC } from "react";
-import Image from "next/image";
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import { Table, TableBody, TableHead, TableCell, TableRow } from "@/components/ui/table";
-import { Pencil, Trophy } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+import { Suspense, type FC } from 'react';
+import Image from 'next/image';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import { Table, TableBody, TableHead, TableCell, TableRow } from '@/components/ui/table';
+import { Pencil, Trophy } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { fetchTournamentAction } from "../(actions)";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import type { TournamentType } from "../(actions)/fetchTournamentAction";
-import { getGenderTranslation, getStageTranslation } from "@/lib/utils";
-import { headers } from "next/headers";
+import { fetchTournamentAction } from '../(actions)';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import type { TournamentType } from '../(actions)/fetchTournamentAction';
+import { getGenderTranslation, getStageTranslation } from '@/lib/utils';
+import { headers } from 'next/headers';
+import { DeleteTournamentImage } from '../(components)/delete-tournament-image';
 
 type TournamentPageProps = Readonly<{
   params: Promise<{
@@ -65,13 +66,22 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                       <Trophy size={480} strokeWidth={1} className="stroke-gray-400" />
                     </div>
                   ) : (
-                    <Image
-                      src={tournament.imageUrl}
-                      width={500}
-                      height={500}
-                      alt={tournament.name}
-                      className="w-full max-w-lg h-auto rounded-lg object-cover"
-                    />
+                    <div className="w-full">
+                      <div className="w-full max-w-[512px] h-auto relative">
+                        <Image
+                          src={tournament.imageUrl}
+                          width={500}
+                          height={500}
+                          alt={tournament.name}
+                          className="w-full max-w-lg h-auto rounded-lg object-cover"
+                        />
+                        <DeleteTournamentImage
+                          teamId={tournament.id}
+                          roles={session?.user.roles as string[]}
+                          className="absolute top-2 right-2"
+                        />
+                      </div>
+                    </div>
                   )
                 }
               </div>
