@@ -1,25 +1,26 @@
-import { Suspense, type FC } from "react";
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import Image from "next/image";
+import { Suspense, type FC } from 'react';
+import { redirect } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import Image from 'next/image';
 import {
   Table,
   TableBody,
   TableHead,
   TableCell,
   TableRow,
-} from "@/components/ui/table";
-import { Pencil } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
-import { Button } from '@/components/ui/button';
+} from '@/components/ui/table';
+import { Pencil } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
+import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { fetchCoachAction } from "../../(actions)";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import { GiWhistle } from "react-icons/gi";
-import { headers } from "next/headers";
+import { fetchCoachAction } from '../../(actions)';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { GiWhistle } from 'react-icons/gi';
+import { headers } from 'next/headers';
+import { DeleteCoachImage } from '@/app/admin/torneos/(components)/delete-coach-image';
 
 type Props = Readonly<{
   params: Promise<{
@@ -61,16 +62,25 @@ const CoachPageContent: FC<Props> = async ({ params }) => {
               {
                 !coach.imageUrl ? (
                   <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
-                    <GiWhistle size={480} strokeWidth={1} className="text-gray-400" />
+                    <GiWhistle size={512} strokeWidth={1} className="text-gray-400" />
                   </div>
                 ) : (
-                  <Image
-                    src={coach.imageUrl}
-                    width={512}
-                    height={512}
-                    alt={`imagen de perfil de ${coach.name}`}
-                    className="rounded-lg size-[512px] object-cover"
-                  />
+                  <div className="w-full">
+                    <div className="w-full max-w-[512px] h-auto relative">
+                      <Image
+                        src={coach.imageUrl}
+                        width={512}
+                        height={512}
+                        alt={`imagen de perfil de ${coach.name}`}
+                        className="rounded-lg size-[512px] object-cover"
+                      />
+                      <DeleteCoachImage
+                        teamId={coach.id}
+                        roles={session?.user.roles as string[]}
+                        className="absolute top-2 right-2"
+                      />
+                    </div>
+                  </div>
                 )
               }
               <Table>
