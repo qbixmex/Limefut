@@ -1,25 +1,26 @@
-import { Suspense, type FC } from "react";
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import Image from "next/image";
+import { Suspense, type FC } from 'react';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
   TableHead,
   TableCell,
   TableRow,
-} from "@/components/ui/table";
-import { Pencil } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+} from '@/components/ui/table';
+import { Pencil } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { fetchPlayerAction } from "../../(actions)";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import { SoccerPlayer } from "@/shared/components/icons";
-import { headers } from "next/headers";
+import { fetchPlayerAction } from '../../(actions)';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { SoccerPlayer } from '@/shared/components/icons';
+import { headers } from 'next/headers';
+import { DeletePlayerImage } from '../../(components)/delete-player-image';
 
 type Props = Readonly<{
   params: Promise<{
@@ -61,16 +62,26 @@ const PlayerContent: FC<Props> = async ({ params }) => {
               {
                 !player.imageUrl ? (
                   <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
-                    <SoccerPlayer size={480} strokeWidth={2} className="text-gray-400" />
+                    <SoccerPlayer size={512} strokeWidth={2} className="text-gray-400" />
                   </div>
                 ) : (
-                  <Image
-                    src={player.imageUrl}
-                    width={512}
-                    height={512}
-                    alt={`imagen de perfil de ${player.name}`}
-                    className="rounded-lg size-[512px] object-cover"
-                  />
+
+                  <div className="w-full">
+                    <div className="w-full max-w-[512px] h-auto relative">
+                      <Image
+                        src={player.imageUrl}
+                        width={512}
+                        height={512}
+                        alt={`imagen de perfil de ${player.name}`}
+                        className="rounded-lg size-[512px] object-cover"
+                      />
+                      <DeletePlayerImage
+                        teamId={player.id}
+                        roles={session?.user.roles as string[]}
+                        className="absolute top-2 right-2"
+                      />
+                    </div>
+                  </div>
                 )
               }
               <Table>
