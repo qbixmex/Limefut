@@ -194,6 +194,7 @@ export const createPenaltyShootoutAction = async (
     updateTag("public-results-roles");
     updateTag("public-result-details");
     updateTag("public-matches-count");
+    updateTag("public-team-standings");
 
     return prismaTransaction;
   } catch (error) {
