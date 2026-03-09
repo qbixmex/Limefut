@@ -155,6 +155,7 @@ export const createMatchAction = async (
     updateTag('public-matches-count');
     updateTag('admin-tournament-for-match');
     updateTag('public-team-matches');
+    updateTag('public-team-standings');
 
     return prismaTransaction;
   } catch (error) {
