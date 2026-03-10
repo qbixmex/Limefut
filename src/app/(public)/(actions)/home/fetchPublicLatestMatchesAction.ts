@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import type { MATCH_STATUS_TYPE } from "@/shared/enums";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   nextMatches?: number;
@@ -36,6 +36,10 @@ export type MatchResponse = {
   week: number | null;
   place: string | null;
   matchDate: Date | null;
+  penaltyShoots: {
+    localGoals: number;
+    visitorGoals: number;
+  } | null;
 };
 
 export type ResponseFetchAction = Promise<{
@@ -88,6 +92,12 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
       skip: (nextMatches - 1) * take,
       select: {
         id: true,
+        localScore: true,
+        visitorScore: true,
+        status: true,
+        week: true,
+        place: true,
+        matchDate: true,
         tournament: {
           select: {
             name: true,
@@ -113,12 +123,12 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
             imageUrl: true,
           },
         },
-        localScore: true,
-        visitorScore: true,
-        status: true,
-        week: true,
-        place: true,
-        matchDate: true,
+        penaltyShootout: {
+          select: {
+            localGoals: true,
+            visitorGoals: true,
+          },
+        },
       },
     });
 
@@ -146,6 +156,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         week: match.week,
         place: match.place,
         matchDate: match.matchDate,
+        penaltyShoots: match.penaltyShootout,
       })),
       pagination: {
         nextMatches: nextMatches,
