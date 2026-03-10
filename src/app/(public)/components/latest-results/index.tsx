@@ -1,10 +1,10 @@
-import type { FC } from "react";
-import { fetchPublicLatestMatchesAction } from "@/app/(public)/(actions)";
-import { Pagination } from "@/shared/components/pagination";
-import { GameScore } from "@/shared/components/icons";
-import Link from "next/link";
-import { Team } from "../results/team";
-import { MatchMetadata } from "../results/match-metadata";
+import type { FC } from 'react';
+import { fetchPublicLatestMatchesAction } from '@/app/(public)/(actions)';
+import { Pagination } from '@/shared/components/pagination';
+import { GameScore } from '@/shared/components/icons';
+import Link from 'next/link';
+import { Team } from '../results/team';
+import { MatchMetadata } from '../results/match-metadata';
 
 type Props = Readonly<{
   resultsPromise: Promise<{ latestResultsPage: string }>;
@@ -60,14 +60,24 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                     imageUrl={match.localTeam.imageUrl}
                     name={match.localTeam.name}
                   />
-                  <div className="flex justify-center items-center gap-2 font-bold text-2xl">
-                    <span className="text-blue-700 dark:text-blue-500">
+                  <div className="flex justify-center items-center gap-2">
+                    {match.penaltyShoots && (
+                      <span className="font-semibold text-gray-500">
+                        ({match.penaltyShoots.localGoals})
+                      </span>
+                    )}
+                    <span className="font-bold text-2xl text-blue-700 dark:text-blue-500">
                       {match.localScore}
                     </span>
                     <span>-</span>
-                    <span className="text-blue-700 dark:text-blue-500">
+                    <span className="font-bold text-2xl text-blue-700 dark:text-blue-500">
                       {match.visitorScore}
                     </span>
+                    {match.penaltyShoots && (
+                      <span className="font-semibold text-gray-500">
+                        ({match.penaltyShoots.visitorGoals})
+                      </span>
+                    )}
                   </div>
                   <Team
                     imageUrl={match.visitorTeam.imageUrl}
