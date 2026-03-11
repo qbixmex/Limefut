@@ -10,10 +10,10 @@ import { Badge } from '@/components/ui/badge';
 import { SoccerField } from '@/shared/components/icons';
 import { getMatchStatus } from '../(helpers)/status';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
-import { formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone } from 'date-fns-tz';
 import { es } from 'date-fns/locale';
 
-const TIME_ZONE = "America/Mexico_City";
+const TIME_ZONE = 'America/Mexico_City';
 
 type Props = Readonly<{
   tournament?: string;
@@ -121,7 +121,7 @@ export const ResultsList: FC<Props> = async ({
                       className="font-semibold italic"
                       target="_blank"
                     >
-                      <div className="grid grid-cols-[1fr_100px_1fr]">
+                      <div className="grid grid-cols-[1fr_120px_1fr]">
                         <span className="text-right">
                           {
                             match.local.name.toLowerCase().includes('descanso')
@@ -130,6 +130,11 @@ export const ResultsList: FC<Props> = async ({
                           }
                         </span>
                         <span className="text-center flex justify-center items-center gap-2">
+                          {match.penaltyShootout && (
+                            <span className="text-gray-500 text-sm font-[400]">
+                              ({match.penaltyShootout!.localGoals})
+                            </span>
+                          )}
                           <span className="text-xl text-sky-500 font-medium">
                             {match.localScore}
                           </span>
@@ -137,6 +142,11 @@ export const ResultsList: FC<Props> = async ({
                           <span className="text-xl text-sky-500 font-medium">
                             {match.visitorScore}
                           </span>
+                          {match.penaltyShootout && (
+                            <span className="text-gray-500 text-sm font-[400]">
+                              ({match.penaltyShootout!.visitorGoals})
+                            </span>
+                          )}
                         </span>
                         <span>
                           {

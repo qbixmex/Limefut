@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type MatchType = {
   id: string;
@@ -25,6 +25,10 @@ export type MatchType = {
     name: string;
     permalink: string;
   };
+  penaltyShootout: {
+    localGoals: number;
+    visitorGoals: number;
+  } | null;
 };
 
 export type ResponseAction = Promise<{
@@ -92,6 +96,12 @@ export const fetchResultsAction = async (
           select: {
             name: true,
             permalink: true,
+          },
+        },
+        penaltyShootout: {
+          select: {
+            localGoals: true,
+            visitorGoals: true,
           },
         },
       },

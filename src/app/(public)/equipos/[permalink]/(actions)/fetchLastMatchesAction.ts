@@ -11,22 +11,28 @@ type FetchTeamResponse = Promise<{
 
 export type LAST_MATCH_TYPE = {
   id: string;
-  localTeam: {
-    name: string;
-    imageUrl: string | null;
-    score: number;
-  };
-  visitorTeam: {
-    name: string;
-    imageUrl: string | null;
-    score: number;
-  };
-  matchDetails: {
-    matchDate: Date | null;
-    place: string | null;
-    week: number | null;
-    status: string;
-  };
+  localTeam: Team;
+  visitorTeam: Team;
+  matchDetails: MatchDetails;
+  penaltyShoots: PenaltyShoots | null;
+};
+
+export type Team = {
+  name: string;
+  imageUrl: string | null;
+  score: number;
+};
+
+export type MatchDetails = {
+  matchDate: Date | null;
+  place: string | null;
+  week: number | null;
+  status: string;
+};
+
+export type PenaltyShoots = {
+  localGoals: number;
+  visitorGoals: number;
 };
 
 export const fetchLastMatchesAction = async ({
@@ -78,6 +84,12 @@ export const fetchLastMatchesAction = async ({
             imageUrl: true,
           },
         },
+        penaltyShootout: {
+          select: {
+            localGoals: true,
+            visitorGoals: true,
+          },
+        },
       },
       orderBy: {
         matchDate: 'desc',
@@ -106,6 +118,7 @@ export const fetchLastMatchesAction = async ({
           week: match.week,
           status: match.status,
         },
+        penaltyShoots: match.penaltyShootout,
       })),
     };
   } catch (error) {

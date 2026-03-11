@@ -18,14 +18,15 @@ export const useConcentratedResults = (results: ResultType[], teams: TeamType[])
 
   const getResultCell = (localTeamId: string, visitorTeamId: string) => {
     const key = `${localTeamId}-${visitorTeamId}`;
-    const result = resultsMap.get(key);
+    const result = resultsMap.get(key) as ResultType;
 
     if (!result) {
       return { className: '', content: null, matchId: null };
     }
 
-    const { localScore, visitorScore, status } = result;
-    const content = `${localScore} - ${visitorScore}`;
+    const { localScore, visitorScore, status, penaltyShootout } = result;
+    const score = `${localScore} - ${visitorScore}`;
+    const penaltyShoots = penaltyShootout;
 
     let className = '';
 
@@ -51,7 +52,8 @@ export const useConcentratedResults = (results: ResultType[], teams: TeamType[])
 
     return {
       className,
-      content,
+      score,
+      penaltyShoots,
       matchId: result.id,
     };
   };
