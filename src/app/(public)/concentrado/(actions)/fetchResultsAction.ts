@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -34,6 +34,10 @@ export type ResultType = {
   status: string;
   localTeam: TeamType;
   visitorTeam: TeamType;
+  penaltyShootout: {
+    localGoals: number;
+    visitorGoals: number;
+  } | null;
 };
 
 export const fetchResultsAction = async (
@@ -107,6 +111,12 @@ export const fetchResultsAction = async (
             format: true,
           },
         },
+        penaltyShootout: {
+          select: {
+            localGoals: true,
+            visitorGoals: true,
+          },
+        },
       },
     });
 
@@ -137,6 +147,7 @@ export const fetchResultsAction = async (
             category: result.visitor.category,
             format: result.visitor.format,
           },
+          penaltyShootout: result.penaltyShootout,
         })),
       },
     };

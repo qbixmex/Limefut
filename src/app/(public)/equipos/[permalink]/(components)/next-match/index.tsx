@@ -7,7 +7,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 import { es } from 'date-fns/locale';
 import { cn, getStatusTranslation } from '@/lib/utils';
 import type { NEXT_MATCH_TYPE } from '../../(actions)/fetchNextMatchesAction';
-import type { LAST_MATCH_TYPE } from '../../(actions)/fetchLastMatchesAction';
+import type { LAST_MATCH_TYPE, Team } from '../../(actions)/fetchLastMatchesAction';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import './styles.css';
 
@@ -36,7 +36,7 @@ export const Match: FC<Props> = ({ match, showScore }) => {
                   className="team-no-image-icon"
                 />
               </div>
-            ): (
+            ) : (
               <Image
                 src={localTeam.imageUrl}
                 width={80}
@@ -54,13 +54,23 @@ export const Match: FC<Props> = ({ match, showScore }) => {
           {
             showScore ? (
               <div className="match-score">
+                {(match as LAST_MATCH_TYPE).penaltyShoots && (
+                  <span className="penalty-result">
+                    ({(match as LAST_MATCH_TYPE).penaltyShoots!.localGoals})
+                  </span>
+                )}
                 <span className="local-score">
-                  {(localTeam as LAST_MATCH_TYPE['visitorTeam']).score}
+                  {(localTeam as Team).score}
                 </span>
                 <span className="score-separator">-</span>
                 <span className="visitor-score">
-                  {(visitorTeam as LAST_MATCH_TYPE['visitorTeam']).score}
+                  {(visitorTeam as Team).score}
                 </span>
+                {(match as LAST_MATCH_TYPE).penaltyShoots && (
+                  <span className="penalty-result">
+                    ({(match as LAST_MATCH_TYPE).penaltyShoots!.visitorGoals})
+                  </span>
+                )}
               </div>
             ) : (
               <span>VS</span>
@@ -77,7 +87,7 @@ export const Match: FC<Props> = ({ match, showScore }) => {
                   className="team-no-image-icon"
                 />
               </div>
-            ): (
+            ) : (
               <Image
                 src={visitorTeam.imageUrl}
                 width={80}

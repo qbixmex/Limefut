@@ -144,3 +144,15 @@ table.concentrated-table tbody td:nth-child(n+3):hover {
 .status-completed {
   @apply bg-emerald-500 dark:bg-emerald-600 text-emerald-50;
 }
+
+.match-result {
+  @apply flex justify-center items-center gap-1;
+}
+
+.match-score {
+  @apply font-[400] text-white;
+}
+
+.penalty-shoot {
+  @apply text-white/80 font-[300] text-xs;
+}
