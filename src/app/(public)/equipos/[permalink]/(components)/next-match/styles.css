@@ -50,12 +50,13 @@
 }
 
 .match-score {
-  display: flex;
-  font-weight: bold;
-  @apply text-3xl gap-2;
+  @apply flex items-center gap-2;
+  & .penalty-result {
+    @apply text-sm font-semibold text-gray-500;
+  }
   & .local-score,
   & .visitor-score {
-    @apply text-blue-600 dark:text-blue-500;
+    @apply text-3xl font-bold text-blue-600 dark:text-blue-500;
   }
 }
 

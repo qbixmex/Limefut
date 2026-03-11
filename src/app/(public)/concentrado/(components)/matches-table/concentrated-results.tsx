@@ -4,7 +4,7 @@ import { type FC } from 'react';
 import Link from 'next/link';
 import type { DataType } from '../../(actions)/fetchResultsAction';
 import { useConcentratedResults } from '../../(hooks)/use-concentrated-results';
-import "./styles.css";
+import './styles.css';
 
 type Props = Readonly<{
   data: DataType;
@@ -72,23 +72,34 @@ export const ConcentratedResults: FC<Props> = ({ data }) => {
                   >
                     {
                       isDiagonal
-                      ? <span>&nbsp;</span>
-                      : (
-                        <Link
-                          href={
-                            `/resultados/`
-                            + cellData.matchId
-                            + '/'
-                            + rowTeam.permalink
-                            + `-vs-`
-                            + colTeam.permalink
-                          }
-                          target="_blank"
-                          className="text-white"
-                        >
-                          {cellData.content}
-                        </Link>
-                      )
+                        ? <span>&nbsp;</span>
+                        : (
+                          <Link
+                            href={
+                              `/resultados/`
+                              + cellData.matchId
+                              + '/'
+                              + rowTeam.permalink
+                              + `-vs-`
+                              + colTeam.permalink
+                            }
+                            target="_blank"
+                          >
+                            <span className="match-result">
+                              {cellData.penaltyShoots && (
+                                <span className="penalty-shoot">
+                                  ({cellData.penaltyShoots.localGoals})
+                                </span>
+                              )}
+                              <span className="match-score">{cellData.score}</span>
+                              {cellData.penaltyShoots && (
+                                <span className="penalty-shoot">
+                                  ({cellData.penaltyShoots.visitorGoals})
+                                </span>
+                              )}
+                            </span>
+                          </Link>
+                        )
                     }
                   </td>
                 );
