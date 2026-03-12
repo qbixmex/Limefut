@@ -2,11 +2,13 @@
 
 import prisma from "@/lib/prisma";
 import type { MATCH_STATUS_TYPE } from "@/shared/enums";
+import { fromZonedTime, toZonedTime } from "date-fns-tz";
 import { cacheLife, cacheTag } from "next/cache";
 
 type Options = Readonly<{
   nextMatches?: number;
   take?: number;
+  timeZone?: string;
 }>;
 
 export type MatchResponse = {
@@ -57,8 +59,11 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   cacheTag('matches');
 
   let { nextMatches = 1, take = 12 } = options ?? {};
+  const timeZone = options?.timeZone ?? 'UTC';
 
-  const today = new Date();
+  const now = new Date();
+  const nowInTimeZone = toZonedTime(now, timeZone);
+  const today = fromZonedTime(nowInTimeZone, timeZone);
   today.setHours(0, 0, 0, 0);
 
   const dayOfWeek = today.getDay();
