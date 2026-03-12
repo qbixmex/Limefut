@@ -17,6 +17,7 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
   const { matches, pagination } = await fetchPublicMatchesAction({
     take: 4,
     nextMatches: Number(matchesPage),
+    timeZone: 'America/Mexico_City',
   });
 
   const todayMatchesCount = async () => {
