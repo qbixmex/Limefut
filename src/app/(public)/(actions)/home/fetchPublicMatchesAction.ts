@@ -82,9 +82,9 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     const data = await prisma.match.findMany({
       where: {
         OR: [
-          { status: "scheduled" },
-          { status: "inProgress" },
-          { status: "postPosed" },
+          { status: 'scheduled' },
+          { status: 'inProgress' },
+          { status: 'postPosed' },
         ],
         matchDate: {
           gte: today,
