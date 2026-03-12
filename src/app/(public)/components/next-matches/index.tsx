@@ -1,12 +1,12 @@
-import type { FC } from "react";
-import Link from "next/link";
-import { fetchPublicMatchesAction } from "@/app/(public)/(actions)";
-import { Pagination } from "@/shared/components/pagination";
-import { CalendarDaysIcon } from "lucide-react";
-import { CurrentDayMatchesAction } from "../../(actions)/home/currentDayMatchesAction";
-import { HorizontalCalendar } from "../horizontal-calendar";
-import { Team } from "../results/team";
-import { MatchMetadata } from "../results/match-metadata";
+import type { FC } from 'react';
+import Link from 'next/link';
+import { fetchPublicMatchesAction } from '@/app/(public)/(actions)';
+import { Pagination } from '@/shared/components/pagination';
+import { CalendarDaysIcon } from 'lucide-react';
+import { CurrentDayMatchesAction } from '../../(actions)/home/currentDayMatchesAction';
+import { HorizontalCalendar } from '../horizontal-calendar';
+import { Team } from '../results/team';
+import { MatchMetadata } from '../results/match-metadata';
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string }>;
