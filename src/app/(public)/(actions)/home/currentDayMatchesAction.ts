@@ -30,14 +30,17 @@ export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchA
 
   const timeZone = options?.timeZone ?? 'America/Mexico_City';
   const now = new Date();
-  const nowIn = toZonedTime(now, timeZone);
-  const startOfToday = fromZonedTime(startOfDay(nowIn), timeZone);
-  const endOfToday = fromZonedTime(endOfDay(nowIn), timeZone);
+  const nowInTimeZone = toZonedTime(now, timeZone);
+  const startOfToday = fromZonedTime(startOfDay(nowInTimeZone), timeZone);
+  const endOfToday = fromZonedTime(endOfDay(nowInTimeZone), timeZone);
 
   try {
     const data = await prisma.match.findMany({
       where: {
-        status: 'scheduled',
+        OR: [
+          { status: 'scheduled' },
+          { status: 'inProgress' },
+        ],
         matchDate: {
           gte: startOfToday,
           lte: endOfToday,
