@@ -251,9 +251,17 @@ export const MatchForm: FC<Props> = ({
       return;
     }
 
-    if (ok) {
+    if (ok && match) {
+      const params = new URLSearchParams(searchParams);
+      const queryString = params.toString();
+
       toast.success(message);
-      route.replace(ROUTES.ADMIN_MATCH(match!.id));
+
+      route.replace(
+        ROUTES.ADMIN_MATCHES
+          + '?torneo=' + match.tournament.id
+          + queryString ? '&' + queryString : '',
+      );
     }
   };
 
@@ -289,7 +297,7 @@ export const MatchForm: FC<Props> = ({
     if (match) {
       route.replace(ROUTES.ADMIN_MATCHES
         + `?torneo=${match.tournament.id}`
-        + `&${queryString}`,
+        + queryString ? '&' + queryString : '',
       );
     } else if (queryString.length > 0) {
       route.replace(`${ROUTES.ADMIN_MATCHES}?${queryString}`);
