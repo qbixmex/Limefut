@@ -1,13 +1,9 @@
-import { type FC, Suspense } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { MatchWrapper } from "./create-match-content";
-import { TournamentsSelector } from "../(components)/selectors/tournaments-selector";
-import { TournamentsSelectorSkeleton } from "~/src/app/(public)/components";
+import { type FC, Suspense } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { MatchWrapper } from './create-match-content';
+import { TournamentsSelector } from '../(components)/selectors/tournaments-selector';
+import { TournamentsSelectorSkeleton } from '@/app/(public)/components';
+import { WeekSelector } from '../(components)/week-selector';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -16,7 +12,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-const CreateMatchPage: FC<Props> = async ({ searchParams }) => {
+const CreateMatchPage: FC<Props> = ({ searchParams }) => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -26,7 +22,10 @@ const CreateMatchPage: FC<Props> = async ({ searchParams }) => {
           </CardHeader>
           <CardContent>
             <Suspense fallback={<TournamentsSelectorSkeleton />}>
-              <TournamentsSelector />
+              <section className="flex gap-5">
+                <TournamentsSelector />
+                <WeekSelector />
+              </section>
             </Suspense>
             <Suspense>
               <MatchWrapper searchParams={searchParams} />

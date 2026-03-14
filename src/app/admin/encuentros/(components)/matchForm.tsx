@@ -62,6 +62,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import "./match-form.css";
 import { updateMatchScoreAction } from '../(actions)/updateMatchScoreAction';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   session: Session;
@@ -90,7 +91,6 @@ export const MatchForm: FC<Props> = ({
   const [localTeamsOpen, setLocalTeamsOpen] = useState(false);
   const [visitorTeamsOpen, setVisitorTeamOpen] = useState(false);
   const [hiddenScores, setHiddenScores] = useState(true);
-  const baseURL = '/admin/encuentros';
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -203,7 +203,7 @@ export const MatchForm: FC<Props> = ({
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(baseURL
+        route.replace(ROUTES.ADMIN_MATCHES
           + `?torneo=${response.match?.tournament.id}`
           + `&sortWeek=${response.match?.week}`,
         );
@@ -227,7 +227,7 @@ export const MatchForm: FC<Props> = ({
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(baseURL
+        route.replace(ROUTES.ADMIN_MATCHES
           + `?torneo=${match.tournament.id}`
           + `&sortWeek=${response.match?.week}`,
         );
@@ -253,7 +253,7 @@ export const MatchForm: FC<Props> = ({
 
     if (ok) {
       toast.success(message);
-      route.replace(`/admin/encuentros/detalles/${match?.id}`);
+      route.replace(ROUTES.ADMIN_MATCH(match!.id));
     }
   };
 
@@ -275,7 +275,7 @@ export const MatchForm: FC<Props> = ({
 
     if (ok) {
       toast.success(message);
-      route.replace(`/admin/encuentros/detalles/${match?.id}`);
+      route.replace(ROUTES.ADMIN_MATCH(match!.id));
     }
   };
 
@@ -287,14 +287,14 @@ export const MatchForm: FC<Props> = ({
     const queryString = params.toString();
 
     if (match) {
-      route.replace(baseURL
+      route.replace(ROUTES.ADMIN_MATCHES
         + `?torneo=${match.tournament.id}`
         + `&${queryString}`,
       );
     } else if (queryString.length > 0) {
-      route.replace(`${baseURL}?${queryString}`);
+      route.replace(`${ROUTES.ADMIN_MATCHES}?${queryString}`);
     } else {
-      route.replace(baseURL);
+      route.replace(ROUTES.ADMIN_MATCHES);
     }
   };
 

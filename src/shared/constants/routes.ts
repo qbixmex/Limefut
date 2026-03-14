@@ -1,0 +1,17 @@
+export const ROUTES = {
+  HOME: '/',
+  ADMIN_TOURNAMENTS: '/admin/torneos',
+  ADMIN_TEAMS: '/admin/equipos',
+  ADMIN_COACHES: '/admin/entrenadores',
+  ADMIN_PLAYERS: '/admin/jugadores',
+  ADMIN_MATCHES: '/admin/encuentros',
+  ADMIN_MATCHES_CREATE: '/admin/encuentros/crear',
+  ADMIN_MATCHES_EDIT: (id: string) => `/admin/encuentros/editar/${id}`,
+  ADMIN_MATCH: (id: string) => `/admin/encuentros/detalles${id}`,
+  ADMIN_STANDINGS: '/admin/estadisticas',
+  ADMIN_PAGES: '/admin/paginas',
+  ADMIN_BANNERS: '/admin/banners',
+  ADMIN_GALLERIES: '/admin/galerias',
+  ADMIN_USERS: '/admin/usuarios',
+  ADMIN_MESSAGES: '/admin/mensajes',
+} as const;
