@@ -7,7 +7,7 @@ export const ROUTES = {
   ADMIN_MATCHES: '/admin/encuentros',
   ADMIN_MATCHES_CREATE: '/admin/encuentros/crear',
   ADMIN_MATCHES_EDIT: (id: string) => `/admin/encuentros/editar/${id}`,
-  ADMIN_MATCH: (id: string) => `/admin/encuentros/detalles${id}`,
+  ADMIN_MATCH: (id: string) => `/admin/encuentros/detalles/${id}`,
   ADMIN_STANDINGS: '/admin/estadisticas',
   ADMIN_PAGES: '/admin/paginas',
   ADMIN_BANNERS: '/admin/banners',
