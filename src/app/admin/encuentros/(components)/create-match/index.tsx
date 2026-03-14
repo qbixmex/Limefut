@@ -5,16 +5,19 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { ROUTES } from "@/shared/constants/routes";
 
 export const CreateMatch = () => {
   const searchParams = useSearchParams();
   
   const getURL = () => {
     const params = new URLSearchParams(searchParams);
-    const baseURL = '/admin/encuentros/crear';
 
     const queryString = params.toString();
-    return queryString ? `${baseURL}?${queryString}` : baseURL;
+
+    return queryString
+      ? ROUTES.ADMIN_MATCHES_CREATE + '?' + queryString
+      : ROUTES.ADMIN_MATCHES_CREATE;
   };
 
   return (
