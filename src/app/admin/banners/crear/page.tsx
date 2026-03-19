@@ -1,15 +1,15 @@
-import { Suspense } from "react";
-import { headers } from "next/headers";
-import type { Session } from "@/lib/auth-client";
+import { Suspense } from 'react';
+import { headers } from 'next/headers';
+import type { Session } from '@/lib/auth-client';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { BannerForm } from "../(components)/banner-form";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+} from '@/components/ui/card';
+import { BannerForm } from '../(components)/banner-form';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 const CreateBannerPage = () => {
   return (

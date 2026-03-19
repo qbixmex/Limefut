@@ -1,9 +1,9 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma/client";
-import prisma from "@/lib/prisma";
-import type { Page, Pagination } from "@/shared/interfaces";
-import { cacheLife, cacheTag } from "next/cache";
+import type { Prisma } from '@/generated/prisma/client';
+import prisma from '@/lib/prisma';
+import type { Page, Pagination } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   userRole: string[] | null;
@@ -20,10 +20,10 @@ export type ResponseAction = Promise<{
 }>;
 
 export const fetchPagesAction = async (options: Options): ResponseAction => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-pages");
+  cacheLife('days');
+  cacheTag('admin-pages');
 
   if ((options.userRole !== null) && (!options.userRole.includes('admin'))) {
     return {
@@ -65,7 +65,7 @@ export const fetchPagesAction = async (options: Options): ResponseAction => {
         seoRobots: true,
         position: true,
       },
-      take: take,
+      take,
       skip: (page - 1) * take,
     });
 
@@ -82,7 +82,7 @@ export const fetchPagesAction = async (options: Options): ResponseAction => {
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener las páginas");
+      console.log('Error al intentar obtener las páginas');
       return {
         ok: false,
         message: error.message,
@@ -96,7 +96,7 @@ export const fetchPagesAction = async (options: Options): ResponseAction => {
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener las páginas, revise los logs del servidor",
+      message: 'Error inesperado al obtener las páginas, revise los logs del servidor',
       customPages: [],
       pagination: {
         currentPage: 0,

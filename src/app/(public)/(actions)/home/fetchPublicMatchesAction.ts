@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import type { MATCH_STATUS_TYPE } from "@/shared/enums";
-import { fromZonedTime, toZonedTime } from "date-fns-tz";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { fromZonedTime, toZonedTime } from 'date-fns-tz';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   nextMatches?: number;
@@ -53,7 +53,7 @@ type Pagination = {
 };
 
 export const fetchPublicMatchesAction = async (options?: Options): ResponseFetchAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('matches');
@@ -97,7 +97,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         },
       },
       orderBy: { matchDate: 'asc' },
-      take: take,
+      take,
       skip: (nextMatches - 1) * take,
       select: {
         id: true,
@@ -139,9 +139,9 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     const totalCount = await prisma.match.count({
       where: {
         OR: [
-          { status: "scheduled" },
-          { status: "inProgress" },
-          { status: "postPosed" },
+          { status: 'scheduled' },
+          { status: 'inProgress' },
+          { status: 'postPosed' },
         ],
         matchDate: {
           gte: today,
@@ -166,13 +166,13 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         matchDate: match.matchDate,
       })),
       pagination: {
-        nextMatches: nextMatches,
+        nextMatches,
         totalPages: Math.ceil(totalCount / take),
       },
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los encuentros");
+      console.log('Error al intentar obtener los encuentros');
       return {
         ok: false,
         message: error.message,
@@ -186,7 +186,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
+      message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',
       matches: [],
       pagination: {
         nextMatches: 0,

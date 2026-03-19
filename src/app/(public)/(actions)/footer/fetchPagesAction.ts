@@ -1,7 +1,7 @@
 'use server';
 
-import { cacheLife, cacheTag } from "next/cache";
-import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from 'next/cache';
+import prisma from '@/lib/prisma';
 
 export type PageType = {
   id: string;
@@ -16,7 +16,7 @@ type ResponseFetchPagesLink = Promise<{
 }>;
 
 export const fetchPagesAction = async (): ResponseFetchPagesLink => {
-  "use cache";
+  'use cache';
 
   cacheLife('weeks');
   cacheTag('public-page-links');
@@ -39,7 +39,7 @@ export const fetchPagesAction = async (): ResponseFetchPagesLink => {
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los links de las páginas");
+      console.log('Error al intentar obtener los links de las páginas');
       return {
         ok: false,
         message: error.message,
@@ -49,7 +49,7 @@ export const fetchPagesAction = async (): ResponseFetchPagesLink => {
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los links de las páginas, revise los logs del servidor",
+      message: 'Error inesperado al obtener los links de las páginas, revise los logs del servidor',
       pageLinks: [],
     };
   }

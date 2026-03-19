@@ -1,17 +1,16 @@
-import type { FC } from "react";
-import { headers } from "next/headers";
+import type { FC } from 'react';
+import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { fetchCredentialAction, fetchPlayersForCredentialForm } from "../../(actions)";
-import { CredentialForm } from "../../(components)/CredentialForm";
+} from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchCredentialAction, fetchPlayersForCredentialForm } from '../../(actions)';
+import { CredentialForm } from '../../(components)/CredentialForm';
 import { type Credential } from '@/shared/interfaces';
-
 
 type Props = Readonly<{
   params: Promise<{

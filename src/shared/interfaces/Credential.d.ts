@@ -15,7 +15,7 @@ export interface Credential {
 
   // Timestamps
   createdAt?: Date;
-  updatedAt?: Date;  
+  updatedAt?: Date;
 }
 
 export interface CredentialSeed extends Omit<Credential, 'id' | 'player' | 'tournament' | 'createdAt' | 'updatedAt'> {

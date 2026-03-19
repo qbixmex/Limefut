@@ -2,11 +2,11 @@ import type { FC } from 'react';
 
 import { CreateStandings } from './create-standings';
 import { TournamentData } from '@/shared/components/TournamentData';
-import { fetchStandingsAction, type TournamentType } from "../(actions)/fetchStandingsAction";
+import { fetchStandingsAction, type TournamentType } from '../(actions)/fetchStandingsAction';
 import { StandingsTable } from './standings-table';
 import { UpdateStandings } from './update-standings';
 import { DeleteStandings } from './delete-standings';
-import "./standingsTableStyles.css";
+import './standingsTableStyles.css';
 
 type Props = Readonly<{
   tournamentId: string;

@@ -6,7 +6,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export const ClearFilters = () => {

@@ -1,2 +1,2 @@
-export { createGallerySchema } from "./createGallerySchema";
-export { editGallerySchema } from "./editGallerySchema";
+export { createGallerySchema } from './createGallerySchema';
+export { editGallerySchema } from './editGallerySchema';

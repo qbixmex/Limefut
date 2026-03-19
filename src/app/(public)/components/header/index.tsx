@@ -1,11 +1,11 @@
-import { Suspense } from "react";
-import { NavigationMenu } from "./navigation-menu";
-import { ThemeSwitcher } from "@/shared/theme/ThemeSwitcher";
-import { Logo } from "@/app/(public)/components";
-import { AuthSession } from "./AuthSession";
-import { Loader2 } from "lucide-react";
-import styles from "./styles.module.css";
-import MobileMenu from "./MobileMenu";
+import { Suspense } from 'react';
+import { NavigationMenu } from './navigation-menu';
+import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
+import { Logo } from '@/app/(public)/components';
+import { AuthSession } from './AuthSession';
+import { Loader2 } from 'lucide-react';
+import styles from './styles.module.css';
+import MobileMenu from './MobileMenu';
 
 export const Header = () => {
   return (

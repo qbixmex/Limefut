@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type TournamentType = {
   id: string;
@@ -55,10 +55,10 @@ export type StandingPromise = Promise<{
 }>;
 
 export const fetchStandingsAction = async (tournamentId: string): StandingPromise => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-standings");
+  cacheLife('days');
+  cacheTag('admin-standings');
 
   try {
     const tournament = await prisma.tournament.findUnique({
@@ -140,7 +140,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener las estadísticas");
+      console.log('Error al intentar obtener las estadísticas');
       return {
         ok: false,
         message: error.message,
@@ -151,7 +151,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener las estadísticas, revise los logs del servidor",
+      message: 'Error inesperado al obtener las estadísticas, revise los logs del servidor',
       tournament: null,
       standings: null,
     };

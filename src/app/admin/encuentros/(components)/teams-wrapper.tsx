@@ -32,7 +32,6 @@ export const TeamsWrapper: FC<Props> = async ({
       roles={session?.user.roles as string[]}
     />
   );
-
 };
 
 export default TeamsWrapper;

@@ -1,7 +1,7 @@
 'use client';
 
-import type { FC } from "react";
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
+import type { FC } from 'react';
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import {
   Select,
   SelectContent,
@@ -9,9 +9,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { updateStatusAction } from "../../(actions)/updateStatusAction";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { updateStatusAction } from '../../(actions)/updateStatusAction';
+import { toast } from 'sonner';
 
 type Props = Readonly<{
   matchId: string;

@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import Link from 'next/link';
-import Image from "next/image";
+import Image from 'next/image';
 import {
   Table,
   TableBody,
@@ -8,13 +8,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Pencil,
   InfoIcon,
   Trophy,
-} from "lucide-react";
-import { fetchTournamentsAction, updateTournamentStateAction } from "../(actions)";
+} from 'lucide-react';
+import { fetchTournamentsAction, updateTournamentStateAction } from '../(actions)';
 import { auth } from '@/lib/auth';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
@@ -97,10 +97,10 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant={
-                        (tournament.gender === "male")
+                        (tournament.gender === 'male')
                           ? 'outline-info'
                           : (tournament.gender === 'female')
-                            ? "outline-danger"
+                            ? 'outline-danger'
                             : 'outline-secondary'
                       }>
                         {getGenderTranslation(tournament.gender)}
@@ -112,8 +112,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell className="hidden lg:table-cell text-center">
                       <Badge
                         variant={(tournament.currentWeek as number > 0)
-                          ? "outline-info"
-                          : "outline-secondary"
+                          ? 'outline-info'
+                          : 'outline-secondary'
                         }
                       >
                         {tournament.currentWeek}
@@ -122,8 +122,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell className="hidden lg:table-cell text-center">
                       <Badge
                         variant={(tournament.teamsQuantity > 0)
-                          ? "outline-info"
-                          : "outline-secondary"
+                          ? 'outline-info'
+                          : 'outline-secondary'
                         }
                       >
                         {tournament.teamsQuantity}
@@ -177,8 +177,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>

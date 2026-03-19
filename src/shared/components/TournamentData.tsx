@@ -1,15 +1,15 @@
-import type { FC } from "react";
-import Link from "next/link";
+import type { FC } from 'react';
+import Link from 'next/link';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { type Tournament } from '@/shared/interfaces';
 
 type Props = Readonly<{
@@ -36,9 +36,9 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
                 <TableCell>
                   <Link
                     href={
-                      `/torneos/${tournament.permalink}`
-                      + `?categoria=${tournament.category}`
-                      + `&formato=${tournament.format}`
+                      `/torneos/${tournament.permalink}` +
+                      `?categoria=${tournament.category}` +
+                      `&formato=${tournament.format}`
                     }
                     target="_blank"
                     className="font-semibold italic"

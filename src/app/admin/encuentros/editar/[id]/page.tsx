@@ -1,13 +1,13 @@
-import { Suspense, type FC } from "react";
+import { Suspense, type FC } from 'react';
 
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import FormSkeleton from "../../(components)/form-skeleton";
-import EditMatchContent from "./edit-match-content";
+} from '@/components/ui/card';
+import FormSkeleton from '../../(components)/form-skeleton';
+import EditMatchContent from './edit-match-content';
 
 type Props = Readonly<{
   params: Promise<{

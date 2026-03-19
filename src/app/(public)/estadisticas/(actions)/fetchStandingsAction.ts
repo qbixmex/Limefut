@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type TournamentType = {
   id: string;
@@ -52,11 +52,11 @@ export const fetchStandingsAction = async (
   category: string,
   format: string,
 ): StandingPromise => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-standings");
-  cacheTag("public-standings");
+  cacheLife('days');
+  cacheTag('admin-standings');
+  cacheTag('public-standings');
 
   try {
     const tournament = await prisma.tournament.findFirst({
@@ -91,7 +91,7 @@ export const fetchStandingsAction = async (
     if (!tournament) {
       return {
         ok: false,
-        message: `¡ No se pudo obtener el torneo ❌ !`,
+        message: '¡ No se pudo obtener el torneo ❌ !',
         tournament: null,
         standings: [],
       };
@@ -164,7 +164,7 @@ export const fetchStandingsAction = async (
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener las estadísticas, revise los logs del servidor",
+      message: 'Error inesperado al obtener las estadísticas, revise los logs del servidor',
       tournament: null,
       standings: [],
     };

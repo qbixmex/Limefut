@@ -1,5 +1,5 @@
-import { type FC } from "react";
-import { Button } from "@/components/ui/button";
+import { type FC } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -7,21 +7,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Pencil, InfoIcon } from "lucide-react";
-import Link from "next/link";
-import { DeleteCredential } from "../(components)/delete-credential";
-import { fetchCredentialsAction } from "../(actions)";
-import { auth } from "@/lib/auth";
-import { Badge } from "@/components/ui/badge";
-import { Pagination } from "@/shared/components/pagination";
-import { cn } from "@/lib/utils";
-import { headers } from "next/headers";
+} from '@/components/ui/tooltip';
+import { Pencil, InfoIcon } from 'lucide-react';
+import Link from 'next/link';
+import { DeleteCredential } from '../(components)/delete-credential';
+import { fetchCredentialsAction } from '../(actions)';
+import { auth } from '@/lib/auth';
+import { Badge } from '@/components/ui/badge';
+import { Pagination } from '@/shared/components/pagination';
+import { cn } from '@/lib/utils';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   query: string;
@@ -101,8 +101,8 @@ export const CredentialsTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>

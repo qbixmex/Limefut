@@ -1,5 +1,5 @@
-import type { MATCH_STATUS_TYPE } from "../enums";
-import type { Team } from "./Team";
+import type { MATCH_STATUS_TYPE } from '../enums';
+import type { Team } from './Team';
 
 export interface Match {
   id: string;

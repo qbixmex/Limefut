@@ -1,2 +1,2 @@
-export { createUserSchema } from "./createUserSchema";
-export { editUserSchema } from "./editUserSchema";
+export { createUserSchema } from './createUserSchema';
+export { editUserSchema } from './editUserSchema';

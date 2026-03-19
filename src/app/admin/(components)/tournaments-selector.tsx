@@ -1,19 +1,19 @@
 'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   usePathname,
   useRouter,
   useSearchParams,
-} from "next/navigation";
+} from 'next/navigation';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import type { Tournament } from "~/src/shared/interfaces";
+} from '@/components/ui/select';
+import type { Tournament } from '~/src/shared/interfaces';
 
 type Props = Readonly<{
   tournaments: Partial<Tournament>[];
@@ -43,7 +43,7 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   return (
     <Select
       onValueChange={setParams}
-      value={tournamentId ?? ""}
+      value={tournamentId ?? ''}
     >
       <SelectTrigger className="w-full lg:w-1/2">
         <SelectValue placeholder="¡ Seleccione una opción !" />

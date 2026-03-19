@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -29,6 +29,6 @@ export const updateMessageStatusAction = async (id: string, state: boolean): Res
 
   return {
     ok: true,
-    message: `¡ El mensaje fue actualizado correctamente 👍 !`,
+    message: '¡ El mensaje fue actualizado correctamente 👍 !',
   };
 };

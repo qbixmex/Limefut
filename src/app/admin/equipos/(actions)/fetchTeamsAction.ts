@@ -1,9 +1,9 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma/client";
-import prisma from "@/lib/prisma";
-import type { Coach, Pagination } from "@/shared/interfaces";
-import { cacheLife, cacheTag } from "next/cache";
+import type { Prisma } from '@/generated/prisma/client';
+import prisma from '@/lib/prisma';
+import type { Coach, Pagination } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   page?: number;
@@ -35,7 +35,7 @@ export const fetchTeamsAction = async (
   tournamentId: string,
   options?: Options,
 ): ResponseFetchTeams => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('admin-teams');
@@ -84,7 +84,7 @@ export const fetchTeamsAction = async (
           select: { players: true },
         },
       },
-      take: take,
+      take,
       skip: (page - 1) * take,
     });
 
@@ -104,7 +104,7 @@ export const fetchTeamsAction = async (
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los equipos");
+      console.log('Error al intentar obtener los equipos');
       return {
         ok: false,
         message: error.message,
@@ -118,7 +118,7 @@ export const fetchTeamsAction = async (
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los equipos, revise los logs del servidor",
+      message: 'Error inesperado al obtener los equipos, revise los logs del servidor',
       teams: [],
       pagination: {
         currentPage: 0,

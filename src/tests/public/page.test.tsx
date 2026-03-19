@@ -17,8 +17,8 @@ vi.mock('@/app/(public)/components/next-matches', () => ({
   NextMatches: () => null,
 }));
 
-describe("Tests on <HomePage />", async () => {
-  test("Should render the home page correctly", () => {
+describe('Tests on <HomePage />', async () => {
+  test('Should render the home page correctly', () => {
     render(
       <HomePage searchParams={Promise.resolve({})} />,
     );

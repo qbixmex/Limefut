@@ -1,8 +1,8 @@
 'use server';
 
-import { updateTag } from "next/cache";
-import prisma from "@/lib/prisma";
-import { createStandingsSchema } from "@/shared/schemas";
+import { updateTag } from 'next/cache';
+import prisma from '@/lib/prisma';
+import { createStandingsSchema } from '@/shared/schemas';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -14,7 +14,7 @@ type DataType = {
   teamId: string;
 }[];
 
-export const createStandingsAction = async ( data: DataType ): CreateResponseAction => {
+export const createStandingsAction = async (data: DataType): CreateResponseAction => {
   const standingsVerified = createStandingsSchema.safeParse(data);
 
   if (!standingsVerified.success) {

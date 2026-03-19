@@ -1,12 +1,12 @@
 'use client';
 
 import { type FC, useEffect, useState, useCallback } from 'react';
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from 'motion/react';
 import type { GalleryImageType } from '../(actions)/fetchGalleryAction';
-import Image from "next/image";
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import "./styles.css";
+import './styles.css';
 
 type SelectedImage = {
   id: string;
@@ -23,10 +23,10 @@ export const ImageGallery: FC<Props> = ({ galleryImages }) => {
   const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    document.body.style.overflow = lightboxOpen ? "hidden" : "auto";
+    document.body.style.overflow = lightboxOpen ? 'hidden' : 'auto';
 
     return () => {
-      document.body.style.overflow = "auto"; // Cleanup
+      document.body.style.overflow = 'auto'; // Cleanup
     };
   }, [lightboxOpen]);
 
@@ -71,11 +71,11 @@ export const ImageGallery: FC<Props> = ({ galleryImages }) => {
         if (event.key === 'Escape' && lightboxOpen) {
           setLightboxOpen(false);
         }
-        if (event.key === "ArrowRight") {
-          loadImage("+");
+        if (event.key === 'ArrowRight') {
+          loadImage('+');
         }
-        if (event.key === "ArrowLeft") {
-          loadImage("-");
+        if (event.key === 'ArrowLeft') {
+          loadImage('-');
         }
       }
     };
@@ -113,7 +113,7 @@ export const ImageGallery: FC<Props> = ({ galleryImages }) => {
                   transition: {
                     duration: 0.5,
                     delay: 0.25 * index,
-                    ease: "easeOut",
+                    ease: 'easeOut',
                   },
                 },
               }}
@@ -176,13 +176,13 @@ export const ImageGallery: FC<Props> = ({ galleryImages }) => {
                     <div className="navigation-buttons">
                       <button
                         className="navigation-btn"
-                        onClick={() => loadImage("-")}
+                        onClick={() => loadImage('-')}
                       >
                         <ChevronLeft />
                       </button>
                       <button
                         className="navigation-btn selected"
-                        onClick={() => loadImage("+")}
+                        onClick={() => loadImage('+')}
                       >
                         <ChevronRight />
                       </button>

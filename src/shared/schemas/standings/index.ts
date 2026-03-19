@@ -1,1 +1,1 @@
-export { createStandingsSchema } from "./createStandingsSchema";
+export { createStandingsSchema } from './createStandingsSchema';

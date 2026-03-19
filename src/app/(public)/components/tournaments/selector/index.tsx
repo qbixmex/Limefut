@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity, useState, type FC } from "react";
+import { Activity, useState, type FC } from 'react';
 import {
   Select,
   SelectContent,
@@ -8,10 +8,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import type { TournamentType } from "../../../(actions)";
-import { usePathname, useRouter } from "next/navigation";
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import type { TournamentType } from '../../../(actions)';
+import { usePathname, useRouter } from 'next/navigation';
 import './styles.css';
 
 type Props = Readonly<{
@@ -39,8 +39,8 @@ export const SelectorInputs: FC<Props> = ({ tournaments }) => {
       tournaments
         .filter(
           tournament =>
-            tournament.permalink == selectedPermalink &&
-            tournament.category == selectedCategory,
+            tournament.permalink === selectedPermalink &&
+            tournament.category === selectedCategory,
         )
         .map(tournament => tournament.format),
     ),
@@ -54,7 +54,7 @@ export const SelectorInputs: FC<Props> = ({ tournaments }) => {
 
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
-    setSelectedFormat("");
+    setSelectedFormat('');
   };
 
   const setTournamentParams = ({

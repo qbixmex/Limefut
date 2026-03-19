@@ -1,11 +1,10 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { createCoachSchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
-import { uploadImage } from "@/shared/actions";
-import type { CloudinaryResponse } from "@/shared/interfaces";
-import type { Coach } from "@/shared/interfaces";
+import prisma from '@/lib/prisma';
+import { createCoachSchema } from '@/shared/schemas';
+import { updateTag } from 'next/cache';
+import { uploadImage } from '@/shared/actions';
+import type { CloudinaryResponse, Coach } from '@/shared/interfaces';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -35,11 +34,7 @@ export const createCoachAction = async (
     nationality: formData.get('nationality') ?? undefined,
     description: formData.get('description') ?? undefined,
     image: formData.get('image') as File,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
     teamsIds: formData.get('teamsIds')
       ? JSON.parse(formData.get('teamsIds') as string)
       : [],
@@ -96,9 +91,9 @@ export const createCoachAction = async (
     });
 
     // Update Cache
-    updateTag("admin-coaches");
-    updateTag("admin-coach");
-    updateTag("admin-coaches-for-team");
+    updateTag('admin-coaches');
+    updateTag('admin-coach');
+    updateTag('admin-coaches-for-team');
 
     return prismaTransaction;
   } catch (error) {
@@ -111,9 +106,9 @@ export const createCoachAction = async (
           coach: null,
         };
       }
-      console.log("CAUSE:", error.cause);
-      console.log("META:", error.meta);
-      console.log("MESSAGE:", error.message);
+      console.log('CAUSE:', error.cause);
+      console.log('META:', error.meta);
+      console.log('MESSAGE:', error.message);
       return {
         ok: false,
         message: '¡ Error al crear el entrenador, revise los logs del servidor !',

@@ -1,5 +1,5 @@
-import z from "zod";
-import { MATCH_STATUS } from "../../enums";
+import z from 'zod';
+import { MATCH_STATUS } from '../../enums';
 
 export const editMatchSchema = z.object({
   localTeamId: z
@@ -22,7 +22,7 @@ export const editMatchSchema = z.object({
     .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],
-    { message: "¡ El estado del partido debe ser válido !" },
+    { message: '¡ El estado del partido debe ser válido !' },
   )
     .optional(),
   localScore: z
@@ -34,9 +34,9 @@ export const editMatchSchema = z.object({
     .min(0, { message: '¡ El marcador visitante debe ser un número positivo !' })
     .optional(),
   matchDate: z
-    .date({ message: "La fecha del encuentro debe ser una fecha válida" })
+    .date({ message: 'La fecha del encuentro debe ser una fecha válida' })
     .optional(),
   tournamentId: z
-    .uuid({ message: "¡ El torneo seleccionado no es válido !" })
+    .uuid({ message: '¡ El torneo seleccionado no es válido !' })
     .optional(),
 });

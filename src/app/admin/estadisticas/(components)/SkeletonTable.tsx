@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { type FC } from "react";
+import { cn } from '@/lib/utils';
+import { type FC } from 'react';
 
 export const SkeletonTable: FC = () => (
   <>
@@ -20,9 +20,9 @@ export const SkeletonTable: FC = () => (
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((row) => (
         <div key={row} className="flex gap-3">
           {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map((item) => (
-            <div key={item} className={cn("h-5 bg-gray-500 rounded animate-pulse", {
-              "w-[250px]": item === 'a',
-              "flex-1": item !== 'a',
+            <div key={item} className={cn('h-5 bg-gray-500 rounded animate-pulse', {
+              'w-[250px]': item === 'a',
+              'flex-1': item !== 'a',
             })} />
           ))}
         </div>

@@ -49,7 +49,7 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
             <div key={d.toISOString()}>
               <div
                 ref={(element) => { dayRefs.current[index] = element; }}
-                className={cn("calendar-day", { "calendar-today": isToday })}
+                className={cn('calendar-day', { 'calendar-today': isToday })}
                 role="listitem"
                 aria-current={isToday ? 'date' : undefined}
               >
@@ -57,8 +57,8 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
                 <p className="calendar-day-num">{format(d, 'd')}</p>
                 <p className="calendar-month">{format(d, 'MMM', { locale: es }).toLowerCase()}</p>
               </div>
-              <p className={cn("calendar-games-count", {
-                ["calendar-today-games-count"]: (matchesOnThisDay > 0) && isToday,
+              <p className={cn('calendar-games-count', {
+                'calendar-today-games-count': (matchesOnThisDay > 0) && isToday,
               })}>
                 {matchesOnThisDay}
               </p>
@@ -68,7 +68,6 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
       </div>
     </div>
   );
-
 };
 
 export default PublicCalendar;

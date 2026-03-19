@@ -1,6 +1,6 @@
 'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,13 +11,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { toast } from "sonner";
-import { deleteMatchAction } from "../../(actions)";
-import "./styles.css";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { toast } from 'sonner';
+import { deleteMatchAction } from '../../(actions)';
+import './styles.css';
 
 type Props = Readonly<{
   id: string;

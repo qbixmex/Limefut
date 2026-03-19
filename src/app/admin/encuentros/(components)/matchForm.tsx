@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Popover,
   PopoverContent,
@@ -60,7 +60,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import "./match-form.css";
+import './match-form.css';
 import { updateMatchScoreAction } from '../(actions)/updateMatchScoreAction';
 import { ROUTES } from '@/shared/constants/routes';
 
@@ -203,9 +203,9 @@ export const MatchForm: FC<Props> = ({
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(ROUTES.ADMIN_MATCHES
-          + `?torneo=${response.match?.tournament.id}`
-          + `&sortWeek=${response.match?.week}`,
+        route.replace(ROUTES.ADMIN_MATCHES +
+          `?torneo=${response.match?.tournament.id}` +
+          `&sortWeek=${response.match?.week}`,
         );
         return;
       }
@@ -227,9 +227,9 @@ export const MatchForm: FC<Props> = ({
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(ROUTES.ADMIN_MATCHES
-          + `?torneo=${match.tournament.id}`
-          + `&sortWeek=${response.match?.week}`,
+        route.replace(ROUTES.ADMIN_MATCHES +
+          `?torneo=${match.tournament.id}` +
+          `&sortWeek=${response.match?.week}`,
         );
       }
     }
@@ -258,9 +258,9 @@ export const MatchForm: FC<Props> = ({
       toast.success(message);
 
       route.replace(
-        ROUTES.ADMIN_MATCHES
-          + '?torneo=' + match.tournament.id
-          + queryString ? '&' + queryString : '',
+        ROUTES.ADMIN_MATCHES +
+          '?torneo=' + match.tournament.id +
+          queryString ? '&' + queryString : '',
       );
     }
   };
@@ -293,22 +293,22 @@ export const MatchForm: FC<Props> = ({
 
     if (params.has('semana')) params.delete('semana');
 
-    if (!match && tournament && params.size == 0) {
+    if (!match && tournament && params.size === 0) {
       route.replace(
         `${ROUTES.ADMIN_MATCHES}?torneo=${tournament}`,
       );
-    } else if (match && params.size == 0) {
+    } else if (match && params.size === 0) {
       route.replace(
-        ROUTES.ADMIN_MATCHES
-          + `?torneo=${match?.tournament.id}`,
+        ROUTES.ADMIN_MATCHES +
+          `?torneo=${match?.tournament.id}`,
       );
     } else if (!match && params.size > 0) {
       route.replace(`${ROUTES.ADMIN_MATCHES}?${params}`);
     } else if (match && params.size > 0) {
       route.replace(
-        ROUTES.ADMIN_MATCHES
-          +`?torneo=${match.tournament.id}`
-          + `&${params}`,
+        ROUTES.ADMIN_MATCHES +
+          `?torneo=${match.tournament.id}` +
+          `&${params}`,
       );
     } else {
       route.replace(ROUTES.ADMIN_MATCHES);
@@ -341,14 +341,14 @@ export const MatchForm: FC<Props> = ({
                             role="combobox"
                             aria-expanded={localTeamsOpen}
                             className={cn(
-                              "w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-                              { "border-destructive!": form.formState.errors.localTeamId },
+                              'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+                              { 'border-destructive!': form.formState.errors.localTeamId },
                             )}
                           >
                             {
                               selectedTeam
                                 ? selectedTeam.name
-                                : "Selecciona un equipo"
+                                : 'Selecciona un equipo'
                             }
                             <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                           </Button>
@@ -368,7 +368,7 @@ export const MatchForm: FC<Props> = ({
                                     const selected = teams.find((t) => t.name === currentValue);
                                     // Validate if team is already selected as visitor
                                     if (selected && selected.id === visitorTeamId) {
-                                      toast.error("Este equipo ya está seleccionado como visitante");
+                                      toast.error('Este equipo ya está seleccionado como visitante');
                                       return;
                                     }
                                     if (selected) {
@@ -379,14 +379,14 @@ export const MatchForm: FC<Props> = ({
                                   }}
                                   disabled={team.id === visitorTeamId}
                                   className={cn(
-                                    team.id === visitorTeamId && "opacity-50 cursor-not-allowed",
+                                    team.id === visitorTeamId && 'opacity-50 cursor-not-allowed',
                                   )}
                                 >
                                   {team.name}
                                   <Check
                                     className={cn(
-                                      "ml-auto",
-                                      field.value === team.id ? "opacity-100" : "opacity-0",
+                                      'ml-auto',
+                                      field.value === team.id ? 'opacity-100' : 'opacity-0',
                                     )}
                                   />
                                 </CommandItem>
@@ -421,13 +421,13 @@ export const MatchForm: FC<Props> = ({
                             role="combobox"
                             aria-expanded={visitorTeamsOpen}
                             className={cn(
-                              "w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-                              { "border-destructive!": form.formState.errors.visitorTeamId },
+                              'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+                              { 'border-destructive!': form.formState.errors.visitorTeamId },
                             )}
                           >
                             {selectedTeam
                               ? selectedTeam.name
-                              : "Selecciona un equipo"}
+                              : 'Selecciona un equipo'}
                             <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                           </Button>
                         </FormControl>
@@ -445,7 +445,7 @@ export const MatchForm: FC<Props> = ({
                                   onSelect={(currentValue) => {
                                     const selected = teams.find((t) => t.name === currentValue);
                                     if (selected && selected.id === localTeamId) {
-                                      toast.error("Este equipo ya está seleccionado como local");
+                                      toast.error('Este equipo ya está seleccionado como local');
                                       return;
                                     }
                                     if (selected) {
@@ -456,14 +456,14 @@ export const MatchForm: FC<Props> = ({
                                   }}
                                   disabled={team.id === localTeamId}
                                   className={cn(
-                                    team.id === localTeamId && "opacity-50 cursor-not-allowed",
+                                    team.id === localTeamId && 'opacity-50 cursor-not-allowed',
                                   )}
                                 >
                                   {team.name}
                                   <Check
                                     className={cn(
-                                      "ml-auto",
-                                      field.value === team.id ? "opacity-100" : "opacity-0",
+                                      'ml-auto',
+                                      field.value === team.id ? 'opacity-100' : 'opacity-0',
                                     )}
                                   />
                                 </CommandItem>
@@ -588,7 +588,7 @@ export const MatchForm: FC<Props> = ({
                         >
                           {selectedDate
                             ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                            : "Selecciona Fecha"
+                            : 'Selecciona Fecha'
                           }
                           <ChevronDownIcon />
                         </Button>
@@ -633,7 +633,7 @@ export const MatchForm: FC<Props> = ({
           </div>
 
           <div className='w-full lg:w-1/2 flex justify-end gap-5'>
-            {(match?.status != 'completed') && (
+            {(match?.status !== 'completed') && (
               <FormField
                 control={form.control}
                 name="status"
@@ -721,8 +721,8 @@ export const MatchForm: FC<Props> = ({
           </Activity>
 
           <Activity mode={(
-            match?.status === MATCH_STATUS.COMPLETED
-            && !hiddenScores
+            match?.status === MATCH_STATUS.COMPLETED &&
+            !hiddenScores
           ) ? 'visible' : 'hidden'}>
             <AlertDialog>
               <AlertDialogTrigger asChild>

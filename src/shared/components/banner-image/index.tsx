@@ -1,7 +1,7 @@
-import type { FC } from "react";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
-import "./styles.css";
+import type { FC } from 'react';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import './styles.css';
 
 type Props = Readonly<{
   title: string;
@@ -31,26 +31,26 @@ export const BannerImage: FC<Props> = (props) => {
         width={1280}
         height={548}
         alt={title ?? 'Imagen del Banner'}
-        className={cn("image", className)}
-        loading={position == 1 ? "eager" : "lazy"}
+        className={cn('image', className)}
+        loading={position === 1 ? 'eager' : 'lazy'}
       />
-      <section className={cn("data-wrapper", {
-        "top-0 left-0": showData,
-        "top-[9999] left-[9999]": !showData,
+      <section className={cn('data-wrapper', {
+        'top-0 left-0': showData,
+        'top-[9999] left-[9999]': !showData,
       })
       }>
-        <h2 className={cn("heading", {
-          ["align-left"]: dataAlignment === 'left',
-          ["align-center"]: dataAlignment === 'center',
-          ["align-right"]: dataAlignment === 'right',
+        <h2 className={cn('heading', {
+          'align-left': dataAlignment === 'left',
+          'align-center': dataAlignment === 'center',
+          'align-right': dataAlignment === 'right',
         })}>
           {title}
         </h2>
 
-        <p className={cn("description", {
-          ["align-left"]: dataAlignment === 'left',
-          ["align-center"]: dataAlignment === 'center',
-          ["align-right"]: dataAlignment === 'right',
+        <p className={cn('description', {
+          'align-left': dataAlignment === 'left',
+          'align-center': dataAlignment === 'center',
+          'align-right': dataAlignment === 'right',
         })}>
           {description}
         </p>
@@ -58,4 +58,3 @@ export const BannerImage: FC<Props> = (props) => {
     </figure>
   );
 };
-

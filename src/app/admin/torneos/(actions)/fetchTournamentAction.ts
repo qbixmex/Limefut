@@ -41,10 +41,10 @@ export const fetchTournamentAction = async (
   tournamentId: string,
   userRole: string[] | null,
 ): FetchTournamentResponse => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-tournament");
+  cacheLife('days');
+  cacheTag('admin-tournament');
 
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
@@ -91,13 +91,13 @@ export const fetchTournamentAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el torneo,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener el torneo,\n¡ Revise los logs del servidor !',
         tournament: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       tournament: null,
     };
   }

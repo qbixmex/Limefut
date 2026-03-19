@@ -1,10 +1,10 @@
-import type { FC } from "react";
-import { es } from "date-fns/locale";
-import { formatInTimeZone } from "date-fns-tz";
-import { getStatusTranslation } from "@/lib/utils";
-import type { MATCH_STATUS_TYPE } from "@/shared/enums";
+import type { FC } from 'react';
+import { es } from 'date-fns/locale';
+import { formatInTimeZone } from 'date-fns-tz';
+import { getStatusTranslation } from '@/lib/utils';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 
-const TIME_ZONE = "America/Mexico_City";
+const TIME_ZONE = 'America/Mexico_City';
 
 type Props = Readonly<{
   tournamentName: string;
@@ -41,8 +41,8 @@ export const MatchMetadata: FC<Props> = ({
           </p>
         </div>
         <div className="w-full md:1/2">
-          <p><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, "dd / LLL / yyyy", { locale: es })}</p>
-          <p><b>Hora:</b> {formatInTimeZone(date as Date, TIME_ZONE, "h:mm a", { locale: es })}</p>
+          <p><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, 'dd / LLL / yyyy', { locale: es })}</p>
+          <p><b>Hora:</b> {formatInTimeZone(date as Date, TIME_ZONE, 'h:mm a', { locale: es })}</p>
           <p><b>Jornada:</b> {week}</p>
         </div>
       </section>

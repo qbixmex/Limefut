@@ -3,13 +3,13 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { UsersForm } from "../(components)/usersForm";
-import type { Session } from "@/lib/auth-client";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
-import { headers } from "next/headers";
+} from '@/components/ui/card';
+import { UsersForm } from '../(components)/usersForm';
+import type { Session } from '@/lib/auth-client';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
+import { headers } from 'next/headers';
 
 const CreateUserPage = () => {
   return (

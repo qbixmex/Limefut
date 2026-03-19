@@ -15,9 +15,8 @@ export type ResponseFetchAction = Promise<{
   matchesDates: string[];
 }>;
 
-
 export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('matches');
@@ -75,7 +74,7 @@ export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchA
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los encuentros");
+      console.log('Error al intentar obtener los encuentros');
       return {
         ok: false,
         message: error.message,
@@ -85,7 +84,7 @@ export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchA
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
+      message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',
       matchesDates: [],
     };
   }

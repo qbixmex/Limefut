@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
-import { uploadImage, deleteImage } from "@/shared/actions";
+import { uploadImage, deleteImage } from '@/shared/actions';
 import { editTeamSchema } from '@/shared/schemas';
 import type { Team } from '@/shared/interfaces';
 
@@ -56,11 +56,7 @@ export const updateTeamAction = async ({
     emails: JSON.parse(formData.get('emails') as string),
     address: formData.get('address') ?? null,
     image: formData.get('image'),
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
   };
 
   const teamVerified = editTeamSchema.safeParse(rawData);
@@ -145,7 +141,7 @@ export const updateTeamAction = async ({
         updateTag('admin-teams');
         updateTag('admin-teams-for-coach');
         updateTag('admin-teams-for-player');
-        updateTag("admin-teams-for-gallery");
+        updateTag('admin-teams-for-gallery');
         updateTag('admin-teams-for-match');
         updateTag('admin-team');
         updateTag('public-teams');

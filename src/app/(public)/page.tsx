@@ -8,8 +8,8 @@ import { ErrorHandler } from '@/shared/components/errorHandler';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    "next-matches"?: string;
-    "latest-results"?: string;
+    'next-matches'?: string;
+    'latest-results'?: string;
   }>;
 }>;
 

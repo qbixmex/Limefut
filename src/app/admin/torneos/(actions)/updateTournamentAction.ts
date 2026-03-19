@@ -58,14 +58,10 @@ export const updateTournamentAction = async ({
     state: formData.get('state') ?? undefined,
     city: formData.get('city') ?? undefined,
     season: formData.get('season') ?? undefined,
-    startDate: startDate,
-    endDate: endDate,
+    startDate,
+    endDate,
     currentWeek,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
   };
 
   const tournamentVerified = editTournamentSchema.safeParse(rawData);
@@ -146,16 +142,16 @@ export const updateTournamentAction = async ({
         }
 
         // Update Cache
-        updateTag("admin-tournaments");
-        updateTag("admin-tournaments-selector");
-        updateTag("admin-tournaments-for-match");
-        updateTag("admin-tournament-for-match");
-        updateTag("admin-tournaments-for-gallery");
-        updateTag("admin-tournament");
-        updateTag("public-tournaments-list");
-        updateTag("public-tournaments");
-        updateTag("public-tournament");
-        updateTag("dashboard-tournaments");
+        updateTag('admin-tournaments');
+        updateTag('admin-tournaments-selector');
+        updateTag('admin-tournaments-for-match');
+        updateTag('admin-tournament-for-match');
+        updateTag('admin-tournaments-for-gallery');
+        updateTag('admin-tournament');
+        updateTag('public-tournaments-list');
+        updateTag('public-tournaments');
+        updateTag('public-tournament');
+        updateTag('dashboard-tournaments');
 
         return {
           ok: true,

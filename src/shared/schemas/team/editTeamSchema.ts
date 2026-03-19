@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
 const ACCEPTED_FILE_TYPES = [
@@ -74,7 +74,7 @@ export const editTeamSchema = z.object({
     })
     .optional(),
   tournamentId: z.union([
-    z.uuid("El id del torneo debe ser un UUID válido"),
+    z.uuid('El id del torneo debe ser un UUID válido'),
     z.literal(''),
     z.null(),
   ]).optional(),
@@ -94,7 +94,7 @@ export const editTeamSchema = z.object({
     .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' })
     .optional(),
   coachId: z.union([
-    z.uuid("El id del entrenador debe ser un UUID válido"),
+    z.uuid('El id del entrenador debe ser un UUID válido'),
     z.literal(''),
     z.null(),
   ]).optional(),
@@ -105,7 +105,7 @@ export const editTeamSchema = z.object({
     )
     .optional(),
   address: z.union([
-    z.string("¡ La dirección debe ser una cadena de texto !")
+    z.string('¡ La dirección debe ser una cadena de texto !')
       .min(10, { message: '¡ La dirección debe ser mayor a 10 caracteres !' })
       .max(250, { message: '¡ La dirección debe ser menor a 250 caracteres !' }),
     z.literal(''),

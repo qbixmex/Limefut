@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { type FC } from 'react';
 import {
   Table,
   TableBody,
@@ -6,11 +6,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import Link from "next/link";
+} from '@/components/ui/table';
+import Link from 'next/link';
 import { fetchStandingsAction, type TournamentType } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
-import { TournamentData } from "~/src/shared/components/TournamentData";
-import { redirect } from "next/navigation";
+import { TournamentData } from '~/src/shared/components/TournamentData';
+import { redirect } from 'next/navigation';
 
 type Props = {
   tournament?: string;
@@ -37,7 +37,7 @@ export const StandingsTable: FC<Props> = async ({
     redirect(`/estadisticas?error=${encodeURIComponent(response.message)}`);
   }
 
-  if (response.standings.length == 0) {
+  if (response.standings.length === 0) {
     return (
       <div className="border-2 border-blue-500 py-5 rounded-lg">
         <p className="text-blue-500 font-bold text-center">
@@ -82,10 +82,10 @@ export const StandingsTable: FC<Props> = async ({
                 <TableCell>
                   <Link
                     href={
-                      `/equipos/${standing.team.permalink}`
-                      + `?torneo=${response.tournament?.permalink}`
-                      + `&categoria=${response.tournament?.category}`
-                      + `&formato=${response.tournament?.format}`
+                      `/equipos/${standing.team.permalink}` +
+                      `?torneo=${response.tournament?.permalink}` +
+                      `&categoria=${response.tournament?.category}` +
+                      `&formato=${response.tournament?.format}`
                     }
                       target="_blank"
                     className="font-semibold italic"

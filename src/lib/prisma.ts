@@ -5,8 +5,8 @@ let databaseUrl = '';
 
 if (process.env.DATABASE_URL === null) {
   throw new Error(
-    'DATABASE_URL is not present !, \n'
-    + 'be sure is in the environment variables',
+    'DATABASE_URL is not present !, \n' +
+    'be sure is in the environment variables',
   );
 } else {
   databaseUrl = process.env.DATABASE_URL;

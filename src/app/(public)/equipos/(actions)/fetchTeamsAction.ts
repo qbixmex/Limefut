@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type TeamType = {
   id: string;
@@ -23,7 +23,7 @@ export const fetchTeamsAction = async (
   category: string,
   format: string,
 ): ResponseAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-teams');
@@ -72,7 +72,7 @@ export const fetchTeamsAction = async (
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los equipos");
+      console.log('Error al intentar obtener los equipos');
       return {
         ok: false,
         message: error.message,
@@ -82,7 +82,7 @@ export const fetchTeamsAction = async (
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los equipos, revise los logs del servidor",
+      message: 'Error inesperado al obtener los equipos, revise los logs del servidor',
       teams: [],
     };
   }

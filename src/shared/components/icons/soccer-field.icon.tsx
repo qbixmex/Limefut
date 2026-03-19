@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC } from 'react';
 
 type Props = Readonly<{
   className?: string;
@@ -40,5 +40,3 @@ export const SoccerField: FC<Props> = ({
 
 export { SoccerField as SoccerFieldIcon };
 export default SoccerField;
-
-

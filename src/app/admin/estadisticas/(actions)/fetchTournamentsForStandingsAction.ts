@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type TournamentType = {
   id: string;
@@ -23,10 +23,10 @@ export type ResponseFetchTournaments = Promise<{
 
 export const fetchTournamentsForStandingsAction = async (userRoles: string[] | null)
   : ResponseFetchTournaments => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-tournaments-for-standings");
+  cacheLife('days');
+  cacheTag('admin-tournaments-for-standings');
 
   if ((userRoles !== null) && (!userRoles.includes('admin'))) {
     return {
@@ -64,7 +64,7 @@ export const fetchTournamentsForStandingsAction = async (userRoles: string[] | n
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los torneos");
+      console.log('Error al intentar obtener los torneos');
       return {
         ok: false,
         message: error.message,
@@ -74,7 +74,7 @@ export const fetchTournamentsForStandingsAction = async (userRoles: string[] | n
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los torneos, revise los logs del servidor",
+      message: 'Error inesperado al obtener los torneos, revise los logs del servidor',
       tournaments: [],
     };
   }

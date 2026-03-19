@@ -1,11 +1,11 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { uploadImage } from "@/shared/actions";
-import type { CloudinaryResponse, Tournament } from "@/shared/interfaces";
-import { createTournamentSchema } from "@/shared/schemas";
-import { revalidatePath, updateTag } from "next/cache";
-import type { GENDER_TYPE } from "@/shared/enums";
+import prisma from '@/lib/prisma';
+import { uploadImage } from '@/shared/actions';
+import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
+import { createTournamentSchema } from '@/shared/schemas';
+import { revalidatePath, updateTag } from 'next/cache';
+import type { GENDER_TYPE } from '@/shared/enums';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -41,14 +41,10 @@ export const createTournamentAction = async (
     city: formData.get('city') ?? undefined,
     description: formData.get('description') ?? undefined,
     season: formData.get('season') ?? undefined,
-    startDate: startDate,
-    endDate: endDate,
+    startDate,
+    endDate,
     currentWeek,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
   };
 
   const tournamentVerified = createTournamentSchema.safeParse(rawData);
@@ -93,16 +89,16 @@ export const createTournamentAction = async (
 
     // Refresh Cache
     revalidatePath('/admin/torneos');
-    updateTag("dashboard-tournaments");
-    updateTag("admin-tournaments-selector");
-    updateTag("admin-tournaments-for-match");
-    updateTag("admin-tournament-for-match");
-    updateTag("admin-tournaments-for-gallery");
-    updateTag("tournaments-list");
-    updateTag("admin-tournaments-list");
-    updateTag("public-tournaments-list");
-    updateTag("public-tournaments");
-    updateTag("public-tournament");
+    updateTag('dashboard-tournaments');
+    updateTag('admin-tournaments-selector');
+    updateTag('admin-tournaments-for-match');
+    updateTag('admin-tournament-for-match');
+    updateTag('admin-tournaments-for-gallery');
+    updateTag('tournaments-list');
+    updateTag('admin-tournaments-list');
+    updateTag('public-tournaments-list');
+    updateTag('public-tournaments');
+    updateTag('public-tournament');
 
     return prismaTransaction;
   } catch (error) {

@@ -1,32 +1,32 @@
-import type { FC } from "react";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
+import type { FC } from 'react';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
   TableHead,
   TableCell,
   TableRow,
-} from "@/components/ui/table";
-import { Minus, Pencil } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+} from '@/components/ui/table';
+import { Minus, Pencil } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { fetchMatchAction } from "../../(actions)";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import { TbSoccerField } from "react-icons/tb";
-import { MATCH_STATUS } from "@/shared/enums";
+import { fetchMatchAction } from '../../(actions)';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { TbSoccerField } from 'react-icons/tb';
+import { MATCH_STATUS } from '@/shared/enums';
 import { SHOOTOUT_STATUS } from '@/shared/enums/shoutout-status.enum';
-import { getMatchStatus } from "../../(helpers)/place";
-import type { MatchType } from "../../(actions)/fetchMatchAction";
-import { PenaltyShootout } from "@/shared/components/penalty-shootouts";
-import { PenaltiesForm } from "../../(components)/penalties-form";
-import { formatInTimeZone } from "date-fns-tz";
-const TIME_ZONE = "America/Mexico_City";
+import { getMatchStatus } from '../../(helpers)/place';
+import type { MatchType } from '../../(actions)/fetchMatchAction';
+import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
+import { PenaltiesForm } from '../../(components)/penalties-form';
+import { formatInTimeZone } from 'date-fns-tz';
+const TIME_ZONE = 'America/Mexico_City';
 
 type Props = Readonly<{
   params: Promise<{
@@ -122,7 +122,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                     <TableHead className="font-semibold">Hora</TableHead>
                     <TableCell>
                       {
-                        formatInTimeZone(match.matchDate as Date as Date, TIME_ZONE, "h:mm a", { locale: es })
+                        formatInTimeZone(match.matchDate as Date as Date, TIME_ZONE, 'h:mm a', { locale: es })
                       }
                     </TableCell>
                   </TableRow>
@@ -169,8 +169,8 @@ export const MatchPage: FC<Props> = async ({ params }) => {
             </section>
 
             {(
-              (match.status === MATCH_STATUS.COMPLETED)
-              && (match.localScore === match.visitorScore)
+              (match.status === MATCH_STATUS.COMPLETED) &&
+              (match.localScore === match.visitorScore)
             ) && (
                 <>
                   <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
@@ -179,8 +179,8 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                       <PenaltyShootout shootout={match.penaltyShootout} admin />
                     </div>
                     {(
-                      match.penaltyShootout === null
-                      || match.penaltyShootout?.status === SHOOTOUT_STATUS.IN_PROGRESS
+                      match.penaltyShootout === null ||
+                      match.penaltyShootout?.status === SHOOTOUT_STATUS.IN_PROGRESS
                     ) && (
                         <div className="w-full lg:w-1/2">
                           <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda de Penales</h3>

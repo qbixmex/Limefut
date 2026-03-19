@@ -37,7 +37,7 @@ export const deletePlayerImageAction = async (playerId: string): ResponseDeleteA
   if (player.imagePublicID) {
     const response = await deleteImage(player.imagePublicID);
     if (!response.ok) {
-      throw 'Error al eliminar la imagen de cloudinary';
+      throw new Error('Error al eliminar la imagen de cloudinary');
     }
   }
 
@@ -49,6 +49,6 @@ export const deletePlayerImageAction = async (playerId: string): ResponseDeleteA
 
   return {
     ok: true,
-    message: `¡ La imagen ha sido eliminada correctamente 👍 !`,
+    message: '¡ La imagen ha sido eliminada correctamente 👍 !',
   };
 };

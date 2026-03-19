@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import deleteImage from "@/shared/actions/deleteImageAction";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import deleteImage from '@/shared/actions/deleteImageAction';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -34,15 +34,15 @@ export const deleteCoachAction = async (coachId: string): ResponseDeleteAction =
     if (coach.imagePublicID) {
       const response = await deleteImage(coach.imagePublicID);
       if (!response.ok) {
-        throw 'Error al eliminar la imagen de cloudinary';
+        throw new Error('Error al eliminar la imagen de cloudinary');
       }
     }
   }
 
   // Update Cache
-  updateTag("admin-coaches");
-  updateTag("admin-coach");
-  updateTag("admin-coaches-for-team");
+  updateTag('admin-coaches');
+  updateTag('admin-coach');
+  updateTag('admin-coaches-for-team');
 
   return {
     ok: true,

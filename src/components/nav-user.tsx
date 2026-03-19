@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 
 import {
   BadgeCheck,
   ChevronsUpDown,
   LogOut,
-} from "lucide-react";
+} from 'lucide-react';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/avatar";
+} from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,16 +20,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   // useSidebar,
-} from "@/components/ui/sidebar";
-import { toast } from "sonner";
-import { signOutAction } from "../app/(auth)/signOutAction";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/sidebar';
+import { toast } from 'sonner';
+import { signOutAction } from '../app/(auth)/signOutAction';
+import { useRouter } from 'next/navigation';
 
 type Props = { user: {
   id: string;
@@ -67,7 +67,7 @@ export const NavUser: FC<Props> = ({ user }) => {
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
-                  {user.username ?? user.name?.split(" ").at(0)}
+                  {user.username ?? user.name?.split(' ').at(0)}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -75,7 +75,7 @@ export const NavUser: FC<Props> = ({ user }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={"bottom"}
+            side={'bottom'}
             align="end"
             sideOffset={4}
           >
@@ -97,6 +97,7 @@ export const NavUser: FC<Props> = ({ user }) => {
               <DropdownMenuItem asChild className="cursor-pointer">
                 <button
                   className="w-full"
+                  // eslint-disable-next-line no-return-assign
                   onClick={() => window.location.href = `/admin/usuarios/perfil/${user.id}`}
                 >
                   <BadgeCheck />

@@ -1,17 +1,17 @@
 'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import Image from "next/image";
-import { GalleryImage } from "./gallery-image";
-import { Maximize2 } from "lucide-react";
-import "./styles.css";
+} from '@/components/ui/dialog';
+import Image from 'next/image';
+import { GalleryImage } from './gallery-image';
+import { Maximize2 } from 'lucide-react';
+import './styles.css';
 
 type GalleryImageProps = Readonly<{
   images: {

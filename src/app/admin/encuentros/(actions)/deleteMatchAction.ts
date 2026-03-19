@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -33,10 +33,10 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
   updateTag('public-matches-count');
   updateTag('admin-tournament-for-match');
   updateTag('public-team-matches');
-  updateTag("public-team-standings");
+  updateTag('public-team-standings');
 
   return {
     ok: true,
-    message: `¡ El encuentro ha sido eliminado correctamente 👍 !`,
+    message: '¡ El encuentro ha sido eliminado correctamente 👍 !',
   };
 };

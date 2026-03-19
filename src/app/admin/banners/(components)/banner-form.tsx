@@ -1,7 +1,7 @@
 'use client';
 
 import { type FC, useState } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -63,7 +63,7 @@ export const BannerForm: FC<Props> = ({ session, heroBanner }) => {
     formData.append('title', data.title as string);
     formData.append('description', data.description as string);
     if (data.image && typeof data.image === 'object') {
-      formData.append("image", data.image);
+      formData.append('image', data.image);
     }
     formData.append('dataAlignment', data.dataAlignment as string);
     formData.append('showData', String(data.showData ?? false));
@@ -181,10 +181,10 @@ export const BannerForm: FC<Props> = ({ session, heroBanner }) => {
                       }))}
                       onChange={(event) => {
                         field.onChange(event);
-                        setDescriptionChars((prev => ({
+                        setDescriptionChars(prev => ({
                           ...prev,
                           count: event.target.value.length,
-                        })));
+                        }));
                       }}
                     />
                   </FormControl>

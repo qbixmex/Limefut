@@ -1,6 +1,6 @@
-import z from "zod";
-import { MATCH_STATUS } from "../../enums";
-import { requiredUUID } from "~/src/lib/helpers";
+import z from 'zod';
+import { MATCH_STATUS } from '../../enums';
+import { requiredUUID } from '~/src/lib/helpers';
 
 export const createMatchSchema = z.object({
   localTeamId: z.uuid({
@@ -35,10 +35,10 @@ export const createMatchSchema = z.object({
     .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],
-    { message: "¡ El estado del partido debe ser válido !" },
+    { message: '¡ El estado del partido debe ser válido !' },
   ),
   matchDate: z
-    .date({ message: "La fecha del encuentro debe ser una fecha válida" }),
+    .date({ message: 'La fecha del encuentro debe ser una fecha válida' }),
   tournamentId: requiredUUID(
     '¡ Seleccione el torneo !',
     '¡ El id del torneo debe ser un UUID válido !',

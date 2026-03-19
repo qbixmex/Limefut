@@ -1,6 +1,6 @@
 'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,10 +11,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { finishMatchAction } from "../../(actions)/finishMatchAction";
-import { toast } from "sonner";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { finishMatchAction } from '../../(actions)/finishMatchAction';
+import { toast } from 'sonner';
 
 type Props = Readonly<{
   matchId: string;

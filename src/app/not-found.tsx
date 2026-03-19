@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const NotFoundPage = () => {
   return (
     <Container>
-      <Header />  
+      <Header />
         <main className="flex-1 flex flex-col">
           <div className="flex-1 wrapper flex flex-col justify-center items-center">
             <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold text-pink-500">

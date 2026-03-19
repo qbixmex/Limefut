@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import type { ComponentProps, FC } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import type { ComponentProps, FC } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   Sidebar,
   SidebarContent,
@@ -12,10 +12,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar";
-import { navMain, navLinks } from "./data";
-import { NavMain } from "@/components/nav-main";
-import { NavLinks } from "@/components/nav-links";
+} from '@/components/ui/sidebar';
+import { navMain, navLinks } from './data';
+import { NavMain } from '@/components/nav-main';
+import { NavLinks } from '@/components/nav-links';
 
 type Props = Readonly<ComponentProps<typeof Sidebar>>;
 

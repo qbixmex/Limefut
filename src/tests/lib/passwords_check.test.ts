@@ -1,4 +1,4 @@
-import { isPasswordInsecure } from "@/lib/passwords_check";
+import { isPasswordInsecure } from '@/lib/passwords_check';
 
 describe('Test on Password Check', () => {
   test('Should checks if the provided password is in the list of common passwords.', () => {

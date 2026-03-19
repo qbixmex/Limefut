@@ -1,22 +1,22 @@
-import { Suspense, type FC } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Suspense, type FC } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { ErrorHandler } from "@/shared/components/errorHandler";
-import { Search } from "@/shared/components/search";
-import { TeamsSelectorSkeleton } from "./(components)/teams-selector-skeleton";
-import { PlayersContent } from "./(components)/players-content";
-import { TeamsSelector } from "./(components)/teams-selector";
-import { fetchTeamsAction } from "~/src/shared/actions/fetchTeamsAction";
-import { TournamentsSelector } from "../(components)/tournaments-selector";
-import { fetchTournamentsAction } from "~/src/shared/actions/fetchTournamentsAction";
-import TournamentsSelectorSkeleton from "../equipos/(components)/TournamentsSelectorSkeleton";
+} from '@/components/ui/tooltip';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { Search } from '@/shared/components/search';
+import { TeamsSelectorSkeleton } from './(components)/teams-selector-skeleton';
+import { PlayersContent } from './(components)/players-content';
+import { TeamsSelector } from './(components)/teams-selector';
+import { fetchTeamsAction } from '~/src/shared/actions/fetchTeamsAction';
+import { TournamentsSelector } from '../(components)/tournaments-selector';
+import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
+import TournamentsSelectorSkeleton from '../equipos/(components)/TournamentsSelectorSkeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{

@@ -1,8 +1,8 @@
 'use server';
 
-import type { User } from "@/shared/interfaces";
+import type { User } from '@/shared/interfaces';
 import prisma from '@/lib/prisma';
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from 'next/cache';
 
 type FetchUserResponse = Promise<{
   ok: boolean;
@@ -14,10 +14,10 @@ export const fetchUserAction = async (
   userId: string,
   userRole: string[] | null,
 ): FetchUserResponse => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-user");
+  cacheLife('days');
+  cacheTag('admin-user');
 
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
@@ -61,13 +61,13 @@ export const fetchUserAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el usuario,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener el usuario,\n¡ Revise los logs del servidor !',
         user: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       user: null,
     };
   }

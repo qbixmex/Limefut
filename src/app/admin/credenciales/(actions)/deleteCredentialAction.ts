@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import prisma from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -28,6 +28,6 @@ export const deleteCredentialAction = async (id: string): ResponseDeleteAction =
 
   return {
     ok: true,
-    message: `¡ La credencial ha sido eliminada correctamente 👍 !`,
+    message: '¡ La credencial ha sido eliminada correctamente 👍 !',
   };
 };

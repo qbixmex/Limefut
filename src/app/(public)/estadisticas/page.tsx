@@ -1,13 +1,13 @@
 import { Suspense, type FC } from 'react';
 import type { Metadata } from 'next/types';
 import { Standings } from './(components)/standings';
-import { ErrorHandler } from "@/shared/components/errorHandler";
+import { ErrorHandler } from '@/shared/components/errorHandler';
 import {
   Heading,
   TournamentsSelector,
   TournamentsSelectorSkeleton,
 } from '../components';
-import "./styles.css";
+import './styles.css';
 
 export const metadata: Metadata = {
   title: 'Tabla de posiciones',

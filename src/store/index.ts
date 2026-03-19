@@ -1,1 +1,1 @@
-export { type GalleryStore, useImageGallery } from "./imageGalleryStore";
+export { type GalleryStore, useImageGallery } from './imageGalleryStore';

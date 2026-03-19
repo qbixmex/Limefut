@@ -1,6 +1,6 @@
-import { Suspense, type FC } from "react";
-import { PageContent } from "./page-content";
-import { PageSkeleton } from "./page-skeleton";
+import { Suspense, type FC } from 'react';
+import { PageContent } from './page-content';
+import { PageSkeleton } from './page-skeleton';
 
 type Props = Readonly<{
   permalinkPromise: Promise<{

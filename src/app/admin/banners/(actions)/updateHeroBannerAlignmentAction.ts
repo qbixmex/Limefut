@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
-import type { ALIGNMENT_TYPE } from "@/shared/enums";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
+import type { ALIGNMENT_TYPE } from '@/shared/enums';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -33,11 +33,11 @@ export const updateHeroBannerAlignmentAction = async (
   // Update Cache
   updateTag('admin-banners');
   updateTag('admin-banner');
-  updateTag("admin-hero-banner");
+  updateTag('admin-hero-banner');
   updateTag('public-banners');
 
   return {
     ok: true,
-    message: `¡ Se actualizó la alineación correctamente 👍 !`,
+    message: '¡ Se actualizó la alineación correctamente 👍 !',
   };
 };

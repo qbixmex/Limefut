@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState, type FC } from "react";
-import type { Session } from "@/lib/auth-client";
-import { useForm } from "react-hook-form";
+import { useEffect, useState, type FC } from 'react';
+import type { Session } from '@/lib/auth-client';
+import { useForm } from 'react-hook-form';
 import {
   Form,
   FormControl,
@@ -10,18 +10,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { createGalleryImageSchema, editGalleryImageSchema } from "@/shared/schemas";
-import { createGalleryImageAction, updateGalleryImageAction } from "../(actions)";
-import { toast } from "sonner";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from '@/components/ui/form';
+import { createGalleryImageSchema, editGalleryImageSchema } from '@/shared/schemas';
+import { createGalleryImageAction, updateGalleryImageAction } from '../(actions)';
+import { toast } from 'sonner';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 import {
   Tooltip,
   TooltipContent,
@@ -29,11 +29,11 @@ import {
 } from '@/components/ui/tooltip';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { useImageGallery } from "@/store";
-import { LoaderCircle, Plus } from "lucide-react";
-import type z from "zod";
+import { useImageGallery } from '@/store';
+import { LoaderCircle, Plus } from 'lucide-react';
+import type z from 'zod';
 
 type Props = Readonly<{
   session: Session;
@@ -78,7 +78,7 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, imagesQuantity
     formData.append('title', data.title as string);
 
     if (data.image && typeof data.image === 'object') {
-      formData.append("image", data.image);
+      formData.append('image', data.image);
     }
 
     if (data.active) {
@@ -127,7 +127,6 @@ export const GalleryImageForm: FC<Props> = ({ session, galleryId, imagesQuantity
         form.reset();
         clearGalleryImage();
         setIsOpen(false);
-        return;
       }
     }
   };

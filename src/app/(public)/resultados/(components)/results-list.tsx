@@ -90,11 +90,11 @@ export const ResultsList: FC<Props> = async ({
                         </span>
                         <span>{' de '}</span>
                         <span className="capitalize">
-                          {formatInTimeZone(match.matchDate, TIME_ZONE, "LLLL", { locale: es })}
+                          {formatInTimeZone(match.matchDate, TIME_ZONE, 'LLLL', { locale: es })}
                         </span>
                         <span>{' del '}</span>
                         <span>
-                          &nbsp;{formatInTimeZone(match.matchDate, TIME_ZONE, "y", { locale: es })}
+                          &nbsp;{formatInTimeZone(match.matchDate, TIME_ZONE, 'y', { locale: es })}
                         </span>
                       </div>
                     ) : (
@@ -105,7 +105,7 @@ export const ResultsList: FC<Props> = async ({
                     {match.matchDate ? (
                       <div className="text-gray-600 dark:text-gray-200">
                         <p>
-                          {formatInTimeZone(match.matchDate, TIME_ZONE, "h:mm aaa", { locale: es })}
+                          {formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm aaa', { locale: es })}
                         </p>
                       </div>
                     ) : (
@@ -188,7 +188,6 @@ export const ResultsList: FC<Props> = async ({
       ))}
     </>
   );
-
 };
 
 export default ResultsList;

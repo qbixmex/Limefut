@@ -1,9 +1,9 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma/client";
-import prisma from "@/lib/prisma";
-import type { ContactMessage, Pagination } from "@/shared/interfaces";
-import { cacheLife, cacheTag } from "next/cache";
+import type { Prisma } from '@/generated/prisma/client';
+import prisma from '@/lib/prisma';
+import type { ContactMessage, Pagination } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   userRoles: string[] | null,
@@ -20,10 +20,10 @@ export type ResponseFetchAction = Promise<{
 }>;
 
 export const fetchMessagesAction = async (options?: Options): ResponseFetchAction => {
-  "use cache";
+  'use cache';
 
-  cacheLife("weeks");
-  cacheTag("admin-messages");
+  cacheLife('weeks');
+  cacheTag('admin-messages');
 
   if ((options?.userRoles !== null) && (!options?.userRoles.includes('admin'))) {
     return {
@@ -63,7 +63,7 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
     const messages = await prisma.contactMessage.findMany({
       where: whereCondition,
       orderBy: { createdAt: 'desc' },
-      take: take,
+      take,
       skip: (page - 1) * take,
       select: {
         id: true,
@@ -88,7 +88,7 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los mensajes");
+      console.log('Error al intentar obtener los mensajes');
       return {
         ok: false,
         message: error.message,
@@ -99,10 +99,9 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
+      message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',
       messages: null,
       pagination: null,
     };
   }
 };
-

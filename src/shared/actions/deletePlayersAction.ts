@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import deleteImage from "@/shared/actions/deleteImageAction";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import deleteImage from '@/shared/actions/deleteImageAction';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -28,8 +28,8 @@ export const deletePlayersAction = async (teamId: string): ResponseDeleteAction 
     if (player._count.penaltyKicks > 0) {
       return {
         ok: false,
-        message: '¡ No se pueden eliminar todos los jugadores, '
-          + ` por que el jugador ( ${player.name} ) tiene tiro de penales !`,
+        message: '¡ No se pueden eliminar todos los jugadores, ' +
+          ` por que el jugador ( ${player.name} ) tiene tiro de penales !`,
       };
     }
   }
@@ -44,7 +44,7 @@ export const deletePlayersAction = async (teamId: string): ResponseDeleteAction 
       if (player.imagePublicID) {
         const response = await deleteImage(player.imagePublicID);
         if (!response.ok) {
-          throw 'Error al eliminar la imagen de cloudinary';
+          throw new Error('Error al eliminar la imagen de cloudinary');
         }
       }
     }
@@ -57,6 +57,6 @@ export const deletePlayersAction = async (teamId: string): ResponseDeleteAction 
 
   return {
     ok: true,
-    message: `¡ Los jugadores fueron eliminados correctamente 👍 !`,
+    message: '¡ Los jugadores fueron eliminados correctamente 👍 !',
   };
 };

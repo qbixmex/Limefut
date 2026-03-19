@@ -1,7 +1,7 @@
 'use client';
 
-import type { ComponentType } from 'react';
-import { forwardRef, type ForwardedRef } from 'react';
+import type { ComponentType, ForwardedRef } from 'react';
+import { forwardRef } from 'react';
 import dynamic from 'next/dynamic';
 import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
 

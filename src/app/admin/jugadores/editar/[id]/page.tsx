@@ -1,16 +1,16 @@
-import { Suspense, type FC } from "react";
-import { redirect } from "next/navigation";
-import { headers } from "next/headers";
+import { Suspense, type FC } from 'react';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import type { Session } from "@/lib/auth-client";
-import { fetchPlayerAction, fetchTeamsForPlayer } from "../../(actions)";
-import { PlayerForm } from "../../(components)/playerForm";
+} from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import type { Session } from '@/lib/auth-client';
+import { fetchPlayerAction, fetchTeamsForPlayer } from '../../(actions)';
+import { PlayerForm } from '../../(components)/playerForm';
 
 type Props = Readonly<{
   params: Promise<{

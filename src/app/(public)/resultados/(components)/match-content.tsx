@@ -1,5 +1,5 @@
-import { Suspense, type FC } from "react";
-import { MatchDetails } from "./match-details";
+import { Suspense, type FC } from 'react';
+import { MatchDetails } from './match-details';
 
 type Props = Readonly<{
   params: Promise<{

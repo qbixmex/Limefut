@@ -1,15 +1,15 @@
-import { betterAuth, type BetterAuthOptions } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { customSession, admin } from "better-auth/plugins";
-import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
-import { nextCookies } from "better-auth/next-js";
-import { ROLE } from "../shared/interfaces";
+import { betterAuth, type BetterAuthOptions } from 'better-auth';
+import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { customSession, admin } from 'better-auth/plugins';
+import bcrypt from 'bcryptjs';
+import { prisma } from '@/lib/prisma';
+import { nextCookies } from 'better-auth/next-js';
+import { ROLE } from '../shared/interfaces';
 
 const options = {
   secret: process.env.BETTER_AUTH_SECRET ?? '',
   database: prismaAdapter(prisma, {
-    provider: "postgresql",
+    provider: 'postgresql',
   }),
   emailAndPassword: {
     enabled: true,
@@ -29,13 +29,13 @@ const options = {
         required: false,
       },
       roles: {
-        type: "string[]",
+        type: 'string[]',
         required: false,
         defaultValue: [ROLE.USER],
         input: false,
       },
       imageUrl: {
-        type: "string",
+        type: 'string',
         required: false,
         defaultValue: '',
         input: false,

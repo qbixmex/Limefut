@@ -1,5 +1,5 @@
-import type { Tournament } from "./Tournament";
-import type { Team } from "./Team";
+import type { Tournament } from './Tournament';
+import type { Team } from './Team';
 
 export interface Standing {
   id: string;

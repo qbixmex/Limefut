@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   quantity: number;
@@ -22,7 +22,7 @@ export type ResponseFetch = Promise<{
 }>;
 
 export const fetchLatestResultsAction = async ({ quantity }: Options): Promise<ResponseFetch> => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('dashboard-results');
@@ -70,7 +70,7 @@ export const fetchLatestResultsAction = async ({ quantity }: Options): Promise<R
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los torneos");
+      console.log('Error al intentar obtener los torneos');
       return {
         ok: false,
         message: error.message,
@@ -80,7 +80,7 @@ export const fetchLatestResultsAction = async ({ quantity }: Options): Promise<R
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los resultados, revise los logs del servidor",
+      message: 'Error inesperado al obtener los resultados, revise los logs del servidor',
       latestResults: [],
     };
   }

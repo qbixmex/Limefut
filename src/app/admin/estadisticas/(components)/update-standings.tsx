@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
-import { GrUpdate as UpdateIcon } from "react-icons/gr";
+import { GrUpdate as UpdateIcon } from 'react-icons/gr';
 import { toast } from 'sonner';
 import { recalculateStandingsAction } from '../(actions)/recalculateStandingsAction';
 

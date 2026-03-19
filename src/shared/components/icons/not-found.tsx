@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC } from 'react';
 
 type Props = Readonly<{
   className?: string;
@@ -12,7 +12,7 @@ export const NotFound: FC<Props> = ({
   className,
   style,
   strokeWidth = 1.5,
-  color = "currentColor",
+  color = 'currentColor',
   size = 800,
 }) => {
   return (

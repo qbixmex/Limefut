@@ -1,13 +1,12 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import bcrypt from "bcryptjs";
-import { createUserSchema } from "@/shared/schemas";
+import prisma from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
+import { createUserSchema } from '@/shared/schemas';
 import { uploadImage } from '@/shared/actions';
-import { updateTag } from "next/cache";
-import type { CloudinaryResponse, ROLE_TYPE } from "@/shared/interfaces";
-import type { User } from "@/shared/interfaces";
-import { isPasswordInsecure } from "@/lib/passwords_check";
+import { updateTag } from 'next/cache';
+import type { CloudinaryResponse, ROLE_TYPE, User } from '@/shared/interfaces';
+import { isPasswordInsecure } from '@/lib/passwords_check';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -45,11 +44,7 @@ export const createUserAction = async (
     password: formData.get('password') as string,
     passwordConfirmation: formData.get('passwordConfirmation') as string,
     roles: JSON.parse(formData.get('roles') as string),
-    isActive: (formData.get('isActive') === 'true')
-      ? true
-      : (formData.get('isActive') === 'false')
-        ? false
-        : false,
+    isActive: formData.get('isActive') === 'true',
   };
 
   const userVerified = createUserSchema.safeParse(rawData);

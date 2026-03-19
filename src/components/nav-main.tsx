@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import type { FC } from "react";
-import Link from "next/link";
+import type { FC } from 'react';
+import Link from 'next/link';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,10 +16,10 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
-import { ChevronRight, type LucideIcon } from "lucide-react";
-import type { IconType } from "react-icons/lib";
-import type { CustomIconType } from "@/shared/types/icon";
+} from '@/components/ui/sidebar';
+import { ChevronRight, type LucideIcon } from 'lucide-react';
+import type { IconType } from 'react-icons/lib';
+import type { CustomIconType } from '@/shared/types/icon';
 
 export type NavItem = {
   label: string;

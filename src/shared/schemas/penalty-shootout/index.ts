@@ -1,1 +1,1 @@
-export * from "./createPenaltyShootoutSchema";
+export * from './createPenaltyShootoutSchema';

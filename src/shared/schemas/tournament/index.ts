@@ -1,2 +1,2 @@
-export { createTournamentSchema } from "./createTournamentSchema";
-export { editTournamentSchema } from "./editTournamentSchema";
+export { createTournamentSchema } from './createTournamentSchema';
+export { editTournamentSchema } from './editTournamentSchema';

@@ -6,7 +6,6 @@ type Props = Readonly<{
 }>;
 
 export const MatchesTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) => {
-
   return (
     <div className="flex flex-col gap-5 animate-pulse">
       {Array.from({ length: rowCount }).map((_, row) => (
@@ -16,13 +15,12 @@ export const MatchesTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) 
           style={{ gridTemplateColumns: `repeat(${colCount},1fr)` }}
         >
           {Array.from({ length: colCount }).map((_, column) => (
-            <div key={`row-${row}-column-${column}`} className={`w-full h-5 bg-gray-500 rounded`} />
+            <div key={`row-${row}-column-${column}`} className={'w-full h-5 bg-gray-500 rounded'} />
           ))}
         </div>
       ))}
     </div>
   );
-
 };
 
 export default MatchesTableSkeleton;
