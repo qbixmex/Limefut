@@ -10,7 +10,7 @@ export const Logo = () => {
           src="/limefut-logo.png"
           width={150}
           height={40}
-          alt="Limefut Logo"
+          alt="Limefut logo"
           className="w-full max-w-[150px]"
         />
       </Link>
