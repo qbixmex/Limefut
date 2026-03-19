@@ -37,7 +37,7 @@ export const MatchesWrapper: FC<Props> = async ({
 
   return (
     <MatchesTable
-      matchesWeeks={tournament!.weeks}
+      matchesWeeks={tournament?.weeks as number[] ?? 0}
       matches={matches}
       pagination={pagination}
       roles={session?.user.roles as string[]}

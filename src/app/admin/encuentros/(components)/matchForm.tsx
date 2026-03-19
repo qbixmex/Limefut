@@ -289,18 +289,27 @@ export const MatchForm: FC<Props> = ({
 
   const handleNavigateBack = () => {
     const params = new URLSearchParams(searchParams);
+    const tournament = params.get('torneo');
 
     if (params.has('semana')) params.delete('semana');
 
-    const queryString = params.toString();
-
-    if (match) {
-      route.replace(ROUTES.ADMIN_MATCHES
-        + `?torneo=${match.tournament.id}`
-        + queryString ? '&' + queryString : '',
+    if (!match && tournament && params.size == 0) {
+      route.replace(
+        `${ROUTES.ADMIN_MATCHES}?torneo=${tournament}`,
       );
-    } else if (queryString.length > 0) {
-      route.replace(`${ROUTES.ADMIN_MATCHES}?${queryString}`);
+    } else if (match && params.size == 0) {
+      route.replace(
+        ROUTES.ADMIN_MATCHES
+          + `?torneo=${match?.tournament.id}`,
+      );
+    } else if (!match && params.size > 0) {
+      route.replace(`${ROUTES.ADMIN_MATCHES}?${params}`);
+    } else if (match && params.size > 0) {
+      route.replace(
+        ROUTES.ADMIN_MATCHES
+          +`?torneo=${match.tournament.id}`
+          + `&${params}`,
+      );
     } else {
       route.replace(ROUTES.ADMIN_MATCHES);
     }
