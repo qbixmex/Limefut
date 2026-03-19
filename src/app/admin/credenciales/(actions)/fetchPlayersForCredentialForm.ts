@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from "@/lib/prisma";
+import prisma from '@/lib/prisma';
 
 export type PlayerForCredential = {
   id: string;
@@ -31,7 +31,7 @@ export const fetchPlayersForCredentialForm = async (): ResponseFetchAction => {
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los jugadores");
+      console.log('Error al intentar obtener los jugadores');
       return {
         ok: false,
         message: error.message,
@@ -41,7 +41,7 @@ export const fetchPlayersForCredentialForm = async (): ResponseFetchAction => {
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los jugadores, revise los logs del servidor",
+      message: 'Error inesperado al obtener los jugadores, revise los logs del servidor',
       players: null,
     };
   }

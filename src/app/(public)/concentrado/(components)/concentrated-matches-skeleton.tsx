@@ -1,8 +1,7 @@
 import type { FC } from 'react';
-import "./matches-table/styles.css";
+import './matches-table/styles.css';
 
 export const ConcentratedMatchesSkeleton: FC = () => {
-
   return (
     <div className="animate-pulse">
       <table className="concentrated-table">
@@ -46,7 +45,6 @@ export const ConcentratedMatchesSkeleton: FC = () => {
       </section>
     </div>
   );
-
 };
 
 export default ConcentratedMatchesSkeleton;

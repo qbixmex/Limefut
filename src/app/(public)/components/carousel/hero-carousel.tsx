@@ -10,7 +10,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { BannerImage } from '~/src/shared/components/banner-image';
 import type { HeroBanner } from '../../(actions)/home/fetchPublicHeroBannersAction';
 import { DotButton, useDotButton } from './carousel-dot-button';
-import "./embla.css";
+import './embla.css';
 
 type Props = Readonly<{
   banners: HeroBanner[];
@@ -69,9 +69,9 @@ export const HeroCarousel: FC<Props> = ({
     const autoplayPlugin = emblaApi.plugins().autoplay;
 
     if (
-      !autoplayPlugin
-      || typeof autoplayPlugin.play !== 'function'
-      || typeof autoplayPlugin.stop !== 'function'
+      !autoplayPlugin ||
+      typeof autoplayPlugin.play !== 'function' ||
+      typeof autoplayPlugin.stop !== 'function'
     ) {
       return;
     }

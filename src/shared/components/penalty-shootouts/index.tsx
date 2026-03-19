@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Check, MinusIcon, XIcon } from "lucide-react";
+import { Check, MinusIcon, XIcon } from 'lucide-react';
 import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { SHOOTOUT_STATUS } from '@/shared/enums';
@@ -94,21 +94,21 @@ export const PenaltyShootout: FC<Props> = ({ shootout, admin = false }) => {
                 <div
                   key={kick.id}
                   className={cn('flex items-center gap-5', {
-                    "justify-end": kick.teamId == shootout.localTeam.id,
-                    "justify-start": kick.teamId == shootout.visitorTeam.id,
+                    'justify-end': kick.teamId === shootout.localTeam.id,
+                    'justify-start': kick.teamId === shootout.visitorTeam.id,
                   })}
                 >
                   <span
                     className={cn({
-                      "order-1": kick.teamId == shootout.localTeam.id,
-                      "order-2": kick.teamId == shootout.visitorTeam.id,
+                      'order-1': kick.teamId === shootout.localTeam.id,
+                      'order-2': kick.teamId === shootout.visitorTeam.id,
                     })}
                   >{kick.shooterName}</span>
                   <PenaltiIcon
                     isGoal={kick.isGoal}
                     className={cn({
-                      "order-2": kick.teamId == shootout.localTeam.id,
-                      "order-1": kick.teamId == shootout.visitorTeam.id,
+                      'order-2': kick.teamId === shootout.localTeam.id,
+                      'order-1': kick.teamId === shootout.visitorTeam.id,
                     })}
                   />
                 </div>
@@ -155,14 +155,14 @@ const ShootoutWinner: FC<{
 const PenaltiIcon: FC<{
   isGoal: boolean | null;
   className?: string;
-}> = ({ isGoal = undefined, className = "" }) => {
+}> = ({ isGoal = undefined, className = '' }) => {
   return (
-    <div className={cn("size-[32px] flex justify-center items-center rounded-full",
+    <div className={cn('size-[32px] flex justify-center items-center rounded-full',
       className,
       {
-        "bg-emerald-600 text-emerald-50": isGoal,
-        "bg-rose-600 text-rose-50": !isGoal,
-        "bg-gray-600 text-gray-50": isGoal === null,
+        'bg-emerald-600 text-emerald-50': isGoal,
+        'bg-rose-600 text-rose-50': !isGoal,
+        'bg-gray-600 text-gray-50': isGoal === null,
       },
     )}>
       {(isGoal === true)

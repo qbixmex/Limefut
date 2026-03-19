@@ -42,7 +42,7 @@ export const fetchLastMatchesAction = async ({
   teamId: string;
   count: number;
 }): FetchTeamResponse => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-team-matches');
@@ -126,13 +126,13 @@ export const fetchLastMatchesAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener los encuentros,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener los encuentros,\n¡ Revise los logs del servidor !',
         matches: [],
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       matches: [],
     };
   }

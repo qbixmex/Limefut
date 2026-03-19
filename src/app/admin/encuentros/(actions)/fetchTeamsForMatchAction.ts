@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type OptionsType = {
   tournamentId: string;
@@ -19,10 +19,10 @@ export type ResponseFetchTeams = Promise<{
 
 export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsType)
   : ResponseFetchTeams => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-teams-for-match");
+  cacheLife('days');
+  cacheTag('admin-teams-for-match');
 
   try {
     // Get teams that are already scheduled for the specified tournament and week.
@@ -68,7 +68,7 @@ export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsTy
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los equipos");
+      console.log('Error al intentar obtener los equipos');
       return {
         ok: false,
         message: error.message,
@@ -78,7 +78,7 @@ export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsTy
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los equipos, revise los logs del servidor",
+      message: 'Error inesperado al obtener los equipos, revise los logs del servidor',
       teams: [],
     };
   }

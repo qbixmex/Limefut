@@ -1,9 +1,8 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { User } from "@/shared/interfaces";
-import type { ROLE_TYPE } from '@/shared/interfaces';
-import { editUserSchema } from "@/shared/schemas";
+import type { User, ROLE_TYPE } from '@/shared/interfaces';
+import { editUserSchema } from '@/shared/schemas';
 import bcrypt from 'bcryptjs';
 import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from '@/shared/actions';
@@ -58,11 +57,7 @@ export const updateUserAction = async ({
     roles: formData.get('roles')
       ? JSON.parse(formData.get('roles') as string)
       : [],
-    isActive: (formData.get('isActive') === 'true')
-      ? true
-      : (formData.get('isActive') === 'false')
-        ? false
-        : false,
+    isActive: formData.get('isActive') === 'true',
   };
 
   const userVerified = editUserSchema.safeParse(rawData);
@@ -76,8 +71,8 @@ export const updateUserAction = async ({
   }
 
   if (
-    userVerified.data.password && userVerified.data.password !== ''
-    && isPasswordInsecure(userVerified.data.password)
+    userVerified.data.password && userVerified.data.password !== '' &&
+    isPasswordInsecure(userVerified.data.password)
   ) {
     return {
       ok: false,
@@ -103,11 +98,11 @@ export const updateUserAction = async ({
           };
         }
 
-        let hashedPassword: string | undefined = undefined;
+        let hashedPassword: string | undefined;
 
         if (userToSave.password && userToSave.password.trim().length > 0) {
-          hashedPassword = userVerified.data.password ?
-            bcrypt.hashSync(userVerified.data.password, 10)
+          hashedPassword = userVerified.data.password
+            ? bcrypt.hashSync(userVerified.data.password, 10)
             : undefined;
         }
 

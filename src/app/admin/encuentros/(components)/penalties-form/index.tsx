@@ -55,8 +55,8 @@ export const PenaltiesForm: FC<Props> = ({
     defaultValues: {
       localPlayerId: '',
       visitorPlayerId: '',
-      localIsGoal: "",
-      visitorIsGoal: "",
+      localIsGoal: '',
+      visitorIsGoal: '',
     },
   });
 
@@ -70,12 +70,12 @@ export const PenaltiesForm: FC<Props> = ({
     formData.append('localPlayerId', data.localPlayerId);
 
     const localPlayerName = localTeam.players.find((p) => {
-      return p.id == data.localPlayerId;
+      return p.id === data.localPlayerId;
     })?.name as string;
     formData.append('localPlayerName', localPlayerName);
 
     const visitorPlayerName = visitorTeam.players.find((p) => {
-      return p.id == data.visitorPlayerId;
+      return p.id === data.visitorPlayerId;
     })?.name as string;
 
     formData.append('visitorPlayerId', data.visitorPlayerId);
@@ -228,7 +228,7 @@ export const PenaltiesForm: FC<Props> = ({
                   <LoaderCircle className="size-4 animate-spin" />
                 </span>
               ) : (
-                true ? 'crear' : 'actualizar'
+                <span>guardar</span>
               )}
             </Button>
           </div>

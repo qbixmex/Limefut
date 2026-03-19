@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
 const ACCEPTED_FILE_TYPES = [
@@ -26,7 +26,7 @@ export const editPlayerSchema = z.object({
     .max(200, { message: '¡ El teléfono debe ser menor a 100 caracteres !' })
     .optional(),
   birthday: z
-    .date({ message: "La fecha de nacimiento debe ser una fecha válida" })
+    .date({ message: 'La fecha de nacimiento debe ser una fecha válida' })
     .optional(),
   nationality: z.string()
     .min(3, { message: '¡ La nacionalidad debe ser mayor a 3 caracteres !' })

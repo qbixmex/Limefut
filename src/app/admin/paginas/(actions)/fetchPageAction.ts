@@ -20,10 +20,10 @@ export const fetchPageAction = async (
   userRoles: string[],
   pageId: string,
 ): FetchResponse => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-page");
+  cacheLife('days');
+  cacheTag('admin-page');
 
   if (!userRoles.includes('admin')) {
     return {
@@ -65,13 +65,13 @@ export const fetchPageAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener la página,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener la página,\n¡ Revise los logs del servidor !',
         page: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       page: null,
     };
   }

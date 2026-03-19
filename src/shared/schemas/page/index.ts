@@ -1,2 +1,2 @@
-export { createPageSchema } from "./createPageSchema";
-export { editPageSchema } from "./editPageSchema";
+export { createPageSchema } from './createPageSchema';
+export { editPageSchema } from './editPageSchema';

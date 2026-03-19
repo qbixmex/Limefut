@@ -10,11 +10,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import {  } from "react";
-import Image from "next/image";
+import { } from 'react';
+import Image from 'next/image';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
-import { EyeOff, Loader2, Pencil, Trash2 } from "lucide-react";
+import { EyeOff, Loader2, Pencil, Trash2 } from 'lucide-react';
 import { useImageGallery } from '~/src/store';
 import { deleteGalleryImageAction } from '../(actions)/deleteGalleryImageAction';
 import { toast } from 'sonner';
@@ -109,7 +109,7 @@ export const GalleryImage: FC<Props> = ({ galleyImage }) => {
           <AlertDialogFooter>
             <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
             <AlertDialogAction
-              className={cn("delete-btn", { 'animate-pulse': isDeleting })}
+              className={cn('delete-btn', { 'animate-pulse': isDeleting })}
               onClick={() => onDeleteImage(id)}
             >
               {isDeleting ? (

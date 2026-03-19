@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type FC } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from '@/components/ui/textarea';
 import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createCoachSchema, editCoachSchema } from '@/shared/schemas';
@@ -71,7 +71,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
     formData.append('teamsIds', JSON.stringify(data.teamsIds));
 
     if (data.image && typeof data.image === 'object') {
-      formData.append("image", data.image);
+      formData.append('image', data.image);
     }
 
     formData.append('active', String(data.active ?? false));
@@ -91,7 +91,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/entrenadores");
+        route.replace('/admin/entrenadores');
         return;
       }
       return;
@@ -112,10 +112,8 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/entrenadores");
-        return;
+        route.replace('/admin/entrenadores');
       }
-      return;
     }
   };
 
@@ -264,7 +262,7 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
                           {
                             (selectedTeams.length > 0)
                               ? `Equipos: ${selectedTeams.length}`
-                              : "Selecciona uno ó más equipos ..."
+                              : 'Selecciona uno ó más equipos ...'
                           }
                           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                         </Button>
@@ -294,8 +292,8 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
                                     {team.name}
                                     <Check
                                       className={cn(
-                                        "ml-auto",
-                                        isSelected ? "opacity-100" : "opacity-0",
+                                        'ml-auto',
+                                        isSelected ? 'opacity-100' : 'opacity-0',
                                       )}
                                     />
                                   </CommandItem>
@@ -387,7 +385,6 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
       </form>
     </Form>
   );
-
 };
 
 export default CoachForm;

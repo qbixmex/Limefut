@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import Link from 'next/link';
-import Image from "next/image";
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import { formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone } from 'date-fns-tz';
 import { es } from 'date-fns/locale';
 import {
   type MatchType,
@@ -17,10 +17,10 @@ import {
 } from '@/components/ui/table';
 import { MatchStatus } from './match-status';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
-import { PenaltyShootout } from "@/shared/components/penalty-shootouts";
-import "./styles.css";
+import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
+import './styles.css';
 
-const TIME_ZONE = "America/Mexico_City";
+const TIME_ZONE = 'America/Mexico_City';
 
 type Props = Readonly<{
   matchId: string;
@@ -43,10 +43,10 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             <div className="team team-local">
               <Link
                 href={
-                  `/equipos/${localTeam.permalink}`
-                  + `?torneo=${tournament.permalink}`
-                  + `&categoria=${localTeam.category}`
-                  + `&formato=${localTeam.format}`
+                  `/equipos/${localTeam.permalink}` +
+                  `?torneo=${tournament.permalink}` +
+                  `&categoria=${localTeam.category}` +
+                  `&formato=${localTeam.format}`
                 }
                 target="_blank"
               >
@@ -61,10 +61,10 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <div className="team-name">
                 <Link
                   href={
-                    `/equipos/${localTeam.permalink}`
-                    + `?torneo=${tournament.permalink}`
-                    + `&categoria=${localTeam.category}`
-                    + `&formato=${localTeam.format}`
+                    `/equipos/${localTeam.permalink}` +
+                    `?torneo=${tournament.permalink}` +
+                    `&categoria=${localTeam.category}` +
+                    `&formato=${localTeam.format}`
                   }
                   className="text-gray-100"
                   target="_blank"
@@ -77,10 +77,10 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             <div className="team team-visitor">
               <Link
                 href={
-                  `/equipos/${visitorTeam.permalink}`
-                  + `?torneo=${tournament.permalink}`
-                  + `&categoria=${visitorTeam.category}`
-                  + `&formato=${visitorTeam.format}`
+                  `/equipos/${visitorTeam.permalink}` +
+                  `?torneo=${tournament.permalink}` +
+                  `&categoria=${visitorTeam.category}` +
+                  `&formato=${visitorTeam.format}`
                 }
                 target="_blank"
               >
@@ -95,10 +95,10 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <div className="team-name">
                 <Link
                   href={
-                    `/equipos/${visitorTeam.permalink}`
-                    + `?torneo=${tournament.permalink}`
-                    + `&categoria=${visitorTeam.category}`
-                    + `&formato=${visitorTeam.format}`
+                    `/equipos/${visitorTeam.permalink}` +
+                    `?torneo=${tournament.permalink}` +
+                    `&categoria=${visitorTeam.category}` +
+                    `&formato=${visitorTeam.format}`
                   }
                   className="text-gray-100"
                   target="_blank"
@@ -126,9 +126,9 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 <TableCell>
                   <Link
                     href={
-                      `/torneos/${tournament.permalink}`
-                      + `?categoria=${tournament.category}`
-                      + `&formato=${tournament.format}`
+                      `/torneos/${tournament.permalink}` +
+                      `?categoria=${tournament.category}` +
+                      `&formato=${tournament.format}`
                     }
                     target="_blank"
                   >
@@ -172,11 +172,11 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                     </span>
                     <span>{' de '}</span>
                     <span className="capitalize">
-                      {formatInTimeZone(match?.matchDate as Date, TIME_ZONE, "LLLL", { locale: es })}
+                      {formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'LLLL', { locale: es })}
                     </span>
                     <span>{' del '}</span>
                     <span>
-                      &nbsp;{formatInTimeZone(match?.matchDate as Date, TIME_ZONE, "y", { locale: es })}
+                      &nbsp;{formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'y', { locale: es })}
                     </span>
                   </p>
                 </TableCell>
@@ -184,7 +184,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <TableRow>
                 <TableHead>Hora</TableHead>
                 <TableCell>
-                  {formatInTimeZone(match?.matchDate as Date, TIME_ZONE, "h:mm aaa", { locale: es })}
+                  {formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'h:mm aaa', { locale: es })}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -219,8 +219,8 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
       <section>
         {
           (
-            (match?.status === MATCH_STATUS.COMPLETED)
-            && (match.localScore === match.visitorScore)
+            (match?.status === MATCH_STATUS.COMPLETED) &&
+            (match.localScore === match.visitorScore)
           ) && (
             <>
               <div className="w-full h-0.25 bg-gray-600 my-5"></div>

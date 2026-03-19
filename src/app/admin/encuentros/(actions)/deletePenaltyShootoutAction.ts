@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -37,9 +37,9 @@ export const deletePenaltyShootoutAction = async (
       });
 
       if (
-        standings
-        && (standings.additionalPoints > 0)
-        && (standings.totalPoints > 0)
+        standings &&
+        (standings.additionalPoints > 0) &&
+        (standings.totalPoints > 0)
       ) {
         await transaction.standings.update({
           where: { teamId: winnerTeamId },
@@ -60,13 +60,13 @@ export const deletePenaltyShootoutAction = async (
   updateTag('admin-matches');
   updateTag('admin-match');
   updateTag('public-matches');
-  updateTag("public-results-roles");
-  updateTag("public-result-details");
-  updateTag("public-matches-count");
-  updateTag("public-team-standings");
+  updateTag('public-results-roles');
+  updateTag('public-result-details');
+  updateTag('public-matches-count');
+  updateTag('public-team-standings');
 
   return {
     ok: true,
-    message: `¡ La tanda de penales ha sido eliminada correctamente 👍 !`,
+    message: '¡ La tanda de penales ha sido eliminada correctamente 👍 !',
   };
 };

@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
 const ACCEPTED_FILE_TYPES = [

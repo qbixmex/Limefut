@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
 // import { CloudinaryResponse } from "@/interfaces";
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config(process.env.CLOUDINARY_URL ?? '');
 
@@ -15,7 +15,7 @@ cloudinary.config(process.env.CLOUDINARY_URL ?? '');
  * @example ```typescript
  * deleteImage("articles/12f23f85-eeba-4569-8de2-3dce913e0ccb");
  * ```
- * @returns 
+ * @returns
  */
 const deleteImage = async (publicId: string): Promise<{ ok: boolean }> => {
   try {

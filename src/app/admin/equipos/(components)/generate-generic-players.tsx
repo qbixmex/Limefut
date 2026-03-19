@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const GenerateGenericPlayers: FC<Props> = ({ userRoles, teamId, gender }) => {
-  const [ generatingPlayers, setGeneratingPlayers ] = useState(false);
+  const [generatingPlayers, setGeneratingPlayers] = useState(false);
 
   const handleGeneratePlayers = async () => {
     setGeneratingPlayers(true);
@@ -38,13 +38,13 @@ export const GenerateGenericPlayers: FC<Props> = ({ userRoles, teamId, gender })
 
   return (
     <Button
-      className={cn("w-full", {
-        "text-gray-200 hover:bg-secondary": generatingPlayers,
+      className={cn('w-full', {
+        'text-gray-200 hover:bg-secondary': generatingPlayers,
       })}
       size="lg"
       onClick={handleGeneratePlayers}
       disabled={generatingPlayers}
-      variant={ generatingPlayers ? "secondary" : "outline-primary"}
+      variant={ generatingPlayers ? 'secondary' : 'outline-primary'}
     >
       {
         !generatingPlayers

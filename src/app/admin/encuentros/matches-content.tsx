@@ -30,10 +30,10 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
     <section className="mt-10">
       <Suspense
         key={
-          `${tournamentId ?? 'tournamentId'}`
-          + `-${query ?? 'query'}`
-          + `-${currentPage ?? 'page'}`
-          + `-${week ?? 'week'}`
+          `${tournamentId ?? 'tournamentId'}` +
+          `-${query ?? 'query'}` +
+          `-${currentPage ?? 'page'}` +
+          `-${week ?? 'week'}`
         }
         fallback={<MatchesTableSkeleton colCount={6} rowCount={16} />}
       >

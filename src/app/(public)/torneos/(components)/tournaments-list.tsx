@@ -3,7 +3,7 @@
 import { type FC } from 'react';
 import type { TournamentType } from '../(actions)/fetchTournamentsAction';
 import { Tournament } from './tournament';
-import "./styles.css";
+import './styles.css';
 
 type Props = Readonly<{
   tournaments: TournamentType[];

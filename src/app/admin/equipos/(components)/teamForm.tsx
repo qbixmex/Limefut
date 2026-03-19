@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useState, type FC, type ChangeEvent } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { EmailInput } from "./email-input";
-import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react";
+import { useRef, useState, type FC, type ChangeEvent } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
+import { EmailInput } from './email-input';
+import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import {
   Form,
   FormControl,
@@ -14,13 +14,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import type z from 'zod';
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -28,8 +28,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+} from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Command,
   CommandEmpty,
@@ -37,12 +37,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { createTeamSchema, editTeamSchema } from "@/shared/schemas";
-import type { Coach, Team, Tournament } from "@/shared/interfaces";
-import { type TournamentType, createTeamAction, updateTeamAction } from "../(actions)";
-import type { Session } from "@/lib/auth-client";
-import { cn, slugify } from "@/lib/utils";
+} from '@/components/ui/command';
+import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
+import type { Coach, Team, Tournament } from '@/shared/interfaces';
+import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
+import type { Session } from '@/lib/auth-client';
+import { cn, slugify } from '@/lib/utils';
 
 type Props = Readonly<{
   session: Session;
@@ -133,7 +133,7 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
     }
 
     if (data.image && typeof data.image === 'object') {
-      formData.append("image", data.image);
+      formData.append('image', data.image);
     }
 
     formData.append('active', String(data.active));
@@ -177,7 +177,6 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
         toast.success(response.message);
         route.replace(`/admin/equipos/${response.team?.id}`);
       }
-      return;
     }
   };
 
@@ -480,7 +479,7 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
                           aria-expanded={coachesOpen}
                           className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                         >
-                          {field.value && selectedCoach ? selectedCoach.name : "Sin entrenador asignado"}
+                          {field.value && selectedCoach ? selectedCoach.name : 'Sin entrenador asignado'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -523,8 +522,8 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
                                   {coach.name}
                                   <Check
                                     className={cn(
-                                      "ml-auto",
-                                      field.value === coach.id ? "opacity-100" : "opacity-0",
+                                      'ml-auto',
+                                      field.value === coach.id ? 'opacity-100' : 'opacity-0',
                                     )}
                                   />
                                 </CommandItem>
@@ -633,7 +632,6 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
       </form>
     </Form>
   );
-
 };
 
 export default TeamForm;

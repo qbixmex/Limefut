@@ -1,14 +1,14 @@
-import { headers } from "next/headers";
-import { LoginForm } from "./components/login-form";
+import { headers } from 'next/headers';
+import { LoginForm } from './components/login-form';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+} from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
 export const Login = () => {
   return (
@@ -24,7 +24,7 @@ const LoginContent = async () => {
   });
 
   if (session) {
-    redirect("/admin/dashboard");
+    redirect('/admin/dashboard');
   }
 
   return (

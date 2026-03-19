@@ -1,8 +1,8 @@
-import { Badge } from "~/src/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/src/components/ui/table";
-import { fetchLeadingTeamsAction } from "../../(actions)/fetchLeadingTeamsAction";
-import Link from "next/link";
-import "../../styles.css";
+import { Badge } from '~/src/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/src/components/ui/table';
+import { fetchLeadingTeamsAction } from '../../(actions)/fetchLeadingTeamsAction';
+import Link from 'next/link';
+import '../../styles.css';
 
 export const LeadingTeams = async () => {
   const { leadingTeams } = await fetchLeadingTeamsAction({ quantity: 8 });

@@ -1,9 +1,9 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma/client";
-import prisma from "@/lib/prisma";
-import type { Pagination, Team } from "@/shared/interfaces";
-import { cacheLife, cacheTag } from "next/cache";
+import type { Prisma } from '@/generated/prisma/client';
+import prisma from '@/lib/prisma';
+import type { Pagination, Team } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   page?: number;
@@ -31,10 +31,10 @@ export const fetchPlayersAction = async (
   teamId: string,
   options?: Options,
 ): ResponseFetchAction => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-players");
+  cacheLife('days');
+  cacheTag('admin-players');
 
   let { page = 1, take = 12 } = options ?? {};
 
@@ -73,7 +73,7 @@ export const fetchPlayersAction = async (
     const players = await prisma.player.findMany({
       where: whereCondition,
       orderBy: { name: 'asc' },
-      take: take,
+      take,
       skip: (page - 1) * take,
       select: {
         id: true,
@@ -104,7 +104,7 @@ export const fetchPlayersAction = async (
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los jugadores");
+      console.log('Error al intentar obtener los jugadores');
       return {
         ok: false,
         message: error.message,
@@ -115,7 +115,7 @@ export const fetchPlayersAction = async (
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los jugadores, revise los logs del servidor",
+      message: 'Error inesperado al obtener los jugadores, revise los logs del servidor',
       players: null,
       pagination: null,
     };

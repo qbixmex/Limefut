@@ -1,11 +1,11 @@
-import { Badge } from "~/src/components/ui/badge";
-import { fetchLatestResultsAction } from "../../(actions)/fetchLatestResultsAction";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/src/components/ui/table";
-import Link from "next/link";
-import { InfoIcon } from "lucide-react";
-import { Button } from "~/src/components/ui/button";
+import { Badge } from '~/src/components/ui/badge';
+import { fetchLatestResultsAction } from '../../(actions)/fetchLatestResultsAction';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/src/components/ui/table';
+import Link from 'next/link';
+import { InfoIcon } from 'lucide-react';
+import { Button } from '~/src/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import "../../styles.css";
+import '../../styles.css';
 
 export const LatestResults = async () => {
   const { latestResults } = await fetchLatestResultsAction({ quantity: 7 });

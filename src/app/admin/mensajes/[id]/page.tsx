@@ -1,21 +1,21 @@
-import { Suspense, type FC } from "react";
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
+import { Suspense, type FC } from 'react';
+import { redirect } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
   TableHead,
   TableCell,
   TableRow,
-} from "@/components/ui/table";
-import { Mail } from "lucide-react";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import { fetchMessageAction } from "../(actions)/fetchMessageAction";
-import { ActiveSwitch } from "@/shared/components/active-switch";
-import { updateMessageStatusAction } from "../(actions)/updateMessageStatusAction";
-import { headers } from "next/headers";
+} from '@/components/ui/table';
+import { Mail } from 'lucide-react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { fetchMessageAction } from '../(actions)/fetchMessageAction';
+import { ActiveSwitch } from '@/shared/components/active-switch';
+import { updateMessageStatusAction } from '../(actions)/updateMessageStatusAction';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   params: Promise<{

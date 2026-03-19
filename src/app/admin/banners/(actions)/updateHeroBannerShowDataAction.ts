@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -32,7 +32,7 @@ export const updateHeroBannerShowDataAction = async (id: string, showData: boole
   // Update Cache
   updateTag('admin-banners');
   updateTag('admin-banner');
-  updateTag("admin-hero-banner");
+  updateTag('admin-hero-banner');
   updateTag('public-banners');
 
   return {

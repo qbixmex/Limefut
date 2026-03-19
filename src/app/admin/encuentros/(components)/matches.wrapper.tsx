@@ -1,9 +1,9 @@
-import type { FC } from "react";
-import { auth } from "@/lib/auth";
-import { fetchMatchesAction, fetchTournamentForMatchAction } from "../(actions)";
-import { MatchesTable } from "./matches-table";
-import type { MATCH_STATUS_TYPE } from "@/shared/enums";
-import { headers } from "next/headers";
+import type { FC } from 'react';
+import { auth } from '@/lib/auth';
+import { fetchMatchesAction, fetchTournamentForMatchAction } from '../(actions)';
+import { MatchesTable } from './matches-table';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   tournamentId: string;

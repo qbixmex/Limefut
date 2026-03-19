@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import { InfoIcon } from 'lucide-react';
 import { fetchLatestMessagesAction } from '../../(actions)/fetchLatestMessagesAction';
-import "../../styles.css";
+import '../../styles.css';
 
 export const LatestMessages = async () => {
   const { latestMessages } = await fetchLatestMessagesAction({ quantity: 5 });

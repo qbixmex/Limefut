@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import Link from 'next/link';
-import Image from "next/image";
+import Image from 'next/image';
 import {
   Table,
   TableBody,
@@ -8,9 +8,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Pencil, InfoIcon } from "lucide-react";
-import { fetchHeroBannersAction, updateHeroBannerStateAction } from "../(actions)";
+} from '@/components/ui/table';
+import { Pencil, InfoIcon } from 'lucide-react';
+import { fetchHeroBannersAction, updateHeroBannerStateAction } from '../(actions)';
 import { auth } from '@/lib/auth';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,7 @@ import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '@/components/ui/badge';
-import { PiFlagBannerFoldBold as BannerFlag } from "react-icons/pi";
+import { PiFlagBannerFoldBold as BannerFlag } from 'react-icons/pi';
 import { DeleteHeroBanner } from './delete-hero-banner';
 import { headers } from 'next/headers';
 
@@ -133,8 +133,8 @@ export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>

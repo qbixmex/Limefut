@@ -1,16 +1,16 @@
-import { Suspense } from "react";
+import { Suspense } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { PlayerForm } from "../(components)/playerForm";
-import type { Session } from "@/lib/auth-client";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { fetchTeamsForPlayer } from "../(actions)";
-import { headers } from "next/headers";
+} from '@/components/ui/card';
+import { PlayerForm } from '../(components)/playerForm';
+import type { Session } from '@/lib/auth-client';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchTeamsForPlayer } from '../(actions)';
+import { headers } from 'next/headers';
 
 const CreatePlayerPage = () => {
   return (

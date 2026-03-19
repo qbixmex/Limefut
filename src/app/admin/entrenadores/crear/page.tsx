@@ -1,16 +1,16 @@
-import { Suspense } from "react";
+import { Suspense } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { CoachForm } from "../(components)/coachForm";
-import type { Session } from "@/lib/auth-client";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { fetchTeamsForCoach } from "../(actions)/fetchTeamsForCoach";
-import { headers } from "next/headers";
+} from '@/components/ui/card';
+import { CoachForm } from '../(components)/coachForm';
+import type { Session } from '@/lib/auth-client';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchTeamsForCoach } from '../(actions)/fetchTeamsForCoach';
+import { headers } from 'next/headers';
 
 const CreateCoachPage = () => {
   return (

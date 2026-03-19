@@ -1,23 +1,23 @@
-import { Suspense } from "react";
-import ActiveTournaments from "./(components)/active-tournaments";
-import TournamentsSkeleton from "./(components)/active-tournaments/TournamentsSkeleton";
-import { LatestResults } from "./(components)/latest-results";
-import { LeadingTeams } from "./(components)/leading-teams";
-import { LeadingSkeleton } from "./(components)/leading-teams/leading-skeleton";
-import { LatestMessages } from "./(components)/latest-messages";
-import { MessagesSkeleton } from "./(components)/latest-messages/messages-skeleton";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { Suspense } from 'react';
+import ActiveTournaments from './(components)/active-tournaments';
+import TournamentsSkeleton from './(components)/active-tournaments/TournamentsSkeleton';
+import { LatestResults } from './(components)/latest-results';
+import { LeadingTeams } from './(components)/leading-teams';
+import { LeadingSkeleton } from './(components)/leading-teams/leading-skeleton';
+import { LatestMessages } from './(components)/latest-messages';
+import { MessagesSkeleton } from './(components)/latest-messages/messages-skeleton';
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export const DashboardPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
-	});
-  
+  });
+
   if (!session) {
-    redirect("/login");
-	}
+    redirect('/login');
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-5 pt-0">

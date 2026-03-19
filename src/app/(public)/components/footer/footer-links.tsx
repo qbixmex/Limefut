@@ -1,6 +1,6 @@
-import type { FC } from "react";
-import Link from "next/link";
-import { fetchPagesAction } from "../../(actions)";
+import type { FC } from 'react';
+import Link from 'next/link';
+import { fetchPagesAction } from '../../(actions)';
 
 export const FooterLinks: FC = async () => {
   const { pageLinks } = await fetchPagesAction();

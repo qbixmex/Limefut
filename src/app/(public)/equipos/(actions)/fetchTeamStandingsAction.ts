@@ -30,7 +30,7 @@ export const fetchTeamStandingsAction = async ({
   teamId: string;
   tournamentId: string;
 }): FetchTeamResponse => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-team-standings');
@@ -74,7 +74,7 @@ export const fetchTeamStandingsAction = async ({
 
     let position = 0;
 
-    tournamentStandings.forEach((std,index) => {
+    tournamentStandings.forEach((std, index) => {
       if (std.teamId === teamId) {
         position = index + 1;
       }
@@ -93,13 +93,13 @@ export const fetchTeamStandingsAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener las estadísticas,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener las estadísticas,\n¡ Revise los logs del servidor !',
         standings: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       standings: null,
     };
   }

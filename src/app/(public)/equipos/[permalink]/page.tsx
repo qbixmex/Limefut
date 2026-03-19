@@ -1,6 +1,6 @@
-import { type FC, Suspense } from "react";
-import { TeamDetails } from "./(components)/team-details";
-import { TeamSkeleton } from "./(components)/team-skeleton";
+import { type FC, Suspense } from 'react';
+import { TeamDetails } from './(components)/team-details';
+import { TeamSkeleton } from './(components)/team-skeleton';
 
 type Props = Readonly<{
   params: Promise<{

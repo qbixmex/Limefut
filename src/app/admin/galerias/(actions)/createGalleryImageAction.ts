@@ -1,10 +1,10 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import type { CloudinaryResponse, GalleryImage } from "@/shared/interfaces";
-import { createGalleryImageSchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
-import { uploadImage } from "~/src/shared/actions";
+import prisma from '@/lib/prisma';
+import type { CloudinaryResponse, GalleryImage } from '@/shared/interfaces';
+import { createGalleryImageSchema } from '@/shared/schemas';
+import { updateTag } from 'next/cache';
+import { uploadImage } from '~/src/shared/actions';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -49,11 +49,7 @@ export const createGalleryImageAction = async ({
     title: formData.get('title') as string,
     image: formData.get('image') as File,
     position: Number(formData.get('position')),
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
   };
 
   const galleryVerified = createGalleryImageSchema.safeParse(rawData);
@@ -110,8 +106,8 @@ export const createGalleryImageAction = async ({
     updateTag('dashboard-images');
     updateTag('admin-galleries');
     updateTag('admin-gallery');
-    updateTag("public-galleries");
-    updateTag("public-gallery");
+    updateTag('public-galleries');
+    updateTag('public-gallery');
 
     return prismaTransaction;
   } catch (error) {

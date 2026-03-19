@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import type { Metadata } from 'next/types';
-import Image from "next/image";
-import "./styles.css";
+import Image from 'next/image';
+import './styles.css';
 
 export const metadata: Metadata = {
   title: '¿ Quienes Somos ?',

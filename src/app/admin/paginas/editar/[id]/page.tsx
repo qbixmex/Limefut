@@ -1,15 +1,15 @@
-import type { FC } from "react";
-import { headers } from "next/headers";
+import type { FC } from 'react';
+import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { fetchPageAction } from "../../(actions)/fetchPageAction";
-import { PageForm } from "../../(components)/page-form";
+} from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchPageAction } from '../../(actions)/fetchPageAction';
+import { PageForm } from '../../(components)/page-form';
 
 type Props = Readonly<{
   params: Promise<{

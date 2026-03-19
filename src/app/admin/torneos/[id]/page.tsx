@@ -187,8 +187,8 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                           <TableCell>
                             <Badge
                               variant={(tournament.teamsQuantity > 0)
-                                ? "outline-info"
-                                : "outline-secondary"
+                                ? 'outline-info'
+                                : 'outline-secondary'
                               }
                             >
                               {tournament.teamsQuantity}

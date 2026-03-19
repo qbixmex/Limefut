@@ -1,7 +1,7 @@
 'use server';
 
-import { cacheLife, cacheTag } from "next/cache";
-import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from 'next/cache';
+import prisma from '@/lib/prisma';
 
 export type PageMetadataType = {
   id: string;
@@ -17,7 +17,7 @@ type ResponseAction = Promise<{
 }>;
 
 export const fetchCustomPageMetadataAction = async (permalink: string): ResponseAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('max');
   cacheTag(`public-page-metadata-${permalink}`);
@@ -40,7 +40,7 @@ export const fetchCustomPageMetadataAction = async (permalink: string): Response
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los metadatos de la página personalizada");
+      console.log('Error al intentar obtener los metadatos de la página personalizada');
       return {
         ok: false,
         message: error.message,
@@ -50,7 +50,7 @@ export const fetchCustomPageMetadataAction = async (permalink: string): Response
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los metadatos de la página personalizada, revise los logs del servidor",
+      message: 'Error inesperado al obtener los metadatos de la página personalizada, revise los logs del servidor',
       pageMetadata: null,
     };
   }

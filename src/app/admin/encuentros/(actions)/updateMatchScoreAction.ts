@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { MATCH_STATUS } from "@/shared/enums";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { MATCH_STATUS } from '@/shared/enums';
+import { updateTag } from 'next/cache';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -182,7 +182,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
     updateTag('public-results-roles');
     updateTag('public-result-details');
     updateTag('public-matches-count');
-    updateTag("public-team-standings");
+    updateTag('public-team-standings');
 
     if (!updatedMatch) {
       return {
@@ -193,7 +193,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
 
     return {
       ok: true,
-      message: `¡ El marcador del partido se actualizó correctamente ⚽️🎉 !`,
+      message: '¡ El marcador del partido se actualizó correctamente ⚽️🎉 !',
     };
   } catch (error) {
     console.error(`Error: ${(error as Error).message}`);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type FC } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
 import { createPlayerSchema, editPlayerSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -83,7 +83,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
     formData.append('birthday', (data.birthday as Date).toISOString());
 
     if (data.image && typeof data.image === 'object') {
-      formData.append("image", data.image);
+      formData.append('image', data.image);
     }
 
     formData.append('active', String(data.active ?? false));
@@ -127,9 +127,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
       if (ok) {
         toast.success(message);
         route.replace(`/admin/jugadores/perfil/${player.id}`);
-        return;
       }
-      return;
     }
   };
 
@@ -318,8 +316,8 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                           {selectedTeam
                             ? selectedTeam.name
                             : field.value === ''
-                              ? "Sin equipo asignado"
-                              : "Selecciona un equipo ..."}
+                              ? 'Sin equipo asignado'
+                              : 'Selecciona un equipo ...'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -342,8 +340,8 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                                 <span className="italic text-gray-500">Sin equipo asignado</span>
                                 <Check
                                   className={cn(
-                                    "ml-auto",
-                                    field.value === '' ? "opacity-100" : "opacity-0",
+                                    'ml-auto',
+                                    field.value === '' ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                               </CommandItem>
@@ -364,8 +362,8 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
                                   {team.name}
                                   <Check
                                     className={cn(
-                                      "ml-auto",
-                                      field.value === team.id ? "opacity-100" : "opacity-0",
+                                      'ml-auto',
+                                      field.value === team.id ? 'opacity-100' : 'opacity-0',
                                     )}
                                   />
                                 </CommandItem>
@@ -432,7 +430,6 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
       </form>
     </Form>
   );
-
 };
 
 export default PlayerForm;

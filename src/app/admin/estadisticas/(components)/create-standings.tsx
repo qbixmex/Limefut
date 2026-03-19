@@ -13,7 +13,7 @@ type Props = Readonly<{
 }>;
 
 export const CreateStandings: FC<Props> = ({ tournament }) => {
-  const [ creatingStandings, setCreatingStandings ] = useState(false);
+  const [creatingStandings, setCreatingStandings] = useState(false);
 
   const handleOnCreateStandings = async () => {
     const data = tournament.teams.map((team) => ({
@@ -36,7 +36,7 @@ export const CreateStandings: FC<Props> = ({ tournament }) => {
   return (
     <>
       <Button
-        variant={creatingStandings ? "outline-secondary" : "outline-primary"}
+        variant={creatingStandings ? 'outline-secondary' : 'outline-primary'}
         onClick={handleOnCreateStandings}
         disabled={creatingStandings}
         className={cn({ 'cursor-not-allowed animate-pulse': creatingStandings })}

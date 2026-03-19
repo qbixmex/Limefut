@@ -45,7 +45,7 @@ export const fetchResultsAction = async (
   category: string,
   format: string,
 ): ResponseAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-matches');
@@ -75,7 +75,7 @@ export const fetchResultsAction = async (
   if (!tournament) {
     return {
       ok: false,
-      message: `! No se encontró el torneo ❌ ¡`,
+      message: '! No se encontró el torneo ❌ ¡',
       data: {
         tournament: null,
         results: [],
@@ -153,7 +153,7 @@ export const fetchResultsAction = async (
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los encuentros");
+      console.log('Error al intentar obtener los encuentros');
       return {
         ok: false,
         message: error.message,
@@ -166,7 +166,7 @@ export const fetchResultsAction = async (
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
+      message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',
       data: {
         tournament: null,
         results: [],

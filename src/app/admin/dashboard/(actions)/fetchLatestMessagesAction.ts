@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   quantity: number;
@@ -17,7 +17,7 @@ export type ResponseFetch = Promise<{
 }>;
 
 export const fetchLatestMessagesAction = async ({ quantity }: Options): Promise<ResponseFetch> => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('contact-messages');
@@ -57,7 +57,7 @@ export const fetchLatestMessagesAction = async ({ quantity }: Options): Promise<
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los mensajes");
+      console.log('Error al intentar obtener los mensajes');
       return {
         ok: false,
         message: error.message,
@@ -67,7 +67,7 @@ export const fetchLatestMessagesAction = async ({ quantity }: Options): Promise<
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los mensajes, revise los logs del servidor",
+      message: 'Error inesperado al obtener los mensajes, revise los logs del servidor',
       latestMessages: [],
     };
   }

@@ -1,9 +1,9 @@
-import { Suspense, type FC } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ErrorHandler } from "@/shared/components/errorHandler";
-import { Search } from "@/shared/components/search";
-import { MessagesTableSkeleton } from "./(components)/messages-table-skeleton";
-import { MessagesTable } from "./(components)/messages-table";
+import { Suspense, type FC } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { Search } from '@/shared/components/search';
+import { MessagesTableSkeleton } from './(components)/messages-table-skeleton';
+import { MessagesTable } from './(components)/messages-table';
 
 type Props = Readonly<{
   searchParams: Promise<{

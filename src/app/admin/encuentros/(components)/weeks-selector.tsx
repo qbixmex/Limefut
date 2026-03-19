@@ -1,7 +1,7 @@
-import type { FC } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { FC } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 type Props = Readonly<{ weeks: number[] }>;
 

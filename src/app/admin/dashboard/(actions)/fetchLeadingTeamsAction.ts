@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   quantity: number;
@@ -22,7 +22,7 @@ export type ResponseFetch = Promise<{
 }>;
 
 export const fetchLeadingTeamsAction = async ({ quantity }: Options): Promise<ResponseFetch> => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('dashboard-leading');
@@ -55,7 +55,6 @@ export const fetchLeadingTeamsAction = async ({ quantity }: Options): Promise<Re
       take: safeQuantity,
     });
 
-
     return {
       ok: true,
       message: '! Los resultados fueron obtenidos correctamente 👍',
@@ -71,7 +70,7 @@ export const fetchLeadingTeamsAction = async ({ quantity }: Options): Promise<Re
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los equipos punteros");
+      console.log('Error al intentar obtener los equipos punteros');
       console.log(`Error: ${error.message}`);
       return {
         ok: false,
@@ -82,7 +81,7 @@ export const fetchLeadingTeamsAction = async ({ quantity }: Options): Promise<Re
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los equipos punteros, revise los logs del servidor",
+      message: 'Error inesperado al obtener los equipos punteros, revise los logs del servidor',
       leadingTeams: [],
     };
   }

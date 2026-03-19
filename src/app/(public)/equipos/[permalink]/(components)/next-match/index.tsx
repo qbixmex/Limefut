@@ -111,7 +111,7 @@ export const Match: FC<Props> = ({ match, showScore }) => {
             {formatInTimeZone(
               matchDetails.matchDate as Date,
               'America/Mexico_City',
-              `d 'de' LLLL 'del' yyyy`,
+              'd \'de\' LLLL \'del\' yyyy',
               { locale: es },
             )}
           </i>

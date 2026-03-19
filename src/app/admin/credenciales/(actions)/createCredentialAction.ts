@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { createCredentialSchema } from "@/shared/schemas";
-import { revalidatePath } from "next/cache";
-import type { Credential } from "@/shared/interfaces";
+import prisma from '@/lib/prisma';
+import { createCredentialSchema } from '@/shared/schemas';
+import { revalidatePath } from 'next/cache';
+import type { Credential } from '@/shared/interfaces';
 
 type CreateResponseAction = Promise<{
   ok: boolean;

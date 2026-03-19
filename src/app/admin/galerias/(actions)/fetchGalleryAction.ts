@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Gallery } from "@/shared/interfaces";
+import type { Gallery } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type GalleryImageType = {
@@ -36,10 +36,10 @@ export const fetchGalleryAction = async (
   userRoles: string[],
   galleryId: string,
 ): FetchTeamResponse => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-gallery");
+  cacheLife('days');
+  cacheTag('admin-gallery');
 
   if (!userRoles.includes('admin')) {
     return {
@@ -109,13 +109,13 @@ export const fetchGalleryAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener la galería,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener la galería,\n¡ Revise los logs del servidor !',
         gallery: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       gallery: null,
     };
   }

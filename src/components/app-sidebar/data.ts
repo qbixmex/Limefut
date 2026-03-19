@@ -1,5 +1,5 @@
-import type { NavItem } from "../nav-main";
-import type { NavLink } from "../nav-links";
+import type { NavItem } from '../nav-main';
+import type { NavLink } from '../nav-links';
 import {
   Users,
   Globe,
@@ -13,127 +13,127 @@ import {
   TrendingUp,
   Inbox,
   ImageIcon,
-} from "lucide-react";
-import { PiFlagBannerFoldBold } from "react-icons/pi";
-import { GiWhistle } from "react-icons/gi";
+} from 'lucide-react';
+import { PiFlagBannerFoldBold } from 'react-icons/pi';
+import { GiWhistle } from 'react-icons/gi';
 import {
   SoccerPlayer,
   SoccerField,
-} from "@/shared/components/icons";
+} from '@/shared/components/icons';
 
 export const navMain: NavItem[] = [
   {
-    label: "Torneos",
-    url: "#",
+    label: 'Torneos',
+    url: '#',
     icon: Trophy,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/torneos",
+        label: 'Lista',
+        url: '/admin/torneos',
         icon: ListIcon,
       },
       {
-        label: "Crear",
-        url: "/admin/torneos/crear",
+        label: 'Crear',
+        url: '/admin/torneos/crear',
         icon: PlusIcon,
       },
     ],
   },
   {
-    label: "Equipos",
-    url: "#",
+    label: 'Equipos',
+    url: '#',
     icon: Flag,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/equipos",
+        label: 'Lista',
+        url: '/admin/equipos',
         icon: ListIcon,
       },
       {
-        label: "Crear",
-        url: "/admin/equipos/crear",
+        label: 'Crear',
+        url: '/admin/equipos/crear',
         icon: PlusIcon,
       },
     ],
   },
   {
-    label: "Entrenadores",
-    url: "#",
+    label: 'Entrenadores',
+    url: '#',
     icon: GiWhistle,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/entrenadores",
+        label: 'Lista',
+        url: '/admin/entrenadores',
         icon: ListIcon,
       },
       {
-        label: "Crear",
-        url: "/admin/entrenadores/crear",
+        label: 'Crear',
+        url: '/admin/entrenadores/crear',
         icon: PlusIcon,
       },
     ],
   },
   {
-    label: "Jugadores",
-    url: "#",
+    label: 'Jugadores',
+    url: '#',
     icon: SoccerPlayer,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/jugadores",
+        label: 'Lista',
+        url: '/admin/jugadores',
         icon: ListIcon,
       },
       {
-        label: "Crear",
-        url: "/admin/jugadores/crear",
+        label: 'Crear',
+        url: '/admin/jugadores/crear',
         icon: PlusIcon,
       },
     ],
   },
   {
-    label: "Encuentros",
-    url: "#",
+    label: 'Encuentros',
+    url: '#',
     icon: SoccerField,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/encuentros",
+        label: 'Lista',
+        url: '/admin/encuentros',
         icon: ListIcon,
       },
       {
-        label: "Crear",
-        url: "/admin/encuentros/crear",
+        label: 'Crear',
+        url: '/admin/encuentros/crear',
         icon: PlusIcon,
       },
     ],
   },
   {
-    label: "Estadísticas",
-    url: "#",
+    label: 'Estadísticas',
+    url: '#',
     icon: TrendingUp,
     isActive: false,
     subItems: [
       {
-        label: "Tabla de Posiciones",
-        url: "/admin/estadisticas",
+        label: 'Tabla de Posiciones',
+        url: '/admin/estadisticas',
         icon: Sheet,
       },
     ],
   },
   {
-    label: "Páginas",
-    url: "#",
+    label: 'Páginas',
+    url: '#',
     icon: Files,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/paginas",
+        label: 'Lista',
+        url: '/admin/paginas',
         icon: ListIcon,
       },
     ],
@@ -157,68 +157,68 @@ export const navMain: NavItem[] = [
   //   ],
   // },
   {
-    label: "Banners",
-    url: "#",
+    label: 'Banners',
+    url: '#',
     icon: PiFlagBannerFoldBold,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/banners",
+        label: 'Lista',
+        url: '/admin/banners',
         icon: ListIcon,
       },
       {
-        label: "Crear",
-        url: "/admin/banners/crear",
+        label: 'Crear',
+        url: '/admin/banners/crear',
         icon: PlusIcon,
       },
     ],
   },
   {
-    label: "Galerías",
-    url: "#",
+    label: 'Galerías',
+    url: '#',
     icon: ImageIcon,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/galerias",
+        label: 'Lista',
+        url: '/admin/galerias',
         icon: ListIcon,
       },
       {
-        label: "Crear",
-        url: "/admin/galerias/crear",
+        label: 'Crear',
+        url: '/admin/galerias/crear',
         icon: PlusIcon,
       },
     ],
   },
   {
-    label: "Usuarios",
-    url: "#",
+    label: 'Usuarios',
+    url: '#',
     icon: Users,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/usuarios",
+        label: 'Lista',
+        url: '/admin/usuarios',
         icon: ListIcon,
       },
       {
-        label: "Crear",
-        url: "/admin/usuarios/crear",
+        label: 'Crear',
+        url: '/admin/usuarios/crear',
         icon: PlusIcon,
       },
     ],
   },
   {
-    label: "Mensajes",
-    url: "#",
+    label: 'Mensajes',
+    url: '#',
     icon: Inbox,
     isActive: false,
     subItems: [
       {
-        label: "Lista",
-        url: "/admin/mensajes",
+        label: 'Lista',
+        url: '/admin/mensajes',
         icon: ListIcon,
       },
     ],
@@ -227,8 +227,8 @@ export const navMain: NavItem[] = [
 
 export const navLinks: NavLink[] = [
   {
-    label: "Página Principal",
-    url: "/",
+    label: 'Página Principal',
+    url: '/',
     icon: Globe,
     target: '_blank',
   },

@@ -1,14 +1,14 @@
 import { Suspense, type FC } from 'react';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { ErrorHandler } from "@/shared/components/errorHandler";
+} from '@/components/ui/tooltip';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { ErrorHandler } from '@/shared/components/errorHandler';
 import { CoachesTable } from './(components)/coaches-table';
 import { CoachesTableSkeleton } from './(components)/coaches-table-skeleton';
 import { Search } from '@/shared/components/search';
@@ -29,7 +29,6 @@ const CoachesPage: FC<Props> = ({ searchParams }) => {
 };
 
 const CoachesPageContent: FC<Props> = async ({ searchParams }) => {
-
   const query = (await searchParams).query ?? '';
   const currentPage = (await searchParams).page ?? '1';
 

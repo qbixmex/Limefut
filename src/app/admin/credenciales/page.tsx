@@ -1,17 +1,17 @@
-import { Suspense, type FC } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Suspense, type FC } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { ErrorHandler } from "@/shared/components/errorHandler";
-import { CredentialsTableSkeleton } from "./(components)/CredentialsTableSkeleton";
-import { CredentialsTable } from "./(components)/CredentialsTable";
-import { Search } from "@/shared/components/search";
+} from '@/components/ui/tooltip';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { CredentialsTableSkeleton } from './(components)/CredentialsTableSkeleton';
+import { CredentialsTable } from './(components)/CredentialsTable';
+import { Search } from '@/shared/components/search';
 
 type Props = Readonly<{
   searchParams: Promise<{

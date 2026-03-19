@@ -35,10 +35,10 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
           <Link
             key={match.id}
             href={
-              `/resultados/${match.id}/`
-              + `${match.localTeam.permalink}`
-              + `-vs-`
-              + `${match.localTeam.permalink}`
+              `/resultados/${match.id}/` +
+              `${match.localTeam.permalink}` +
+              '-vs-' +
+              `${match.localTeam.permalink}`
             }
             target="_blank"
           >

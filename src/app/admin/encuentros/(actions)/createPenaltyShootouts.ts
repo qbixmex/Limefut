@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
-import type { PenaltyShootout } from "@/shared/interfaces";
-import { createPenaltyShootoutSchema } from "~/src/shared/schemas";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
+import type { PenaltyShootout } from '@/shared/interfaces';
+import { createPenaltyShootoutSchema } from '~/src/shared/schemas';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -143,18 +143,18 @@ export const createPenaltyShootoutAction = async (
                 teamId: shootoutToSave.localTeamId,
                 playerId: shootoutToSave.localPlayerId,
                 shooterName: shootoutToSave.localPlayerName,
-                isGoal: (shootoutToSave.localIsGoal === 'scored' && true)
-                  || (shootoutToSave.localIsGoal === 'missed' && false)
-                  || (shootoutToSave.localIsGoal === 'not-taken' && null),
+                isGoal: (shootoutToSave.localIsGoal === 'scored' && true) ||
+                  (shootoutToSave.localIsGoal === 'missed' && false) ||
+                  (shootoutToSave.localIsGoal === 'not-taken' && null),
                 order: nextOrder,
               },
               {
                 teamId: shootoutToSave.visitorTeamId,
                 playerId: shootoutToSave.visitorPlayerId,
                 shooterName: shootoutToSave.visitorPlayerName,
-                isGoal: (shootoutToSave.visitorIsGoal === 'scored' && true)
-                  || (shootoutToSave.visitorIsGoal === 'missed' && false)
-                  || (shootoutToSave.visitorIsGoal === 'not-taken' && null),
+                isGoal: (shootoutToSave.visitorIsGoal === 'scored' && true) ||
+                  (shootoutToSave.visitorIsGoal === 'missed' && false) ||
+                  (shootoutToSave.visitorIsGoal === 'not-taken' && null),
                 order: nextOrder + 1,
               },
             ],
@@ -164,8 +164,8 @@ export const createPenaltyShootoutAction = async (
       });
 
       if (
-        updatedShootout.winnerTeamId !== null
-        && updatedShootout.status === 'completed'
+        updatedShootout.winnerTeamId !== null &&
+        updatedShootout.status === 'completed'
       ) {
         await transaction.standings.update({
           where: { teamId: updatedShootout.winnerTeamId },
@@ -191,10 +191,10 @@ export const createPenaltyShootoutAction = async (
     updateTag('admin-matches');
     updateTag('admin-match');
     updateTag('public-matches');
-    updateTag("public-results-roles");
-    updateTag("public-result-details");
-    updateTag("public-matches-count");
-    updateTag("public-team-standings");
+    updateTag('public-results-roles');
+    updateTag('public-result-details');
+    updateTag('public-matches-count');
+    updateTag('public-team-standings');
 
     return prismaTransaction;
   } catch (error) {
@@ -207,10 +207,10 @@ export const createPenaltyShootoutAction = async (
           penaltyShootout: null,
         };
       }
-      console.log("CAUSE:", error.cause);
-      console.log("NAME:", error.name);
-      console.log("META:", error.meta);
-      console.log("MESSAGE:", error.message);
+      console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
+      console.log('META:', error.meta);
+      console.log('MESSAGE:', error.message);
       console.log(error.message);
       return {
         ok: false,
@@ -218,8 +218,8 @@ export const createPenaltyShootoutAction = async (
         penaltyShootout: null,
       };
     }
-    console.log("Error Cause:", (error as Error).cause);
-    console.log("Error Message:", (error as Error).message);
+    console.log('Error Cause:', (error as Error).cause);
+    console.log('Error Message:', (error as Error).message);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',

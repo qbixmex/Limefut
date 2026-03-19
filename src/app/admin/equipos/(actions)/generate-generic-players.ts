@@ -1,10 +1,10 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
-import { malePlayers } from "@/shared/data/male-players";
-import { femalePlayers } from "@/shared/data/female-players";
-import { shuffleArray } from "@/lib/utils";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
+import { malePlayers } from '@/shared/data/male-players';
+import { femalePlayers } from '@/shared/data/female-players';
+import { shuffleArray } from '@/lib/utils';
 
 type Options = {
   userRoles: string[] | undefined;

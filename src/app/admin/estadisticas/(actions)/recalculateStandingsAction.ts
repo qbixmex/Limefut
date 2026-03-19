@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
-import { MATCH_STATUS } from "@/shared/enums";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
+import { MATCH_STATUS } from '@/shared/enums';
 
 export type ResponseRecalculateAction = Promise<{
   ok: boolean;
@@ -18,7 +18,7 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
         select: { id: true },
       });
 
-      if (teams.length == 0) {
+      if (teams.length === 0) {
         throw new Error('¡ No hay equipos en este torneo !');
       }
 
@@ -27,7 +27,7 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
         where: { tournamentId },
       });
 
-      if (count == 0) {
+      if (count === 0) {
         throw new Error('¡ No se pudo limpiar la tabla de posiciones !');
       }
 
@@ -49,7 +49,7 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
         })),
       });
 
-      if (newStandings.count == 0) {
+      if (newStandings.count === 0) {
         throw new Error('¡ No se pudo crear las estadísticas !');
       }
 

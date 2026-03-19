@@ -1,2 +1,2 @@
-export { createTeamSchema } from "./createTeamSchema";
-export { editTeamSchema } from "./editTeamSchema";
+export { createTeamSchema } from './createTeamSchema';
+export { editTeamSchema } from './editTeamSchema';

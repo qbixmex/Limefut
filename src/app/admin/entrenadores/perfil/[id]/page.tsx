@@ -13,7 +13,7 @@ import {
 import { Pencil } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchCoachAction } from '../../(actions)';
 import { format } from 'date-fns';

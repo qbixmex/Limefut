@@ -1,7 +1,7 @@
 'use server';
 
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth';
 
 export const signOutAction = async () => {
   await auth.api.signOut({
@@ -9,6 +9,6 @@ export const signOutAction = async () => {
   });
 
   return {
-    message: "¡ Has cerrado sesión correctamente 👍 !",
+    message: '¡ Has cerrado sesión correctamente 👍 !',
   };
 };

@@ -1,10 +1,10 @@
 'use client';
 
-import type { FC } from "react";
-import type { TournamentType } from "../(actions)/fetchTournamentsAction";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { Trophy } from "lucide-react";
+import type { FC } from 'react';
+import type { TournamentType } from '../(actions)/fetchTournamentsAction';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Trophy } from 'lucide-react';
 
 type Props = Readonly<{
   tournament: TournamentType;
@@ -15,9 +15,9 @@ export const Tournament: FC<Props> = ({ tournament }) => {
 
   const onTournamentSelected = () => {
     router.push(
-      `torneos/${tournament.permalink}`
-      + `?categoria=${tournament.category}`
-      + `&formato=${tournament.format}`,
+      `torneos/${tournament.permalink}` +
+      `?categoria=${tournament.category}` +
+      `&formato=${tournament.format}`,
     );
   };
 

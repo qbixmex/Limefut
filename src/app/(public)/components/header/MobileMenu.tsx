@@ -1,12 +1,12 @@
 'use client';
 
-import type { FC } from "react";
-import { useEffect, useState } from "react";
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Menu, X as CloseIcon } from 'lucide-react';
-import { navigation } from "./navigation-menu/data";
+import { navigation } from './navigation-menu/data';
 import styles from './styles.mobile-menu.module.css';
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 export const MobileMenu: FC = () => {
   const [visible, setVisible] = useState(false);
@@ -51,7 +51,7 @@ export const MobileMenu: FC = () => {
             {navigation
               .sort((a, b) => a.position - b.position)
               .map((item) => (
-                item.url == '#' ? (
+                item.url === '#' ? (
                   <div key={item.id} className="w-full text-center">
                     <button
                       className={styles.mobileMenuLink}
@@ -101,7 +101,7 @@ type SubLinksProps = Readonly<{
 
 const SubLinks: FC<SubLinksProps> = ({ links, isExpanded, onLinkClick }) => {
   return (
-    <div className={cn("mt-5 space-y-3", !isExpanded && "hidden")}>
+    <div className={cn('mt-5 space-y-3', !isExpanded && 'hidden')}>
       {links.map((link) => (
         <Link
           key={link.id}

@@ -6,9 +6,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "~/src/shared/enums";
+} from '@/components/ui/select';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '~/src/shared/enums';
 
 export const StatusSelector = () => {
   const searchParams = useSearchParams();

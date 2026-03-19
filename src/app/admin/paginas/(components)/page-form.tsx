@@ -2,8 +2,8 @@
 
 import type { ChangeEvent, FC } from 'react';
 import { useCallback, useRef, useState } from 'react';
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Label } from "@/components/ui/label";
+import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -25,10 +25,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
 import { createPageSchema, editPageSchema } from '@/shared/schemas';
 import { updatePageAction } from '../(actions)/updatePageAction';
-import { MdEditorField } from "./md-editor-field";
+import { MdEditorField } from './md-editor-field';
 import type { CustomPageImage, Page } from '@/shared/interfaces/Page';
 import { deleteContentImageAction } from '../(actions)/deleteContentImageAction';
-import "./styles.css";
+import './styles.css';
 import { CharactersCounter } from '@/shared/components/characters-counter';
 
 type Props = Readonly<{
@@ -102,12 +102,12 @@ export const PageForm: FC<Props> = ({ page }) => {
         return imageUrl !== customPageImage.imageUrl;
       }));
       setIsDeletingImage(null);
-      toast.success("Imagen eliminada correctamente 👍");
+      toast.success('Imagen eliminada correctamente 👍');
     }
 
     if (!response.ok) {
       setIsDeletingImage(null);
-      toast.error("¡ No se pudo eliminar la imagen !");
+      toast.error('¡ No se pudo eliminar la imagen !');
     }
   };
 
@@ -152,7 +152,7 @@ export const PageForm: FC<Props> = ({ page }) => {
       toast.success(response.message);
 
       if (!isDraft) {
-        route.replace("/admin/paginas");
+        route.replace('/admin/paginas');
       }
 
       setIsDraft(false);
@@ -255,10 +255,10 @@ export const PageForm: FC<Props> = ({ page }) => {
                           }))}
                           onChange={(event) => {
                             field.onChange(event);
-                            setSeoTitleChars((prev => ({
+                            setSeoTitleChars(prev => ({
                               ...prev,
                               count: event.target.value.length,
-                            })));
+                            }));
                           }}
                         />
                       </FormControl>
@@ -328,10 +328,10 @@ export const PageForm: FC<Props> = ({ page }) => {
                         }))}
                         onChange={(event) => {
                           field.onChange(event);
-                          setSeoDescriptionChars((prev => ({
+                          setSeoDescriptionChars(prev => ({
                             ...prev,
                             count: event.target.value.length,
-                          })));
+                          }));
                         }}
                       />
                     </FormControl>
@@ -436,7 +436,7 @@ export const PageForm: FC<Props> = ({ page }) => {
                           type="button"
                           size="icon"
                           // disabled={isDeletingImage === articleImage.imageUrl}
-                          className={cn("bg-cyan-600/70! hover:bg-cyan-600! cursor-pointer", {
+                          className={cn('bg-cyan-600/70! hover:bg-cyan-600! cursor-pointer', {
                             // "cursor-not-allowed bg-gray-500!": isDeletingImage === articleImage.imageUrl,
                           })}
                           onClick={async () => {
@@ -453,8 +453,8 @@ export const PageForm: FC<Props> = ({ page }) => {
                           variant="destructive"
                           size="icon"
                           disabled={isDeletingImage === customPageImage.imageUrl}
-                          className={cn("bg-pink-600/70! hover:bg-pink-600! cursor-pointer", {
-                            "cursor-not-allowed bg-gray-500!": isDeletingImage === customPageImage.imageUrl,
+                          className={cn('bg-pink-600/70! hover:bg-pink-600! cursor-pointer', {
+                            'cursor-not-allowed bg-gray-500!': isDeletingImage === customPageImage.imageUrl,
                           })}
                           onClick={() => handleDeleteImage(customPageImage)}
                         >

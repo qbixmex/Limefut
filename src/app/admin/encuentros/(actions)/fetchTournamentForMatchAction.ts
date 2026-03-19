@@ -14,10 +14,10 @@ type FetchResponse = Promise<{
 }>;
 
 export const fetchTournamentForMatchAction = async (id: string): FetchResponse => {
-  "use cache";
-  
-  cacheLife("days");
-  cacheTag("admin-tournament-for-match");
+  'use cache';
+
+  cacheLife('days');
+  cacheTag('admin-tournament-for-match');
 
   try {
     const tournament = await prisma.tournament.findUnique({
@@ -57,13 +57,13 @@ export const fetchTournamentForMatchAction = async (id: string): FetchResponse =
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el torneo,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener el torneo,\n¡ Revise los logs del servidor !',
         tournament: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       tournament: null,
     };
   }

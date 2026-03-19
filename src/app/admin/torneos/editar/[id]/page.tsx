@@ -1,17 +1,17 @@
-import { randomUUID } from "node:crypto";
-import { Suspense, type FC } from "react";
+import { randomUUID } from 'node:crypto';
+import { Suspense, type FC } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { fetchTournamentAction } from "../../(actions)";
-import { TournamentForm } from "../../(components)/tournamentForm";
+} from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchTournamentAction } from '../../(actions)';
+import { TournamentForm } from '../../(components)/tournamentForm';
 import type { Tournament } from '@/shared/interfaces';
-import { headers } from "next/headers";
+import { headers } from 'next/headers';
 
 type Props = Readonly<{
   params: Promise<{

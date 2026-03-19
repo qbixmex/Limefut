@@ -1,6 +1,6 @@
 'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   Select,
   SelectContent,
@@ -8,10 +8,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
-import { ALIGNMENT, type ALIGNMENT_TYPE } from "@/shared/enums";
-import { updateHeroBannerAlignmentAction } from "../../(actions)/updateHeroBannerAlignmentAction";
+} from '@/components/ui/select';
+import { toast } from 'sonner';
+import { ALIGNMENT, type ALIGNMENT_TYPE } from '@/shared/enums';
+import { updateHeroBannerAlignmentAction } from '../../(actions)/updateHeroBannerAlignmentAction';
 
 type Props = Readonly<{
   bannerId: string;

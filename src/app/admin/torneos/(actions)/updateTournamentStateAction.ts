@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { revalidatePath, updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { revalidatePath, updateTag } from 'next/cache';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -32,17 +32,17 @@ export const updateTournamentStateAction = async (id: string, state: boolean): R
   revalidatePath('/admin/torneos');
 
   // Update Cache
-  updateTag("admin-tournaments");
-  updateTag("admin-tournaments-selector");
-  updateTag("admin-tournaments-for-match");
-  updateTag("admin-tournament-for-match");
-  updateTag("admin-tournaments-for-gallery");
-  updateTag("admin-tournament");
-  updateTag("public-tournament");
-  updateTag("tournaments-list");
-  updateTag("public-tournaments");
-  updateTag("public-tournament");
-  updateTag("dashboard-tournaments");
+  updateTag('admin-tournaments');
+  updateTag('admin-tournaments-selector');
+  updateTag('admin-tournaments-for-match');
+  updateTag('admin-tournament-for-match');
+  updateTag('admin-tournaments-for-gallery');
+  updateTag('admin-tournament');
+  updateTag('public-tournament');
+  updateTag('tournaments-list');
+  updateTag('public-tournaments');
+  updateTag('public-tournament');
+  updateTag('dashboard-tournaments');
 
   return {
     ok: true,

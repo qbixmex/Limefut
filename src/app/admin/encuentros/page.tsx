@@ -1,14 +1,14 @@
-import { Suspense, type FC } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ErrorHandler } from "@/shared/components/errorHandler";
-import { Search } from "@/shared/components/search";
-import ClearFilters from "./(components)/clear-filters";
+import { Suspense, type FC } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { Search } from '@/shared/components/search';
+import ClearFilters from './(components)/clear-filters';
 import { fetchTournamentsForMatchAction } from './(actions)/fetchTournamentsForMatchAction';
-import { TournamentsSelector } from "../(components)/tournaments-selector";
-import { MatchesContent } from "./matches-content";
-import type { MATCH_STATUS_TYPE } from "@/shared/enums";
-import { TournamentsSelectorSkeleton } from "../../(public)/components";
-import { CreateMatch } from "./(components)/create-match";
+import { TournamentsSelector } from '../(components)/tournaments-selector';
+import { MatchesContent } from './matches-content';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { TournamentsSelectorSkeleton } from '../../(public)/components';
+import { CreateMatch } from './(components)/create-match';
 
 type Props = Readonly<{
   searchParams: Promise<{

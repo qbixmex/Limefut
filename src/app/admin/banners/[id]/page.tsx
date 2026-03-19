@@ -12,14 +12,12 @@ import type { ALIGNMENT_TYPE } from '@/shared/enums';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Pencil } from 'lucide-react';
+import { Pencil, CircleQuestionMarkIcon } from 'lucide-react';
 import { fetchHeroBannerAction, updateHeroBannerStateAction } from '../(actions)';
 import { BannerImage } from '@/shared/components/banner-image';
 import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { updateHeroBannerShowDataAction } from '../(actions)/updateHeroBannerShowDataAction';
 import { BannerAlignment } from '../(components)/banner-alignment';
-import { CircleQuestionMarkIcon } from "lucide-react";
-
 
 type Props = Readonly<{
   params: Promise<{

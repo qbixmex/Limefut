@@ -1,7 +1,7 @@
 'use client';
 
 import { type FC } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -61,12 +61,12 @@ export const CredentialForm: FC<Props> = ({ credential }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/credenciales");
+        route.replace('/admin/credenciales');
         return;
       }
       return;
     }
-    
+
     // Update credential
     if (credential) {
       const response = await updateCredentialAction(credential.id, formData);
@@ -78,10 +78,8 @@ export const CredentialForm: FC<Props> = ({ credential }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/credenciales");
-        return;
+        route.replace('/admin/credenciales');
       }
-      return;
     }
   };
 
@@ -202,7 +200,6 @@ export const CredentialForm: FC<Props> = ({ credential }) => {
       </form>
     </Form>
   );
-
 };
 
 export default CredentialForm;

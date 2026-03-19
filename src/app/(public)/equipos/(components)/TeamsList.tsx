@@ -1,8 +1,8 @@
-import type { FC } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { fetchTeamsAction } from "../(actions)/fetchTeamsAction";
-import { ShieldBan } from "lucide-react";
+import type { FC } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { fetchTeamsAction } from '../(actions)/fetchTeamsAction';
+import { ShieldBan } from 'lucide-react';
 
 type TeamsListProps = Readonly<{
   tournamentPermalink?: string;
@@ -21,7 +21,7 @@ export const TeamsList: FC<TeamsListProps> = async ({
 
   const { teams } = await fetchTeamsAction(tournamentPermalink, category, format);
 
-  if (teams.length == 0) {
+  if (teams.length === 0) {
     return (
       <div className="border-2 border-blue-500 py-5 rounded-lg">
         <p className="text-blue-500 font-bold text-center">
@@ -41,10 +41,10 @@ export const TeamsList: FC<TeamsListProps> = async ({
                 <div className="size-[250px] text-gray-400 bg-gray-200 dark:bg-gray-700 rounded grid place-content-center">
                   <Link
                     href={
-                      `/equipos/${team.permalink}`
-                      + `?torneo=${tournamentPermalink}`
-                      + `&categoria=${team.category}`
-                      + `&formato=${team.format}`
+                      `/equipos/${team.permalink}` +
+                      `?torneo=${tournamentPermalink}` +
+                      `&categoria=${team.category}` +
+                      `&formato=${team.format}`
                     }
                   >
                     <ShieldBan size={250} strokeWidth={1} className="text-gray-500" />
@@ -53,10 +53,10 @@ export const TeamsList: FC<TeamsListProps> = async ({
               ) : (
                 <Link
                   href={
-                    `/equipos/${team.permalink}`
-                    + `?torneo=${tournamentPermalink}`
-                    + `&categoria=${team.category}`
-                    + `&formato=${team.format}`
+                    `/equipos/${team.permalink}` +
+                    `?torneo=${tournamentPermalink}` +
+                    `&categoria=${team.category}` +
+                    `&formato=${team.format}`
                   }
                   >
                   <Image
@@ -71,10 +71,10 @@ export const TeamsList: FC<TeamsListProps> = async ({
             </figure>
             <Link
               href={
-                `/equipos/${team.permalink}`
-                + `?torneo=${tournamentPermalink}`
-                + `&categoria=${team.category}`
-                + `&formato=${team.format}`
+                `/equipos/${team.permalink}` +
+                `?torneo=${tournamentPermalink}` +
+                `&categoria=${team.category}` +
+                `&formato=${team.format}`
               }
               className="italic font-bold"
             >

@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import deleteImage from "./deleteImageAction";
-import type { CustomPageImage } from "@/shared/interfaces/Page";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import deleteImage from './deleteImageAction';
+import type { CustomPageImage } from '@/shared/interfaces/Page';
+import { updateTag } from 'next/cache';
 
 type DeleteContentImageResponse = {
   ok: boolean;

@@ -78,9 +78,9 @@ const GalleryDetailsContent: FC<Props> = async ({ params }) => {
                       <TableCell>
                         {
                           gallery.tournament
-                            ? `${gallery.tournament.name}`
-                            + `, ${gallery.tournament.category}`
-                            + `, ${gallery.tournament.format} vs ${gallery.tournament.format}`
+                            ? `${gallery.tournament.name}` +
+                            `, ${gallery.tournament.category}` +
+                            `, ${gallery.tournament.format} vs ${gallery.tournament.format}`
                             : 'No definido'
                         }
                       </TableCell>
@@ -118,9 +118,9 @@ const GalleryDetailsContent: FC<Props> = async ({ params }) => {
                       <TableCell>
                         {
                           gallery.team
-                            ? `${gallery.team.name}`
-                            + `, ${gallery.team.category}`
-                            + `, ${gallery.team.format} vs ${gallery.team.format}`
+                            ? `${gallery.team.name}` +
+                            `, ${gallery.team.category}` +
+                            `, ${gallery.team.format} vs ${gallery.team.format}`
                             : 'No definido'
                         }
                       </TableCell>

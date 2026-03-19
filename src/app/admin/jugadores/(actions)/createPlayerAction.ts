@@ -1,11 +1,10 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { createPlayerSchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
-import { uploadImage } from "@/shared/actions";
-import type { CloudinaryResponse } from "@/shared/interfaces";
-import type { Player } from "@/shared/interfaces";
+import prisma from '@/lib/prisma';
+import { createPlayerSchema } from '@/shared/schemas';
+import { updateTag } from 'next/cache';
+import { uploadImage } from '@/shared/actions';
+import type { CloudinaryResponse, Player } from '@/shared/interfaces';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -32,11 +31,7 @@ export const createPlayerAction = async (
     nationality: formData.get('nationality') ?? undefined,
     birthday: new Date(formData.get('birthday') as string) ?? undefined,
     image: formData.get('image') as File,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
     teamId: ((formData.get('teamId') as string) === '')
       ? null
       : (formData.get('teamId') as string),
@@ -96,8 +91,8 @@ export const createPlayerAction = async (
           player: null,
         };
       }
-      console.log("ERROR META:", error.meta);
-      console.log("MESSAGE:", error.message);
+      console.log('ERROR META:', error.meta);
+      console.log('MESSAGE:', error.message);
       return {
         ok: false,
         message: '¡ Error al crear el jugador, revise los logs del servidor !',

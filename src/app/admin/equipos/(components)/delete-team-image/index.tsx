@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { DeleteImage } from "@/shared/components/delete-image";
+import { DeleteImage } from '@/shared/components/delete-image';
 import { toast } from 'sonner';
 import { deleteTeamImageAction } from '../../(actions)/deleteTeamImageAction';
 

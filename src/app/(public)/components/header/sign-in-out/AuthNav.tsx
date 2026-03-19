@@ -1,21 +1,21 @@
 'use client';
 
-import type { FC } from "react";
-import { useState } from "react";
+import type { FC } from 'react';
+import { useState } from 'react';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/avatar";
-import Link from "next/link";
+} from '@/components/ui/avatar';
+import Link from 'next/link';
 import {
   ChevronsUpDown,
   LayoutDashboard,
   UserCircle,
   LogOut,
-} from "lucide-react";
-import { toast } from "sonner";
-import { signOutAction } from "@/app/(auth)/signOutAction";
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { signOutAction } from '@/app/(auth)/signOutAction';
 
 type Props = Readonly<{
   user: {
@@ -46,7 +46,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
         {user.username && (
           <div className="hidden lg:grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-medium text-green-50">
-              {user.username ?? user.name?.split(" ").at(0)}
+              {user.username ?? user.name?.split(' ').at(0)}
             </span>
           </div>
         )}

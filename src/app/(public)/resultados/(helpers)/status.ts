@@ -1,6 +1,6 @@
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
-type BadgeVariant = "outline-secondary" | "outline-info" | "outline-warning" | "outline-success" | "outline-danger";
+type BadgeVariant = 'outline-secondary' | 'outline-info' | 'outline-warning' | 'outline-success' | 'outline-danger';
 
 /**
  * Get match status in string format

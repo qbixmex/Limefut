@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -10,7 +10,7 @@ export type ResponseDeleteAction = Promise<{
 
 export const deleteGalleryAction = async (galleryId: string): ResponseDeleteAction => {
   const imagesCount = await prisma.galleryImage.count({
-    where: { galleryId: galleryId },
+    where: { galleryId },
   });
 
   if (imagesCount !== 0) {
@@ -42,8 +42,8 @@ export const deleteGalleryAction = async (galleryId: string): ResponseDeleteActi
   updateTag('dashboard-images');
   updateTag('public-galleries');
   updateTag('public-gallery');
-  updateTag("public-galleries");
-  updateTag("public-gallery");
+  updateTag('public-galleries');
+  updateTag('public-gallery');
 
   return {
     ok: true,

@@ -1,8 +1,8 @@
-import { Suspense } from "react";
-import { FooterLinks } from "./footer-links";
-import { SocialMedia } from "./social-media";
-import { FooterLinksSkeleton } from "./footer-links-skeleton";
-import "./styles.css";
+import { Suspense } from 'react';
+import { FooterLinks } from './footer-links';
+import { SocialMedia } from './social-media';
+import { FooterLinksSkeleton } from './footer-links-skeleton';
+import './styles.css';
 
 export const Footer = () => {
   return (

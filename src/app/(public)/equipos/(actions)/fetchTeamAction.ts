@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Coach, Player } from "@/shared/interfaces";
+import type { Coach, Player } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type CoachType = Pick<Coach, 'id' | 'name'>;
@@ -49,7 +49,7 @@ export const fetchTeamAction = async ({
   category: string;
   format: string;
 }): FetchTeamResponse => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-team');
@@ -70,12 +70,12 @@ export const fetchTeamAction = async ({
         permalink: true,
         headquarters: true,
         imageUrl: true,
-        category:true,
-        format:true,
-        gender:true,
-        country:true,
-        city:true,
-        state:true,
+        category: true,
+        format: true,
+        gender: true,
+        country: true,
+        city: true,
+        state: true,
         address: true,
         active: true,
         tournament: {
@@ -128,13 +128,13 @@ export const fetchTeamAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el equipo,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener el equipo,\n¡ Revise los logs del servidor !',
         team: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       team: null,
     };
   }

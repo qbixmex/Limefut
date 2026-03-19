@@ -1,17 +1,17 @@
-import type { FC } from "react";
-import { headers } from "next/headers";
+import type { FC } from 'react';
+import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { GalleryForm } from "../../(components)/galleryForm";
-import type { Session } from "@/lib/auth-client";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { fetchTeamsForGalleryAction, fetchGalleryAction } from "../../(actions)";
-import { fetchTournamentsForGalleryAction } from "../../(actions)/fetchTournamentsForGalleryAction";
+} from '@/components/ui/card';
+import { GalleryForm } from '../../(components)/galleryForm';
+import type { Session } from '@/lib/auth-client';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchTeamsForGalleryAction, fetchGalleryAction } from '../../(actions)';
+import { fetchTournamentsForGalleryAction } from '../../(actions)/fetchTournamentsForGalleryAction';
 
 type Props = Readonly<{
   params: Promise<{

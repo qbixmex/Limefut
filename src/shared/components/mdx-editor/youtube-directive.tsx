@@ -18,7 +18,7 @@ export const YoutubeDirectiveDescriptor: DirectiveDescriptor<YoutubeDirectiveNod
   Editor: ({ mdastNode, lexicalNode, parentEditor }) => {
     return (
       <div className="flex flex-col gap-5 relative">
-        
+
         <div className="relative w-full pt-[56.25%]">
           <iframe
             width="100%"
