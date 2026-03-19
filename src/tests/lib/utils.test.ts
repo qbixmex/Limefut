@@ -25,7 +25,7 @@ describe('Test on Utils', () => {
 
   test('Should sleep the timer', async () => {
     const start = Date.now();
-    await sleep(0.5);
+    await sleep();
     const end = Date.now();
     const elapsed = (end - start) / 1000;
 
