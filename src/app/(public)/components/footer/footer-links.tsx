@@ -7,15 +7,19 @@ export const FooterLinks: FC = async () => {
 
   return (
     <section className="w-full md:w-1/2">
-      <ul className="flex flex-col md:flex-row justify-start items-center gap-5">
-        {pageLinks.map(({ id, title, permalink }) => (
-          <li key={id}>
-            <Link className="font-semibold italic" href={`/${permalink}`}>
-              {title}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {(pageLinks.length > 0) ? (
+        <ul className="flex flex-col md:flex-row justify-start items-center gap-5">
+          {pageLinks.map(({ id, title, permalink }) => (
+            <li key={id}>
+              <Link className="font-semibold italic" href={`/${permalink}`}>
+                {title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p role="alert">No hay páginas para mostrar.</p>
+      )}
     </section>
   );
 };
