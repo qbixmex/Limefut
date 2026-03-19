@@ -24,9 +24,9 @@ export const ResultsContent: FC<Props> = async ({ searchParamsPromise }) => {
   return (
     <Suspense
       key={
-        `${tournament ?? 'tournament'}`
-        + `-${category ?? 'category'}`
-        + `-${format ?? 'format'}`
+        `${tournament ?? 'tournament'}` +
+        `-${category ?? 'category'}` +
+        `-${format ?? 'format'}`
       }
       fallback={<ResultsSkeleton />}
     >

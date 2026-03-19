@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -33,7 +33,7 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
   updateTag('admin-teams');
   updateTag('admin-teams-for-coach');
   updateTag('admin-teams-for-player');
-  updateTag("admin-teams-for-gallery");
+  updateTag('admin-teams-for-gallery');
   updateTag('admin-teams-for-match');
   updateTag('admin-team');
   updateTag('public-teams');

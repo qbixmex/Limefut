@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
-import { uploadImage, deleteImage } from "@/shared/actions";
+import { uploadImage, deleteImage } from '@/shared/actions';
 import { editPlayerSchema } from '@/shared/schemas';
 import type { Player } from '@/shared/interfaces';
 
@@ -50,11 +50,7 @@ export const updatePlayerAction = async ({
     birthday: new Date(formData.get('birthday') as string) ?? undefined,
     nationality: formData.get('nationality') ?? undefined,
     image: imageFile,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
     teamId: ((formData.get('teamId') as string) === '')
       ? null
       : (formData.get('teamId') as string),

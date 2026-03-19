@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
 import nodeMailer from 'nodemailer';
-import { sendMessageSchema } from "@/shared/schemas";
+import { sendMessageSchema } from '@/shared/schemas';
 
 const sendEmailAction = async (formData: FormData) => {
   const rawData = {
@@ -35,14 +35,14 @@ const sendEmailAction = async (formData: FormData) => {
 
   const { name, email, message } = formVerified.data;
 
-  const htmlMessage = '<h1>Detalles del mensaje</h1>'
-    + '<h2>Remitente</h2>'
-    + '<ul>'
-    + `<li><b>Nombre:</b> ${name}</li>`
-    + `<li><b>Email:</b> ${email}</li>`
-    + '</ul>'
-    + `<h2>Mensaje:</h2>`
-    + `<p>${message}</p>`;
+  const htmlMessage = '<h1>Detalles del mensaje</h1>' +
+    '<h2>Remitente</h2>' +
+    '<ul>' +
+    `<li><b>Nombre:</b> ${name}</li>` +
+    `<li><b>Email:</b> ${email}</li>` +
+    '</ul>' +
+    '<h2>Mensaje:</h2>' +
+    `<p>${message}</p>`;
 
   try {
     await transporter.sendMail({

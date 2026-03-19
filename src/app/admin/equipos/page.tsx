@@ -1,13 +1,13 @@
-import { type FC, Suspense } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TournamentsSelector } from "../(components)/tournaments-selector";
-import { TeamsContent } from "./(components)/teams-content";
-import { ClearFilters } from "./(components)/clear-filters";
-import { TournamentsSelectorSkeleton } from "./(components)/TournamentsSelectorSkeleton";
-import { fetchTournamentsAction } from "@/shared/actions/fetchTournamentsAction";
-import { Search } from "@/shared/components/search";
-import { ErrorHandler } from "@/shared/components/errorHandler";
-import { CreateTeam } from "./(components)/create-team.tsx";
+import { type FC, Suspense } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { TournamentsSelector } from '../(components)/tournaments-selector';
+import { TeamsContent } from './(components)/teams-content';
+import { ClearFilters } from './(components)/clear-filters';
+import { TournamentsSelectorSkeleton } from './(components)/TournamentsSelectorSkeleton';
+import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
+import { Search } from '@/shared/components/search';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { CreateTeam } from './(components)/create-team.tsx';
 
 type Props = Readonly<{
   searchParams: Promise<{

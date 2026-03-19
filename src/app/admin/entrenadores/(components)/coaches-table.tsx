@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import Link from 'next/link';
-import Image from "next/image";
+import Image from 'next/image';
 import {
   Table,
   TableBody,
@@ -8,17 +8,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Pencil, InfoIcon } from "lucide-react";
-import { GiWhistle } from "react-icons/gi";
-import { Badge } from "@/components/ui/badge";
+import { Pencil, InfoIcon } from 'lucide-react';
+import { GiWhistle } from 'react-icons/gi';
+import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { fetchCoachesAction, updateCoachStateAction } from "../(actions)";
-import { DeleteCoach } from "../(components)/delete-coach";
+import { fetchCoachesAction, updateCoachStateAction } from '../(actions)';
+import { DeleteCoach } from '../(components)/delete-coach';
 import { Pagination } from '@/shared/components/pagination';
 import { ActiveSwitch } from '@/shared/components/active-switch';
-import { auth } from "@/lib/auth";
+import { auth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 import { headers } from 'next/headers';
 
@@ -132,8 +132,8 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>

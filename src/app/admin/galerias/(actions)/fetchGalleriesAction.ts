@@ -1,9 +1,9 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma/client";
-import prisma from "@/lib/prisma";
-import type { Pagination } from "@/shared/interfaces";
-import { cacheLife, cacheTag } from "next/cache";
+import type { Prisma } from '@/generated/prisma/client';
+import prisma from '@/lib/prisma';
+import type { Pagination } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   userRole: string[] | null;
@@ -29,10 +29,10 @@ export type ResponseAction = Promise<{
 }>;
 
 export const fetchGalleriesAction = async (options: Options): ResponseAction => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-galleries");
+  cacheLife('days');
+  cacheTag('admin-galleries');
 
   if ((options.userRole !== null) && (!options.userRole.includes('admin'))) {
     return {
@@ -76,7 +76,7 @@ export const fetchGalleriesAction = async (options: Options): ResponseAction => 
           select: { images: true },
         },
       },
-      take: take,
+      take,
       skip: (page - 1) * take,
     });
 
@@ -96,7 +96,7 @@ export const fetchGalleriesAction = async (options: Options): ResponseAction => 
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los equipos");
+      console.log('Error al intentar obtener los equipos');
       return {
         ok: false,
         message: error.message,
@@ -110,7 +110,7 @@ export const fetchGalleriesAction = async (options: Options): ResponseAction => 
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los equipos, revise los logs del servidor",
+      message: 'Error inesperado al obtener los equipos, revise los logs del servidor',
       galleries: [],
       pagination: {
         currentPage: 0,

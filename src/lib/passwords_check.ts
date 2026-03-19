@@ -1,8 +1,8 @@
-import { commonPasswords } from "../shared/data/passwords";
+import { commonPasswords } from '../shared/data/passwords';
 
 /**
  * Checks if the provided password is in the list of common passwords.
- * 
+ *
  * @param password The password to check against the list of common passwords.
  * @example
  * ```typescript

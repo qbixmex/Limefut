@@ -114,8 +114,8 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="font-semibold">Categoría</TableHead>
                 <TableCell>
                   {
-                    team?.category
-                    ?? <span className="text-gray-500 italic">No especificado</span>
+                    team?.category ??
+                    <span className="text-gray-500 italic">No especificado</span>
                   }
                 </TableCell>
               </TableRow>
@@ -145,8 +145,8 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="font-semibold">País</TableHead>
                 <TableCell>
                   {
-                    team?.country
-                    ?? <span className="text-gray-500 italic">No especificado</span>
+                    team?.country ??
+                    <span className="text-gray-500 italic">No especificado</span>
                   }
                 </TableCell>
               </TableRow>
@@ -154,8 +154,8 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="font-semibold">Estado</TableHead>
                 <TableCell>
                   {
-                    team?.state
-                    ?? <span className="text-gray-500 italic">No especificado</span>
+                    team?.state ??
+                    <span className="text-gray-500 italic">No especificado</span>
                   }
                 </TableCell>
               </TableRow>
@@ -168,8 +168,8 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="w-[120px] font-semibold">Ciudad</TableHead>
                 <TableCell>
                   {
-                    team?.city
-                    ?? <span className="text-gray-500 italic">No especificada</span>
+                    team?.city ??
+                    <span className="text-gray-500 italic">No especificada</span>
                   }
                 </TableCell>
               </TableRow>
@@ -179,9 +179,9 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                   {team?.tournament ? (
                     <Link
                       href={
-                        `/torneos/${team?.tournament.permalink}`
-                        + `?categoria=${team.tournament.category}`
-                        + `&formato=${team.tournament.format}`
+                        `/torneos/${team?.tournament.permalink}` +
+                        `?categoria=${team.tournament.category}` +
+                        `&formato=${team.tournament.format}`
                       }
                       className="text-wrap"
                     >
@@ -224,10 +224,10 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
             <TooltipTrigger asChild>
               <Link
                 href={
-                  '/estadisticas'
-                  + `?torneo=${team?.tournament?.permalink}`
-                  + `&categoria=${team?.tournament?.category}`
-                  + `&formato=${team?.tournament?.format}`
+                  '/estadisticas' +
+                  `?torneo=${team?.tournament?.permalink}` +
+                  `&categoria=${team?.tournament?.category}` +
+                  `&formato=${team?.tournament?.format}`
                 }
                 target='_blank'
               >

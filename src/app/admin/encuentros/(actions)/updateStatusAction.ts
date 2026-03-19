@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import type { MATCH_STATUS_TYPE } from "@/shared/enums";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { updateTag } from 'next/cache';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -31,10 +31,10 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS_T
   updateTag('public-result-details');
   updateTag('public-matches-count');
   updateTag('public-team-matches');
-  updateTag("public-team-standings");
+  updateTag('public-team-standings');
 
   return {
     ok: true,
-    message: `¡ El estado del partido fue actualizado correctamente 👍 !`,
+    message: '¡ El estado del partido fue actualizado correctamente 👍 !',
   };
 };

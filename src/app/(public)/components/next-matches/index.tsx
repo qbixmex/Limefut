@@ -49,10 +49,10 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
           <Link
             key={match.id}
             href={
-              `/resultados/${match.id}/`
-              + `${match.localTeam.permalink}`
-              + `-vs-`
-              + `${match.localTeam.permalink}`
+              `/resultados/${match.id}/` +
+              `${match.localTeam.permalink}` +
+              '-vs-' +
+              `${match.localTeam.permalink}`
             }
             target="_blank"
           >

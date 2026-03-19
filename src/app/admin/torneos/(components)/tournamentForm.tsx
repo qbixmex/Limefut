@@ -2,7 +2,7 @@
 
 import type { FC, ChangeEvent } from 'react';
 import { useRef, useState } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -26,11 +26,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn, slugify } from '@/lib/utils';
-import type { Session } from "@/lib/auth-client";
+import type { Session } from '@/lib/auth-client';
 
 type Props = Readonly<{
   session: Session;
@@ -90,7 +90,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     if (data.city) formData.append('city', data.city as string);
 
     if (data.image && typeof data.image === 'object') {
-      formData.append("image", data.image);
+      formData.append('image', data.image);
     }
 
     if (data.description) formData.append('description', data.description as string);
@@ -144,7 +144,6 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
       if (response.ok) {
         toast.success(response.message);
         route.replace(`/admin/torneos/${response.tournament?.id}`);
-        return;
       }
     }
   };
@@ -423,7 +422,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                         >
                           {field.value
                             ? format(field.value as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                            : "Selecciona Fecha"
+                            : 'Selecciona Fecha'
                           }
                           <ChevronDownIcon />
                         </Button>
@@ -469,7 +468,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                         >
                           {field.value
                             ? format(field.value as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                            : "Selecciona Fecha"
+                            : 'Selecciona Fecha'
                           }
                           <ChevronDownIcon />
                         </Button>

@@ -1,11 +1,11 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { createTeamSchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
-import { uploadImage } from "@/shared/actions";
-import type { CloudinaryResponse, Team } from "@/shared/interfaces";
-import type { GENDER_TYPE } from "@/shared/enums";
+import prisma from '@/lib/prisma';
+import { createTeamSchema } from '@/shared/schemas';
+import { updateTag } from 'next/cache';
+import { uploadImage } from '@/shared/actions';
+import type { CloudinaryResponse, Team } from '@/shared/interfaces';
+import type { GENDER_TYPE } from '@/shared/enums';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -42,6 +42,7 @@ export const createTeamAction = async (
     image: formData.get('image') as File,
     active: (formData.get('active') === 'true')
       ? true
+      // eslint-disable-next-line no-unneeded-ternary
       : (formData.get('active') === 'false')
         ? false
         : false,
@@ -103,7 +104,7 @@ export const createTeamAction = async (
     updateTag('admin-teams');
     updateTag('admin-teams-for-player');
     updateTag('admin-teams-for-coach');
-    updateTag("admin-teams-for-gallery");
+    updateTag('admin-teams-for-gallery');
     updateTag('admin-teams-for-match');
     updateTag('admin-team');
     updateTag('public-teams');

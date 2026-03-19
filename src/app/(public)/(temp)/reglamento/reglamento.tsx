@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import type { Metadata } from 'next/types';
-import "./styles.css";
+import './styles.css';
 import { FaWhatsapp } from 'react-icons/fa6';
 
 export const metadata: Metadata = {

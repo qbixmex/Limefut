@@ -2,9 +2,9 @@
 
 import type { FC } from 'react';
 import Link from 'next/link';
-import Image from "next/image";
-import { DeleteTeam } from "../(components)/delete-team";
-import { updateTeamStateAction } from "../(actions)";
+import Image from 'next/image';
+import { DeleteTeam } from '../(components)/delete-team';
+import { updateTeamStateAction } from '../(actions)';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import {
@@ -14,13 +14,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Pencil,
   InfoIcon,
   Flag,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -149,8 +149,8 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>

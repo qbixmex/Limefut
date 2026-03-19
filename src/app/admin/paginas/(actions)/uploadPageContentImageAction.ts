@@ -1,9 +1,9 @@
 'use server';
 
-import { updateTag } from "next/cache";
-import prisma from "@/lib/prisma";
-import { uploadImage } from "@/shared/actions";
-import type { CloudinaryResponse } from "@/shared/interfaces/Cloudinary";
+import { updateTag } from 'next/cache';
+import prisma from '@/lib/prisma';
+import { uploadImage } from '@/shared/actions';
+import type { CloudinaryResponse } from '@/shared/interfaces/Cloudinary';
 
 type UploadArticleImageResponse = Promise<{
   message: string;

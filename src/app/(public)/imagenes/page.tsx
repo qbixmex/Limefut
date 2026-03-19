@@ -1,8 +1,8 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card';
 import Heading from '../components/heading';
-import { fetchGalleriesAction } from "./(actions)/fetchGalleriesAction";
-import Image from "next/image";
-import Link from "next/link";
+import { fetchGalleriesAction } from './(actions)/fetchGalleriesAction';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const GalleriesPage = async () => {
   const response = await fetchGalleriesAction();

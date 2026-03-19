@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import type { Gallery } from "@/shared/interfaces";
-import { createGallerySchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import type { Gallery } from '@/shared/interfaces';
+import { createGallerySchema } from '@/shared/schemas';
+import { updateTag } from 'next/cache';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -29,11 +29,7 @@ export const createGalleryAction = async (
     galleryDate: new Date(formData.get('galleryDate') as string),
     tournamentId: formData.get('tournamentId') as string,
     teamId: formData.get('teamId') as string,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
   };
 
   const galleryVerified = createGallerySchema.safeParse(rawData);
@@ -64,9 +60,9 @@ export const createGalleryAction = async (
     // Refresh Cache
     updateTag('admin-galleries');
     updateTag('dashboard-images');
-    updateTag("public-galleries-list");
-    updateTag("public-galleries");
-    updateTag("public-gallery");
+    updateTag('public-galleries-list');
+    updateTag('public-galleries');
+    updateTag('public-gallery');
 
     return prismaTransaction;
   } catch (error) {

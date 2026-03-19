@@ -1,20 +1,20 @@
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   fetchTournamentAction,
   type TournamentType,
-} from "../../(actions)/fetchTournamentAction";
-import { redirect } from "next/navigation";
-import Image from "next/image";
-import { Trophy, ShieldBan } from "lucide-react";
-import Link from "next/link";
-import { Heading } from "../../../components";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "~/src/components/ui/table";
-import { ErrorHandler } from "~/src/shared/components/errorHandler";
-import { format as formatDate } from "date-fns";
-import { es } from "date-fns/locale";
-import { Badge } from "@/components/ui/badge";
-import { getGenderTranslation, getStageTranslation } from "@/lib/utils";
-import "./style.css";
+} from '../../(actions)/fetchTournamentAction';
+import { redirect } from 'next/navigation';
+import Image from 'next/image';
+import { Trophy, ShieldBan } from 'lucide-react';
+import Link from 'next/link';
+import { Heading } from '../../../components';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/components/ui/table';
+import { ErrorHandler } from '~/src/shared/components/errorHandler';
+import { format as formatDate } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { Badge } from '@/components/ui/badge';
+import { getGenderTranslation, getStageTranslation } from '@/lib/utils';
+import './style.css';
 
 type Props = Readonly<{
   params: Promise<{
@@ -198,10 +198,10 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
             <section key={team.id} className="teamCard">
               <Link
                 href={
-                  `/equipos/${team.permalink}`
-                  + `?torneo=${tournament.permalink}`
-                  + `&categoria=${team.category}`
-                  + `&formato=${team.format}`
+                  `/equipos/${team.permalink}` +
+                  `?torneo=${tournament.permalink}` +
+                  `&categoria=${team.category}` +
+                  `&formato=${team.format}`
                 }
               >
                 {!team.imageUrl ? (
@@ -221,10 +221,10 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                 )}
               </Link>
               <Link href={
-                `/equipos/${team.permalink}`
-                + `?torneo=${tournament.permalink}`
-                + `&categoria=${team.category}`
-                + `&formato=${team.format}`
+                `/equipos/${team.permalink}` +
+                `?torneo=${tournament.permalink}` +
+                `&categoria=${team.category}` +
+                `&formato=${team.format}`
               }>
                 {team.name}
               </Link>

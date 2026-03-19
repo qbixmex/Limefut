@@ -1,8 +1,8 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma/client";
-import prisma from "@/lib/prisma";
-import type { Pagination, Credential } from "@/shared/interfaces";
+import type { Prisma } from '@/generated/prisma/client';
+import prisma from '@/lib/prisma';
+import type { Pagination, Credential } from '@/shared/interfaces';
 
 type Options = Readonly<{
   page?: number;
@@ -45,7 +45,7 @@ export const fetchCredentialsAction = async (options?: Options): ResponseFetchAc
     const credentials = await prisma.credential.findMany({
       where: whereCondition,
       orderBy: { fullName: 'asc' },
-      take: take,
+      take,
       skip: (page - 1) * take,
       select: {
         id: true,
@@ -60,7 +60,7 @@ export const fetchCredentialsAction = async (options?: Options): ResponseFetchAc
     return {
       ok: true,
       message: '! Las credenciales fueron obtenidos correctamente 👍',
-      credentials: credentials,
+      credentials,
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
@@ -68,7 +68,7 @@ export const fetchCredentialsAction = async (options?: Options): ResponseFetchAc
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener las credenciales");
+      console.log('Error al intentar obtener las credenciales');
       return {
         ok: false,
         message: error.message,
@@ -79,7 +79,7 @@ export const fetchCredentialsAction = async (options?: Options): ResponseFetchAc
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener las credenciales, revise los logs del servidor",
+      message: 'Error inesperado al obtener las credenciales, revise los logs del servidor',
       credentials: null,
       pagination: null,
     };

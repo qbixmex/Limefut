@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 export enum ROBOTS {
-  INDEX_FOLLOW = "index, follow",
-  INDEX_NO_FOLLOW = "index, nofollow",
-  NO_INDEX_FOLLOW = "noindex, follow",
-  NO_INDEX_NO_FOLLOW = "noindex, nofollow",
+  INDEX_FOLLOW = 'index, follow',
+  INDEX_NO_FOLLOW = 'index, nofollow',
+  NO_INDEX_FOLLOW = 'noindex, follow',
+  NO_INDEX_NO_FOLLOW = 'noindex, nofollow',
 }
 
 export enum PAGE_STATUS {

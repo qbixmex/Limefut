@@ -1,7 +1,7 @@
 'use client';
 
-import type { FC } from "react";
-import { deleteMessageAction } from "../../(actions)/deleteMessageAction";
+import type { FC } from 'react';
+import { deleteMessageAction } from '../../(actions)/deleteMessageAction';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,12 +12,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { toast } from "sonner";
-import "./styles.css";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { toast } from 'sonner';
+import './styles.css';
 
 type Props = Readonly<{
   id: string;

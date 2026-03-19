@@ -1,7 +1,7 @@
 'use client';
 
 import { type FC, useEffect, useState } from 'react';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -9,26 +9,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { InfoIcon, Minus } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
-import { DeleteMatch } from "../(components)/delete-match";
-import { MATCH_STATUS } from "@/shared/enums";
-import { MatchStatus } from "../(components)/match-status";
-import { FinishMatch } from "../(components)/finish-match";
-import { MatchScoreInput } from "../(components)/match-score-input";
+} from '@/components/ui/tooltip';
+import { InfoIcon, Minus } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
+import { DeleteMatch } from '../(components)/delete-match';
+import { MATCH_STATUS } from '@/shared/enums';
+import { MatchStatus } from '../(components)/match-status';
+import { FinishMatch } from '../(components)/finish-match';
+import { MatchScoreInput } from '../(components)/match-score-input';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { Match } from '../(actions)/fetchMatchesAction';
-import { useSearchParams } from "next/navigation";
+import { useSearchParams } from 'next/navigation';
 import { WeeksSelector } from './weeks-selector';
 import { DateSelector } from './date-selector';
 import { StatusSelector } from './status-selector';
@@ -96,7 +96,7 @@ export const MatchesTable: FC<Props> = ({
                       <div className="text-right">
                         <Link href={`/admin/equipos/${match.localTeam.id}`}>
                           <div className="space-x-2">
-                            {(match.penaltyShootout?.status == MATCH_STATUS.COMPLETED) && (
+                            {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
                               <Badge variant="outline-secondary">
                                 {match.penaltyShootout.localGoals}
                               </Badge>
@@ -106,7 +106,7 @@ export const MatchesTable: FC<Props> = ({
                         </Link>
                       </div>
                       <div className="flex justify-center items-center gap-2">
-                        {match.status != MATCH_STATUS.COMPLETED ? (
+                        {match.status !== MATCH_STATUS.COMPLETED ? (
                           <MatchScoreInput
                             matchId={match.id}
                             score={match.localScore}
@@ -116,7 +116,7 @@ export const MatchesTable: FC<Props> = ({
                           <Badge variant="outline">{match.localScore}</Badge>
                         )}
                         <Minus strokeWidth={2} />
-                        {match.status != MATCH_STATUS.COMPLETED ? (
+                        {match.status !== MATCH_STATUS.COMPLETED ? (
                           <MatchScoreInput
                             matchId={match.id}
                             score={match.visitorScore}
@@ -130,7 +130,7 @@ export const MatchesTable: FC<Props> = ({
                         <Link href={`/admin/equipos/${match.visitorTeam.id}`}>
                           <div className="space-x-2">
                             <span>{match.visitorTeam.name}</span>
-                            {(match.penaltyShootout?.status == MATCH_STATUS.COMPLETED) && (
+                            {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
                               <Badge variant="outline-secondary">
                                 {match.penaltyShootout.visitorGoals}
                               </Badge>
@@ -147,9 +147,9 @@ export const MatchesTable: FC<Props> = ({
                     <Badge variant="outline-info">{match.week}</Badge>
                   </TableCell>
                   <TableCell className="text-center">
-                    {format(match.matchDate as Date, "dd / MMM / y", { locale: es }).toUpperCase()},
+                    {format(match.matchDate as Date, 'dd / MMM / y', { locale: es }).toUpperCase()},
                     {' '}
-                    {formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', "h:mm a", { locale: es })}
+                    {formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })}
                   </TableCell>
                   <TableCell>
                     {match.status === MATCH_STATUS.COMPLETED ? (
@@ -203,8 +203,8 @@ export const MatchesTable: FC<Props> = ({
             </TableBody>
           </Table>
         </div>
-        <div className={cn("flex justify-center mt-10", {
-          'hidden': matches.length === 0 || pagination!.totalPages === 1,
+        <div className={cn('flex justify-center mt-10', {
+          hidden: matches.length === 0 || pagination!.totalPages === 1,
         })}>
           <Pagination totalPages={pagination!.totalPages as number} />
         </div>

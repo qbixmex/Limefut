@@ -1,19 +1,19 @@
 'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   usePathname,
   useRouter,
   useSearchParams,
-} from "next/navigation";
+} from 'next/navigation';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import type { TournamentType } from "~/src/shared/actions/fetchTournamentsAction";
+} from '@/components/ui/select';
+import type { TournamentType } from '~/src/shared/actions/fetchTournamentsAction';
 
 type Props = Readonly<{
   tournaments: TournamentType[];

@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import deleteImage from "@/shared/actions/deleteImageAction";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import deleteImage from '@/shared/actions/deleteImageAction';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -33,7 +33,7 @@ export const deleteUserAction = async (userId: string): ResponseDeleteAction => 
   if (userDeleted.imagePublicID) {
     const response = await deleteImage(userDeleted.imagePublicID);
     if (!response.ok) {
-      throw 'Error deleting image from cloudinary';
+      throw new Error('Error deleting image from cloudinary');
     }
   }
 

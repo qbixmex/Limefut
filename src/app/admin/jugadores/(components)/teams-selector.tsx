@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, type FC } from "react";
+import { useState, type FC } from 'react';
 import {
   usePathname,
   useRouter,
   useSearchParams,
-} from "next/navigation";
-import { cn } from "~/src/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+} from 'next/navigation';
+import { cn } from '~/src/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Command,
   CommandEmpty,
@@ -15,9 +15,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { Check, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/command';
+import { Check, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 type Props = Readonly<{
   teams: {
@@ -26,7 +26,7 @@ type Props = Readonly<{
   }[];
 }>;
 
-export const TeamsSelector: FC<Props> = ({ teams: teams }) => {
+export const TeamsSelector: FC<Props> = ({ teams }) => {
   const searchParams = useSearchParams();
   const teamId = searchParams.get('equipo') ?? '';
   const pathname = usePathname();
@@ -55,7 +55,7 @@ export const TeamsSelector: FC<Props> = ({ teams: teams }) => {
             {
               teamId !== 'none' && selectedTeam
                 ? <span className="text-gray-300 italic">{selectedTeam.name}</span>
-                : teamId == 'none' && !selectedTeam
+                : teamId === 'none' && !selectedTeam
                   ? <span className="text-gray-400 italic">Jugadores sin equipo asignado</span>
                   : <span className="dark:text-gray-300">Seleccione un equipo</span>
             }
@@ -74,9 +74,9 @@ export const TeamsSelector: FC<Props> = ({ teams: teams }) => {
                   >
                     <span className="text-gray-400 italic">Jugadores sin equipo asignado</span>
                     <Check
-                      className={cn("ml-auto size-4", {
-                        "opacity-100": teamId === 'none',
-                        "opacity-0": teamId !== 'none',
+                      className={cn('ml-auto size-4', {
+                        'opacity-100': teamId === 'none',
+                        'opacity-0': teamId !== 'none',
                       })}
                     />
                   </CommandItem>
@@ -88,9 +88,9 @@ export const TeamsSelector: FC<Props> = ({ teams: teams }) => {
                   >
                     {team.name}
                     <Check
-                      className={cn("ml-auto h-4 w-4", {
-                        "opacity-100": teamId === team.id,
-                        "opacity-0": teamId !== team.id,
+                      className={cn('ml-auto h-4 w-4', {
+                        'opacity-100': teamId === team.id,
+                        'opacity-0': teamId !== team.id,
                       })}
                     />
                   </CommandItem>

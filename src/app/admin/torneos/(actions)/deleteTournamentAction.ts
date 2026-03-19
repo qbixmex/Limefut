@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
-import { deleteImage } from "@/shared/actions";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
+import { deleteImage } from '@/shared/actions';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -33,22 +33,22 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
   if (tournament.imagePublicID) {
     const response = await deleteImage(tournament.imagePublicID);
     if (!response.ok) {
-      throw 'Error al eliminar la imagen de cloudinary';
+      throw new Error('Error al eliminar la imagen de cloudinary');
     }
   }
 
   // Update Cache
-  updateTag("admin-tournaments");
-  updateTag("admin-tournaments-selector");
-  updateTag("admin-tournaments-for-match");
-  updateTag("admin-tournament-for-match");
-  updateTag("admin-tournaments-for-gallery");
-  updateTag("admin-tournament");
-  updateTag("public-tournaments-list");
-  updateTag("tournaments-list");
-  updateTag("public-tournaments");
-  updateTag("public-tournament");
-  updateTag("dashboard-tournaments");
+  updateTag('admin-tournaments');
+  updateTag('admin-tournaments-selector');
+  updateTag('admin-tournaments-for-match');
+  updateTag('admin-tournament-for-match');
+  updateTag('admin-tournaments-for-gallery');
+  updateTag('admin-tournament');
+  updateTag('public-tournaments-list');
+  updateTag('tournaments-list');
+  updateTag('public-tournaments');
+  updateTag('public-tournament');
+  updateTag('dashboard-tournaments');
 
   return {
     ok: true,

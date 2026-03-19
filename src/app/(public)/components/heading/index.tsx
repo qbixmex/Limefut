@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react';
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
@@ -14,12 +14,12 @@ export const Heading: FC<Props> = ({ children, className, style, level = 'h1' })
 
   return (
     <Tag className={cn(className, {
-      [styles.headingOne]:   level === 'h1',
-      [styles.headingTwo]:   level === 'h2',
+      [styles.headingOne]: level === 'h1',
+      [styles.headingTwo]: level === 'h2',
       [styles.headingThree]: level === 'h3',
-      [styles.headingFour]:  level === 'h4',
-      [styles.headingFive]:  level === 'h5',
-      [styles.headingSix]:   level === 'h6',
+      [styles.headingFour]: level === 'h4',
+      [styles.headingFive]: level === 'h5',
+      [styles.headingSix]: level === 'h6',
     })} style={style}>
       {children}
     </Tag>

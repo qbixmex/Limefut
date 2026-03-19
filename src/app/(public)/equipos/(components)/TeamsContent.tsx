@@ -1,6 +1,6 @@
-import { Suspense, type FC } from "react";
-import { TeamsSkeleton } from "./TeamsSkeleton";
-import { TeamsList } from "./TeamsList";
+import { Suspense, type FC } from 'react';
+import { TeamsSkeleton } from './TeamsSkeleton';
+import { TeamsList } from './TeamsList';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -16,9 +16,9 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
   return (
     <Suspense
       key={
-        `${params.torneo ?? 'tournament'}`
-        + `-${params.categoria ?? 'category'}`
-        + `-${params.formato ?? 'format'}`
+        `${params.torneo ?? 'tournament'}` +
+        `-${params.categoria ?? 'category'}` +
+        `-${params.formato ?? 'format'}`
       }
       fallback={<TeamsSkeleton />}
     >

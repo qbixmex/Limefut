@@ -1,13 +1,13 @@
-import { Suspense, type FC } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { ErrorHandler } from "@/shared/components/errorHandler";
-import { Search } from "@/shared/components/search";
-import BannersTableSkeleton from "./(components)/banners-table-skeleton";
-import BannersTable from "./(components)/banners-table";
+import { Suspense, type FC } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { Search } from '@/shared/components/search';
+import BannersTableSkeleton from './(components)/banners-table-skeleton';
+import BannersTable from './(components)/banners-table';
 
 type Props = Readonly<{
   searchParams: Promise<{

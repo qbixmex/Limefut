@@ -9,9 +9,9 @@ import {
   shuffleArray,
   sleep,
   slugify,
-} from "@/lib/utils";
-import { PAGE_STATUS, ROBOTS } from "@/shared/interfaces";
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
+} from '@/lib/utils';
+import { PAGE_STATUS, ROBOTS } from '@/shared/interfaces';
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
 describe('Test on Utils', () => {
   test('Should slugify text with spaces', () => {
@@ -74,24 +74,24 @@ describe('Test on Utils', () => {
 
   test('Should translates the page status to a user friendly string', () => {
     expect(getPageStatus(PAGE_STATUS.DRAFT)).toEqual({
-      label: "Borrador",
+      label: 'Borrador',
       variant: 'outline-secondary',
     });
     expect(getPageStatus(PAGE_STATUS.HOLD)).toEqual({
-      label: "Retenido",
-      variant: "outline-warning",
+      label: 'Retenido',
+      variant: 'outline-warning',
     });
     expect(getPageStatus(PAGE_STATUS.UNPUBLISHED)).toEqual({
-      label: "No Publicado",
-      variant: "outline-info",
+      label: 'No Publicado',
+      variant: 'outline-info',
     });
     expect(getPageStatus(PAGE_STATUS.PUBLISHED)).toEqual({
-      label: "Publicado",
-      variant: "outline-success",
+      label: 'Publicado',
+      variant: 'outline-success',
     });
     expect(getPageStatus('lorem' as PAGE_STATUS)).toEqual({
-      label: "Desconocido",
-      variant: "outline-secondary",
+      label: 'Desconocido',
+      variant: 'outline-secondary',
     });
   });
 
@@ -124,7 +124,7 @@ describe('Test on Utils', () => {
   test('Should shuffle an array', () => {
     const originalArray = [1, 2, 3, 4, 5];
     const shuffledArray = shuffleArray(originalArray);
-    
+
     // Check if the shuffled array has the same length as the original
     expect(shuffledArray).toHaveLength(originalArray.length);
 

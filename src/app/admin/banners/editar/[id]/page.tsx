@@ -1,12 +1,12 @@
-import { randomUUID } from "node:crypto";
-import type { FC } from "react";
-import { headers } from "next/headers";
-import type { Session } from "@/lib/auth-client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { fetchHeroBannerAction } from "../../(actions)";
-import { BannerForm } from "../../(components)/banner-form";
+import { randomUUID } from 'node:crypto';
+import type { FC } from 'react';
+import { headers } from 'next/headers';
+import type { Session } from '@/lib/auth-client';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchHeroBannerAction } from '../../(actions)';
+import { BannerForm } from '../../(components)/banner-form';
 
 type Props = Readonly<{
   params: Promise<{

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type FC } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -18,14 +18,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+} from '@/components/ui/popover';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -33,17 +33,16 @@ import { createUserSchema, editUserSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createUserAction } from '../(actions)';
 import type { Session } from '@/lib/auth-client';
-import type { User } from '@/shared/interfaces';
+import type { User, ROLE_TYPE } from '@/shared/interfaces';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, Eye, EyeClosed, LoaderCircle } from 'lucide-react';
-import type { ROLE_TYPE } from '@/shared/interfaces';
 import { updateUserAction } from '../(actions)/updateUserAction';
 
 const roles = [
-  { value: "user", label: "Usuario" },
-  { value: "admin", label: "Administrador" },
+  { value: 'user', label: 'Usuario' },
+  { value: 'admin', label: 'Administrador' },
 ];
 
 type Props = Readonly<{
@@ -80,7 +79,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
     if (data.username) formData.append('username', data.username);
     formData.append('email', data.email as string);
     if (data.image && typeof data.image === 'object') {
-      formData.append("image", data.image);
+      formData.append('image', data.image);
     }
     formData.append('password', data.password as string);
     formData.append('passwordConfirmation', data.passwordConfirmation as string);
@@ -102,7 +101,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace("/admin/usuarios");
+        route.replace('/admin/usuarios');
         return;
       }
       return;
@@ -123,10 +122,8 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace("/admin/usuarios");
-        return;
+        route.replace('/admin/usuarios');
       }
-      return;
     }
   };
 
@@ -223,7 +220,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
                   <div className="relative">
                     <FormControl>
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         {...field}
                       />
                     </FormControl>
@@ -252,7 +249,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
                   <div className="relative">
                     <FormControl>
                       <Input
-                        type={showPasswordConfirmation ? "text" : "password"}
+                        type={showPasswordConfirmation ? 'text' : 'password'}
                         {...field}
                       />
                     </FormControl>
@@ -292,7 +289,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
                         >
                           {((field.value as string[]).length > 0)
                             ? `${(field.value as string[]).length} rol${(field.value as string[]).length < 2 ? '' : 'es'} seleccionado${(field.value as string[]).length < 2 ? '' : 's'}`
-                            : "Seleccione un rol"}
+                            : 'Seleccione un rol'}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -320,8 +317,8 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
                                   {role.label}
                                   <Check
                                     className={cn(
-                                      "ml-auto",
-                                      field.value?.includes(role.value as ROLE_TYPE) ? "opacity-100" : "opacity-0",
+                                      'ml-auto',
+                                      field.value?.includes(role.value as ROLE_TYPE) ? 'opacity-100' : 'opacity-0',
                                     )}
                                   />
                                 </CommandItem>
@@ -400,7 +397,6 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
       </form>
     </Form>
   );
-
 };
 
 export default UsersForm;

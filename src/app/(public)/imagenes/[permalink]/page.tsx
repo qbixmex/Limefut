@@ -1,7 +1,7 @@
-import { Suspense, type FC } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { GalleryDetails } from "../(components)/gallery-details";
-import { GallerySkeleton } from "../(components)/gallery-skeleton";
+import { Suspense, type FC } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { GalleryDetails } from '../(components)/gallery-details';
+import { GallerySkeleton } from '../(components)/gallery-skeleton';
 
 type Props = Readonly<{
   params: Promise<{

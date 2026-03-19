@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { MATCH_STATUS } from "@/shared/enums";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { MATCH_STATUS } from '@/shared/enums';
+import { updateTag } from 'next/cache';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -68,7 +68,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
         totalPoints: { increment: visitorPoints },
       },
     });
-  } catch(error) {
+  } catch (error) {
     console.error(`Error: ${(error as Error).message}`);
   }
 
@@ -88,9 +88,9 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
   updateTag('public-standings');
   updateTag('dashboard-results');
   updateTag('public-matches');
-  updateTag("public-matches-count");
+  updateTag('public-matches-count');
   updateTag('public-team-matches');
-  updateTag("public-team-standings");
+  updateTag('public-team-standings');
 
   if (!updatedMatch) {
     return {
@@ -101,6 +101,6 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
 
   return {
     ok: true,
-    message: `¡ El estado del partido finalizó correctamente ⚽️🎉 !`,
+    message: '¡ El estado del partido finalizó correctamente ⚽️🎉 !',
   };
 };

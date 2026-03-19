@@ -56,7 +56,6 @@ export const rehypeYoutube = () => {
 
           // reemplaza el nodo <p> completo por la secuencia resultante
           parent.children.splice(index, 1, ...newNodes);
-          return;
         }
       }
     });

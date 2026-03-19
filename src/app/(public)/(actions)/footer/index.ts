@@ -1,1 +1,1 @@
-export { type PageType, fetchPagesAction } from "./fetchPagesAction";
+export { type PageType, fetchPagesAction } from './fetchPagesAction';

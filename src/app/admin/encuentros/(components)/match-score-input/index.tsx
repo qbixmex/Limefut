@@ -1,9 +1,9 @@
 'use client';
 
-import type { ChangeEvent, FC } from "react";
-import { useEffect, useState } from "react";
-import { updateStatusAction } from "../../(actions)/updateMatchScore";
-import { toast } from "sonner";
+import type { ChangeEvent, FC } from 'react';
+import { useEffect, useState } from 'react';
+import { updateStatusAction } from '../../(actions)/updateMatchScore';
+import { toast } from 'sonner';
 
 type Props = Readonly<{
   matchId: string;
@@ -14,7 +14,7 @@ type Props = Readonly<{
 
 export const MatchScoreInput: FC<Props> = (props) => {
   const { matchId, score, local = false, visitor = false } = props;
-  const [ scoreValue, setScoreValue ] = useState<string>(String(score));
+  const [scoreValue, setScoreValue] = useState<string>(String(score));
 
   // Synchronize the internal state if 'score' prop changes from outside.
   useEffect(() => {

@@ -1,10 +1,10 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma/client";
-import prisma from "@/lib/prisma";
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
-import type { Pagination } from "@/shared/interfaces";
-import { cacheLife, cacheTag } from "next/cache";
+import type { Prisma } from '@/generated/prisma/client';
+import prisma from '@/lib/prisma';
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { Pagination } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   tournamentId: string;
@@ -51,7 +51,7 @@ export type PenaltyShootout = {
 };
 
 export const fetchMatchesAction = async (options?: Options): ResponseFetchAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('admin-matches');
@@ -67,11 +67,11 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   if (isNaN(take)) take = 12;
 
   const statusMap: Record<string, MATCH_STATUS_TYPE> = {
-    "programado": MATCH_STATUS.SCHEDULED,
-    "en progreso": MATCH_STATUS.IN_PROGRESS,
-    "finalizado": MATCH_STATUS.COMPLETED,
-    "pospuesto": MATCH_STATUS.POST_POSED,
-    "cancelado": MATCH_STATUS.CANCELED,
+    programado: MATCH_STATUS.SCHEDULED,
+    'en progreso': MATCH_STATUS.IN_PROGRESS,
+    finalizado: MATCH_STATUS.COMPLETED,
+    pospuesto: MATCH_STATUS.POST_POSED,
+    cancelado: MATCH_STATUS.CANCELED,
   };
 
   const whereCondition: Prisma.MatchWhereInput = {
@@ -115,7 +115,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         { week: isNaN(parseInt(sortWeek as string)) ? sortWeek as 'asc' | 'desc' : undefined },
         { matchDate: sortMatchDate },
       ],
-      take: take,
+      take,
       skip: (page - 1) * take,
       select: {
         id: true,
@@ -175,7 +175,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los encuentros");
+      console.log('Error al intentar obtener los encuentros');
       return {
         ok: false,
         message: error.message,
@@ -189,7 +189,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
+      message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',
       matches: [],
       pagination: {
         currentPage: 0,

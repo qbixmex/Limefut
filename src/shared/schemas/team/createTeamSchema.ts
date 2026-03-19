@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
 const ACCEPTED_FILE_TYPES = [
@@ -37,7 +37,7 @@ export const createTeamSchema = z.object({
     .max(200, { message: '¡ La sede debe ser menor a 200 caracteres !' })
     .optional(),
   image: z
-    .instanceof(File, { message: "La imagen debe ser un archivo" })
+    .instanceof(File, { message: 'La imagen debe ser un archivo' })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
@@ -67,7 +67,7 @@ export const createTeamSchema = z.object({
     error: '¡ Debes seleccionar al menos un género !',
   }),
   tournamentId: z.union([
-    z.uuid("El id del torneo debe ser un UUID válido"),
+    z.uuid('El id del torneo debe ser un UUID válido'),
     z.literal(''),
     z.null(),
   ]).optional(),
@@ -84,7 +84,7 @@ export const createTeamSchema = z.object({
     .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' })
     .optional(),
   coachId: z.union([
-    z.uuid("El id del entrenador debe ser un UUID válido"),
+    z.uuid('El id del entrenador debe ser un UUID válido'),
     z.literal(''),
     z.null(),
   ]).optional(),
@@ -95,7 +95,7 @@ export const createTeamSchema = z.object({
     )
     .optional(),
   address: z.union([
-    z.string("¡ La dirección debe ser una cadena de texto !")
+    z.string('¡ La dirección debe ser una cadena de texto !')
       .min(10, { message: '¡ La dirección debe ser mayor a 10 caracteres !' })
       .max(250, { message: '¡ La dirección debe ser menor a 250 caracteres !' }),
     z.literal(''),

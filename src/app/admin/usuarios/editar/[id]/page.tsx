@@ -1,17 +1,17 @@
-import type { FC } from "react";
-import { headers } from "next/headers";
+import type { FC } from 'react';
+import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { UsersForm } from "../../(components)/usersForm";
-import { auth } from "@/lib/auth";
-import { fetchUserAction } from "../../(actions)/fetchUserAction";
-import { redirect } from "next/navigation";
-import type { Session } from "@/lib/auth-client";
-import type { User } from "@/shared/interfaces";
+} from '@/components/ui/card';
+import { UsersForm } from '../../(components)/usersForm';
+import { auth } from '@/lib/auth';
+import { fetchUserAction } from '../../(actions)/fetchUserAction';
+import { redirect } from 'next/navigation';
+import type { Session } from '@/lib/auth-client';
+import type { User } from '@/shared/interfaces';
 
 type Props = Readonly<{
   params: Promise<{

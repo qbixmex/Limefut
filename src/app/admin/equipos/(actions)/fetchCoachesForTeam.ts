@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type ResponseFetchAction = Promise<{
   ok: boolean;
@@ -13,10 +13,10 @@ export type ResponseFetchAction = Promise<{
 }>;
 
 export const fetchCoachesForTeam = async (): ResponseFetchAction => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-coaches-for-team");
+  cacheLife('days');
+  cacheTag('admin-coaches-for-team');
 
   try {
     const coaches = await prisma.coach.findMany({
@@ -35,7 +35,7 @@ export const fetchCoachesForTeam = async (): ResponseFetchAction => {
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los entrenadores");
+      console.log('Error al intentar obtener los entrenadores');
       return {
         ok: false,
         message: error.message,
@@ -45,7 +45,7 @@ export const fetchCoachesForTeam = async (): ResponseFetchAction => {
     console.log(error);
     return {
       ok: false,
-      message: "¡ Error inesperado al obtener los entrenadores ❌ !, revise los logs del servidor",
+      message: '¡ Error inesperado al obtener los entrenadores ❌ !, revise los logs del servidor',
       coaches: null,
     };
   }

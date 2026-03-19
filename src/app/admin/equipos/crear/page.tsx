@@ -1,19 +1,19 @@
-import crypto from "node:crypto";
-import { Suspense, type FC } from "react";
-import { headers } from "next/headers";
+import crypto from 'node:crypto';
+import { Suspense, type FC } from 'react';
+import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { TeamForm } from "../(components)/teamForm";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { fetchTournamentsForTeam } from "../(actions)";
-import type { Coach } from "@/shared/interfaces";
-import { fetchCoachesForTeam } from "../(actions)/fetchCoachesForTeam";
-import type { Session } from "@/lib/auth-client";
+} from '@/components/ui/card';
+import { TeamForm } from '../(components)/teamForm';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { fetchTournamentsForTeam } from '../(actions)';
+import type { Coach } from '@/shared/interfaces';
+import { fetchCoachesForTeam } from '../(actions)/fetchCoachesForTeam';
+import type { Session } from '@/lib/auth-client';
 
 const CreateTeamPage = () => {
   return (

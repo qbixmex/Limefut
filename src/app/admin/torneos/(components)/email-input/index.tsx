@@ -1,6 +1,6 @@
 'use client';
 
-import type { KeyboardEvent} from 'react';
+import type { KeyboardEvent } from 'react';
 import { useState, forwardRef } from 'react';
 import { X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +18,7 @@ export const EmailInput = forwardRef<HTMLInputElement, EmailInputProps>(
   ({
     value = [],
     onChange,
-    placeholder = "Escribe un email y presiona Enter", className,
+    placeholder = 'Escribe un email y presiona Enter', className,
   }, ref) => {
     const [emailInput, setEmailInput] = useState('');
 
@@ -59,7 +59,7 @@ export const EmailInput = forwardRef<HTMLInputElement, EmailInputProps>(
     };
 
     return (
-      <div className={cn("space-y-2", className)}>
+      <div className={cn('space-y-2', className)}>
         {/* Input for adding new emails */}
         <Input
           ref={ref}
@@ -102,4 +102,4 @@ export const EmailInput = forwardRef<HTMLInputElement, EmailInputProps>(
   },
 );
 
-EmailInput.displayName = "EmailInput";
+EmailInput.displayName = 'EmailInput';

@@ -1,5 +1,5 @@
-import z from "zod";
-import { requiredUUID } from "~/src/lib/helpers";
+import z from 'zod';
+import { requiredUUID } from '~/src/lib/helpers';
 
 export const createPenaltyShootoutSchema = z.object({
   localPlayerId: requiredUUID(

@@ -1,18 +1,18 @@
 'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   usePathname,
   useRouter,
   useSearchParams,
-} from "next/navigation";
+} from 'next/navigation';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 type Props = Readonly<{
   tournaments: {
@@ -37,7 +37,7 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
   return (
     <Select
       onValueChange={setTournamentPermalinkParam}
-      defaultValue={tournamentPermalink ?? ""}
+      defaultValue={tournamentPermalink ?? ''}
     >
       <SelectTrigger className="w-full max-w-[400px]">
         <SelectValue placeholder="¡ Selecciona un torneo !" />

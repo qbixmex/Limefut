@@ -2,7 +2,7 @@
 
 import type { ChangeEvent, FC } from 'react';
 import { useRef, useState } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -31,7 +31,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { format } from "date-fns";
+import { format } from 'date-fns';
 import {
   Command,
   CommandEmpty,
@@ -40,7 +40,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { es } from "date-fns/locale";
+import { es } from 'date-fns/locale';
 import { cn, slugify } from '@/lib/utils';
 
 type Props = Readonly<{
@@ -157,7 +157,6 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
         if (!data.tournamentId) setSelectedTournament(false);
         if (!data.teamId) setSelectedTeam(false);
         route.replace(`/admin/galerias/${response.gallery?.id}`);
-        return;
       }
     }
   };
@@ -246,12 +245,12 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                           >
                             {
                               field.value && selectedTournament
-                                ? `${selectedTournament.name},`
-                                + ` ${selectedTournament.category}`
-                                + ` ${selectedTournament.format} vs ${selectedTournament.format}`
+                                ? `${selectedTournament.name},` +
+                                ` ${selectedTournament.category}` +
+                                ` ${selectedTournament.format} vs ${selectedTournament.format}`
                                 : field.value === undefined
-                                  ? "Sin torneo"
-                                  : "Seleccione un torneo"
+                                  ? 'Sin torneo'
+                                  : 'Seleccione un torneo'
                             }
                             <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
@@ -289,8 +288,8 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                                     {tournament.name}, {tournament.category}, {tournament.format} vs {tournament.format}
                                     <Check
                                       className={cn(
-                                        "ml-auto",
-                                        field.value === tournament.id ? "opacity-100" : "opacity-0",
+                                        'ml-auto',
+                                        field.value === tournament.id ? 'opacity-100' : 'opacity-0',
                                       )}
                                     />
                                   </CommandItem>
@@ -336,8 +335,8 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                               field.value && selectedTeam
                                 ? selectedTeam.name
                                 : field.value === undefined
-                                  ? "Seleccione un equipo"
-                                  : "Sin Equipo"
+                                  ? 'Seleccione un equipo'
+                                  : 'Sin Equipo'
                             }
                             <ChevronsUpDown className="ml_2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
@@ -375,8 +374,8 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                                     {team.name}
                                     <Check
                                       className={cn(
-                                        "ml-auto",
-                                        field.value === team.id ? "opacity-100" : "opacity-0",
+                                        'ml-auto',
+                                        field.value === team.id ? 'opacity-100' : 'opacity-0',
                                       )}
                                     />
                                   </CommandItem>
@@ -406,7 +405,7 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
                 >
                   {selectedDate
                     ? format(selectedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
-                    : "Selecciona Fecha"
+                    : 'Selecciona Fecha'
                   }
                   <ChevronDownIcon />
                 </Button>
@@ -486,7 +485,6 @@ export const GalleryForm: FC<Props> = ({ session, teams, tournaments, gallery })
       </form>
     </Form>
   );
-
 };
 
 export default GalleryForm;

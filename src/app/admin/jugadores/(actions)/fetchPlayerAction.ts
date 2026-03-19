@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Player, Team } from "@/shared/interfaces";
+import type { Player, Team } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type TeamType = Pick<Team, 'id' | 'name' | 'permalink'>;
@@ -16,10 +16,10 @@ export const fetchPlayerAction = async (
   playerId: string,
   userRole: string[] | null,
 ): FetchPlayerResponse => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-player");
+  cacheLife('days');
+  cacheTag('admin-player');
 
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
@@ -65,13 +65,13 @@ export const fetchPlayerAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el jugador,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener el jugador,\n¡ Revise los logs del servidor !',
         player: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       player: null,
     };
   }

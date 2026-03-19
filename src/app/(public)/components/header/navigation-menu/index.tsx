@@ -2,7 +2,7 @@
 
 import { navigation } from './data';
 import Link from 'next/link';
-import "./navigation-menu.css";
+import './navigation-menu.css';
 
 export const NavigationMenu: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ export const NavigationMenu: React.FC = () => {
       <div className="navigation-content">
         {navigation.map((item) => (
           <div key={item.id} className="group navigation-items">
-            {(item.url == '#') ? (
+            {(item.url === '#') ? (
               <>
                 <span>{item.label}</span>
                 <div className="navigation-links-wrapper">

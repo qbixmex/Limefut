@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import Image from "next/image";
+import Image from 'next/image';
 import Link from 'next/link';
 import { headers } from 'next/headers';
 import { fetchUsersAction, updateUserStateAction } from '../(actions)';
@@ -10,16 +10,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Pencil,
   User,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { DeleteUser } from "./delete-user";
-import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { DeleteUser } from './delete-user';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
-import { TooltipContent } from '@/components/ui/tooltip';
 import Pagination from '@/shared/components/pagination';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { auth } from '@/lib/auth';
@@ -136,8 +135,8 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
@@ -151,7 +150,6 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
       )}
     </>
   );
-
 };
 
 export default UsersTable;

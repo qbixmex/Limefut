@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -50,9 +50,9 @@ export const createEmptyCustomPage = async (): CreateResponseAction => {
         };
       }
 
-      console.log("Name:", error.name);
-      console.log("Cause:", error.cause);
-      console.log("Message:", error.message);
+      console.log('Name:', error.name);
+      console.log('Cause:', error.cause);
+      console.log('Message:', error.message);
 
       return {
         ok: false,

@@ -75,7 +75,7 @@ const PaginationNumber: FC<PaginationNumberProps> = ({ page, url, isActive, posi
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.replace(url, { scroll: false });    
+    router.replace(url, { scroll: false });
   };
 
   const className = clsx(
@@ -108,7 +108,7 @@ const PaginationArrow: FC<PaginationArrowProps> = ({ url, direction, isDisabled 
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.replace(url, { scroll: false });    
+    router.replace(url, { scroll: false });
   };
 
   const className = clsx(

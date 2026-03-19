@@ -1,24 +1,24 @@
-import { Suspense, type FC } from "react";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import Image from "next/image";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
+import { Suspense, type FC } from 'react';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import Image from 'next/image';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
   TableHead,
   TableCell,
   TableRow,
-} from "@/components/ui/table";
-import { IdCardIcon, Pencil } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+} from '@/components/ui/table';
+import { IdCardIcon, Pencil } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { fetchCredentialAction } from "../../(actions)";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { fetchCredentialAction } from '../../(actions)';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 type Props = Readonly<{
   params: Promise<{

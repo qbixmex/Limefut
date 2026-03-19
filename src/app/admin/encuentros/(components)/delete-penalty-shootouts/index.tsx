@@ -16,7 +16,7 @@ import {
   AlertDialogCancel,
   AlertDialogDescription,
 } from '@/components/ui/alert-dialog';
-import "./styles.css";
+import './styles.css';
 import { toast } from 'sonner';
 import { deletePenaltyShootoutAction } from '../../(actions)/deletePenaltyShootoutAction';
 

@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { fetchLatestTournamentsAction } from "../../(actions)/fetchLatestTournamentsAction";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import Link from 'next/link';
+import { fetchLatestTournamentsAction } from '../../(actions)/fetchLatestTournamentsAction';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
-import { InfoIcon } from "lucide-react";
-import "./active-tournaments.css";
-import "../../styles.css";
+import { InfoIcon } from 'lucide-react';
+import './active-tournaments.css';
+import '../../styles.css';
 
 export const ActiveTournaments = async () => {
   const { tournaments } = await fetchLatestTournamentsAction();

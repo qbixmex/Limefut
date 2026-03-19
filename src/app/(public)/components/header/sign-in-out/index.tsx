@@ -1,17 +1,17 @@
 'use client';
 
-import type { FC } from "react";
-import { LogIn } from "lucide-react";
-import type { Session } from "@/lib/auth-client";
-import Link from "next/link";
+import type { FC } from 'react';
+import { LogIn } from 'lucide-react';
+import type { Session } from '@/lib/auth-client';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AuthNav } from "./AuthNav";
+import { AuthNav } from './AuthNav';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import "./styles.css";
+} from '@/components/ui/tooltip';
+import './styles.css';
 
 type Props = { session: Session | null };
 

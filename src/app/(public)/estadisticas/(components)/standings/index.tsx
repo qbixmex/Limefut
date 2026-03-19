@@ -1,6 +1,6 @@
-import { Suspense, type FC } from "react";
-import { StandingsTable } from "./standings-table";
-import { StandingsSkeleton } from "./standings-skeleton";
+import { Suspense, type FC } from 'react';
+import { StandingsTable } from './standings-table';
+import { StandingsSkeleton } from './standings-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -24,9 +24,9 @@ export const Standings: FC<Props> = async ({ searchParams }) => {
   return (
     <Suspense
       key={
-        `${tournament ?? 'tournament'}`
-        + `-${category ?? 'category'}`
-        + `-${format ?? 'format'}`
+        `${tournament ?? 'tournament'}` +
+        `-${category ?? 'category'}` +
+        `-${format ?? 'format'}`
       }
       fallback={<StandingsSkeleton />}
     >

@@ -45,11 +45,7 @@ export const updateGalleryImageAction = async ({
     title: formData.get('title') as string,
     image: formData.get('image') as File,
     position: Number(formData.get('position')),
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
   };
 
   const galleryVerified = editGalleryImageSchema.safeParse(rawData);
@@ -201,8 +197,8 @@ export const updateGalleryImageAction = async ({
             };
           }
 
-          console.log("Error Name:", error.name);
-          console.log("Error Message:", error.message);
+          console.log('Error Name:', error.name);
+          console.log('Error Message:', error.message);
 
           return {
             ok: false,
@@ -210,9 +206,9 @@ export const updateGalleryImageAction = async ({
             galleryImage: null,
           };
         }
-        console.log("Error Name:", (error as Error).name);
-        console.log("Error Cause:", (error as Error).cause);
-        console.log("Error Message:", (error as Error).message);
+        console.log('Error Name:', (error as Error).name);
+        console.log('Error Cause:', (error as Error).cause);
+        console.log('Error Message:', (error as Error).message);
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
@@ -223,9 +219,9 @@ export const updateGalleryImageAction = async ({
 
     return prismaTransaction;
   } catch (error) {
-    console.log("Error Name:", (error as Error).name);
-    console.log("Cause:", (error as Error).cause);
-    console.log("Error Message:", (error as Error).message);
+    console.log('Error Name:', (error as Error).name);
+    console.log('Cause:', (error as Error).cause);
+    console.log('Error Message:', (error as Error).message);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',

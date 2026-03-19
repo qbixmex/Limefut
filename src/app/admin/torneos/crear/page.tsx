@@ -1,16 +1,16 @@
-import { randomUUID } from "node:crypto";
+import { randomUUID } from 'node:crypto';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { TournamentForm } from "../(components)/tournamentForm";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import type { Session } from "@/lib/auth-client";
-import { Suspense } from "react";
+} from '@/components/ui/card';
+import { TournamentForm } from '../(components)/tournamentForm';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
+import type { Session } from '@/lib/auth-client';
+import { Suspense } from 'react';
 
 const CreateTournamentPage = async () => {
   return (

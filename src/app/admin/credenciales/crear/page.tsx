@@ -1,13 +1,13 @@
-import { headers } from "next/headers";
+import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { CredentialForm } from "../(components)/CredentialForm";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+} from '@/components/ui/card';
+import { CredentialForm } from '../(components)/CredentialForm';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 const CreateMatchPage = async () => {
   const session = await auth.api.getSession({ headers: await headers() });

@@ -23,14 +23,14 @@ type Props = Readonly<{
 export const GalleriesTable: FC<Props> = async ({
   query = '',
   currentPage = 1,
-}) => {  
+}) => {
   const session = await auth.api.getSession({ headers: await headers() });
-  
+
   const {
     galleries = [],
     pagination,
   } = await fetchGalleriesAction({
-    userRole: session?.user.roles ?? [], 
+    userRole: session?.user.roles ?? [],
     page: currentPage as number,
     take: 12,
     searchTerm: query,
@@ -106,8 +106,8 @@ export const GalleriesTable: FC<Props> = async ({
               </TableBody>
             </Table>
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>

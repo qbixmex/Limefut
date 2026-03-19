@@ -1,5 +1,5 @@
-import { fetchPublicHeroBannersAction } from "../../(actions)/home/fetchPublicHeroBannersAction";
-import { HeroCarousel } from "../carousel/hero-carousel";
+import { fetchPublicHeroBannersAction } from '../../(actions)/home/fetchPublicHeroBannersAction';
+import { HeroCarousel } from '../carousel/hero-carousel';
 
 export const Hero = async () => {
   const { heroBanners } = await fetchPublicHeroBannersAction();

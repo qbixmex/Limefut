@@ -47,17 +47,9 @@ export const updateHeroBannerAction = async ({
     description: formData.get('description') as string,
     image: formData.get('image') as File,
     dataAlignment: formData.get('dataAlignment'),
-    showData: (formData.get('showData') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    showData: formData.get('showData') === 'true',
     position: Number(formData.get('position') ?? 0),
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
   };
 
   const heroBannerVerified = editHeroBannerSchema.safeParse(rawData);
@@ -90,7 +82,7 @@ export const updateHeroBannerAction = async ({
         const heroBannerDuplicated = await transaction.heroBanner.count({
           where: {
             title: heroBannerVerified.data.title as string,
-            id: { not: heroBannerId }, // Exclude current page 
+            id: { not: heroBannerId }, // Exclude current page
           },
         });
 
@@ -231,9 +223,9 @@ export const updateHeroBannerAction = async ({
             };
           }
 
-          console.log("Name:", error.name);
-          console.log("Cause:", error.cause);
-          console.log("Message:", error.message);
+          console.log('Name:', error.name);
+          console.log('Cause:', error.cause);
+          console.log('Message:', error.message);
 
           return {
             ok: false,

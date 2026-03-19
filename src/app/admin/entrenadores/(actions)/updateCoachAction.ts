@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
-import { uploadImage, deleteImage } from "@/shared/actions";
+import { uploadImage, deleteImage } from '@/shared/actions';
 import { editCoachSchema } from '@/shared/schemas';
 import type { Coach } from '@/shared/interfaces';
 
@@ -51,11 +51,7 @@ export const updateCoachAction = async ({
     nationality: formData.get('nationality') ?? undefined,
     description: formData.get('description') ?? undefined,
     image: imageFile,
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
     teamsIds: formData.get('teamsIds')
       ? JSON.parse(formData.get('teamsIds') as string)
       : [],
@@ -128,11 +124,10 @@ export const updateCoachAction = async ({
           updatedCoach.imagePublicID = imageUploaded.publicId;
         }
 
-
         // Update Cache
-        updateTag("admin-coaches");
-        updateTag("admin-coach");
-        updateTag("admin-coaches-for-team");
+        updateTag('admin-coaches');
+        updateTag('admin-coach');
+        updateTag('admin-coaches-for-team');
 
         return {
           ok: true,

@@ -1,9 +1,9 @@
 'use server';
 
-import type { Prisma } from "@/generated/prisma/client";
-import prisma from "@/lib/prisma";
-import type { Pagination } from "@/shared/interfaces";
-import { cacheLife, cacheTag } from "next/cache";
+import type { Prisma } from '@/generated/prisma/client';
+import prisma from '@/lib/prisma';
+import type { Pagination } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   page?: number;
@@ -27,11 +27,11 @@ export type ResponseFetchAction = Promise<{
 }>;
 
 export const fetchCoachesAction = async (options?: Options): ResponseFetchAction => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-coaches");
-  
+  cacheLife('days');
+  cacheTag('admin-coaches');
+
   let { page = 1, take = 12 } = options ?? {};
 
   // In case is an invalid number like (lorem)
@@ -65,7 +65,7 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
     const coaches = await prisma.coach.findMany({
       where: whereCondition,
       orderBy: { name: 'asc' },
-      take: take,
+      take,
       skip: (page - 1) * take,
       select: {
         id: true,
@@ -96,7 +96,7 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los entrenadores");
+      console.log('Error al intentar obtener los entrenadores');
       return {
         ok: false,
         message: error.message,
@@ -107,7 +107,7 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los entrenadores, revise los logs del servidor",
+      message: 'Error inesperado al obtener los entrenadores, revise los logs del servidor',
       coaches: null,
       pagination: null,
     };

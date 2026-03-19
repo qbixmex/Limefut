@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 2; // 2MB
 const ACCEPTED_FILE_TYPES = [
@@ -24,14 +24,14 @@ export const createPlayerSchema = z.object({
     .max(100, { message: '¡ El teléfono debe ser menor a 100 caracteres !' })
     .optional(),
   birthday: z
-    .date({ message: "La fecha de nacimiento debe ser una fecha válida" })
+    .date({ message: 'La fecha de nacimiento debe ser una fecha válida' })
     .optional(),
   nationality: z.string()
     .min(3, { message: '¡ La nacionalidad debe ser mayor a 3 caracteres !' })
     .max(100, { message: '¡ La nacionalidad debe ser menor a 100 caracteres !' })
     .optional(),
   image: z
-    .instanceof(File, { message: "La imagen debe ser un archivo" })
+    .instanceof(File, { message: 'La imagen debe ser un archivo' })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),

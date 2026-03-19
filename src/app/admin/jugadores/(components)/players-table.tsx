@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import Link from 'next/link';
-import Image from "next/image";
-import { auth } from "@/lib/auth";
-import { fetchPlayersAction, updatePlayerStateAction } from "../(actions)";
+import Image from 'next/image';
+import { auth } from '@/lib/auth';
+import { fetchPlayersAction, updatePlayerStateAction } from '../(actions)';
 import {
   Table,
   TableBody,
@@ -10,17 +10,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Pencil, InfoIcon } from "lucide-react";
+} from '@/components/ui/table';
+import { Pencil, InfoIcon } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { SoccerPlayer } from "@/shared/components/icons";
-import { Badge } from "@/components/ui/badge";
-import { DeletePlayer } from "../(components)/delete-player";
+} from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { SoccerPlayer } from '@/shared/components/icons';
+import { Badge } from '@/components/ui/badge';
+import { DeletePlayer } from '../(components)/delete-player';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
@@ -156,8 +156,8 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
               className="absolute -top-5 right-0"
             />
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
@@ -171,7 +171,6 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
       )}
     </>
   );
-
 };
 
 export default PlayersTable;

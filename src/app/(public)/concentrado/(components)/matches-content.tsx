@@ -35,7 +35,6 @@ export const MatchesContent: FC<Props> = async ({ searchParamsPromise }) => {
       </Suspense>
     </>
   );
-
 };
 
 export default MatchesContent;

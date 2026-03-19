@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type GalleryType = {
   title: string;
@@ -36,7 +36,7 @@ export type ResponseAction = Promise<{
 }>;
 
 export const fetchGalleryAction = async (galleryPermalink: string): ResponseAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-gallery');
@@ -93,7 +93,7 @@ export const fetchGalleryAction = async (galleryPermalink: string): ResponseActi
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener la galería");
+      console.log('Error al intentar obtener la galería');
       return {
         ok: false,
         message: error.message,
@@ -103,7 +103,7 @@ export const fetchGalleryAction = async (galleryPermalink: string): ResponseActi
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener la galería, revise los logs del servidor",
+      message: 'Error inesperado al obtener la galería, revise los logs del servidor',
       gallery: null,
     };
   }

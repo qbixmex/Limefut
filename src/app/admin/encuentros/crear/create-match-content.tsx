@@ -72,5 +72,3 @@ const CreateMatchContent: FC<CreateMatchContentProps> = async ({ tournamentId, w
     </section>
   );
 };
-
-

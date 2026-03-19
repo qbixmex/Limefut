@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
-import deleteImage from "./deleteImageAction";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
+import deleteImage from './deleteImageAction';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;

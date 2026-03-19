@@ -1,1 +1,1 @@
-export { default as TournamentsSelector } from "./tournaments-selector";
+export { default as TournamentsSelector } from './tournaments-selector';

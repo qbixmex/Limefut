@@ -159,8 +159,8 @@ const InitializedMDXEditor = ({ editorRef, uploadImage, ...props }: Props) => {
   return (
     <MDXEditor
       className={cn({
-        "light-editor": resolvedTheme === 'light',
-        "dark-theme dark-editor": resolvedTheme === 'dark',
+        'light-editor': resolvedTheme === 'light',
+        'dark-theme dark-editor': resolvedTheme === 'dark',
       })}
       contentEditableClassName="prose"
       translation={(key, defaultValue, interpolations) => {
@@ -187,7 +187,7 @@ const InitializedMDXEditor = ({ editorRef, uploadImage, ...props }: Props) => {
         imagePlugin({
           imageUploadHandler: async (file: File) => {
             try {
-              let url = "";
+              let url = '';
               if (typeof uploadImage === 'function') {
                 url = await uploadImage(file);
               }
@@ -209,7 +209,7 @@ const InitializedMDXEditor = ({ editorRef, uploadImage, ...props }: Props) => {
             java: 'Java',
             kt: 'Kotlin',
             c: 'C',
-            "c++": 'C++',
+            'c++': 'C++',
             php: 'PHP',
           },
           codeMirrorExtensions: [basicDark],

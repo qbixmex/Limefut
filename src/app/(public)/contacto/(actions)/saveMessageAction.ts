@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import type { ContactMessage } from "@/shared/interfaces";
-import { sendMessageSchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import type { ContactMessage } from '@/shared/interfaces';
+import { sendMessageSchema } from '@/shared/schemas';
+import { updateTag } from 'next/cache';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -14,7 +14,6 @@ type ResponseCreateAction = Promise<{
 export const saveMessageAction = async (
   formData: FormData,
 ): ResponseCreateAction => {
-
   const rawData = Object.fromEntries(formData.entries());
 
   const messageVerified = sendMessageSchema.safeParse(rawData);

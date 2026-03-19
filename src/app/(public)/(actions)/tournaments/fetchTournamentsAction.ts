@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type TournamentType = {
   id: string;
@@ -19,7 +19,7 @@ type ResponseAction = Promise<{
 }>;
 
 export const fetchTournamentsAction = async (): ResponseAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-tournaments-list');
@@ -49,7 +49,7 @@ export const fetchTournamentsAction = async (): ResponseAction => {
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los torneos");
+      console.log('Error al intentar obtener los torneos');
       return {
         ok: false,
         message: error.message,
@@ -59,7 +59,7 @@ export const fetchTournamentsAction = async (): ResponseAction => {
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los torneos, revise los logs del servidor",
+      message: 'Error inesperado al obtener los torneos, revise los logs del servidor',
       tournaments: [],
     };
   }

@@ -49,4 +49,3 @@ export const YouTubeButton = () => {
 };
 
 export default YouTubeButton;
-

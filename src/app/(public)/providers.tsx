@@ -1,6 +1,6 @@
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/sonner";
-import type { ReactNode } from "react";
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/sonner';
+import type { ReactNode } from 'react';
 
 type Props = { readonly children?: ReactNode; };
 
@@ -15,7 +15,7 @@ export const Providers: React.FC<Props> = ({ children }) => {
       {children}
       <Toaster
         position="top-right"
-        toastOptions={{ style: { width: 400 }}}
+        toastOptions={{ style: { width: 400 } }}
         richColors
       />
     </ThemeProvider>

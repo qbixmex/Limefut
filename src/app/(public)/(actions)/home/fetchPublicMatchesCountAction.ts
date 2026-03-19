@@ -1,7 +1,7 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type ResponseFetchAction = Promise<{
   ok: boolean;
@@ -10,7 +10,7 @@ export type ResponseFetchAction = Promise<{
 }>;
 
 export const fetchPublicMatchesAction = async (): ResponseFetchAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-matches-count');
@@ -27,7 +27,7 @@ export const fetchPublicMatchesAction = async (): ResponseFetchAction => {
 
     const data = await prisma.match.findMany({
       where: {
-        status: { not: "canceled" },
+        status: { not: 'canceled' },
         matchDate: {
           gte: startDate,
           lte: endDate,
@@ -50,7 +50,7 @@ export const fetchPublicMatchesAction = async (): ResponseFetchAction => {
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los encuentros");
+      console.log('Error al intentar obtener los encuentros');
       return {
         ok: false,
         message: error.message,
@@ -60,7 +60,7 @@ export const fetchPublicMatchesAction = async (): ResponseFetchAction => {
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
+      message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',
       matchesDates: [],
     };
   }

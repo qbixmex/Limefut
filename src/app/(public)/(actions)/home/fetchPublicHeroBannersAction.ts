@@ -1,7 +1,7 @@
 'use server';
 
-import { cacheLife, cacheTag } from "next/cache";
-import prisma from "@/lib/prisma";
+import { cacheLife, cacheTag } from 'next/cache';
+import prisma from '@/lib/prisma';
 
 export type HeroBanner = {
   id: string;
@@ -20,13 +20,12 @@ export type ResponseAction = Promise<{
 }>;
 
 export const fetchPublicHeroBannersAction = async (): ResponseAction => {
-  "use cache";
+  'use cache';
 
   cacheLife('days');
   cacheTag('public-banners');
 
   try {
-
     const heroBanners = await prisma.heroBanner.findMany({
       where: { active: true },
       orderBy: { position: 'asc' },
@@ -56,7 +55,7 @@ export const fetchPublicHeroBannersAction = async (): ResponseAction => {
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los encuentros");
+      console.log('Error al intentar obtener los encuentros');
       return {
         ok: false,
         message: error.message,
@@ -66,7 +65,7 @@ export const fetchPublicHeroBannersAction = async (): ResponseAction => {
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los encuentros, revise los logs del servidor",
+      message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',
       heroBanners: [],
     };
   }

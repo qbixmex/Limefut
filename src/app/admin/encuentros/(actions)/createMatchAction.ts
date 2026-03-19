@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { createMatchSchema } from "@/shared/schemas";
-import { updateTag } from "next/cache";
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from "@/shared/enums";
+import prisma from '@/lib/prisma';
+import { createMatchSchema } from '@/shared/schemas';
+import { updateTag } from 'next/cache';
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -168,10 +168,10 @@ export const createMatchAction = async (
           match: null,
         };
       }
-      console.log("CAUSE:", error.cause);
-      console.log("NAME:", error.name);
-      console.log("META:", error.meta);
-      console.log("MESSAGE:", error.message);
+      console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
+      console.log('META:', error.meta);
+      console.log('MESSAGE:', error.message);
       console.log(error.message);
       return {
         ok: false,

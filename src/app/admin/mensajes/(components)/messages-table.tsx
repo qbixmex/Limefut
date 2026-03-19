@@ -9,11 +9,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Info } from "lucide-react";
-import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
+} from '@/components/ui/table';
+import { Info } from 'lucide-react';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
-import { TooltipContent } from '@/components/ui/tooltip';
 import Pagination from '@/shared/components/pagination';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -111,8 +110,8 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn("flex justify-center mt-10", {
-            'hidden': pagination!.totalPages === 1,
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
           })}>
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
@@ -126,7 +125,6 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
       )}
     </>
   );
-
 };
 
 export default MessagesTable;

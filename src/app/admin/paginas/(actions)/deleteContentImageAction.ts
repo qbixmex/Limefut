@@ -1,8 +1,8 @@
 'use server';
 
-import { updateTag } from "next/cache";
-import prisma from "@/lib/prisma";
-import { deleteImage } from "@/shared/actions";
+import { updateTag } from 'next/cache';
+import prisma from '@/lib/prisma';
+import { deleteImage } from '@/shared/actions';
 
 type DeleteContentImageResponse = {
   ok: boolean;

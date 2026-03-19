@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { ContactMessage } from "@/shared/interfaces";
+import type { ContactMessage } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type FetchResponse = Promise<{
@@ -14,10 +14,10 @@ export const fetchMessageAction = async (
   id: string,
   userRole: string[] | null,
 ): FetchResponse => {
-  "use cache";
+  'use cache';
 
-  cacheLife("weeks");
-  cacheTag("admin-message");
+  cacheLife('weeks');
+  cacheTag('admin-message');
 
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
@@ -50,13 +50,13 @@ export const fetchMessageAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: "No se pudo obtener el mensaje,\n¡ Revise los logs del servidor !",
+        message: 'No se pudo obtener el mensaje,\n¡ Revise los logs del servidor !',
         contactMessage: null,
       };
     }
     return {
       ok: false,
-      message: "Error inesperado del servidor,\n¡ Revise los logs del servidor !",
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
       contactMessage: null,
     };
   }

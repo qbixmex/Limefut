@@ -59,7 +59,7 @@ export const updatePageAction = async ({
         const pageDuplicated = await transaction.customPage.count({
           where: {
             permalink: pageVerified.data.permalink as string,
-            id: { not: pageId }, // Exclude current page 
+            id: { not: pageId }, // Exclude current page
           },
         });
 

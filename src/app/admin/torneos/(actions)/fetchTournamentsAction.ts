@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import type { Prisma } from "@/generated/prisma/client";
-import type { Pagination } from "@/shared/interfaces";
-import { cacheLife, cacheTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import type { Prisma } from '@/generated/prisma/client';
+import type { Pagination } from '@/shared/interfaces';
+import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   page?: number;
@@ -32,10 +32,10 @@ export type ResponseFetch = Promise<{
 }>;
 
 export const fetchTournamentsAction = async (options?: Options): ResponseFetch => {
-  "use cache";
+  'use cache';
 
-  cacheLife("days");
-  cacheTag("admin-tournaments");
+  cacheLife('days');
+  cacheTag('admin-tournaments');
 
   let { page = 1, take = 12 } = options ?? {};
 
@@ -80,7 +80,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
           select: { teams: true },
         },
       },
-      take: take,
+      take,
       skip: (page - 1) * take,
     });
 
@@ -110,7 +110,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log("Error al intentar obtener los torneos");
+      console.log('Error al intentar obtener los torneos');
       return {
         ok: false,
         message: error.message,
@@ -121,7 +121,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
     console.log(error);
     return {
       ok: false,
-      message: "Error inesperado al obtener los torneos, revise los logs del servidor",
+      message: 'Error inesperado al obtener los torneos, revise los logs del servidor',
       tournaments: null,
       pagination: null,
     };

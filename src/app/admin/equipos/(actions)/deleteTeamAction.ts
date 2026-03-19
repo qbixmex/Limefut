@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import deleteImage from "@/shared/actions/deleteImageAction";
-import { updateTag } from "next/cache";
+import prisma from '@/lib/prisma';
+import deleteImage from '@/shared/actions/deleteImageAction';
+import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -41,7 +41,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
 
   const matchesCount = await prisma.match.count({
     where: {
-      OR : [
+      OR: [
         { localId: teamId },
         { visitorId: teamId },
       ],
@@ -51,9 +51,9 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   if (matchesCount > 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el equipo'
-        + ` porque aparece en ( ${matchesCount} )`
-        + ` encuentro${matchesCount > 0 ? 's' : ''} !`,
+      message: '¡ No se puede eliminar el equipo' +
+        ` porque aparece en ( ${matchesCount} )` +
+        ` encuentro${matchesCount > 0 ? 's' : ''} !`,
     };
   }
 
@@ -64,9 +64,9 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   if (standingsCount > 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el equipo'
-        + ` porque aparece en la tabla de posiciones`
-        + ` y probablemente contenga estadísticas !`,
+      message: '¡ No se puede eliminar el equipo' +
+        ' porque aparece en la tabla de posiciones' +
+        ' y probablemente contenga estadísticas !',
     };
   }
 
@@ -78,7 +78,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   if (teamDeleted.imagePublicID) {
     const response = await deleteImage(teamDeleted.imagePublicID);
     if (!response.ok) {
-      throw 'Error al eliminar la imagen de cloudinary';
+      throw new Error('Error al eliminar la imagen de cloudinary');
     }
   }
 
@@ -86,7 +86,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   updateTag('admin-teams');
   updateTag('admin-teams-for-coach');
   updateTag('admin-teams-for-player');
-  updateTag("admin-teams-for-gallery");
+  updateTag('admin-teams-for-gallery');
   updateTag('admin-teams-for-match');
   updateTag('admin-team');
   updateTag('public-teams');
@@ -95,6 +95,6 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
 
   return {
     ok: true,
-    message: `¡ El equipo ha sido eliminado correctamente 👍 !`,
+    message: '¡ El equipo ha sido eliminado correctamente 👍 !',
   };
 };

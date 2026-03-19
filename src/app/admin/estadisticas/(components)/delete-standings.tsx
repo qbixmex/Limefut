@@ -35,7 +35,7 @@ export const DeleteStandings: FC<Props> = ({ tournamentId }) => {
       toast.error((error as Error).message);
     }
   };
-  
+
   return (
     <AlertDialog>
       <Tooltip>

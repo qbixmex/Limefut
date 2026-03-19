@@ -1,23 +1,23 @@
-import { Suspense, type FC } from "react";
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { fetchUserAction } from "../../(actions)/fetchUserAction";
-import Image from "next/image";
+import { Suspense, type FC } from 'react';
+import { redirect } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { fetchUserAction } from '../../(actions)/fetchUserAction';
+import Image from 'next/image';
 import {
   Table,
   TableBody,
   TableHead,
   TableCell,
   TableRow,
-} from "@/components/ui/table";
-import { Pencil, UserIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+} from '@/components/ui/table';
+import { Pencil, UserIcon } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { type User } from "@/shared/interfaces";
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import { type User } from '@/shared/interfaces';
 
 type Props = Readonly<{
   params: Promise<{

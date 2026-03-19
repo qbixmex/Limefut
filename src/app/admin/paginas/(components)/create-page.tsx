@@ -1,11 +1,11 @@
 'use client';
 
-import type { FormEvent } from "react";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { createEmptyCustomPage } from "../(actions)/createEmptyCustomPage";
-import { useRouter } from "next/navigation";
+import type { FormEvent } from 'react';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { createEmptyCustomPage } from '../(actions)/createEmptyCustomPage';
+import { useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export const CreatePage = () => {

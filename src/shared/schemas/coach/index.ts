@@ -1,2 +1,2 @@
-export { createCoachSchema } from "./createCoachSchema";
-export { editCoachSchema } from "./editCoachSchema";
+export { createCoachSchema } from './createCoachSchema';
+export { editCoachSchema } from './editCoachSchema';

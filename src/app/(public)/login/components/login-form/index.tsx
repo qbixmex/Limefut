@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
   Form,
@@ -12,9 +12,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Eye, EyeClosed, LoaderCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { signInAction } from '@/app/(auth)/signInAction';
@@ -48,8 +48,8 @@ export const LoginForm = () => {
   const onSubmit = async ({ email, password }: z.infer<typeof loginSchema>) => {
     const formData = new FormData();
 
-    formData.append("email", email);
-    formData.append("password", password);
+    formData.append('email', email);
+    formData.append('password', password);
 
     const { ok, message } = await signInAction(formData);
 
@@ -102,7 +102,7 @@ export const LoginForm = () => {
                     type="button"
                     onClick={() => setPasswordVisible(prev => !prev)}
                     className={cn('showHidePassword', {
-                      'hidden': field.value?.length === 0,
+                      hidden: field.value?.length === 0,
                     })}
                   >
                     {passwordVisible ? <Eye /> : <EyeClosed />}

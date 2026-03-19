@@ -1,15 +1,15 @@
 'use client';
 
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { ROUTES } from "@/shared/constants/routes";
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { ROUTES } from '@/shared/constants/routes';
 
 export const CreateMatch = () => {
   const searchParams = useSearchParams();
-  
+
   const getURL = () => {
     const params = new URLSearchParams(searchParams);
 

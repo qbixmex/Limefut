@@ -1,1 +1,1 @@
-export * from "./fetchTournamentsAction";
+export * from './fetchTournamentsAction';

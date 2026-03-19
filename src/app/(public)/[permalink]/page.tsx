@@ -2,7 +2,7 @@ import { Suspense, type FC } from 'react';
 import { PageWrapper } from './page-wrapper';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { fetchCustomPageMetadataAction } from './(actions)/fetchCustomPageMetadata';
-import "./styles.css";
+import './styles.css';
 
 type Props = Readonly<{
   params: Promise<{
@@ -20,7 +20,7 @@ export const generateMetadata = async (
   return {
     title: pageMetadata?.seoTitle ?? (await parent).title,
     description: pageMetadata?.seoDescription ?? (await parent).description,
-    robots: pageMetadata?.seoRobots ?? "index, follow",
+    robots: pageMetadata?.seoRobots ?? 'index, follow',
   };
 };
 

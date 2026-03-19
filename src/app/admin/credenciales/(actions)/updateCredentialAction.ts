@@ -114,9 +114,9 @@ export const updateCredentialAction = async (
               credential: null,
             };
           }
-          console.log("Mensaje de Error:");
+          console.log('Mensaje de Error:');
           console.log(error.meta);
-          console.log("Error:", error.message);
+          console.log('Error:', error.message);
           return {
             ok: false,
             message: '¡ Error al actualizar la credencial, revise los logs del servidor !',

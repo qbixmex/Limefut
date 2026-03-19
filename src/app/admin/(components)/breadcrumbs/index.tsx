@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity } from "react";
+import { Activity } from 'react';
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -8,11 +8,11 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
   BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
-import { ChevronRight } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { validate as isUUID } from "uuid";
-import Link from "next/link";
+} from '@/components/ui/breadcrumb';
+import { ChevronRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { validate as isUUID } from 'uuid';
+import Link from 'next/link';
 
 export const Breadcrumbs = () => {
   const path = usePathname();
@@ -41,8 +41,8 @@ export const Breadcrumbs = () => {
           pathSegments.length > 2 && (
             <Activity
               mode={
-                ['editar', 'crear', 'detalles', 'perfil'].includes(pathSegments[2].toLowerCase())
-                || isUUID(pathSegments[2])
+                ['editar', 'crear', 'detalles', 'perfil'].includes(pathSegments[2].toLowerCase()) ||
+                isUUID(pathSegments[2])
                 ? 'hidden' : 'visible'
               }
             >

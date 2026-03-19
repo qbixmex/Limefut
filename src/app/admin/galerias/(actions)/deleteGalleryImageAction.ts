@@ -1,8 +1,8 @@
 'use server';
 
-import prisma from "@/lib/prisma";
-import { updateTag } from "next/cache";
-import { deleteImage } from "~/src/shared/actions";
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
+import { deleteImage } from '~/src/shared/actions';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -14,7 +14,7 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
     where: { id: galleryImageId },
   });
 
-  if (galleryImageExists == 0) {
+  if (galleryImageExists === 0) {
     return {
       ok: false,
       message: '¡ No se puede eliminar la imagen de la galería, quizás fue eliminada ó no existe !',
@@ -38,7 +38,7 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
   if (galleryImage.imagePublicID) {
     const response = await deleteImage(galleryImage.imagePublicID);
     if (!response.ok) {
-      throw 'Error al eliminar la imagen de cloudinary';
+      throw new Error('Error al eliminar la imagen de cloudinary');
     }
   }
 
@@ -55,11 +55,11 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
   updateTag('dashboard-images');
   updateTag('public-galleries');
   updateTag('public-gallery');
-  updateTag("public-galleries");
-  updateTag("public-gallery");
+  updateTag('public-galleries');
+  updateTag('public-gallery');
 
   return {
     ok: true,
-    message: `¡ La imagen de la galería ha sido eliminada correctamente 👍 !`,
+    message: '¡ La imagen de la galería ha sido eliminada correctamente 👍 !',
   };
 };

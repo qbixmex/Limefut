@@ -1,2 +1,2 @@
-export { createPlayerSchema } from "./createPlayerSchema";
-export { editPlayerSchema } from "./editPlayerSchema";
+export { createPlayerSchema } from './createPlayerSchema';
+export { editPlayerSchema } from './editPlayerSchema';

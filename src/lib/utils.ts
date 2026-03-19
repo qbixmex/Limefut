@@ -1,8 +1,8 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { ROBOTS } from "../shared/interfaces";
-import { PAGE_STATUS } from "../shared/interfaces/Page";
-import { GENDER, MATCH_STATUS, type MATCH_STATUS_TYPE } from "../shared/enums";
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import { ROBOTS } from '../shared/interfaces';
+import { PAGE_STATUS } from '../shared/interfaces/Page';
+import { GENDER, MATCH_STATUS, type MATCH_STATUS_TYPE } from '../shared/enums';
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -32,12 +32,12 @@ export const pad = (n: number, d = 2) => n.toString().padStart(d, '0');
 export const slugify = (name: string): string => {
   return name
     .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // remove accents
-    .replace(/\.[^/.]+$/, "") // removes extension
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // remove accents
+    .replace(/\.[^/.]+$/, '') // removes extension
     .trim() // removes trailing spaces
-    .replace(/[^a-z0-9]+/g, "-") // replace non-alphanumeric characters with dashes
-    .replace(/^-+|-+$/g, ""); // remove leading and trailing dashes
+    .replace(/[^a-z0-9]+/g, '-') // replace non-alphanumeric characters with dashes
+    .replace(/^-+|-+$/g, ''); // remove leading and trailing dashes
 };
 
 /**
@@ -90,7 +90,7 @@ export const getStageTranslation = (stage: string): {
       | 'outline-success'
       | 'outline-secondary';
   } => {
-    switch(stage) {
+    switch (stage) {
       case 'regular':
         return {
           variant: 'outline-info',
@@ -114,10 +114,9 @@ export const getStageTranslation = (stage: string): {
     }
   };
 
-
 /**
  * Gets the variant for the SEO robots badge.
- * 
+ *
  * @param robots - The SEO robots value.
  * @example ```typescript
  * getVariant("index, follow");
@@ -142,7 +141,7 @@ export const getBadgeRobotsVariant = (robots: ROBOTS) => {
 
 /**
  * Translates the SEO robots to a user friendly string.
- * 
+ *
  * @param robots - The SEO robots value.
  * @example ```typescript
  * getRobots("index, follow");
@@ -153,21 +152,21 @@ export const getBadgeRobotsVariant = (robots: ROBOTS) => {
 export const getRobots = (robots: ROBOTS) => {
   switch (robots) {
     case ROBOTS.INDEX_FOLLOW:
-      return "indexar, seguir";
+      return 'indexar, seguir';
     case ROBOTS.INDEX_NO_FOLLOW:
-      return "indexar, no seguir";
+      return 'indexar, no seguir';
     case ROBOTS.NO_INDEX_FOLLOW:
-      return "no indexar, seguir";
+      return 'no indexar, seguir';
     case ROBOTS.NO_INDEX_NO_FOLLOW:
-      return "no indexar, no seguir";
+      return 'no indexar, no seguir';
     default:
-      return "no indexar, no seguir";
+      return 'no indexar, no seguir';
   }
 };
 
 /**
  * Translates the page status to a user friendly string.
- * 
+ *
  * @param status - The page status value.
  * @example ```typescript
  * getPageStatus(PageStatus.DRAFT);
@@ -188,35 +187,35 @@ export const getPageStatus = (status: PAGE_STATUS): {
   switch (status) {
     case PAGE_STATUS.DRAFT:
       return {
-        label: "Borrador",
+        label: 'Borrador',
         variant: 'outline-secondary',
       };
     case PAGE_STATUS.HOLD:
       return {
-        label: "Retenido",
-        variant: "outline-warning",
+        label: 'Retenido',
+        variant: 'outline-warning',
       };
     case PAGE_STATUS.UNPUBLISHED:
       return {
-        label: "No Publicado",
-        variant: "outline-info",
+        label: 'No Publicado',
+        variant: 'outline-info',
       };
     case PAGE_STATUS.PUBLISHED:
       return {
-        label: "Publicado",
-        variant: "outline-success",
+        label: 'Publicado',
+        variant: 'outline-success',
       };
     default:
       return {
-        label: "Desconocido",
-        variant: "outline-secondary",
+        label: 'Desconocido',
+        variant: 'outline-secondary',
       };
   }
 };
 
 /**
  * Translates the alignment value to Spanish.
- * 
+ *
  * @param alignment - The alignment value ("left", "center", "right").
  * @example ```typescript
  * getAlignmentTranslation("left");
@@ -229,21 +228,21 @@ export const getPageStatus = (status: PAGE_STATUS): {
  * @returns The alignment in Spanish.
  */
 export const getAlignmentTranslation = (alignment: string) => {
-  switch(alignment) {
-    case "left":
-      return "izquierda";
-    case "center":
-      return "centro";
-    case "right":
-      return "derecha";
+  switch (alignment) {
+    case 'left':
+      return 'izquierda';
+    case 'center':
+      return 'centro';
+    case 'right':
+      return 'derecha';
     default:
-      return "desconocida";
+      return 'desconocida';
   }
 };
 
 /**
  * Translates the gender to "Varonil" o "Femenil".
- * 
+ *
  * @param gender - The gender value as "male" or "female".
  * @example ```typescript
  * getGenderTranslation("male");
@@ -251,23 +250,23 @@ export const getAlignmentTranslation = (alignment: string) => {
  * getGenderTranslation("female");
  * // Returns "Femenil"
  * ```
- * 
+ *
  * @returns The translated gender in Spanish.
  */
 export const getGenderTranslation = (gender: string) => {
-  switch(gender) {
+  switch (gender) {
     case GENDER.FEMALE:
-      return "femenil";
+      return 'femenil';
     case GENDER.MALE:
-      return "varonil";
+      return 'varonil';
     default:
-      return "desconocido";
+      return 'desconocido';
   }
 };
 
 /**
  * Translates the match status to Spanish.
- * 
+ *
  * @param status - The match status value.
  * @example ```typescript
  * getStatusTranslation(MATCH_STATUS.SCHEDULED);
@@ -284,25 +283,25 @@ export const getGenderTranslation = (gender: string) => {
  * @returns The status translated in Spanish.
  */
 export const getStatusTranslation = (status: MATCH_STATUS_TYPE): string => {
-  switch(status) {
+  switch (status) {
     case MATCH_STATUS.SCHEDULED:
-      return "programado";
+      return 'programado';
     case MATCH_STATUS.IN_PROGRESS:
-      return "en progreso";
+      return 'en progreso';
     case MATCH_STATUS.POST_POSED:
-      return "pospuesto";
+      return 'pospuesto';
     case MATCH_STATUS.CANCELED:
-      return "cancelado";
+      return 'cancelado';
     case MATCH_STATUS.COMPLETED:
-      return "completado";
+      return 'completado';
     default:
-      return "desconocido";
+      return 'desconocido';
   }
 };
 
 /**
  * Shuffles an array in place using the Fisher-Yates algorithm.
- * 
+ *
  * @param array - The array to shuffle.
  * @see https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
  * @example ```typescript

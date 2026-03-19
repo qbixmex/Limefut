@@ -4,7 +4,7 @@ import { type FC, useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { SearchIcon, XIcon } from 'lucide-react';
-import "./styles.css";
+import './styles.css';
 
 type Props = Readonly<{
   placeholder?: string;
@@ -15,7 +15,7 @@ export const Search: FC<Props> = ({ placeholder }) => {
   const query = searchParams.get('query')?.toString() ?? '';
   const pathname = usePathname();
   const router = useRouter();
-  const [ inputValue, setInputValue ] = useState(query);
+  const [inputValue, setInputValue] = useState(query);
 
   // Synchronize input value with URL param.
   // This is useful if the user navigates with browser back and forward button.
@@ -62,7 +62,6 @@ export const Search: FC<Props> = ({ placeholder }) => {
       </button>
     </div>
   );
-
 };
 
 export default Search;

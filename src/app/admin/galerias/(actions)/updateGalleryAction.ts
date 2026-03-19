@@ -46,11 +46,7 @@ export const updateGalleryAction = async ({
     tournamentId: formData.get('tournamentId'),
     teamId: formData.get('teamId'),
     galleryDate: new Date(formData.get('galleryDate') as string),
-    active: (formData.get('active') === 'true')
-      ? true
-      : (formData.get('active') === 'false')
-        ? false
-        : false,
+    active: formData.get('active') === 'true',
   };
 
   const galleryVerified = editGallerySchema.safeParse(rawData);
@@ -114,8 +110,8 @@ export const updateGalleryAction = async ({
             };
           }
 
-          console.log("Error Name:", error.name);
-          console.log("Error Message:", error.message);
+          console.log('Error Name:', error.name);
+          console.log('Error Message:', error.message);
 
           return {
             ok: false,

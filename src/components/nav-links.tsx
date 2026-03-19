@@ -1,15 +1,14 @@
 'use client';
 
-import type { FC } from "react";
+import type { FC } from 'react';
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import type { LucideIcon } from "lucide-react";
-
+} from '@/components/ui/sidebar';
+import type { LucideIcon } from 'lucide-react';
 
 export type NavLink = {
   label: string;
@@ -30,7 +29,7 @@ export const NavLinks: FC<Props> = ({ links }) => {
         {links.map((link) => (
           <SidebarMenuItem key={link.label}>
             <SidebarMenuButton asChild>
-              <a href={link.url} target={link.target ?  "_blank" : "_self"}>
+              <a href={link.url} target={link.target ? '_blank' : '_self'}>
                 <link.icon />
                 <span>{link.label}</span>
               </a>

@@ -1,1 +1,1 @@
-export { SkeletonTable } from "./SkeletonTable";
+export { SkeletonTable } from './SkeletonTable';

@@ -1,17 +1,17 @@
-import { type FC, Suspense } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { type FC, Suspense } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Plus } from "lucide-react";
-import { TournamentsTable } from "./(components)/tournamentsTable";
-import { TournamentsTableSkeleton } from "./(components)/tournaments-table-skeleton";
-import { ErrorHandler } from "@/shared/components/errorHandler";
-import { Search } from "@/shared/components/search";
+} from '@/components/ui/tooltip';
+import { Plus } from 'lucide-react';
+import { TournamentsTable } from './(components)/tournamentsTable';
+import { TournamentsTableSkeleton } from './(components)/tournaments-table-skeleton';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { Search } from '@/shared/components/search';
 
 type Props = Readonly<{
   searchParams: Promise<{
