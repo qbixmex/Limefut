@@ -1,8 +1,7 @@
 'use server';
 
 import { cacheLife, cacheTag } from 'next/cache';
-import { toZonedTime, fromZonedTime } from 'date-fns-tz';
-import { endOfDay, startOfDay } from 'date-fns';
+
 import prisma from '@/lib/prisma';
 
 type Options = Readonly<{
@@ -19,20 +18,32 @@ export type ResponseFetchAction = Promise<{
 
 export const CurrentDayMatchesAction = async (options?: Options): ResponseFetchAction => {
   "use cache";
-  
+
   cacheLife('days');
   cacheTag('matches');
-  
+
   let { take = 12 } = options ?? {};
-  
+
   // In case is an invalid number like (lorem)
   if (isNaN(take)) take = 12;
 
   const timeZone = options?.timeZone ?? 'America/Mexico_City';
+
   const now = new Date();
-  const nowInTimeZone = toZonedTime(now, timeZone);
-  const startOfToday = fromZonedTime(startOfDay(nowInTimeZone), timeZone);
-  const endOfToday = fromZonedTime(endOfDay(nowInTimeZone), timeZone);
+  const localTime = new Date(now.toLocaleString('en-US', { timeZone }));
+
+  const startOfToday = new Date(
+    localTime.getFullYear(),
+    localTime.getMonth(),
+    localTime.getDate(),
+    0, 0, 0, 0,
+  );
+  const endOfToday = new Date(
+    localTime.getFullYear(),
+    localTime.getMonth(),
+    localTime.getDate(),
+    23, 59, 59, 999,
+  );
 
   try {
     const data = await prisma.match.findMany({
