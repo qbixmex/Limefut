@@ -1,10 +1,12 @@
-import type { FC } from 'react';
+import { headers } from 'next/headers';
 import { SignInOut } from './sign-in-out';
-import type { SessionUI } from '@/shared/types';
+import { auth } from '@/lib/auth';
 
-type Props = Readonly<{ session: SessionUI }>;
+export const AuthSession = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-export const AuthSession: FC<Props> = ({ session }) => {
   return (
     <SignInOut session={session} />
   );
