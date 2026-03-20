@@ -44,6 +44,7 @@ const eslintConfig = defineConfig([
       'no-undef': 'off',
       'space-before-function-paren': 'off',
       'comma-dangle': ['warn', 'always-multiline'],
+      '@next/next/no-html-link-for-pages': 'off',
       'multiline-ternary': 'off',
     },
     ignores: [
