@@ -25,8 +25,6 @@ describe('Test on <Header /> component', () => {
   test('Should render component correctly', () => {
     render(<Header />);
 
-    screen.debug();
-
     expect(
       screen.getByRole('banner', { name: /cabecera principal/i }),
     ).toBeInTheDocument();
