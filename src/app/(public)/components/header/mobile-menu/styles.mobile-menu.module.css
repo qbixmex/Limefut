@@ -1,4 +1,4 @@
-@reference "../../../globals.css";
+@reference "../../../../globals.css";
 
 .wrapper {
   @apply absolute top-0 left-0 z-100 w-full h-screen
