@@ -27,11 +27,16 @@ export const SignInOut: FC<Props> = ({ session }) => {
         : (
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link href="/login">
+              <Link
+                href="/login"
+                role="link"
+                aria-label="Acceder con credenciales"
+              >
                 <LogIn
                   className="stroke-green-50"
                   size={22}
                   strokeWidth={1.5}
+                  aria-hidden="true"
                 />
               </Link>
             </TooltipTrigger>

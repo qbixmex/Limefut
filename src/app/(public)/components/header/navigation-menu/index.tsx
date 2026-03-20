@@ -6,7 +6,7 @@ import './navigation-menu.css';
 
 export const NavigationMenu: React.FC = () => {
   return (
-    <nav className="navigation-menu">
+    <nav className="navigation-menu" role="menu" aria-label="Menu principal">
       <div className="navigation-content">
         {navigation.map((item) => (
           <div key={item.id} className="group navigation-items">

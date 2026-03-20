@@ -4,7 +4,10 @@ import styles from './styles.module.css';
 
 export const Logo = () => {
   return (
-    <div className={styles.logo}>
+    <figure
+      className={styles.logo}
+      data-testid="site-logo"
+    >
       <Link href="/">
         <Image
           src="/limefut-logo.png"
@@ -14,7 +17,7 @@ export const Logo = () => {
           className="w-full max-w-[150px]"
         />
       </Link>
-    </div>
+    </figure>
   );
 };
 
