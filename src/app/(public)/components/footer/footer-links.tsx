@@ -6,7 +6,7 @@ export const FooterLinks: FC = async () => {
   const { pageLinks } = await fetchPagesAction();
 
   return (
-    <section className="w-full md:w-1/2">
+    <nav className="w-full md:w-1/2" aria-label="Enlaces del pie de página">
       {(pageLinks.length > 0) ? (
         <ul className="flex flex-col md:flex-row justify-start items-center gap-5">
           {pageLinks.map(({ id, title, permalink }) => (
@@ -20,7 +20,7 @@ export const FooterLinks: FC = async () => {
       ) : (
         <p role="alert">No hay páginas para mostrar.</p>
       )}
-    </section>
+    </nav>
   );
 };
 
