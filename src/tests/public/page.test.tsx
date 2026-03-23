@@ -17,6 +17,10 @@ vi.mock('@/app/(public)/components/next-matches', () => ({
   NextMatches: () => null,
 }));
 
+vi.mock('@/app/(public)/components/latest-images', () => ({
+  LatestImages: () => null,
+}));
+
 describe('Tests on <HomePage />', async () => {
   test('Should render the home page correctly', () => {
     render(
