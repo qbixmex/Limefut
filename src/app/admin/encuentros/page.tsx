@@ -1,7 +1,6 @@
 import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { Search } from '@/shared/components/search';
 import ClearFilters from './(components)/clear-filters';
 import { fetchTournamentsForMatchAction } from './(actions)/fetchTournamentsForMatchAction';
 import { TournamentsSelector } from '../(components)/tournaments-selector';
@@ -9,6 +8,7 @@ import { MatchesContent } from './matches-content';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { TournamentsSelectorSkeleton } from '../../(public)/components';
 import { CreateMatch } from './(components)/create-match';
+import { Search } from './(components)/search';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -32,7 +32,7 @@ export const MatchesPage: FC<Props> = (props) => {
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
               <CardTitle className="admin-page-card-title">Lista de Encuentros</CardTitle>
-              <section className="flex gap-5 items-center">
+              <section className="flex lg:w-1/2 justify-end gap-5 items-center">
                 <ClearFilters />
                 <Search placeholder="Buscar encuentro ..." />
                 <CreateMatch />

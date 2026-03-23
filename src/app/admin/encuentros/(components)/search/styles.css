@@ -1,0 +1,41 @@
+@reference "tailwindcss";
+
+.main-wrapper {
+  @apply relative;
+}
+
+.search-wrapper {
+  @apply flex gap-5;
+}
+
+.input-group {
+  @apply relative;
+
+  & .search-input {
+    @apply block w-full lg:min-w-[320px];
+    @apply rounded-md border border-gray-500 focus:border-blue-500;
+    @apply py-2 pl-10 text-sm outline-0;
+    @apply placeholder:text-gray-500 text-gray-400 italic;
+  }
+
+  & .searchIcon {
+    @apply absolute left-3 top-1/2 size-5;
+    @apply -translate-y-1/2;
+    @apply text-gray-500 peer-focus:text-blue-400;
+  }
+
+  & .closeIcon {
+    @apply size-4.5 text-gray-500;
+  }
+}
+
+.submit-button {
+  @apply hover:border-blue-500;
+  & .send-icon {
+    @apply group-hover:text-blue-500;
+  }
+}
+
+.close-button {
+  @apply absolute right-3 top-1/2 -translate-y-1/2;
+}
