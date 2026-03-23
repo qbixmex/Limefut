@@ -33,7 +33,7 @@ export const AppSidebar: FC<Props> = ({ ...props }) => {
                     width={20}
                     height={20}
                     alt="Limefut Logo"
-                    className="w-5 h-auto"
+                    className="w-full max-w-5"
                   />
                 </div>
                 <div className="leading-none">
