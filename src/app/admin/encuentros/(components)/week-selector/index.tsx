@@ -1,7 +1,7 @@
 'use client';
 
 import type { SubmitEvent } from 'react';
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,28 +37,30 @@ export const WeekSelector = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex gap-5">
-        <Label className="space-x-5">
-          <span>Jornada</span>
-          <Input
-            ref={weekRef}
-            id="week"
-            type="number"
-            min={0}
-            defaultValue={sortedWeek ?? selectedWeek ?? 0}
-            className="w-[75px]"
-          />
-        </Label>
-        <Button
-          variant="outline-primary"
-          size="icon"
-          type="submit"
-        >
-          <SendHorizontal />
-        </Button>
-      </div>
-    </form>
+    <Fragment key={`week-${sortedWeek ?? 'none'}`}>
+      <form onSubmit={handleSubmit}>
+        <div className="flex gap-5">
+          <Label className="space-x-5">
+            <span>Jornada</span>
+            <Input
+              ref={weekRef}
+              id="week"
+              type="number"
+              min={0}
+              defaultValue={sortedWeek ?? selectedWeek ?? 0}
+              className="w-[75px]"
+            />
+          </Label>
+          <Button
+            variant="outline-primary"
+            size="icon"
+            type="submit"
+          >
+            <SendHorizontal />
+          </Button>
+        </div>
+      </form>
+    </Fragment>
   );
 };
 
