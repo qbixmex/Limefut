@@ -31,7 +31,7 @@ export const BannerImage: FC<Props> = (props) => {
         width={1280}
         height={548}
         alt={title ?? 'Imagen del Banner'}
-        className={cn('image', className)}
+        className={cn('banner-image', className)}
         loading={position === 1 ? 'eager' : 'lazy'}
       />
       <section className={cn('data-wrapper', {

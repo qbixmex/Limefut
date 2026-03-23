@@ -20,9 +20,11 @@
   @apply text-white text-shadow-xs text-shadow-black;
 }
 
-.image {
+.banner-image {
   width: 100%;
-  height: 548px;
+  max-width: 1280px;
+  height: auto;
+  max-height: 548px;
   object-fit: cover;
   object-position: center;
   margin: auto;
