@@ -1,0 +1,53 @@
+@reference '../../../globals.css';
+
+#latest-images {
+  @apply mt-5;
+  & .content {
+    @apply border border-green-900/90 rounded-b-lg p-5;
+  }
+}
+
+#header {
+  @apply flex items-center justify-between;
+  @apply bg-emerald-700 text-emerald-50;
+  @apply px-5 py-3 rounded-t-lg;
+
+  & .logo-heading {
+    @apply flex items-center gap-3;
+  }
+
+  & a {
+    @apply text-emerald-50 hover:text-emerald-200 text-lg font-bold italic;
+  }
+}
+
+.image-galleries {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-5;
+}
+
+.empty-message {
+  @apply text-emerald-800 dark:text-emerald-600;
+  @apply text-center font-bold text-xl italic;
+}
+
+.figure {
+  @apply border bg-gray-100 border-gray-300 rounded-md;
+  @apply dark:bg-gray-800 dark:border-gray-700;
+  @apply overflow-hidden;
+
+  & a {
+    @apply text-gray-500 dark:text-gray-50 italic text-sm font-medium;
+  }
+
+  & .main-image {
+    width: 100%;
+    max-width: 640px;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  & figcaption {
+    @apply px-4 py-3;
+  }
+}

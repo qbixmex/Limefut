@@ -34,7 +34,7 @@ export const MatchesPage: FC<Props> = (props) => {
               <CardTitle className="admin-page-card-title">Lista de Encuentros</CardTitle>
               <section className="flex lg:w-1/2 justify-end gap-5 items-center">
                 <ClearFilters />
-                <Search placeholder="Buscar encuentro ..." />
+                <Search placeholder="ejemplo country vs newland" />
                 <CreateMatch />
               </section>
             </CardHeader>
