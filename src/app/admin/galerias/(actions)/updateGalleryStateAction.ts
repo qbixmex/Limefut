@@ -35,6 +35,7 @@ export const updateGalleryStateAction = async (id: string, state: boolean)
   updateTag('admin-gallery');
   updateTag('public-galleries');
   updateTag('public-gallery');
+  updateTag('public-home-images');
 
   return {
     ok: true,

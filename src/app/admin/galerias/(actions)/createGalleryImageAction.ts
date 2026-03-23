@@ -108,6 +108,7 @@ export const createGalleryImageAction = async ({
     updateTag('admin-gallery');
     updateTag('public-galleries');
     updateTag('public-gallery');
+    updateTag('public-home-images');
 
     return prismaTransaction;
   } catch (error) {

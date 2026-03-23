@@ -116,6 +116,7 @@ export const updateGalleryImageAction = async ({
           updateTag('dashboard-images');
           updateTag('public-galleries');
           updateTag('public-gallery');
+          updateTag('public-home-images');
 
           return {
             ok: true,
