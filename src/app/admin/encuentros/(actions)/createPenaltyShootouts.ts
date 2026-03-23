@@ -68,14 +68,7 @@ export const createPenaltyShootoutAction = async (
         include: {
           kicks: {
             orderBy: { order: 'desc' },
-            take: 1,
           },
-        },
-      });
-
-      const kicksCount = await transaction.penaltyKick.count({
-        where: {
-          shootoutId: penaltyShootout?.id,
         },
       });
 
@@ -98,12 +91,22 @@ export const createPenaltyShootoutAction = async (
         nextOrder = 1;
       }
 
-      // current kicks + 2 new ones that will be created
-      const totalKicks = kicksCount + 2;
+      // Count existing kicks per team BEFORE adding the new ones
+      const localKicksBefore = penaltyShootout.kicks.filter(
+        (k) => k.teamId === shootoutToSave.localTeamId,
+      ).length;
+      const visitorKicksBefore = penaltyShootout.kicks.filter(
+        (k) => k.teamId === shootoutToSave.visitorTeamId,
+      ).length;
+
+      // Expected kicks after this round (each team shoots once per round)
+      const localKicksAfter = localKicksBefore + 1;
+      const visitorKicksAfter = visitorKicksBefore + 1;
 
       let winnerTeamId: string | null = null;
       let status: 'in_progress' | 'completed' = 'in_progress';
 
+      // Calculate the score after this round
       const finalLocalGoals =
         penaltyShootout.localGoals +
         (shootoutToSave.localIsGoal === 'scored' ? 1 : 0);
@@ -112,16 +115,32 @@ export const createPenaltyShootoutAction = async (
         penaltyShootout.visitorGoals +
         (shootoutToSave.visitorIsGoal === 'scored' ? 1 : 0);
 
-      // Evaluate winner when there are 6 minimum kicks
-      if (totalKicks >= 6) {
-        // If there's NO draw, penalty shootout finishes.
-        if (finalLocalGoals !== finalVisitorGoals) {
-          status = 'completed';
+      // Check if both teams have completed their 3 mandatory rounds
+      const localCompleted3 = localKicksAfter >= 3;
+      const visitorCompleted3 = visitorKicksAfter >= 3;
 
+      if (localCompleted3 && visitorCompleted3) {
+        // Phase 1: Both teams completed mandatory 3 rounds each (6 total kicks)
+        if (finalLocalGoals !== finalVisitorGoals) {
+          // There is a winner - penalty shootout ends here
+          status = 'completed';
           winnerTeamId =
             finalLocalGoals > finalVisitorGoals
               ? shootoutToSave.localTeamId
               : shootoutToSave.visitorTeamId;
+        } else {
+          // It's a draw after 3 rounds → sudden death begins
+          // Each team shoots one more round until there's a winner
+          if (shootoutToSave.localIsGoal === 'scored' && shootoutToSave.visitorIsGoal === 'missed') {
+            // Local scores, Visitor misses → Local wins
+            status = 'completed';
+            winnerTeamId = shootoutToSave.localTeamId;
+          } else if (shootoutToSave.localIsGoal === 'missed' && shootoutToSave.visitorIsGoal === 'scored') {
+            // Local misses, Visitor scores → Visitor wins
+            status = 'completed';
+            winnerTeamId = shootoutToSave.visitorTeamId;
+          }
+          // If both score or both miss → sudden death continues (status remains 'in_progress')
         }
       }
 

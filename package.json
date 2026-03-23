@@ -1,12 +1,13 @@
 {
   "name": "limefut",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "private": true,
   "scripts": {
     "dev": "next dev --port=3000",
     "build": "next build",
     "preview": "next start",
     "lint": "eslint",
+    "type-check": "tsc --noEmit --incremental false",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
