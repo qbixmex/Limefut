@@ -63,6 +63,7 @@ export const createGalleryAction = async (
     updateTag('public-galleries-list');
     updateTag('public-galleries');
     updateTag('public-gallery');
+    updateTag('public-home-images');
 
     return prismaTransaction;
   } catch (error) {
