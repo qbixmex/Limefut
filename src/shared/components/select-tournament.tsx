@@ -33,6 +33,7 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
 
   return (
     <Select
+      key={`tournament-${tournamentId ?? 'none'}`}
       onValueChange={setParam}
       defaultValue={tournamentId ?? ''}
     >
