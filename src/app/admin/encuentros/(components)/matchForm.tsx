@@ -253,15 +253,22 @@ export const MatchForm: FC<Props> = ({
 
     if (ok && match) {
       const params = new URLSearchParams(searchParams);
-      const queryString = params.toString();
+
+      if (params.has('semana')) params.delete('semana');
 
       toast.success(message);
 
-      route.replace(
-        ROUTES.ADMIN_MATCHES +
-          '?torneo=' + match.tournament.id +
-          queryString ? '&' + queryString : '',
-      );
+      if (params.size === 0) {
+        route.replace(
+          `${ROUTES.ADMIN_MATCHES}?torneo=${match.tournament.id}`,
+        );
+      } else {
+        route.replace(
+          ROUTES.ADMIN_MATCHES +
+            `?torneo=${match.tournament.id}` +
+            `&${params}`,
+        );
+      }
     }
   };
 
