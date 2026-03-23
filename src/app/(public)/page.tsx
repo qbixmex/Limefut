@@ -1,10 +1,12 @@
-import { type FC, Suspense } from 'react';
+import type { FC } from 'react';
+import { Suspense } from 'react';
 import { Hero } from './components/hero';
 import { CarouselSkeleton } from './components/carousel/carousel-skeleton';
 import { NextMatches } from './components/next-matches';
 import { LatestResults, MatchesSkeleton } from './components';
 import { HorizontalCalendarSkeleton } from './components/horizontal-calendar/horizontal-calendar-skeleton';
 import { ErrorHandler } from '@/shared/components/errorHandler';
+import { LatestImages } from './components/latest-images';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -47,6 +49,10 @@ const HomePage: FC<Props> = ({ searchParams }) => {
               resultsPromise as Promise<{ latestResultsPage: string }>
             }
           />
+        </Suspense>
+
+        <Suspense fallback={<p>Cargando imágenes recientes</p>}>
+          <LatestImages />
         </Suspense>
       </div>
     </>
