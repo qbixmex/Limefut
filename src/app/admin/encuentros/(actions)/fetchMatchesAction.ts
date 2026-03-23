@@ -84,27 +84,45 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
     const searchTerm = options.searchTerm;
     const weekNumber = parseInt(searchTerm, 10);
 
-    whereCondition.OR = [
-      { // Search by local team name
-        local: { name: { contains: searchTerm, mode: 'insensitive' } },
-      },
-      { // Search by visitor team name
-        visitor: { name: { contains: searchTerm, mode: 'insensitive' } },
-      },
-    ];
+    if (searchTerm.includes('vs')) {
+      const segments = searchTerm.split('vs');
+      const localTeam = segments[0].trim().toLowerCase();
+      const visitorTeam = segments[1].trim().toLowerCase();
 
-    // If the search term is a valid number, add the condition to search by week.
-    if (!isNaN(weekNumber)) {
-      whereCondition.OR.push({
-        week: { equals: weekNumber },
-      });
-    }
+      whereCondition.AND = [
+        {
+          local: {
+            is: { name: { contains: localTeam, mode: 'insensitive' } },
+          },
+        },
+        {
+          visitor: {
+            is: { name: { contains: visitorTeam, mode: 'insensitive' } },
+          },
+        },
+      ];
+    } else {
+      whereCondition.OR = [
+        { // Search by local team name
+          local: { name: { contains: searchTerm, mode: 'insensitive' } },
+        },
+        { // Search by visitor team name
+          visitor: { name: { contains: searchTerm, mode: 'insensitive' } },
+        },
+      ];
 
-    // Search by status in Spanish
-    const searchTermLower = searchTerm.toLowerCase();
-    const status = statusMap[searchTermLower];
-    if (status) {
-      whereCondition.OR.push({ status: { equals: status } });
+      // If the search term is a valid number, add the condition to search by week.
+      if (!isNaN(weekNumber)) {
+        whereCondition.OR.push({
+          week: { equals: weekNumber },
+        });
+      }
+      // Search by status in Spanish
+      const searchTermLower = searchTerm.toLowerCase();
+      const status = statusMap[searchTermLower];
+      if (status) {
+        whereCondition.OR.push({ status: { equals: status } });
+      }
     }
   }
 
