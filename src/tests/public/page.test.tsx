@@ -13,6 +13,10 @@ vi.mock('@/app/(public)/components/latest-results', () => ({
   LatestResults: () => null,
 }));
 
+vi.mock('@/app/(public)/components/horizontal-calendar', () => ({
+  HorizontalCalendar: () => null,
+}));
+
 vi.mock('@/app/(public)/components/next-matches', () => ({
   NextMatches: () => null,
 }));

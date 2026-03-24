@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { Hero } from './components/hero';
 import { CarouselSkeleton } from './components/carousel/carousel-skeleton';
 import { NextMatches } from './components/next-matches';
-import { LatestResults, MatchesSkeleton } from './components';
+import { HorizontalCalendar, LatestResults, MatchesSkeleton } from './components';
 import { HorizontalCalendarSkeleton } from './components/horizontal-calendar/horizontal-calendar-skeleton';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { LatestImages } from './components/latest-images';
@@ -12,12 +12,14 @@ type Props = Readonly<{
   searchParams: Promise<{
     'next-matches'?: string;
     'latest-results'?: string;
+    'selected-day'?: string;
   }>;
 }>;
 
 const HomePage: FC<Props> = ({ searchParams }) => {
   const matchesPromise = searchParams.then((sp) => ({ matchesPage: sp['next-matches'] }));
   const resultsPromise = searchParams.then((sp) => ({ latestResultsPage: sp['latest-results'] }));
+  const selectedDayPromise = searchParams.then((sp) => ({ selectedDay: sp['selected-day'] }));
 
   return (
     <>
@@ -32,15 +34,15 @@ const HomePage: FC<Props> = ({ searchParams }) => {
           <Hero />
         </Suspense>
 
-        <Suspense fallback={
-          <>
-            <HorizontalCalendarSkeleton />
-            <MatchesSkeleton />
-          </>
-        }>
-          <NextMatches matchesPromise={
-            matchesPromise as Promise<{ matchesPage: string }>
-          } />
+        <Suspense fallback={<HorizontalCalendarSkeleton />}>
+          <HorizontalCalendar />
+        </Suspense>
+
+        <Suspense fallback={<MatchesSkeleton />}>
+          <NextMatches
+            matchesPromise={matchesPromise}
+            selectedDayPromise={selectedDayPromise}
+          />
         </Suspense>
 
         <Suspense fallback={<MatchesSkeleton />}>
