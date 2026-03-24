@@ -28,42 +28,63 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   const todayInZone = new Date(nowInZone);
   todayInZone.setHours(0, 0, 0, 0);
 
-  const startDate = new Date(todayInZone);
-  startDate.setDate(todayInZone.getDate() - 7);
-
-  const endDate = new Date(todayInZone);
-  endDate.setDate(todayInZone.getDate() + 7);
-  endDate.setHours(23, 59, 59, 999);
-
-  const startDateUTC = fromZonedTime(startDate, timeZone);
-  const endDateUTC = fromZonedTime(endDate, timeZone);
-
-  const statusFilter: Prisma.MatchWhereInput['OR'] = [
+  const futureStatusFilter: Prisma.MatchWhereInput['OR'] = [
     { status: 'scheduled' },
     { status: 'inProgress' },
     { status: 'postPosed' },
-    { status: 'completed' },
   ];
 
+  const startDate = new Date(todayInZone);
+  startDate.setDate(todayInZone.getDate() - 7);
+  const startDateUTC = fromZonedTime(startDate, timeZone);
+
+  const pastEndDate = new Date(todayInZone);
+  pastEndDate.setDate(todayInZone.getDate() - 1);
+  pastEndDate.setHours(23, 59, 59, 999);
+  const pastEndDateUTC = fromZonedTime(pastEndDate, timeZone);
+
+  const futureStartDate = new Date(todayInZone);
+  futureStartDate.setHours(0, 0, 0, 0);
+  const futureStartDateUTC = fromZonedTime(futureStartDate, timeZone);
+
+  const futureEndDate = new Date(todayInZone);
+  futureEndDate.setDate(todayInZone.getDate() + 7);
+  futureEndDate.setHours(23, 59, 59, 999);
+  const futureEndDateUTC = fromZonedTime(futureEndDate, timeZone);
+
   try {
-    const data = await prisma.match.findMany({
-      where: {
-        OR: statusFilter,
-        matchDate: {
-          gte: startDateUTC,
-          lte: endDateUTC,
+    const [pastMatches, futureMatches] = await Promise.all([
+      prisma.match.findMany({
+        where: {
+          matchDate: {
+            gte: startDateUTC,
+            lte: pastEndDateUTC,
+          },
         },
-      },
-      orderBy: { matchDate: 'asc' },
-      select: {
-        matchDate: true,
-      },
-    });
+        select: {
+          matchDate: true,
+        },
+      }),
+      prisma.match.findMany({
+        where: {
+          OR: futureStatusFilter,
+          matchDate: {
+            gte: futureStartDateUTC,
+            lte: futureEndDateUTC,
+          },
+        },
+        select: {
+          matchDate: true,
+        },
+      }),
+    ]);
+
+    const allMatches = [...pastMatches, ...futureMatches];
 
     return {
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
-      matchesDates: data.map((match) => {
+      matchesDates: allMatches.map((match) => {
         return match.matchDate
           ? match.matchDate.toISOString()
           : '';
