@@ -41,7 +41,7 @@ export const MatchMetadata: FC<Props> = ({
           </p>
         </div>
         <div className="w-full md:1/2">
-          <p><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, 'dd / LLL / yyyy', { locale: es })}</p>
+          <p><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, "EEEE dd 'de' LLLL, yyyy", { locale: es })}</p>
           <p><b>Hora:</b> {formatInTimeZone(date as Date, TIME_ZONE, 'h:mm a', { locale: es })}</p>
           <p><b>Jornada:</b> {week}</p>
         </div>

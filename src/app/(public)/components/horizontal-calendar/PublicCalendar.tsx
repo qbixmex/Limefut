@@ -1,7 +1,8 @@
 'use client';
 
 import type { FC } from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { addDays, format, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -14,6 +15,10 @@ type Props = Readonly<{
 export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
   const today = new Date();
   const RANGE = 7; // days before and after
+  const [currentDay, setCurrentDay] = useState<Date>(today);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const days = Array.from(
     { length: RANGE * 2 + 1 },
@@ -34,35 +39,55 @@ export const PublicCalendar: FC<Props> = ({ matchesDates }) => {
     container.scrollTo({ left: target, behavior: 'smooth' });
   }, [RANGE]);
 
+  const handleSelectDay = (day: Date) => {
+    setCurrentDay(day);
+    const params = new URLSearchParams(searchParams);
+    const dateWithoutTime = day.toISOString().split('T')[0];
+    if (isSameDay(day, today)) {
+      params.delete('next-matches');
+      params.delete('selected-day');
+    } else {
+      params.set('next-matches', '1');
+      params.set('selected-day', dateWithoutTime);
+    }
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <div className="calendar-wrapper">
       <div className="calendar-header">Calendario de partidos</div>
 
       <div className="calendar-body" ref={containerRef} role="list">
-        {days.map((d, index) => {
-          const isToday = isSameDay(d, today);
+        {days.map((day, index) => {
+          const selectedDay = isSameDay(day, currentDay);
           const matchesOnThisDay = matchesDates.filter(
-            (matchDate) => isSameDay(d, new Date(matchDate)),
+            (matchDate) => isSameDay(day, new Date(matchDate)),
           ).length;
 
           return (
-            <div key={d.toISOString()}>
+            <button
+              key={day.toISOString()}
+              onClick={() => handleSelectDay(day)}
+              className="cursor-pointer"
+            >
               <div
                 ref={(element) => { dayRefs.current[index] = element; }}
-                className={cn('calendar-day', { 'calendar-today': isToday })}
+                className={cn('calendar-day', {
+                  'calendar-today': selectedDay,
+                })}
                 role="listitem"
-                aria-current={isToday ? 'date' : undefined}
+                aria-current={selectedDay ? 'date' : undefined}
               >
-                <p className="calendar-weekday">{format(d, 'EEE', { locale: es }).toLowerCase()}</p>
-                <p className="calendar-day-num">{format(d, 'd')}</p>
-                <p className="calendar-month">{format(d, 'MMM', { locale: es }).toLowerCase()}</p>
+                <p className="calendar-weekday">{format(day, 'EEE', { locale: es }).toLowerCase()}</p>
+                <p className="calendar-day-num">{format(day, 'd')}</p>
+                <p className="calendar-month">{format(day, 'MMM', { locale: es }).toLowerCase()}</p>
               </div>
               <p className={cn('calendar-games-count', {
-                'calendar-today-games-count': (matchesOnThisDay > 0) && isToday,
+                'calendar-today-games-count': (matchesOnThisDay > 0) && selectedDay,
               })}>
                 {matchesOnThisDay}
               </p>
-            </div>
+            </button>
           );
         })}
       </div>
