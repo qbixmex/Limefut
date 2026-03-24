@@ -3,7 +3,6 @@
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
-import { parse } from 'date-fns';
 import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -81,20 +80,17 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   let isPastDate = false;
 
   if (selectedDay) {
-    const selectedDate = parse(selectedDay, 'yyyy-MM-dd', new Date());
-    if (isNaN(selectedDate.getTime())) {
+    const midnightInClientZone = new Date(selectedDay + 'T00:00:00');
+    if (isNaN(midnightInClientZone.getTime())) {
       dateFilter = { gte: today, lte: endOfWeek };
     } else {
-      const selectedDateInZone = toZonedTime(selectedDate, timeZone);
+      const selectedDateInZone = toZonedTime(midnightInClientZone, timeZone);
       isPastDate = selectedDateInZone < today;
 
-      const startOfDayInZone = toZonedTime(selectedDate, timeZone);
-      startOfDayInZone.setHours(0, 0, 0, 0);
-      const startOfDayUTC = fromZonedTime(startOfDayInZone, timeZone);
+      const startOfDayUTC = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
 
-      const endOfDayInZone = toZonedTime(selectedDate, timeZone);
-      endOfDayInZone.setHours(23, 59, 59, 999);
-      const endOfDayUTC = fromZonedTime(endOfDayInZone, timeZone);
+      const endOfDayUTC = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
+      endOfDayUTC.setHours(23, 59, 59, 999);
 
       dateFilter = { gte: startOfDayUTC, lte: endOfDayUTC };
     }
