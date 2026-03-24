@@ -69,17 +69,6 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   const todayInZone = new Date(nowInZone);
   todayInZone.setHours(0, 0, 0, 0);
 
-  const dayOfWeek = todayInZone.getDay();
-  const diffToEndOfWeek = (7 - dayOfWeek) % 7;
-
-  const endOfWeek = new Date(todayInZone);
-  endOfWeek.setDate(todayInZone.getDate() + diffToEndOfWeek);
-  endOfWeek.setHours(23, 59, 59, 999);
-
-  const today = fromZonedTime(todayInZone, timeZone);
-  const startOfDay = new Date(today);
-  startOfDay.setHours(0, 0, 0, 0);
-
   let dateFilter: Record<string, Date>;
   let isPastDate = false;
 
@@ -94,7 +83,17 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
 
     dateFilter = { gte: startOfDayUTC, lte: endOfDayUTC };
   } else {
-    dateFilter = { gte: startOfDay, lte: endOfWeek };
+    const startOfTodayUTC = fromZonedTime(
+      new Date(todayInZone.getFullYear(), todayInZone.getMonth(), todayInZone.getDate(), 0, 0, 0, 0),
+      timeZone,
+    );
+
+    const endOfTodayUTC = fromZonedTime(
+      new Date(todayInZone.getFullYear(), todayInZone.getMonth(), todayInZone.getDate(), 23, 59, 59, 999),
+      timeZone,
+    );
+
+    dateFilter = { gte: startOfTodayUTC, lte: endOfTodayUTC };
   }
 
   const statusFilter: Prisma.MatchWhereInput['OR'] = isPastDate
