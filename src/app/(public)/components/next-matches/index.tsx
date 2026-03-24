@@ -23,8 +23,10 @@ export const NextMatches: FC<Props> = async ({ matchesPromise, selectedDayPromis
   });
 
   const todayMatchesCount = async () => {
-    const { matchesDates } = await CurrentDayMatchesAction();
-    const count = matchesDates.length;
+    const { matchesDates } = await CurrentDayMatchesAction({
+      timeZone: 'America/Mexico_City',
+    });
+    const count = matches.length;
     const pluralize = (count > 1) ? 's' : '';
 
     if (matchesDates.length > 0) {
