@@ -1,7 +1,13 @@
 'use server';
 
+import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
+import { fromZonedTime, toZonedTime } from 'date-fns-tz';
+
+type Options = Readonly<{
+  timeZone?: string;
+}>;
 
 export type ResponseFetchAction = Promise<{
   ok: boolean;
@@ -9,28 +15,43 @@ export type ResponseFetchAction = Promise<{
   matchesDates: string[];
 }>;
 
-export const fetchPublicMatchesAction = async (): ResponseFetchAction => {
+export const fetchPublicMatchesAction = async (options?: Options): ResponseFetchAction => {
   'use cache';
 
   cacheLife('days');
   cacheTag('public-matches-count');
 
+  const timeZone = options?.timeZone ?? 'America/Mexico_City';
+
+  const now = new Date();
+  const nowInZone = toZonedTime(now, timeZone);
+  const todayInZone = new Date(nowInZone);
+  todayInZone.setHours(0, 0, 0, 0);
+
+  const startDate = new Date(todayInZone);
+  startDate.setDate(todayInZone.getDate() - 7);
+
+  const endDate = new Date(todayInZone);
+  endDate.setDate(todayInZone.getDate() + 7);
+  endDate.setHours(23, 59, 59, 999);
+
+  const startDateUTC = fromZonedTime(startDate, timeZone);
+  const endDateUTC = fromZonedTime(endDate, timeZone);
+
+  const statusFilter: Prisma.MatchWhereInput['OR'] = [
+    { status: 'scheduled' },
+    { status: 'inProgress' },
+    { status: 'postPosed' },
+    { status: 'completed' },
+  ];
+
   try {
-    const now = new Date();
-    const startDate = new Date(now);
-    startDate.setDate(now.getDate() - 7);
-    startDate.setHours(0, 0, 0, 0);
-
-    const endDate = new Date(now);
-    endDate.setDate(now.getDate() + 7);
-    endDate.setHours(23, 59, 59, 999);
-
     const data = await prisma.match.findMany({
       where: {
-        status: { not: 'canceled' },
+        OR: statusFilter,
         matchDate: {
-          gte: startDate,
-          lte: endDate,
+          gte: startDateUTC,
+          lte: endDateUTC,
         },
       },
       orderBy: { matchDate: 'asc' },
