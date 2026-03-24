@@ -4,19 +4,21 @@ import { fetchPublicMatchesAction } from '@/app/(public)/(actions)';
 import { Pagination } from '@/shared/components/pagination';
 import { CalendarDaysIcon } from 'lucide-react';
 import { CurrentDayMatchesAction } from '../../(actions)/home/currentDayMatchesAction';
-import { HorizontalCalendar } from '../horizontal-calendar';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
 
 type Props = Readonly<{
-  matchesPromise: Promise<{ matchesPage: string }>;
+  matchesPromise: Promise<{ matchesPage: string | undefined }>;
+  selectedDayPromise: Promise<{ selectedDay: string | undefined }>;
 }>;
 
-export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
+export const NextMatches: FC<Props> = async ({ matchesPromise, selectedDayPromise }) => {
   const { matchesPage } = await matchesPromise;
+  const { selectedDay } = await selectedDayPromise;
   const { matches, pagination } = await fetchPublicMatchesAction({
     take: 4,
-    nextMatches: Number(matchesPage),
+    nextMatches: Number(matchesPage) ?? undefined,
+    selectedDay: selectedDay ?? undefined,
     timeZone: 'America/Mexico_City',
   });
 
@@ -32,10 +34,6 @@ export const NextMatches: FC<Props> = async ({ matchesPromise }) => {
 
   return (
     <section>
-      <div className="mb-5">
-        <HorizontalCalendar />
-      </div>
-
       <div className="bg-emerald-700 text-emerald-50 px-6 py-3 rounded-t-lg flex items-center gap-4">
         <CalendarDaysIcon size={50} strokeWidth={1.5} />
         <>

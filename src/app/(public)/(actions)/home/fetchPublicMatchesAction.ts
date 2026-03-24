@@ -1,12 +1,14 @@
 'use server';
 
+import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   nextMatches?: number;
+  selectedDay?: string;
   take?: number;
   timeZone?: string;
 }>;
@@ -59,6 +61,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   cacheTag('matches');
 
   let { nextMatches = 1, take = 12 } = options ?? {};
+  const selectedDay = options?.selectedDay;
   const timeZone = options?.timeZone ?? 'UTC';
 
   const now = new Date();
@@ -67,17 +70,44 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   today.setHours(0, 0, 0, 0);
 
   const dayOfWeek = today.getDay();
-  // Set midnight of the last day of the week (Sunday)
   const diffToEndOfWeek = (7 - dayOfWeek) % 7;
 
-  // Calculate the end of the week date
   const endOfWeek = new Date(today);
-
-  // Set the time to the end of the day (23:59:59.999)
   endOfWeek.setDate(today.getDate() + diffToEndOfWeek);
-
-  // Set the time to the end of the day (23:59:59.999)
   endOfWeek.setHours(23, 59, 59, 999);
+
+  let dateFilter: Record<string, Date>;
+  let isPastDate = false;
+
+  if (selectedDay) {
+    const selectedDate = new Date(selectedDay + 'T00:00:00');
+    if (isNaN(selectedDate.getTime())) {
+      dateFilter = { gte: today, lte: endOfWeek };
+    } else {
+      const selectedDateInZone = toZonedTime(selectedDate, timeZone);
+      isPastDate = selectedDateInZone < today;
+
+      const startOfDayInZone = toZonedTime(selectedDate, timeZone);
+      startOfDayInZone.setHours(0, 0, 0, 0);
+      const startOfDayUTC = fromZonedTime(startOfDayInZone, timeZone);
+
+      const endOfDayInZone = toZonedTime(selectedDate, timeZone);
+      endOfDayInZone.setHours(23, 59, 59, 999);
+      const endOfDayUTC = fromZonedTime(endOfDayInZone, timeZone);
+
+      dateFilter = { gte: startOfDayUTC, lte: endOfDayUTC };
+    }
+  } else {
+    dateFilter = { gte: today, lte: endOfWeek };
+  }
+
+  const statusFilter: Prisma.MatchWhereInput['OR'] = isPastDate
+    ? undefined
+    : [
+        { status: MATCH_STATUS.SCHEDULED },
+        { status: MATCH_STATUS.IN_PROGRESS },
+        { status: MATCH_STATUS.POST_POSED },
+      ];
 
   // In case is an invalid number like (lorem)
   if (isNaN(nextMatches)) nextMatches = 1;
@@ -86,15 +116,8 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   try {
     const data = await prisma.match.findMany({
       where: {
-        OR: [
-          { status: 'scheduled' },
-          { status: 'inProgress' },
-          { status: 'postPosed' },
-        ],
-        matchDate: {
-          gte: today,
-          lte: endOfWeek,
-        },
+        ...(statusFilter && { OR: statusFilter }),
+        matchDate: dateFilter,
       },
       orderBy: { matchDate: 'asc' },
       take,
@@ -138,22 +161,15 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
 
     const totalCount = await prisma.match.count({
       where: {
-        OR: [
-          { status: 'scheduled' },
-          { status: 'inProgress' },
-          { status: 'postPosed' },
-        ],
-        matchDate: {
-          gte: today,
-          lte: endOfWeek,
-        },
+        ...(statusFilter && { OR: statusFilter }),
+        matchDate: dateFilter,
       },
     });
 
     return {
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
-      matches: data.map((match) => ({
+      matches: (data.length > 0) ? data.map((match) => ({
         id: match.id,
         tournament: match.tournament,
         localTeam: match.local,
@@ -164,7 +180,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         week: match.week,
         place: match.place,
         matchDate: match.matchDate,
-      })),
+      })) : [],
       pagination: {
         nextMatches,
         totalPages: Math.ceil(totalCount / take),
