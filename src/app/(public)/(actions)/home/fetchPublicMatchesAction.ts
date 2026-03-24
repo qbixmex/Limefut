@@ -3,6 +3,7 @@
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { parse } from 'date-fns';
 import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -80,7 +81,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   let isPastDate = false;
 
   if (selectedDay) {
-    const selectedDate = new Date(selectedDay + 'T00:00:00');
+    const selectedDate = parse(selectedDay, 'yyyy-MM-dd', new Date());
     if (isNaN(selectedDate.getTime())) {
       dateFilter = { gte: today, lte: endOfWeek };
     } else {
