@@ -2,10 +2,9 @@ import type { FC } from 'react';
 import Link from 'next/link';
 import { fetchPublicMatchesAction } from '@/app/(public)/(actions)';
 import { Pagination } from '@/shared/components/pagination';
-import { CalendarDaysIcon } from 'lucide-react';
-import { CurrentDayMatchesAction } from '../../(actions)/home/currentDayMatchesAction';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
+import { SoccerField } from '@/shared/components/icons';
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string | undefined }>;
@@ -22,26 +21,11 @@ export const NextMatches: FC<Props> = async ({ matchesPromise, selectedDayPromis
     timeZone: 'America/Mexico_City',
   });
 
-  const todayMatchesCount = async () => {
-    const { matchesDates } = await CurrentDayMatchesAction({
-      timeZone: 'America/Mexico_City',
-    });
-    const count = matches.length;
-    const pluralize = (count > 1) ? 's' : '';
-
-    if (matchesDates.length > 0) {
-      return `Hoy hay ${count} encuentro${pluralize} programado${pluralize}`;
-    }
-  };
-
   return (
     <section>
       <div className="bg-emerald-700 text-emerald-50 px-6 py-3 rounded-t-lg flex items-center gap-4">
-        <CalendarDaysIcon size={50} strokeWidth={1.5} />
-        <>
-          <p className="text-2xl font-semibold">Próximos Encuentros</p>
-          <p className="font-semibold italic">{todayMatchesCount()}</p>
-        </>
+        <SoccerField size={50} strokeWidth={1.5} />
+        <p className="text-2xl font-semibold">Encuentros</p>
       </div>
 
       <div className="border border-green-900/90 rounded-b-lg p-5">
