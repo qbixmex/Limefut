@@ -5,13 +5,15 @@ import { Pagination } from '@/shared/components/pagination';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
 import { SoccerField } from '@/shared/components/icons';
+import { HorizontalCalendar } from '../horizontal-calendar';
+import fetchPublicMatchesCountAction from '../../(actions)/home/fetchPublicMatchesCountAction';
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string | undefined }>;
   selectedDayPromise: Promise<{ selectedDay: string | undefined }>;
 }>;
 
-export const NextMatches: FC<Props> = async ({ matchesPromise, selectedDayPromise }) => {
+export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPromise }) => {
   const { matchesPage } = await matchesPromise;
   const { selectedDay } = await selectedDayPromise;
   const { matches, pagination } = await fetchPublicMatchesAction({
@@ -20,9 +22,14 @@ export const NextMatches: FC<Props> = async ({ matchesPromise, selectedDayPromis
     selectedDay: selectedDay ?? undefined,
     timeZone: 'America/Mexico_City',
   });
+  const { matchesDates } = await fetchPublicMatchesCountAction({
+    timeZone: 'America/Mexico_City',
+  });
 
   return (
     <section>
+      <HorizontalCalendar matchesDates={matchesDates} />
+
       <div className="bg-emerald-700 text-emerald-50 px-6 py-3 rounded-t-lg flex items-center gap-4">
         <SoccerField size={50} strokeWidth={1.5} />
         <p className="text-2xl font-semibold">Encuentros</p>
@@ -90,5 +97,3 @@ export const NextMatches: FC<Props> = async ({ matchesPromise, selectedDayPromis
     </section>
   );
 };
-
-export default NextMatches;

@@ -2,8 +2,8 @@ import type { FC } from 'react';
 import { Suspense } from 'react';
 import { Hero } from './components/hero';
 import { CarouselSkeleton } from './components/carousel/carousel-skeleton';
-import { NextMatches } from './components/next-matches';
-import { HorizontalCalendar, LatestResults, MatchesSkeleton } from './components';
+import { CalendarMatches } from './components/calendar-matches';
+import { LatestResults, MatchesSkeleton } from './components';
 import { HorizontalCalendarSkeleton } from './components/horizontal-calendar/horizontal-calendar-skeleton';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { LatestImages } from './components/latest-images';
@@ -34,12 +34,13 @@ const HomePage: FC<Props> = ({ searchParams }) => {
           <Hero />
         </Suspense>
 
-        <Suspense fallback={<HorizontalCalendarSkeleton />}>
-          <HorizontalCalendar />
-        </Suspense>
-
-        <Suspense fallback={<MatchesSkeleton />}>
-          <NextMatches
+        <Suspense fallback={
+          <>
+            <HorizontalCalendarSkeleton />
+            <MatchesSkeleton />
+          </>
+        }>
+          <CalendarMatches
             matchesPromise={matchesPromise}
             selectedDayPromise={selectedDayPromise}
           />
