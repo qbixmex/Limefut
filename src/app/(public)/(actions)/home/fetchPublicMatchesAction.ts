@@ -65,37 +65,36 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   const timeZone = options?.timeZone ?? 'UTC';
 
   const now = new Date();
-  const nowInTimeZone = toZonedTime(now, timeZone);
-  const today = fromZonedTime(nowInTimeZone, timeZone);
-  today.setHours(0, 0, 0, 0);
+  const nowInZone = toZonedTime(now, timeZone);
+  const todayInZone = new Date(nowInZone);
+  todayInZone.setHours(0, 0, 0, 0);
 
-  const dayOfWeek = today.getDay();
+  const dayOfWeek = todayInZone.getDay();
   const diffToEndOfWeek = (7 - dayOfWeek) % 7;
 
-  const endOfWeek = new Date(today);
-  endOfWeek.setDate(today.getDate() + diffToEndOfWeek);
+  const endOfWeek = new Date(todayInZone);
+  endOfWeek.setDate(todayInZone.getDate() + diffToEndOfWeek);
   endOfWeek.setHours(23, 59, 59, 999);
+
+  const today = fromZonedTime(todayInZone, timeZone);
+  const startOfDay = new Date(today);
+  startOfDay.setHours(0, 0, 0, 0);
 
   let dateFilter: Record<string, Date>;
   let isPastDate = false;
 
   if (selectedDay) {
-    const midnightInClientZone = new Date(selectedDay + 'T00:00:00');
-    if (isNaN(midnightInClientZone.getTime())) {
-      dateFilter = { gte: today, lte: endOfWeek };
-    } else {
-      const selectedDateInZone = toZonedTime(midnightInClientZone, timeZone);
-      isPastDate = selectedDateInZone < today;
+    const selectedDateInZone = toZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
+    isPastDate = selectedDateInZone < todayInZone;
 
-      const startOfDayUTC = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
+    const startOfDayUTC = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
 
-      const endOfDayUTC = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
-      endOfDayUTC.setHours(23, 59, 59, 999);
+    const endOfDayUTC = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
+    endOfDayUTC.setHours(23, 59, 59, 999);
 
-      dateFilter = { gte: startOfDayUTC, lte: endOfDayUTC };
-    }
+    dateFilter = { gte: startOfDayUTC, lte: endOfDayUTC };
   } else {
-    dateFilter = { gte: today, lte: endOfWeek };
+    dateFilter = { gte: startOfDay, lte: endOfWeek };
   }
 
   const statusFilter: Prisma.MatchWhereInput['OR'] = isPastDate
