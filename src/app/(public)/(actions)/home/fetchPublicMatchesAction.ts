@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
-import { fromZonedTime } from 'date-fns-tz';
+import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
@@ -61,10 +61,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
 
   let { nextMatches = 1, take = 12 } = options ?? {};
   const selectedDay = options?.selectedDay;
-  const timeZone = options?.timeZone ?? 'UTC';
-
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
+  const timeZone = options?.timeZone ?? 'America/Mexico_City';
 
   let startOfDate: Date;
   let endOfDate: Date;
@@ -73,8 +70,12 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     startOfDate = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
     endOfDate = fromZonedTime(new Date(selectedDay + 'T23:59:59'), timeZone);
   } else {
-    startOfDate = fromZonedTime(new Date(now), timeZone);
-    endOfDate = fromZonedTime(new Date(now), timeZone);
+    const nowInZone = toZonedTime(new Date(), timeZone);
+    const todayInZone = new Date(nowInZone);
+    todayInZone.setHours(0, 0, 0, 0);
+
+    startOfDate = fromZonedTime(todayInZone, timeZone);
+    endOfDate = fromZonedTime(todayInZone, timeZone);
     endOfDate.setHours(23, 59, 59, 999);
   }
 
