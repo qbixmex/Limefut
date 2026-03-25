@@ -1,9 +1,8 @@
 'use server';
 
-import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
-import { fromZonedTime, toZonedTime } from 'date-fns-tz';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { fromZonedTime } from 'date-fns-tz';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
@@ -65,44 +64,19 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   const timeZone = options?.timeZone ?? 'UTC';
 
   const now = new Date();
-  const nowInZone = toZonedTime(now, timeZone);
-  const todayInZone = new Date(nowInZone);
-  todayInZone.setHours(0, 0, 0, 0);
+  now.setHours(0, 0, 0, 0);
 
-  let dateFilter: Record<string, Date>;
-  let isPastDate = false;
+  let startOfDate: Date;
+  let endOfDate: Date;
 
   if (selectedDay) {
-    const selectedDateInZone = toZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
-    isPastDate = selectedDateInZone < todayInZone;
-
-    const startOfDayUTC = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
-
-    const endOfDayUTC = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
-    endOfDayUTC.setHours(23, 59, 59, 999);
-
-    dateFilter = { gte: startOfDayUTC, lte: endOfDayUTC };
+    startOfDate = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
+    endOfDate = fromZonedTime(new Date(selectedDay + 'T23:59:59'), timeZone);
   } else {
-    const startOfTodayUTC = fromZonedTime(
-      new Date(todayInZone.getFullYear(), todayInZone.getMonth(), todayInZone.getDate(), 0, 0, 0, 0),
-      timeZone,
-    );
-
-    const endOfTodayUTC = fromZonedTime(
-      new Date(todayInZone.getFullYear(), todayInZone.getMonth(), todayInZone.getDate(), 23, 59, 59, 999),
-      timeZone,
-    );
-
-    dateFilter = { gte: startOfTodayUTC, lte: endOfTodayUTC };
+    startOfDate = fromZonedTime(new Date(now), timeZone);
+    endOfDate = fromZonedTime(new Date(now), timeZone);
+    endOfDate.setHours(23, 59, 59, 999);
   }
-
-  const statusFilter: Prisma.MatchWhereInput['OR'] = isPastDate
-    ? undefined
-    : [
-        { status: MATCH_STATUS.SCHEDULED },
-        { status: MATCH_STATUS.IN_PROGRESS },
-        { status: MATCH_STATUS.POST_POSED },
-      ];
 
   // In case is an invalid number like (lorem)
   if (isNaN(nextMatches)) nextMatches = 1;
@@ -111,8 +85,10 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   try {
     const data = await prisma.match.findMany({
       where: {
-        ...(statusFilter && { OR: statusFilter }),
-        matchDate: dateFilter,
+        matchDate: {
+          gte: startOfDate,
+          lte: endOfDate,
+        },
       },
       orderBy: { matchDate: 'asc' },
       take,
@@ -156,8 +132,10 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
 
     const totalCount = await prisma.match.count({
       where: {
-        ...(statusFilter && { OR: statusFilter }),
-        matchDate: dateFilter,
+        matchDate: {
+          gte: startOfDate,
+          lte: endOfDate,
+        },
       },
     });
 

@@ -12,7 +12,10 @@ import './styles.css';
 const TIME_ZONE = 'America/Mexico_City';
 
 type Props = Readonly<{
-  matchesDates: string[];
+  matchesDates: {
+    id: string;
+    matchDate: string;
+  }[];
 }>;
 
 export const HorizontalCalendar: FC<Props> = ({ matchesDates }) => {
@@ -64,7 +67,7 @@ export const HorizontalCalendar: FC<Props> = ({ matchesDates }) => {
           const selectedDay = isSameDay(day, currentDay);
           const matchesOnThisDay = matchesDates.filter(
             (matchDate) => {
-              const matchDateInZone = toZonedTime(parseISO(matchDate), TIME_ZONE);
+              const matchDateInZone = toZonedTime(parseISO(matchDate.matchDate), TIME_ZONE);
               return isSameDay(day, matchDateInZone);
             },
           ).length;
