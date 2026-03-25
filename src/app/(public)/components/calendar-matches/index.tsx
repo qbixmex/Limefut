@@ -13,6 +13,8 @@ type Props = Readonly<{
   selectedDayPromise: Promise<{ selectedDay: string | undefined }>;
 }>;
 
+const timeZone = 'America/Mexico_City';
+
 export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPromise }) => {
   const { matchesPage } = await matchesPromise;
   const { selectedDay } = await selectedDayPromise;
@@ -20,11 +22,9 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
     take: 4,
     nextMatches: Number(matchesPage) ?? undefined,
     selectedDay: selectedDay ?? undefined,
-    timeZone: 'America/Mexico_City',
+    timeZone,
   });
-  const { matchesDates } = await fetchPublicMatchesCountAction({
-    timeZone: 'America/Mexico_City',
-  });
+  const { matchesDates } = await fetchPublicMatchesCountAction({ timeZone });
 
   return (
     <section>
