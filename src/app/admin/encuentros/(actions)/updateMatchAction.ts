@@ -160,13 +160,14 @@ export const updateMatchAction = async ({
         // Update Cache
         updateTag('admin-matches');
         updateTag('admin-match');
+        updateTag('admin-tournament-for-match');
+        updateTag('admin-teams-for-match');
         updateTag('matches');
         updateTag('dashboard-results');
         updateTag('public-matches');
         updateTag('public-results-roles');
         updateTag('public-result-details');
         updateTag('public-matches-count');
-        updateTag('admin-tournament-for-match');
         updateTag('public-team-matches');
         updateTag('public-team-standings');
 
