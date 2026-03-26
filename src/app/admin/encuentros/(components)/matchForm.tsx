@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, type FC, Activity } from 'react';
+import { useState, useEffect, type FC, Activity, useId } from 'react';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -41,7 +41,7 @@ import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { Match, Team } from '@/shared/interfaces';
 import { createMatchAction, updateMatchAction } from '../(actions)';
-import { Check, ChevronDownIcon, ChevronsUpDown, LoaderCircle } from 'lucide-react';
+import { Check, ChevronDownIcon, ChevronsUpDown, FlipHorizontal2, LoaderCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { MATCH_STATUS } from '@/shared/enums';
@@ -63,6 +63,7 @@ import {
 import './match-form.css';
 import { updateMatchScoreAction } from '../(actions)/updateMatchScoreAction';
 import { ROUTES } from '@/shared/constants/routes';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 type Props = Readonly<{
   session: Session;
@@ -265,8 +266,8 @@ export const MatchForm: FC<Props> = ({
       } else {
         route.replace(
           ROUTES.ADMIN_MATCHES +
-            `?torneo=${match.tournament.id}` +
-            `&${params}`,
+          `?torneo=${match.tournament.id}` +
+          `&${params}`,
         );
       }
     }
@@ -307,19 +308,26 @@ export const MatchForm: FC<Props> = ({
     } else if (match && params.size === 0) {
       route.replace(
         ROUTES.ADMIN_MATCHES +
-          `?torneo=${match?.tournament.id}`,
+        `?torneo=${match?.tournament.id}`,
       );
     } else if (!match && params.size > 0) {
       route.replace(`${ROUTES.ADMIN_MATCHES}?${params}`);
     } else if (match && params.size > 0) {
       route.replace(
         ROUTES.ADMIN_MATCHES +
-          `?torneo=${match.tournament.id}` +
-          `&${params}`,
+        `?torneo=${match.tournament.id}` +
+        `&${params}`,
       );
     } else {
       route.replace(ROUTES.ADMIN_MATCHES);
     }
+  };
+
+  const handleFlipTeams = () => {
+    const localTeamId = form.getValues('localTeamId');
+    const visitorTeamId = form.getValues('visitorTeamId');
+    form.setValue('localTeamId', visitorTeamId);
+    form.setValue('visitorTeamId', localTeamId);
   };
 
   return (
@@ -329,13 +337,14 @@ export const MatchForm: FC<Props> = ({
         className="space-y-8"
       >
         {/* Local Team and Visitor Team */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_50px_1fr] place-items-end gap-5">
+          <div className="w-full">
             <FormField
               control={form.control}
               name="localTeamId"
               render={({ field }) => {
-                const selectedTeam = teams.find((t) => t.id === field.value) ?? match?.localTeam;
+                const selectedTeam = teams.find((t) => t.id === field.value) ??
+                  (match ? match?.localTeam : undefined);
                 const visitorTeamId = form.watch('visitorTeamId');
                 return (
                   <FormItem>
@@ -355,7 +364,7 @@ export const MatchForm: FC<Props> = ({
                             {
                               selectedTeam
                                 ? selectedTeam.name
-                                : 'Selecciona un equipo'
+                                : 'Seleccione un equipo'
                             }
                             <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                           </Button>
@@ -409,12 +418,31 @@ export const MatchForm: FC<Props> = ({
               }}
             />
           </div>
-          <div className="w-full lg:w-1/2">
+          <div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline-primary"
+                  type="button"
+                  onClick={handleFlipTeams}
+                  role="button"
+                  aria-label="Invertir equipos"
+                >
+                  <FlipHorizontal2 />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <span>Invertir Equipos</span>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <div className="w-full">
             <FormField
               control={form.control}
               name="visitorTeamId"
               render={({ field }) => {
-                const selectedTeam = teams.find((t) => t.id === field.value) ?? match?.visitorTeam;
+                const selectedTeam = teams.find((t) => t.id === field.value) ??
+                  (match ? match?.visitorTeam : undefined);
                 const localTeamId = form.watch('localTeamId');
 
                 return (
