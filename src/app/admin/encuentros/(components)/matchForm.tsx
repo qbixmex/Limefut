@@ -344,7 +344,15 @@ export const MatchForm: FC<Props> = ({
               name="localTeamId"
               render={({ field }) => {
                 const selectedTeam = teams.find((t) => t.id === field.value) ??
-                  (match ? match?.localTeam : undefined);
+                  (
+                    match
+                      ? (
+                        field.value === match.visitorTeam.id
+                          ? match.visitorTeam
+                          : match.localTeam
+                      )
+                      : undefined
+                  );
                 const visitorTeamId = form.watch('visitorTeamId');
                 return (
                   <FormItem>
@@ -442,7 +450,15 @@ export const MatchForm: FC<Props> = ({
               name="visitorTeamId"
               render={({ field }) => {
                 const selectedTeam = teams.find((t) => t.id === field.value) ??
-                  (match ? match?.visitorTeam : undefined);
+                  (
+                    match
+                      ? (
+                        field.value === match.localTeam.id
+                          ? match.localTeam
+                          : match.visitorTeam
+                        )
+                      : undefined
+                  );
                 const localTeamId = form.watch('localTeamId');
 
                 return (
