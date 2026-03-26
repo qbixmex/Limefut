@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, type FC, Activity, useId } from 'react';
+import { useState, useEffect, type FC, Activity } from 'react';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
