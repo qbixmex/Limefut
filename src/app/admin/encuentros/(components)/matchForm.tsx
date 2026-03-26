@@ -337,7 +337,7 @@ export const MatchForm: FC<Props> = ({
         className="space-y-8"
       >
         {/* Local Team and Visitor Team */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_50px_1fr] place-items-end gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_50px_1fr] place-items-center lg:place-items-end gap-5">
           <div className="w-full">
             <FormField
               control={form.control}
