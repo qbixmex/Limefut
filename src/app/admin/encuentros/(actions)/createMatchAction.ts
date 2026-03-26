@@ -149,11 +149,12 @@ export const createMatchAction = async (
     updateTag('admin-match');
     updateTag('matches');
     updateTag('dashboard-results');
+    updateTag('admin-tournament-for-match');
+    updateTag('admin-teams-for-match');
     updateTag('public-matches');
     updateTag('public-results-roles');
     updateTag('public-result-details');
     updateTag('public-matches-count');
-    updateTag('admin-tournament-for-match');
     updateTag('public-team-matches');
     updateTag('public-team-standings');
 
