@@ -9,6 +9,10 @@ vi.mock('@/app/(public)/components/hero', () => ({
   Hero: () => null,
 }));
 
+vi.mock('@/app/(public)/components/calendar-matches', () => ({
+  CalendarMatches: () => null,
+}));
+
 vi.mock('@/app/(public)/components/latest-results', () => ({
   LatestResults: () => null,
 }));
