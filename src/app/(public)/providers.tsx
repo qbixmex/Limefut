@@ -1,6 +1,7 @@
 import { ThemeProvider } from 'next-themes';
-import { Toaster } from '@/components/ui/sonner';
 import type { ReactNode } from 'react';
+import { Toaster } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 type Props = { readonly children?: ReactNode; };
 
@@ -12,7 +13,9 @@ export const Providers: React.FC<Props> = ({ children }) => {
       enableSystem
       disableTransitionOnChange
     >
-      {children}
+      <TooltipProvider>
+        {children}
+      </TooltipProvider>
       <Toaster
         position="top-right"
         toastOptions={{ style: { width: 400 } }}

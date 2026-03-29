@@ -27,8 +27,6 @@ export const createGalleryAction = async (
     title: formData.get('title') as string,
     permalink: formData.get('permalink') ?? '',
     galleryDate: new Date(formData.get('galleryDate') as string),
-    tournamentId: formData.get('tournamentId') as string,
-    teamId: formData.get('teamId') as string,
     active: formData.get('active') === 'true',
   };
 
@@ -42,12 +40,10 @@ export const createGalleryAction = async (
     };
   }
 
-  const galleryToSave = galleryVerified.data;
-
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdGallery = await transaction.gallery.create({
-        data: galleryToSave,
+        data: galleryVerified.data,
       });
 
       return {
@@ -76,6 +72,9 @@ export const createGalleryAction = async (
           gallery: null,
         };
       }
+
+      console.log('Error Name:', error.name);
+      console.log('Error Message:', error.message);
 
       return {
         ok: false,

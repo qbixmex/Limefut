@@ -30,10 +30,10 @@ export const AppSidebar: FC<Props> = ({ ...props }) => {
                 <div className="bg-green-600 dark:bg-primary-foreground flex aspect-square size-8 items-center justify-center rounded">
                   <Image
                     src="/limefut-logo-white.webp"
-                    width={20}
-                    height={20}
+                    width={72}
+                    height={80}
                     alt="Limefut Logo"
-                    className="w-full max-w-5"
+                    className="w-full max-w-[20px] h-auto"
                   />
                 </div>
                 <div className="leading-none">
