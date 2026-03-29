@@ -16,18 +16,6 @@ type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
   gallery: Gallery & {
-    tournament: {
-      id: string;
-      name: string;
-      category: string;
-      format: string;
-    } | null;
-    team: {
-      id: string;
-      name: string;
-      category: string;
-      format: string;
-    } | null;
     images: GalleryImageType[];
   } | null;
 }>;
@@ -60,22 +48,6 @@ export const fetchGalleryAction = async (
         active: true,
         createdAt: true,
         updatedAt: true,
-        tournament: {
-          select: {
-            id: true,
-            name: true,
-            category: true,
-            format: true,
-          },
-        },
-        team: {
-          select: {
-            id: true,
-            name: true,
-            category: true,
-            format: true,
-          },
-        },
         images: {
           select: {
             id: true,

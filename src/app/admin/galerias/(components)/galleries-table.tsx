@@ -8,12 +8,13 @@ import { format } from 'date-fns/format';
 import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { es } from 'date-fns/locale';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Pagination } from '@/shared/components/pagination';
 import { Badge } from '@/components/ui/badge';
 import { DeleteGallery } from './delete-gallery';
 import { headers } from 'next/headers';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   query: string | undefined;
@@ -72,11 +73,15 @@ export const GalleriesTable: FC<Props> = async ({
                     <TableCell>
                       <div className="flex gap-3">
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/galerias/${gallery.id}`}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
+                          <TooltipTrigger>
+                            <Link
+                              href={ROUTES.ADMIN_GALLERIES_SHOW(gallery.id)}
+                              className={buttonVariants({
+                                variant: 'outline-info',
+                                size: 'icon',
+                              })}
+                            >
+                              <InfoIcon />
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">
@@ -84,11 +89,15 @@ export const GalleriesTable: FC<Props> = async ({
                           </TooltipContent>
                         </Tooltip>
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/galerias/editar/${gallery.id}`}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
+                          <TooltipTrigger>
+                            <Link
+                              href={ROUTES.ADMIN_GALLERIES_EDIT(gallery.id)}
+                              className={buttonVariants({
+                                variant: 'outline-warning',
+                                size: 'icon',
+                              })}
+                            >
+                              <Pencil />
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">

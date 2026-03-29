@@ -354,7 +354,43 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
           )}
         </div>
       </section>
-    </div >
+
+      <section>
+        <h2 className="text-2xl font-semibold mb-5">
+          Imágenes de {team?.name}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <Image
+            width={1024}
+            height={1024}
+            src="/images/generic-players/male/bear-player.webp"
+            alt="Bear player"
+            className="w-[1024px] rounded"
+          />
+          <Image
+            width={1024}
+            height={1024}
+            src="/images/generic-players/male/black-cat-player.webp"
+            alt="Bear player"
+            className="w-[1024px] rounded"
+          />
+          <Image
+            width={1024}
+            height={1024}
+            src="/images/generic-players/male/capibara-player.webp"
+            alt="Cat player"
+            className="w-[1024px] rounded"
+          />
+          <Image
+            width={1024}
+            height={1024}
+            src="/images/generic-players/male/lion-player.webp"
+            alt="Lion player"
+            className="w-[1024px] rounded"
+          />
+        </div>
+      </section>
+    </div>
   );
 };
 

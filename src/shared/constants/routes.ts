@@ -12,6 +12,9 @@ export const ROUTES = {
   ADMIN_PAGES: '/admin/paginas',
   ADMIN_BANNERS: '/admin/banners',
   ADMIN_GALLERIES: '/admin/galerias',
+  ADMIN_GALLERIES_CREATE: '/admin/galerias/crear',
+  ADMIN_GALLERIES_SHOW: (id: string) => `/admin/galerias/${id}`,
+  ADMIN_GALLERIES_EDIT: (id: string) => `/admin/galerias/editar/${id}`,
   ADMIN_USERS: '/admin/usuarios',
   ADMIN_MESSAGES: '/admin/mensajes',
 } as const;

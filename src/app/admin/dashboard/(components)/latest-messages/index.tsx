@@ -1,9 +1,6 @@
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import Link from 'next/link';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
-import { InfoIcon } from 'lucide-react';
 import { fetchLatestMessagesAction } from '../../(actions)/fetchLatestMessagesAction';
+import { LinkDetails } from '../link-details';
 import '../../styles.css';
 
 export const LatestMessages = async () => {
@@ -36,18 +33,7 @@ export const LatestMessages = async () => {
                     </p>
                   </TableCell>
                   <TableCell className="text-center">
-                    <Link href={`/admin/mensajes/${id}`}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant="outline-info" size="icon-sm">
-                            <InfoIcon />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="left">
-                          ver detalles
-                        </TooltipContent>
-                      </Tooltip>
-                    </Link>
+                    <LinkDetails url={`/admin/mensajes/${id}`} />
                   </TableCell>
                 </TableRow>
               ))}

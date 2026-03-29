@@ -1,31 +1,29 @@
+import type { FC } from 'react';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GalleryForm } from '../(components)/galleryForm';
 import type { Session } from '@/lib/auth-client';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { fetchTeamsForGalleryAction } from '../(actions)';
-import { fetchTournamentsForGalleryAction } from '../(actions)/fetchTournamentsForGalleryAction';
 
-const CreateGalleryPage = () => {
+type Props = Readonly<{
+  searchParams: Promise<{
+    torneo?: string;
+  }>;
+}>;
+
+const CreateGalleryPage: FC<Props> = ({ searchParams }) => {
   return (
     <Suspense>
-      <CreateGalleryContent />
+      <CreateGalleryContent searchParams={searchParams} />
     </Suspense>
   );
 };
 
-const CreateGalleryContent = async () => {
+const CreateGalleryContent: FC<Props> = async ({ searchParams }) => {
+  const { torneo: tournamentId } = await searchParams;
   const session = await auth.api.getSession({ headers: await headers() });
-
-  const { tournaments } = await fetchTournamentsForGalleryAction();
-  const { teams } = await fetchTeamsForGalleryAction();
 
   if (session && !(session.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear galerías !';
@@ -42,8 +40,7 @@ const CreateGalleryContent = async () => {
           <CardContent>
             <GalleryForm
               session={session as Session}
-              tournaments={tournaments}
-              teams={teams}
+              tournamentId={tournamentId}
             />
           </CardContent>
         </Card>
