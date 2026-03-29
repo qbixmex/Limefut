@@ -15,7 +15,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { GalleryImageForm } from '../(components)/galleryImageForm';
 import { fetchGalleryAction } from '../(actions)';
 import { GalleryImages } from '../(components)/gallery-images';
@@ -53,6 +53,27 @@ const GalleryDetailsContent: FC<Props> = async ({ params }) => {
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
             <CardTitle className="admin-page-card-title">Detalles de la Galería</CardTitle>
+            <div className="space-x-5">
+              <GalleryImageForm
+                session={session as Session}
+                galleryId={gallery.id as string}
+                imagesQuantity={gallery.images.length}
+              />
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link
+                    href={`/admin/galerias/editar/${gallery.id}`}
+                    className={buttonVariants({
+                      variant: 'outline-warning',
+                      size: 'icon',
+                    })}
+                  >
+                    <Pencil />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="left">editar</TooltipContent>
+              </Tooltip>
+            </div>
           </CardHeader>
           <CardContent>
             <section className="flex flex-col lg:flex-row mb-10">
@@ -72,18 +93,6 @@ const GalleryDetailsContent: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="w-[180px] font-semibold">Enlace Permanente</TableHead>
                       <TableCell>{gallery.permalink}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead>Torneo</TableHead>
-                      <TableCell>
-                        {
-                          gallery.tournament
-                            ? `${gallery.tournament.name}` +
-                            `, ${gallery.tournament.category}` +
-                            `, ${gallery.tournament.format} vs ${gallery.tournament.format}`
-                            : 'No definido'
-                        }
-                      </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -113,18 +122,6 @@ const GalleryDetailsContent: FC<Props> = async ({ params }) => {
                         }
                       </TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableHead>Equipo</TableHead>
-                      <TableCell>
-                        {
-                          gallery.team
-                            ? `${gallery.team.name}` +
-                            `, ${gallery.team.category}` +
-                            `, ${gallery.team.format} vs ${gallery.team.format}`
-                            : 'No definido'
-                        }
-                      </TableCell>
-                    </TableRow>
                   </TableBody>
                 </Table>
               </div>
@@ -146,24 +143,6 @@ const GalleryDetailsContent: FC<Props> = async ({ params }) => {
                 )
               }
             </section>
-
-            <div className="absolute top-5 right-5 space-x-5">
-              <GalleryImageForm
-                session={session as Session}
-                galleryId={gallery.id as string}
-                imagesQuantity={gallery.images.length}
-              />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href={`/admin/galerias/editar/${gallery.id}`}>
-                    <Button variant="outline-warning" size="icon">
-                      <Pencil />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="left">editar</TooltipContent>
-              </Tooltip>
-            </div>
           </CardContent>
         </Card>
       </div>

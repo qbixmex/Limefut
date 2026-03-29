@@ -8,7 +8,7 @@ import type { Gallery } from '@/shared/interfaces';
 type Options = {
   formData: FormData;
   userRoles: string[];
-  authenticatedUserId: string;
+  authenticatedUserId: string | null;
   galleryId: string;
 };
 
@@ -43,8 +43,6 @@ export const updateGalleryAction = async ({
   const rawData = {
     title: formData.get('title') as string,
     permalink: formData.get('permalink') ?? '',
-    tournamentId: formData.get('tournamentId'),
-    teamId: formData.get('teamId'),
     galleryDate: new Date(formData.get('galleryDate') as string),
     active: formData.get('active') === 'true',
   };
@@ -81,8 +79,6 @@ export const updateGalleryAction = async ({
           data: {
             title: galleryToSave.title,
             galleryDate: galleryToSave.galleryDate,
-            tournamentId: galleryToSave.tournamentId,
-            teamId: galleryToSave.teamId,
             active: galleryToSave.active,
           },
         });

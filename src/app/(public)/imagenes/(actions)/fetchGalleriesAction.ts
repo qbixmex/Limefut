@@ -32,7 +32,8 @@ export const fetchGalleriesAction = async (): ResponseAction => {
       where: {
         active: true,
         images: {
-          some: {}, // Retrieve Galleries with images inside
+          // Retrieve Galleries with images inside
+          some: {},
         },
       },
       select: {

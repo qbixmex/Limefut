@@ -1,10 +1,7 @@
 import { Badge } from '~/src/components/ui/badge';
 import { fetchLatestResultsAction } from '../../(actions)/fetchLatestResultsAction';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/src/components/ui/table';
-import Link from 'next/link';
-import { InfoIcon } from 'lucide-react';
-import { Button } from '~/src/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { LinkDetails } from '../link-details';
 import '../../styles.css';
 
 export const LatestResults = async () => {
@@ -68,18 +65,7 @@ export const LatestResults = async () => {
                     {result.format} vs {result.format}
                   </TableCell>
                   <TableCell>
-                    <Link href={`/admin/encuentros/detalles/${result.id}`}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant="outline-info" size="icon-sm">
-                            <InfoIcon />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="left">
-                          ver detalles
-                        </TooltipContent>
-                      </Tooltip>
-                    </Link>
+                    <LinkDetails url={`/admin/encuentros/detalles/${result.id}`} />
                   </TableCell>
                 </TableRow>
               ))}

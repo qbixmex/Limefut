@@ -23,11 +23,5 @@ export const editGallerySchema = z.object({
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
   galleryDate: z.date({ message: 'La fecha de la galería debe ser una fecha válida' }),
-  tournamentId: z
-    .uuid({ message: '¡ El id del torneo no es un UUID válido !' })
-    .nullish(),
-  teamId: z
-    .uuid({ message: '¡ El id del equipo no es un UUID válido !' })
-    .nullish(),
   active: z.boolean().optional(),
 });

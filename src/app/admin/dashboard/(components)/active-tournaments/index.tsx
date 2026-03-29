@@ -1,10 +1,7 @@
-import Link from 'next/link';
 import { fetchLatestTournamentsAction } from '../../(actions)/fetchLatestTournamentsAction';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
-import { InfoIcon } from 'lucide-react';
 import './active-tournaments.css';
+import { LinkDetails } from '../link-details';
 import '../../styles.css';
 
 export const ActiveTournaments = async () => {
@@ -36,18 +33,7 @@ export const ActiveTournaments = async () => {
                     </p>
                   </TableCell>
                   <TableCell>
-                    <Link href={`/admin/torneos/${id}`}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant="outline-info" size="icon-sm">
-                            <InfoIcon />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="left">
-                          ver detalles
-                        </TooltipContent>
-                      </Tooltip>
-                    </Link>
+                    <LinkDetails url={`/admin/torneos/${id}`} />
                   </TableCell>
                 </TableRow>
               ))}

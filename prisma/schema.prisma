@@ -152,7 +152,6 @@ model Tournament {
   credentials Credential[]
   teams       Team[]
   standings   Standings[]
-  galleries   Gallery[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -188,7 +187,6 @@ model Team {
   standings        Standings[]
   homeMatches      Match[]           @relation("HomeMatches")
   awayMatches      Match[]           @relation("AwayMatches")
-  galleries        Gallery[]
   localShootouts   PenaltyShootout[] @relation("ShootoutLocalTeam")
   visitorShootouts PenaltyShootout[] @relation("ShootoutVisitorTeam")
   wonShootouts     PenaltyShootout[] @relation("ShootoutWinnerTeam")
@@ -402,10 +400,6 @@ model Gallery {
 
   // Relations
   images       GalleryImage[]
-  tournamentId String?        @map("tournament_id")
-  teamId       String?        @map("team_id")
-  tournament   Tournament?    @relation(fields: [tournamentId], references: [id])
-  team         Team?          @relation(fields: [teamId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")

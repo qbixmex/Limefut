@@ -3,11 +3,12 @@ import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { GalleriesTable } from './(components)/galleries-table';
 import Search from '@/shared/components/search';
 import { GalleriesTableSkeleton } from './(components)/galleries-table-skeleton';
+import { GalleriesTable } from './(components)/galleries-table';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -39,11 +40,12 @@ const GalleryContent: FC<Props> = async ({ searchParams }) => {
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar galería ..." />
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link href="/admin/galerias/crear">
-                      <Button variant="outline-primary" size="icon">
-                        <Plus strokeWidth={3} />
-                      </Button>
+                  <TooltipTrigger>
+                    <Link
+                      href={ROUTES.ADMIN_GALLERIES_CREATE}
+                      className={buttonVariants({ variant: 'outline-primary', size: 'icon' })}
+                    >
+                      <Plus strokeWidth={3} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="left">crear</TooltipContent>
