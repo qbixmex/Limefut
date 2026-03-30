@@ -1,6 +1,10 @@
 export const HorizontalCalendarSkeleton = () => {
   return (
-    <div className="animate-pulse">
+    <div
+      className="animate-pulse"
+      role="status"
+      aria-label="Cargando calendario"
+    >
       <div className="bg-gray-700 rounded-t h-10" />
       <div className="border border-gray-400 rounded-b grid grid-cols-14 gap-5 p-5">
         {Array.from({ length: 14 }).map((_, index) => (

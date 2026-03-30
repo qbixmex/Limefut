@@ -34,27 +34,25 @@ export const BannerImage: FC<Props> = (props) => {
         className={cn('banner-image', className)}
         loading={position === 1 ? 'eager' : 'lazy'}
       />
-      <section className={cn('data-wrapper', {
-        'top-0 left-0': showData,
-        'top-[9999] left-[9999]': !showData,
-      })
-      }>
-        <h2 className={cn('heading', {
-          'align-left': dataAlignment === 'left',
-          'align-center': dataAlignment === 'center',
-          'align-right': dataAlignment === 'right',
-        })}>
-          {title}
-        </h2>
+      {showData && (
+        <section>
+          <h2 className={cn('heading', {
+            'align-left': dataAlignment === 'left',
+            'align-center': dataAlignment === 'center',
+            'align-right': dataAlignment === 'right',
+          })}>
+            {title}
+          </h2>
 
-        <p className={cn('description', {
-          'align-left': dataAlignment === 'left',
-          'align-center': dataAlignment === 'center',
-          'align-right': dataAlignment === 'right',
-        })}>
-          {description}
-        </p>
-      </section>
+          <p className={cn('description', {
+            'align-left': dataAlignment === 'left',
+            'align-center': dataAlignment === 'center',
+            'align-right': dataAlignment === 'right',
+          })}>
+            {description}
+          </p>
+        </section>
+      )}
     </figure>
   );
 };

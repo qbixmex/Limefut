@@ -188,5 +188,3 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
     };
   }
 };
-
-export default fetchPublicLatestMatchesAction;

@@ -17,7 +17,7 @@ export type ResponseFetchAction = Promise<{
   }[];
 }>;
 
-export const fetchPublicMatchesAction = async (options?: Options): ResponseFetchAction => {
+export const fetchPublicMatchesCountAction = async (options?: Options): ResponseFetchAction => {
   'use cache';
 
   cacheLife('days');
@@ -82,5 +82,3 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     };
   }
 };
-
-export default fetchPublicMatchesAction;

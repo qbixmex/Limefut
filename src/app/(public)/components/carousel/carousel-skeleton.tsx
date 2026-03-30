@@ -1,6 +1,10 @@
 export const CarouselSkeleton = () => {
   return (
-    <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-5 animate-pulse">
+    <div
+      className="w-full max-w-[1200px] mx-auto flex flex-col gap-5 animate-pulse"
+      role="status"
+      aria-label="Cargando carrusel de imágenes"
+    >
       <div className="w-full bg-gray-500 rounded-lg h-100" />
       <div className="flex justify-between items-center">
         <div className="flex gap-5 items-center">

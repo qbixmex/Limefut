@@ -73,5 +73,3 @@ export const fetchLatestImagesAction = async (): ResponseAction => {
     };
   }
 };
-
-export default fetchLatestImagesAction;
