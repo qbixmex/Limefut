@@ -35,7 +35,7 @@ export const BannerImage: FC<Props> = (props) => {
         loading={position === 1 ? 'eager' : 'lazy'}
       />
       {showData && (
-        <section>
+        <section className="data-wrapper">
           <h2 className={cn('heading', {
             'align-left': dataAlignment === 'left',
             'align-center': dataAlignment === 'center',
