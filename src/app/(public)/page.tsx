@@ -23,13 +23,13 @@ const HomePage: FC<Props> = ({ searchParams }) => {
 
   return (
     <>
+      <h1 className="visually-hidden">Limefut - Liga menor de fútbol</h1>
+
       <Suspense>
         <ErrorHandler />
       </Suspense>
 
       <div className="wrapper">
-        <h1 className="visually-hidden">Limefut - Liga menor de fútbol</h1>
-
         <Suspense fallback={<CarouselSkeleton />}>
           <Hero />
         </Suspense>

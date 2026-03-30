@@ -185,5 +185,3 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     };
   }
 };
-
-export default fetchPublicMatchesAction;

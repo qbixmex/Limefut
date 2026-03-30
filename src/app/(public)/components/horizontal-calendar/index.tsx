@@ -41,7 +41,9 @@ export const HorizontalCalendar: FC<Props> = ({ matchesDates }) => {
     if (!element || !container) return;
 
     const target = element.offsetLeft + element.offsetWidth / 2 - container.clientWidth / 2;
-    container.scrollTo({ left: target, behavior: 'smooth' });
+    if (container && typeof container.scrollTo === 'function') {
+      container.scrollTo({ left: target, behavior: 'smooth' });
+    }
   }, [RANGE]);
 
   const handleSelectDay = (day: Date) => {

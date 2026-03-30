@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { fetchPublicLatestMatchesAction } from '@/app/(public)/(actions)';
+import { fetchPublicLatestMatchesAction } from '../../(actions)/home/fetchPublicLatestMatchesAction';
 import { Pagination } from '@/shared/components/pagination';
 import { GameScore } from '@/shared/components/icons';
 import Link from 'next/link';
@@ -41,6 +41,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
               `${match.localTeam.permalink}`
             }
             target="_blank"
+            data-testid={`match-${match.id}`}
           >
             <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
               <div className="flex flex-col gap-5 md:flex-row md:gap-5">
@@ -66,11 +67,19 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                         ({match.penaltyShoots.localGoals})
                       </span>
                     )}
-                    <span className="font-bold text-2xl text-blue-700 dark:text-blue-500">
+                    <span
+                      className="font-bold text-2xl text-blue-700 dark:text-blue-500"
+                      role="heading"
+                      aria-level={3}
+                      aria-label={`Goles del equipo local ${match.localTeam.name}`}
+                    >
                       {match.localScore}
                     </span>
                     <span>-</span>
-                    <span className="font-bold text-2xl text-blue-700 dark:text-blue-500">
+                    <span
+                      className="font-bold text-2xl text-blue-700 dark:text-blue-500"
+                      aria-label={`Goles del equipo visitante ${match.visitorTeam.name}`}
+                    >
                       {match.visitorScore}
                     </span>
                     {match.penaltyShoots && (

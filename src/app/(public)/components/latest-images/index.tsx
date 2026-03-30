@@ -29,7 +29,11 @@ export const LatestImages: FC = async () => {
           <section className="image-galleries">
             {latestImages.map((image) => (
               <figure key={image.id} className="figure">
-                <Link href={`imagenes/${image.permalink}`}>
+                <Link
+                  href={`imagenes/${image.permalink}`}
+                  role="link"
+                  aria-label={`Ver galeria de ${image.title}`}
+                >
                   <Image
                     width={640}
                     height={360}

@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 import Link from 'next/link';
-import { fetchPublicMatchesAction } from '@/app/(public)/(actions)';
 import { Pagination } from '@/shared/components/pagination';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
 import { SoccerField } from '@/shared/components/icons';
 import { HorizontalCalendar } from '../horizontal-calendar';
-import fetchPublicMatchesCountAction from '../../(actions)/home/fetchPublicMatchesCountAction';
+import { fetchPublicMatchesAction } from '../../(actions)/home/fetchPublicMatchesAction';
+import { fetchPublicMatchesCountAction } from '../../(actions)/home/fetchPublicMatchesCountAction';
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string | undefined }>;

@@ -21,7 +21,7 @@ export const Team: FC<Props> = ({
               src={imageUrl}
               width={150}
               height={150}
-              alt={`${name} escudo`}
+              alt={`Escudo del equipo ${name}`}
               className="size-25 object-cover rounded"
             />
           )}
