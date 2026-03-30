@@ -1,42 +1,27 @@
 import { render, screen } from '@testing-library/react';
 import HomePage from '@/app/(public)/page';
 
-vi.mock('@/shared/components/errorHandler', () => ({
-  ErrorHandler: () => null,
-}));
+vi.mock('@/shared/components/errorHandler', () => ({ ErrorHandler: () => null }));
+vi.mock('@/app/(public)/components/hero', () => ({ Hero: () => null }));
+vi.mock('@/app/(public)/components/calendar-matches', () => ({ CalendarMatches: () => null }));
+vi.mock('@/app/(public)/components/latest-results', () => ({ LatestResults: () => null }));
+vi.mock('@/app/(public)/components/latest-images', () => ({ LatestImages: () => null }));
 
-vi.mock('@/app/(public)/components/hero', () => ({
-  Hero: () => null,
-}));
+describe('Tests on <HomePage />', () => {
+  test('Should render the home page correctly', async () => {
+    const serverComponent = await HomePage({
+      searchParams: Promise.resolve({
+        'next-matches': undefined,
+        'latest-results': undefined,
+        'selected-day': undefined,
+      }),
+    });
 
-vi.mock('@/app/(public)/components/calendar-matches', () => ({
-  CalendarMatches: () => null,
-}));
+    render(serverComponent);
 
-vi.mock('@/app/(public)/components/latest-results', () => ({
-  LatestResults: () => null,
-}));
-
-vi.mock('@/app/(public)/components/horizontal-calendar', () => ({
-  HorizontalCalendar: () => null,
-}));
-
-vi.mock('@/app/(public)/components/next-matches', () => ({
-  NextMatches: () => null,
-}));
-
-vi.mock('@/app/(public)/components/latest-images', () => ({
-  LatestImages: () => null,
-}));
-
-describe('Tests on <HomePage />', async () => {
-  test('Should render the home page correctly', () => {
-    render(
-      <HomePage searchParams={Promise.resolve({})} />,
+    const title = screen.queryByRole('heading',
+      { level: 1 },
     );
-
-    const title = screen.getByRole('heading', { level: 1 });
-
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent(/limefut/i);
   });

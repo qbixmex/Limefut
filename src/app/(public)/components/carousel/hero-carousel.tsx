@@ -66,7 +66,7 @@ export const HeroCarousel: FC<Props> = ({
   useEffect(() => {
     if (!emblaApi || !shouldEnableAutoplayPlugin) return;
 
-    const autoplayPlugin = emblaApi.plugins().autoplay;
+    const autoplayPlugin = emblaApi.plugins()?.autoplay;
 
     if (
       !autoplayPlugin ||
@@ -76,7 +76,7 @@ export const HeroCarousel: FC<Props> = ({
       return;
     }
 
-    if (play) {
+    if (play && autoplayPlugin) {
       autoplayPlugin.play();
     } else {
       autoplayPlugin.stop();
@@ -91,12 +91,8 @@ export const HeroCarousel: FC<Props> = ({
 
   const showControls = banners.length > 1;
 
-  if (banners.length === 0) {
-    return null;
-  }
-
   return (
-    <section className="embla">
+    <section className="embla" data-testid="hero-carousel">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
           {banners.map((banner) => (

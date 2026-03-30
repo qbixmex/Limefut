@@ -2,7 +2,11 @@ import type { FC } from 'react';
 
 const MatchesSkeleton: FC = () => {
   return (
-    <div className="animate-pulse">
+    <div
+      className="animate-pulse"
+      role="status"
+      aria-label="Cargando partidos"
+    >
       <div className="bg-gray-500 h-12 rounded-t" />
       <div className="border border-gray-900/90 rounded-b-lg p-5 flex flex-col gap-5">
         {Array.from({ length: 3 }).map((_, row) => (
