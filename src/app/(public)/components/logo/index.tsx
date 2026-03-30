@@ -15,6 +15,7 @@ export const Logo = () => {
           height={40}
           alt="Limefut logo"
           className="w-full max-w-[150px]"
+          loading="eager"
         />
       </Link>
     </figure>

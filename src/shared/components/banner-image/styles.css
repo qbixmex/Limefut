@@ -6,6 +6,7 @@
 
 .data-wrapper {
   @apply absolute w-full h-full px-5 lg:px-20 bg-black/20;
+  @apply top-0 left-0;
   @apply flex flex-col justify-center gap-3;
 }
 
