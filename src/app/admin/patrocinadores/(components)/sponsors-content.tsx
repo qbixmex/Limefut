@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
 import { SponsorsTable } from '../sponsors-table';
 import { CreateSponsor } from './create-sponsor';
+import { SponsorTableSkeleton } from './sponsor-table-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -33,9 +34,8 @@ export const CustomSponsorsContent: FC<Props> = async ({ searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense
-                key={`${query}-${currentPage}`}
-                // TODO: fallback={<PagesTableSkeleton />}
-                fallback={<p>Cargando páginas</p>}
+                key={`${query ?? 'query'}-${currentPage ?? 'current-page'}`}
+                fallback={<SponsorTableSkeleton />}
               >
                 <SponsorsTable
                   query={query}
