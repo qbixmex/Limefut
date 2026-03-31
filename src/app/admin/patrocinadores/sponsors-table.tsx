@@ -1,20 +1,20 @@
 import { type FC } from 'react';
-import Link from 'next/link';
-import { headers } from 'next/headers';
+import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { InfoIcon, Pencil } from 'lucide-react';
-import { buttonVariants } from '@/components/ui/button';
 import { auth } from '@/lib/auth';
-import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
-// TODO: import { DeleteSponsor } from './delete-sponsor';
-import { Badge } from '@/components/ui/badge';
-import { ROUTES } from '@/shared/constants/routes';
 import { ActiveSwitch } from '@/shared/components/active-switch';
-import { es } from 'date-fns/locale';
+import { Pagination } from '@/shared/components/pagination';
+import { ROUTES } from '@/shared/constants/routes';
 import { format } from 'date-fns/format';
+import { es } from 'date-fns/locale';
+import { InfoIcon, Pencil } from 'lucide-react';
+import { headers } from 'next/headers';
+import Link from 'next/link';
 import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
+import { DeleteSponsor } from './(components)/delete-sponsor';
 
 type Props = Readonly<{
   query?: string;
@@ -124,10 +124,10 @@ export const SponsorsTable: FC<Props> = async ({
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        {/* <DeleteSponsor
-                            pageId={page.id as string}
-                            roles={session?.user.roles as string[]}
-                          /> */}
+                        <DeleteSponsor
+                          sponsorId={sponsor.id as string}
+                          roles={session?.user.roles as string[]}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

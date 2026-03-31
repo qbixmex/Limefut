@@ -33,7 +33,7 @@ export const createSponsorSchema = z.object({
     .optional(),
   image: z
     .instanceof(File, { message: 'La imagen debe ser un archivo' })
-    .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
+    .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 2MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
   active: z.boolean('¡ Activo debe ser un valor boleano !').optional(),
