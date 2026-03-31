@@ -48,7 +48,8 @@ export const updateSponsorAction = async ({
     endDate: new Date(formData.get('endDate') as string) ?? new Date(),
     image: formData.get('image') as File,
     clicks: parseInt(formData.get('clicks') as string ?? '0'),
-    position: formData.get('position') ?? '',
+    alignment: formData.get('alignment') ?? '',
+    position: parseInt(formData.get('position') as string ?? '0'),
     active: formData.get('active') === 'true',
   };
 
@@ -94,6 +95,89 @@ export const updateSponsorAction = async ({
           };
         }
 
+        const sponsors = await transaction.sponsor.findMany({
+          select: {
+            id: true,
+            position: true,
+          },
+          orderBy: { position: 'asc' },
+        });
+
+        const maxPosition = sponsors.length;
+        const updatedPosition = Math.max(1, Math.min(rawData.position, maxPosition));
+        const currentPosition = sponsors.find((sponsor) => sponsor.id === sponsorId)?.position ?? 0;
+
+        // If position unchanged, just update the page fields (ensure position kept)
+        if (updatedPosition === currentPosition) {
+          const updatedSponsor = await transaction.sponsor.update({
+            where: { id: sponsorId },
+            data: {
+              name: data.name,
+              url: data.url,
+              startDate: data.startDate,
+              endDate: data.endDate,
+              alignment: data.alignment,
+              position: updatedPosition,
+              clicks: data.clicks,
+              active: data.active,
+            },
+          });
+
+          if (image !== null) {
+            const updatedImage = await updateSponsorImage(
+              image as File,
+              updatedSponsor.imagePublicId,
+            );
+
+            // Update sponsor image data.
+            await transaction.heroBanner.update({
+              where: { id: sponsorId },
+              data: {
+                imageUrl: updatedImage.imageUrl,
+                imagePublicId: updatedImage.imagePublicId,
+              },
+            });
+          }
+
+          // Update Cache
+          updateTag('admin-sponsors');
+          updateTag('admin-sponsor');
+
+          return {
+            ok: true,
+            message: '¡ El patrocinador fue guardado correctamente 👍 !',
+            sponsor: updatedSponsor,
+          };
+        }
+
+        // When moving up (to a smaller number): increment affected positions,
+        // update in descending order to avoid unique position conflicts.
+        if (updatedPosition < currentPosition) {
+          const affected = sponsors
+            .filter((sponsor) => sponsor.position! >= updatedPosition && sponsor.position! < currentPosition)
+            .sort((a, b) => b.position! - a.position!); // descending
+
+          for (const sponsor of affected) {
+            await transaction.sponsor.update({
+              where: { id: sponsor.id },
+              data: { position: sponsor.position! + 1 },
+            });
+          }
+        } else {
+          // Moving down (to a larger number): decrement affected positions,
+          // update in ascending order to avoid unique position conflicts.
+          const affected = sponsors
+            .filter((sponsor) => sponsor.position! <= updatedPosition && sponsor.position! > currentPosition)
+            .sort((a, b) => a.position! - b.position!); // ascending
+
+          for (const sponsor of affected) {
+            await transaction.sponsor.update({
+              where: { id: sponsor.id },
+              data: { position: sponsor.position! - 1 },
+            });
+          }
+        }
+
         const updatedSponsor = await transaction.sponsor.update({
           where: { id: sponsorId },
           data: {
@@ -101,6 +185,7 @@ export const updateSponsorAction = async ({
             url: data.url,
             startDate: data.startDate,
             endDate: data.endDate,
+            alignment: data.alignment,
             position: data.position,
             clicks: data.clicks,
             active: data.active,
@@ -126,7 +211,7 @@ export const updateSponsorAction = async ({
         // Update Cache
         updateTag('admin-sponsors');
         updateTag('admin-sponsor');
-        updateTag('public-sponsor');
+        updateTag('public-sponsors');
 
         return {
           ok: true,
@@ -164,6 +249,8 @@ export const updateSponsorAction = async ({
     });
 
     // Update Cache
+    updateTag('admin-sponsors');
+    updateTag('admin-sponsor');
     updateTag('public-sponsors');
 
     return prismaTransaction;

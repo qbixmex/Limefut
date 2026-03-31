@@ -6,7 +6,8 @@ export interface Sponsor {
   imagePublicId: string;
   startDate?: Date | null;
   endDate?: Date | null;
-  position: string;
+  alignment: string;
+  position: number;
   clicks: number;
   active: boolean;
   createdAt?: Date;

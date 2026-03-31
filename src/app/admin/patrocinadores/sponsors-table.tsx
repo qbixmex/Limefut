@@ -50,7 +50,8 @@ export const SponsorsTable: FC<Props> = async ({
                 <TableRow>
                   <TableHead className="hidden md:table-cell w-[120px]">Imagen</TableHead>
                   <TableHead className="w-[200px]">Nombre</TableHead>
-                  <TableHead className="hidden lg:table-cell w-[50px]">Posición</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[50px] text-center">Posición</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[50px]">Alineación</TableHead>
                   <TableHead className="hidden lg:table-cell w-[50px]">URL</TableHead>
                   <TableHead className="hidden md:table-cell w-[100px] text-center">Clicks</TableHead>
                   <TableHead className="hidden sm:table-cell w-[100px] text-center">Activo</TableHead>
@@ -74,9 +75,14 @@ export const SponsorsTable: FC<Props> = async ({
                     <TableCell>
                       <p className="text-pretty">{sponsor.name}</p>
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell">
+                    <TableCell className="hidden lg:table-cell text-center">
                       <Badge variant="outline-info">
                         {sponsor.position}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      <Badge variant="outline-info">
+                        {sponsor.alignment}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">

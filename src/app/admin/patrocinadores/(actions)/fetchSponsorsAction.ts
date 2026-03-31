@@ -19,7 +19,8 @@ export type SponsorType = {
   imageUrl: string;
   startDate: Date | null;
   endDate: Date | null;
-  position: string;
+  alignment: string;
+  position: number;
   clicks: number;
   active: boolean;
 };
@@ -73,6 +74,7 @@ export const fetchSponsorsAction = async (options: Options): ResponseFetch => {
         imageUrl: true,
         startDate: true,
         endDate: true,
+        alignment: true,
         position: true,
         clicks: true,
         active: true,

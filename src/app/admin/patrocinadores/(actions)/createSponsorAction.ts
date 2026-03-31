@@ -31,7 +31,8 @@ export const createSponsorAction = async (
     endDate: new Date(formData.get('endDate') as string) ?? new Date(),
     image: formData.get('image') as File,
     clicks: parseInt(formData.get('clicks') as string ?? '0'),
-    position: formData.get('position') ?? '',
+    alignment: formData.get('alignment') ?? '',
+    position: parseInt(formData.get('position') as string ?? '0'),
     active: formData.get('active') === 'true',
   };
 
@@ -63,6 +64,14 @@ export const createSponsorAction = async (
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
+      // Find the maximum position
+      const maxPositionResult = await transaction.sponsor.aggregate({
+        _max: { position: true },
+      });
+
+      // Calculate the new position
+      const newPosition = (maxPositionResult._max.position || 0) + 1;
+
       const createdSponsor = await transaction.sponsor.create({
         data: {
           name: data.name,
@@ -71,7 +80,8 @@ export const createSponsorAction = async (
           endDate: data.endDate,
           imagePublicId: cloudinaryResponse?.publicId as string,
           imageUrl: cloudinaryResponse?.secureUrl as string,
-          position: data.position,
+          alignment: data.alignment,
+          position: newPosition,
           clicks: data.clicks,
           active: data.active,
         },

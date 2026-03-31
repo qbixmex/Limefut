@@ -50,7 +50,8 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
       url: sponsor?.url ?? undefined,
       startDate: sponsor?.startDate ?? undefined,
       endDate: sponsor?.endDate ?? undefined,
-      position: sponsor?.position ?? '',
+      position: sponsor?.position ?? 1,
+      alignment: sponsor?.alignment ?? '',
       clicks: sponsor?.clicks ?? 0,
       active: sponsor?.active ?? false,
     },
@@ -70,7 +71,8 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
     if (data.startDate) formData.append('startDate', (data.startDate as Date).toString());
     if (data.endDate) formData.append('endDate', (data.endDate as Date).toString());
     if (data.image) formData.append('image', data.image as File);
-    formData.append('position', String(data.position ?? 0));
+    formData.append('alignment', data.alignment as string ?? '');
+    if (data.position) formData.append('position', String(data.position ?? 0));
     if (data.clicks) formData.append('clicks', data.clicks.toString());
     formData.append('active', String(data.active ?? false));
 
@@ -284,7 +286,7 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
             <div className="w-full lg:w-auto lg:mt-5">
               <FormField
                 control={form.control}
-                name="position"
+                name="alignment"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -293,7 +295,7 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="w-full lg:w-auto">
-                          <SelectValue placeholder="Seleccione posición" />
+                          <SelectValue placeholder="Seleccione la alineación" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
@@ -310,6 +312,33 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
                 )}
               />
             </div>
+            {sponsor && (
+              <div className="w-full lg:w-auto lg:mt-5">
+                <FormField
+                  control={form.control}
+                  name="position"
+                  render={({ field }) => (
+                    <FormItem className="flex gap-3">
+                      <FormLabel>Posición</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="number"
+                          min={1}
+                          value={field.value ?? '1'}
+                          onChange={(e) => {
+                            const clicks = parseInt(e.target.value);
+                            field.onChange(clicks);
+                          }}
+                          className="w-16"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
             <div className="w-full inline-flex justify-end lg:w-auto lg:mt-5">
               <FormField
                 control={form.control}
