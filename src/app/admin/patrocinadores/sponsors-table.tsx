@@ -14,20 +14,12 @@ import { ROUTES } from '@/shared/constants/routes';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { es } from 'date-fns/locale';
 import { format } from 'date-fns/format';
-import { fetchSponsorsAction } from './(actions)/fetchSponsorsAction';
+import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
 
 type Props = Readonly<{
   query?: string;
   currentPage?: string;
 }>;
-
-const updateSponsorStateAction = async (_id: string, state: boolean) => {
-  'use server';
-  return Promise.resolve({
-    ok: true,
-    message: `Patrocinador ${state ? 'activado' : 'desactivado'} 👍`,
-  });
-};
 
 export const SponsorsTable: FC<Props> = async ({
   query = '',
@@ -87,7 +79,6 @@ export const SponsorsTable: FC<Props> = async ({
                     <TableCell className="text-center">
                       <ActiveSwitch
                         resource={{ id: sponsor.id, state: sponsor.active }}
-                        // TODO: updateResourceStateAction={updateSponsorStateAction}
                         updateResourceStateAction={updateSponsorStateAction}
                       />
                     </TableCell>
