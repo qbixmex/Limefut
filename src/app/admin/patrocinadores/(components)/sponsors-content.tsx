@@ -3,6 +3,7 @@ import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
 import { SponsorsTable } from '../sponsors-table';
+import { CreateSponsor } from './create-sponsor';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -25,7 +26,7 @@ export const CustomSponsorsContent: FC<Props> = async ({ searchParams }) => {
               <CardTitle className="admin-page-card-title">Lista de Patrocinadores</CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar patrocinador ..." />
-                {/* <CreatePage /> */}
+                <CreateSponsor />
               </section>
             </CardHeader>
             <CardContent>
