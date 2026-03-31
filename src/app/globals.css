@@ -306,7 +306,7 @@
   }
 
   .admin-page-card-header {
-    @apply flex items-center justify-between;
+    @apply flex flex-col! lg:flex-row! lg:items-center! lg:justify-between!;
   }
 
   .admin-page-card-title {

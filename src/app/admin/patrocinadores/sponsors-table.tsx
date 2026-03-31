@@ -15,6 +15,7 @@ import { headers } from 'next/headers';
 import Link from 'next/link';
 import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
 import { DeleteSponsor } from './(components)/delete-sponsor';
+import Image from 'next/image';
 
 type Props = Readonly<{
   query?: string;
@@ -47,49 +48,59 @@ export const SponsorsTable: FC<Props> = async ({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead className="w-25">Posición</TableHead>
-                  <TableHead className="w-25">URL</TableHead>
-                  <TableHead className="w-25 text-center">Clicks</TableHead>
-                  <TableHead className="w-25 text-center">Activo</TableHead>
-                  <TableHead className="w-25">Fecha Inicial</TableHead>
-                  <TableHead className="w-25">Fecha Final</TableHead>
-                  <TableHead className="w-50">Acciones</TableHead>
+                  <TableHead className="hidden md:table-cell w-[120px]">Imagen</TableHead>
+                  <TableHead className="w-[200px]">Nombre</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[50px]">Posición</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[50px]">URL</TableHead>
+                  <TableHead className="hidden md:table-cell w-[100px] text-center">Clicks</TableHead>
+                  <TableHead className="hidden sm:table-cell w-[100px] text-center">Activo</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[120px]">Fecha Inicial</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[120px]">Fecha Final</TableHead>
+                  <TableHead className="w-[150px]">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {sponsors.map((sponsor) => (
                   <TableRow key={sponsor.id}>
+                    <TableCell className="hidden md:table-cell">
+                      <Image
+                        src={sponsor.imageUrl}
+                        width={100}
+                        height={100}
+                        className="size-[100px] object-contain rounded"
+                        alt={`Imagen del patrocinador ${sponsor.name}`}
+                      />
+                    </TableCell>
                     <TableCell>
                       <p className="text-pretty">{sponsor.name}</p>
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="hidden lg:table-cell">
                       <Badge variant="outline-info">
                         {sponsor.position}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="hidden lg:table-cell">
                       {sponsor.url ?? <Badge variant="outline-secondary" />}
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="hidden md:table-cell text-center">
                       <Badge variant="outline-info">
                         {sponsor.clicks}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="hidden sm:table-cell text-center">
                       <ActiveSwitch
                         resource={{ id: sponsor.id, state: sponsor.active }}
                         updateResourceStateAction={updateSponsorStateAction}
                       />
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="hidden lg:table-cell">
                       {
                         sponsor.startDate
                           ? format(sponsor.startDate, 'dd / MMM / y', { locale: es }).toUpperCase()
                           : <Badge variant="outline-secondary">No establecida</Badge>
                       }
                     </TableCell>
-                    <TableCell className="text-center">
+                    <TableCell className="hidden lg:table-cell">
                       {
                         sponsor.endDate
                           ? format(sponsor.endDate, 'dd / MMM / y', { locale: es }).toUpperCase()

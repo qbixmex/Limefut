@@ -23,7 +23,9 @@ export const CustomSponsorsContent: FC<Props> = async ({ searchParams }) => {
         <div className="admin-page-container">
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
-              <CardTitle className="admin-page-card-title">Lista de Patrocinadores</CardTitle>
+              <CardTitle className="admin-page-card-title">
+                Lista de Patrocinadores
+              </CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar patrocinador ..." />
                 <CreateSponsor />

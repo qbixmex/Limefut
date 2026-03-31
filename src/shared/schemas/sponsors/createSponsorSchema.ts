@@ -26,7 +26,8 @@ export const createSponsorSchema = z.object({
     .date({ message: 'La fecha final debe ser una fecha válida' })
     .optional(),
   position: z
-    .string('¡ La posición debe ser una cadena de texto !'),
+    .string('¡ La posición debe ser una cadena de texto !')
+    .min(1, { message: '¡ Seleccione la posición del patrocinador !' }),
   clicks: z
     .int()
     .min(0, { message: '¡ Los clicks deben ser un número positivo !' })
