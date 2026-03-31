@@ -4,9 +4,8 @@ import { headers } from 'next/headers';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { InfoIcon, Pencil } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { auth } from '@/lib/auth';
-import type { Sponsor } from '@/shared/interfaces';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 // TODO: import { DeleteSponsor } from './delete-sponsor';
@@ -15,40 +14,12 @@ import { ROUTES } from '@/shared/constants/routes';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { es } from 'date-fns/locale';
 import { format } from 'date-fns/format';
+import { fetchSponsorsAction } from './(actions)/fetchSponsorsAction';
 
 type Props = Readonly<{
   query?: string;
   currentPage?: string;
 }>;
-
-const sponsors: Sponsor[] = [
-  {
-    id: '91a8f2d9-0eb5-4843-9272-25479985bd81',
-    name: 'Powerade',
-    imageUrl: 'https://cloudinary.com/powerade.webp',
-    imagePublicId: 'ac035db3-322a-4e27-8025-338854fdf7e9',
-    position: 'home-sidebar',
-    startDate: new Date('2024-05-22T00:00:00.00Z'),
-    endDate: new Date('2024-06-22T00:00:00.00Z'),
-    clicks: 15,
-    active: true,
-    createdAt: new Date('2024-03-05T14:22:18.475Z'),
-    updatedAt: new Date('2024-03-05T14:25:35.122Z'),
-  },
-  {
-    id: '37256634-2786-4390-bc23-0aa5a0a51364',
-    name: 'Gatorade',
-    imageUrl: 'https://cloudinary.com/gatorade.webp',
-    imagePublicId: '3d12b601-5dfa-47cb-8bfc-131d95e3cb6c',
-    position: 'home-sidebar',
-    // startDate: new Date('2024-08-15T00:00:00.00Z'),
-    // endDate: new Date('2024-09-15T00:00:00.00Z'),
-    clicks: 0,
-    active: false,
-    createdAt: new Date('2024-05-05T10:12:45.722Z'),
-    updatedAt: new Date('2024-05-05T12:45:00.125Z'),
-  },
-];
 
 const updateSponsorStateAction = async (_id: string, state: boolean) => {
   'use server';
@@ -56,11 +27,6 @@ const updateSponsorStateAction = async (_id: string, state: boolean) => {
     ok: true,
     message: `Patrocinador ${state ? 'activado' : 'desactivado'} 👍`,
   });
-};
-
-const pagination = {
-  totalPages: 1,
-  currentPage: 1,
 };
 
 export const SponsorsTable: FC<Props> = async ({
@@ -71,15 +37,15 @@ export const SponsorsTable: FC<Props> = async ({
     headers: await headers(),
   });
 
-  // const {
-  //   sponsors = [],
-  //   pagination,
-  // } = await fetchSponsorsAction({
-  //   userRole: session?.user.roles ?? [],
-  //   page: currentPage as number,
-  //   take: 12,
-  //   searchTerm: query,
-  // });
+  const {
+    sponsors = [],
+    pagination,
+  } = await fetchSponsorsAction({
+    userRoles: session?.user.roles ?? [],
+    page: currentPage as number,
+    take: 12,
+    searchTerm: query,
+  });
 
   return (
     <>
@@ -90,11 +56,12 @@ export const SponsorsTable: FC<Props> = async ({
               <TableHeader>
                 <TableRow>
                   <TableHead>Nombre</TableHead>
-                  <TableHead className="w-25 text-center">Posición</TableHead>
+                  <TableHead className="w-25">Posición</TableHead>
+                  <TableHead className="w-25">URL</TableHead>
                   <TableHead className="w-25 text-center">Clicks</TableHead>
                   <TableHead className="w-25 text-center">Activo</TableHead>
-                  <TableHead className="w-25 text-center">Fecha Inicial</TableHead>
-                  <TableHead className="w-25 text-center">Fecha Final</TableHead>
+                  <TableHead className="w-25">Fecha Inicial</TableHead>
+                  <TableHead className="w-25">Fecha Final</TableHead>
                   <TableHead className="w-50">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
@@ -108,6 +75,9 @@ export const SponsorsTable: FC<Props> = async ({
                       <Badge variant="outline-info">
                         {sponsor.position}
                       </Badge>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {sponsor.url ?? <Badge variant="outline-secondary" />}
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant="outline-info">
@@ -138,11 +108,12 @@ export const SponsorsTable: FC<Props> = async ({
                     <TableCell>
                       <div className="flex gap-3">
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={ROUTES.ADMIN_SPONSORS_SHOW(sponsor.id)}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
+                          <TooltipTrigger>
+                            <Link
+                              href={ROUTES.ADMIN_SPONSORS_SHOW(sponsor.id)}
+                              className={buttonVariants({ variant: 'outline-info', size: 'icon' })}
+                            >
+                              <InfoIcon />
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">
@@ -150,11 +121,12 @@ export const SponsorsTable: FC<Props> = async ({
                           </TooltipContent>
                         </Tooltip>
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={ROUTES.ADMIN_SPONSORS_EDIT(sponsor.id)}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
+                          <TooltipTrigger>
+                            <Link
+                              href={ROUTES.ADMIN_SPONSORS_EDIT(sponsor.id)}
+                              className={buttonVariants({ variant: 'outline-warning', size: 'icon' })}
+                            >
+                              <Pencil />
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">

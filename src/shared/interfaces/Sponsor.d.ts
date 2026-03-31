@@ -1,11 +1,11 @@
 export interface Sponsor {
-  id: string;
+  id?: string;
   name: string;
   url?: string | null;
   imageUrl: string;
   imagePublicId: string;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | null;
+  endDate?: Date | null;
   position: string;
   clicks: number;
   active: boolean;
