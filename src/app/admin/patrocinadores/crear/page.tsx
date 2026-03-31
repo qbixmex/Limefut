@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
@@ -31,7 +32,10 @@ const CreateSponsorContent: FC<Props> = async () => {
             <CardTitle className="admin-page-card-title">Crear Patrocinador</CardTitle>
           </CardHeader>
           <CardContent>
-            <SponsorForm session={session as Session} />
+            <SponsorForm
+              key={randomUUID()}
+              session={session as Session}
+            />
           </CardContent>
         </Card>
       </div>

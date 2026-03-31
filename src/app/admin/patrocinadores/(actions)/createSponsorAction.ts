@@ -4,7 +4,6 @@ import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { uploadImage } from '@/shared/actions';
 import type { CloudinaryResponse, Sponsor } from '@/shared/interfaces';
-import type { ALIGNMENT_TYPE } from '@/shared/enums';
 import { createSponsorSchema } from '@/shared/schemas';
 
 type ResponseCreateAction = Promise<{

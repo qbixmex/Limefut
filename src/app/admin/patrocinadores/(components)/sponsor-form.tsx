@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, type FC } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
@@ -15,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createSponsorSchema, editSponsorSchema } from '@/shared/schemas';
-import { createSponsorAction } from '../(actions)';
+import { createSponsorAction, updateSponsorAction } from '../(actions)';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
@@ -68,11 +69,12 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
     if (data.url) formData.append('url', data.url as string);
     if (data.startDate) formData.append('startDate', (data.startDate as Date).toString());
     if (data.endDate) formData.append('endDate', (data.endDate as Date).toString());
-    formData.append('image', data.image as File);
+    if (data.image) formData.append('image', data.image as File);
     formData.append('position', String(data.position ?? 0));
+    if (data.clicks) formData.append('clicks', data.clicks.toString());
     formData.append('active', String(data.active ?? false));
 
-    // Create Hero Banner
+    // Create Sponsor
     if (!sponsor) {
       const response = await createSponsorAction(
         formData,
@@ -88,35 +90,26 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
         toast.success(response.message);
         route.replace(ROUTES.ADMIN_SPONSORS);
       }
-
-      form.reset({
-        name: '',
-        url: undefined,
-        startDate: undefined,
-        endDate: undefined,
-        position: '',
-        clicks: 0,
-        active: false,
-      });
+      return;
     }
 
-    // Update Hero Banner
-    // if (heroBanner) {
-    //   const response = await updateHeroBannerAction({
-    //     formData,
-    //     heroBannerId: heroBanner?.id as string,
-    //     userRoles: session.user.roles!,
-    //     authenticatedUserId: session?.user.id,
-    //   });
+    // Update Sponsor
+    if (sponsor) {
+      const response = await updateSponsorAction({
+        formData,
+        sponsorId: sponsor?.id as string,
+        userRoles: session.user.roles!,
+        authenticatedUserId: session?.user.id,
+      });
 
-    //   if (!response.ok) {
-    //     toast.error(response.message);
-    //     return;
-    //   }
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
 
-    //   toast.success(response.message);
-    //   route.replace(`/admin/banners/${heroBanner.id}`);
-    // }
+      toast.success(response.message);
+      route.replace(ROUTES.ADMIN_SPONSORS);
+    }
   };
 
   return (
@@ -274,7 +267,10 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
                         type="number"
                         min={0}
                         value={field.value ?? '0'}
-                        onChange={(e) => parseInt(e.target.value)}
+                        onChange={(e) => {
+                          const clicks = parseInt(e.target.value);
+                          field.onChange(clicks);
+                        }}
                         className="w-16"
                       />
                     </FormControl>
@@ -290,19 +286,27 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
                 control={form.control}
                 name="position"
                 render={({ field }) => (
-                  <Select onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full lg:w-auto">
-                      <SelectValue placeholder="Seleccione posición" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value={SPONSOR_POSITION.HOME_TOP_SIDEBAR}>Home Arriba</SelectItem>
-                        <SelectItem value={SPONSOR_POSITION.HOME_RIGHT_SIDEBAR}>Home Derecha</SelectItem>
-                        <SelectItem value={SPONSOR_POSITION.HOME_BOTTOM_SIDEBAR}>Home Abajo</SelectItem>
-                        <SelectItem value={SPONSOR_POSITION.HOME_LEFT_SIDEBAR}>Home Izquierda</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <FormItem>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-full lg:w-auto">
+                          <SelectValue placeholder="Seleccione posición" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value={SPONSOR_POSITION.HOME_TOP}>Home Arriba</SelectItem>
+                            <SelectItem value={SPONSOR_POSITION.HOME_RIGHT}>Home Derecha</SelectItem>
+                            <SelectItem value={SPONSOR_POSITION.HOME_BOTTOM}>Home Abajo</SelectItem>
+                            <SelectItem value={SPONSOR_POSITION.HOME_LEFT}>Home Izquierda</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
             </div>
@@ -336,20 +340,12 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
             variant="outline-secondary"
             size="lg"
             onClick={() => {
-              form.reset({
-                name: '',
-                url: undefined,
-                startDate: undefined,
-                endDate: undefined,
-                position: '',
-                clicks: 0,
-                active: false,
-              });
               route.replace(ROUTES.ADMIN_SPONSORS);
             }}
           >
             cancelar
           </Button>
+
           <Button
             type="submit"
             variant="outline-primary"
