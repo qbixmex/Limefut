@@ -30,7 +30,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
-import { SPONSOR_POSITION } from '@/shared/enums/sponsor-position';
+import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
+import { cn, getAlignment } from '@/lib/utils';
 
 type Props = Readonly<{
   session: Session;
@@ -294,15 +295,17 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
                         value={field.value ?? undefined}
                         onValueChange={field.onChange}
                       >
-                        <SelectTrigger className="w-full lg:w-auto">
+                        <SelectTrigger
+                          className="w-full lg:w-auto"
+                          aria-invalid={!!form.formState.errors.alignment}
+                        >
                           <SelectValue placeholder="Seleccione la alineación" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            <SelectItem value={SPONSOR_POSITION.HOME_TOP}>Home Arriba</SelectItem>
-                            <SelectItem value={SPONSOR_POSITION.HOME_RIGHT}>Home Derecha</SelectItem>
-                            <SelectItem value={SPONSOR_POSITION.HOME_BOTTOM}>Home Abajo</SelectItem>
-                            <SelectItem value={SPONSOR_POSITION.HOME_LEFT}>Home Izquierda</SelectItem>
+                            <SelectItem value={SPONSOR_ALIGNMENT.RIGHT}>
+                              {getAlignment(SPONSOR_ALIGNMENT.RIGHT)}
+                            </SelectItem>
                           </SelectGroup>
                         </SelectContent>
                       </Select>

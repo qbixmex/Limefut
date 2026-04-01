@@ -1,4 +1,5 @@
 import {
+  getAlignment,
   getAlignmentTranslation,
   getBadgeRobotsVariant,
   getGenderTranslation,
@@ -12,6 +13,7 @@ import {
 } from '@/lib/utils';
 import { PAGE_STATUS, ROBOTS } from '@/shared/interfaces';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 
 describe('Test on Utils', () => {
   test('Should slugify text with spaces', () => {
@@ -130,5 +132,13 @@ describe('Test on Utils', () => {
 
     // Check if the shuffled array contains the same elements as the original
     expect(shuffledArray).toEqual(expect.arrayContaining(originalArray));
+  });
+
+  test('Should translates sponsor alignment to Spanish.', () => {
+    expect(getAlignment(SPONSOR_ALIGNMENT.TOP)).toBe('arriba');
+    expect(getAlignment(SPONSOR_ALIGNMENT.RIGHT)).toBe('derecha');
+    expect(getAlignment(SPONSOR_ALIGNMENT.BOTTOM)).toBe('abajo');
+    expect(getAlignment(SPONSOR_ALIGNMENT.LEFT)).toBe('izquierda');
+    expect(getAlignment('lorem')).toBe('lorem');
   });
 });

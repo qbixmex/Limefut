@@ -4,7 +4,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { auth } from '@/lib/auth';
-import { cn } from '@/lib/utils';
+import { cn, getAlignment } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Pagination } from '@/shared/components/pagination';
 import { ROUTES } from '@/shared/constants/routes';
@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
 import { DeleteSponsor } from './(components)/delete-sponsor';
 import Image from 'next/image';
+import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 
 type Props = Readonly<{
   query?: string;
@@ -82,7 +83,7 @@ export const SponsorsTable: FC<Props> = async ({
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
                       <Badge variant="outline-info">
-                        {sponsor.alignment}
+                        {getAlignment(sponsor.alignment)}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
