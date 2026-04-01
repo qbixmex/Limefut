@@ -40,8 +40,6 @@ export const fetchSponsorAction = async (
       };
     }
 
-    console.log(sponsor);
-
     return {
       ok: true,
       message: '¡ Patrocinador obtenido correctamente 👍 !',
