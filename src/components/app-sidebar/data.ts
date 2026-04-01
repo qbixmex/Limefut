@@ -15,7 +15,7 @@ import {
   ImageIcon,
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
-import { GiWhistle } from 'react-icons/gi';
+import { GiWhistle, GiSodaCan } from 'react-icons/gi';
 import {
   SoccerPlayer,
   SoccerField,
@@ -138,24 +138,6 @@ export const navMain: NavItem[] = [
       },
     ],
   },
-  // {
-  //   label: "Credenciales",
-  //   url: "#",
-  //   icon: IdCard,
-  //   isActive: false,
-  //   subItems: [
-  //     {
-  //       label: "Lista",
-  //       url: "/admin/credenciales",
-  //       icon: ListIcon,
-  //     },
-  //     {
-  //       label: "Crear",
-  //       url: "/admin/credenciales/crear",
-  //       icon: PlusIcon,
-  //     },
-  //   ],
-  // },
   {
     label: 'Banners',
     url: '#',
@@ -170,6 +152,24 @@ export const navMain: NavItem[] = [
       {
         label: 'Crear',
         url: '/admin/banners/crear',
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: 'Patrocinadores',
+    url: '#',
+    icon: GiSodaCan,
+    isActive: false,
+    subItems: [
+      {
+        label: 'Lista',
+        url: '/admin/patrocinadores',
+        icon: ListIcon,
+      },
+      {
+        label: 'Crear',
+        url: '/admin/patrocinadores/crear',
         icon: PlusIcon,
       },
     ],
