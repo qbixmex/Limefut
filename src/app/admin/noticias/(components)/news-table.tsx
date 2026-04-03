@@ -1,0 +1,135 @@
+import { type FC } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { auth } from '@/lib/auth';
+import { cn } from '@/lib/utils';
+import { ActiveSwitch } from '@/shared/components/active-switch';
+import { Pagination } from '@/shared/components/pagination';
+import { ROUTES } from '@/shared/constants/routes';
+import { format } from 'date-fns/format';
+import { es } from 'date-fns/locale';
+import { InfoIcon, Pencil } from 'lucide-react';
+import { headers } from 'next/headers';
+import Link from 'next/link';
+import type { New } from '@/shared/interfaces';
+import { fetchNewsAction } from '../(actions)';
+// import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
+// import { DeleteSponsor } from './(components)/delete-new';
+
+type Props = Readonly<{
+  query?: string;
+  currentPage?: string;
+}>;
+
+const pagination = {
+  currentPage: 0,
+  totalPages: 0,
+};
+
+export const NewsTable: FC<Props> = async ({
+  query = '',
+  currentPage = 1,
+}) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const {
+    news = [],
+    pagination,
+  } = await fetchNewsAction({
+    userRoles: session?.user.roles ?? [],
+    page: currentPage as number,
+    take: 12,
+    searchTerm: query,
+  });
+
+  return (
+    <>
+      {news.length > 0 ? (
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[200px]">Título</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[120px]">Fecha de publicación</TableHead>
+                  <TableHead className="hidden sm:table-cell w-[100px] text-center">Activo</TableHead>
+                  <TableHead className="w-[150px]">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {news.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <p className="text-pretty">{item.title}</p>
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      <p className="text-pretty">
+                        {format(item.publishedDate, "d 'de' MMMM 'del' y", { locale: es })}
+                      </p>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell text-center">
+                      {/* <ActiveSwitch
+                        resource={{ id: item.id, state: item.active }}
+                        updateResourceStateAction={updateNewStateAction}
+                      /> */}
+                      SWITCH
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-3">
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Link
+                              href={ROUTES.ADMIN_NEWS_SHOW(item.id as string)}
+                              className={buttonVariants({ variant: 'outline-info', size: 'icon' })}
+                            >
+                              <InfoIcon />
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">
+                            detalles
+                          </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Link
+                              href={ROUTES.ADMIN_SPONSORS_EDIT(item.id as string)}
+                              className={buttonVariants({ variant: 'outline-warning', size: 'icon' })}
+                            >
+                              <Pencil />
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">
+                            <p>editar</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        {/* <DeleteNew
+                          sponsorId={new.id as string}
+                          roles={session?.user.roles as string[]}
+                        /> */}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <div className={cn('flex justify-center mt-10', {
+            hidden: pagination!.totalPages === 1,
+          })}>
+            <Pagination totalPages={pagination!.totalPages as number} />
+          </div>
+        </div>
+      ) : (
+        <div className="border border-sky-600 p-5 rounded">
+          <p className="text-sky-500 text-center text-xl font-semibold">
+            No hay noticias disponibles
+          </p>
+        </div>
+      )}
+    </>
+  );
+};
