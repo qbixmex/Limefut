@@ -5,8 +5,6 @@ export interface Announcement {
   publishedDate: Date;
   description: string;
   content: string;
-  imageUrl?: string | null;
-  imagePublicId?: string | null;
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;

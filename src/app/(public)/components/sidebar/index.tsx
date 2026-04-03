@@ -1,10 +1,12 @@
+import { Announcements } from '../announcements';
 import { Sponsors } from '../sponsors';
-import styles from './styles.module.css';
+import './sidebar.css';
 
 export const Sidebar = () => {
   return (
-    <aside className={styles.sidebar}>
+    <aside className="sidebar">
       <Sponsors />
+      <Announcements />
     </aside>
   );
 };

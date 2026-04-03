@@ -25,4 +25,5 @@ export const ROUTES = {
   ADMIN_ANNOUNCEMENTS_CREATE: '/admin/noticias/crear',
   ADMIN_ANNOUNCEMENTS_SHOW: (id: string) => `/admin/noticias/${id}`,
   ADMIN_ANNOUNCEMENTS_EDIT: (id: string) => `/admin/noticias/editar/${id}`,
+  PUBLIC_ANNOUNCEMENTS_SHOW: (id: string) => `/noticias/${id}`,
 } as const;
