@@ -9,11 +9,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
-import { fetchSponsorAction } from '../(actions)';
+import { fetchAnnouncementAction } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
-import { getAlignment } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
-import Image from 'next/image';
 
 type Props = Readonly<{
   params: Promise<{
@@ -21,22 +19,22 @@ type Props = Readonly<{
   }>;
 }>;
 
-const SponsorPage: FC<Props> = ({ params }) => {
+const AnnouncementPage: FC<Props> = ({ params }) => {
   return (
     <Suspense>
-      <SponsorContent params={params} />
+      <AnnouncementContent params={params} />
     </Suspense>
   );
 };
 
-const SponsorContent: FC<Props> = async ({ params }) => {
+const AnnouncementContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
   const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, message, sponsor } = await fetchSponsorAction(session?.user?.roles ?? [], sponsorId);
+  const { ok, message, announcement } = await fetchAnnouncementAction(session?.user?.roles ?? [], sponsorId);
 
   if (!ok) {
-    redirect(`${ROUTES.ADMIN_SPONSORS}?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(message)}`);
   }
 
   return (
@@ -45,95 +43,56 @@ const SponsorContent: FC<Props> = async ({ params }) => {
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
             <CardTitle className="admin-page-card-title">
-              Detalles del Patrocinador
+              Detalles de la Noticia
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col lg:flex-row gap-5">
-              <div className="w-full md:w-[400px] flex justify-center lg:justify-start mb-5">
-                <Image
-                  src={sponsor?.imageUrl as string}
-                  alt={`${sponsor?.name} Patrocinador`}
-                  width={300}
-                  height={500}
-                  className="rounded"
-                />
-              </div>
-              <div className="w-full">
-                <Table className="md:lg:3/4 lg:w-1/2">
+            <div className="flex flex-col lg:flex-row gap:5 lg:gap-10">
+              <div className="flex-1">
+                <Table>
                   <TableBody>
                     <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Nombre</TableHead>
+                      <TableHead className="font-semibold w-[180px]">Título</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {sponsor?.name}
+                        {announcement?.title}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableHead className="font-semibold w-[180px]">URL</TableHead>
+                      <TableHead className="font-semibold w-[180px]">Enlace Permanente</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {sponsor?.url}
+                        {announcement?.permalink}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Fecha Inicial</TableHead>
+                      <TableHead className="font-semibold w-[180px]">Descripción</TableHead>
+                      <TableCell className="dark:text-gray-400 italic">
+                        <p className="text-balance">{announcement?.description}</p>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead className="font-semibold w-[180px]">Fecha de publicación</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
                         {
-                          sponsor?.startDate?.toLocaleDateString('es-MX', {
+                          announcement?.publishedDate?.toLocaleDateString('es-MX', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
                           }) ?? 'No definido'
                         }
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Fecha Final</TableHead>
-                      <TableCell className="dark:text-gray-400 italic">
-                        {
-                          sponsor?.endDate?.toLocaleDateString('es-MX', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          }) ?? 'No definido'
-                        }
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Alineación</TableHead>
-                      <TableCell className="dark:text-gray-400 italic">
-                        <Badge variant="outline-info">
-                          {getAlignment(sponsor?.alignment as string)}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Posición</TableHead>
-                      <TableCell className="dark:text-gray-400 italic">
-                        <Badge variant="outline-info">
-                          {sponsor?.position}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Clicks</TableHead>
-                      <TableCell className="dark:text-gray-400 italic">
-                        <Badge variant="outline-info">
-                          {sponsor?.clicks}
-                        </Badge>
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Estado</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        <Badge variant={sponsor?.active ? 'outline-info' : 'outline-secondary'}>
-                          {sponsor?.active ? 'activo' : 'desactivado'}
+                        <Badge variant={announcement?.active ? 'outline-info' : 'outline-secondary'}>
+                          {announcement?.active ? 'activo' : 'desactivado'}
                         </Badge>
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Fecha de creación</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {sponsor?.updatedAt?.toLocaleDateString('es-MX', {
+                        {announcement?.updatedAt?.toLocaleDateString('es-MX', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -143,7 +102,7 @@ const SponsorContent: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Fecha de actualización</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {sponsor?.updatedAt?.toLocaleDateString('es-MX', {
+                        {announcement?.updatedAt?.toLocaleDateString('es-MX', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -153,12 +112,16 @@ const SponsorContent: FC<Props> = async ({ params }) => {
                   </TableBody>
                 </Table>
               </div>
+              <div className='flex-1'>
+                <h2 className="text-xl text-blue-600 font-semibold">Contenido</h2>
+                <p className="text-pretty">{announcement?.content}</p>
+              </div>
             </div>
 
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={ROUTES.ADMIN_SPONSORS_EDIT(sponsor?.id as string)}>
+                  <Link href={ROUTES.ADMIN_ANNOUNCEMENTS_EDIT(announcement?.id as string)}>
                     <Button variant="outline-warning" size="icon">
                       <Pencil />
                     </Button>
@@ -176,4 +139,4 @@ const SponsorContent: FC<Props> = async ({ params }) => {
   );
 };
 
-export default SponsorPage;
+export default AnnouncementPage;

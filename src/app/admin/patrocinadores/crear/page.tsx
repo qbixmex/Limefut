@@ -7,21 +7,15 @@ import { SponsorForm } from '../(components)/sponsor-form';
 import type { Session } from '@/lib/auth-client';
 import { auth } from '@/lib/auth';
 
-type Props = Readonly<{
-  searchParams: Promise<{
-    torneo?: string;
-  }>;
-}>;
-
-const CreateSponsorPage: FC<Props> = ({ searchParams }) => {
+const CreateSponsorPage: FC = () => {
   return (
     <Suspense>
-      <CreateSponsorContent searchParams={searchParams} />
+      <CreateSponsorContent />
     </Suspense>
   );
 };
 
-const CreateSponsorContent: FC<Props> = async () => {
+const CreateSponsorContent: FC = async () => {
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (

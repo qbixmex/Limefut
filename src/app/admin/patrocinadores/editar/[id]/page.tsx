@@ -7,6 +7,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchSponsorAction } from '../../(actions)';
 import { SponsorForm } from '../../(components)/sponsor-form';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
@@ -28,7 +29,7 @@ const EditSponsorContent: FC<Props> = async ({ params }) => {
 
   if (!ok) {
     const message = `¡ El patrocinador con el id: "${sponsorId}", no existe ❌ !`;
-    redirect(`/admin/patrocinadores?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.ADMIN_SPONSORS}?error=${encodeURIComponent(message)}`);
   }
 
   return (
