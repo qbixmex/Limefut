@@ -31,6 +31,7 @@ import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { cn, slugify } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
+import { MdEditorField } from '../../paginas/(components)/md-editor-field';
 
 type Props = Readonly<{
   session: Session;
@@ -253,11 +254,10 @@ export const AnnouncementForm: FC<Props> = ({ session, announcement }) => {
                   Contenido <span className="text-amber-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Textarea
-                    rows={5}
-                    {...field}
-                    value={field.value ?? ''}
-                    className="min-h-100 resize-none"
+                  <MdEditorField
+                    markdownString={field.value}
+                    setContent={value => field.onChange(value)}
+                    resourceId={announcement?.id as string}
                   />
                 </FormControl>
                 <FormMessage />

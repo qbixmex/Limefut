@@ -12,6 +12,11 @@ import { Pencil } from 'lucide-react';
 import { fetchAnnouncementAction } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { Badge } from '@/components/ui/badge';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeRaw from 'rehype-raw';
+import rehypeYoutube from '@/lib/rehype-youtube';
 
 type Props = Readonly<{
   params: Promise<{
@@ -47,7 +52,7 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col lg:flex-row gap:5 lg:gap-10">
+            <div className="flex flex-col lg:flex-row gap:5 lg:gap-10 mb-5">
               <div className="flex-1">
                 <Table>
                   <TableBody>
@@ -81,6 +86,12 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                         }
                       </TableCell>
                     </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+              <div className='flex-1'>
+                <Table>
+                  <TableBody>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Estado</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
@@ -112,11 +123,19 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                   </TableBody>
                 </Table>
               </div>
-              <div className='flex-1'>
-                <h2 className="text-xl text-blue-600 font-semibold">Contenido</h2>
-                <p className="text-pretty">{announcement?.content}</p>
-              </div>
             </div>
+
+            <section>
+              <h2 className="text-xl text-blue-600 font-semibold">Contenido</h2>
+              <div className="prose prose-lg dark:prose-invert max-w-none mb-10">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeYoutube]}
+                >
+                  {announcement?.content}
+                </ReactMarkdown>
+              </div>
+            </section>
 
             <div className="absolute top-5 right-5">
               <Tooltip>
