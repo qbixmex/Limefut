@@ -49,7 +49,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
           >
             <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
               <div className="flex flex-col gap-5 md:flex-row md:gap-5">
-                <div className="w-full lg:w-1/2 order-2 md:order-1">
+                <div className="w-full lg:mx-w-1/2 order-2 md:order-1">
                   <MatchMetadata
                     tournamentName={match.tournament.name}
                     category={match.localTeam.category}
@@ -86,7 +86,9 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
             </div>
           </Link>
         )) : (
-          <p className="text-2xl text-green-800 font-semibold italic text-center">No hay encuentros programados</p>
+          <p className="text-2xl text-green-800 dark:text-green-500 font-semibold italic text-center">
+            No hay encuentros programados
+          </p>
         )}
       </div>
       {(pagination.totalPages > 1) && (

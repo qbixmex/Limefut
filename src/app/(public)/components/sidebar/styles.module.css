@@ -1,0 +1,5 @@
+@reference 'tailwindcss';
+
+.sidebar {
+  @apply flex-[0_0_340px] bg-gray-50! dark:bg-gray-900! md:rounded p-5 lg:p-10
+}

@@ -17,4 +17,8 @@ export const ROUTES = {
   ADMIN_GALLERIES_EDIT: (id: string) => `/admin/galerias/editar/${id}`,
   ADMIN_USERS: '/admin/usuarios',
   ADMIN_MESSAGES: '/admin/mensajes',
+  ADMIN_SPONSORS: '/admin/patrocinadores',
+  ADMIN_SPONSORS_CREATE: '/admin/patrocinadores/crear',
+  ADMIN_SPONSORS_SHOW: (id: string) => `/admin/patrocinadores/${id}`,
+  ADMIN_SPONSORS_EDIT: (id: string) => `/admin/patrocinadores/editar/${id}`,
 } as const;

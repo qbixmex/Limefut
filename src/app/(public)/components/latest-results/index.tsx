@@ -25,12 +25,6 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
       </div>
 
       <div className="border border-green-900/90 rounded-b-lg p-5">
-        {(matches.length === 0) && (
-          <div className="text-emerald-800 dark:text-emerald-600 text-center font-bold text-xl italic">
-            ¡ No hay encuentros recientes !
-          </div>
-        )}
-
         {(matches.length > 0) && matches.map((match, index) => (
           <Link
             key={match.id}
@@ -100,6 +94,12 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
             </div>
           </Link>
         ))}
+
+        {(matches.length === 0) && (
+          <div className="text-green-800 dark:text-green-500 text-center font-bold text-xl italic">
+            ¡ No hay encuentros recientes !
+          </div>
+        )}
       </div>
       {(pagination.totalPages > 1) && (
         <section className="flex justify-center mt-5">
