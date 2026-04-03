@@ -1,4 +1,4 @@
-export interface New {
+export interface Announcement {
   id?: string;
   title: string;
   permalink: string;

@@ -1,5 +1,5 @@
 import { Suspense, type FC } from 'react';
-import { NewsContent } from './(components)/news-content';
+import { AnnouncementsContent } from './(components)/announcements-content';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -8,12 +8,12 @@ type Props = Readonly<{
   }>;
 }>;
 
-const SponsorsPage: FC<Props> = ({ searchParams }) => {
+const AnnouncementsPage: FC<Props> = ({ searchParams }) => {
   return (
     <Suspense>
-      <NewsContent searchParams={searchParams} />
+      <AnnouncementsContent searchParams={searchParams} />
     </Suspense>
   );
 };
 
-export default SponsorsPage;
+export default AnnouncementsPage;

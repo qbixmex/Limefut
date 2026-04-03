@@ -509,7 +509,7 @@ model Sponsor {
   @@map("sponsors")
 }
 
-model News {
+model Announcement {
   id            String   @id @default(uuid())
   title         String   @unique @db.VarChar
   permalink     String   @unique @db.VarChar
@@ -522,5 +522,5 @@ model News {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  @@map("news")
+  @@map("announcements")
 }

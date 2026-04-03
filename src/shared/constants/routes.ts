@@ -21,8 +21,8 @@ export const ROUTES = {
   ADMIN_SPONSORS_CREATE: '/admin/patrocinadores/crear',
   ADMIN_SPONSORS_SHOW: (id: string) => `/admin/patrocinadores/${id}`,
   ADMIN_SPONSORS_EDIT: (id: string) => `/admin/patrocinadores/editar/${id}`,
-  ADMIN_NEWS: '/admin/noticias',
-  ADMIN_NEWS_CREATE: '/admin/noticias/crear',
-  ADMIN_NEWS_SHOW: (id: string) => `/admin/noticias/${id}`,
-  ADMIN_NEWS_EDIT: (id: string) => `/admin/noticias/editar/${id}`,
+  ADMIN_ANNOUNCEMENTS: '/admin/noticias',
+  ADMIN_ANNOUNCEMENTS_CREATE: '/admin/noticias/crear',
+  ADMIN_ANNOUNCEMENTS_SHOW: (id: string) => `/admin/noticias/${id}`,
+  ADMIN_ANNOUNCEMENTS_EDIT: (id: string) => `/admin/noticias/editar/${id}`,
 } as const;

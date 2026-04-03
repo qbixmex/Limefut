@@ -13,8 +13,8 @@ import { es } from 'date-fns/locale';
 import { InfoIcon, Pencil } from 'lucide-react';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import type { New } from '@/shared/interfaces';
-import { fetchNewsAction } from '../(actions)';
+import type { Announcement } from '@/shared/interfaces';
+import { fetchAnnouncementsAction } from '../(actions)';
 // import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
 // import { DeleteSponsor } from './(components)/delete-new';
 
@@ -28,7 +28,7 @@ const pagination = {
   totalPages: 0,
 };
 
-export const NewsTable: FC<Props> = async ({
+export const AnnouncementsTable: FC<Props> = async ({
   query = '',
   currentPage = 1,
 }) => {
@@ -37,9 +37,9 @@ export const NewsTable: FC<Props> = async ({
   });
 
   const {
-    news = [],
+    announcements = [],
     pagination,
-  } = await fetchNewsAction({
+  } = await fetchAnnouncementsAction({
     userRoles: session?.user.roles ?? [],
     page: currentPage as number,
     take: 12,
@@ -48,7 +48,7 @@ export const NewsTable: FC<Props> = async ({
 
   return (
     <>
-      {news.length > 0 ? (
+      {announcements.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
             <Table>
@@ -61,14 +61,14 @@ export const NewsTable: FC<Props> = async ({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {news.map((item) => (
-                  <TableRow key={item.id}>
+                {announcements.map((announcement) => (
+                  <TableRow key={announcement.id}>
                     <TableCell>
-                      <p className="text-pretty">{item.title}</p>
+                      <p className="text-pretty">{announcement.title}</p>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
                       <p className="text-pretty">
-                        {format(item.publishedDate, "d 'de' MMMM 'del' y", { locale: es })}
+                        {format(announcement.publishedDate, "d 'de' MMMM 'del' y", { locale: es })}
                       </p>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell text-center">
@@ -83,7 +83,7 @@ export const NewsTable: FC<Props> = async ({
                         <Tooltip>
                           <TooltipTrigger>
                             <Link
-                              href={ROUTES.ADMIN_NEWS_SHOW(item.id as string)}
+                              href={ROUTES.ADMIN_ANNOUNCEMENTS_SHOW(announcement.id as string)}
                               className={buttonVariants({ variant: 'outline-info', size: 'icon' })}
                             >
                               <InfoIcon />
@@ -96,7 +96,7 @@ export const NewsTable: FC<Props> = async ({
                         <Tooltip>
                           <TooltipTrigger>
                             <Link
-                              href={ROUTES.ADMIN_SPONSORS_EDIT(item.id as string)}
+                              href={ROUTES.ADMIN_ANNOUNCEMENTS_EDIT(announcement.id as string)}
                               className={buttonVariants({ variant: 'outline-warning', size: 'icon' })}
                             >
                               <Pencil />

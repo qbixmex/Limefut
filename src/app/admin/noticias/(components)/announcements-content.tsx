@@ -2,10 +2,11 @@ import { Suspense, type FC } from 'react';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
-import { NewsTable } from './news-table';
-// import { NewsTable } from '../news-table';
-// import { CreateNew } from './create-new';
-// import { NewsTableSkeleton } from './news-table-skeleton';
+import { AnnouncementsTable } from './announcements-table';
+import { CreateAnnouncement } from './create-announcement';
+// import { AnnouncementsTable } from '../announcements-table';
+// import { CreateAnnouncement } from './create-announcement';
+// import { AnnouncementsTableSkeleton } from './announcements-table-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -14,7 +15,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const NewsContent: FC<Props> = async ({ searchParams }) => {
+export const AnnouncementsContent: FC<Props> = async ({ searchParams }) => {
   const query = (await searchParams).query;
   const currentPage = (await searchParams).page;
 
@@ -30,16 +31,16 @@ export const NewsContent: FC<Props> = async ({ searchParams }) => {
               </CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar noticia" />
-                {/* <CreateNew /> */}
+                <CreateAnnouncement />
               </section>
             </CardHeader>
             <CardContent>
               <Suspense
                 key={`${query ?? 'query'}-${currentPage ?? 'current-page'}`}
-                // TODO: fallback={<NewsTableSkeleton />}
+                // TODO: fallback={<AnnouncementsTableSkeleton />}
                 fallback={<p>Loading ...</p>}
               >
-                <NewsTable
+                <AnnouncementsTable
                   query={query}
                   currentPage={currentPage}
                 />

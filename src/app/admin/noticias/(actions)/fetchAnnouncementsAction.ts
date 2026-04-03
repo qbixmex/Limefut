@@ -12,7 +12,7 @@ type Options = Readonly<{
   searchTerm?: string;
 }>;
 
-export type NewType = {
+export type AnnouncementsType = {
   id: string;
   title: string;
   permalink: string;
@@ -23,21 +23,21 @@ export type NewType = {
 export type ResponseFetch = Promise<{
   ok: boolean;
   message: string;
-  news: NewType[];
+  announcements: AnnouncementsType[];
   pagination: Pagination | null;
 }>;
 
-export const fetchNewsAction = async (options: Options): ResponseFetch => {
+export const fetchAnnouncementsAction = async (options: Options): ResponseFetch => {
   'use cache';
 
   cacheLife('days');
-  cacheTag('admin-news');
+  cacheTag('admin-announcements');
 
   if (!options.userRoles.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      news: [],
+      announcements: [],
       pagination: null,
     };
   }
@@ -48,7 +48,7 @@ export const fetchNewsAction = async (options: Options): ResponseFetch => {
   if (isNaN(page)) page = 1;
   if (isNaN(take)) take = 12;
 
-  const whereCondition: Prisma.NewsWhereInput = options?.searchTerm ? {
+  const whereCondition: Prisma.AnnouncementWhereInput = options?.searchTerm ? {
     OR: [
       {
         title: {
@@ -60,7 +60,7 @@ export const fetchNewsAction = async (options: Options): ResponseFetch => {
   } : {};
 
   try {
-    const news = await prisma.news.findMany({
+    const announcements = await prisma.announcement.findMany({
       where: whereCondition,
       select: {
         id: true,
@@ -74,12 +74,12 @@ export const fetchNewsAction = async (options: Options): ResponseFetch => {
       skip: (page - 1) * take,
     });
 
-    const totalCount = await prisma.news.count({ where: whereCondition });
+    const totalCount = await prisma.announcement.count({ where: whereCondition });
 
     return {
       ok: true,
       message: '! Los patrocinadores fueron obtenidos correctamente 👍',
-      news,
+      announcements,
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
@@ -94,14 +94,14 @@ export const fetchNewsAction = async (options: Options): ResponseFetch => {
       return {
         ok: false,
         message: error.message,
-        news: [],
+        announcements: [],
         pagination: null,
       };
     }
     return {
       ok: false,
       message: 'Error inesperado al obtener los patrocinadores, revise los logs del servidor',
-      news: [],
+      announcements: [],
       pagination: null,
     };
   }
