@@ -44,6 +44,6 @@ export const deleteSponsorAction = async (sponsorId: string): ResponseDeleteActi
 
   return {
     ok: true,
-    message: `¡ El banner "${sponsor.name}", ha sido eliminado correctamente 👍 !`,
+    message: `¡ El patrocinador "${sponsor.name}", ha sido eliminado correctamente 👍 !`,
   };
 };

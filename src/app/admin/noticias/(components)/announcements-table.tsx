@@ -1,11 +1,9 @@
 import { type FC } from 'react';
-import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { auth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
-import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Pagination } from '@/shared/components/pagination';
 import { ROUTES } from '@/shared/constants/routes';
 import { format } from 'date-fns/format';
@@ -13,10 +11,8 @@ import { es } from 'date-fns/locale';
 import { InfoIcon, Pencil } from 'lucide-react';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import type { Announcement } from '@/shared/interfaces';
 import { fetchAnnouncementsAction } from '../(actions)';
-// import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
-// import { DeleteSponsor } from './(components)/delete-new';
+import { DeleteAnnouncement } from '../(components)/delete-announcement';
 
 type Props = Readonly<{
   query?: string;
@@ -101,10 +97,10 @@ export const AnnouncementsTable: FC<Props> = async ({
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        {/* <DeleteNew
-                          sponsorId={new.id as string}
+                        <DeleteAnnouncement
+                          announcementId={announcement.id as string}
                           roles={session?.user.roles as string[]}
-                        /> */}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
