@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
 import { AnnouncementsTable } from './announcements-table';
 import { CreateAnnouncement } from './create-announcement';
+import { AnnouncementsTableSkeleton } from './announcements-table-skeleton';
 // import { AnnouncementsTable } from '../announcements-table';
 // import { CreateAnnouncement } from './create-announcement';
 // import { AnnouncementsTableSkeleton } from './announcements-table-skeleton';
@@ -37,8 +38,7 @@ export const AnnouncementsContent: FC<Props> = async ({ searchParams }) => {
             <CardContent>
               <Suspense
                 key={`${query ?? 'query'}-${currentPage ?? 'current-page'}`}
-                // TODO: fallback={<AnnouncementsTableSkeleton />}
-                fallback={<p>Loading ...</p>}
+                fallback={<AnnouncementsTableSkeleton />}
               >
                 <AnnouncementsTable
                   query={query}
