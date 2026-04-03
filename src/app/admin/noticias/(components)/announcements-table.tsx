@@ -11,8 +11,9 @@ import { es } from 'date-fns/locale';
 import { InfoIcon, Pencil } from 'lucide-react';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { fetchAnnouncementsAction } from '../(actions)';
+import { fetchAnnouncementsAction, updateAnnouncementStateAction } from '../(actions)';
 import { DeleteAnnouncement } from '../(components)/delete-announcement';
+import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
   query?: string;
@@ -63,11 +64,10 @@ export const AnnouncementsTable: FC<Props> = async ({
                       </p>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell text-center">
-                      {/* <ActiveSwitch
-                        resource={{ id: item.id, state: item.active }}
-                        updateResourceStateAction={updateNewStateAction}
-                      /> */}
-                      SWITCH
+                      <ActiveSwitch
+                        resource={{ id: announcement.id, state: announcement.active }}
+                        updateResourceStateAction={updateAnnouncementStateAction}
+                      />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">

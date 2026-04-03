@@ -23,10 +23,7 @@ export const updateSponsorStateAction = async (id: string, state: boolean): Resp
   const updatedSponsor = await prisma.sponsor.update({
     where: { id },
     data: { active: state },
-    select: {
-      name: true,
-      active: true,
-    },
+    select: { active: true },
   });
 
   // Update Cache
@@ -36,6 +33,6 @@ export const updateSponsorStateAction = async (id: string, state: boolean): Resp
 
   return {
     ok: true,
-    message: `¡ El patrocinador "${updatedSponsor.name}" fue ${updatedSponsor.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `¡ El patrocinador fue ${updatedSponsor.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
   };
 };
