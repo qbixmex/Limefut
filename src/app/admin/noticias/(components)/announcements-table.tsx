@@ -23,11 +23,6 @@ type Props = Readonly<{
   currentPage?: string;
 }>;
 
-const pagination = {
-  currentPage: 0,
-  totalPages: 0,
-};
-
 export const AnnouncementsTable: FC<Props> = async ({
   query = '',
   currentPage = 1,

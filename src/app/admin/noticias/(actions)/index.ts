@@ -1,7 +1,6 @@
 export { fetchAnnouncementsAction } from './fetchAnnouncementsAction';
-// export { fetchNewAction } from './fetchNewAction';
+export { fetchAnnouncementAction } from './fetchAnnouncementAction';
 export { createAnnouncementAction } from './createAnnouncementAction';
-// export { createAnnouncementAction } from './createAnnouncementAction';
-// export { updateAnnouncementAction } from './updateAnnouncementAction';
+export { updateAnnouncementAction } from './updateAnnouncementAction';
 // export { updateAnnouncementStateAction } from './updateAnnouncementStateAction';
 // export { deleteAnnouncementAction } from './deleteAnnouncementAction';

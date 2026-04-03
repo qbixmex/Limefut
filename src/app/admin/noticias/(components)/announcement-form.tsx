@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createAnnouncementSchema, editAnnouncementSchema } from '@/shared/schemas';
-import { createAnnouncementAction } from '../(actions)';
+import { createAnnouncementAction, updateAnnouncementAction } from '../(actions)';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
@@ -97,25 +97,27 @@ export const AnnouncementForm: FC<Props> = ({ session, announcement }) => {
         toast.success(response.message);
         route.replace(ROUTES.ADMIN_ANNOUNCEMENTS);
       }
+
+      return;
     }
 
     // Update Announcement
-    // if (announcement) {
-    //   const response = await updateAnnouncementAction({
-    //     formData,
-    //     announcementId: announcement?.id as string,
-    //     userRoles: session.user.roles!,
-    //     authenticatedUserId: session?.user.id,
-    //   });
+    if (announcement) {
+      const response = await updateAnnouncementAction({
+        formData,
+        announcementId: announcement?.id as string,
+        userRoles: session.user.roles!,
+        authenticatedUserId: session?.user.id,
+      });
 
-    //   if (!response.ok) {
-    //     toast.error(response.message);
-    //     return;
-    //   }
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
 
-    //   toast.success(response.message);
-    //   route.replace(ROUTES.ADMIN_ANNOUNCEMENTS);
-    // }
+      toast.success(response.message);
+      route.replace(ROUTES.ADMIN_ANNOUNCEMENTS);
+    }
   };
 
   return (

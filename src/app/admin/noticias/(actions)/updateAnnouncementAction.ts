@@ -1,0 +1,208 @@
+'use server';
+
+import prisma from '@/lib/prisma';
+import { updateTag } from 'next/cache';
+import { editAnnouncementSchema } from '@/shared/schemas';
+import type { Announcement } from '@/shared/interfaces';
+import { deleteImage, uploadImage } from '@/shared/actions';
+
+type Options = {
+  formData: FormData;
+  announcementId: string;
+  userRoles: string[];
+  authenticatedUserId: string;
+};
+
+type EditResponseAction = Promise<{
+  ok: boolean;
+  message: string;
+  announcement: Announcement | null;
+}>;
+
+export const updateAnnouncementAction = async ({
+  formData,
+  announcementId,
+  userRoles,
+  authenticatedUserId,
+}: Options): EditResponseAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Usuario no autenticado !',
+      announcement: null,
+    };
+  }
+
+  if (!userRoles.includes('admin')) {
+    return {
+      ok: false,
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      announcement: null,
+    };
+  }
+
+  const rawData = {
+    title: formData.get('title') as string ?? '',
+    permalink: formData.get('permalink') ?? '',
+    publishedDate: formData.get('publishedDate') ? new Date(formData.get('publishedDate') as string) : null,
+    description: formData.get('description') ?? '',
+    content: formData.get('content') ?? '',
+    image: formData.get('image') as File,
+    active: formData.get('active') === 'true',
+  };
+
+  const sponsorVerified = editAnnouncementSchema.safeParse(rawData);
+
+  if (!sponsorVerified.success) {
+    return {
+      ok: false,
+      message: sponsorVerified.error.issues[0].message,
+      announcement: null,
+    };
+  }
+
+  const { image, ...data } = sponsorVerified.data;
+
+  try {
+    const prismaTransaction = await prisma.$transaction(async (transaction) => {
+      try {
+        const announcementExists = await transaction.announcement.count({
+          where: { id: announcementId },
+        });
+
+        if (!announcementExists) {
+          return {
+            ok: false,
+            message: '¡ La noticia no existe o ha sido eliminado !',
+            announcement: null,
+          };
+        }
+
+        const titleDuplicated = await transaction.announcement.count({
+          where: {
+            title: sponsorVerified.data.title as string,
+            id: { not: announcementId }, // Exclude current page
+          },
+        });
+
+        if (titleDuplicated > 0) {
+          return {
+            ok: false,
+            message: '¡ Ya existe una noticia con ese título !',
+            announcement: null,
+          };
+        }
+
+        const permalinkDuplicated = await transaction.announcement.count({
+          where: {
+            permalink: sponsorVerified.data.permalink as string,
+            id: { not: announcementId }, // Exclude current page
+          },
+        });
+
+        if (permalinkDuplicated > 0) {
+          return {
+            ok: false,
+            message: '¡ Ya existe una noticia con ese enlace permanente !',
+            announcement: null,
+          };
+        }
+
+        const updatedAnnouncement = await transaction.announcement.update({
+          where: { id: announcementId },
+          data,
+        });
+
+        if (image !== null) {
+          const updatedImage = await updateAnnouncementImage(
+            image as File,
+            updatedAnnouncement.imagePublicId as string,
+          );
+
+          // Update announcement image data.
+          await transaction.announcement.update({
+            where: { id: announcementId },
+            data: {
+              imageUrl: updatedImage.imageUrl,
+              imagePublicId: updatedImage.imagePublicId,
+            },
+          });
+        }
+
+        // Update Cache
+        updateTag('admin-announcements');
+        updateTag('admin-announcement');
+        updateTag('public-announcement');
+
+        return {
+          ok: true,
+          message: '¡ La noticia fue actualizada correctamente 👍 !',
+          announcement: updatedAnnouncement,
+        };
+      } catch (error) {
+        if (error instanceof Error && 'meta' in error && error.meta) {
+          if ('code' in error && error.code as string === 'P2002') {
+            const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+            return {
+              ok: false,
+              message: `¡ El campo "${fieldError}", está duplicado !`,
+              announcement: null,
+            };
+          }
+
+          console.log('Name:', error.name);
+          console.log('Cause:', error.cause);
+          console.log('Message:', error.message);
+
+          return {
+            ok: false,
+            message: '¡ Error al actualizar la noticia, revise los logs del servidor !',
+            announcement: null,
+          };
+        }
+        console.log((error as Error).message);
+        return {
+          ok: false,
+          message: '¡ Error inesperado, revise los logs !',
+          announcement: null,
+        };
+      }
+    });
+
+    // Update Cache
+    updateTag('admin-sponsors');
+    updateTag('admin-sponsor');
+    updateTag('public-sponsors');
+
+    return prismaTransaction;
+  } catch (error) {
+    console.log(error);
+    return {
+      ok: false,
+      message: '¡ Error inesperado, revise los logs del servidor !',
+      announcement: null,
+    };
+  }
+};
+
+const updateAnnouncementImage = async (image: File, imagePublicId: string) => {
+  // Delete previous image from cloudinary.
+  if (imagePublicId) {
+    const cloudinaryResponse = await deleteImage(imagePublicId);
+    if (!cloudinaryResponse.ok) {
+      throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+    }
+  }
+
+  // Upload Image to third-party storage (cloudinary).
+  const imageUploaded = await uploadImage(image as File, 'announcements');
+
+  if (!imageUploaded) {
+    throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+  }
+
+  return {
+    imageUrl: imageUploaded.secureUrl,
+    imagePublicId: imageUploaded.publicId,
+  };
+};
