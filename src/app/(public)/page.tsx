@@ -8,6 +8,7 @@ import { HorizontalCalendarSkeleton } from './components/horizontal-calendar/hor
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { LatestImages } from './components/latest-images';
 import { Sidebar } from './components/sidebar';
+import { LatestImagesSkeleton } from './components/latest-images/latest-images-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -51,7 +52,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
               }
             />
           </Suspense>
-          <Suspense fallback={<p>Cargando imágenes recientes</p>}>
+          <Suspense fallback={<LatestImagesSkeleton />}>
             <LatestImages />
           </Suspense>
         </div>
