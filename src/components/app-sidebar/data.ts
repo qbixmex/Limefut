@@ -13,6 +13,7 @@ import {
   TrendingUp,
   Inbox,
   ImageIcon,
+  Newspaper,
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
 import { GiWhistle, GiSodaCan } from 'react-icons/gi';
@@ -152,6 +153,24 @@ export const navMain: NavItem[] = [
       {
         label: 'Crear',
         url: '/admin/banners/crear',
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: 'Noticias',
+    url: '#',
+    icon: Newspaper,
+    isActive: false,
+    subItems: [
+      {
+        label: 'Lista',
+        url: '/admin/noticias',
+        icon: ListIcon,
+      },
+      {
+        label: 'Crear',
+        url: '/admin/noticias/crear',
         icon: PlusIcon,
       },
     ],
