@@ -76,7 +76,6 @@ export const AnnouncementForm: FC<Props> = ({ session, announcement }) => {
     formData.append('title', data.title as string);
     formData.append('permalink', data.permalink as string);
     formData.append('publishedDate', (data.publishedDate as Date).toString());
-    if (data.image) formData.append('image', data.image as File);
     formData.append('description', data.description as string ?? '');
     formData.append('content', data.content ?? '');
     formData.append('active', String(data.active ?? false));
@@ -174,76 +173,51 @@ export const AnnouncementForm: FC<Props> = ({ session, announcement }) => {
 
         <section className="flex gap-5">
           <div className="flex-1 flex gap-5">
-            <div className="flex flex-col gap-2">
-              <FormField
-                control={form.control}
-                name="publishedDate"
-                render={() => (
-                  <FormItem>
-                    <FormLabel htmlFor="date-picker" className="px-1">
-                      Fecha de publicación <span className="text-amber-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Popover open={openPublishedDateCalendar} onOpenChange={setOpenPublishedDateCalendar}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            id="date-picker"
-                            variant="secondary"
-                            className={cn('justify-between font-normal', {
-                              'border-destructive border': form.formState.errors.publishedDate,
-                            })}
-                            aria-invalid={form.formState.errors.publishedDate ? 'true' : 'false'}
-                          >
-                            {selectedPublishedDate
-                              ? format(selectedPublishedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
-                              : 'Seleccione la fecha de publicación'
-                            }
-                            <ChevronDownIcon />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={selectedPublishedDate}
-                            defaultMonth={selectedPublishedDate}
-                            captionLayout="dropdown"
-                            onSelect={(date) => {
-                              setSelectedPublishedDate(date);
-                              form.setValue('publishedDate', date as Date);
-                              setOpenPublishedDateCalendar(false);
-                            }}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div>
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Imagen <span className="text-gray-500 dark:text-gray-600">(opcional)</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          field.onChange(file);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="publishedDate"
+              render={() => (
+                <FormItem>
+                  <FormLabel htmlFor="date-picker" className="px-1">
+                    Fecha de publicación <span className="text-amber-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Popover open={openPublishedDateCalendar} onOpenChange={setOpenPublishedDateCalendar}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          id="date-picker"
+                          variant="secondary"
+                          className={cn('justify-between font-normal', {
+                            'border-destructive border': form.formState.errors.publishedDate,
+                          })}
+                          aria-invalid={form.formState.errors.publishedDate ? 'true' : 'false'}
+                        >
+                          {selectedPublishedDate
+                            ? format(selectedPublishedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
+                            : 'Seleccione la fecha de publicación'
+                          }
+                          <ChevronDownIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={selectedPublishedDate}
+                          defaultMonth={selectedPublishedDate}
+                          captionLayout="dropdown"
+                          onSelect={(date) => {
+                            setSelectedPublishedDate(date);
+                            form.setValue('publishedDate', date as Date);
+                            setOpenPublishedDateCalendar(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <div className="flex-1">
             <FormField

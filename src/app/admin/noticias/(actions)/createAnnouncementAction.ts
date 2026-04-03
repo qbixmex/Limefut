@@ -2,8 +2,7 @@
 
 import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
-import { uploadImage } from '@/shared/actions';
-import type { CloudinaryResponse, Announcement } from '@/shared/interfaces';
+import type { Announcement } from '@/shared/interfaces';
 import { createAnnouncementSchema } from '@/shared/schemas';
 
 type ResponseCreateAction = Promise<{
@@ -44,26 +43,10 @@ export const createAnnouncementAction = async (
     };
   }
 
-  const { image, ...data } = announcementVerified.data;
-
-  // Upload Image to third-party storage (cloudinary).
-  let cloudinaryResponse: CloudinaryResponse | null = null;
-
-  if (image) {
-    cloudinaryResponse = await uploadImage(image!, 'sponsors');
-    if (!cloudinaryResponse) {
-      return {
-        ok: false,
-        message: '¡ No se pudo subir la imagen al servidor !',
-        announcement: null,
-      };
-    }
-  }
-
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdAnnouncement = await transaction.announcement.create({
-        data,
+        data: announcementVerified.data,
       });
 
       return {

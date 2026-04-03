@@ -1,3 +1,3 @@
 import { createAnnouncementSchema } from './createAnnouncementSchema';
 
-export const editAnnouncementSchema = createAnnouncementSchema.extend({});
+export const editAnnouncementSchema = createAnnouncementSchema.partial();

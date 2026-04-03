@@ -4,7 +4,6 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { editAnnouncementSchema } from '@/shared/schemas';
 import type { Announcement } from '@/shared/interfaces';
-import { deleteImage, uploadImage } from '@/shared/actions';
 
 type Options = {
   formData: FormData;
@@ -51,17 +50,15 @@ export const updateAnnouncementAction = async ({
     active: formData.get('active') === 'true',
   };
 
-  const sponsorVerified = editAnnouncementSchema.safeParse(rawData);
+  const announcementVerified = editAnnouncementSchema.safeParse(rawData);
 
-  if (!sponsorVerified.success) {
+  if (!announcementVerified.success) {
     return {
       ok: false,
-      message: sponsorVerified.error.issues[0].message,
+      message: announcementVerified.error.issues[0].message,
       announcement: null,
     };
   }
-
-  const { image, ...data } = sponsorVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -80,7 +77,7 @@ export const updateAnnouncementAction = async ({
 
         const titleDuplicated = await transaction.announcement.count({
           where: {
-            title: sponsorVerified.data.title as string,
+            title: announcementVerified.data.title as string,
             id: { not: announcementId }, // Exclude current page
           },
         });
@@ -95,7 +92,7 @@ export const updateAnnouncementAction = async ({
 
         const permalinkDuplicated = await transaction.announcement.count({
           where: {
-            permalink: sponsorVerified.data.permalink as string,
+            permalink: announcementVerified.data.permalink as string,
             id: { not: announcementId }, // Exclude current page
           },
         });
@@ -110,24 +107,8 @@ export const updateAnnouncementAction = async ({
 
         const updatedAnnouncement = await transaction.announcement.update({
           where: { id: announcementId },
-          data,
+          data: announcementVerified.data,
         });
-
-        if (image !== null) {
-          const updatedImage = await updateAnnouncementImage(
-            image as File,
-            updatedAnnouncement.imagePublicId as string,
-          );
-
-          // Update announcement image data.
-          await transaction.announcement.update({
-            where: { id: announcementId },
-            data: {
-              imageUrl: updatedImage.imageUrl,
-              imagePublicId: updatedImage.imagePublicId,
-            },
-          });
-        }
 
         // Update Cache
         updateTag('admin-announcements');
@@ -183,26 +164,4 @@ export const updateAnnouncementAction = async ({
       announcement: null,
     };
   }
-};
-
-const updateAnnouncementImage = async (image: File, imagePublicId: string) => {
-  // Delete previous image from cloudinary.
-  if (imagePublicId) {
-    const cloudinaryResponse = await deleteImage(imagePublicId);
-    if (!cloudinaryResponse.ok) {
-      throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
-    }
-  }
-
-  // Upload Image to third-party storage (cloudinary).
-  const imageUploaded = await uploadImage(image as File, 'announcements');
-
-  if (!imageUploaded) {
-    throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
-  }
-
-  return {
-    imageUrl: imageUploaded.secureUrl,
-    imagePublicId: imageUploaded.publicId,
-  };
 };

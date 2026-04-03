@@ -6,8 +6,6 @@ CREATE TABLE "announcements" (
     "publishedDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "description" VARCHAR NOT NULL,
     "content" TEXT NOT NULL,
-    "image_url" TEXT,
-    "image_public_id" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
