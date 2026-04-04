@@ -82,7 +82,10 @@ export const deleteContentImageAction = async (
   return {
     ok: true,
     message: 'La imagen del contenido ha sido eliminada 👍',
-    customPageImages: updatedPage?.images ?? [],
+    customPageImages: updatedPage?.images.map(({ imageUrl, publicId }) => ({
+      imageUrl,
+      resourceId: publicId,
+    })) ?? [],
   };
 };
 

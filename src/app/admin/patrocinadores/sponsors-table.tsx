@@ -16,7 +16,6 @@ import Link from 'next/link';
 import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
 import { DeleteSponsor } from './(components)/delete-sponsor';
 import Image from 'next/image';
-import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 
 type Props = Readonly<{
   query?: string;

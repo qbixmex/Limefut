@@ -26,13 +26,14 @@ import type z from 'zod';
 import { createPageSchema, editPageSchema } from '@/shared/schemas';
 import { updatePageAction } from '../(actions)/updatePageAction';
 import { MdEditorField } from './md-editor-field';
-import type { CustomPageImage, Page } from '@/shared/interfaces/Page';
+import type { CustomPageImage } from '@/shared/interfaces/Page';
 import { deleteContentImageAction } from '../(actions)/deleteContentImageAction';
-import './styles.css';
 import { CharactersCounter } from '@/shared/components/characters-counter';
+import type { PageType } from '../(actions)/fetchPageAction';
+import './styles.css';
 
 type Props = Readonly<{
-  page: Page & { images: CustomPageImage[] };
+  page: PageType;
 }>;
 
 type CountCharacters = {
