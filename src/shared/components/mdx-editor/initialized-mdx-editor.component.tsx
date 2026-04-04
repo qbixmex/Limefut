@@ -154,7 +154,7 @@ const spanishLocalization: Record<string, string> = {
   'contentArea.editableMarkdown': 'Markdown editable',
 };
 
-const InitializedMDXEditor = ({ editorRef, uploadImage, ...props }: Props) => {
+const InitializedMDXEditor = ({ editorRef, uploadImage = undefined, ...props }: Props) => {
   const { resolvedTheme } = useTheme();
   return (
     <MDXEditor
@@ -227,7 +227,7 @@ const InitializedMDXEditor = ({ editorRef, uploadImage, ...props }: Props) => {
               <InsertCodeBlock />
               <InsertThematicBreak />
               <Separator />
-              <InsertImage />
+              {(typeof uploadImage === 'function') && <InsertImage />}
               <YouTubeButton />
               <UndoRedo />
             </DiffSourceToggleWrapper>

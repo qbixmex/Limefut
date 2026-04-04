@@ -94,7 +94,7 @@ export const PageForm: FC<Props> = ({ page }) => {
 
     const response = await deleteContentImageAction(
       page.id as string,
-      customPageImage.publicId,
+      customPageImage.resourceId,
     );
 
     if (response.ok) {
@@ -220,7 +220,7 @@ export const PageForm: FC<Props> = ({ page }) => {
                     <MdEditorField
                       markdownString={field.value}
                       setContent={value => field.onChange(value)}
-                      pageId={page?.id}
+                      resourceId={page?.id}
                       updateContentImage={updateContentImage}
                     />
                   </FormControl>
@@ -423,7 +423,7 @@ export const PageForm: FC<Props> = ({ page }) => {
 
                 <div className="flex flex-wrap gap-5">
                   {contentImages.map((customPageImage) => (
-                    <figure key={customPageImage.publicId} className="relative w-fit">
+                    <figure key={customPageImage.resourceId} className="relative w-fit">
                       <Image
                         src={customPageImage.imageUrl}
                         alt="Imagen del contenido"

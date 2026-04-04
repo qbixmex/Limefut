@@ -12,8 +12,8 @@ const ACCEPTED_FILE_TYPES = [
 export const editSponsorSchema = z.object({
   name: z
     .string('¡ El nombre debe ser una cadena de texto !')
-    .min(3, { message: '¡ El name debe ser mayor a 3 caracteres !' })
-    .max(250, { message: '¡ El name debe ser menor a 250 caracteres !' })
+    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
+    .max(250, { message: '¡ El nombre debe ser menor a 250 caracteres !' })
     .optional(),
   url: z
     .string('¡ El URL debe ser una cadena de texto !')

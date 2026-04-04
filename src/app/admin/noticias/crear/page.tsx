@@ -3,19 +3,11 @@ import type { FC } from 'react';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SponsorForm } from '../(components)/sponsor-form';
+import { AnnouncementForm } from '../(components)/announcement-form';
 import type { Session } from '@/lib/auth-client';
 import { auth } from '@/lib/auth';
 
-const CreateSponsorPage: FC = () => {
-  return (
-    <Suspense>
-      <CreateSponsorContent />
-    </Suspense>
-  );
-};
-
-const CreateSponsorContent: FC = async () => {
+const CreateAnnouncementPage: FC = async () => {
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
@@ -23,10 +15,10 @@ const CreateSponsorContent: FC = async () => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Crear Patrocinador</CardTitle>
+            <CardTitle className="admin-page-card-title">Crear Noticia</CardTitle>
           </CardHeader>
           <CardContent>
-            <SponsorForm
+            <AnnouncementForm
               key={randomUUID()}
               session={session as Session}
             />
@@ -37,4 +29,4 @@ const CreateSponsorContent: FC = async () => {
   );
 };
 
-export default CreateSponsorPage;
+export default CreateAnnouncementPage;

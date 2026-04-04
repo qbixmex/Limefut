@@ -5,9 +5,8 @@ import type { Session } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { fetchSponsorAction } from '../../(actions)';
-import { SponsorForm } from '../../(components)/sponsor-form';
-import { ROUTES } from '@/shared/constants/routes';
+import { fetchAnnouncementAction } from '../../(actions)';
+import { AnnouncementForm } from '../../(components)/announcement-form';
 
 type Props = Readonly<{
   params: Promise<{
@@ -15,21 +14,21 @@ type Props = Readonly<{
   }>;
 }>;
 
-const EditSponsorPage: FC<Props> = ({ params }) => {
+const EditAnnouncementPage: FC<Props> = ({ params }) => {
   return (
-    <EditSponsorContent params={params} />
+    <EditAnnouncementContent params={params} />
   );
 };
 
-const EditSponsorContent: FC<Props> = async ({ params }) => {
+const EditAnnouncementContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
   const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, sponsor } = await fetchSponsorAction(session?.user.roles ?? [], sponsorId);
+  const { ok, announcement } = await fetchAnnouncementAction(session?.user.roles ?? [], sponsorId);
 
   if (!ok) {
     const message = `¡ El patrocinador con el id: "${sponsorId}", no existe ❌ !`;
-    redirect(`${ROUTES.ADMIN_SPONSORS}?error=${encodeURIComponent(message)}`);
+    redirect(`/admin/patrocinadores?error=${encodeURIComponent(message)}`);
   }
 
   return (
@@ -37,13 +36,13 @@ const EditSponsorContent: FC<Props> = async ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Editar Banner</CardTitle>
+            <CardTitle className="admin-page-card-title">Editar Noticia</CardTitle>
           </CardHeader>
           <CardContent>
-            <SponsorForm
+            <AnnouncementForm
               key={randomUUID()}
               session={session as Session}
-              sponsor={sponsor!}
+              announcement={announcement!}
             />
           </CardContent>
         </Card>
@@ -52,4 +51,4 @@ const EditSponsorContent: FC<Props> = async ({ params }) => {
   );
 };
 
-export default EditSponsorPage;
+export default EditAnnouncementPage;

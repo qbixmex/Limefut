@@ -1,0 +1,58 @@
+@reference '../../../globals.css';
+
+#announcements {
+  @apply border border-gray-400 dark:border-gray-500 rounded-md;
+
+  header {
+    @apply bg-gray-700 dark:bg-gray-500 px-3 py-2;
+
+    .heading {
+      @apply font-bold text-xl shadow-none!;
+    }
+  }
+
+  .content {
+    @apply p-4 min-h-[300px];
+
+    .empty-content {
+      @apply flex flex-col justify-center items-center gap-5;
+      p {
+        @apply text-xl text-gray-600 dark:text-gray-400 text-center leading-tight font-semibold;
+      }
+      .icon {
+        @apply size-[100px] stroke-1 stroke-gray-600 dark:stroke-gray-400;
+      }
+    }
+
+    .announcements {
+      @apply flex flex-col gap-5;
+    }
+
+    .announcement {
+      width: 100%;
+      border-width: 0.5px;
+      @apply bg-gray-100/80 border-gray-400;
+      @apply dark:border-gray-500 dark:bg-gray-800;
+      @apply p-3 rounded;
+
+      .subtitle {
+        text-shadow: none !important;
+        @apply text-lg text-gray-700 dark:text-gray-200 font-semibold;
+      }
+
+      .date {
+        text-shadow: none !important;
+        @apply text-sm italic text-gray-500 dark:text-gray-400 mb-3;
+      }
+
+      .description {
+        text-shadow: none !important;
+        @apply w-full text-pretty text-base italic text-gray-500 dark:text-gray-300  mb-3;
+      }
+
+      .more {
+        @apply block italic text-right;
+      }
+    }
+  }
+}

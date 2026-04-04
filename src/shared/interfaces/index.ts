@@ -15,6 +15,7 @@ export type { GalleryImage } from './GalleryImage';
 export type { Page } from './Page';
 export { ROBOTS, PAGE_STATUS } from './Page';
 export type { Sponsor } from './Sponsor';
-export { type HeroBanner } from './HeroBanner';
+export type { HeroBanner } from './HeroBanner';
+export type { Announcement } from './Announcement';
 
 export type { CloudinaryResponse } from './Cloudinary';
