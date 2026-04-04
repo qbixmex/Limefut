@@ -1,5 +1,5 @@
 @reference "../../../globals.css";
 
-h1 {
+#heading {
   @apply text-4xl lg:text-6xl text-emerald-800 dark:text-emerald-500 font-semibold;
 }
