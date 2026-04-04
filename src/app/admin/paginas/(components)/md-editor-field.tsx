@@ -9,28 +9,31 @@ import { toast } from 'sonner';
 type Props = Readonly<{
   markdownString: string | undefined;
   setContent: (value: string) => void;
-  updateContentImage: (pageImage: CustomPageImage) => void;
-  pageId: string;
+  updateContentImage?: (pageImage: CustomPageImage) => void;
+  resourceId: string;
 }>;
 
 export const MdEditorField: FC<Props> = ({
   markdownString,
   setContent,
   updateContentImage,
-  pageId,
+  resourceId,
 }) => {
+  const canUploadImage = typeof updateContentImage === 'function';
   const handleImageUpload = async (file: File) => {
-    const { message, cloudinaryResponse } = await uploadPageContentImageAction(file, pageId);
+    const { message, cloudinaryResponse } = await uploadPageContentImageAction(file, resourceId);
 
     if (!cloudinaryResponse) {
       toast.error(message);
       return '';
     }
 
-    updateContentImage({
-      publicId: cloudinaryResponse.publicId,
-      imageUrl: cloudinaryResponse.secureUrl,
-    });
+    if (canUploadImage) {
+      updateContentImage({
+        resourceId: cloudinaryResponse.publicId,
+        imageUrl: cloudinaryResponse.secureUrl,
+      });
+    }
 
     if (cloudinaryResponse) {
       toast.success(message);
@@ -44,7 +47,7 @@ export const MdEditorField: FC<Props> = ({
       <ForwardRefEditor
         markdown={markdownString ?? ''}
         onChange={(value: string) => setContent(value)}
-        uploadImage={handleImageUpload}
+        uploadImage={canUploadImage ? handleImageUpload : undefined}
       />
     </>
   );

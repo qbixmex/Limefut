@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { ROBOTS } from '../shared/interfaces';
 import { PAGE_STATUS } from '../shared/interfaces/Page';
 import { GENDER, MATCH_STATUS, type MATCH_STATUS_TYPE } from '../shared/enums';
+import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -319,4 +320,34 @@ export const shuffleArray = <T>(array: T[]): T[] => {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
+};
+
+/**
+ * Translates the sponsor alignment to Spanish.
+ * @param alignment - The sponsor alignment value.
+ * @example ```typescript
+ * getAlignment(SPONSOR_ALIGNMENT.TOP);
+ * // Returns "Arriba"
+ * getAlignment(SPONSOR_ALIGNMENT.RIGHT);
+ * // Returns "Derecha"
+ * getAlignment(SPONSOR_ALIGNMENT.BOTTOM);
+ * // Returns "Abajo"
+ * getAlignment(SPONSOR_ALIGNMENT.LEFT);
+ * // Returns "Izquierda"
+ * ```
+ * @returns The sponsor alignment translated to Spanish.
+ */
+export const getAlignment = (alignment: string) => {
+  switch (alignment) {
+    case SPONSOR_ALIGNMENT.TOP:
+      return 'arriba';
+    case SPONSOR_ALIGNMENT.RIGHT:
+      return 'derecha';
+    case SPONSOR_ALIGNMENT.BOTTOM:
+      return 'abajo';
+    case SPONSOR_ALIGNMENT.LEFT:
+      return 'izquierda';
+    default:
+      return alignment;
+  }
 };

@@ -30,7 +30,7 @@ export interface Page {
 export interface CustomPageImage {
   id?: string;
   imageUrl: string;
-  publicId: string;
+  resourceId: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -7,13 +7,15 @@ import { cacheLife, cacheTag } from 'next/cache';
 type Image = {
   id: string;
   imageUrl: string;
-  publicId: string;
+  resourceId: string;
 };
+
+export type PageType = Page & { images: Image[] }
 
 type FetchResponse = Promise<{
   ok: boolean;
   message: string;
-  page: Page & { images: Image[] } | null;
+  page: PageType | null;
 }>;
 
 export const fetchPageAction = async (
@@ -58,7 +60,14 @@ export const fetchPageAction = async (
     return {
       ok: true,
       message: '¡ Página obtenida correctamente 👍 !',
-      page,
+      page: {
+        ...page,
+        images: page.images.map((item) => ({
+          id: item.id,
+          imageUrl: item.imageUrl,
+          resourceId: item.publicId,
+        })),
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

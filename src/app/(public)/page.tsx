@@ -7,6 +7,8 @@ import { LatestResults, MatchesSkeleton } from './components';
 import { HorizontalCalendarSkeleton } from './components/horizontal-calendar/horizontal-calendar-skeleton';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { LatestImages } from './components/latest-images';
+import { Sidebar } from './components/sidebar';
+import { LatestImagesSkeleton } from './components/latest-images/latest-images-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -22,43 +24,41 @@ const HomePage: FC<Props> = ({ searchParams }) => {
   const selectedDayPromise = searchParams.then((sp) => ({ selectedDay: sp['selected-day'] }));
 
   return (
-    <>
-      <h1 className="visually-hidden">Limefut - Liga menor de fútbol</h1>
-
-      <Suspense>
-        <ErrorHandler />
-      </Suspense>
-
-      <div className="wrapper">
-        <Suspense fallback={<CarouselSkeleton />}>
-          <Hero />
+    <div className="flex flex-col lg:flex-row gap-5">
+      <main className="w-full">
+        <h1 className="visually-hidden">Limefut - Liga menor de fútbol</h1>
+        <Suspense>
+          <ErrorHandler />
         </Suspense>
-
-        <Suspense fallback={
-          <>
-            <HorizontalCalendarSkeleton />
-            <MatchesSkeleton />
-          </>
-        }>
-          <CalendarMatches
-            matchesPromise={matchesPromise}
-            selectedDayPromise={selectedDayPromise}
-          />
-        </Suspense>
-
-        <Suspense fallback={<MatchesSkeleton />}>
-          <LatestResults
-            resultsPromise={
-              resultsPromise as Promise<{ latestResultsPage: string }>
-            }
-          />
-        </Suspense>
-
-        <Suspense fallback={<p>Cargando imágenes recientes</p>}>
-          <LatestImages />
-        </Suspense>
-      </div>
-    </>
+        <div className="wrapper">
+          <Suspense fallback={<CarouselSkeleton />}>
+            <Hero />
+          </Suspense>
+          <Suspense fallback={
+            <>
+              <HorizontalCalendarSkeleton />
+              <MatchesSkeleton />
+            </>
+          }>
+            <CalendarMatches
+              matchesPromise={matchesPromise}
+              selectedDayPromise={selectedDayPromise}
+            />
+          </Suspense>
+          <Suspense fallback={<MatchesSkeleton />}>
+            <LatestResults
+              resultsPromise={
+                resultsPromise as Promise<{ latestResultsPage: string }>
+              }
+            />
+          </Suspense>
+          <Suspense fallback={<LatestImagesSkeleton />}>
+            <LatestImages />
+          </Suspense>
+        </div>
+      </main>
+      <Sidebar />
+    </div>
   );
 };
 

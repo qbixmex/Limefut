@@ -57,17 +57,17 @@ enum Alignment {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String   @id @default(uuid())
   name          String?
-  username      String?   @unique
-  email         String    @unique
-  emailVerified Boolean?  @map("email_verified")
-  imageUrl      String?   @map("image_url")
-  imagePublicID String?   @map("image_public_id")
+  username      String?  @unique
+  email         String   @unique
+  emailVerified Boolean? @map("email_verified")
+  imageUrl      String?  @map("image_url")
+  imagePublicID String?  @map("image_public_id")
   password      String?
 
-  sessions      Session[]
-  accounts      Account[]
+  sessions Session[]
+  accounts Account[]
 
   roles    Role[]  @default([user])
   isActive Boolean @default(false) @map("is_active")
@@ -399,7 +399,7 @@ model Gallery {
   active      Boolean  @default(false)
 
   // Relations
-  images       GalleryImage[]
+  images GalleryImage[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -489,4 +489,36 @@ model HeroBanner {
   updatedAt     DateTime  @updatedAt
 
   @@map("hero_banners")
+}
+
+model Sponsor {
+  id            String    @id @default(uuid())
+  name          String    @unique @db.VarChar
+  url           String?
+  imageUrl      String    @map("image_url")
+  imagePublicId String    @map("image_public_id")
+  startDate     DateTime? @map("start_date")
+  endDate       DateTime? @map("end_date")
+  position      Int       @default(0)
+  alignment     String
+  clicks        Int       @default(0)
+  active        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("sponsors")
+}
+
+model Announcement {
+  id            String   @id @default(uuid())
+  title         String   @unique @db.VarChar
+  permalink     String   @unique @db.VarChar
+  publishedDate DateTime @default(now())
+  description   String   @db.VarChar
+  content       String
+  active        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("announcements")
 }

@@ -1,10 +1,10 @@
 @reference "tailwindcss";
 
 .container {
+  width: 100%;
   @apply
-    w-full
     flex flex-col lg:gap-8 min-h-screen
-    lg:mx-auto
-    lg:max-w-[1024px]
-    xl:max-w-[80%];
+    min-[1366px]:mx-auto
+    min-[1366px]:max-w-[calc(100%-100px)]
+    min-[1920px]:max-w-[90%];
 }

@@ -20,12 +20,12 @@ export const metadata: Metadata = {
     locale: 'es_MX',
     type: 'website',
     images: [
-     {
-       url: `${DOMAIN}/limefut-logo-1200-x-630.webp`,
-       width: 1200,
-       height: 630,
-       alt: 'Liga menor de fútbol',
-     },
+      {
+        url: `${DOMAIN}/limefut-logo-1200-x-630.webp`,
+        width: 1200,
+        height: 630,
+        alt: 'Liga menor de fútbol',
+      },
     ],
   },
   twitter: {
@@ -49,9 +49,9 @@ const PublicLayout: FC<Props> = ({ children }) => {
   return (
     <Container>
       <Header />
-      <main className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col">
         {children}
-      </main>
+      </div>
       <Footer />
     </Container>
   );
