@@ -35,7 +35,7 @@ export const fetchPublicAnnouncementAction = async (permalink: string): FetchAnn
         title: true,
         content: true,
         publishedDate: true,
-      }
+      },
     });
 
     if (!announcement) {

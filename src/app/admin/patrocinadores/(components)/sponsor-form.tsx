@@ -31,7 +31,7 @@ import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
-import { cn, getAlignment } from '@/lib/utils';
+import { getAlignment } from '@/lib/utils';
 
 type Props = Readonly<{
   session: Session;

@@ -14,16 +14,19 @@ type Props = Readonly<{
   time?: number;
 }>;
 
-export const SponsorCarousel: FC<Props> = ({ sponsors, time = 10 }) => {
+export const SponsorCarousel: FC<Props> = ({ sponsors = [], time = 10 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % sponsors.length);
-    }, time * 1000);
-
-    return () => clearInterval(interval);
+    if (sponsors.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % sponsors.length);
+      }, time * 1000);
+      return () => clearInterval(interval);
+    }
   }, [sponsors.length, time]);
+
+  if (sponsors.length === 0) return null;
 
   const currentSponsor = sponsors[currentIndex];
 
@@ -39,11 +42,11 @@ export const SponsorCarousel: FC<Props> = ({ sponsors, time = 10 }) => {
       <Image
         width={0}
         height={0}
-        src={currentSponsor.imageUrl}
-        alt={`${currentSponsor.name} patrocinador`}
+        src={currentSponsor?.imageUrl ?? ''}
+        alt={`${currentSponsor?.name} patrocinador`}
         className="w-full max-w-[288px] h-auto rounded"
       />
-      <figcaption className="visually-hidden">{currentSponsor.name}</figcaption>
+      <figcaption className="visually-hidden">{currentSponsor?.name}</figcaption>
     </motion.figure>
   );
 };

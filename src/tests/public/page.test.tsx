@@ -6,6 +6,7 @@ vi.mock('@/app/(public)/components/hero', () => ({ Hero: () => null }));
 vi.mock('@/app/(public)/components/calendar-matches', () => ({ CalendarMatches: () => null }));
 vi.mock('@/app/(public)/components/latest-results', () => ({ LatestResults: () => null }));
 vi.mock('@/app/(public)/components/latest-images', () => ({ LatestImages: () => null }));
+vi.mock('@/app/(public)/components/sidebar', () => ({ Sidebar: () => null }));
 
 describe('Tests on <HomePage />', () => {
   test('Should render the home page correctly', async () => {

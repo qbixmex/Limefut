@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
-import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AnnouncementForm } from '../(components)/announcement-form';

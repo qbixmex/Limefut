@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { fetchPageAction } from '../../(actions)/fetchPageAction';
+import { fetchPageAction, type PageType } from '../../(actions)/fetchPageAction';
 import { PageForm } from '../../(components)/page-form';
 
 type Props = Readonly<{
@@ -45,7 +45,7 @@ export const EditCustomPage: FC<Props> = async ({ params }) => {
           <CardContent>
             <PageForm
               key={response.page.id}
-              page={response.page}
+              page={response.page as PageType}
             />
           </CardContent>
         </Card>
