@@ -3,7 +3,7 @@ CREATE TABLE "videos" (
     "id" TEXT NOT NULL,
     "title" VARCHAR NOT NULL,
     "permalink" VARCHAR NOT NULL,
-    "publishedDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "published_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "description" VARCHAR NOT NULL,
     "url" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT false,

@@ -11,41 +11,15 @@ import { es } from 'date-fns/locale';
 import { InfoIcon, Pencil } from 'lucide-react';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-// import { fetchVideosAction, updateVideoStateAction } from '../(actions)';
+import { fetchVideosAction } from '../(actions)';
+// import { updateVideoStateAction } from '../(actions)';
 // import { DeleteVideo } from '../(components)/delete-video';
 import { ActiveSwitch } from '@/shared/components/active-switch';
-import { Video } from '@/shared/interfaces';
 
 type Props = Readonly<{
   query?: string;
   currentPage?: string;
 }>;
-
-const videos: Video[] = [
-  {
-    id: 'k30f',
-    title: 'Video One',
-    permalink: 'video-one',
-    publishedDate: new Date('2024-04-05T10:25:14.125Z'),
-    description: 'Irure incididunt Lorem Lorem voluptate quis fugiat do est elit esse velit. Dolor mollit proident ea proident eiusmod ullamco id velit aliquip officia nulla. Consequat tempor duis anim ex proident exercitation excepteur Lorem. Eu veniam culpa ea laborum aliqua nisi nisi ullamco nisi reprehenderit ut ipsum laborum proident. Nulla ut eiusmod quis laborum qui qui et incididunt deserunt irure nulla occaecat ex. Occaecat mollit id consequat nisi nostrud ipsum fugiat dolor sunt magna adipisicing mollit dolor sint.',
-    url: 'https://youtu.be/oV6kM5CapOc?si=Hl2qdQHyzX4_HQxt',
-    active: true,
-  },
-  {
-    id: 'n32t',
-    title: 'Video Two',
-    permalink: 'video-two',
-    publishedDate: new Date('2024-04-05T10:25:14.125Z'),
-    description: 'Irure incididunt Lorem Lorem voluptate quis fugiat do est elit esse velit. Dolor mollit proident ea proident eiusmod ullamco id velit aliquip officia nulla. Consequat tempor duis anim ex proident exercitation excepteur Lorem. Eu veniam culpa ea laborum aliqua nisi nisi ullamco nisi reprehenderit ut ipsum laborum proident. Nulla ut eiusmod quis laborum qui qui et incididunt deserunt irure nulla occaecat ex. Occaecat mollit id consequat nisi nostrud ipsum fugiat dolor sunt magna adipisicing mollit dolor sint.',
-    url: 'https://youtu.be/ae7ymgf-zLY?si=IEsnWcqyadnuySrw',
-    active: true,
-  },
-];
-
-const pagination = {
-  currentPage: 1,
-  totalPages: 10,
-};
 
 const updateVideoStateAction = async () => {
   'use server';
@@ -64,15 +38,15 @@ export const VideosTable: FC<Props> = async ({
     headers: await headers(),
   });
 
-  // const {
-  //   videos = [],
-  //   pagination,
-  // } = await fetchVideosAction({
-  //   userRoles: session?.user.roles ?? [],
-  //   page: currentPage as number,
-  //   take: 12,
-  //   searchTerm: query,
-  // });
+  const {
+    videos = [],
+    pagination,
+  } = await fetchVideosAction({
+    userRoles: session?.user.roles ?? [],
+    page: currentPage as number,
+    take: 12,
+    searchTerm: query,
+  });
 
   return (
     <>
