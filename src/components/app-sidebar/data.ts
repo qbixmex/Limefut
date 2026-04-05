@@ -14,6 +14,7 @@ import {
   Inbox,
   ImageIcon,
   Newspaper,
+  VideoIcon,
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
 import { GiWhistle, GiSodaCan } from 'react-icons/gi';
@@ -207,6 +208,24 @@ export const navMain: NavItem[] = [
       {
         label: 'Crear',
         url: '/admin/galerias/crear',
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: 'Videos',
+    url: '#',
+    icon: VideoIcon,
+    isActive: false,
+    subItems: [
+      {
+        label: 'Lista',
+        url: '/admin/videos',
+        icon: ListIcon,
+      },
+      {
+        label: 'Crear',
+        url: '/admin/videos/crear',
         icon: PlusIcon,
       },
     ],

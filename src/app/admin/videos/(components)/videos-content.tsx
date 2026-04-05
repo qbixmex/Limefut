@@ -2,9 +2,9 @@ import { Suspense, type FC } from 'react';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
-import { AnnouncementsTable } from './announcements-table';
-import { CreateAnnouncement } from './create-announcement';
-import { AnnouncementsTableSkeleton } from './announcements-table-skeleton';
+// import { VideosTable } from './videos-table';
+// import { CreateAnnouncement } from './create-video';
+// import { videoTableSkeleton } from './video-table-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -13,7 +13,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const AnnouncementsContent: FC<Props> = async ({ searchParams }) => {
+export const VideosContent: FC<Props> = async ({ searchParams }) => {
   const query = (await searchParams).query;
   const currentPage = (await searchParams).page;
 
@@ -25,22 +25,23 @@ export const AnnouncementsContent: FC<Props> = async ({ searchParams }) => {
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
               <CardTitle className="admin-page-card-title">
-                Noticias
+                Videos
               </CardTitle>
               <section className="flex gap-5 items-center">
-                <Search placeholder="Buscar noticia" />
-                <CreateAnnouncement />
+                <Search placeholder="Buscar video" />
+                {/* <CreateVideo /> */}
               </section>
             </CardHeader>
             <CardContent>
               <Suspense
                 key={`${query ?? 'query'}-${currentPage ?? 'current-page'}`}
-                fallback={<AnnouncementsTableSkeleton />}
+                // TODO: fallback={<VideosTableSkeleton />}
+                fallback={<p>Cargando Videos</p>}
               >
-                <AnnouncementsTable
+                {/* <VideosTable
                   query={query}
                   currentPage={currentPage}
-                />
+                /> */}
               </Suspense>
             </CardContent>
           </Card>
