@@ -2,7 +2,7 @@ import { Suspense, type FC } from 'react';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
-// import { VideosTable } from './videos-table';
+import { VideosTable } from './videos-table';
 // import { CreateAnnouncement } from './create-video';
 // import { videoTableSkeleton } from './video-table-skeleton';
 
@@ -38,10 +38,10 @@ export const VideosContent: FC<Props> = async ({ searchParams }) => {
                 // TODO: fallback={<VideosTableSkeleton />}
                 fallback={<p>Cargando Videos</p>}
               >
-                {/* <VideosTable
+                <VideosTable
                   query={query}
                   currentPage={currentPage}
-                /> */}
+                />
               </Suspense>
             </CardContent>
           </Card>
