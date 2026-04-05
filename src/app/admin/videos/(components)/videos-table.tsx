@@ -12,7 +12,7 @@ import { InfoIcon, Pencil } from 'lucide-react';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 import { fetchVideosAction, updateVideoStateAction } from '../(actions)';
-// import { DeleteVideo } from '../(components)/delete-video';
+import { DeleteVideo } from '../(components)/delete-video';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 
 type Props = Readonly<{
@@ -101,10 +101,10 @@ export const VideosTable: FC<Props> = async ({
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        {/* <DeleteVideo
+                        <DeleteVideo
                           videoId={video.id as string}
                           roles={session?.user.roles as string[]}
-                        /> */}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
