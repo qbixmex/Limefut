@@ -522,3 +522,17 @@ model Announcement {
 
   @@map("announcements")
 }
+
+model Video {
+  id            String   @id @default(uuid())
+  title         String   @unique @db.VarChar
+  permalink     String   @unique @db.VarChar
+  publishedDate DateTime @default(now())
+  description   String   @db.VarChar
+  url           String
+  active        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("videos")
+}
