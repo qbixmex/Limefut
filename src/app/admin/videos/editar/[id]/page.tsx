@@ -5,8 +5,8 @@ import type { Session } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { fetchAnnouncementAction } from '../../(actions)';
-import { AnnouncementForm } from '../../(components)/announcement-form';
+import { fetchVideoAction } from '../../(actions)';
+import { VideoForm } from '../../(components)/video-form';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
@@ -15,7 +15,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-const EditAnnouncementPage: FC<Props> = ({ params }) => {
+const EditVideoPage: FC<Props> = ({ params }) => {
   return (
     <EditAnnouncementContent params={params} />
   );
@@ -25,11 +25,11 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
   const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, announcement } = await fetchAnnouncementAction(session?.user.roles ?? [], sponsorId);
+  const { ok, video } = await fetchVideoAction(session?.user.roles ?? [], sponsorId);
 
   if (!ok) {
-    const message = `¡ La noticia con el id: "${sponsorId}", no existe ❌ !`;
-    redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(message)}`);
+    const message = `¡ El video con el id: "${sponsorId}", no existe ❌ !`;
+    redirect(`${ROUTES.ADMIN_VIDEOS}?error=${encodeURIComponent(message)}`);
   }
 
   return (
@@ -37,13 +37,13 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Editar Noticia</CardTitle>
+            <CardTitle className="admin-page-card-title">Editar Video</CardTitle>
           </CardHeader>
           <CardContent>
-            <AnnouncementForm
+            <VideoForm
               key={randomUUID()}
               session={session as Session}
-              announcement={announcement!}
+              video={video!}
             />
           </CardContent>
         </Card>
@@ -52,4 +52,4 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
   );
 };
 
-export default EditAnnouncementPage;
+export default EditVideoPage;

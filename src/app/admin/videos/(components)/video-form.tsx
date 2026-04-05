@@ -58,11 +58,11 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: video?.title ?? 'Video Three',
-      permalink: video?.permalink ?? 'video-three',
-      url: video?.url ?? 'https://youtu.be/RJNIpd6BSVA?si=jQ-FKYmUTEzzkkOK',
-      publishedDate: video?.publishedDate ?? new Date(),
-      description: video?.description ?? 'Adipisicing aliqua magna nisi cillum aliquip culpa ad proident voluptate irure dolor.',
+      title: video?.title ?? '',
+      permalink: video?.permalink ?? '',
+      url: video?.url ?? '',
+      publishedDate: video?.publishedDate ?? undefined,
+      description: video?.description ?? '',
       active: video?.active ?? false,
     },
   });
@@ -94,7 +94,7 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        // route.replace(ROUTES.ADMIN_VIDEOS);
+        route.replace(ROUTES.ADMIN_VIDEOS);
       }
 
       return;
@@ -115,7 +115,7 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
       }
 
       toast.success(response.message);
-      // route.replace(ROUTES.ADMIN_VIDEOS);
+      route.replace(ROUTES.ADMIN_VIDEOS);
     }
   };
 

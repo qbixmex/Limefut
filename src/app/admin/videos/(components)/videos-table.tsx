@@ -11,8 +11,7 @@ import { es } from 'date-fns/locale';
 import { InfoIcon, Pencil } from 'lucide-react';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { fetchVideosAction } from '../(actions)';
-// import { updateVideoStateAction } from '../(actions)';
+import { fetchVideosAction, updateVideoStateAction } from '../(actions)';
 // import { DeleteVideo } from '../(components)/delete-video';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 
@@ -20,15 +19,6 @@ type Props = Readonly<{
   query?: string;
   currentPage?: string;
 }>;
-
-const updateVideoStateAction = async () => {
-  'use server';
-
-  return await Promise.resolve({
-    ok: true,
-    message: 'Video updated successfully',
-  });
-};
 
 export const VideosTable: FC<Props> = async ({
   query = '',
@@ -80,7 +70,6 @@ export const VideosTable: FC<Props> = async ({
                     <TableCell className="hidden sm:table-cell text-center">
                       <ActiveSwitch
                         resource={{ id: video.id as string, state: video.active }}
-                        // updateResourceStateAction={updateVideoStateAction}
                         updateResourceStateAction={updateVideoStateAction}
                       />
                     </TableCell>

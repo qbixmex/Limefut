@@ -2,12 +2,12 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
-import { editVideoSchema } from '@/shared/schemas';
-import type { Video } from '@/shared/interfaces';
+import { editAnnouncementSchema } from '@/shared/schemas';
+import type { Announcement } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;
-  videoId: string;
+  announcementId: string;
   userRoles: string[];
   authenticatedUserId: string;
 };
@@ -15,12 +15,12 @@ type Options = {
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
-  video: Video | null;
+  announcement: Announcement | null;
 }>;
 
-export const updateVideoAction = async ({
+export const updateAnnouncementAction = async ({
   formData,
-  videoId,
+  announcementId,
   userRoles,
   authenticatedUserId,
 }: Options): EditResponseAction => {
@@ -28,7 +28,7 @@ export const updateVideoAction = async ({
     return {
       ok: false,
       message: '¡ Usuario no autenticado !',
-      video: null,
+      announcement: null,
     };
   }
 
@@ -36,7 +36,7 @@ export const updateVideoAction = async ({
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      video: null,
+      announcement: null,
     };
   }
 
@@ -44,82 +44,81 @@ export const updateVideoAction = async ({
     title: formData.get('title') as string ?? '',
     permalink: formData.get('permalink') ?? '',
     publishedDate: formData.get('publishedDate') ? new Date(formData.get('publishedDate') as string) : null,
-    url: formData.get('url') ?? '',
     description: formData.get('description') ?? '',
+    content: formData.get('content') ?? '',
     image: formData.get('image') as File,
     active: formData.get('active') === 'true',
   };
 
-  const videoVerified = editVideoSchema.safeParse(rawData);
+  const announcementVerified = editAnnouncementSchema.safeParse(rawData);
 
-  if (!videoVerified.success) {
+  if (!announcementVerified.success) {
     return {
       ok: false,
-      message: videoVerified.error.issues[0].message,
-      video: null,
+      message: announcementVerified.error.issues[0].message,
+      announcement: null,
     };
   }
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
-        const videoExists = await transaction.video.count({
-          where: { id: videoId },
+        const announcementExists = await transaction.announcement.count({
+          where: { id: announcementId },
         });
 
-        if (!videoExists) {
+        if (!announcementExists) {
           return {
             ok: false,
-            message: '¡ El video no existe o ha sido eliminado !',
-            video: null,
+            message: '¡ La noticia no existe o ha sido eliminado !',
+            announcement: null,
           };
         }
 
-        const titleDuplicated = await transaction.video.count({
+        const titleDuplicated = await transaction.announcement.count({
           where: {
-            title: videoVerified.data.title as string,
-            id: { not: videoId }, // Exclude current page
+            title: announcementVerified.data.title as string,
+            id: { not: announcementId }, // Exclude current page
           },
         });
 
         if (titleDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe un video con ese título !',
-            video: null,
+            message: '¡ Ya existe una noticia con ese título !',
+            announcement: null,
           };
         }
 
-        const permalinkDuplicated = await transaction.video.count({
+        const permalinkDuplicated = await transaction.announcement.count({
           where: {
-            permalink: videoVerified.data.permalink as string,
-            id: { not: videoId }, // Exclude current page
+            permalink: announcementVerified.data.permalink as string,
+            id: { not: announcementId }, // Exclude current page
           },
         });
 
         if (permalinkDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe un video con ese enlace permanente !',
-            video: null,
+            message: '¡ Ya existe una noticia con ese enlace permanente !',
+            announcement: null,
           };
         }
 
-        const updatedVideo = await transaction.video.update({
-          where: { id: videoId },
-          data: videoVerified.data,
+        const updatedAnnouncement = await transaction.announcement.update({
+          where: { id: announcementId },
+          data: announcementVerified.data,
         });
 
         // Update Cache
-        updateTag('admin-videos');
-        updateTag('admin-video');
-        updateTag('public-videos');
-        updateTag('public-video');
+        updateTag('admin-announcements');
+        updateTag('admin-announcement');
+        updateTag('public-announcement');
 
         return {
           ok: true,
-          message: '¡ El video fue actualizado correctamente 👍 !',
-          video: updatedVideo,
+          message: '¡ La noticia fue actualizada correctamente 👍 !',
+          announcement: updatedAnnouncement,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
@@ -128,7 +127,7 @@ export const updateVideoAction = async ({
             return {
               ok: false,
               message: `¡ El campo "${fieldError}", está duplicado !`,
-              video: null,
+              announcement: null,
             };
           }
 
@@ -138,15 +137,15 @@ export const updateVideoAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el video, revise los logs del servidor !',
-            video: null,
+            message: '¡ Error al actualizar la noticia, revise los logs del servidor !',
+            announcement: null,
           };
         }
         console.log((error as Error).message);
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
-          video: null,
+          announcement: null,
         };
       }
     });
@@ -162,7 +161,7 @@ export const updateVideoAction = async ({
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      video: null,
+      announcement: null,
     };
   }
 };
