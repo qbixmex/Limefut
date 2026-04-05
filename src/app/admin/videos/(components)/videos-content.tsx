@@ -3,7 +3,7 @@ import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
 import { VideosTable } from './videos-table';
-// import { CreateAnnouncement } from './create-video';
+import { CreateVideo } from './create-video';
 // import { videoTableSkeleton } from './video-table-skeleton';
 
 type Props = Readonly<{
@@ -29,7 +29,7 @@ export const VideosContent: FC<Props> = async ({ searchParams }) => {
               </CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar video" />
-                {/* <CreateVideo /> */}
+                <CreateVideo />
               </section>
             </CardHeader>
             <CardContent>
