@@ -19,7 +19,7 @@ export const Videos = async () => {
       <div className="content">
         {(!ok || videos.length === 0) && (
           <div className="empty-content">
-            <p>No hay noticias que mostrar por el momento</p>
+            <p>No hay videos que mostrar por el momento</p>
             <BsFilm className="icon" />
           </div>
         )}
