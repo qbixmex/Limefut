@@ -5,10 +5,12 @@ import './sidebar.css';
 
 export const Sidebar = () => {
   return (
-    <aside className="sidebar">
+    <div className="sidebar">
       <Sponsors />
+
       <Announcements />
+
       <Videos />
-    </aside>
+    </div>
   );
 };

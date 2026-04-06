@@ -81,7 +81,7 @@ describe('Tests on <LatestImages />', () => {
       const image = screen.getByAltText(banner.title) as HTMLImageElement;
       expect(image).toBeInTheDocument();
       const src = image.getAttribute('src') ?? '';
-      const parsedUrl = new URL(src, 'https://localhost');
+      const parsedUrl = new URL(src, 'http://localhost');
       const originalUrl = parsedUrl.searchParams.get('url');
       expect(originalUrl).toBe(banners[index].imageUrl);
     });
