@@ -25,5 +25,12 @@ export const ROUTES = {
   ADMIN_ANNOUNCEMENTS_CREATE: '/admin/noticias/crear',
   ADMIN_ANNOUNCEMENTS_SHOW: (id: string) => `/admin/noticias/${id}`,
   ADMIN_ANNOUNCEMENTS_EDIT: (id: string) => `/admin/noticias/editar/${id}`,
+  PUBLIC_ANNOUNCEMENTS: '/noticias',
   PUBLIC_ANNOUNCEMENTS_SHOW: (id: string) => `/noticias/${id}`,
+  ADMIN_VIDEOS: '/admin/videos',
+  ADMIN_VIDEOS_CREATE: '/admin/videos/crear',
+  ADMIN_VIDEOS_SHOW: (id: string) => `/admin/videos/${id}`,
+  ADMIN_VIDEOS_EDIT: (id: string) => `/admin/videos/editar/${id}`,
+  PUBLIC_VIDEOS: '/videos',
+  PUBLIC_VIDEOS_SHOW: (id: string) => `/videos/${id}`,
 } as const;

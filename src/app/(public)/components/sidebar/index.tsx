@@ -1,5 +1,6 @@
 import { Announcements } from '../announcements';
 import { Sponsors } from '../sponsors';
+import { Videos } from '../videos';
 import './sidebar.css';
 
 export const Sidebar = () => {
@@ -7,6 +8,7 @@ export const Sidebar = () => {
     <aside className="sidebar">
       <Sponsors />
       <Announcements />
+      <Videos />
     </aside>
   );
 };

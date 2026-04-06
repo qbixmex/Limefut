@@ -14,3 +14,4 @@ export { createPageSchema, editPageSchema } from './page';
 export { createHeroBannerSchema, editHeroBannerSchema } from './hero-banner';
 export { createSponsorSchema, editSponsorSchema } from './sponsors';
 export { createAnnouncementSchema, editAnnouncementSchema } from './announcements';
+export { createVideoSchema, editVideoSchema } from './videos';

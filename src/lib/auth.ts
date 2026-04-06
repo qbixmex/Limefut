@@ -56,23 +56,25 @@ export const auth = betterAuth({
   plugins: [
     ...(options.plugins ?? []),
     customSession(
-      async ({ user, session }) => ({
-        user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          emailVerified: user.emailVerified,
-          image: user.imageUrl,
-          roles: user.roles,
-        },
-        session: {
-          createdAt: session.createdAt,
-          expiresAt: session.expiresAt,
-          token: session.token,
-          userAgent: session.userAgent,
-        },
-      }),
+      async ({ user, session }) => {
+        return {
+          user: {
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            roles: user.roles,
+            image: user.imageUrl,
+          },
+          session: {
+            createdAt: session.createdAt,
+            expiresAt: session.expiresAt,
+            token: session.token,
+            userAgent: session.userAgent,
+          },
+        };
+      },
       options,
     ),
   ],

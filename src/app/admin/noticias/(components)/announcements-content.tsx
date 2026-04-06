@@ -5,9 +5,6 @@ import { Search } from '@/shared/components/search';
 import { AnnouncementsTable } from './announcements-table';
 import { CreateAnnouncement } from './create-announcement';
 import { AnnouncementsTableSkeleton } from './announcements-table-skeleton';
-// import { AnnouncementsTable } from '../announcements-table';
-// import { CreateAnnouncement } from './create-announcement';
-// import { AnnouncementsTableSkeleton } from './announcements-table-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{

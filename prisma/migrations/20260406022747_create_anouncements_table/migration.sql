@@ -3,7 +3,7 @@ CREATE TABLE "announcements" (
     "id" TEXT NOT NULL,
     "title" VARCHAR NOT NULL,
     "permalink" VARCHAR NOT NULL,
-    "publishedDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "published_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "description" VARCHAR NOT NULL,
     "content" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT false,

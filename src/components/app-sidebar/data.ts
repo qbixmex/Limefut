@@ -16,6 +16,7 @@ import {
   Newspaper,
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
+import { RiFolderVideoLine } from 'react-icons/ri';
 import { GiWhistle, GiSodaCan } from 'react-icons/gi';
 import {
   SoccerPlayer,
@@ -207,6 +208,24 @@ export const navMain: NavItem[] = [
       {
         label: 'Crear',
         url: '/admin/galerias/crear',
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: 'Videos',
+    url: '#',
+    icon: RiFolderVideoLine,
+    isActive: false,
+    subItems: [
+      {
+        label: 'Lista',
+        url: '/admin/videos',
+        icon: ListIcon,
+      },
+      {
+        label: 'Crear',
+        url: '/admin/videos/crear',
         icon: PlusIcon,
       },
     ],

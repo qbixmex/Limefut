@@ -513,7 +513,7 @@ model Announcement {
   id            String   @id @default(uuid())
   title         String   @unique @db.VarChar
   permalink     String   @unique @db.VarChar
-  publishedDate DateTime @default(now())
+  publishedDate DateTime @default(now()) @map("published_date")
   description   String   @db.VarChar
   content       String
   active        Boolean  @default(false)
@@ -521,4 +521,19 @@ model Announcement {
   updatedAt     DateTime @updatedAt
 
   @@map("announcements")
+}
+
+model Video {
+  id            String   @id @default(uuid())
+  title         String   @unique @db.VarChar
+  permalink     String   @unique @db.VarChar
+  publishedDate DateTime @default(now()) @map("published_date")
+  description   String   @db.VarChar
+  url           String
+  platform      String
+  active        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("videos")
 }
