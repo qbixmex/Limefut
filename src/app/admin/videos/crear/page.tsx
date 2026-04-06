@@ -14,7 +14,7 @@ const CreateVideoPage: FC = async () => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Crear Noticia</CardTitle>
+            <CardTitle className="admin-page-card-title">Crear Video</CardTitle>
           </CardHeader>
           <CardContent>
             <VideoForm

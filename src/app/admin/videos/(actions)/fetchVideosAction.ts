@@ -17,7 +17,7 @@ export type VideosType = {
   title: string;
   permalink: string;
   publishedDate: Date;
-  url: string;
+  platform: string;
   active: boolean;
 };
 
@@ -68,7 +68,7 @@ export const fetchVideosAction = async (options: Options): ResponseFetch => {
         title: true,
         permalink: true,
         publishedDate: true,
-        url: true,
+        platform: true,
         active: true,
       },
       orderBy: { publishedDate: 'asc' },

@@ -12,6 +12,9 @@ export const createVideoSchema = z.object({
   url: z
     .string('¡ El URL debe ser una cadena de texto !')
     .min(3, { message: '¡ El URL debe ser mayor a 3 caracteres !' }),
+  platform: z
+    .string('¡ La plataforma ser una cadena de texto !')
+    .min(1, { message: '¡ La plataforma es obligatoria !' }),
   publishedDate: z
     .date({ message: 'Selecciona la fecha de publicación' }),
   description: z

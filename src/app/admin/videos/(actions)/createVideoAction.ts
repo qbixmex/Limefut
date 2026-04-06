@@ -27,6 +27,7 @@ export const createVideoAction = async (
     title: formData.get('title') as string ?? '',
     permalink: formData.get('permalink') ?? '',
     url: formData.get('url') ?? '',
+    platform: formData.get('platform') ?? '',
     publishedDate: formData.get('publishedDate') ? new Date(formData.get('publishedDate') as string) : null,
     description: formData.get('description') ?? '',
     image: formData.get('image') as File,

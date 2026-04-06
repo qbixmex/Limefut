@@ -47,8 +47,8 @@ export const VideosTable: FC<Props> = async ({
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[200px]">Título</TableHead>
-                  <TableHead className="hidden lg:table-cell">Fecha de publicación</TableHead>
-                  <TableHead className="hidden lg:table-cell w-[160px]">url</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[150px]">Fecha de publicación</TableHead>
+                  <TableHead className="hidden lg:table-cell w-[100px]">Plataforma</TableHead>
                   <TableHead className="hidden sm:table-cell w-[100px] text-center">Activo</TableHead>
                   <TableHead className="w-[150px]">Acciones</TableHead>
                 </TableRow>
@@ -65,7 +65,7 @@ export const VideosTable: FC<Props> = async ({
                       </p>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
-                      {video.url}
+                      {video.platform}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell text-center">
                       <ActiveSwitch

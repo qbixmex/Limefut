@@ -31,6 +31,8 @@ import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { cn, slugify } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PLATFORM } from '@/shared/constants/platforms';
 
 type Props = Readonly<{
   session: Session;
@@ -61,6 +63,7 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
       title: video?.title ?? '',
       permalink: video?.permalink ?? '',
       url: video?.url ?? '',
+      platform: video?.platform ?? undefined,
       publishedDate: video?.publishedDate ?? undefined,
       description: video?.description ?? '',
       active: video?.active ?? false,
@@ -78,6 +81,7 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
     formData.append('publishedDate', (data.publishedDate as Date).toString());
     formData.append('description', data.description as string ?? '');
     formData.append('url', data.url ?? '');
+    formData.append('platform', data.platform ?? '');
     formData.append('active', String(data.active ?? false));
 
     // Create video
@@ -217,52 +221,87 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
         </section>
 
         <section className="flex flex-col gap-5 lg:flex-row mb-10">
-          <div className="flex-1">
-            <FormField
-              control={form.control}
-              name="publishedDate"
-              render={() => (
-                <FormItem>
-                  <FormLabel htmlFor="date-picker" className="px-1">
-                    Fecha de publicación <span className="text-amber-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Popover open={openPublishedDateCalendar} onOpenChange={setOpenPublishedDateCalendar}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          id="date-picker"
-                          variant="secondary"
-                          className={cn('justify-between font-normal', {
-                            'border-destructive border': form.formState.errors.publishedDate,
-                          })}
-                          aria-invalid={form.formState.errors.publishedDate ? 'true' : 'false'}
+          <div className="w-full flex gap-5">
+            <div className="w-1/2">
+              <FormField
+                control={form.control}
+                name="platform"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Plataforma <span className="text-amber-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value ?? undefined}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger
+                          className="w-full"
+                          aria-invalid={!!form.formState.errors.platform}
                         >
-                          {selectedPublishedDate
-                            ? format(selectedPublishedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
-                            : 'Seleccione la fecha de publicación'
-                          }
-                          <ChevronDownIcon />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={selectedPublishedDate}
-                          defaultMonth={selectedPublishedDate}
-                          captionLayout="dropdown"
-                          onSelect={(date) => {
-                            setSelectedPublishedDate(date);
-                            form.setValue('publishedDate', date as Date);
-                            setOpenPublishedDateCalendar(false);
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          <SelectValue placeholder="Seleccione plataforma" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value={PLATFORM.YOUTUBE}>Youtube</SelectItem>
+                            <SelectItem value={PLATFORM.FACEBOOK}>Facebook</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="w-1/2">
+              <FormField
+                control={form.control}
+                name="publishedDate"
+                render={() => (
+                  <FormItem>
+                    <FormLabel htmlFor="date-picker" className="px-1">
+                      Fecha de publicación <span className="text-amber-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Popover open={openPublishedDateCalendar} onOpenChange={setOpenPublishedDateCalendar}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            id="date-picker"
+                            variant="secondary"
+                            className={cn('justify-between font-normal border border-input bg-input/30 text-muted-foreground', {
+                              'border-destructive border': form.formState.errors.publishedDate,
+                            })}
+                            aria-invalid={form.formState.errors.publishedDate ? 'true' : 'false'}
+                          >
+                            {selectedPublishedDate
+                              ? format(selectedPublishedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
+                              : 'Seleccione la fecha de publicación'
+                            }
+                            <ChevronDownIcon />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={selectedPublishedDate}
+                            defaultMonth={selectedPublishedDate}
+                            captionLayout="dropdown"
+                            onSelect={(date) => {
+                              setSelectedPublishedDate(date);
+                              form.setValue('publishedDate', date as Date);
+                              setOpenPublishedDateCalendar(false);
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
           <div className="w-full flex items-end lg:justify-end gap-5">
             <FormField

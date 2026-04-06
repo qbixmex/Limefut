@@ -5,6 +5,7 @@ export interface Video {
   publishedDate: Date;
   description: string;
   url: string;
+  platform: string;
   active: boolean;
   createdAt?: Date;
   updatedAt?: Date;

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
 import { VideosTable } from './videos-table';
 import { CreateVideo } from './create-video';
+import { VideosTableSkeleton } from './videos-table-skeleton';
 // import { videoTableSkeleton } from './video-table-skeleton';
 
 type Props = Readonly<{
@@ -35,8 +36,7 @@ export const VideosContent: FC<Props> = async ({ searchParams }) => {
             <CardContent>
               <Suspense
                 key={`${query ?? 'query'}-${currentPage ?? 'current-page'}`}
-                // TODO: fallback={<VideosTableSkeleton />}
-                fallback={<p>Cargando Videos</p>}
+                fallback={<VideosTableSkeleton />}
               >
                 <VideosTable
                   query={query}

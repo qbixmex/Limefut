@@ -7,16 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
-import { fetchAnnouncementAction } from '../(actions)';
+import { fetchVideoAction } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { Badge } from '@/components/ui/badge';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeRaw from 'rehype-raw';
-import rehypeYoutube from '@/lib/rehype-youtube';
 
 type Props = Readonly<{
   params: Promise<{
@@ -24,7 +19,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-const AnnouncementPage: FC<Props> = ({ params }) => {
+const VideoPage: FC<Props> = ({ params }) => {
   return (
     <Suspense>
       <AnnouncementContent params={params} />
@@ -36,10 +31,10 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
   const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, message, announcement } = await fetchAnnouncementAction(session?.user?.roles ?? [], sponsorId);
+  const { ok, message, video } = await fetchVideoAction(session?.user?.roles ?? [], sponsorId);
 
   if (!ok) {
-    redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.ADMIN_VIDEOS}?error=${encodeURIComponent(message)}`);
   }
 
   return (
@@ -48,7 +43,7 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
             <CardTitle className="admin-page-card-title">
-              Detalles de la Noticia
+              Detalles del Video
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -59,26 +54,26 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Título</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {announcement?.title}
+                        {video?.title}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Enlace Permanente</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {announcement?.permalink}
+                        {video?.permalink}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Descripción</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        <p className="text-balance">{announcement?.description}</p>
+                        <p className="text-balance">{video?.description}</p>
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Fecha de publicación</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
                         {
-                          announcement?.publishedDate?.toLocaleDateString('es-MX', {
+                          video?.publishedDate?.toLocaleDateString('es-MX', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
@@ -93,17 +88,23 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                 <Table>
                   <TableBody>
                     <TableRow>
+                      <TableHead className="font-semibold w-[180px]">Plataforma</TableHead>
+                      <TableCell className="dark:text-gray-400 italic">
+                        {video?.platform}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableHead className="font-semibold w-[180px]">Estado</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        <Badge variant={announcement?.active ? 'outline-info' : 'outline-secondary'}>
-                          {announcement?.active ? 'activo' : 'desactivado'}
+                        <Badge variant={video?.active ? 'outline-info' : 'outline-secondary'}>
+                          {video?.active ? 'activo' : 'desactivado'}
                         </Badge>
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Fecha de creación</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {announcement?.updatedAt?.toLocaleDateString('es-MX', {
+                        {video?.updatedAt?.toLocaleDateString('es-MX', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -113,7 +114,7 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Fecha de actualización</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {announcement?.updatedAt?.toLocaleDateString('es-MX', {
+                        {video?.updatedAt?.toLocaleDateString('es-MX', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -125,23 +126,11 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
               </div>
             </div>
 
-            <section>
-              <h2 className="text-xl text-blue-600 font-semibold">Contenido</h2>
-              <div className="prose prose-lg dark:prose-invert max-w-none mb-10">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeYoutube]}
-                >
-                  {announcement?.content}
-                </ReactMarkdown>
-              </div>
-            </section>
-
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger>
                   <Link
-                    href={ROUTES.ADMIN_ANNOUNCEMENTS_EDIT(announcement?.id as string)}
+                    href={ROUTES.ADMIN_VIDEOS_EDIT(video?.id as string)}
                     className={buttonVariants({
                       variant: 'outline-warning',
                       size: 'icon',
@@ -162,4 +151,4 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
   );
 };
 
-export default AnnouncementPage;
+export default VideoPage;

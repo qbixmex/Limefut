@@ -530,6 +530,7 @@ model Video {
   publishedDate DateTime @default(now()) @map("published_date")
   description   String   @db.VarChar
   url           String
+  platform      String
   active        Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

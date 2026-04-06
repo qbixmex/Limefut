@@ -17,6 +17,7 @@ import {
   VideoIcon,
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
+import { RiFolderVideoLine } from 'react-icons/ri';
 import { GiWhistle, GiSodaCan } from 'react-icons/gi';
 import {
   SoccerPlayer,
@@ -215,7 +216,7 @@ export const navMain: NavItem[] = [
   {
     label: 'Videos',
     url: '#',
-    icon: VideoIcon,
+    icon: RiFolderVideoLine,
     isActive: false,
     subItems: [
       {

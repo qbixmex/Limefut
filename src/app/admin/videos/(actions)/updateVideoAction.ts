@@ -45,6 +45,7 @@ export const updateVideoAction = async ({
     permalink: formData.get('permalink') ?? '',
     publishedDate: formData.get('publishedDate') ? new Date(formData.get('publishedDate') as string) : null,
     url: formData.get('url') ?? '',
+    platform: formData.get('platform') ?? '',
     description: formData.get('description') ?? '',
     image: formData.get('image') as File,
     active: formData.get('active') === 'true',
