@@ -3,8 +3,8 @@ import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
 import { Newspaper } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
-import './announcements.css';
 import { fetchPublicAnnouncementsAction } from '../../(actions)/home/fetchPublicAnnouncements';
+import './announcements.css';
 
 export const Announcements = async () => {
   const { ok, announcements } = await fetchPublicAnnouncementsAction();
@@ -26,17 +26,24 @@ export const Announcements = async () => {
         {(announcements.length > 0) && (
           <div className="announcements">
             {announcements.map(({ id, permalink, title, description, publishedDate }) => (
-              <div key={id} className="announcement">
+              <article
+                key={id}
+                className="announcement"
+                aria-label={`Anuncio: ${title}`}
+              >
                 <h3 className="subtitle">{title}</h3>
-                <p className="date">{formatInTimeZone(publishedDate, 'America/Mexico_City', "d 'de' MMMM 'del' yyyy", { locale: es })}</p>
-                <p className="description">{description}</p>
+                <p className="date" role="contentinfo">
+                  {formatInTimeZone(publishedDate, 'America/Mexico_City', "d 'de' MMMM 'del' yyyy", { locale: es })}
+                </p>
+                <p className="description" role="region">{description}</p>
                 <Link
                   href={ROUTES.PUBLIC_ANNOUNCEMENTS_SHOW(permalink)}
                   className="more"
+                  aria-label={`Ver más sobre el anuncio: ${title}`}
                 >
                   Ver más
                 </Link>
-              </div>
+              </article>
             ))}
           </div>
         )}
