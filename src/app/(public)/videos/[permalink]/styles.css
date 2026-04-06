@@ -1,0 +1,25 @@
+@reference "../../../globals.css";
+
+#video-details {
+  .heading {
+    @apply text-4xl lg:text-6xl text-emerald-800 dark:text-emerald-500 font-semibold;
+    @apply mb-3;
+  }
+
+  .video-date {
+    @apply flex gap-2;
+    @apply text-lg font-medium text-muted-foreground italic mb-5;
+    .calendar-icon {
+      @apply stroke-emerald-700;
+    }
+  }
+
+  .video-description {
+    @apply text-2xl font-medium text-muted-foreground italic mb-10;
+  }
+
+  .video-player {
+    @apply rounded;
+  }
+}
+

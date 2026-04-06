@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
 import { fetchAnnouncementAction } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
@@ -139,11 +139,15 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
 
             <div className="absolute top-5 right-5">
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href={ROUTES.ADMIN_ANNOUNCEMENTS_EDIT(announcement?.id as string)}>
-                    <Button variant="outline-warning" size="icon">
-                      <Pencil />
-                    </Button>
+                <TooltipTrigger>
+                  <Link
+                    href={ROUTES.ADMIN_ANNOUNCEMENTS_EDIT(announcement?.id as string)}
+                    className={buttonVariants({
+                      variant: 'outline-warning',
+                      size: 'icon',
+                    })}
+                  >
+                    <Pencil />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">

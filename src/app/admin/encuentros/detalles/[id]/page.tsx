@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
+import type { Session } from '@/lib/auth-client';
 import {
   Table,
   TableBody,
@@ -185,7 +186,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                         <div className="w-full lg:w-1/2">
                           <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda de Penales</h3>
                           <PenaltiesForm
-                            session={session}
+                            session={session as Session}
                             currentMatchId={match.id}
                             localTeam={{
                               id: match.localTeam.id,

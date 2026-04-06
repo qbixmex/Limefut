@@ -7,6 +7,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchAnnouncementAction } from '../../(actions)';
 import { AnnouncementForm } from '../../(components)/announcement-form';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
@@ -27,8 +28,8 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
   const { ok, announcement } = await fetchAnnouncementAction(session?.user.roles ?? [], sponsorId);
 
   if (!ok) {
-    const message = `¡ El patrocinador con el id: "${sponsorId}", no existe ❌ !`;
-    redirect(`/admin/patrocinadores?error=${encodeURIComponent(message)}`);
+    const message = `¡ La noticia con el id: "${sponsorId}", no existe ❌ !`;
+    redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(message)}`);
   }
 
   return (

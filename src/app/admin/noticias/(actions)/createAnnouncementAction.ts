@@ -79,7 +79,7 @@ export const createAnnouncementAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear el patrocinador, revise los logs del servidor !',
+        message: '¡ Error al crear la noticia, revise los logs del servidor !',
         announcement: null,
       };
     }

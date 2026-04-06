@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
+import type { Session } from '@/lib/auth-client';
 import { redirect } from 'next/navigation';
 import { fetchTournamentAction } from '../../(actions)';
 import { TournamentForm } from '../../(components)/tournamentForm';
@@ -58,7 +59,7 @@ const EditTournamentContent: FC<EditTournamentContentProps> = async ({ paramsPro
   return (
     <TournamentForm
       key={randomUUID()}
-      session={session!}
+      session={session as Session}
       tournament={response.tournament as Tournament}
     />
   );

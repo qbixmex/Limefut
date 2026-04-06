@@ -1,0 +1,13 @@
+@reference '../../../globals.css';
+
+#facebook {
+  .loading-block {
+    @apply block w-[230px] h-[408px] bg-gray-500 rounded animate-pulse;
+  }
+  .placeholder-block {
+    @apply block w-[230px] h-[408px] bg-gray-500 rounded;
+  }
+  .thumbnail-image {
+    @apply block w-[230px] h-[408px];
+  }
+}
