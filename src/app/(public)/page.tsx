@@ -27,13 +27,16 @@ const HomePage: FC<Props> = ({ searchParams }) => {
     <div className="flex flex-col lg:flex-row gap-5">
       <main className="w-full">
         <h1 className="visually-hidden">Limefut - Liga menor de fútbol</h1>
+
         <Suspense>
           <ErrorHandler />
         </Suspense>
+
         <div className="wrapper">
           <Suspense fallback={<CarouselSkeleton />}>
             <Hero />
           </Suspense>
+
           <Suspense fallback={
             <>
               <HorizontalCalendarSkeleton />
@@ -45,6 +48,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
               selectedDayPromise={selectedDayPromise}
             />
           </Suspense>
+
           <Suspense fallback={<MatchesSkeleton />}>
             <LatestResults
               resultsPromise={
@@ -52,12 +56,16 @@ const HomePage: FC<Props> = ({ searchParams }) => {
               }
             />
           </Suspense>
+
           <Suspense fallback={<LatestImagesSkeleton />}>
             <LatestImages />
           </Suspense>
         </div>
       </main>
-      <Sidebar />
+
+      <aside>
+        <Sidebar />
+      </aside>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { SponsorCarousel } from './sponsor-carousel';
 export const Sponsors = async () => {
   const { ok, sponsors } = await fetchPublicSponsorsAction();
 
-  if (!ok && sponsors.length === 0) {
+  if (!ok || sponsors.length === 0) {
     return null;
   }
 
