@@ -3,50 +3,39 @@
 import type { FC } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useSponsorsCarousel } from './use-sponsors-carousel';
 
 type Props = Readonly<{
-  sponsors: Array<{
+  sponsors: {
     id: string;
     name: string;
     imageUrl: string;
-  }>;
+  }[];
   time?: number;
 }>;
 
 export const SponsorCarousel: FC<Props> = ({ sponsors = [], time = 10 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (sponsors.length > 0) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % sponsors.length);
-      }, time * 1000);
-      return () => clearInterval(interval);
-    }
-  }, [sponsors.length, time]);
+  const { sponsor } = useSponsorsCarousel(sponsors, time);
 
   if (sponsors.length === 0) return null;
 
-  const currentSponsor = sponsors[currentIndex];
-
   return (
     <motion.figure
-      key={currentIndex}
+      key={sponsor?.id ?? 'sponsor'}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1, ease: 'easeInOut' }}
       className="space-y-10"
+      aria-label={sponsor?.name ?? 'sponsor'}
     >
       <Image
         width={0}
         height={0}
-        src={currentSponsor?.imageUrl ?? ''}
-        alt={`${currentSponsor?.name} patrocinador`}
+        src={sponsor?.imageUrl ?? ''}
+        alt={`Patrocinador ${sponsor?.name.toLowerCase() ?? 'Sponsor Image'}`}
         className="w-full max-w-[288px] h-auto rounded"
       />
-      <figcaption className="visually-hidden">{currentSponsor?.name}</figcaption>
     </motion.figure>
   );
 };
