@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     if (!response.ok) {
       return Response.json(
         { error: 'Failed to fetch page' },
-        { status: response.status }
+        { status: response.status },
       );
     }
 

@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+import type { Session } from '@/lib/auth-client';
 import { SignInOut } from './sign-in-out';
 import { auth } from '@/lib/auth';
 
@@ -8,6 +9,6 @@ export const AuthSession = async () => {
   });
 
   return (
-    <SignInOut session={session} />
+    <SignInOut session={session as Session} />
   );
 };

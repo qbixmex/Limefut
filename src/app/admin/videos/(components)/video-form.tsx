@@ -31,7 +31,7 @@ import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { cn, slugify } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PLATFORM } from '@/shared/constants/platforms';
 
 type Props = Readonly<{

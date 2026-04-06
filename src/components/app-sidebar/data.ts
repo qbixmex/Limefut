@@ -14,7 +14,6 @@ import {
   Inbox,
   ImageIcon,
   Newspaper,
-  VideoIcon,
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
 import { RiFolderVideoLine } from 'react-icons/ri';
