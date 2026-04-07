@@ -11,6 +11,8 @@ type Props = Readonly<{
 }>;
 
 export const EmbeddedVideo: FC<Props> = ({ url, title, platform, className }) => {
+  if (platform === '') return null;
+
   return (
     <>
       {platform === PLATFORM.YOUTUBE && (
