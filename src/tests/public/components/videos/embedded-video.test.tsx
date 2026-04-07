@@ -26,7 +26,7 @@ describe('Test on <EmbeddedVideo /> component', () => {
   });
 
   test('Should render a loader', async () => {
-    const resolvedURL = 'https://scontent.fgdl5-2.fna.fbcdn.net/v/t15.5256-10/3365345368_n.jpg'
+    const resolvedURL = 'https://scontent.fgdl5-2.fna.fbcdn.net/v/t15.5256-10/3365345368_n.jpg';
     vi.mocked(fetchThumbnail).mockResolvedValue({
       data: { thumbnailUrl: resolvedURL },
     });
@@ -68,7 +68,7 @@ describe('Test on <EmbeddedVideo /> component', () => {
   });
 
   test('Should render facebook thumbnail', async () => {
-    const resolvedURL = 'https://scontent.fgdl5-2.fna.fbcdn.net/v/t15.5256-10/3365345368_n.jpg'
+    const resolvedURL = 'https://scontent.fgdl5-2.fna.fbcdn.net/v/t15.5256-10/3365345368_n.jpg';
     vi.mocked(fetchThumbnail).mockResolvedValue({
       data: { thumbnailUrl: resolvedURL },
     });
