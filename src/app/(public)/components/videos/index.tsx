@@ -19,7 +19,7 @@ export const Videos = async () => {
       <div className="content">
         {(!ok || videos.length === 0) && (
           <div className="empty-content">
-            <p>No hay videos que mostrar por el momento</p>
+            <p role="region">No hay videos que mostrar por el momento</p>
             <BsFilm className="icon" />
           </div>
         )}
@@ -27,9 +27,16 @@ export const Videos = async () => {
         {(videos.length > 0) && (
           <div className="videos">
             {videos.map((video) => (
-              <div key={video.id} className="video">
+              <article
+                key={video.id}
+                className="video"
+                aria-label={`Video: ${video.title}`}
+              >
                 <h3 className="subtitle">{video.title}</h3>
-                <Link href={ROUTES.PUBLIC_VIDEOS_SHOW(video.permalink)}>
+                <Link
+                  href={ROUTES.PUBLIC_VIDEOS_SHOW(video.permalink)}
+                  title={`Ver video: ${video.title}`}
+                >
                   <EmbeddedVideo
                     className="thumbnail"
                     title={video.title}
@@ -37,7 +44,7 @@ export const Videos = async () => {
                     platform={video.platform}
                   />
                 </Link>
-                <p className="date">
+                <p className="date" role="contentinfo">
                   {
                     formatInTimeZone(
                       video.publishedDate,
@@ -47,7 +54,7 @@ export const Videos = async () => {
                     )
                   }
                 </p>
-              </div>
+              </article>
             ))}
           </div>
         )}

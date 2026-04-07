@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FC } from 'react';
 import Image from 'next/image';
+import { fetchThumbnail } from './(actions)/fetch-thumbnail';
 import './embed-facebook.css';
 
 type Props = Readonly<{
@@ -13,36 +14,32 @@ type Props = Readonly<{
 export const EmbedFacebook: FC<Props> = ({ url, title, className }) => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    const fetchThumbnail = async () => {
-      try {
-        const response = await fetch('/api/facebook-thumbnail', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url }),
-        });
-
-        const data = await response.json();
-        setThumbnailUrl(data.thumbnailUrl || '');
-      } catch (error) {
-        console.error('Error:', error);
+    fetchThumbnail(url)
+      .then(({ data }) => {
+        setThumbnailUrl(data.thumbnailUrl);
+      })
+      .catch((error: Error) => {
+        setError(error.message);
         setThumbnailUrl('');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchThumbnail();
+      })
+      .finally(() => setLoading(false));
   }, [url]);
 
   return (
     <div id="facebook" className={className}>
       {
         (loading)
-          ? <div className="loading-block" />
-          : (!thumbnailUrl) ? <div className="placeholder-block" />
-          : (
+          ? <div className="loading-block" role="status" />
+          : error?.length > 0 ? (
+            <div
+              className="placeholder-block"
+              role="status"
+              aria-label="No se pudo cargar la miniatura del video de Facebook"
+            />
+          ) : (
             <Image
               width={230}
               height={408}
