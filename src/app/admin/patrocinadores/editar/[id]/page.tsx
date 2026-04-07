@@ -37,7 +37,7 @@ const EditSponsorContent: FC<Props> = async ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Editar Banner</CardTitle>
+            <CardTitle className="admin-page-card-title">Editar Patrocinador</CardTitle>
           </CardHeader>
           <CardContent>
             <SponsorForm

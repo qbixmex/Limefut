@@ -1,6 +1,10 @@
 import { SponsorCarousel } from '@/app/(public)/components/sponsors/sponsor-carousel';
 import { act, render, screen } from '@testing-library/react';
 import { sponsors } from '@/tests/mocks/sponsors';
+import userEvent from '@testing-library/user-event';
+import { incrementClickAction } from '@/app/(public)/(actions)/videos/incrementClickAction';
+
+vi.mock('@/app/(public)/(actions)/videos/incrementClickAction');
 
 describe('Test on <SponsorCarousel /> component', () => {
   test('Should render an image', () => {
@@ -42,6 +46,10 @@ describe('Test on <SponsorCarousel /> component', () => {
 
     expect(sponsorImage).toBeInTheDocument();
     expect(originalUrl).toBe(sponsors[1].imageUrl);
+
+    vi.clearAllTimers();
+    vi.clearAllMocks();
+    vi.useRealTimers();
   });
 
   test('Should not render the component if sponsors array is empty', () => {
@@ -52,5 +60,21 @@ describe('Test on <SponsorCarousel /> component', () => {
     });
 
     expect(figcaption).not.toBeInTheDocument();
+  });
+
+  test('Should send click to server action', async () => {
+    const { container } = render(
+      <SponsorCarousel
+        sponsors={sponsors}
+        time={1}
+      />,
+    );
+    const button = container.querySelector('#sponsor-button') as HTMLButtonElement;
+    expect(button).toBeInTheDocument();
+
+    const user = userEvent.setup();
+    await user.click(button);
+
+    expect(incrementClickAction).toHaveBeenCalledWith(sponsors[0].id);
   });
 });
