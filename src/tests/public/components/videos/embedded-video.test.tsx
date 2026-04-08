@@ -27,9 +27,7 @@ describe('Test on <EmbeddedVideo /> component', () => {
 
   test('Should render a loader', async () => {
     const resolvedURL = 'https://scontent.fgdl5-2.fna.fbcdn.net/v/t15.5256-10/3365345368_n.jpg';
-    vi.mocked(fetchThumbnail).mockResolvedValue({
-      data: { thumbnailUrl: resolvedURL },
-    });
+    vi.mocked(fetchThumbnail).mockResolvedValue({ thumbnailUrl: resolvedURL });
     const url = 'https://www.facebook.com/share/r/1Ce8pKqkj9/';
     const title = 'Festejando el título';
     render(
@@ -69,9 +67,7 @@ describe('Test on <EmbeddedVideo /> component', () => {
 
   test('Should render facebook thumbnail', async () => {
     const resolvedURL = 'https://scontent.fgdl5-2.fna.fbcdn.net/v/t15.5256-10/3365345368_n.jpg';
-    vi.mocked(fetchThumbnail).mockResolvedValue({
-      data: { thumbnailUrl: resolvedURL },
-    });
+    vi.mocked(fetchThumbnail).mockResolvedValue({ thumbnailUrl: resolvedURL });
 
     const url = 'https://www.facebook.com/share/r/1Ce8pKqkj9/';
     const title = 'Festejando el título';
