@@ -18,9 +18,7 @@ export const EmbedFacebook: FC<Props> = ({ url, title, className }) => {
 
   useEffect(() => {
     fetchThumbnail(url)
-      .then(({ data }) => {
-        setThumbnailUrl(data.thumbnailUrl);
-      })
+      .then(({ thumbnailUrl }) => setThumbnailUrl(thumbnailUrl))
       .catch((error: Error) => {
         setError(error.message);
         setThumbnailUrl('');
