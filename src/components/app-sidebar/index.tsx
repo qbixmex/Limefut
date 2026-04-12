@@ -55,7 +55,6 @@ export const AppSidebar: FC<Props> = ({ ...props }) => {
       <SidebarFooter>
         {/* EMPTY FOR NOW */}
       </SidebarFooter>
-
       <SidebarRail />
     </Sidebar>
   );

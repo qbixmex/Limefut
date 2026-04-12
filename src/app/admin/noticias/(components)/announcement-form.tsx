@@ -231,7 +231,7 @@ export const AnnouncementForm: FC<Props> = ({ session, announcement }) => {
                   </FormLabel>
                   <FormControl>
                     <Textarea
-                      cols={2}
+                      rows={2}
                       {...field}
                       value={field.value ?? ''}
                       className="resize-none"

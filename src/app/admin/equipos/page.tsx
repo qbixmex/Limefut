@@ -19,31 +19,29 @@ type Props = Readonly<{
 
 const TeamsPage: FC<Props> = ({ searchParams }) => {
   return (
-    <>
-      <div className="admin-page">
-        <div className="admin-page-container">
-          <Card className="admin-page-card">
-            <CardHeader className="admin-page-card-header">
-              <CardTitle className="admin-page-card-title">Lista de Equipos</CardTitle>
-              <section className="flex gap-5 items-center">
-                <ClearFilters />
-                <Search placeholder="Buscar equipo ..." />
-                <CreateTeam />
-              </section>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<TournamentsSelectorSkeleton />}>
-                <TournamentsContent />
-              </Suspense>
-              <Suspense>
-                <ErrorHandler />
-                <TeamsContent searchParamsPromise={searchParams} />
-              </Suspense>
-            </CardContent>
-          </Card>
-        </div>
+    <div className="admin-page">
+      <div className="admin-page-container">
+        <Card className="admin-page-card">
+          <CardHeader className="admin-page-card-header">
+            <CardTitle className="admin-page-card-title">Lista de Equipos</CardTitle>
+            <section className="flex gap-5 items-center">
+              <ClearFilters />
+              <Search placeholder="Buscar equipo ..." />
+              <CreateTeam />
+            </section>
+          </CardHeader>
+          <CardContent>
+            <Suspense fallback={<TournamentsSelectorSkeleton />}>
+              <TournamentsContent />
+            </Suspense>
+            <Suspense>
+              <ErrorHandler />
+              <TeamsContent searchParamsPromise={searchParams} />
+            </Suspense>
+          </CardContent>
+        </Card>
       </div>
-    </>
+    </div>
   );
 };
 

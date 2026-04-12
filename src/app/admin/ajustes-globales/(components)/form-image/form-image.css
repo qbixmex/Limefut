@@ -1,0 +1,40 @@
+@reference '../../../../globals.css';
+
+
+.image-placeholder {
+  @apply border border-gray-300 dark:border-gray-700 rounded-lg;
+  @apply stroke-gray-500/75 dark:stroke-gray-600 size-[96px];
+}
+
+.logotype-image {
+  @apply border border-gray-500 dark:border-gray-700/50 rounded;
+}
+
+.remove-icon {
+  @apply size-5 group-hover:stroke-pink-500;
+  @apply opacity-50 group-hover:opacity-100;
+  @apply transition-colors ease-in-out duration-300;
+}
+
+.cancel-btn {
+  @apply
+    bg-gray-100
+    hover:bg-gray-200
+    border-gray-600
+    text-gray-600
+    hover:text-gray-800
+    dark:bg-gray-800
+    dark:text-gray-400
+    dark:hover:bg-gray-900
+    dark:hover:text-gray-100;
+}
+
+.delete-btn {
+  @apply 
+    text-pink-200
+    border-pink-600
+    bg-pink-600
+    hover:text-pink-100
+    hover:border-pink-500
+    hover:bg-pink-800;
+}
