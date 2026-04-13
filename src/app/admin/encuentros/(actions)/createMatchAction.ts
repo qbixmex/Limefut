@@ -53,7 +53,9 @@ export const createMatchAction = async (
     visitorScore: parseInt(formData.get('visitorScore') as string ?? '0') ?? '',
     place: formData.get('place') ?? undefined,
     referee: formData.get('referee') ?? undefined,
-    matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
+    matchDate: formData.get('matchDate')
+      ? new Date(formData.get('matchDate') as string)
+      : undefined,
     week: parseInt(formData.get('week') as string) ?? 0,
     status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
     tournamentId: formData.get('tournamentId') ?? undefined,
