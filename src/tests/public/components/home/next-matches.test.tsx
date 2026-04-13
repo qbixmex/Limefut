@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 import { fetchPublicMatchesAction } from '@/app/(public)/(actions)/home/fetchPublicMatchesAction';
 import { fetchPublicMatchesCountAction } from '@/app/(public)/(actions)/home/fetchPublicMatchesCountAction';
 import { nextMatches, matchesDates } from '@/tests/mocks/next_matches';
+import { es } from 'date-fns/locale';
+import { formatInTimeZone } from 'date-fns-tz';
 
 vi.mock('@/app/(public)/(actions)/home/fetchPublicMatchesAction');
 vi.mock('@/app/(public)/(actions)/home/fetchPublicMatchesCountAction');
@@ -67,13 +69,16 @@ describe('Test on <NextMatches /> component', () => {
     nextMatches.forEach((match) => {
       expect(screen.getByText(match.localTeam.name)).toBeInTheDocument();
       expect(screen.getByText(match.visitorTeam.name)).toBeInTheDocument();
-      expect(screen.getByText(match.matchDate.getDay())).toBeInTheDocument();
-      expect(screen.getByText(match.matchDate.getMonth())).toBeInTheDocument();
-      expect(screen.getByText(match.matchDate.getFullYear())).toBeInTheDocument();
+
+      const gameDate = formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', "EEEE dd 'de' LLLL, yyyy", { locale: es });
       const hour = match.matchDate.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit',
       });
+
+      expect(
+        screen.getByLabelText('Fecha del partido'),
+      ).toHaveTextContent(gameDate);
       expect(screen.getByText(new RegExp(hour, 'i'))).toBeInTheDocument();
     });
   });

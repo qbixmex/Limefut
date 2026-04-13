@@ -1,7 +1,6 @@
 'use client';
 
 import type { FC } from 'react';
-import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
