@@ -2,7 +2,8 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ROBOTS } from '../shared/interfaces';
 import { PAGE_STATUS } from '../shared/interfaces/Page';
-import { GENDER, LANGUAGE, LANGUAGE_TYPE, MATCH_STATUS, type MATCH_STATUS_TYPE } from '../shared/enums';
+import type { LANGUAGE_TYPE, MATCH_STATUS_TYPE } from '../shared/enums';
+import { GENDER, LANGUAGE, MATCH_STATUS } from '../shared/enums';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 
 export const cn = (...inputs: ClassValue[]) => {
