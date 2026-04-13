@@ -537,3 +537,76 @@ model Video {
 
   @@map("videos")
 }
+
+model GlobalSettings {
+  id               Int     @id @default(1)
+  // GENERAL
+  siteName         String? @map("site_name") @db.VarChar(100)
+  logoUrl          String? @map("logo_url") @db.VarChar(255)
+  logoPublicId     String? @map("logo_public_id") @db.VarChar(255)
+  faviconUrl       String? @map("favicon_url") @db.VarChar(255)
+  favIconPublicId  String? @map("favicon_id") @db.VarChar(255)
+  organizationName String? @map("organization_name") @db.VarChar(100)
+  phone            String? @db.VarChar(150)
+  address          String? @db.VarChar(255)
+  mapsUrl          String? @map("maps_url") @db.VarChar(255)
+  country          String? @default("Mexico") @db.VarChar(50)
+
+  // SOCIAL MEDIA
+  facebookUrl  String? @map("facebook_url") @db.VarChar(255)
+  twitterXUrl  String? @map("twitter_x_url") @db.VarChar(255)
+  instagramUrl String? @map("instagram_url") @db.VarChar(255)
+  youtubeUrl   String? @map("youtube_url") @db.VarChar(255)
+  tiktokUrl    String? @map("tiktok_url") @db.VarChar(255)
+  whatsApp     String? @map("whats_app") @db.VarChar(100)
+
+  // MAINTENANCE MODE
+  maintenanceMode    Boolean @default(false) @map("maintenance_mode")
+  maintenanceMessage String? @map("maintenance_message") @db.VarChar(255)
+
+  // COLORS
+  primaryColor   String? @map("primary_color") @db.VarChar(50)
+  secondaryColor String? @map("secondary_color") @db.VarChar(50)
+  accentColor    String? @map("accent_color") @db.VarChar(50)
+
+  // ANALYTICS
+  googleAnalyticsId String? @map("google_analytics_id") @db.VarChar(255)
+  googleTagManager  String? @map("google_tag_manager") @db.VarChar(255)
+  metaPixelId       String? @map("meta_pixel_id") @db.VarChar(255)
+
+  // LOCATION
+  defaultLanguage String? @default("es") @map("default_language") @db.VarChar(3)
+  timeZone        String? @default("America/Mexico_City") @map("time_zone") @db.VarChar(100)
+
+  // EMAIL
+  contactEmail String? @map("contact_email") @db.VarChar(255)
+  fromEmail    String? @map("from_email") @db.VarChar(255)
+  replyToEmail String? @map("reply_to_email") @db.VarChar(255)
+
+  // SEO
+  seoSections SeoSection[]
+
+  // TIMESTAMPS
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("global_settings")
+}
+
+model SeoSection {
+  id          String @id @default(uuid())
+  permalink   String @unique
+  title       String @db.VarChar(70)
+  description String @db.VarChar(165)
+  robots      String @default("index, follow") @db.VarChar(20)
+
+  // Relationship
+  globalSettingsId Int            @default(1) @map("global_settings_id")
+  globalSettings   GlobalSettings @relation(fields: [globalSettingsId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("seo_sections")
+}

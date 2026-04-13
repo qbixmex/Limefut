@@ -14,6 +14,8 @@ import {
   Inbox,
   ImageIcon,
   Newspaper,
+  Settings2,
+  Settings,
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
 import { RiFolderVideoLine } from 'react-icons/ri';
@@ -258,6 +260,24 @@ export const navMain: NavItem[] = [
         label: 'Lista',
         url: '/admin/mensajes',
         icon: ListIcon,
+      },
+    ],
+  },
+  {
+    label: 'Ajustes',
+    url: '#',
+    icon: Settings2,
+    isActive: false,
+    subItems: [
+      {
+        label: 'Globales',
+        url: '/admin/ajustes-globales',
+        icon: Settings,
+      },
+      {
+        label: 'Seo',
+        url: '#',
+        icon: Globe,
       },
     ],
   },

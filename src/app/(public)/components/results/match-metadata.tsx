@@ -41,9 +41,9 @@ export const MatchMetadata: FC<Props> = ({
           </p>
         </div>
         <div className="w-full md:1/2">
-          <p><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, "EEEE dd 'de' LLLL, yyyy", { locale: es })}</p>
-          <p><b>Hora:</b> {formatInTimeZone(date as Date, TIME_ZONE, 'h:mm a', { locale: es })}</p>
-          <p><b>Jornada:</b> {week}</p>
+          <p aria-label="Fecha del partido"><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, "EEEE dd 'de' LLLL, yyyy", { locale: es })}</p>
+          <p aria-label="Hora del partido"><b>Hora:</b> {formatInTimeZone(date as Date, TIME_ZONE, 'h:mm a', { locale: es })}</p>
+          <p aria-label="Jornada del partido"><b>Jornada:</b> {week}</p>
         </div>
       </section>
     </div>

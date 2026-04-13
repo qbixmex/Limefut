@@ -2,7 +2,8 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ROBOTS } from '../shared/interfaces';
 import { PAGE_STATUS } from '../shared/interfaces/Page';
-import { GENDER, MATCH_STATUS, type MATCH_STATUS_TYPE } from '../shared/enums';
+import type { LANGUAGE_TYPE, MATCH_STATUS_TYPE } from '../shared/enums';
+import { GENDER, LANGUAGE, MATCH_STATUS } from '../shared/enums';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -349,5 +350,29 @@ export const getAlignment = (alignment: string) => {
       return 'izquierda';
     default:
       return alignment;
+  }
+};
+
+/**
+ * Translates the site language to Spanish.
+ * @param language - The site language value.
+ * @example ```typescript
+ * getAlignment(LANGUAGE.SPANISH);
+ * // Returns "español"
+ * getAlignment(LANGUAGE.ENGLISH);
+ * // Returns "inglés"
+ * ```
+ * @returns The site language in Spanish.
+ */
+export const getSiteLanguage = (language: LANGUAGE_TYPE) => {
+  switch (language) {
+    case LANGUAGE.NONE:
+      return 'ninguno';
+    case LANGUAGE.SPANISH:
+      return 'español';
+    case LANGUAGE.ENGLISH:
+      return 'inglés';
+    default:
+      return '';
   }
 };
