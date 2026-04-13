@@ -38,7 +38,8 @@ export const createMatchSchema = z.object({
     { message: '¡ El estado del partido debe ser válido !' },
   ),
   matchDate: z
-    .date({ message: 'La fecha del encuentro debe ser una fecha válida' }),
+    .date({ message: 'La fecha del encuentro debe ser una fecha válida' })
+    .optional(),
   tournamentId: requiredUUID(
     '¡ Seleccione el torneo !',
     '¡ El id del torneo debe ser un UUID válido !',

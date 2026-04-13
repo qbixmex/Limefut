@@ -1,6 +1,6 @@
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
-type BadgeVariant = 'outline-secondary' | 'outline-info' | 'outline-warning' | 'outline-success' | 'outline-danger';
+type BadgeVariant = 'outline-primary' | 'outline-secondary' | 'outline-info' | 'outline-warning' | 'outline-success' | 'outline-danger';
 
 /**
  * Get match status in string format
@@ -18,7 +18,7 @@ export const getMatchStatus = (status: MATCH_STATUS_TYPE): {
 } => {
   switch (status) {
     case MATCH_STATUS.SCHEDULED:
-      return { label: 'Programado', variant: 'outline-warning' };
+      return { label: 'Programado', variant: 'outline-primary' };
     case MATCH_STATUS.IN_PROGRESS:
       return { label: 'En Curso', variant: 'outline-info' };
     case MATCH_STATUS.COMPLETED:
