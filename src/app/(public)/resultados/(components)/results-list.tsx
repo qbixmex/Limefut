@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Info } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { SoccerField } from '@/shared/components/icons';
 import { getMatchStatus } from '../(helpers)/status';
@@ -113,7 +113,11 @@ export const ResultsList: FC<Props> = async ({
                     )}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
-                    <p className="text-balance">{match.place ?? 'No definido'}</p>
+                    {match.place ? (
+                      <p className="text-balance">{match.place}</p>
+                    ) : (
+                      <span className="text-gray-600">No definida</span>
+                    )}
                   </TableCell>
                   <TableCell>
                     <Link
@@ -165,14 +169,13 @@ export const ResultsList: FC<Props> = async ({
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     <Tooltip>
-                      <TooltipTrigger asChild>
+                      <TooltipTrigger>
                         <Link
                           href={`/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
                           target="_blank"
+                          className={buttonVariants({ variant: 'outline-info', size: 'icon-sm' })}
                         >
-                          <Button variant="outline-info" size="icon-sm">
-                            <Info />
-                          </Button>
+                          <Info />
                         </Link>
                       </TooltipTrigger>
                       <TooltipContent side="left">

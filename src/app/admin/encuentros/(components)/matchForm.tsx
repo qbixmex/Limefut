@@ -64,6 +64,7 @@ import './match-form.css';
 import { updateMatchScoreAction } from '../(actions)/updateMatchScoreAction';
 import { ROUTES } from '@/shared/constants/routes';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Switch } from '@/components/ui/switch';
 
 type Props = Readonly<{
   session: Session;
@@ -102,7 +103,7 @@ export const MatchForm: FC<Props> = ({
       visitorScore: match?.visitorScore ?? 0,
       place: match?.place ?? undefined,
       referee: match?.referee ?? undefined,
-      matchDate: match?.matchDate ? new Date(match.matchDate) : new Date(),
+      matchDate: match?.matchDate ? new Date(match.matchDate) : undefined,
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
       week: match?.week ?? 0,
     },
@@ -110,6 +111,7 @@ export const MatchForm: FC<Props> = ({
 
   const [openCalendar, setOpenCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(form.getValues('matchDate'));
+  const [enabledDate, setEnabledDate] = useState(false);
   const [selectedTime, setSelectedTime] = useState<string>(() => {
     const initialDate = form.getValues('matchDate');
     return initialDate ? format(initialDate, 'HH:mm:ss') : '00:00:00';
@@ -181,7 +183,7 @@ export const MatchForm: FC<Props> = ({
     formData.append('visitorScore', (data.visitorScore as number).toString());
     if (data.place) formData.append('place', data.place as string);
     if (data.referee) formData.append('referee', data.referee as string);
-    formData.append('matchDate', (data.matchDate as Date).toISOString());
+    if (data.matchDate) formData.append('matchDate', (data.matchDate as Date).toISOString());
     formData.append('status', data.status as string);
     formData.append('tournamentId', !match ? tournamentId as string : match.tournament.id);
     formData.append('week', !match ? `${week}` : `${data.week}`);
@@ -456,7 +458,7 @@ export const MatchForm: FC<Props> = ({
                         field.value === match.localTeam.id
                           ? match.localTeam
                           : match.visitorTeam
-                        )
+                      )
                       : undefined
                   );
                 const localTeamId = form.watch('localTeamId');
@@ -594,7 +596,9 @@ export const MatchForm: FC<Props> = ({
               name="place"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Sede</FormLabel>
+                  <FormLabel>
+                    Sede <span className="text-sm text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -609,7 +613,9 @@ export const MatchForm: FC<Props> = ({
               name="referee"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Arbitro</FormLabel>
+                  <FormLabel>
+                    Arbitro <span className="text-sm text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -623,64 +629,78 @@ export const MatchForm: FC<Props> = ({
         {/* Match Date and Week */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
-            <div className="flex flex-col gap-2">
-              <>
-                <div className="flex gap-4">
-                  <div className="flex flex-col gap-3">
-                    <Label htmlFor="date-picker" className="px-1">
-                      Fecha
-                    </Label>
-                    <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          id="date-picker"
-                          variant="secondary"
-                          className="w-[225px] justify-between font-normal"
-                        >
-                          {selectedDate
-                            ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                            : 'Selecciona Fecha'
-                          }
-                          <ChevronDownIcon />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          startMonth={new Date(2020, 0)}
-                          endMonth={new Date(new Date().getFullYear() + 10, 11)}
-                          selected={selectedDate}
-                          defaultMonth={selectedDate}
-                          captionLayout="dropdown"
-                          onSelect={(date) => {
-                            setSelectedDate(date);
-                            form.setValue('matchDate', date);
-                            setOpenCalendar(false);
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <Label htmlFor="time-picker" className="px-1">
-                      Hora
-                    </Label>
-                    <Input
-                      id="time-picker"
-                      type="time"
-                      step="1"
-                      min="00:00:00"
-                      value={selectedTime}
-                      onChange={(e) => {
-                        const value = !e.target.value ? '00:00:00' : e.target.value;
-                        setSelectedTime(value);
-                      }}
-                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                    />
-                  </div>
+            {(!enabledDate && !match?.matchDate) && (
+              <div className="flex items-center gap-5">
+                <Switch
+                  id="set-date"
+                  checked={enabledDate}
+                  onCheckedChange={() => setEnabledDate(prev => !prev)}
+                />
+                <Label htmlFor='set-date'>Programar Fecha y Hora</Label>
+              </div>
+            )}
+
+            {(enabledDate || match?.matchDate) && (
+              <div className="flex gap-5">
+                <div className="flex flex-col gap-3">
+                  <Label htmlFor="date-picker" className="px-1">
+                    Fecha
+                  </Label>
+                  <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="date-picker"
+                        variant="secondary"
+                        className="w-[225px] justify-between font-normal"
+                      >
+                        {selectedDate
+                          ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                          : (
+                            <span>
+                              Seleccione Fecha&nbsp;
+                              <span className="text-sm text-gray-500">(optional)</span>
+                            </span>
+                          )
+                        }
+                        <ChevronDownIcon />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        startMonth={new Date(2020, 0)}
+                        endMonth={new Date(new Date().getFullYear() + 10, 11)}
+                        selected={selectedDate}
+                        defaultMonth={selectedDate}
+                        captionLayout="dropdown"
+                        onSelect={(date) => {
+                          setSelectedDate(date);
+                          form.setValue('matchDate', date);
+                          setOpenCalendar(false);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
-              </>
-            </div>
+                <div className="flex flex-col gap-3">
+                  <Label htmlFor="time-picker" className="px-1">
+                    Hora
+                  </Label>
+                  <Input
+                    id="time-picker"
+                    type="time"
+                    step="1"
+                    min="00:00:00"
+                    value={selectedTime}
+                    onChange={(e) => {
+                      const value = !e.target.value ? '00:00:00' : e.target.value;
+                      setSelectedTime(value);
+                    }}
+                    className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <div className='w-full lg:w-1/2 flex justify-end gap-5'>

@@ -5,6 +5,7 @@ import {
   getGenderTranslation,
   getPageStatus,
   getRobots,
+  getSiteLanguage,
   getStageTranslation,
   getStatusTranslation,
   shuffleArray,
@@ -14,6 +15,7 @@ import {
 import { PAGE_STATUS, ROBOTS } from '@/shared/interfaces';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
+import { LANGUAGE } from '../../shared/enums/language.enum';
 
 describe('Test on Utils', () => {
   test('Should slugify text with spaces', () => {
@@ -140,5 +142,12 @@ describe('Test on Utils', () => {
     expect(getAlignment(SPONSOR_ALIGNMENT.BOTTOM)).toBe('abajo');
     expect(getAlignment(SPONSOR_ALIGNMENT.LEFT)).toBe('izquierda');
     expect(getAlignment('lorem')).toBe('lorem');
+  });
+
+  test('Should translates site language.', () => {
+    expect(getSiteLanguage(LANGUAGE.NONE)).toBe('ninguno');
+    expect(getSiteLanguage(LANGUAGE.ENGLISH)).toBe('inglés');
+    expect(getSiteLanguage(LANGUAGE.SPANISH)).toBe('español');
+    expect(getSiteLanguage('french')).toBe('ninguno');
   });
 });
