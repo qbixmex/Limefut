@@ -2,9 +2,6 @@
 
 import type { FC } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-// TODO import { DeleteField } from '../(components)/delete-field';
-// TODO import { updateFieldStateAction } from '../(actions)';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import {
@@ -15,22 +12,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Pencil,
-  InfoIcon,
-  Flag,
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Pencil, InfoIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ActiveSwitch } from '@/shared/components/active-switch';
 import type { Field } from '@/shared/interfaces';
 import { ROUTES } from '@/shared/constants/routes';
-// import type { FieldType } from '../(actions)/fetchTeamsAction';
+import { DeleteField } from './delete-field';
 
 type Props = Readonly<{
   fields: Field[];
@@ -51,7 +42,7 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-12 text-center">#</TableHead>
-                  <TableHead className="">Nombre</TableHead>
+                  <TableHead>Nombre</TableHead>
                   <TableHead className="hidden md:table-cell w-25">Ciudad</TableHead>
                   <TableHead className="hidden md:table-cell w-25">Estado</TableHead>
                   <TableHead className="hidden md:table-cell w-25">País</TableHead>
@@ -92,7 +83,7 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
                             <p>editar</p>
                           </TooltipContent>
                         </Tooltip>
-                        {/* <DeleteField fieldId={field.id} roles={roles} /> */}
+                        <DeleteField fieldId={field.id as string} roles={roles} />
                       </div>
                     </TableCell>
                   </TableRow>
@@ -109,7 +100,7 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
       ) : (
         <div className="border border-sky-600 p-5 rounded mt-10">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            No se encontraron canchas de juego
+            Aún no hay canchas de juego creadas
           </p>
         </div>
       )}

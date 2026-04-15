@@ -1,7 +1,6 @@
 import { type FC, Suspense } from 'react';
 import { FieldsWrapper } from './fields-wrapper';
-// TODO import { FieldsTableSkeleton } from './fields-table-skeleton';
-// import { FieldsWrapper } from '../../encuentros/(components)/teams-wrapper';
+import { FieldsTableSkeleton } from './fiels-table-skeleton';
 
 type Props = Readonly<{
   searchParamsPromise: Promise<{
@@ -18,16 +17,14 @@ export const FieldsContent: FC<Props> = async ({ searchParamsPromise }) => {
   } = await searchParamsPromise;
 
   return (
-    <>
-      <Suspense
-        key={`${query ?? 'query'}-${currentPage}`}
-        // TODO fallback={<FieldsTableSkeleton />}
-      >
-        <FieldsWrapper
-          currentPage={+currentPage}
-          query={query}
-        />
-      </Suspense>
-    </>
+    <Suspense
+      key={`${query ?? 'query'}-${currentPage}`}
+      fallback={<FieldsTableSkeleton />}
+    >
+      <FieldsWrapper
+        currentPage={+currentPage}
+        query={query}
+      />
+    </Suspense>
   );
 };
