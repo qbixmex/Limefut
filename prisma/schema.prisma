@@ -219,7 +219,7 @@ model Field {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("field")
+  @@map("fields")
 }
 
 model Coach {

@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "field" (
+CREATE TABLE "fields" (
     "id" TEXT NOT NULL,
     "name" VARCHAR NOT NULL,
     "city" VARCHAR,
@@ -12,11 +12,11 @@ CREATE TABLE "field" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "field_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "fields_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "field_permalink_key" ON "field"("permalink");
+CREATE UNIQUE INDEX "fields_permalink_key" ON "fields"("permalink");
 
 -- AddForeignKey
-ALTER TABLE "field" ADD CONSTRAINT "field_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "fields" ADD CONSTRAINT "fields_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE ON UPDATE CASCADE;
