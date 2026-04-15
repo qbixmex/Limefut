@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { SendHorizonal as SendHorizontal } from 'lucide-react';
+import { SendHorizontal } from 'lucide-react';
 
 export const WeekSelector = () => {
   const router = useRouter();
@@ -28,6 +28,7 @@ export const WeekSelector = () => {
   const setWeekParam = (week: string) => {
     const params = new URLSearchParams(searchParams);
     params.set('semana', week);
+    params.set('sortWeek', week);
     router.push(`${pathname}?${params}`);
   };
 
