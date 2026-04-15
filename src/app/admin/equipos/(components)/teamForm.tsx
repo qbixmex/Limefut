@@ -43,6 +43,7 @@ import type { Coach, Team, Tournament } from '@/shared/interfaces';
 import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
 import type { Session } from '@/lib/auth-client';
 import { cn, slugify } from '@/lib/utils';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   session: Session;
@@ -153,7 +154,7 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
       if (response.ok) {
         form.reset();
         toast.success(response.message);
-        route.replace(`/admin/equipos/${response.team?.id}`);
+        route.replace(ROUTES.ADMIN_TEAM_EDIT(response.team?.id as string));
         return;
       }
       return;
@@ -175,20 +176,18 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(`/admin/equipos/${response.team?.id}`);
+        route.replace(ROUTES.ADMIN_TEAM(response.team?.id as string));
       }
     }
   };
 
   const handleNavigateBack = () => {
-    const baseUrl = '/admin/equipos';
-
     if (team && team.tournament) {
-      route.replace(`${baseUrl}?torneo=${team.tournament.id}`);
+      route.replace(`${ROUTES.ADMIN_TEAMS}?torneo=${team.tournament.id}`);
     } else if (tournamentId) {
-      route.replace(`${baseUrl}?torneo=${tournamentId}`);
+      route.replace(`${ROUTES.ADMIN_TEAMS}?torneo=${tournamentId}`);
     } else {
-      route.replace(baseUrl);
+      route.replace(ROUTES.ADMIN_TEAMS);
     }
   };
 

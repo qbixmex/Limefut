@@ -19,11 +19,12 @@ import {
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
 import { RiFolderVideoLine } from 'react-icons/ri';
-import { GiWhistle, GiSodaCan } from 'react-icons/gi';
+import { GiWhistle, GiSodaCan, GiSoccerBall } from 'react-icons/gi';
 import {
   SoccerPlayer,
   SoccerField,
 } from '@/shared/components/icons';
+import { SoccerPlayerFrontIcon } from '@/shared/components/icons/soccer-player-front.icon';
 
 export const navMain: NavItem[] = [
   {
@@ -58,6 +59,24 @@ export const navMain: NavItem[] = [
       {
         label: 'Crear',
         url: '/admin/equipos/crear',
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: 'Canchas',
+    url: '#',
+    icon: SoccerField,
+    isActive: false,
+    subItems: [
+      {
+        label: 'Lista',
+        url: '/admin/canchas',
+        icon: ListIcon,
+      },
+      {
+        label: 'Crear',
+        url: '/admin/canchas/crear',
         icon: PlusIcon,
       },
     ],
@@ -101,7 +120,7 @@ export const navMain: NavItem[] = [
   {
     label: 'Encuentros',
     url: '#',
-    icon: SoccerField,
+    icon: SoccerPlayerFrontIcon,
     isActive: false,
     subItems: [
       {

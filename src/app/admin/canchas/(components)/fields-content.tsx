@@ -1,6 +1,7 @@
 import { type FC, Suspense } from 'react';
-import { TeamsTableSkeleton } from './teams-table-skeleton';
-import { TeamsWrapper } from './teams-wrapper';
+import { FieldsWrapper } from './fields-wrapper';
+// TODO import { FieldsTableSkeleton } from './fields-table-skeleton';
+// import { FieldsWrapper } from '../../encuentros/(components)/teams-wrapper';
 
 type Props = Readonly<{
   searchParamsPromise: Promise<{
@@ -10,23 +11,19 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
+export const FieldsContent: FC<Props> = async ({ searchParamsPromise }) => {
   const {
-    torneo: tournamentId,
     query = '',
     page: currentPage = 1,
   } = await searchParamsPromise;
-
-  if (!tournamentId) return null;
 
   return (
     <>
       <Suspense
         key={`${query ?? 'query'}-${currentPage}`}
-        fallback={<TeamsTableSkeleton colCount={9} rowCount={6} />}
+        // TODO fallback={<FieldsTableSkeleton />}
       >
-        <TeamsWrapper
-          tournamentId={tournamentId}
+        <FieldsWrapper
           currentPage={+currentPage}
           query={query}
         />
@@ -34,5 +31,3 @@ export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
     </>
   );
 };
-
-export default TeamsContent;
