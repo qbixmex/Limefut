@@ -52,10 +52,10 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
                 <TableRow>
                   <TableHead className="w-12 text-center">#</TableHead>
                   <TableHead className="">Nombre</TableHead>
-                  <TableHead className="hidden">Ciudad</TableHead>
-                  <TableHead className="hidden">Estado</TableHead>
-                  <TableHead className="hidden">País</TableHead>
-                  <TableHead>Acciones</TableHead>
+                  <TableHead className="hidden md:table-cell w-25">Ciudad</TableHead>
+                  <TableHead className="hidden md:table-cell w-25">Estado</TableHead>
+                  <TableHead className="hidden md:table-cell w-25">País</TableHead>
+                  <TableHead className="w-[120px]">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -64,8 +64,8 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
                     <TableCell className="font-bold text-center">{index + 1}</TableCell>
                     <TableCell className="">{field.name}</TableCell>
                     <TableCell className="hidden md:table-cell">{field.city}</TableCell>
-                    <TableCell className="hidden">{field.state}</TableCell>
-                    <TableCell className="hidden">{field.country}</TableCell>
+                    <TableCell className="hidden md:table-cell">{field.state}</TableCell>
+                    <TableCell className="hidden md:table-cell">{field.country}</TableCell>
                     <TableCell>
                       <div className="flex gap-3">
                         <Tooltip>
