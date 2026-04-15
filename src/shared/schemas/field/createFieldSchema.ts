@@ -23,24 +23,34 @@ export const createFieldSchema = z.object({
       (value) => /^[a-zA-Z0-9_-]+$/.test(value),
       { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
     ),
-  city: z.string()
-    .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
-    .max(255, { message: '¡ La ciudad debe ser menor a 255 caracteres !' })
-    .optional(),
-  state: z.string()
-    .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
-    .max(255, { message: '¡ El estado debe ser menor a 255 caracteres !' })
-    .optional(),
-  country: z.string()
-    .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
-    .max(255, { message: '¡ El país debe ser menor a 255 caracteres !' })
-    .optional(),
-  address: z.string()
-    .min(3, { message: '¡ La dirección debe ser mayor a 3 caracteres !' })
-    .max(255, { message: '¡ La dirección debe ser menor a 255 caracteres !' })
-    .optional(),
-  map: z.string()
-    .min(3, { message: '¡ El mapa debe ser mayor a 3 caracteres !' })
-    .max(255, { message: '¡ El mapa debe ser menor a 255 caracteres !' })
-    .optional(),
+  city: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
+      .max(255, { message: '¡ La ciudad debe ser menor a 255 caracteres !' }),
+  ]).optional(),
+  state: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
+      .max(255, { message: '¡ El estado debe ser menor a 255 caracteres !' }),
+  ]).optional(),
+  country: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
+      .max(255, { message: '¡ El país debe ser menor a 255 caracteres !' }),
+  ]).optional(),
+  address: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ La dirección debe ser mayor a 3 caracteres !' })
+      .max(255, { message: '¡ La dirección debe ser menor a 255 caracteres !' }),
+  ]).optional(),
+  map: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ El mapa debe ser mayor a 3 caracteres !' })
+      .max(255, { message: '¡ El mapa debe ser menor a 255 caracteres !' }),
+  ]).optional(),
 });

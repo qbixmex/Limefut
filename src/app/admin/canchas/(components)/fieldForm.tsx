@@ -18,28 +18,9 @@ import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
 import { createFieldSchema, editFieldSchema } from '@/shared/schemas';
 import type { Field } from '@/shared/interfaces';
-import { createFieldAction } from '../(actions)';
+import { createFieldAction, updateFieldAction } from '../(actions)';
 import type { Session } from '@/lib/auth-client';
 import { slugify } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
@@ -57,13 +38,13 @@ export const FieldForm: FC<Props> = ({ session, field }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: field?.name ?? 'Soccer Field',
-      permalink: field?.permalink ?? 'soccer-field',
-      city: field?.city ?? 'Zapopan', // undefined
-      state: field?.state ?? 'Jalisco', // undefined
-      country: field?.country ?? 'México', // undefined
-      address: field?.address ?? 'Avenida Lopez de Legaspi #333', // undefined
-      map: field?.map ?? 'https://maps.app.goo.gl/eYugNe5Cay9cFwex9', // undefined
+      name: field?.name ?? '',
+      permalink: field?.permalink ?? '',
+      city: field?.city ?? '',
+      state: field?.state ?? '',
+      country: field?.country ?? '',
+      address: field?.address ?? '',
+      map: field?.map ?? '',
     },
   });
 
@@ -112,22 +93,22 @@ export const FieldForm: FC<Props> = ({ session, field }) => {
 
     // Update Field
     if (field) {
-      // const response = await updateTeamAction({
-      //   formData,
-      //   teamId: field.id,
-      //   userRoles: session.user.roles as string[],
-      //   authenticatedUserId: session?.user.id,
-      // });
+      const response = await updateFieldAction({
+        formData,
+        fieldId: field.id as string,
+        userRoles: session.user.roles as string[],
+        authenticatedUserId: session?.user.id,
+      });
 
-      // if (!response.ok) {
-      //   toast.error(response.message);
-      //   return;
-      // }
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
 
-      // if (response.ok) {
-      //   toast.success(response.message);
-      //   route.replace(ROUTES.ADMIN_TEAM(response.team?.id as string));
-      // }
+      if (response.ok) {
+        toast.success(response.message);
+        route.replace(ROUTES.ADMIN_FIELDS);
+      }
     }
   };
 

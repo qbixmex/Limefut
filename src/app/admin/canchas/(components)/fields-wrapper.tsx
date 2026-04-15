@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 import { FieldsTable } from './fields-table';
-import { fetchFieldsAction } from '../(actions)/fetchFieldsAction';
+import { fetchFieldsAction } from '../(actions)';
 
 type Props = Readonly<{
   currentPage: number;
