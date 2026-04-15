@@ -191,6 +191,7 @@ model Team {
   visitorShootouts PenaltyShootout[] @relation("ShootoutVisitorTeam")
   wonShootouts     PenaltyShootout[] @relation("ShootoutWinnerTeam")
   penaltyKicks     PenaltyKick[]
+  fields           Field[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -198,6 +199,27 @@ model Team {
 
   @@index([permalink, category, format])
   @@map("teams")
+}
+
+model Field {
+  id        String  @id @default(uuid())
+  name      String  @db.VarChar()
+  city      String? @db.VarChar()
+  state     String? @db.VarChar()
+  country   String? @db.VarChar()
+  address   String? @db.VarChar()
+  map       String? @db.VarChar()
+  permalink String  @unique()
+
+  // Relationship
+  teamId String? @map("team_id")
+  team   Team?   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("field")
 }
 
 model Coach {
