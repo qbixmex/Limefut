@@ -20,8 +20,8 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
   const week = sp.sortWeek;
   const query = sp.query ?? '';
   const currentPage = sp.page ?? '1';
-  const sortMatchDate = sp.sortMatchDate ?? 'desc';
-  const sortWeek = sp.sortWeek ?? 'desc';
+  const sortMatchDate = sp.sortMatchDate ?? 'asc';
+  const sortWeek = sp.sortWeek ?? 'asc';
   const status = sp.status;
 
   if (!tournamentId) return null;
