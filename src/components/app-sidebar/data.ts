@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
 import { RiFolderVideoLine } from 'react-icons/ri';
-import { GiWhistle, GiSodaCan, GiSoccerBall } from 'react-icons/gi';
+import { GiWhistle, GiSodaCan } from 'react-icons/gi';
 import {
   SoccerPlayer,
   SoccerField,

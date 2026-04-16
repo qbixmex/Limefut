@@ -9,7 +9,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Pencil } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';

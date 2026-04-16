@@ -4,8 +4,6 @@ import { MatchForm } from '../../(components)/matchForm';
 import { fetchMatchAction } from '../../(actions)';
 import { redirect } from 'next/navigation';
 import { fetchTeamsForMatchAction } from '../../(actions)/fetchTeamsForMatchAction';
-import type { MatchType } from '../../(actions)/fetchMatchAction';
-import type { Team } from '@/shared/interfaces';
 import type { Session } from '@/lib/auth-client';
 import { headers } from 'next/headers';
 

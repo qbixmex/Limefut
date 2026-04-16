@@ -1,7 +1,6 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import deleteImage from '@/shared/actions/deleteImageAction';
 import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{

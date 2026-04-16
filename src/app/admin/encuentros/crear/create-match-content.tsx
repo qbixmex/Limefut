@@ -3,7 +3,6 @@ import { headers } from 'next/headers';
 import { MatchForm } from '../(components)/matchForm';
 import { redirect } from 'next/navigation';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
-import type { Team } from '@/shared/interfaces';
 import { auth } from '@/lib/auth';
 import type { Session } from '@/lib/auth-client';
 import { FormSkeleton } from '../(components)/form-skeleton';
