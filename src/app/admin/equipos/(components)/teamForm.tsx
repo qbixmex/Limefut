@@ -45,23 +45,28 @@ import type { Session } from '@/lib/auth-client';
 import { cn, slugify } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
 
+type FIELD_TYPE = { id: string; name: string; };
+
 type Props = Readonly<{
   session: Session;
   tournaments: TournamentType[];
   coaches: Coach[];
+  fields: FIELD_TYPE[];
   team?: Team & {
     tournament: Pick<Tournament, 'id' | 'name'> | null;
     coach: Pick<Coach, 'id' | 'name'> | null;
+    fields: FIELD_TYPE[];
   };
 }>;
 
-export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => {
+export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = [], team }) => {
   const route = useRouter();
   const params = useSearchParams();
   const formSchema = !team ? createTeamSchema : editTeamSchema;
   const isPermalinkEdited = useRef(false);
   const [coachesOpen, setCoachesOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [teamsOpen, setTeamsOpen] = useState(false);
 
   let tournamentId: string | undefined = '';
 
@@ -89,6 +94,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
       coachId: team?.coach?.id ?? undefined,
       emails: team?.emails ?? [],
       address: team?.address ?? undefined,
+      fieldsIds: (team?.fields && team.fields.length > 0)
+        ? team?.fields.map((t) => t.id)
+        : [],
       active: team?.active ?? false,
     },
   });
@@ -137,6 +145,10 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
       formData.append('image', data.image);
     }
 
+    if (data.fieldsIds && data.fieldsIds.length > 0) {
+      formData.append('fieldsIds', JSON.stringify(data.fieldsIds));
+    }
+
     formData.append('active', String(data.active));
 
     // Create team
@@ -154,7 +166,7 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
       if (response.ok) {
         form.reset();
         toast.success(response.message);
-        route.replace(ROUTES.ADMIN_TEAM_EDIT(response.team?.id as string));
+        route.replace(ROUTES.ADMIN_TEAMS);
         return;
       }
       return;
@@ -484,7 +496,7 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
                       </PopoverTrigger>
                       <PopoverContent className="w-full p-0">
                         <Command>
-                          <CommandInput placeholder="Buscar entrenador ..." className="h-9" />
+                          <CommandInput placeholder="Buscar entrenador" className="h-9" />
                           <CommandList>
                             <CommandEmpty>¡ No se encontró el entrenador !</CommandEmpty>
                             <CommandGroup>
@@ -559,7 +571,7 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
           </div>
         </div>
 
-        {/* Address and Active */}
+        {/* Address, Fields and Active */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
@@ -580,25 +592,104 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, team }) => 
               )}
             />
           </div>
-          <div className="w-full lg:w-1/2 flex items-center">
-            <FormField
-              control={form.control}
-              name="active"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center gap-3">
-                    <Label htmlFor="active">Activo</Label>
-                    <FormControl>
-                      <Switch
-                        id="active"
-                        checked={field.value ?? false}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </div>
-                </FormItem>
-              )}
-            />
+          <div className="w-full lg:w-1/2 flex justify-end gap-5 items-center">
+            {fields.length > 0 && (
+              <div className="w-full">
+                <FormField
+                  control={form.control}
+                  name="fieldsIds"
+                  render={({ field: input }) => {
+                    const selectedFields = fields.filter((f) => input.value?.includes(f.id));
+                    const selectedFieldsCount = selectedFields.length;
+
+                    return (
+                      <FormItem>
+                        <FormLabel>Canchas</FormLabel>
+                        <Popover open={teamsOpen} onOpenChange={setTeamsOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline-secondary"
+                              role="combobox"
+                              aria-expanded={teamsOpen}
+                              className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+                            >
+                              {
+                                (selectedFields.length > 0)
+                                  ? (
+                                    selectedFieldsCount + ' ' +
+                                    'cancha' + (selectedFieldsCount > 1 ? 's' : '') + ' ' +
+                                    'seleccionada' + (selectedFieldsCount > 1 ? 's' : '')
+                                  )
+                                  : 'Seleccione una o más canchas'
+                              }
+                              <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-full p-0">
+                            <Command>
+                              <CommandInput placeholder="Buscar cancha" className="h-9" />
+                              <CommandList>
+                                <CommandEmpty>No se encontró la cancha.</CommandEmpty>
+                                <CommandGroup className="max-h-[200px] overflow-y-scroll">
+                                  {fields.map((item) => {
+                                    const isSelected = input.value?.includes(item.id);
+
+                                    return (
+                                      <CommandItem
+                                        key={item.id}
+                                        value={item.name}
+                                        onSelect={() => {
+                                          let newValue = Array.isArray(input.value) ? [...input.value] : [];
+                                          if (isSelected) {
+                                            newValue = newValue.filter((id) => id !== item.id);
+                                          } else {
+                                            newValue.push(item.id);
+                                          }
+                                          form.setValue('fieldsIds', newValue);
+                                        }}
+                                      >
+                                        {item.name}
+                                        <Check
+                                          className={cn(
+                                            'ml-auto',
+                                            isSelected ? 'opacity-100' : 'opacity-0',
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    );
+                                  })}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+            )}
+            <div className="ml-auto">
+              <FormField
+                control={form.control}
+                name="active"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center gap-3 mt-5">
+                      <Label htmlFor="active">Activo</Label>
+                      <FormControl>
+                        <Switch
+                          id="active"
+                          checked={field.value ?? false}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
         </div>
 

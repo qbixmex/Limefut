@@ -19,4 +19,4 @@ CREATE TABLE "fields" (
 CREATE UNIQUE INDEX "fields_permalink_key" ON "fields"("permalink");
 
 -- AddForeignKey
-ALTER TABLE "fields" ADD CONSTRAINT "fields_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "fields" ADD CONSTRAINT "fields_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "teams"("id") ON DELETE SET NULL ON UPDATE CASCADE;

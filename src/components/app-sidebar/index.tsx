@@ -34,6 +34,7 @@ export const AppSidebar: FC<Props> = ({ ...props }) => {
                     height={80}
                     alt="Limefut Logo"
                     className="w-full max-w-[20px] h-auto"
+                    loading="eager"
                   />
                 </div>
                 <div className="leading-none">

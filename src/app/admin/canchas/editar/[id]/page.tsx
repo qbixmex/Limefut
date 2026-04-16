@@ -8,8 +8,8 @@ import {
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import type { Session } from '@/lib/auth-client';
-import { fetchFieldAction } from '../../../(actions)';
-import { FieldForm } from '../../../(components)/fieldForm';
+import { fetchFieldAction } from '../../(actions)';
+import { FieldForm } from '../../(components)/fieldForm';
 import { headers } from 'next/headers';
 import { ROUTES } from '@/shared/constants/routes';
 import type { Field } from '@/shared/interfaces';

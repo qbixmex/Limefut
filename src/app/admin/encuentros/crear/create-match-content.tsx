@@ -59,13 +59,11 @@ const CreateMatchContent: FC<CreateMatchContentProps> = async ({ tournamentId, w
     redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
   }
 
-  const teams = responseTeams.teams as Team[];
-
   return (
     <section className="mt-10">
       <MatchForm
         session={session as Session}
-        initialTeams={teams}
+        initialTeams={responseTeams.teams}
         tournamentId={tournamentId}
         week={parseInt(week)}
       />

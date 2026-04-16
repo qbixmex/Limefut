@@ -57,6 +57,7 @@ export const createFieldAction = async (
 
     // Update Cache
     updateTag('admin-fields');
+    updateTag('admin-fields-for-team');
     updateTag('admin-field');
     updateTag('public-fields');
     updateTag('public-field');

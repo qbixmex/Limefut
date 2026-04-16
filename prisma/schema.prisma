@@ -213,7 +213,7 @@ model Field {
 
   // Relationship
   teamId String? @map("team_id")
-  team   Team?   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  team   Team?   @relation(fields: [teamId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")

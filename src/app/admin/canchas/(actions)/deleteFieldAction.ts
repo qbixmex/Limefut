@@ -27,6 +27,7 @@ export const deleteFieldAction = async (fieldId: string): ResponseDeleteAction =
 
   // Update Cache
   updateTag('admin-fields');
+  updateTag('admin-fields-for-team');
   updateTag('admin-field');
   updateTag('public-fields');
   updateTag('public-field');

@@ -22,24 +22,20 @@ export const EditMatchContent: FC<Props> = async ({ matchId }) => {
     redirect(`/admin/encuentros?error=${encodeURIComponent(responseMatch.message)}`);
   }
 
-  const match = responseMatch.match as MatchType;
-
   const responseTeams = await fetchTeamsForMatchAction({
-    tournamentId: match?.tournament.id as string,
-    week: match?.week as number,
+    tournamentId: responseMatch.match?.tournament.id as string,
+    week: responseMatch.match?.week as number,
   });
 
   if (!responseTeams.ok) {
     redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
   }
 
-  const teams = responseTeams.teams as Team[];
-
   return (
     <MatchForm
       session={session as Session}
-      match={match}
-      initialTeams={teams}
+      match={responseMatch.match}
+      initialTeams={responseTeams.teams}
     />
   );
 };

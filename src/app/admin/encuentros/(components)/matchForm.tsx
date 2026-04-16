@@ -39,7 +39,6 @@ import { createMatchSchema, editMatchSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
-import type { Match, Team } from '@/shared/interfaces';
 import { createMatchAction, updateMatchAction } from '../(actions)';
 import { Check, ChevronDownIcon, ChevronsUpDown, FlipHorizontal2, LoaderCircle } from 'lucide-react';
 import { format } from 'date-fns';
@@ -65,18 +64,23 @@ import { updateMatchScoreAction } from '../(actions)/updateMatchScoreAction';
 import { ROUTES } from '@/shared/constants/routes';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Switch } from '@/components/ui/switch';
+import type { MatchType } from '../(actions)/fetchMatchAction';
+
+type InitialTeam = {
+  id: string;
+  name: string;
+  fields: {
+    id: string;
+    name: string;
+  }[];
+};
 
 type Props = Readonly<{
   session: Session;
-  initialTeams: Team[];
+  initialTeams: InitialTeam[];
   tournamentId?: string;
   week?: number;
-  match?: Match & {
-    tournament: {
-      id: string;
-      name: string;
-    };
-  };
+  match?: MatchType | null;
 }>;
 
 export const MatchForm: FC<Props> = ({
@@ -89,7 +93,7 @@ export const MatchForm: FC<Props> = ({
   const searchParams = useSearchParams();
   const route = useRouter();
   const formSchema = !match ? createMatchSchema : editMatchSchema;
-  const [teams, setTeams] = useState<Team[]>(initialTeams);
+  const [teams, setTeams] = useState<InitialTeam[]>(initialTeams);
   const [localTeamsOpen, setLocalTeamsOpen] = useState(false);
   const [visitorTeamsOpen, setVisitorTeamOpen] = useState(false);
   const [hiddenScores, setHiddenScores] = useState(true);
@@ -101,7 +105,7 @@ export const MatchForm: FC<Props> = ({
       localScore: match?.localScore ?? 0,
       visitorTeamId: match?.visitorTeam.id ?? '',
       visitorScore: match?.visitorScore ?? 0,
-      place: match?.place ?? undefined,
+      place: match?.place ?? '',
       referee: match?.referee ?? undefined,
       matchDate: match?.matchDate ? new Date(match.matchDate) : undefined,
       status: match?.status ?? MATCH_STATUS.SCHEDULED,
@@ -156,8 +160,9 @@ export const MatchForm: FC<Props> = ({
       tournamentId: match?.tournament.id as string,
       week,
     });
+
     if (response.ok && response.teams) {
-      setTeams(response.teams as Team[]);
+      setTeams(response.teams);
 
       // Clear team selections if they're no longer available
       const localId = form.watch('localTeamId');
@@ -328,6 +333,7 @@ export const MatchForm: FC<Props> = ({
   const handleFlipTeams = () => {
     const localTeamId = form.getValues('localTeamId');
     const visitorTeamId = form.getValues('visitorTeamId');
+
     form.setValue('localTeamId', visitorTeamId);
     form.setValue('visitorTeamId', localTeamId);
   };
@@ -594,17 +600,51 @@ export const MatchForm: FC<Props> = ({
             <FormField
               control={form.control}
               name="place"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Sede <span className="text-sm text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                // Get the local team based on the selected localTeamId
+                // to show its fields in the place select
+                const localTeamId = form.watch('localTeamId');
+                const localTeam = match?.localTeam.id === localTeamId
+                  ? match?.localTeam
+                  : teams.find(t => t.id === localTeamId) || initialTeams.find(t => t.id === localTeamId);
+
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      Sede <span className="text-sm text-gray-500">(opcional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value === 'none' ? '' : value);
+                        }}
+                        value={field.value ?? ''}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue
+                            placeholder={
+                              localTeamId
+                                ? 'Seleccione una sede'
+                                : 'Seleccione un equipo local primero'
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Ninguna</SelectItem>
+                          {localTeam?.fields && localTeam.fields.length > 0 ? (
+                            localTeam.fields.map((fieldItem) => (
+                              <SelectItem key={fieldItem.id} value={fieldItem.name}>
+                                {fieldItem.name}
+                              </SelectItem>
+                            ))
+                          ) : null}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           </div>
           <div className="w-full lg:w-1/2">
