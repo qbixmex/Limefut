@@ -33,5 +33,3 @@ export const TeamsWrapper: FC<Props> = async ({
     />
   );
 };
-
-export default TeamsWrapper;

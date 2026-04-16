@@ -14,6 +14,7 @@ import { fetchTournamentsForTeam } from '../(actions)';
 import type { Coach } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from '../(actions)/fetchCoachesForTeam';
 import type { Session } from '@/lib/auth-client';
+import { fetchFieldsForTeam } from '../(actions)/fetchFieldsForTeam';
 
 const CreateTeamPage = () => {
   return (
@@ -53,6 +54,8 @@ const CreateTeamPageContent: FC = async () => {
     redirect(`/admin/equipos?error=${encodeURIComponent('¡ No puedes crear un equipo sin entrenadores activos !')}`);
   }
 
+  const responseFields = await fetchFieldsForTeam();
+
   const tournaments = responseTournaments.tournaments;
   const coaches = responseCoaches.coaches;
 
@@ -69,6 +72,7 @@ const CreateTeamPageContent: FC = async () => {
               session={session as Session}
               tournaments={tournaments}
               coaches={coaches as Coach[]}
+              fields={responseFields.fields}
             />
           </CardContent>
         </Card>

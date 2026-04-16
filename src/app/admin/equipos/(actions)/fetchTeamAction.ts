@@ -6,6 +6,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 
 type CoachType = Pick<Coach, 'id' | 'name'>;
 type PlayerType = Pick<Player, 'id' | 'name'>;
+type FieldType = { id: string; name: string; };
 
 type FetchTeamResponse = Promise<{
   ok: boolean;
@@ -17,6 +18,7 @@ type FetchTeamResponse = Promise<{
     } | null;
     coach: CoachType | null;
     players: PlayerType[] | null;
+    fields: FieldType[];
   } | null;
 }>;
 
@@ -54,6 +56,12 @@ export const fetchTeamAction = async (
           },
         },
         players: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        fields: {
           select: {
             id: true,
             name: true,

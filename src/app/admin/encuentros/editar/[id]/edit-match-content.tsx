@@ -4,8 +4,6 @@ import { MatchForm } from '../../(components)/matchForm';
 import { fetchMatchAction } from '../../(actions)';
 import { redirect } from 'next/navigation';
 import { fetchTeamsForMatchAction } from '../../(actions)/fetchTeamsForMatchAction';
-import type { MatchType } from '../../(actions)/fetchMatchAction';
-import type { Team } from '@/shared/interfaces';
 import type { Session } from '@/lib/auth-client';
 import { headers } from 'next/headers';
 
@@ -22,24 +20,20 @@ export const EditMatchContent: FC<Props> = async ({ matchId }) => {
     redirect(`/admin/encuentros?error=${encodeURIComponent(responseMatch.message)}`);
   }
 
-  const match = responseMatch.match as MatchType;
-
   const responseTeams = await fetchTeamsForMatchAction({
-    tournamentId: match?.tournament.id as string,
-    week: match?.week as number,
+    tournamentId: responseMatch.match?.tournament.id as string,
+    week: responseMatch.match?.week as number,
   });
 
   if (!responseTeams.ok) {
     redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
   }
 
-  const teams = responseTeams.teams as Team[];
-
   return (
     <MatchForm
       session={session as Session}
-      match={match}
-      initialTeams={teams}
+      match={responseMatch.match}
+      initialTeams={responseTeams.teams}
     />
   );
 };

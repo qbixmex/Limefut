@@ -1,10 +1,18 @@
 import type { MATCH_STATUS_TYPE } from '../enums';
-import type { Team } from './Team';
+
+export type TeamForMatch = {
+  id: string;
+  name: string;
+  fields: {
+    id: string;
+    name: string;
+  }[];
+};
 
 export interface Match {
   id: string;
-  localTeam: Partial<Team>;
-  visitorTeam: Partial<Team>;
+  localTeam: TeamForMatch;
+  visitorTeam: TeamForMatch;
   place: string | null;
   matchDate: Date | null;
   week: number | null;

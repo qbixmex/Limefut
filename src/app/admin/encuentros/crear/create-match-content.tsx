@@ -3,7 +3,6 @@ import { headers } from 'next/headers';
 import { MatchForm } from '../(components)/matchForm';
 import { redirect } from 'next/navigation';
 import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
-import type { Team } from '@/shared/interfaces';
 import { auth } from '@/lib/auth';
 import type { Session } from '@/lib/auth-client';
 import { FormSkeleton } from '../(components)/form-skeleton';
@@ -59,13 +58,11 @@ const CreateMatchContent: FC<CreateMatchContentProps> = async ({ tournamentId, w
     redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
   }
 
-  const teams = responseTeams.teams as Team[];
-
   return (
     <section className="mt-10">
       <MatchForm
         session={session as Session}
-        initialTeams={teams}
+        initialTeams={responseTeams.teams}
         tournamentId={tournamentId}
         week={parseInt(week)}
       />

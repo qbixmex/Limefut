@@ -1,6 +1,6 @@
 import { type FC, Suspense } from 'react';
 import { TeamsTableSkeleton } from './teams-table-skeleton';
-import { TeamsWrapper } from '../../encuentros/(components)/teams-wrapper';
+import { TeamsWrapper } from './teams-wrapper';
 
 type Props = Readonly<{
   searchParamsPromise: Promise<{

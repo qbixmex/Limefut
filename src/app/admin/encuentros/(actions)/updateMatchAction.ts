@@ -120,7 +120,7 @@ export const updateMatchAction = async ({
           data: {
             localId: matchToSave.localTeamId,
             visitorId: matchToSave.visitorTeamId,
-            place: matchToSave.place,
+            place: matchToSave.place ?? null,
             week: matchToSave.week,
             referee: matchToSave.referee,
             localScore: matchToSave.localScore,

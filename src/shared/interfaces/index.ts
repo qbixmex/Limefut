@@ -2,6 +2,7 @@ export { ROLE, type ROLE_TYPE, type User } from './User';
 export type { Pagination } from './Pagination';
 export type { Tournament } from './Tournament';
 export type { Team } from './Team';
+export type { Field } from './Field';
 export type { Coach } from './Coach';
 export type { Player } from './Player';
 export type { Match } from './Match';

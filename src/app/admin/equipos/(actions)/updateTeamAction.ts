@@ -56,6 +56,9 @@ export const updateTeamAction = async ({
     emails: JSON.parse(formData.get('emails') as string),
     address: formData.get('address') ?? null,
     image: formData.get('image'),
+    fieldsIds: formData.get('fieldsIds')
+      ? JSON.parse(formData.get('fieldsIds') as string ?? 'undefined')
+      : undefined,
     active: formData.get('active') === 'true',
   };
 
@@ -103,6 +106,9 @@ export const updateTeamAction = async ({
             active: teamToSave.active,
             tournamentId: teamToSave.tournamentId,
             coachId: teamToSave.coachId ?? undefined,
+            fields: {
+              set: teamToSave.fieldsIds?.map((id) => ({ id })) || [],
+            },
           },
         });
 
