@@ -101,5 +101,6 @@ export const createTeamSchema = z.object({
     z.literal(''),
     z.null(),
   ]).optional(),
+  fieldsIds: z.array(z.uuid('¡ El valor debe ser un UUID válido !')).optional(),
   active: z.boolean().optional(),
 });

@@ -7,7 +7,7 @@ import { TournamentsSelectorSkeleton } from './(components)/TournamentsSelectorS
 import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
 import { Search } from '@/shared/components/search';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { CreateTeam } from './(components)/create-team.tsx';
+import { CreateTeam } from './(components)/create-team';
 
 type Props = Readonly<{
   searchParams: Promise<{

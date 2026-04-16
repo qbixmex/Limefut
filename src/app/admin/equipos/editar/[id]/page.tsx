@@ -13,6 +13,7 @@ import { TeamForm } from '../../(components)/teamForm';
 import type { Coach } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from '../../(actions)/fetchCoachesForTeam';
 import { headers } from 'next/headers';
+import { fetchFieldsForTeam } from '../../(actions)/fetchFieldsForTeam';
 
 type Props = Readonly<{
   params: Promise<{
@@ -35,6 +36,8 @@ const EditTeamPageContent: FC<Props> = async ({ params }) => {
   const teamId = (await params).id;
   const responseTeam = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
+  console.log(responseTeam.team?.fields);
+
   if (!responseTeam.team) {
     redirect(`/admin/equipos?error=${encodeURIComponent(responseTeam.message)}`);
   }
@@ -50,6 +53,9 @@ const EditTeamPageContent: FC<Props> = async ({ params }) => {
   if (!responseCoaches.ok) {
     redirect(`/admin/equipos?error=${encodeURIComponent(responseCoaches.message)}`);
   }
+
+  const responseFields = await fetchFieldsForTeam();
+
   const tournaments = responseTeams.tournaments;
   const coaches = responseCoaches.coaches;
 
@@ -64,7 +70,8 @@ const EditTeamPageContent: FC<Props> = async ({ params }) => {
             <TeamForm
               key={teamId}
               session={session as Session}
-              team={responseTeam.team!}
+              team={responseTeam.team}
+              fields={responseFields.fields}
               tournaments={tournaments as TournamentType[]}
               coaches={coaches as Coach[]}
             />
