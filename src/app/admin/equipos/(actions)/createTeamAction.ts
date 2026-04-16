@@ -40,6 +40,9 @@ export const createTeamAction = async (
     emails: JSON.parse(formData.get('emails') as string),
     address: formData.get('address') as string,
     image: formData.get('image') as File,
+    fieldsIds: formData.get('fieldsIds')
+      ? JSON.parse(formData.get('fieldsIds') as string ?? 'undefined')
+      : undefined,
     active: (formData.get('active') === 'true')
       ? true
       // eslint-disable-next-line no-unneeded-ternary
@@ -90,6 +93,9 @@ export const createTeamAction = async (
           active: teamToSave.active,
           tournamentId: teamToSave.tournamentId ?? null,
           coachId: teamToSave.coachId ?? null,
+          fields: {
+            connect: teamToSave.fieldsIds?.map((id) => ({ id })) || [],
+          },
         },
       });
 

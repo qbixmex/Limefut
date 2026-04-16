@@ -19,8 +19,12 @@ export type MatchType = {
     id: string;
     permalink: string;
     players: {
-      name: string;
       id: string;
+      name: string;
+    }[];
+    fields: {
+      id: string;
+      name: string;
     }[];
   }
   visitorTeam: {
@@ -30,6 +34,10 @@ export type MatchType = {
     players: {
       name: string;
       id: string;
+    }[];
+    fields: {
+      id: string;
+      name: string;
     }[];
   }
   tournament: TournamentType;
@@ -114,6 +122,12 @@ export const fetchMatchAction = async (
                 name: true,
               },
             },
+            fields: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
         visitor: {
@@ -122,6 +136,12 @@ export const fetchMatchAction = async (
             name: true,
             permalink: true,
             players: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            fields: {
               select: {
                 id: true,
                 name: true,

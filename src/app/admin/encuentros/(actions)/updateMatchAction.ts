@@ -68,7 +68,9 @@ export const updateMatchAction = async ({
     visitorScore: parseInt(formData.get('visitorScore') as string ?? '0') ?? undefined,
     place: formData.get('place') ?? undefined,
     referee: formData.get('referee') ?? undefined,
-    matchDate: new Date(formData.get('matchDate') as string) ?? new Date(),
+    matchDate: formData.get('matchDate')
+      ? new Date(formData.get('matchDate') as string)
+      : undefined,
     week: parseInt(formData.get('week') as string) ?? 1,
     status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
     tournamentId: formData.get('tournamentId') ?? undefined,
@@ -118,7 +120,7 @@ export const updateMatchAction = async ({
           data: {
             localId: matchToSave.localTeamId,
             visitorId: matchToSave.visitorTeamId,
-            place: matchToSave.place,
+            place: matchToSave.place ?? null,
             week: matchToSave.week,
             referee: matchToSave.referee,
             localScore: matchToSave.localScore,

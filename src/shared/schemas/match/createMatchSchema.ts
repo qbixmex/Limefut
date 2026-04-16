@@ -13,10 +13,12 @@ export const createMatchSchema = z.object({
       ? '! El equipo visitante es obligatorio !'
       : '¡ El id del equipo visitante no es un UUID válido !',
   }),
-  place: z.string()
-    .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ La sede debe ser menor a 50 caracteres !' })
-    .optional(),
+  place: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
+      .max(50, { message: '¡ La sede debe ser menor a 50 caracteres !' }),
+  ]).optional(),
   referee: z.string()
     .min(3, { message: '¡ El arbitro debe ser mayor a 3 caracteres !' })
     .max(50, { message: '¡ El arbitro debe ser menor a 50 caracteres !' })
@@ -38,7 +40,8 @@ export const createMatchSchema = z.object({
     { message: '¡ El estado del partido debe ser válido !' },
   ),
   matchDate: z
-    .date({ message: 'La fecha del encuentro debe ser una fecha válida' }),
+    .date({ message: 'La fecha del encuentro debe ser una fecha válida' })
+    .optional(),
   tournamentId: requiredUUID(
     '¡ Seleccione el torneo !',
     '¡ El id del torneo debe ser un UUID válido !',

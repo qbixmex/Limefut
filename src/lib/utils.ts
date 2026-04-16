@@ -2,7 +2,8 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ROBOTS } from '../shared/interfaces';
 import { PAGE_STATUS } from '../shared/interfaces/Page';
-import { GENDER, LANGUAGE, LANGUAGE_TYPE, MATCH_STATUS, type MATCH_STATUS_TYPE } from '../shared/enums';
+import type { LANGUAGE_TYPE, MATCH_STATUS_TYPE } from '../shared/enums';
+import { GENDER, LANGUAGE, MATCH_STATUS } from '../shared/enums';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -360,10 +361,12 @@ export const getAlignment = (alignment: string) => {
  * // Returns "español"
  * getAlignment(LANGUAGE.ENGLISH);
  * // Returns "inglés"
+ * getAlignment('japanese');
+ * // Returns "ninguno"
  * ```
  * @returns The site language in Spanish.
  */
-export const getSiteLanguage = (language: LANGUAGE_TYPE) => {
+export const getSiteLanguage = (language: LANGUAGE_TYPE | string) => {
   switch (language) {
     case LANGUAGE.NONE:
       return 'ninguno';
@@ -372,6 +375,6 @@ export const getSiteLanguage = (language: LANGUAGE_TYPE) => {
     case LANGUAGE.ENGLISH:
       return 'inglés';
     default:
-      return '';
+      return 'ninguno';
   }
 };

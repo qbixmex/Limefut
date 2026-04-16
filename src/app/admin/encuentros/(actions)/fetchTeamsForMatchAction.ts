@@ -14,6 +14,10 @@ export type ResponseFetchTeams = Promise<{
   teams: {
     id: string;
     name: string;
+    fields: {
+      id: string;
+      name: string;
+    }[]
   }[];
 }>;
 
@@ -58,6 +62,12 @@ export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsTy
       select: {
         id: true,
         name: true,
+        fields: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
 

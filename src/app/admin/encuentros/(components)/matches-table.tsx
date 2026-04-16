@@ -141,15 +141,25 @@ export const MatchesTable: FC<Props> = ({
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    <p className="text-balance">{match.place}</p>
+                    {match.place ? (
+                      <p className="text-balance">{match.place}</p>
+                    ) : (
+                      <Badge variant="outline-secondary">No definida</Badge>
+                    )}
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge variant="outline-info">{match.week}</Badge>
                   </TableCell>
                   <TableCell className="text-center">
-                    {format(match.matchDate as Date, 'dd / MMM / y', { locale: es }).toUpperCase()},
-                    {' '}
-                    {formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })}
+                    {match.matchDate ? (
+                      <>
+                        {format(match.matchDate as Date, 'dd / MMM / y', { locale: es }).toUpperCase()},
+                        {' '}
+                        {formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })}
+                      </>
+                    ) : (
+                      <Badge variant="outline-secondary">No definida</Badge>
+                    )}
                   </TableCell>
                   <TableCell>
                     {match.status === MATCH_STATUS.COMPLETED ? (

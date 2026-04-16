@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/tooltip';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import type { TeamType } from '../(actions)/fetchTeamsAction';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   teams: TeamType[];
@@ -65,7 +66,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                   <TableRow key={team.id}>
                     <TableCell className="font-bold text-center">{index + 1}</TableCell>
                     <TableCell>
-                      <Link href={`/admin/equipos/${team.id}`}>
+                      <Link href={ROUTES.ADMIN_TEAM(team.id)}>
                         {
                           !team.imageUrl ? (
                             <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
@@ -119,7 +120,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/equipos/${team.id}`}>
+                            <Link href={ROUTES.ADMIN_TEAM(team.id)}>
                               <Button variant="outline-info" size="icon">
                                 <InfoIcon />
                               </Button>
@@ -131,7 +132,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/equipos/editar/${team.id}`}>
+                            <Link href={ROUTES.ADMIN_TEAM_EDIT(team.id)}>
                               <Button variant="outline-warning" size="icon">
                                 <Pencil />
                               </Button>

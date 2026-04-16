@@ -70,6 +70,13 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
     };
   }
 
+  // Remove associated fields with the team.
+  await prisma.field.updateMany({
+    where: { id: teamId },
+    data: { teamId: null },
+  });
+
+  // Remove the team.
   const teamDeleted = await prisma.team.delete({
     where: { id: teamId },
   });
