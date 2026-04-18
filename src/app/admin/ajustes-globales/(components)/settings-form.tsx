@@ -37,36 +37,37 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
   const form = useForm<z.infer<typeof GlobalSettingsSchema>>({
     resolver: zodResolver(GlobalSettingsSchema),
     defaultValues: {
-      siteName: globalSettings?.siteName ?? undefined,
-      organizationName: globalSettings?.organizationName ?? undefined,
-      phone: globalSettings?.phone ?? undefined,
-      address: globalSettings?.address ?? undefined,
-      mapsUrl: globalSettings?.mapsUrl ?? undefined,
-      country: globalSettings?.country ?? undefined,
-      facebookUrl: globalSettings?.facebookUrl ?? undefined,
-      twitterXUrl: globalSettings?.twitterXUrl ?? undefined,
-      instagramUrl: globalSettings?.instagramUrl ?? undefined,
-      youtubeUrl: globalSettings?.youtubeUrl ?? undefined,
-      tiktokUrl: globalSettings?.tiktokUrl ?? undefined,
-      whatsApp: globalSettings?.whatsApp ?? undefined,
+      siteName: globalSettings?.siteName ?? '',
+      organizationName: globalSettings?.organizationName ?? '',
+      phone: globalSettings?.phone ?? '',
+      address: globalSettings?.address ?? '',
+      mapsUrl: globalSettings?.mapsUrl ?? '',
+      country: globalSettings?.country ?? '',
+      facebookUrl: globalSettings?.facebookUrl ?? '',
+      twitterXUrl: globalSettings?.twitterXUrl ?? '',
+      instagramUrl: globalSettings?.instagramUrl ?? '',
+      youtubeUrl: globalSettings?.youtubeUrl ?? '',
+      tiktokUrl: globalSettings?.tiktokUrl ?? '',
+      whatsApp: globalSettings?.whatsApp ?? '',
       maintenanceMode: globalSettings?.maintenanceMode ?? false,
-      maintenanceMessage: globalSettings?.maintenanceMessage ?? undefined,
-      primaryColor: globalSettings?.primaryColor ?? undefined,
-      secondaryColor: globalSettings?.secondaryColor ?? undefined,
-      accentColor: globalSettings?.accentColor ?? undefined,
-      googleAnalyticsId: globalSettings?.googleAnalyticsId ?? undefined,
-      googleTagManager: globalSettings?.googleTagManager ?? undefined,
-      metaPixelId: globalSettings?.metaPixelId ?? undefined,
-      defaultLanguage: globalSettings?.defaultLanguage ?? undefined,
-      timeZone: globalSettings?.timeZone ?? undefined,
-      contactEmail: globalSettings?.contactEmail ?? undefined,
-      fromEmail: globalSettings?.fromEmail ?? undefined,
-      replyToEmail: globalSettings?.replyToEmail ?? undefined,
+      maintenanceMessage: globalSettings?.maintenanceMessage ?? '',
+      primaryColor: globalSettings?.primaryColor ?? '',
+      secondaryColor: globalSettings?.secondaryColor ?? '',
+      accentColor: globalSettings?.accentColor ?? '',
+      googleAnalyticsId: globalSettings?.googleAnalyticsId ?? '',
+      googleTagManager: globalSettings?.googleTagManager ?? '',
+      metaPixelId: globalSettings?.metaPixelId ?? '',
+      defaultLanguage: globalSettings?.defaultLanguage ?? '',
+      timeZone: globalSettings?.timeZone ?? '',
+      contactEmail: globalSettings?.contactEmail ?? '',
+      fromEmail: globalSettings?.fromEmail ?? '',
+      replyToEmail: globalSettings?.replyToEmail ?? '',
     },
   });
 
   const onSubmit = async (data: z.infer<typeof GlobalSettingsSchema>) => {
     const formData = new FormData();
+
     formData.append('siteName', data.siteName as string);
     formData.append('organizationName', data.organizationName as string);
     formData.append('phone', data.phone as string);
@@ -75,6 +76,9 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
     formData.append('country', data.country as string);
     if (data.logoImage && data.logoImage instanceof File) {
       formData.append('logoImage', data.logoImage);
+    }
+    if (data.logoAdminImage && data.logoAdminImage instanceof File) {
+      formData.append('logoAdminImage', data.logoAdminImage);
     }
     if (data.faviconImage && data.faviconImage instanceof File) {
       formData.append('faviconImage', data.faviconImage);
@@ -374,6 +378,34 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
           </div>
           <div className="flex-1 flex items-center gap-5">
             <FormImage
+              imageUrl={globalSettings?.logoAdminUrl as string}
+              logoType="logo-admin"
+            />
+            <FormField
+              control={form.control}
+              name="logoAdminImage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Logo administrativo
+                    <span className='text-sm text-gray-600'>(opcional)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        field.onChange(file);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex-1 flex items-center gap-5">
+            <FormImage
               imageUrl={globalSettings?.faviconUrl as string}
               logoType="favicon"
             />
@@ -489,7 +521,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
           <div className="flex-1">
             <FormField
               control={form.control}
-              name="whatsApp"
+              name="tiktokUrl"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>

@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { type FC, Suspense } from 'react';
 import { Logo } from '../logo';
 import { NavigationMenu } from './navigation-menu';
 import { AuthSession } from './AuthSession';
@@ -7,14 +7,19 @@ import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
 import { navigation } from './navigation-menu/data';
 import styles from './styles.module.css';
 
-export const Header = () => {
+type Props = Readonly<{
+  siteName?: string | null;
+  siteLogo?: string | null;
+}>;
+
+export const Header: FC<Props> = ({ siteName = '', siteLogo = '' }) => {
   return (
     <header
       role="banner"
       aria-label="Cabecera principal"
       className={styles.header}
     >
-      <Logo />
+      <Logo siteName={siteName} siteLogo={siteLogo} />
       <NavigationMenu navigation={navigation} />
       <div className="flex items-center gap-4 lg:gap-2">
         <Suspense>

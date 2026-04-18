@@ -11,17 +11,24 @@ import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
 import { NavUser } from '@/components/nav-user';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import type { GlobalSettings } from '@/shared/interfaces';
 
-type Props = Readonly<{ children: ReactNode; }>;
+type Props = Readonly<{
+  children: ReactNode;
+  settings: GlobalSettings | null;
+}>;
 
-export const MainLayout: FC<Props> = async ({ children }) => {
+export const MainLayout: FC<Props> = async ({ children, settings }) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar
+        siteLogo={settings?.logoAdminUrl ?? null}
+        siteName={settings?.siteName ?? 'Nombre del sitio'}
+      />
       <SidebarInset>
         <header className="header">
           <div className="headerLeft">

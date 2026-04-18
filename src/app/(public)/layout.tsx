@@ -1,6 +1,7 @@
-import type { FC, ReactNode } from 'react';
+import { Suspense, type FC, type ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Container, Footer, Header } from './components';
+import { fetchPublicGlobalSettingsAction } from '../admin/ajustes-globales/(actions)/fetchPublicGlobalSettingsAction';
 import '@/app/globals.css';
 
 const DOMAIN = process.env.DOMAIN ?? 'http://localhost:3000';
@@ -47,12 +48,36 @@ type Props = Readonly<{ children: ReactNode; }>
 
 const PublicLayout: FC<Props> = ({ children }) => {
   return (
+    <Suspense>
+      <PublicLayoutContent>
+        {children}
+      </PublicLayoutContent>
+    </Suspense>
+  );
+};
+
+const PublicLayoutContent: FC<Props> = async ({ children }) => {
+  const { globalSettings } = await fetchPublicGlobalSettingsAction();
+
+  return (
     <Container>
-      <Header />
+      <Header
+        siteLogo={globalSettings?.logoUrl ?? null}
+        siteName={globalSettings?.siteName ?? null}
+      />
       <div className="flex-1 flex flex-col">
         {children}
       </div>
-      <Footer />
+      <Footer
+        siteName={globalSettings?.siteName ?? null}
+        socialMedia={[
+          { facebook: globalSettings?.facebookUrl ?? undefined },
+          { twitterX: globalSettings?.twitterXUrl ?? undefined },
+          { instagram: globalSettings?.instagramUrl ?? undefined },
+          { tikTok: globalSettings?.tiktokUrl ?? undefined },
+          { youtube: globalSettings?.youtubeUrl ?? undefined },
+        ]}
+      />
     </Container>
   );
 };

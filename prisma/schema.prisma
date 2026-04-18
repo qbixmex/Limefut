@@ -564,15 +564,19 @@ model GlobalSettings {
   id               Int     @id @default(1)
   // GENERAL
   siteName         String? @map("site_name") @db.VarChar(100)
-  logoUrl          String? @map("logo_url") @db.VarChar(255)
-  logoPublicId     String? @map("logo_public_id") @db.VarChar(255)
-  faviconUrl       String? @map("favicon_url") @db.VarChar(255)
-  favIconPublicId  String? @map("favicon_id") @db.VarChar(255)
   organizationName String? @map("organization_name") @db.VarChar(100)
   phone            String? @db.VarChar(150)
   address          String? @db.VarChar(255)
   mapsUrl          String? @map("maps_url") @db.VarChar(255)
   country          String? @default("Mexico") @db.VarChar(50)
+
+  // Logos
+  logoUrl           String? @map("logo_url") @db.VarChar(255)
+  logoPublicId      String? @map("logo_public_id") @db.VarChar(255)
+  logoAdminUrl      String? @map("logo_admin_url") @db.VarChar(255)
+  logoAdminPublicId String? @map("logo_admin_public_id") @db.VarChar(255)
+  faviconUrl        String? @map("favicon_url") @db.VarChar(255)
+  favIconPublicId   String? @map("favicon_id") @db.VarChar(255)
 
   // SOCIAL MEDIA
   facebookUrl  String? @map("facebook_url") @db.VarChar(255)
