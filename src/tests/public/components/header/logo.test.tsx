@@ -3,7 +3,12 @@ import { render, screen } from '@testing-library/react';
 
 describe('Test on <ComponentName /> component', () => {
   test('Should render correctly', () => {
-    render(<Logo />);
+    render(
+      <Logo
+        siteName="Site Name"
+        siteLogo="https://cloudinary.com/logo.png"
+      />,
+    );
 
     const image = screen.getByRole('img', { name: /logo/i });
 
@@ -11,7 +16,12 @@ describe('Test on <ComponentName /> component', () => {
   });
 
   test('Should link to homepage', () => {
-    render(<Logo />);
+    render(
+      <Logo
+        siteName="Site Name"
+        siteLogo="https://cloudinary.com/logo.png"
+      />,
+    );
 
     const link = screen.getByRole('link');
 

@@ -5,18 +5,16 @@ import { FaFacebookF, FaXTwitter } from 'react-icons/fa6';
 
 const data: Social[] = [
   {
-    id: '53d1237e-8535-42bf-a5ff-035c9950d206',
+    platform: 'facebook',
     url: 'https://www.facebook.com/michael-jackson',
     icon: FaFacebookF,
     css: 'inline',
-    active: true,
   },
   {
-    id: 'ae51ceea-c1a1-4fc4-a384-eb026854966f',
+    platform: 'twitterX',
     url: 'https://x.com/michael-jackson',
     icon: FaXTwitter,
     css: 'inline',
-    active: true,
   },
 ];
 
@@ -51,8 +49,8 @@ describe('Test on <SocialMedia /> component', () => {
     });
   });
 
-  test('Should show only active social media', async () => {
-    data[1].active = false; // Disable second social media
+  test('Should show only with valid urls social media', async () => {
+    data[1].url = '#'; // Disable second social media
     const component = await SocialMedia({ socialMedia: data });
     render(component);
 

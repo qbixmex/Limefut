@@ -22,9 +22,14 @@ export const GlobalSettingsSchema = z.object({
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo del logo deber ser menor a 2MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .optional(),
+  logoAdminImage: z
+    .instanceof(File, { message: 'La imagen debe ser un archivo' })
+    .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo del logo deber ser menor a 2MB')
+    .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
+    .optional(),
   faviconImage: z
     .instanceof(File, { message: 'La imagen favicon debe ser un archivo' })
-    .refine((file) => { return !file || file.size <= (1024 * 10); }, 'El tamaño máximo del favicon deber ser menor a 10kb')
+    .refine((file) => { return !file || file.size <= ((1024 * 1024) * 1); }, 'El tamaño máximo del favicon deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .optional(),
   organizationName: z.union([
@@ -171,11 +176,11 @@ export const GlobalSettingsSchema = z.object({
   fromEmail: z.union([
     z.literal(''),
     z.email('El correo del remitente es incorrecto'),
-  ]),
+  ]).optional(),
   replyToEmail: z.union([
     z.literal(''),
     z.email('El correo del destinatario es incorrecto'),
-  ]),
+  ]).optional(),
 });
 
 export const SeoSectionSchema = z.object({

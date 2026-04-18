@@ -6,7 +6,7 @@ import { SettingsForm } from './(components)/settings-form';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import type { Session } from '@/lib/auth-client';
-import { fetchGlobalSettingsAction } from './(actions)/fetchGlobalSettingsAction';
+import { fetchAdminGlobalSettingsAction } from './(actions)/fetchAdminGlobalSettingsAction';
 
 const GlobalSettings: FC = () => <GlobalSettingsContent />;
 
@@ -15,7 +15,7 @@ const GlobalSettingsContent = async () => {
     headers: await headers(),
   });
 
-  const { globalSettings } = await fetchGlobalSettingsAction(session?.user.roles ?? []);
+  const { globalSettings } = await fetchAdminGlobalSettingsAction(session?.user.roles ?? []);
 
   return (
     <div className="admin-page">

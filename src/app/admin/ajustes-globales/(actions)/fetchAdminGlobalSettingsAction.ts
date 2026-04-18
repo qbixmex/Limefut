@@ -10,7 +10,7 @@ type FetchVideoResponse = Promise<{
   globalSettings: GlobalSettings | null;
 }>;
 
-export const fetchGlobalSettingsAction = async (userRoles: string[] | null): FetchVideoResponse => {
+export const fetchAdminGlobalSettingsAction = async (userRoles: string[] | null): FetchVideoResponse => {
   'use cache';
 
   cacheLife('weeks');

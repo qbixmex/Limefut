@@ -1,0 +1,19 @@
+@reference "tailwindcss";
+
+#public-site-logo {
+  @apply w-full max-w-[150px];
+
+  .logo-default {
+    @apply flex gap-2 items-center;
+  }
+
+  .site-logo-icon {
+    @apply size-10 text-green-50;
+  }
+
+  .site-name-text {
+    font-size: 24px;
+    color: var(--color-green-50);
+    font-weight: 600;
+  }
+}

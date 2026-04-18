@@ -1,0 +1,21 @@
+@reference '../../app/globals.css';
+
+#admin-sidebar {
+  .site-logo {
+    @apply flex items-center justify-center;
+    @apply aspect-square size-8 rounded;
+    @apply bg-green-600 dark:bg-primary-foreground;
+
+    .site-logo-icon {
+      @apply text-green-50;
+    }
+
+    .site-logo-image {
+      @apply w-full max-w-[20px] h-auto;
+    }
+  }
+
+  .site-name {
+    @apply text-lg font-bold text-green-600;
+  }
+}

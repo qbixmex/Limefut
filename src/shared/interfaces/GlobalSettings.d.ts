@@ -2,15 +2,19 @@ export interface GlobalSettings {
   // GENERAL
   id: number;
   siteName?: string | null;
-  logoUrl: string | null;
-  logoPublicId: string | null;
-  faviconUrl: string | null;
-  favIconPublicId: string | null;
   organizationName: string | null;
   phone: string | null;
   address: string | null;
   mapsUrl: string | null;
   country: string | null;
+
+  // LOGOS
+  logoUrl: string | null;
+  logoPublicId: string | null;
+  logoAdminUrl: string | null;
+  logoAdminPublicId: string | null;
+  faviconUrl: string | null;
+  favIconPublicId: string | null;
 
   // SOCIAL MEDIA
   facebookUrl: string | null;

@@ -1,22 +1,41 @@
+import type { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import styles from './styles.module.css';
+import { PiSoccerBall } from 'react-icons/pi';
+import './logo.css';
 
-export const Logo = () => {
+type Props = Readonly<{
+  siteName: string | null;
+  siteLogo: string | null;
+}>;
+
+export const Logo: FC<Props> = ({ siteName, siteLogo }) => {
   return (
     <figure
-      className={styles.logo}
+      id="public-site-logo"
       data-testid="site-logo"
     >
       <Link href="/">
-        <Image
-          src="/limefut-logo.png"
-          width={150}
-          height={40}
-          alt="Limefut logo"
-          className="w-full max-w-[150px]"
-          loading="eager"
-        />
+        {
+          !siteLogo ? (
+            <div className="logo-default">
+              <PiSoccerBall
+                size={24}
+                className="site-logo-icon"
+              />
+              <span className="site-name-text">{siteName}</span>
+            </div>
+          ) : (
+            <Image
+              src={siteLogo}
+              width={150}
+              height={40}
+              alt={`${siteName} logo`}
+              className="w-full max-w-[150px]"
+              loading="eager"
+            />
+          )
+        }
       </Link>
     </figure>
   );

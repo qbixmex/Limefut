@@ -1,5 +1,0 @@
-@reference "tailwindcss";
-
-.logo {
-  @apply w-full max-w-[150px];
-}

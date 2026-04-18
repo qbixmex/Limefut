@@ -13,19 +13,23 @@ export const SocialMedia: FC<Props> = ({ socialMedia }) => {
       className="social-media"
       aria-label="Enlaces del redes sociales"
     >
-      {(socialMedia.length > 0) ? socialMedia.filter((item) => item.active).map((item) => (
-        <div key={item.id} className="social-link">
-          <a href={item.url} target="_blank">
-            <item.icon
-              className={cn(['social-icon', item.css])}
-              role="icon"
-              aria-label="Social media icon"
-            />
-          </a>
-        </div>
-      )) : (
-        <p role="alert">Aún no hay redes sociales disponibles.</p>
-      )}
+      {
+        (socialMedia.length > 0) ? socialMedia
+          .filter((item) => item.url !== '#')
+          .map((item) => (
+            <div key={item.platform} className="social-link">
+              <a href={item.url} target="_blank">
+                <item.icon
+                  className={cn(['social-icon', item.css])}
+                  role="icon"
+                  aria-label="Social media icon"
+                />
+              </a>
+            </div>
+          )) : (
+          <p role="alert">Aún no hay redes sociales disponibles.</p>
+        )
+      }
     </nav>
   );
 };

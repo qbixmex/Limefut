@@ -6,6 +6,7 @@ import { MainLayout } from './(components)/main-layout';
 import DashboardSkeleton from './(components)/dashboard-skeleton';
 import { auth } from '@/lib/auth';
 import './layout.styles.css';
+import { fetchAdminGlobalSettingsAction } from './ajustes-globales/(actions)/fetchAdminGlobalSettingsAction';
 
 export const metadata: Metadata = {
   title: 'Limefut - Admin',
@@ -34,8 +35,12 @@ const AdminLayoutContent: FC<Props> = async ({ children }) => {
     redirect('/login');
   }
 
+  const { globalSettings } = await fetchAdminGlobalSettingsAction(
+    session.user.roles ?? [],
+  );
+
   return (
-    <MainLayout>
+    <MainLayout settings={globalSettings}>
       {children}
     </MainLayout>
   );
