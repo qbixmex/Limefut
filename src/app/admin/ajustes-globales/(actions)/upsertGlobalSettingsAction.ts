@@ -34,7 +34,10 @@ export const upsertGlobalSettingsAction = async (
     country: formData.get('country') ?? undefined,
     defaultLanguage: formData.get('defaultLanguage') ?? undefined,
     timeZone: formData.get('timeZone') ?? undefined,
+
+    // Logos
     logoImage: formData.get('logoImage') as File ?? undefined,
+    logoAdminImage: formData.get('logoAdminImage') as File ?? undefined,
     faviconImage: formData.get('faviconImage') as File ?? undefined,
 
     // Social Media
@@ -75,7 +78,7 @@ export const upsertGlobalSettingsAction = async (
     };
   }
 
-  const { logoImage, faviconImage, ...settingsToSave } = dataVerified.data;
+  const { logoImage, logoAdminImage, faviconImage, ...settingsToSave } = dataVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -91,19 +94,11 @@ export const upsertGlobalSettingsAction = async (
       });
 
       if (logoImage instanceof File) {
-        // Delete previous image if exists
-        if (globalSettings.logoPublicId) {
-          const cloudinaryResponse = await deleteImage(globalSettings.logoPublicId);
-          if (!cloudinaryResponse.ok) {
-            throw new Error('¡ Error al intentar eliminar el logo de cloudinary !');
-          }
-        }
-
-        const logoUploaded = await uploadImage(logoImage, 'general-settings');
-
-        if (!logoUploaded) {
-          throw new Error('Error subiendo el logo a cloudinary');
-        }
+        const logoUploaded = await handleUploadImage({
+          publicId: globalSettings.logoPublicId,
+          imageFile: logoImage,
+          folder: 'general-settings',
+        });
 
         await transaction.globalSettings.update({
           where: { id: 1 },
@@ -118,20 +113,32 @@ export const upsertGlobalSettingsAction = async (
         globalSettings.logoPublicId = logoUploaded.publicId;
       }
 
+      if (logoAdminImage instanceof File) {
+        const logoAdminUploaded = await handleUploadImage({
+          publicId: globalSettings.logoAdminPublicId,
+          imageFile: logoAdminImage,
+          folder: 'general-settings',
+        });
+
+        await transaction.globalSettings.update({
+          where: { id: 1 },
+          data: {
+            logoAdminUrl: logoAdminUploaded.secureUrl,
+            logoAdminPublicId: logoAdminUploaded.publicId,
+          },
+        });
+
+        // Update event object to return.
+        globalSettings.logoAdminUrl = logoAdminUploaded.secureUrl;
+        globalSettings.logoAdminPublicId = logoAdminUploaded.publicId;
+      }
+
       if (faviconImage instanceof File) {
-        // Delete previous image if exists
-        if (globalSettings.favIconPublicId) {
-          const cloudinaryResponse = await deleteImage(globalSettings.favIconPublicId);
-          if (!cloudinaryResponse.ok) {
-            throw new Error('¡ Error al intentar eliminar el favicon de cloudinary !');
-          }
-        }
-
-        const faviconUploaded = await uploadImage(faviconImage, 'general-settings');
-
-        if (!faviconUploaded) {
-          throw new Error('Error subiendo el favicon a cloudinary');
-        }
+        const faviconUploaded = await handleUploadImage({
+          publicId: globalSettings.logoAdminPublicId,
+          imageFile: faviconImage,
+          folder: 'general-settings',
+        });
 
         await transaction.globalSettings.update({
           where: { id: 1 },
@@ -155,6 +162,7 @@ export const upsertGlobalSettingsAction = async (
 
     // Refresh Cache
     updateTag('admin-global-settings');
+    updateTag('public-global-settings');
 
     return prismaTransaction;
   } catch (error) {
@@ -185,4 +193,30 @@ export const upsertGlobalSettingsAction = async (
       globalSettings: null,
     };
   }
+};
+
+const handleUploadImage = async ({
+  publicId,
+  imageFile,
+  folder,
+}: {
+  publicId: string | null;
+  imageFile: File;
+  folder: string;
+}) => {
+  // Delete previous image if exists
+  if (publicId) {
+    const cloudinaryResponse = await deleteImage(publicId);
+    if (!cloudinaryResponse.ok) {
+      throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+    }
+  }
+
+  const logoUploaded = await uploadImage(imageFile, folder);
+
+  if (!logoUploaded) {
+    throw new Error('Error subiendo el logo a cloudinary');
+  }
+
+  return logoUploaded;
 };

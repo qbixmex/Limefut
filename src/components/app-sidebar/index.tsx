@@ -16,30 +16,44 @@ import {
 import { navMain, navLinks } from './data';
 import { NavMain } from '@/components/nav-main';
 import { NavLinks } from '@/components/nav-links';
+import { PiSoccerBall } from 'react-icons/pi';
+import './app-sidebar.css';
 
-type Props = Readonly<ComponentProps<typeof Sidebar>>;
+type Props = Readonly<{
+  siteName: string;
+  siteLogo: string | null;
+} & ComponentProps<typeof Sidebar>>;
 
-export const AppSidebar: FC<Props> = ({ ...props }) => {
+export const AppSidebar: FC<Props> = ({ siteName, siteLogo, ...props }) => {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar id="admin-sidebar" collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/admin/dashboard">
-                <div className="bg-green-600 dark:bg-primary-foreground flex aspect-square size-8 items-center justify-center rounded">
-                  <Image
-                    src="/limefut-logo-white.webp"
-                    width={72}
-                    height={80}
-                    alt="Limefut Logo"
-                    className="w-full max-w-[20px] h-auto"
-                    loading="eager"
-                  />
-                </div>
+                <figure className="site-logo">
+                  {
+                    !siteLogo ? (
+                      <PiSoccerBall
+                        size={24}
+                        className="site-logo-icon"
+                      />
+                    ) : (
+                      <Image
+                        src={siteLogo}
+                        width={72}
+                        height={80}
+                        alt={`${siteName} logo`}
+                        className="site-logo-image"
+                        loading="eager"
+                      />
+                    )
+                  }
+                </figure>
                 <div className="leading-none">
-                  <span className="text-lg font-bold text-green-800 dark:text-primary/80">
-                    Limefut
+                  <span className="site-name">
+                    {siteName}
                   </span>
                 </div>
               </Link>

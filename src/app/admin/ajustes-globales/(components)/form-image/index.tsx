@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 
 type Props = Readonly<{
   imageUrl: string;
-  logoType: 'logo' | 'favicon';
+  logoType: 'logo' | 'logo-admin' | 'favicon';
   className?: string;
 }>;
 
@@ -24,6 +24,7 @@ export const FormImage: FC<Props> = ({ imageUrl, logoType, className }) => {
     startTransition(async () => {
       const { ok, message } = await deleteLogoImageAction({
         deleteLogoImage: logoType === 'logo',
+        deleteLogoAdminImage: logoType === 'logo-admin',
         deleteFavIcon: logoType === 'favicon',
       });
 
