@@ -21,11 +21,13 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
   const matchesByWeek = getUniqueMatches(matches);
   const matchesSortedWeeks = getMatchesSortedByWeeks(matchesByWeek);
 
+  if (matches.length === 0) return null;
+
   return (
     <>
       {matchesSortedWeeks.map((week) => (
         <div key={week} className="mb-8">
-          <h3 className="text-lg font-semibold mb-4">Jornada {week}</h3>
+          <h2 className="text-lg font-semibold mb-4">Jornada {week}</h2>
 
           <Table>
             <TableHeader>
@@ -50,38 +52,64 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                   <TableCell className="hidden lg:table-cell">
                     {match.matchDate ? (
                       <div className="text-gray-600 dark:text-gray-200">
-                        <span>
+                        <span
+                          role="date"
+                          aria-label="Día del partido"
+                        >
                           {`${formatInTimeZone(match.matchDate, TIME_ZONE, 'dd', { locale: es })}`}
                         </span>
                         <span>{' de '}</span>
-                        <span className="capitalize">
+                        <span
+                          className="capitalize"
+                          role="date"
+                          aria-label="Mes del partido"
+                        >
                           {formatInTimeZone(match.matchDate, TIME_ZONE, 'LLLL', { locale: es })}
                         </span>
                         <span>{' del '}</span>
-                        <span>
+                        <span
+                          role="date"
+                          aria-label="Año del partido"
+                        >
                           &nbsp;{formatInTimeZone(match.matchDate, TIME_ZONE, 'y', { locale: es })}
                         </span>
                       </div>
                     ) : (
-                      <p className="text-gray-600">No definida</p>
+                      <span
+                        role="date"
+                        aria-label="Fecha del partido no definida"
+                        className="text-gray-600"
+                      >No definida</span>
                     )}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     {match.matchDate ? (
                       <div className="text-gray-600 dark:text-gray-200">
-                        <p>
+                        <span role="time" aria-label="Hora del partido">
                           {formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm aaa', { locale: es })}
-                        </p>
+                        </span>
                       </div>
                     ) : (
-                      <p className="text-gray-600">No definida</p>
+                      <span
+                      className="text-gray-600"
+                      role="time"
+                      aria-label="Hora del partido no definida"
+                      >No definida</span>
                     )}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     {match.place ? (
-                      <p className="text-balance">{match.place}</p>
+                      <p
+                        className="text-balance"
+                        role="location"
+                        aria-label="Sede del partido"
+                      >{match.place}</p>
                     ) : (
-                      <span className="text-gray-600">No definida</span>
+                      <span
+                        className="text-gray-600"
+                        role="location"
+                        aria-label="Sede del partido no definida"
+                      >No definida</span>
                     )}
                   </TableCell>
                   <TableCell>
@@ -91,7 +119,11 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                       target="_blank"
                     >
                       <div className="grid grid-cols-[1fr_120px_1fr]">
-                        <span className="text-right">
+                        <span
+                          className="text-right"
+                          role="team-name"
+                          aria-label="Nombre equipo local"
+                        >
                           {
                             match.local.name.toLowerCase().includes('descanso')
                               ? <span className="text-gray-400 font-semibold italic">{match.local.name}</span>
@@ -100,24 +132,43 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                         </span>
                         <span className="text-center flex justify-center items-center gap-2">
                           {match.penaltyShootout && (
-                            <span className="text-gray-500 text-sm font-[400]">
+                            <span
+                              className="text-gray-500 text-sm font-[400]"
+                              role="score"
+                              aria-label={'Penales equipo local'}
+                            >
                               ({match.penaltyShootout!.localGoals})
                             </span>
                           )}
-                          <span className="text-xl text-sky-500 font-medium">
+                          <span
+                            className="text-xl text-sky-500 font-medium"
+                            role="score"
+                            aria-label={'Goles equipo local'}
+                          >
                             {match.localScore}
                           </span>
                           <span>-</span>
-                          <span className="text-xl text-sky-500 font-medium">
+                          <span
+                            className="text-xl text-sky-500 font-medium"
+                            role="score"
+                            aria-label={'Goles equipo visitante'}
+                          >
                             {match.visitorScore}
                           </span>
                           {match.penaltyShootout && (
-                            <span className="text-gray-500 text-sm font-[400]">
+                            <span
+                              className="text-gray-500 text-sm font-[400]"
+                              role="score"
+                              aria-label={'Penales equipo visitante'}
+                            >
                               ({match.penaltyShootout!.visitorGoals})
                             </span>
                           )}
                         </span>
-                        <span>
+                        <span
+                          role="team-name"
+                          aria-label="Nombre equipo visitante"
+                        >
                           {
                             match.visitor.name.toLowerCase().includes('descanso')
                               ? (<span className="text-gray-400 font-semibold italic">{match.visitor.name}</span>)
@@ -128,7 +179,11 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                     </Link>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    <Badge variant={getMatchStatus(match.status as MATCH_STATUS_TYPE).variant}>
+                    <Badge
+                      variant={getMatchStatus(match.status as MATCH_STATUS_TYPE).variant}
+                      role="status"
+                      aria-label={`Estado del partido: ${getMatchStatus(match.status as MATCH_STATUS_TYPE).label}`}
+                    >
                       {getMatchStatus(match.status as MATCH_STATUS_TYPE).label}
                     </Badge>
                   </TableCell>
@@ -139,6 +194,8 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                           href={`/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
                           target="_blank"
                           className={buttonVariants({ variant: 'outline-info', size: 'icon-sm' })}
+                          role="button"
+                          aria-label={`Detalles del partido entre ${match.local.name} y ${match.visitor.name}`}
                         >
                           <Info />
                         </Link>
