@@ -8,25 +8,25 @@ type Props = Readonly<{
     torneo?: string;
     categoria?: string;
     formato?: string;
+    roles?: 'complete' | 'team' | 'field';
+    team?: string;
   }>;
 }>;
 
 export const ResultsPage: FC<Props> = ({ searchParams }) => {
   return (
-    <>
-      <div className="wrapper">
-        <Heading level="h1" className="text-emerald-600">
-          Rol de Juegos y Resultados
-        </Heading>
-        <Suspense fallback={<TournamentsSelectorSkeleton />}>
-          <TournamentsSelector />
-        </Suspense>
-        <Suspense>
-          <ErrorHandler />
-          <ResultsContent searchParamsPromise={searchParams} />
-        </Suspense>
-      </div>
-    </>
+    <div className="wrapper">
+      <Heading level="h1" className="text-emerald-600">
+        Rol de Juegos y Resultados
+      </Heading>
+      <Suspense fallback={<TournamentsSelectorSkeleton />}>
+        <TournamentsSelector />
+      </Suspense>
+      <Suspense>
+        <ErrorHandler />
+        <ResultsContent searchParamsPromise={searchParams} />
+      </Suspense>
+    </div>
   );
 };
 

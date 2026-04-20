@@ -41,71 +41,84 @@ export const fetchResultsAction = async (
   tournamentPermalink: string,
   category: string,
   format: string,
+  roles?: string,
+  teamPermalink?: string,
 ): ResponseAction => {
   'use cache';
 
   cacheLife('days');
-  cacheTag('public-results-roles');
-
-  const tournament = await prisma.tournament.findFirst({
-    where: {
-      permalink: tournamentPermalink,
-      category,
-      format,
-    },
-    select: { id: true },
-  });
-
-  if (!tournament) {
-    return {
-      ok: false,
-      message: '! No se encontró el torneo ❌ ¡',
-      matches: [],
-    };
-  }
+  cacheTag(`public-results-roles-${teamPermalink ?? 'all'}`);
 
   try {
-    const matches = await prisma.match.findMany({
+    const tournament = await prisma.tournament.findFirst({
       where: {
-        tournamentId: tournament.id,
+        permalink: tournamentPermalink,
+        category,
+        format,
       },
-      orderBy: { week: 'asc' },
-      select: {
-        id: true,
-        localScore: true,
-        visitorScore: true,
-        matchDate: true,
-        week: true,
-        status: true,
-        place: true,
-        tournament: {
+      include: {
+        matches: {
+          where: roles === 'team' && teamPermalink
+            ? {
+                OR: [
+                  { local: { permalink: teamPermalink } },
+                  { visitor: { permalink: teamPermalink } },
+                ],
+              }
+            : undefined,
+          orderBy: { week: 'asc' },
           select: {
-            name: true,
-            permalink: true,
-            category: true,
-            format: true,
-          },
-        },
-        local: {
-          select: {
-            name: true,
-            permalink: true,
-          },
-        },
-        visitor: {
-          select: {
-            name: true,
-            permalink: true,
-          },
-        },
-        penaltyShootout: {
-          select: {
-            localGoals: true,
-            visitorGoals: true,
+            id: true,
+            localScore: true,
+            visitorScore: true,
+            matchDate: true,
+            week: true,
+            status: true,
+            place: true,
+            tournament: {
+              select: {
+                name: true,
+                permalink: true,
+                category: true,
+                format: true,
+              },
+            },
+            local: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+            visitor: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
+            penaltyShootout: {
+              select: {
+                localGoals: true,
+                visitorGoals: true,
+              },
+            },
           },
         },
       },
     });
+
+    if (!tournament) {
+      return {
+        ok: false,
+        message: '! No se encontró el torneo ❌ ¡',
+        matches: [],
+      };
+    }
+
+    const matches = tournament.matches.map((match) => ({
+      ...match,
+      tournament: match.tournament,
+    }));
 
     return {
       ok: true,

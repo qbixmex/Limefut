@@ -1,0 +1,16 @@
+@reference '../../../../globals.css';
+
+.wrapper {
+  margin-bottom: calc(var(--spacing) * 10);
+}
+
+.heading {
+  font-size: var(--text-2xl);
+  margin-bottom: calc(var(--spacing) * 5);
+  font-weight: 600;
+  color: var(--color-sky-600);
+}
+
+:global(.dark) .heading {
+  color: var(--color-blue-500);
+}
