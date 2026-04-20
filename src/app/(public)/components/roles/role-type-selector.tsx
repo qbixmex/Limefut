@@ -10,7 +10,7 @@ export const RoleTypeSelector = () => {
 
   return (
     <nav
-      className="flex gap-2"
+      className="flex gap-2 mb-6"
       role="navigation"
       aria-label="Selector de rol de juego"
     >
@@ -34,7 +34,7 @@ export const RoleTypeSelector = () => {
         Rol por equipo
       </Button>
 
-      <Button
+      {/* <Button
         variant="outline-primary"
         onClick={() => handleRoleSelection('field')}
         role="button"
@@ -42,7 +42,7 @@ export const RoleTypeSelector = () => {
         className={cn({ 'selected-option': rolesState.field })}
       >
         Rol por cancha
-      </Button>
+      </Button> */}
     </nav>
   );
 };

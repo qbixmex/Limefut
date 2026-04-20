@@ -1,0 +1,32 @@
+@reference "../../globals.css";
+
+.button {
+  @apply px-6 py-3;
+  @apply rounded-lg;
+  @apply text-base font-medium;
+  @apply cursor-pointer transition-all duration-200;
+  @apply border-none;
+}
+
+.button:hover {
+  @apply -translate-y-0.5;
+}
+
+.button:active {
+  @apply translate-y-0;
+}
+
+.primary {
+  @apply text-white;
+  @apply bg-blue-600 hover:bg-blue-700;
+}
+
+.secondary {
+  @apply text-gray-800;
+  @apply bg-gray-100 hover:bg-gray-200;
+}
+
+.disabled {
+  @apply opacity-50;
+  @apply cursor-not-allowed translate-y-0;
+}

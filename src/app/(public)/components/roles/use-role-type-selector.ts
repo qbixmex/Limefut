@@ -23,6 +23,10 @@ export const useRoleTypeSelector = () => {
     const params = new URLSearchParams(searchParams.toString());
     const currentRole = params.get('roles');
 
+    if (params.has('team')) {
+      params.delete('team');
+    }
+
     switch (type) {
       case 'complete':
         if (currentRole === type) params.delete('roles');
