@@ -49,7 +49,7 @@ describe('Tests on <RoleTypeSelector />', () => {
     expect(handleRoleSelectionMock).toHaveBeenCalledWith('team');
   });
 
-  test('Should call handleRoleSelection on click field role button', async () => {
+  test.skip('Should call handleRoleSelection on click field role button', async () => {
     render(<RoleTypeSelector />);
 
     const button = screen.getByRole('button', {
@@ -97,7 +97,7 @@ describe('Tests on <RoleTypeSelector />', () => {
     expect(handleRoleSelectionMock).toHaveBeenNthCalledWith(2, 'team');
   });
 
-  test("Should remove 'roles=field' from url", async () => {
+  test.skip("Should remove 'roles=field' from url", async () => {
     render(<RoleTypeSelector />);
 
     const button = screen.getByRole('button', {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity, type FC } from 'react';
+import { type FC } from 'react';
 import {
   Select,
   SelectContent,
