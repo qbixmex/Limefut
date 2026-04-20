@@ -5,18 +5,18 @@ import { cacheLife, cacheTag } from 'next/cache';
 
 export type MatchType = {
   id: string;
-  tournament: {
-    name: string;
-    permalink: string;
-    category: string | null;
-    format: string | null;
-  };
   localScore: number | null;
   visitorScore: number | null;
   matchDate: Date | null;
   week: number | null;
   status: string;
   place: string | null;
+  tournament: {
+    name: string;
+    permalink: string;
+    category: string | null;
+    format: string | null;
+  };
   local: {
     name: string;
     permalink: string;
