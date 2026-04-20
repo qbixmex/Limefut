@@ -1,0 +1,5 @@
+@reference '../../../globals.css';
+
+.selected-option {
+  @apply border-blue-500 bg-blue-600 text-blue-50!;
+}
