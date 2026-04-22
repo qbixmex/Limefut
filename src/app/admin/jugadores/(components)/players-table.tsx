@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Pencil, InfoIcon } from 'lucide-react';
+import { InfoIcon } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { headers } from 'next/headers';
 import { DeletePlayers } from '@/shared/components/delete-players';
+import { EditPlayer } from './edit-player';
 
 type Props = Readonly<{
   teamId: string;
@@ -128,18 +129,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                             detalles
                           </TooltipContent>
                         </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/jugadores/editar/${player.id}`}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <EditPlayer playerId={player.id} />
                         <DeletePlayer
                           playerId={player.id}
                           roles={session?.user.roles as string[]}
