@@ -16,17 +16,24 @@ type Props = Readonly<{
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{
+    torneo?: string;
+  }>;
 }>;
 
-const EditPlayerPage: FC<Props> = ({ params }) => {
+const EditPlayerPage: FC<Props> = ({ params, searchParams }) => {
   return (
     <Suspense>
-      <EditPlayerContent params={params} />
+      <EditPlayerContent
+        params={params}
+        searchParams={searchParams}
+      />
     </Suspense>
   );
 };
 
-export const EditPlayerContent: FC<Props> = async ({ params }) => {
+export const EditPlayerContent: FC<Props> = async ({ params, searchParams }) => {
+  const tournamentId = (await searchParams).torneo;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -37,7 +44,7 @@ export const EditPlayerContent: FC<Props> = async ({ params }) => {
     redirect(`/admin/jugadores?error=${encodeURIComponent(responsePlayer.message)}`);
   }
 
-  const responseTeams = await fetchTeamsForPlayer();
+  const responseTeams = await fetchTeamsForPlayer(tournamentId ?? '');
 
   if (!responseTeams.ok) {
     redirect(`/admin/jugadores?error=${encodeURIComponent(responseTeams.message)}`);

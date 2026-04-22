@@ -115,7 +115,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                       {
                         match.matchDate
                           ? format(match.matchDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                          : 'No Proporcionado'
+                          : <span className="text-gray-500 italic">No Proporcionada</span>
                       }
                     </TableCell>
                   </TableRow>
@@ -123,7 +123,9 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                     <TableHead className="font-semibold">Hora</TableHead>
                     <TableCell>
                       {
-                        formatInTimeZone(match.matchDate as Date as Date, TIME_ZONE, 'h:mm a', { locale: es })
+                        match.matchDate
+                          ? formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm a', { locale: es })
+                          : <span className="text-gray-500 italic">No proporcionada</span>
                       }
                     </TableCell>
                   </TableRow>

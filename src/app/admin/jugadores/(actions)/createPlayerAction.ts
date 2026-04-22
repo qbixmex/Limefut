@@ -26,7 +26,7 @@ export const createPlayerAction = async (
 
   const rawData = {
     name: formData.get('name') ?? '',
-    email: formData.get('email') ?? '',
+    email: formData.get('email') ?? undefined,
     phone: formData.get('phone') as string ?? undefined,
     nationality: formData.get('nationality') ?? undefined,
     birthday: new Date(formData.get('birthday') as string) ?? undefined,
@@ -40,6 +40,7 @@ export const createPlayerAction = async (
   const playerVerified = createPlayerSchema.safeParse(rawData);
 
   if (!playerVerified.success) {
+    console.log('ERROR:', playerVerified.error.message);
     return {
       ok: false,
       message: playerVerified.error.message,

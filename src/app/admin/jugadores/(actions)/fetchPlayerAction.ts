@@ -9,7 +9,9 @@ type TeamType = Pick<Team, 'id' | 'name' | 'permalink'>;
 type FetchPlayerResponse = Promise<{
   ok: boolean;
   message: string;
-  player: Player & { team: TeamType | null } | null;
+  player: Player & {
+    team: TeamType | null,
+  } | null;
 }>;
 
 export const fetchPlayerAction = async (
@@ -41,7 +43,6 @@ export const fetchPlayerAction = async (
           },
         },
       },
-
     });
 
     if (!player) {

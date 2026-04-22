@@ -186,15 +186,21 @@ export const createPenaltyShootoutAction = async (
         updatedShootout.winnerTeamId !== null &&
         updatedShootout.status === 'completed'
       ) {
-        await transaction.standings.update({
+        await transaction.standings.upsert({
           where: { teamId: updatedShootout.winnerTeamId },
-          data: {
+          update: {
             additionalPoints: {
               increment: 1,
             },
             totalPoints: {
               increment: 1,
             },
+          },
+          create: {
+            teamId: updatedShootout.winnerTeamId,
+            tournamentId: match.tournamentId,
+            additionalPoints: 1,
+            totalPoints: 1,
           },
         });
       }

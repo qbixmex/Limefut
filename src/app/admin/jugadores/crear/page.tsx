@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import { Suspense } from 'react';
 import {
   Card,
@@ -12,15 +13,22 @@ import { redirect } from 'next/navigation';
 import { fetchTeamsForPlayer } from '../(actions)';
 import { headers } from 'next/headers';
 
-const CreatePlayerPage = () => {
+type Props = Readonly<{
+  searchParams: Promise<{
+    torneo?: string;
+  }>;
+}>;
+
+const CreatePlayerPage: FC<Props> = ({ searchParams }) => {
   return (
     <Suspense>
-      <CreatePlayerContent />
+      <CreatePlayerContent searchParams={searchParams} />
     </Suspense>
   );
 };
 
-const CreatePlayerContent = async () => {
+const CreatePlayerContent: FC<Props> = async ({ searchParams }) => {
+  const tournamentId = (await searchParams).torneo;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -30,7 +38,7 @@ const CreatePlayerContent = async () => {
     redirect(`/admin/jugadores?error=${encodeURIComponent(message)}`);
   }
 
-  const responseTeams = await fetchTeamsForPlayer();
+  const responseTeams = await fetchTeamsForPlayer(tournamentId ?? '');
 
   if (!responseTeams.ok) {
     redirect(`/admin/jugadores?error=${encodeURIComponent(responseTeams.message)}`);
