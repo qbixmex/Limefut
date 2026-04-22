@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, type FC } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
 import { createPlayerSchema, editPlayerSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
-import type { Player, Team } from '@/shared/interfaces';
+import type { Player } from '@/shared/interfaces';
 import { createPlayerAction, updatePlayerAction } from '../(actions)';
 import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { format } from 'date-fns';
@@ -39,8 +39,12 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import type z from 'zod';
+import { ROUTES } from '@/shared/constants/routes';
 
-type TeamType = Pick<Team, 'id' | 'name'>;
+type TeamType = {
+  id: string;
+  name: string;
+};
 
 type Props = Readonly<{
   session: Session;
@@ -53,16 +57,17 @@ type Props = Readonly<{
 export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
   const route = useRouter();
   const formSchema = !player ? createPlayerSchema : editPlayerSchema;
+  const searchParams = useSearchParams();
   const [teamsOpen, setTeamOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: player?.name ?? '',
-      email: player?.email ?? '',
-      phone: player?.phone ?? '',
+      email: player?.email ?? undefined,
+      phone: player?.phone ?? undefined,
       birthday: player?.birthday ?? new Date(2000, 0, 1),
-      nationality: player?.nationality ?? '',
+      nationality: player?.nationality ?? undefined,
       active: player?.active ?? false,
       teamId: player?.team?.id ?? '',
     },
@@ -73,13 +78,19 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
     name: 'birthday',
   });
 
+  const handleCancel = () => {
+    const params = new URLSearchParams(searchParams);
+    route.push(`${ROUTES.ADMIN_PLAYERS}?${params}`);
+  };
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
+    const params = new URLSearchParams(searchParams);
 
     formData.append('name', data.name as string);
-    formData.append('email', data.email as string);
-    formData.append('phone', data.phone as string);
-    formData.append('nationality', data.nationality as string);
+    if (data.email) formData.append('email', data.email as string);
+    if (data.phone) formData.append('phone', data.phone as string);
+    if (data.nationality) formData.append('nationality', data.nationality as string);
     formData.append('birthday', (data.birthday as Date).toISOString());
 
     if (data.image && typeof data.image === 'object') {
@@ -91,7 +102,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
 
     // Create player
     if (!player) {
-      const { ok, message, player } = await createPlayerAction(
+      const { ok, message } = await createPlayerAction(
         formData,
         session?.user.roles ?? null,
       );
@@ -104,7 +115,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
       if (ok) {
         toast.success(message);
         form.reset();
-        route.replace(`/admin/jugadores/perfil/${player?.id}`);
+        route.push(`${ROUTES.ADMIN_PLAYERS}?${params}`);
         return;
       }
       return;
@@ -126,7 +137,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
 
       if (ok) {
         toast.success(message);
-        route.replace(`/admin/jugadores/perfil/${player.id}`);
+        route.push(`${ROUTES.ADMIN_PLAYERS}?${params}`);
       }
     }
   };
@@ -407,7 +418,7 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
             type="button"
             variant="outline-secondary"
             size="lg"
-            onClick={() => route.back()}
+            onClick={handleCancel}
           >
             cancelar
           </Button>

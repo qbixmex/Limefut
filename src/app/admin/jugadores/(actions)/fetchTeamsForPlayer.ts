@@ -12,7 +12,7 @@ export type ResponseFetchTeams = Promise<{
   }[] | null;
 }>;
 
-export const fetchTeamsForPlayer = async (): ResponseFetchTeams => {
+export const fetchTeamsForPlayer = async (tournamentId: string): ResponseFetchTeams => {
   'use cache';
 
   cacheLife('days');
@@ -21,7 +21,7 @@ export const fetchTeamsForPlayer = async (): ResponseFetchTeams => {
   try {
     const teams = await prisma.team.findMany({
       orderBy: { name: 'asc' },
-      where: { active: true },
+      where: { tournamentId },
       select: {
         id: true,
         name: true,
