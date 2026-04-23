@@ -32,10 +32,13 @@ export const createTeamSchema = z.object({
       (value) => /^[a-zA-Z0-9_-]+$/.test(value),
       { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
     ),
-  headquarters: z.string()
-    .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La sede debe ser menor a 200 caracteres !' })
-    .optional(),
+  headquarters: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
+      .max(200, { message: '¡ La sede debe ser menor a 200 caracteres !' }),
+    z.null(),
+  ]).optional(),
   image: z
     .instanceof(File, { message: 'La imagen debe ser un archivo' })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
@@ -71,18 +74,27 @@ export const createTeamSchema = z.object({
     z.literal(''),
     z.null(),
   ]).optional(),
-  country: z.string()
-    .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' })
-    .optional(),
-  state: z.string()
-    .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' })
-    .optional(),
-  city: z.string()
-    .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' })
-    .optional(),
+  country: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
+      .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),
+    z.null(),
+  ]).optional(),
+  state: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
+      .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' }),
+    z.null(),
+  ]).optional(),
+  city: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
+      .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' }),
+    z.null(),
+  ]).optional(),
   coachId: z.union([
     z.uuid('El id del entrenador debe ser un UUID válido'),
     z.literal(''),
