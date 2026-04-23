@@ -44,6 +44,7 @@ import { type TournamentType, createTeamAction, updateTeamAction } from '../(act
 import type { Session } from '@/lib/auth-client';
 import { cn, slugify } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
+import { addTeamToStandingsAction } from '../(actions)/addTeamToStandingsAction';
 
 type FIELD_TYPE = { id: string; name: string; };
 
@@ -59,7 +60,13 @@ type Props = Readonly<{
   };
 }>;
 
-export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = [], team }) => {
+export const TeamForm: FC<Props> = ({
+  session,
+  tournaments,
+  coaches,
+  fields = [],
+  team,
+}) => {
   const route = useRouter();
   const params = useSearchParams();
   const formSchema = !team ? createTeamSchema : editTeamSchema;
@@ -83,17 +90,17 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
     defaultValues: {
       name: team?.name ?? '',
       permalink: team?.permalink ?? '',
-      headquarters: team?.headquarters ?? undefined,
+      headquarters: team?.headquarters ?? '',
       category: team?.category ?? '',
       format: team?.format ?? '',
-      gender: team?.gender ?? undefined,
+      gender: team?.gender ?? '',
       tournamentId,
-      country: team?.country ?? undefined,
-      state: team?.state ?? undefined,
-      city: team?.city ?? undefined,
-      coachId: team?.coach?.id ?? undefined,
+      country: team?.country ?? '',
+      state: team?.state ?? '',
+      city: team?.city ?? '',
+      coachId: team?.coach?.id ?? '',
       emails: team?.emails ?? [],
-      address: team?.address ?? undefined,
+      address: team?.address ?? '',
       fieldsIds: (team?.fields && team.fields.length > 0)
         ? team?.fields.map((t) => t.id)
         : [],
@@ -118,7 +125,7 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
-    formData.append('headquarters', data.headquarters as string);
+    if (data.headquarters) formData.append('headquarters', data.headquarters as string);
     formData.append('category', data.category as string);
     formData.append('format', data.format as string);
     formData.append('gender', data.gender as string);
@@ -127,15 +134,15 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
       formData.append('tournamentId', data.tournamentId.trim());
     }
 
-    formData.append('country', data.country as string);
-    formData.append('state', data.state as string);
-    formData.append('city', data.city as string);
+    if (data.country) formData.append('country', data.country as string);
+    if (data.state) formData.append('state', data.state as string);
+    if (data.city) formData.append('city', data.city as string);
 
     if (data.coachId) {
       formData.append('coachId', data.coachId.trim());
     }
 
-    formData.append('emails', JSON.stringify(data.emails as string[]));
+    if (data.emails) formData.append('emails', JSON.stringify(data.emails as string[]));
 
     if (data.address) {
       formData.append('address', data.address.trim());
@@ -163,10 +170,22 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
         return;
       }
 
+      if (data.tournamentId && response.team?.id) {
+        await addTeamToStandingsAction({
+          tournamentId: data.tournamentId,
+          teamId: response.team.id,
+          userRole: session.user.roles ?? [],
+        });
+      }
+
       if (response.ok) {
         form.reset();
         toast.success(response.message);
-        route.replace(ROUTES.ADMIN_TEAMS);
+        route.replace(
+          tournamentId
+            ? `${ROUTES.ADMIN_TEAMS}?torneo=${tournamentId}`
+            : ROUTES.ADMIN_TEAMS,
+        );
         return;
       }
       return;
@@ -188,7 +207,11 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(ROUTES.ADMIN_TEAM(response.team?.id as string));
+        route.replace(
+          tournamentId
+            ? `${ROUTES.ADMIN_TEAMS}?torneo=${tournamentId}`
+            : ROUTES.ADMIN_TEAMS,
+        );
       }
     }
   };
@@ -264,7 +287,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
               name="headquarters"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Sede</FormLabel>
+                  <FormLabel>
+                    Sede <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -279,7 +304,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Imagen</FormLabel>
+                  <FormLabel>
+                    Imagen <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       ref={fileInputRef}
@@ -426,7 +453,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>País</FormLabel>
+                  <FormLabel>
+                    País <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -445,7 +474,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
               name="state"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Estado</FormLabel>
+                  <FormLabel>
+                    Estado <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -460,7 +491,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ciudad</FormLabel>
+                  <FormLabel>
+                    Ciudad <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -481,7 +514,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
                 const selectedCoach = coaches.find((c) => c.id === field.value);
                 return (
                   <FormItem>
-                    <FormLabel>Entrenador</FormLabel>
+                    <FormLabel>
+                      Entrenador <span className="text-gray-500">(opcional)</span>
+                    </FormLabel>
                     <Popover open={coachesOpen} onOpenChange={setCoachesOpen}>
                       <PopoverTrigger asChild>
                         <Button
@@ -556,7 +591,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
               name="emails"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Correos Electrónicos</FormLabel>
+                  <FormLabel>
+                    Correos Electrónicos <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <EmailInput
                       value={field.value || []}
@@ -579,7 +616,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Dirección</FormLabel>
+                  <FormLabel>
+                    Dirección <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
@@ -604,7 +643,9 @@ export const TeamForm: FC<Props> = ({ session, tournaments, coaches, fields = []
 
                     return (
                       <FormItem>
-                        <FormLabel>Canchas</FormLabel>
+                        <FormLabel>
+                          Canchas <span className="text-gray-500">(opcional)</span>
+                        </FormLabel>
                         <Popover open={teamsOpen} onOpenChange={setTeamsOpen}>
                           <PopoverTrigger asChild>
                             <Button

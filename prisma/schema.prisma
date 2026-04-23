@@ -375,8 +375,6 @@ model Credential {
 
 model Standings {
   id               String @id @default(uuid())
-  teamId           String @unique() @map("team_id")
-  team             Team   @relation(fields: [teamId], references: [id])
   matchesPlayed    Int    @default(0) @map("matches_played")
   wins             Int    @default(0) @map("wins")
   draws            Int    @default(0) @map("draws")
@@ -391,6 +389,8 @@ model Standings {
   // Relations
   tournamentId String     @map("tournament_id")
   tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  teamId           String @unique() @map("team_id")
+  team             Team   @relation(fields: [teamId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")

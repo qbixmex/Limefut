@@ -34,5 +34,3 @@ export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
     </>
   );
 };
-
-export default TeamsContent;
