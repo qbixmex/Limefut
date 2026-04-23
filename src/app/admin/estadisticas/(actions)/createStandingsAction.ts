@@ -54,6 +54,10 @@ export const createStandingsAction = async (data: DataType): CreateResponseActio
         };
       }
 
+      console.log('ERROR NAME:', error.name);
+      console.log('ERROR CAUSE:', error.cause);
+      console.log('ERROR MESSAGE:', error.message);
+
       return {
         ok: false,
         message: '¡ Error al crear las estadísticas, revise los logs del servidor !',

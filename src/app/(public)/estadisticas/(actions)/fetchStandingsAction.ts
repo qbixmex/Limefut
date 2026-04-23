@@ -55,7 +55,6 @@ export const fetchStandingsAction = async (
   'use cache';
 
   cacheLife('days');
-  cacheTag('admin-standings');
   cacheTag('public-standings');
 
   try {
