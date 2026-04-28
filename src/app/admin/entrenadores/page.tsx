@@ -1,5 +1,5 @@
 import { Suspense, type FC } from 'react';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Tooltip,
@@ -43,11 +43,16 @@ const CoachesPageContent: FC<Props> = async ({ searchParams }) => {
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar entrenador ..." />
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link href="/admin/entrenadores/crear">
-                      <Button variant="outline-primary" size="icon">
-                        <Plus strokeWidth={3} />
-                      </Button>
+                  <TooltipTrigger>
+                    <Link href="/admin/entrenadores/crear"
+                      className={
+                        buttonVariants({
+                          variant: 'outline-primary',
+                          size: 'icon',
+                        })
+                      }
+                    >
+                      <Plus strokeWidth={3} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="left">

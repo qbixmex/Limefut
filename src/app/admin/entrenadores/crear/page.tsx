@@ -9,7 +9,6 @@ import { CoachForm } from '../(components)/coachForm';
 import type { Session } from '@/lib/auth-client';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { fetchTeamsForCoach } from '../(actions)/fetchTeamsForCoach';
 import { headers } from 'next/headers';
 
 const CreateCoachPage = () => {
@@ -30,14 +29,6 @@ const CreateCoachPageContent = async () => {
     redirect(`/admin/entrenadores?error=${encodeURIComponent(message)}`);
   }
 
-  const responseTeams = await fetchTeamsForCoach();
-
-  if (!responseTeams.ok) {
-    redirect(`/admin/entrenadores?error=${encodeURIComponent(responseTeams.message)}`);
-  }
-
-  const teams = responseTeams.teams;
-
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -46,10 +37,7 @@ const CreateCoachPageContent = async () => {
             <CardTitle className="admin-page-card-title">Crear Entrenador</CardTitle>
           </CardHeader>
           <CardContent>
-            <CoachForm
-              session={session as Session}
-              teams={teams!}
-            />
+            <CoachForm session={session as Session} />
           </CardContent>
         </Card>
       </div>

@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Pencil, InfoIcon } from 'lucide-react';
 import { GiWhistle } from 'react-icons/gi';
 import { Badge } from '@/components/ui/badge';
@@ -98,11 +98,17 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell>
                       <div className="flex gap-3">
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/entrenadores/perfil/${coach.id}`}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
+                          <TooltipTrigger>
+                            <Link
+                              href={`/admin/entrenadores/perfil/${coach.id}`}
+                              className={
+                                buttonVariants({
+                                  variant: 'outline-primary',
+                                  size: 'icon',
+                                })
+                              }
+                            >
+                              <InfoIcon />
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">
@@ -110,11 +116,17 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
                           </TooltipContent>
                         </Tooltip>
                         <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/entrenadores/editar/${coach.id}`}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
+                          <TooltipTrigger>
+                            <Link
+                              href={`/admin/entrenadores/editar/${coach.id}`}
+                              className={
+                                buttonVariants({
+                                  variant: 'outline-warning',
+                                  size: 'icon',
+                                })
+                              }
+                            >
+                              <Pencil />
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">

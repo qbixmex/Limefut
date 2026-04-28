@@ -57,11 +57,11 @@ export const useSelectorInputs = (tournaments: TournamentType[]) => {
     const { tournament, category, format } = paramsState;
 
     if (tournament && category && format) {
-      const currentTorneo = searchParams.get('torneo');
-      const currentCategoria = searchParams.get('categoria');
-      const currentFormato = searchParams.get('formato');
+      const currentTournament = searchParams.get('torneo');
+      const currentCategory = searchParams.get('categoria');
+      const currentFormat = searchParams.get('formato');
 
-      if (currentTorneo !== tournament || currentCategoria !== category || currentFormato !== format) {
+      if (currentTournament !== tournament || currentCategory !== category || currentFormat !== format) {
         const params = new URLSearchParams();
         params.set('torneo', tournament);
         params.set('categoria', category);

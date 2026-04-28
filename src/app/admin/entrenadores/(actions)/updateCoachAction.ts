@@ -67,7 +67,7 @@ export const updateCoachAction = async ({
     };
   }
 
-  const { image, teamsIds, ...coachToSave } = coachVerified.data;
+  const { image, ...coachToSave } = coachVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -86,12 +86,7 @@ export const updateCoachAction = async ({
 
         const updatedCoach = await transaction.coach.update({
           where: { id: coachId },
-          data: {
-            ...coachToSave,
-            teams: {
-              set: (teamsIds ?? []).map((id: string) => ({ id })),
-            },
-          },
+          data: coachToSave,
         });
 
         if (image) {

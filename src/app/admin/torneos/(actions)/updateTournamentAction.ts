@@ -144,6 +144,7 @@ export const updateTournamentAction = async ({
         // Update Cache
         updateTag('admin-tournaments');
         updateTag('admin-tournaments-selector');
+        updateTag('admin-tournaments-for-coach');
         updateTag('admin-tournaments-for-match');
         updateTag('admin-tournament-for-match');
         updateTag('admin-tournaments-for-gallery');
