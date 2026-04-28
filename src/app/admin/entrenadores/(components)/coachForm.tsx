@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FC } from 'react';
+import type { FC } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
@@ -19,29 +19,20 @@ import { createCoachSchema, editCoachSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
-import type { Coach, Team } from '@/shared/interfaces';
+import type { Coach } from '@/shared/interfaces';
 import { createCoachAction, updateCoachAction } from '../(actions)';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Check, ChevronsUpDown, LoaderCircle } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { cn } from '@/lib/utils';
-
-type TeamType = Pick<Team, 'id' | 'name'>;
+import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
   session: Session;
-  teams: Pick<Team, 'id' | 'name'>[];
-  coach?: Coach & {
-    teams: TeamType[];
-  };
+  coach?: Coach;
 }>;
 
-export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
+export const CoachForm: FC<Props> = ({ session, coach }) => {
   const route = useRouter();
   const formSchema = !coach ? createCoachSchema : editCoachSchema;
-  const [teamsOpen, setTeamsOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,9 +44,6 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
       nationality: coach?.nationality ?? '',
       description: coach?.description ?? '',
       active: coach?.active ?? false,
-      teamsIds: (coach?.teams && ((coach?.teams as TeamType[]).length > 0))
-        ? coach?.teams.map((t) => t.id)
-        : [],
     },
   });
 
@@ -68,7 +56,6 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
     formData.append('age', (data.age as number).toString());
     formData.append('nationality', data.nationality as string);
     formData.append('description', data.description as string);
-    formData.append('teamsIds', JSON.stringify(data.teamsIds));
 
     if (data.image && typeof data.image === 'object') {
       formData.append('image', data.image);
@@ -238,77 +225,10 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
           </div>
         </div>
 
-        {/* Team(s) & Age & Active */}
+        {/* Tournament & Age & Active */}
         <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="teamsIds"
-              render={({ field }) => {
-                const selectedTeams = teams.filter((t) => field.value?.includes(t.id));
-                return (
-                  <FormItem>
-                    <FormLabel>
-                      Equipo{selectedTeams.length > 0 ? 's' : ''}
-                    </FormLabel>
-                    <Popover open={teamsOpen} onOpenChange={setTeamsOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline-secondary"
-                          role="combobox"
-                          aria-expanded={teamsOpen}
-                          className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
-                        >
-                          {
-                            (selectedTeams.length > 0)
-                              ? `Equipos: ${selectedTeams.length}`
-                              : 'Selecciona uno ó más equipos ...'
-                          }
-                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command>
-                          <CommandInput placeholder="Buscar equipo ..." className="h-9" />
-                          <CommandList>
-                            <CommandEmpty>No se encontró el equipo.</CommandEmpty>
-                            <CommandGroup>
-                              {teams.map((team) => {
-                                const isSelected = field.value?.includes(team.id);
-                                return (
-                                  <CommandItem
-                                    key={team.id}
-                                    value={team.name}
-                                    onSelect={() => {
-                                      let newValue = Array.isArray(field.value) ? [...field.value] : [];
-                                      if (isSelected) {
-                                        newValue = newValue.filter((id) => id !== team.id);
-                                      } else {
-                                        newValue.push(team.id);
-                                      }
-                                      form.setValue('teamsIds', newValue);
-                                    }}
-                                  >
-                                    {team.name}
-                                    <Check
-                                      className={cn(
-                                        'ml-auto',
-                                        isSelected ? 'opacity-100' : 'opacity-0',
-                                      )}
-                                    />
-                                  </CommandItem>
-                                );
-                              })}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
+          <div className="w-full lg:w-1/2 space-y-5">
+            {/* EMPTY FOR UI */}
           </div>
           <div className="w-full lg:w-1/2 flex justify-end gap-5">
             <FormField
@@ -386,5 +306,3 @@ export const CoachForm: FC<Props> = ({ session, teams, coach }) => {
     </Form>
   );
 };
-
-export default CoachForm;

@@ -91,6 +91,7 @@ export const createTournamentAction = async (
     revalidatePath('/admin/torneos');
     updateTag('dashboard-tournaments');
     updateTag('admin-tournaments-selector');
+    updateTag('admin-tournaments-for-coach');
     updateTag('admin-tournaments-for-match');
     updateTag('admin-tournament-for-match');
     updateTag('admin-tournaments-for-gallery');

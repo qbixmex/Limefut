@@ -13,9 +13,9 @@ import {
 import { Pencil } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { fetchCoachAction } from '../../(actions)';
+import { fetchCoachDetailsAction } from '../../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { GiWhistle } from 'react-icons/gi';
@@ -42,7 +42,7 @@ const CoachPageContent: FC<Props> = async ({ params }) => {
   });
   const coachId = (await params).id;
 
-  const response = await fetchCoachAction(coachId, session?.user.roles ?? null);
+  const response = await fetchCoachDetailsAction(coachId, session?.user.roles ?? null);
 
   if (!response.ok) {
     redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);
@@ -110,18 +110,6 @@ const CoachPageContent: FC<Props> = async ({ params }) => {
                     <TableCell className="whitespace-break-spaces">{coach.description ?? 'No proporcionada'}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Equipo{coach.teams.length > 1 ? 's' : ''}</TableHead>
-                    <TableCell className="flex flex-wrap gap-2">
-                      {
-                        coach.teams.map((team) => (
-                          <Link key={team.id} href={`/admin/equipos/${team.permalink}`}>
-                            <Badge variant="outline-info">{team.name}</Badge>
-                          </Link>
-                        ))
-                      }
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
                     <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
                     <TableCell>
                       {format(new Date(coach?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
@@ -147,13 +135,38 @@ const CoachPageContent: FC<Props> = async ({ params }) => {
               </Table>
             </section>
 
+            <section>
+              <h2 className="text-2xl font-semibold mb-2">
+                Equipo{coach.teams.length > 1 ? 's' : ''}
+              </h2>
+
+              <div className="flex flex-wrap gap-2">
+                {
+                  coach.teams.map((team) => (
+                    <Link key={team.id} href={`/admin/equipos/${team.id}`}>
+                      <Badge variant="outline-info">
+                        <span>{team.name},</span>
+                        <span>{team.category}</span>
+                      </Badge>
+                    </Link>
+                  ))
+                }
+              </div>
+            </section>
+
             <div className="absolute top-5 right-5">
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href={`/admin/entrenadores/editar/${coach.id}`}>
-                    <Button variant="outline-warning" size="icon">
-                      <Pencil />
-                    </Button>
+                <TooltipTrigger>
+                  <Link
+                    href={`/admin/entrenadores/editar/${coach.id}`}
+                    className={
+                      buttonVariants({
+                        variant: 'outline-warning',
+                        size: 'icon',
+                      })
+                    }
+                  >
+                    <Pencil />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">
