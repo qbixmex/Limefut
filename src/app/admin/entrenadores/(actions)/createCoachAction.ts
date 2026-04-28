@@ -50,7 +50,7 @@ export const createCoachAction = async (
     };
   }
 
-  const { image, teamsIds, ...coachToSave } = coachVerified.data;
+  const { image, ...coachToSave } = coachVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
   let cloudinaryResponse: CloudinaryResponse | null = null;
@@ -69,9 +69,9 @@ export const createCoachAction = async (
           ...coachToSave,
           imageUrl: cloudinaryResponse?.secureUrl ?? null,
           imagePublicID: cloudinaryResponse?.publicId ?? null,
-          teams: {
-            connect: (teamsIds ?? []).map((id: string) => ({ id })),
-          },
+          // teams: {
+          //   connect: (teamsIds ?? []).map((id: string) => ({ id })),
+          // },
         },
         include: {
           teams: {

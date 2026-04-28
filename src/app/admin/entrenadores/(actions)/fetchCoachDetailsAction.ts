@@ -7,10 +7,19 @@ import { cacheLife, cacheTag } from 'next/cache';
 type FetchCoachResponse = Promise<{
   ok: boolean;
   message: string;
-  coach: Coach | null;
+  coach: Coach & {
+    teams: Team[];
+  } | null;
 }>;
 
-export const fetchCoachAction = async (
+export type Team = {
+  id: string;
+  name: string;
+  permalink: string;
+  category: string;
+};
+
+export const fetchCoachDetailsAction = async (
   coachId: string,
   userRole: string[] | null,
 ): FetchCoachResponse => {
@@ -28,7 +37,19 @@ export const fetchCoachAction = async (
   }
 
   try {
-    const coach = await prisma.coach.findUnique({ where: { id: coachId } });
+    const coach = await prisma.coach.findUnique({
+      where: { id: coachId },
+      include: {
+        teams: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+            category: true,
+          },
+        },
+      },
+    });
 
     if (!coach) {
       return {
