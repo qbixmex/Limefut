@@ -32,13 +32,6 @@ export const createTeamSchema = z.object({
       (value) => /^[a-zA-Z0-9_-]+$/.test(value),
       { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
     ),
-  headquarters: z.union([
-    z.literal(''),
-    z.string()
-      .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
-      .max(200, { message: '¡ La sede debe ser menor a 200 caracteres !' }),
-    z.null(),
-  ]).optional(),
   image: z
     .instanceof(File, { message: 'La imagen debe ser un archivo' })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')

@@ -123,9 +123,13 @@ export const fetchMatchAction = async (
               },
             },
             fields: {
-              select: {
-                id: true,
-                name: true,
+              include: {
+                field: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             },
           },
@@ -142,9 +146,13 @@ export const fetchMatchAction = async (
               },
             },
             fields: {
-              select: {
-                id: true,
-                name: true,
+              include: {
+                field: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             },
           },
@@ -207,8 +215,14 @@ export const fetchMatchAction = async (
       message: '¡ Encuentro obtenido correctamente 👍 !',
       match: {
         id: match.id,
-        localTeam: match.local,
-        visitorTeam: match.visitor,
+        localTeam: {
+          ...match.local,
+          fields: match.local.fields.map((teamField) => teamField.field),
+        },
+        visitorTeam: {
+          ...match.visitor,
+          fields: match.visitor.fields.map((teamField) => teamField.field),
+        },
         place: match.place,
         matchDate: match.matchDate,
         week: match.week,

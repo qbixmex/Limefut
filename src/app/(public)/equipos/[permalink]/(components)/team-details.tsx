@@ -38,16 +38,18 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
     redirect(`/equipos?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
   };
 
-  const { ok, message, team } = await fetchTeamAction({
+  const responseTeam = await fetchTeamAction({
     permalink,
     tournamentPermalink,
     category,
     format,
   });
 
-  if (!team && !ok) {
-    redirect(`/equipos?error=${encodeURIComponent(message)}`);
+  if (!responseTeam.team && !responseTeam.ok) {
+    redirect(`/equipos?error=${encodeURIComponent(responseTeam.message)}`);
   }
+
+  const team = responseTeam.team;
 
   const responseStandings = await fetchTeamStandingsAction({
     teamId: team!.id,
@@ -102,14 +104,6 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
         <section className="w-full grid grid-cols-1 lg:grid-cols-2 gap-10">
           <Table>
             <TableBody>
-              <TableRow>
-                <TableHead className="w-[120px] font-semibold">Sede</TableHead>
-                <TableCell>
-                  <span className="text-wrap dark:text-gray-200 italic">
-                    {team?.headquarters ?? 'No especificado'}
-                  </span>
-                </TableCell>
-              </TableRow>
               <TableRow>
                 <TableHead className="font-semibold">Categoría</TableHead>
                 <TableCell>
@@ -200,7 +194,19 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                       {team?.coach.name}
                     </Link>
                   ) : (
-                    <Badge variant="outline-secondary">No Asignado</Badge>
+                    <Badge variant="outline-secondary">No asignado</Badge>
+                  )}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="w-[120px] font-semibold">
+                  Sede{team!.fields.length > 1 ? 's' : ''}
+                </TableHead>
+                <TableCell>
+                  {(team!.fields.length > 0) ? team!.fields.map((field) => (
+                    <Badge key={field.id} variant="outline-info">{field.name}</Badge>
+                  )) : (
+                    <Badge variant="outline-secondary">No asignada</Badge>
                   )}
                 </TableCell>
               </TableRow>
@@ -352,42 +358,6 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
               ))}
             </div>
           )}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-5">
-          Imágenes de {team?.name}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          <Image
-            width={1024}
-            height={1024}
-            src="/images/generic-players/male/bear-player.webp"
-            alt="Bear player"
-            className="w-[1024px] rounded"
-          />
-          <Image
-            width={1024}
-            height={1024}
-            src="/images/generic-players/male/black-cat-player.webp"
-            alt="Bear player"
-            className="w-[1024px] rounded"
-          />
-          <Image
-            width={1024}
-            height={1024}
-            src="/images/generic-players/male/capibara-player.webp"
-            alt="Cat player"
-            className="w-[1024px] rounded"
-          />
-          <Image
-            width={1024}
-            height={1024}
-            src="/images/generic-players/male/lion-player.webp"
-            alt="Lion player"
-            className="w-[1024px] rounded"
-          />
         </div>
       </section>
     </div>

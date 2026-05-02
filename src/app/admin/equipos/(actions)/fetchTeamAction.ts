@@ -62,9 +62,13 @@ export const fetchTeamAction = async (
           },
         },
         fields: {
-          select: {
-            id: true,
-            name: true,
+          include: {
+            field: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
@@ -81,7 +85,10 @@ export const fetchTeamAction = async (
     return {
       ok: true,
       message: '¡ Equipo obtenido correctamente 👍 !',
-      team,
+      team: {
+        ...team,
+        fields: team.fields.map((teamField) => teamField.field),
+      },
     };
   } catch (error) {
     if (error instanceof Error) {
