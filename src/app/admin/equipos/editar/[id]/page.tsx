@@ -34,18 +34,17 @@ const EditTeamPageContent: FC<Props> = async ({ params }) => {
     headers: await headers(),
   });
   const teamId = (await params).id;
-  const responseTeam = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
-  console.log(responseTeam.team?.fields);
+  const responseTeam = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
   if (!responseTeam.team) {
     redirect(`/admin/equipos?error=${encodeURIComponent(responseTeam.message)}`);
   }
 
-  const responseTeams = await fetchTournamentsForTeam();
+  const responseTournaments = await fetchTournamentsForTeam();
 
-  if (!responseTeams.ok) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(responseTeams.message)}`);
+  if (!responseTournaments.ok) {
+    redirect(`/admin/equipos?error=${encodeURIComponent(responseTournaments.message)}`);
   }
 
   const responseCoaches = await fetchCoachesForTeam();
@@ -56,7 +55,7 @@ const EditTeamPageContent: FC<Props> = async ({ params }) => {
 
   const responseFields = await fetchFieldsForTeam();
 
-  const tournaments = responseTeams.tournaments;
+  const tournaments = responseTournaments.tournaments;
   const coaches = responseCoaches.coaches;
 
   return (

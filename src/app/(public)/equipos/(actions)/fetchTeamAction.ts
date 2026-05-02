@@ -1,17 +1,16 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Coach, Player } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
-type CoachType = Pick<Coach, 'id' | 'name'>;
-type PlayerType = Pick<Player, 'id' | 'name'>;
+type CoachType = { id: string; name: string; };
+type PlayerType = { id: string; name: string; };
+type FieldType = { id: string; name: string; };
 
 export type TeamType = {
   id: string;
   name: string;
   permalink: string;
-  headquarters: string | null;
   imageUrl: string | null;
   category: string | null;
   format: string | null;
@@ -35,6 +34,7 @@ type FetchTeamResponse = Promise<{
     } | null;
     coach: CoachType | null;
     players: PlayerType[] | null;
+    fields: FieldType[],
   } | null;
 }>;
 
@@ -68,7 +68,6 @@ export const fetchTeamAction = async ({
         id: true,
         name: true,
         permalink: true,
-        headquarters: true,
         imageUrl: true,
         category: true,
         format: true,
@@ -99,6 +98,16 @@ export const fetchTeamAction = async ({
             name: true,
           },
         },
+        fields: {
+          include: {
+            field: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -121,7 +130,10 @@ export const fetchTeamAction = async ({
     return {
       ok: true,
       message: '¡ Equipo obtenido correctamente 👍 !',
-      team,
+      team: {
+        ...team,
+        fields: team.fields.map((teamField) => teamField.field),
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

@@ -2,7 +2,6 @@ export interface Team {
   id: string;
   name: string;
   permalink: string;
-  headquarters: string | null;
   imageUrl: string | null;
   imagePublicID: string | null;
   category: string | null;

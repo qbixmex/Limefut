@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { createTeamSchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
 import { uploadImage } from '@/shared/actions';
-import type { CloudinaryResponse, Team } from '@/shared/interfaces';
+import type { CloudinaryResponse } from '@/shared/interfaces';
 import type { GENDER_TYPE } from '@/shared/enums';
 
 type CreateResponseAction = Promise<{
@@ -12,6 +12,27 @@ type CreateResponseAction = Promise<{
   message: string;
   team: Team | null;
 }>;
+
+type Team = {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+  state: string | null;
+  address: string | null;
+  permalink: string;
+  imagePublicID: string | null;
+  category: string;
+  format: string;
+  gender: string;
+  country: string | null;
+  city: string | null;
+  active: boolean;
+  tournamentId: string | null;
+  coachId: string | null;
+  emails: string[];
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export const createTeamAction = async (
   formData: FormData,
@@ -28,7 +49,6 @@ export const createTeamAction = async (
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
-    headquarters: formData.get('headquarters') as string,
     category: formData.get('category') ?? '',
     format: formData.get('format') as string,
     gender: formData.get('gender') as string,
@@ -79,7 +99,6 @@ export const createTeamAction = async (
         data: {
           name: teamToSave.name,
           permalink: teamToSave.permalink,
-          headquarters: teamToSave.headquarters,
           imageUrl: cloudinaryResponse?.secureUrl ?? undefined,
           imagePublicID: cloudinaryResponse?.publicId ?? undefined,
           category: teamToSave.category,
@@ -93,11 +112,18 @@ export const createTeamAction = async (
           active: teamToSave.active,
           tournamentId: teamToSave.tournamentId ?? null,
           coachId: teamToSave.coachId ?? null,
-          fields: {
-            connect: teamToSave.fieldsIds?.map((id) => ({ id })) || [],
-          },
         },
       });
+
+      // Create TeamField records for the many-to-many relationship
+      if (teamToSave.fieldsIds && teamToSave.fieldsIds.length > 0) {
+        await transaction.teamField.createMany({
+          data: teamToSave.fieldsIds.map((fieldId) => ({
+            teamId: createdTeam.id,
+            fieldId,
+          })),
+        });
+      }
 
       return {
         ok: true,

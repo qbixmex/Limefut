@@ -29,6 +29,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxValue,
+} from '@/components/ui/combobox';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Command,
@@ -73,7 +84,6 @@ export const TeamForm: FC<Props> = ({
   const isPermalinkEdited = useRef(false);
   const [coachesOpen, setCoachesOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [teamsOpen, setTeamsOpen] = useState(false);
 
   let tournamentId: string | undefined = '';
 
@@ -90,7 +100,6 @@ export const TeamForm: FC<Props> = ({
     defaultValues: {
       name: team?.name ?? '',
       permalink: team?.permalink ?? '',
-      headquarters: team?.headquarters ?? '',
       category: team?.category ?? '',
       format: team?.format ?? '',
       gender: team?.gender ?? '',
@@ -125,7 +134,6 @@ export const TeamForm: FC<Props> = ({
 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
-    if (data.headquarters) formData.append('headquarters', data.headquarters as string);
     formData.append('category', data.category as string);
     formData.append('format', data.format as string);
     formData.append('gender', data.gender as string);
@@ -188,7 +196,6 @@ export const TeamForm: FC<Props> = ({
         );
         return;
       }
-      return;
     }
 
     // Update team
@@ -279,55 +286,9 @@ export const TeamForm: FC<Props> = ({
           </div>
         </div>
 
-        {/* Headquarters and Image */}
+        {/* Category and Format */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="headquarters"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Sede <span className="text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Imagen <span className="text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      ref={fileInputRef}
-                      type="file"
-                      value={undefined}
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        field.onChange(file);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Division and Group */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-5">
             <FormField
               control={form.control}
               name="category"
@@ -347,6 +308,8 @@ export const TeamForm: FC<Props> = ({
                 </FormItem>
               )}
             />
+          </div>
+          <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
               name="format"
@@ -374,6 +337,35 @@ export const TeamForm: FC<Props> = ({
                         <SelectItem value="5">5 vs 5</SelectItem>
                       </SelectContent>
                     </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        {/* Image and Gender */}
+        <div className="flex flex-col gap-5 lg:flex-row">
+          <div className="w-full lg:w-1/2">
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Imagen <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      ref={fileInputRef}
+                      type="file"
+                      value={undefined}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        field.onChange(file);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -638,72 +630,46 @@ export const TeamForm: FC<Props> = ({
                   control={form.control}
                   name="fieldsIds"
                   render={({ field: input }) => {
-                    const selectedFields = fields.filter((f) => input.value?.includes(f.id));
-                    const selectedFieldsCount = selectedFields.length;
-
                     return (
                       <FormItem>
                         <FormLabel>
                           Canchas <span className="text-gray-500">(opcional)</span>
                         </FormLabel>
-                        <Popover open={teamsOpen} onOpenChange={setTeamsOpen}>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline-secondary"
-                              role="combobox"
-                              aria-expanded={teamsOpen}
-                              className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
-                            >
-                              {
-                                (selectedFields.length > 0)
-                                  ? (
-                                    selectedFieldsCount + ' ' +
-                                    'cancha' + (selectedFieldsCount > 1 ? 's' : '') + ' ' +
-                                    'seleccionada' + (selectedFieldsCount > 1 ? 's' : '')
-                                  )
-                                  : 'Seleccione una o más canchas'
-                              }
-                              <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-full p-0">
-                            <Command>
-                              <CommandInput placeholder="Buscar cancha" className="h-9" />
-                              <CommandList>
-                                <CommandEmpty>No se encontró la cancha.</CommandEmpty>
-                                <CommandGroup className="max-h-[200px] overflow-y-scroll">
-                                  {fields.map((item) => {
-                                    const isSelected = input.value?.includes(item.id);
 
-                                    return (
-                                      <CommandItem
-                                        key={item.id}
-                                        value={item.name}
-                                        onSelect={() => {
-                                          let newValue = Array.isArray(input.value) ? [...input.value] : [];
-                                          if (isSelected) {
-                                            newValue = newValue.filter((id) => id !== item.id);
-                                          } else {
-                                            newValue.push(item.id);
-                                          }
-                                          form.setValue('fieldsIds', newValue);
-                                        }}
-                                      >
-                                        {item.name}
-                                        <Check
-                                          className={cn(
-                                            'ml-auto',
-                                            isSelected ? 'opacity-100' : 'opacity-0',
-                                          )}
-                                        />
-                                      </CommandItem>
-                                    );
-                                  })}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
+                        <Combobox
+                          multiple
+                          items={fields}
+                          itemToStringValue={(field) => field.name}
+                          value={fields.filter((f) => input.value?.includes(f.id))}
+                          onValueChange={(selectedFields) => {
+                            form.setValue('fieldsIds', selectedFields.map((f) => f.id));
+                          }}
+                        >
+                          <ComboboxChips className="w-full">
+                            <ComboboxValue>
+                              {(values) => (
+                                <>
+                                  {values.map((field: FIELD_TYPE) => (
+                                    <ComboboxChip key={field.id}>
+                                      {field.name}
+                                    </ComboboxChip>
+                                  ))}
+                                </>
+                              )}
+                            </ComboboxValue>
+                            <ComboboxChipsInput placeholder="Buscar cancha" />
+                          </ComboboxChips>
+                          <ComboboxContent>
+                            <ComboboxEmpty>No se encontró la cancha.</ComboboxEmpty>
+                            <ComboboxList>
+                              {(item) => (
+                                <ComboboxItem key={item.id} value={item}>
+                                  {item.name}
+                                </ComboboxItem>
+                              )}
+                            </ComboboxList>
+                          </ComboboxContent>
+                        </Combobox>
                         <FormMessage />
                       </FormItem>
                     );

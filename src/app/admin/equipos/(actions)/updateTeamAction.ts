@@ -4,7 +4,6 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from '@/shared/actions';
 import { editTeamSchema } from '@/shared/schemas';
-import type { Team } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;
@@ -18,6 +17,27 @@ type EditResponseAction = Promise<{
   message: string;
   team: Team | null;
 }>;
+
+type Team = {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+  state: string | null;
+  address: string | null;
+  permalink: string;
+  imagePublicID: string | null;
+  category: string;
+  format: string;
+  gender: string;
+  country: string | null;
+  city: string | null;
+  active: boolean;
+  tournamentId: string | null;
+  coachId: string | null;
+  emails: string[];
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export const updateTeamAction = async ({
   formData,
@@ -44,7 +64,6 @@ export const updateTeamAction = async ({
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
-    headquarters: formData.get('headquarters') as string ?? null,
     category: formData.get('category') ?? '',
     format: formData.get('format') as string,
     gender: formData.get('gender') as string,
@@ -94,7 +113,6 @@ export const updateTeamAction = async ({
           data: {
             name: teamToSave.name,
             permalink: teamToSave.permalink,
-            headquarters: teamToSave.headquarters,
             category: teamToSave.category,
             format: teamToSave.format,
             gender: teamToSave.gender,
@@ -106,11 +124,26 @@ export const updateTeamAction = async ({
             active: teamToSave.active,
             tournamentId: teamToSave.tournamentId,
             coachId: teamToSave.coachId ?? undefined,
-            fields: {
-              set: teamToSave.fieldsIds?.map((id) => ({ id })) || [],
-            },
           },
         });
+
+        // Update TeamField records for the many-to-many relationship
+        if (teamToSave.fieldsIds !== undefined) {
+          // Delete existing relationships
+          await transaction.teamField.deleteMany({
+            where: { teamId },
+          });
+
+          // Create new relationships if any
+          if (teamToSave.fieldsIds.length > 0) {
+            await transaction.teamField.createMany({
+              data: teamToSave.fieldsIds.map((fieldId) => ({
+                teamId,
+                fieldId,
+              })),
+            });
+          }
+        }
 
         // Update Image
         if (image !== null) {

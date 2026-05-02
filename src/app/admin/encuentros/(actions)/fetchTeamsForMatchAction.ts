@@ -63,9 +63,13 @@ export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsTy
         id: true,
         name: true,
         fields: {
-          select: {
-            id: true,
-            name: true,
+          include: {
+            field: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
@@ -74,7 +78,10 @@ export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsTy
     return {
       ok: true,
       message: '! Los equipos fueron obtenidos correctamente 👍',
-      teams,
+      teams: teams.map((team) => ({
+        ...team,
+        fields: team.fields.map((teamField) => teamField.field),
+      })),
     };
   } catch (error) {
     if (error instanceof Error) {
