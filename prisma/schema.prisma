@@ -165,7 +165,6 @@ model Team {
   id            String   @id @default(uuid())
   name          String
   permalink     String
-  headquarters  String?
   imageUrl      String?  @map("image_url")
   imagePublicID String?  @map("image_public_id")
   category      String
@@ -191,7 +190,7 @@ model Team {
   visitorShootouts PenaltyShootout[] @relation("ShootoutVisitorTeam")
   wonShootouts     PenaltyShootout[] @relation("ShootoutWinnerTeam")
   penaltyKicks     PenaltyKick[]
-  fields           Field[]
+  fields           TeamField[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -199,6 +198,16 @@ model Team {
 
   @@index([permalink, category, format])
   @@map("teams")
+}
+
+model TeamField {
+  teamId  String
+  team    Team   @relation(fields: [teamId], references: [id])
+  fieldId String
+  field   Field  @relation(fields: [fieldId], references: [id])
+
+  @@id([teamId, fieldId])
+  @@map("team_fields")
 }
 
 model Field {
@@ -212,8 +221,7 @@ model Field {
   permalink String  @unique()
 
   // Relationship
-  teamId String? @map("team_id")
-  team   Team?   @relation(fields: [teamId], references: [id])
+  teams TeamField[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
