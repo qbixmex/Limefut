@@ -22,6 +22,7 @@ import { GenerateGenericPlayers } from '../(components)/generate-generic-players
 import { headers } from 'next/headers';
 import { DeletePlayers } from '@/shared/components/delete-players';
 import { DeleteTeamImage } from '../(components)/delete-team-image';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
@@ -89,10 +90,6 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="font-semibold w-[180px]">Nombre</TableHead>
                     <TableCell>{team.name}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Sede</TableHead>
-                    <TableCell>{team.headquarters}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Categoría</TableHead>
@@ -213,6 +210,26 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
                           <span className="text-wrap">
                             {team.address ?? 'No especificada'}
                           </span>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="font-semibold">
+                          Sede{team.fields.length > 1 ? 's' : ''}
+                        </TableHead>
+                        <TableCell className="flex flex-wrap gap-2">
+                          {(team.fields.length > 0) ? team.fields.map((field) => (
+                            <Link
+                              key={field.id}
+                              href={ROUTES.ADMIN_FIELD(field.id)}
+                              target="_blank"
+                            >
+                              <Badge variant="outline-info">
+                                {field.name}
+                              </Badge>
+                            </Link>
+                          )) : (
+                            <Badge variant="outline-secondary">No asignada</Badge>
+                          )}
                         </TableCell>
                       </TableRow>
                       <TableRow>
