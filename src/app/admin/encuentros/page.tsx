@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import ClearFilters from './(components)/clear-filters';
 import { fetchTournamentsForMatchAction } from './(actions)/fetchTournamentsForMatchAction';
-import { TournamentsSelector } from '../(components)/tournaments-selector';
+import { TournamentsSelector } from '@/app/admin/(components)/tournaments-selector';
 import { MatchesContent } from './matches-content';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { TournamentsSelectorSkeleton } from '../../(public)/components';
@@ -17,13 +17,12 @@ type Props = Readonly<{
     sortMatchDate?: 'asc' | 'desc';
     sortWeek?: 'asc' | 'desc';
     torneo?: string;
+    categoria?: string;
     status?: MATCH_STATUS_TYPE;
   }>;
 }>;
 
-export const MatchesPage: FC<Props> = (props) => {
-  const searchParams = props.searchParams;
-
+export const MatchesPage: FC<Props> = ({ searchParams }) => {
   return (
     <>
       <ErrorHandler />
@@ -40,7 +39,7 @@ export const MatchesPage: FC<Props> = (props) => {
             </CardHeader>
             <CardContent>
               <Suspense fallback={<TournamentsSelectorSkeleton />}>
-                <TournamentsWrapper />
+                <SearchParamsSelector />
               </Suspense>
               <Suspense>
                 <MatchesContent searchParams={searchParams} />
@@ -53,7 +52,7 @@ export const MatchesPage: FC<Props> = (props) => {
   );
 };
 
-const TournamentsWrapper = async () => {
+const SearchParamsSelector = async () => {
   const { tournaments } = await fetchTournamentsForMatchAction();
 
   return (

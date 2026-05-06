@@ -88,7 +88,7 @@ export const TeamsSelector: FC<Props> = ({ teams }) => {
                   >
                     {team.name}
                     <Check
-                      className={cn('ml-auto h-4 w-4', {
+                      className={cn('ml-auto size-4', {
                         'opacity-100': teamId === team.id,
                         'opacity-0': teamId !== team.id,
                       })}
@@ -103,5 +103,3 @@ export const TeamsSelector: FC<Props> = ({ teams }) => {
     </div>
   );
 };
-
-export default TeamsSelector;

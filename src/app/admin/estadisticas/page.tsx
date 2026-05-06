@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 type Props = Readonly<{
   searchParams: Promise<{
     torneo: string;
+    categoria: string;
   }>;
 }>;
 
