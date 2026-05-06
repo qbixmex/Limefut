@@ -30,7 +30,7 @@ export const MatchesPage: FC<Props> = ({ searchParams }) => {
         <div className="admin-page-container">
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
-              <CardTitle className="admin-page-card-title">Lista de Encuentros</CardTitle>
+              <CardTitle className="admin-page-card-title">Encuentros</CardTitle>
               <section className="flex lg:w-1/2 justify-end gap-5 items-center">
                 <ClearFilters />
                 <Search placeholder="ejemplo: country vs tepeyac" />
