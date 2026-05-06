@@ -22,7 +22,7 @@ const CreateMatchPage: FC<Props> = ({ searchParams }) => {
           </CardHeader>
           <CardContent>
             <Suspense fallback={<TournamentsSelectorSkeleton />}>
-              <section className="flex gap-5">
+              <section className="flex flex-col gap-5">
                 <TournamentsSelector />
                 <WeekSelector />
               </section>

@@ -52,7 +52,7 @@ export const fetchTeamsForMatchAction = async ({ tournamentId, week }: OptionsTy
     const teams = await prisma.team.findMany({
       where: {
         tournamentId,
-        ...({
+        ...(week !== 0 && {
           id: {
             notIn: Array.from(scheduledTeamsIds),
           },
