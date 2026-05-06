@@ -9,5 +9,3 @@ export const TournamentsSelector: FC = async () => {
     <SelectTournament tournaments={tournaments} />
   );
 };
-
-export default TournamentsSelector;

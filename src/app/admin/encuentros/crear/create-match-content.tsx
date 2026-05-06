@@ -24,10 +24,7 @@ export const MatchWrapper: FC<MatchWrapperProps> = async ({ searchParams }) => {
         key={`permalink-${tournamentId}_week-${week}`}
         fallback={<FormSkeleton />}
       >
-        <CreateMatchContent
-          tournamentId={tournamentId}
-          week={week}
-        />
+        <CreateMatchContent tournamentId={tournamentId} week={week} />
       </Suspense>
     </>
   );
