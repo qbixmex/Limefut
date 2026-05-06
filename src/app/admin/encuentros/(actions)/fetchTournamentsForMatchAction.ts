@@ -13,8 +13,8 @@ export type ResponseFetchAction = Promise<{
   tournaments: {
     id: string;
     name: string;
+    permalink: string;
     category: string;
-    format: string;
   }[];
 }>;
 
@@ -41,8 +41,8 @@ export const fetchTournamentsForMatchAction = async (options?: OptionsType)
       select: {
         id: true,
         name: true,
+        permalink: true,
         category: true,
-        format: true,
       },
     });
 

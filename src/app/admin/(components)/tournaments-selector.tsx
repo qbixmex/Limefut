@@ -13,20 +13,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { Tournament } from '~/src/shared/interfaces';
 
 type Props = Readonly<{
-  tournaments: Partial<Tournament>[];
+  tournaments: {
+    id: string;
+    name: string;
+    permalink: string;
+    category: string;
+  }[];
 }>;
 
 export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   const searchParams = useSearchParams();
-  const tournamentId = searchParams.get('torneo');
+  const tournamentPermalink = searchParams.get('torneo');
+  const categoryPermalink = searchParams.get('categoria');
   const pathname = usePathname();
   const router = useRouter();
   const params = new URLSearchParams(searchParams);
 
-  const setParams = (tournamentId: string) => {
+  const uniqueTournaments = [
+    ...new Map(tournaments.map(item => [item.name, item])).values(),
+  ];
+
+  const setTournamentParam = (tournamentPermalink: string) => {
     if (params.size > 0) {
       for (const key of params.keys()) {
         if (key === 'torneo') continue;
@@ -34,32 +43,57 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
       }
     }
 
-    if (tournamentId || !params.has('torneo')) {
-      params.set('torneo', tournamentId.trim());
+    if (tournamentPermalink || !params.has('torneo')) {
+      params.set('torneo', tournamentPermalink);
+      router.push(`${pathname}?${params}`);
+    }
+  };
+
+  const setCategoryParam = (category: string) => {
+    if (category || !params.has('categoria')) {
+      params.set('categoria', category);
       router.push(`${pathname}?${params}`);
     }
   };
 
   return (
-    <Select
-      onValueChange={setParams}
-      value={tournamentId ?? ''}
-    >
-      <SelectTrigger className="w-full lg:w-1/2">
-        <SelectValue placeholder="¡ Seleccione una opción !" />
-      </SelectTrigger>
-      <SelectContent>
-        {tournaments.map((tournament) => (
-          <SelectItem
-            key={tournament.id}
-            value={tournament.id!}
-          >
-            {tournament.name}, {tournament.category}, {tournament.format} vs {tournament.format}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="flex flex-col gap-5 mb-5">
+      <Select
+        value={tournamentPermalink ?? ''}
+        onValueChange={setTournamentParam}
+      >
+        <SelectTrigger className="w-full lg:w-1/2">
+          <SelectValue placeholder="Seleccione el torneo" />
+        </SelectTrigger>
+        <SelectContent>
+          {uniqueTournaments.map((tournament) => (
+            <SelectItem
+              key={tournament.id}
+              value={tournament.permalink}
+            >
+              {tournament.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {params.has('torneo') && (
+        <Select
+          value={categoryPermalink ?? ''}
+          onValueChange={setCategoryParam}
+        >
+          <SelectTrigger className="w-full lg:w-1/2">
+            <SelectValue placeholder="Seleccione la categoría" />
+          </SelectTrigger>
+          <SelectContent>
+            {tournaments.map(({ id, category }) => (
+              <SelectItem key={id} value={category}>
+                {category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+    </div>
   );
 };
-
-export default TournamentsSelector;
