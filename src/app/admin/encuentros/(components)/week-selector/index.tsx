@@ -1,27 +1,23 @@
 'use client';
 
-import type { SubmitEvent } from 'react';
-import { Fragment, useEffect, useRef } from 'react';
+import type { ChangeEvent, SubmitEvent } from 'react';
+import { Fragment, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { SendHorizontal } from 'lucide-react';
+import { MinusIcon, PlusIcon, SendHorizontal } from 'lucide-react';
+import styles from './styles.module.css';
 
 export const WeekSelector = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const tournamentSearchParam = searchParams.get('torneo');
   const sortedWeek = searchParams.get('sortWeek');
   const selectedWeek = searchParams.get('semana');
-  const weekRef = useRef<HTMLInputElement | null>(null);
+  const tournamentSearchParam = searchParams.get('torneo');
 
-  useEffect(() => {
-    if (weekRef.current) {
-      weekRef.current.value = sortedWeek ?? selectedWeek ?? '0';
-    }
-  }, [sortedWeek, selectedWeek]);
+  const [weekValue, setWeekValue] = useState(() => {
+    return Number(selectedWeek ?? sortedWeek ?? 0);
+  });
 
   if (!tournamentSearchParam) return null;
 
@@ -34,31 +30,57 @@ export const WeekSelector = () => {
 
   const handleSubmit = (event: SubmitEvent) => {
     event.preventDefault();
-    setWeekParam(weekRef.current?.value ?? '0');
+    setWeekParam(weekValue.toString());
+  };
+
+  const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setWeekValue(Number(event.target.value) || 0);
   };
 
   return (
     <Fragment key={`week-${sortedWeek ?? 'none'}`}>
       <form onSubmit={handleSubmit}>
-        <div className="flex gap-5">
-          <Label className="space-x-5">
-            <span>Jornada</span>
-            <Input
-              ref={weekRef}
-              id="week"
-              type="number"
-              min={0}
-              defaultValue={sortedWeek ?? selectedWeek ?? 0}
-              className="w-[75px]"
-            />
-          </Label>
-          <Button
-            variant="outline-primary"
-            size="icon"
-            type="submit"
-          >
-            <SendHorizontal />
-          </Button>
+        <div className={styles.weekAndSubmit}>
+          <div className={styles.weekSelector}>
+            <label htmlFor="week" className={styles.weekLabel}>
+              <span>Jornada</span>
+            </label>
+            <div className={styles.weekGroup}>
+              <Button
+                variant="outline-primary"
+                type="button"
+                size="icon"
+                onClick={() => {
+                  setWeekValue(prev => (prev > 0) ? prev - 1 : prev);
+                }}
+                className={styles.modifyQuantityButtons}
+              >
+                <MinusIcon className="size-6" strokeWidth={3} />
+              </Button>
+              <input
+                id="week"
+                name="week"
+                min={0}
+                value={weekValue}
+                onChange={onInputChange}
+                className={styles.weekInput}
+              />
+              <Button
+                variant="outline-primary"
+                type="button"
+                size="icon"
+                className={styles.modifyQuantityButtons}
+                onClick={() => setWeekValue(prev => prev + 1)}
+              >
+                <PlusIcon className="size-6" />
+              </Button>
+            </div>
+          </div>
+          <div className={styles.buttonWrapper}>
+            <Button variant="outline-primary" type="submit">
+              <SendHorizontal />
+            </Button>
+          </div>
         </div>
       </form>
     </Fragment>

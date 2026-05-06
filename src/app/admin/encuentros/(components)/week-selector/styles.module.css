@@ -1,0 +1,53 @@
+@reference 'tailwindcss';
+
+.weekSelector {
+  @apply w-full flex flex-col gap-4 mb-8;
+}
+
+.weekLabel {
+  @apply text-xl;
+}
+
+.weekGroup {
+  display: flex;
+  justify-content: center;
+  @apply items-center gap-5 md:justify-start;
+}
+
+.weekInput {
+  display: block;
+  width: 80px;
+  height: auto;
+  padding: 8px 4px;
+  text-align: center;
+  border-radius: 8px;
+
+  &:focus-visible {
+    outline: none;
+    border-width: 1px;
+    border-color: var(--color-gray-500);
+    border-style: solid;
+  }
+
+  :global(.dark) &:focus-visible {
+    border-color: var(--color-blue-500);
+  }
+}
+
+.modifyQuantityButtons {
+  border-width: 1px;
+  border-color: var(--color-blue-500);
+  border-radius: 50%;
+}
+
+.buttonWrapper {
+  @apply w-full flex md:justify-end;
+
+  button {
+    @apply w-full md:w-fit;
+  }
+}
+
+.weekAndSubmit {
+  @apply w-full md:w-1/2 flex flex-col md:flex-row items-center;
+}
