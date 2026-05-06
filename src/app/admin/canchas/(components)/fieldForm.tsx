@@ -79,6 +79,9 @@ export const FieldForm: FC<Props> = ({ session, field }) => {
       );
 
       if (!response.ok) {
+        if (response.message.includes('enlace permanente')) {
+          form.setError('permalink', { message: 'Enlace permanente duplicado' });
+        }
         toast.error(response.message);
         return;
       }
@@ -88,7 +91,6 @@ export const FieldForm: FC<Props> = ({ session, field }) => {
         toast.success(response.message);
         route.replace(ROUTES.ADMIN_FIELDS);
       }
-      return;
     }
 
     // Update Field
@@ -101,6 +103,9 @@ export const FieldForm: FC<Props> = ({ session, field }) => {
       });
 
       if (!response.ok) {
+        if (response.message.includes('enlace permanente')) {
+          form.setError('permalink', { message: 'Enlace permanente duplicado' });
+        }
         toast.error(response.message);
         return;
       }
@@ -160,6 +165,7 @@ export const FieldForm: FC<Props> = ({ session, field }) => {
                       {...field}
                       value={field.value ?? ''}
                       onChange={handlePermalinkChange}
+                      aria-invalid={!!form.formState.errors.permalink}
                     />
                   </FormControl>
                   <FormMessage />
