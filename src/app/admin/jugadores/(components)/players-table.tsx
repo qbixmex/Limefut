@@ -11,13 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { InfoIcon } from 'lucide-react';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
 import { SoccerPlayer } from '@/shared/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { DeletePlayer } from '../(components)/delete-player';
@@ -27,6 +20,7 @@ import { ActiveSwitch } from '@/shared/components/active-switch';
 import { headers } from 'next/headers';
 import { DeletePlayers } from '@/shared/components/delete-players';
 import { EditPlayer } from './edit-player';
+import { PlayerDetails } from './player-details';
 
 type Props = Readonly<{
   teamId: string;
@@ -117,18 +111,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/jugadores/perfil/${player.id}`}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            detalles
-                          </TooltipContent>
-                        </Tooltip>
+                        <PlayerDetails playerId={player.id} />
                         <EditPlayer playerId={player.id} />
                         <DeletePlayer
                           playerId={player.id}
