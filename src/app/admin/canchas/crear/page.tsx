@@ -1,4 +1,3 @@
-import crypto from 'node:crypto';
 import { Suspense, type FC } from 'react';
 import { headers } from 'next/headers';
 import {
@@ -7,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-// import { FieldForm } from '../(components)/fieldForm';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import type { Session } from '@/lib/auth-client';
@@ -40,7 +38,7 @@ const CreateFieldContent: FC = async () => {
           </CardHeader>
           <CardContent>
             <FieldForm
-              key={crypto.randomUUID()}
+              // key={crypto.randomUUID()}
               session={session as Session}
             />
           </CardContent>
