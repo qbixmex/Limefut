@@ -1,0 +1,6 @@
+@reference 'tailwindcss';
+
+.tournamentsSelector,
+.categoriesSelector {
+  @apply w-full lg:w-1/2 2xl:w-full 2xl:max-w-[600px];
+}

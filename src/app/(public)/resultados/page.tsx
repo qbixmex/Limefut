@@ -1,5 +1,5 @@
 import { Suspense, type FC } from 'react';
-import { Heading, TournamentsSelector, TournamentsSelectorSkeleton } from '../components';
+import { Heading, SearchParamsSelector, TournamentsSelectorSkeleton } from '../components';
 import { ResultsContent } from './(components)/results-content';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 
@@ -7,7 +7,6 @@ type Props = Readonly<{
   searchParams: Promise<{
     torneo?: string;
     categoria?: string;
-    formato?: string;
     roles?: 'complete' | 'team' | 'field';
     team?: string;
   }>;
@@ -20,11 +19,11 @@ export const ResultsPage: FC<Props> = ({ searchParams }) => {
         Rol de Juegos y Resultados
       </Heading>
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <TournamentsSelector />
+        <SearchParamsSelector />
       </Suspense>
       <Suspense>
         <ErrorHandler />
-        <ResultsContent searchParamsPromise={searchParams} />
+        <ResultsContent searchParams={searchParams} />
       </Suspense>
     </div>
   );

@@ -8,7 +8,6 @@ export type TournamentType = {
   name: string;
   permalink: string;
   category: string;
-  format: string;
   gender: string;
 };
 
@@ -37,7 +36,6 @@ export const fetchTournamentsAction = async (): ResponseAction => {
         name: true,
         permalink: true,
         category: true,
-        format: true,
         gender: true,
       },
     });
