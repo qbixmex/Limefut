@@ -10,10 +10,14 @@ import { TournamentsSelector } from '../(components)/tournaments-selector';
 import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
 import TournamentsSelectorSkeleton from '../equipos/(components)/TournamentsSelectorSkeleton';
 import { CreatePlayerButton } from './(components)/create-player-button';
+import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
+import { redirect } from 'next/navigation';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   searchParams: Promise<{
     torneo?: string;
+    categoria?: string;
     equipo?: string;
     query?: string;
     page?: string;
@@ -21,8 +25,6 @@ type Props = Readonly<{
 }>;
 
 export const PlayersPage: FC<Props> = ({ searchParams }) => {
-  const tournamentIdPromise = searchParams.then((sp) => ({ tournamentId: sp.torneo }));
-
   return (
     <>
       <ErrorHandler />
@@ -37,11 +39,11 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
               </section>
             </CardHeader>
             <CardContent>
-              <section className="flex flex-col gap-5 mb-10">
+              <section className="mb-10">
                 <Suspense fallback={<TournamentsSelectorSkeleton />}>
-                  <TournamentsWrapper />
+                  <SearchParamsSelector />
                 </Suspense>
-                <TournamentsIdProvider tournamentIdPromise={tournamentIdPromise} />
+                <TeamsContent searchParams={searchParams} />
               </section>
               <Suspense>
                 <PlayersContent searchParams={searchParams} />
@@ -54,36 +56,38 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
   );
 };
 
-const TournamentsWrapper = async () => {
+const SearchParamsSelector = async () => {
   const { tournaments } = await fetchTournamentsAction();
   return (
     <TournamentsSelector tournaments={tournaments} />
   );
 };
 
-type TeamsWrapperProps = Readonly<{
-  tournamentIdPromise: Promise<{
-    tournamentId: string | undefined;
-  }>;
-}>;
+const TeamsContent: FC<Props> = async ({ searchParams }) => {
+  const tournamentPermalink = (await searchParams).torneo;
+  const categoryPermalink = (await searchParams).categoria;
 
-const TournamentsIdProvider: FC<TeamsWrapperProps> = async ({ tournamentIdPromise }) => {
-  const { tournamentId } = await tournamentIdPromise;
-
-  if (!tournamentId) {
+  if (!tournamentPermalink || !categoryPermalink) {
     return null;
+  }
+
+  const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
+    permalink: tournamentPermalink,
+    category: categoryPermalink,
+  });
+
+  if (!ok && !tournamentId) {
+    redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(message)}`);
   }
 
   return (
     <Suspense fallback={<TeamsSelectorSkeleton />}>
-      <TeamsWrapper tournamentIdPromise={tournamentIdPromise} />
+      <TeamsWrapper tournamentId={tournamentId as string} />
     </Suspense>
   );
 };
 
-const TeamsWrapper: FC<TeamsWrapperProps> = async ({ tournamentIdPromise }) => {
-  const { tournamentId } = await tournamentIdPromise;
-
+const TeamsWrapper: FC<{ tournamentId: string }> = async ({ tournamentId }) => {
   const { teams } = await fetchTeamsAction(tournamentId as string);
 
   return (

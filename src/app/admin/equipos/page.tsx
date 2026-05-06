@@ -1,13 +1,12 @@
 import { type FC, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { TournamentsSelector } from '../(components)/tournaments-selector';
 import { TeamsContent } from './(components)/teams-content';
 import { ClearFilters } from './(components)/clear-filters';
 import { TournamentsSelectorSkeleton } from './(components)/TournamentsSelectorSkeleton';
-import { fetchTournamentsAction } from '@/shared/actions/fetchTournamentsAction';
 import { Search } from '@/shared/components/search';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { CreateTeam } from './(components)/create-team';
+import { SearchParamsSelectors } from './(components)/search-params-selectors';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -32,7 +31,7 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
           </CardHeader>
           <CardContent>
             <Suspense fallback={<TournamentsSelectorSkeleton />}>
-              <TournamentsContent />
+              <SearchParamsSelectors />
             </Suspense>
             <Suspense>
               <ErrorHandler />
@@ -42,14 +41,6 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
         </Card>
       </div>
     </div>
-  );
-};
-
-const TournamentsContent = async () => {
-  const { tournaments } = await fetchTournamentsAction();
-
-  return (
-    <TournamentsSelector tournaments={tournaments} />
   );
 };
 
