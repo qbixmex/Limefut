@@ -43,6 +43,7 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
                 <TableRow>
                   <TableHead className="w-12 text-center">#</TableHead>
                   <TableHead>Nombre</TableHead>
+                  <TableHead className="hidden md:table-cell w-25">Enlace Permanente</TableHead>
                   <TableHead className="hidden md:table-cell w-25">Ciudad</TableHead>
                   <TableHead className="hidden md:table-cell w-25">Estado</TableHead>
                   <TableHead className="hidden md:table-cell w-25">País</TableHead>
@@ -54,6 +55,7 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
                   <TableRow key={field.id}>
                     <TableCell className="font-bold text-center">{index + 1}</TableCell>
                     <TableCell className="">{field.name}</TableCell>
+                    <TableCell className="">{field.permalink}</TableCell>
                     <TableCell className="hidden md:table-cell">{field.city}</TableCell>
                     <TableCell className="hidden md:table-cell">{field.state}</TableCell>
                     <TableCell className="hidden md:table-cell">{field.country}</TableCell>

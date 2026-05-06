@@ -1,6 +1,6 @@
 import { type FC, Suspense } from 'react';
 import { FieldsWrapper } from './fields-wrapper';
-import { FieldsTableSkeleton } from './fiels-table-skeleton';
+import { FieldsTableSkeleton } from './fields-table-skeleton';
 
 type Props = Readonly<{
   searchParamsPromise: Promise<{
