@@ -1,7 +1,7 @@
 @reference 'tailwindcss';
 
 .weekSelector {
-  @apply w-full flex flex-col gap-4 mb-8;
+  @apply w-full flex flex-col gap-3;
 }
 
 .weekLabel {
@@ -38,16 +38,4 @@
   border-width: 1px;
   border-color: var(--color-blue-500);
   border-radius: 50%;
-}
-
-.buttonWrapper {
-  @apply w-full flex md:justify-end;
-
-  button {
-    @apply w-full md:w-fit;
-  }
-}
-
-.weekAndSubmit {
-  @apply w-full md:w-1/2 flex flex-col md:flex-row items-center;
 }

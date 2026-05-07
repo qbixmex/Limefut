@@ -14,10 +14,9 @@ export const Standings: FC<Props> = async ({ searchParams }) => {
   const {
     torneo: tournament,
     categoria: category,
-    formato: format,
   } = await searchParams;
 
-  if (!tournament && !category && !format) {
+  if (!tournament || !category) {
     return null;
   }
 
@@ -25,15 +24,13 @@ export const Standings: FC<Props> = async ({ searchParams }) => {
     <Suspense
       key={
         `${tournament ?? 'tournament'}` +
-        `-${category ?? 'category'}` +
-        `-${format ?? 'format'}`
+        `-${category ?? 'category'}`
       }
       fallback={<StandingsSkeleton />}
     >
       <StandingsTable
         tournament={tournament}
         category={category}
-        format={format}
       />
     </Suspense>
   );

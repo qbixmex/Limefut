@@ -12,7 +12,7 @@ export const TournamentsWrapper: FC = async () => {
   const { tournaments } = await fetchTournamentsForStandingsAction(userRoles);
 
   return (
-    <section className="mb-10">
+    <section className="w-full lg:w-1/2 2xl:w-full 2xl:max-w-[600px] mb-10">
       <TournamentsSelector tournaments={tournaments} />
     </section>
   );

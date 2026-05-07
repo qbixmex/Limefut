@@ -2,30 +2,18 @@ import type { FC } from 'react';
 import { redirect } from 'next/navigation';
 import { fetchResultsAction } from '../../(actions)/fetchResultsAction';
 import ConcentratedResults from './concentrated-results';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
-  tournament?: string;
-  category?: string;
-  format?: string;
+  tournament: string;
+  category: string;
 }>;
 
-export const MatchesTable: FC<Props> = async ({
-  tournament,
-  category,
-  format,
-}) => {
-  if (!tournament || !category || !format) {
-    redirect(`/resultados?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
-  }
-
-  const { ok, message, data } = await fetchResultsAction(tournament, category, format);
+export const MatchesTable: FC<Props> = async ({ tournament, category }) => {
+  const { ok, message, data } = await fetchResultsAction(tournament, category);
 
   if (!ok) {
-    redirect(`/encuentros?error=${encodeURIComponent(message)}`);
-  }
-
-  if (!tournament || !category || !format) {
-    redirect(`/encuentros?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
+    redirect(`${ROUTES.PUBLIC_CONCENTRATED}?error=${encodeURIComponent(message)}`);
   }
 
   return (

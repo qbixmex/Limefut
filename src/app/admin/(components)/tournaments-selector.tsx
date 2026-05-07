@@ -35,34 +35,27 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
     ...new Map(tournaments.map(item => [item.name, item])).values(),
   ];
 
-  const setTournamentParam = (tournamentPermalink: string) => {
-    if (params.size > 0) {
-      for (const key of params.keys()) {
-        if (key === 'torneo') continue;
-        params.delete(key);
-      }
-    }
+  const setTournamentParam = (value: string) => {
+    if (!value) return;
 
-    if (tournamentPermalink || !params.has('torneo')) {
-      params.set('torneo', tournamentPermalink);
-      router.push(`${pathname}?${params}`);
-    }
+    params.set('torneo', value);
+    router.push(`${pathname}?${params}`);
   };
 
-  const setCategoryParam = (category: string) => {
-    if (category || !params.has('categoria')) {
-      params.set('categoria', category);
-      router.push(`${pathname}?${params}`);
-    }
+  const setCategoryParam = (value: string) => {
+     if (!value) return;
+
+     params.set('categoria', value);
+     router.push(`${pathname}?${params}`);
   };
 
   return (
-    <div className="flex flex-col gap-5 mb-5">
+    <div className="w-full flex flex-col gap-5 mb-5">
       <Select
         value={tournamentPermalink ?? ''}
         onValueChange={setTournamentParam}
       >
-        <SelectTrigger className="w-full lg:w-1/2">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Seleccione el torneo" />
         </SelectTrigger>
         <SelectContent>
@@ -82,7 +75,7 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
           value={categoryPermalink ?? ''}
           onValueChange={setCategoryParam}
         >
-          <SelectTrigger className="w-full lg:w-1/2">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Seleccione la categoría" />
           </SelectTrigger>
           <SelectContent>

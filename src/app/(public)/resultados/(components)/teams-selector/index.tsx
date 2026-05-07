@@ -1,10 +1,13 @@
 import { type FC } from 'react';
 import { TeamOption } from '../team-option';
-import type { TeamType } from '../../(actions)/fetchTeamsByTournamentAction';
 import styles from './teams-selector.module.css';
 
 type Props = Readonly<{
-  teams: TeamType[];
+  teams: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
 }>;
 
 export const TeamsSelector: FC<Props> = ({ teams }) => {

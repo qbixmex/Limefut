@@ -1,13 +1,12 @@
 import { Suspense, type FC } from 'react';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { Heading, TournamentsSelector, TournamentsSelectorSkeleton } from '../components';
+import { Heading, SearchParamsSelector, TournamentsSelectorSkeleton } from '../components';
 import { MatchesContent } from './(components)/matches-content';
 
 type Props = Readonly<{
   searchParams: Promise<{
     torneo?: string;
     categoria?: string;
-    formato?: string;
   }>;
 }>;
 
@@ -19,7 +18,7 @@ export const ResultsPage: FC<Props> = ({ searchParams }) => {
           Concentrado de Encuentros
         </Heading>
         <Suspense fallback={<TournamentsSelectorSkeleton />}>
-          <TournamentsSelector />
+          <SearchParamsSelector />
         </Suspense>
         <Suspense>
           <ErrorHandler />

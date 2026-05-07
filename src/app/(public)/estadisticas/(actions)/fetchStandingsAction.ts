@@ -47,11 +47,13 @@ export type StandingPromise = Promise<{
   standings: StandingType[];
 }>;
 
-export const fetchStandingsAction = async (
+export const fetchStandingsAction = async ({
+  tournamentPermalink,
+  category,
+}: {
   tournamentPermalink: string,
   category: string,
-  format: string,
-): StandingPromise => {
+}): StandingPromise => {
   'use cache';
 
   cacheLife('days');
@@ -62,7 +64,6 @@ export const fetchStandingsAction = async (
       where: {
         permalink: tournamentPermalink,
         category,
-        format,
       },
       select: {
         id: true,

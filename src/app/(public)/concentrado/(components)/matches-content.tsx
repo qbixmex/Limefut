@@ -6,7 +6,6 @@ type Props = Readonly<{
   searchParamsPromise: Promise<{
     torneo?: string;
     categoria?: string;
-    formato?: string;
   }>;
 }>;
 
@@ -14,23 +13,21 @@ export const MatchesContent: FC<Props> = async ({ searchParamsPromise }) => {
   const {
     torneo: tournament,
     categoria: category,
-    formato: format,
   } = await searchParamsPromise;
 
-  if (!tournament && !category && !format) {
+  if (!tournament || !category) {
     return null;
   }
 
   return (
     <>
       <Suspense
-        key={`${tournament}-${category}-${format}`}
+        key={`${tournament ?? 'tournament'}-${category ?? 'category'}`}
         fallback={<ConcentratedMatchesSkeleton />}
       >
         <MatchesTable
-          tournament={tournament}
-          category={category}
-          format={format}
+          tournament={tournament as string}
+          category={category as string}
         />
       </Suspense>
     </>

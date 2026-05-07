@@ -11,30 +11,24 @@ import Link from 'next/link';
 import { fetchStandingsAction, type TournamentType } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
 import { TournamentData } from '~/src/shared/components/TournamentData';
 import { redirect } from 'next/navigation';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = {
-  tournament?: string;
-  category?: string;
-  format?: string;
+  tournament: string;
+  category: string;
 };
 
 export const StandingsTable: FC<Props> = async ({
   tournament,
   category,
-  format,
 }) => {
-  if (!tournament || !category || !format) {
-    redirect(`/estadisticas?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
-  }
-
-  const response = await fetchStandingsAction(
-    tournament,
+  const response = await fetchStandingsAction({
+    tournamentPermalink: tournament,
     category,
-    format,
-  );
+  });
 
   if (!response.ok) {
-    redirect(`/estadisticas?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.PUBLIC_STANDINGS}?error=${encodeURIComponent(response.message)}`);
   }
 
   if (response.standings.length === 0) {
