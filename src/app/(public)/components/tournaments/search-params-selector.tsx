@@ -7,5 +7,10 @@ type Props = Readonly<{ roles?: boolean }>;
 export const SearchParamsSelector: FC<Props> = async ({ roles }) => {
   const { tournaments } = await fetchTournamentsAction();
 
-  return <SelectorInputs tournaments={tournaments} roles={roles} />;
+  return (
+    <SelectorInputs
+      tournaments={tournaments}
+      roles={roles}
+    />
+  );
 };

@@ -35,7 +35,9 @@ export const ResultsList: FC<Props> = async ({
 
   return (
     <div className="mt-5">
-      <RoleTypeSelector />
+      {tournament && category && (
+        <RoleTypeSelector />
+      )}
 
       {roles === 'team' && teams.length > 0 && (
         <TeamsSelector teams={teams} />
