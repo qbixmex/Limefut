@@ -1,8 +1,11 @@
+import type { FC } from 'react';
 import { fetchTournamentsAction } from '../../(actions)';
 import { SelectorInputs } from './selector';
 
-export const SearchParamsSelector = async () => {
+type Props = Readonly<{ roles?: boolean }>;
+
+export const SearchParamsSelector: FC<Props> = async ({ roles }) => {
   const { tournaments } = await fetchTournamentsAction();
 
-  return <SelectorInputs tournaments={tournaments} />;
+  return <SelectorInputs tournaments={tournaments} roles={roles} />;
 };

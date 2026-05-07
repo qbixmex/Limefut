@@ -18,9 +18,10 @@ import style from './styles.module.css';
 
 type Props = Readonly<{
   tournaments: TournamentType[];
+  roles?: boolean;
 }>;
 
-export const SelectorInputs: FC<Props> = ({ tournaments }) => {
+export const SelectorInputs: FC<Props> = ({ tournaments, roles }) => {
   const {
     uniqueTournaments,
     tournamentPermalink,
@@ -28,7 +29,7 @@ export const SelectorInputs: FC<Props> = ({ tournaments }) => {
     setTournamentParam,
     setCategoryParam,
     clearParams,
-  } = useSelectorInputs(tournaments);
+  } = useSelectorInputs(tournaments, roles);
 
   return (
     <section className="flex flex-col gap-5">

@@ -1,6 +1,6 @@
 import { type FC, Suspense } from 'react';
 import type { Metadata } from 'next';
-import { Heading, TournamentsSelector, TournamentsSelectorSkeleton } from '../components';
+import { Heading, SearchParamsSelector, TournamentsSelectorSkeleton } from '../components';
 import { TeamsContent } from './(components)/TeamsContent';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 
@@ -24,7 +24,7 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
       </Heading>
 
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <TournamentsSelector />
+        <SearchParamsSelector />
       </Suspense>
 
       <Suspense>

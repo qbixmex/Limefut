@@ -43,7 +43,6 @@ export type ResultType = {
 export const fetchResultsAction = async (
   tournamentPermalink: string,
   category: string,
-  format: string,
 ): ResponseAction => {
   'use cache';
 
@@ -54,7 +53,6 @@ export const fetchResultsAction = async (
     where: {
       permalink: tournamentPermalink,
       category,
-      format,
     },
     select: {
       id: true,
@@ -75,7 +73,7 @@ export const fetchResultsAction = async (
   if (!tournament) {
     return {
       ok: false,
-      message: '! No se encontró el torneo ❌ ¡',
+      message: `! No se encontró el torneo con el enlace permamente "${tournamentPermalink}" y categoría "${category}" ❌ ¡`,
       data: {
         tournament: null,
         results: [],

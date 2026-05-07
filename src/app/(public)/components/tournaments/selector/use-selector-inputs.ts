@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { TournamentType } from '@/app/(public)/(actions)';
 
-export const useSelectorInputs = (tournaments: TournamentType[]) => {
+export const useSelectorInputs = (tournaments: TournamentType[], roles?: boolean) => {
   const searchParams = useSearchParams();
   const tournamentPermalink = searchParams.get('torneo');
   const categoryPermalink = searchParams.get('categoria');
@@ -32,7 +32,7 @@ export const useSelectorInputs = (tournaments: TournamentType[]) => {
   const setCategoryParam = (value: string) => {
     if (categoryPermalink || !params.has('categoria')) {
       params.set('categoria', value);
-      params.set('roles', 'complete');
+      if (roles) params.set('roles', 'complete');
       router.push(`${pathname}?${params}`);
     }
   };

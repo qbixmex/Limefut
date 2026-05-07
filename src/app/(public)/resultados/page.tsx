@@ -19,7 +19,7 @@ export const ResultsPage: FC<Props> = ({ searchParams }) => {
         Rol de Juegos y Resultados
       </Heading>
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <SearchParamsSelector />
+        <SearchParamsSelector roles />
       </Suspense>
       <Suspense>
         <ErrorHandler />
