@@ -4,7 +4,7 @@ import { Standings } from './(components)/standings';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import {
   Heading,
-  TournamentsSelector,
+  SearchParamsSelector,
   TournamentsSelectorSkeleton,
 } from '../components';
 import './styles.css';
@@ -19,7 +19,6 @@ type Props = Readonly<{
   searchParams: Promise<{
     torneo: string;
     categoria: string;
-    formato: string;
   }>;
 }>;
 
@@ -31,7 +30,7 @@ export const StandingsPage: FC<Props> = ({ searchParams }) => {
       </Heading>
 
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <TournamentsSelector />
+        <SearchParamsSelector />
       </Suspense>
 
       <Suspense>

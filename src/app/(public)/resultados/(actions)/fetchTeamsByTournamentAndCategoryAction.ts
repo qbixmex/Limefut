@@ -15,11 +15,13 @@ export type ResponseAction = Promise<{
   teams: TeamType[];
 }>;
 
-export const fetchTeamsByTournamentAction = async (
-  tournamentPermalink: string,
-  category: string,
-  format: string,
-): ResponseAction => {
+export const fetchTeamsByTournamentAndCategoryAction = async ({
+  tournamentPermalink,
+  categoryPermalink,
+}: {
+  tournamentPermalink: string;
+  categoryPermalink: string;
+}): ResponseAction => {
   'use cache';
 
   cacheLife('days');
@@ -29,8 +31,7 @@ export const fetchTeamsByTournamentAction = async (
     const tournament = await prisma.tournament.findFirst({
       where: {
         permalink: tournamentPermalink,
-        category,
-        format,
+        category: categoryPermalink,
       },
       select: {
         teams: {

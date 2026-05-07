@@ -50,7 +50,7 @@ export const TeamsSelector: FC<Props> = ({ teams }) => {
             variant="outline-secondary"
             role="combobox"
             aria-expanded={open}
-            className="w-full lg:max-w-1/2 justify-between border-input! dark:bg-input/30!"
+            className="w-full justify-between border-input! dark:bg-input/30!"
           >
             {
               teamId !== 'none' && selectedTeam

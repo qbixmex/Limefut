@@ -59,7 +59,9 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
 const SearchParamsSelector = async () => {
   const { tournaments } = await fetchTournamentsAction();
   return (
-    <TournamentsSelector tournaments={tournaments} />
+    <section className="w-full lg:w-1/2 2xl:w-full 2xl:max-w-[600px]">
+      <TournamentsSelector tournaments={tournaments} />
+    </section>
   );
 };
 
@@ -91,7 +93,9 @@ const TeamsWrapper: FC<{ tournamentId: string }> = async ({ tournamentId }) => {
   const { teams } = await fetchTeamsAction(tournamentId as string);
 
   return (
-    <TeamsSelector teams={teams} />
+    <section className="w-full lg:w-1/2 2xl:w-full 2xl:max-w-[600px]">
+      <TeamsSelector teams={teams} />
+    </section>
   );
 };
 

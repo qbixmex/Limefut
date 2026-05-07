@@ -6,27 +6,47 @@ import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction'
 import { auth } from '@/lib/auth';
 import type { Session } from '@/lib/auth-client';
 import { FormSkeleton } from '../(components)/form-skeleton';
+import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
+import { ROUTES } from '@/shared/constants/routes';
 
 type MatchWrapperProps = Readonly<{
   searchParams: Promise<{
     torneo?: string;
+    categoria?: string;
     semana?: string;
   }>;
 }>;
 
 export const MatchWrapper: FC<MatchWrapperProps> = async ({ searchParams }) => {
-  const tournamentId = (await searchParams).torneo;
-  const week = (await searchParams).semana;
+  const {
+    torneo: tournament,
+    categoria: category,
+    semana: week,
+  } = await searchParams;
+
+  if (!tournament || !category || !week) {
+    return null;
+  }
+
+  const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
+    permalink: tournament,
+    category,
+  });
+
+  if (!ok && !tournamentId) {
+    redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(message)}`);
+  }
 
   return (
-    <>
-      <Suspense
-        key={`permalink-${tournamentId}_week-${week}`}
-        fallback={<FormSkeleton />}
-      >
-        <CreateMatchContent tournamentId={tournamentId} week={week} />
-      </Suspense>
-    </>
+    <Suspense
+      key={`${tournament ?? 'tournament'}-${category ?? 'category'}-${week ?? 'week'}`}
+      fallback={<FormSkeleton />}
+    >
+      <CreateMatchContent
+        tournamentId={tournamentId as string}
+        week={week}
+      />
+    </Suspense>
   );
 };
 

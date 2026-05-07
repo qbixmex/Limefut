@@ -1,18 +1,21 @@
 import { type FC, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MatchWrapper } from './create-match-content';
-import { TournamentsSelector } from '../(components)/selectors/tournaments-selector';
 import { TournamentsSelectorSkeleton } from '@/app/(public)/components';
+import { SearchParamsSelectors } from '../../equipos/(components)/search-params-selectors';
 import { WeekSelector } from '../(components)/week-selector';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo: string;
-    semana: string;
+    torneo?: string;
+    categoria?: string;
+    sortWeek?: string;
   }>;
 }>;
 
 const CreateMatchPage: FC<Props> = ({ searchParams }) => {
+  const sortWeekPromise = searchParams.then((sp) => ({ sortWeek: sp.sortWeek }));
+
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -22,9 +25,13 @@ const CreateMatchPage: FC<Props> = ({ searchParams }) => {
           </CardHeader>
           <CardContent>
             <Suspense fallback={<TournamentsSelectorSkeleton />}>
-              <section className="flex flex-col gap-5">
-                <TournamentsSelector />
-                <WeekSelector />
+              <section className="flex flex-col md:flex-row gap-10">
+                <div className="w-full lg:w-1/2">
+                  <SearchParamsSelectors />
+                </div>
+                <div className="w-full lg:w-1/2">
+                  <WeekSelector sortWeekPromise={sortWeekPromise} />
+                </div>
               </section>
             </Suspense>
             <Suspense>
