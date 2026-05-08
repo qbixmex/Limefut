@@ -8,7 +8,6 @@ export type TeamType = {
   name: string;
   permalink: string;
   category: string;
-  format: string;
   imageUrl: string | null;
 };
 
@@ -21,7 +20,6 @@ export type ResponseAction = Promise<{
 export const fetchTeamsAction = async (
   permalink: string,
   category: string,
-  format: string,
 ): ResponseAction => {
   'use cache';
 
@@ -32,7 +30,6 @@ export const fetchTeamsAction = async (
     where: {
       permalink,
       category,
-      format,
     },
     select: {
       id: true,

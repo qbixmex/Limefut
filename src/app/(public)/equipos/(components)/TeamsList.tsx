@@ -7,19 +7,17 @@ import { ShieldBan } from 'lucide-react';
 type TeamsListProps = Readonly<{
   tournamentPermalink?: string;
   category?: string;
-  format?: string;
 }>;
 
 export const TeamsList: FC<TeamsListProps> = async ({
   tournamentPermalink,
   category,
-  format,
 }) => {
-  if (!tournamentPermalink || !category || !format) {
+  if (!tournamentPermalink || !category) {
     return null;
   }
 
-  const { teams } = await fetchTeamsAction(tournamentPermalink, category, format);
+  const { teams } = await fetchTeamsAction(tournamentPermalink, category);
 
   if (teams.length === 0) {
     return (
@@ -43,8 +41,7 @@ export const TeamsList: FC<TeamsListProps> = async ({
                     href={
                       `/equipos/${team.permalink}` +
                       `?torneo=${tournamentPermalink}` +
-                      `&categoria=${team.category}` +
-                      `&formato=${team.format}`
+                      `&categoria=${team.category}`
                     }
                   >
                     <ShieldBan size={250} strokeWidth={1} className="text-gray-500" />
@@ -55,8 +52,7 @@ export const TeamsList: FC<TeamsListProps> = async ({
                   href={
                     `/equipos/${team.permalink}` +
                     `?torneo=${tournamentPermalink}` +
-                    `&categoria=${team.category}` +
-                    `&formato=${team.format}`
+                    `&categoria=${team.category}`
                   }
                   >
                   <Image
@@ -73,8 +69,7 @@ export const TeamsList: FC<TeamsListProps> = async ({
               href={
                 `/equipos/${team.permalink}` +
                 `?torneo=${tournamentPermalink}` +
-                `&categoria=${team.category}` +
-                `&formato=${team.format}`
+                `&categoria=${team.category}`
               }
               className="italic font-bold"
             >

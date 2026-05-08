@@ -31,10 +31,9 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
   const {
     torneo: tournamentPermalink,
     categoria: category,
-    formato: format,
   } = await searchParams;
 
-  if (!tournamentPermalink || !category || !format) {
+  if (!tournamentPermalink || !category) {
     redirect(`/equipos?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
   };
 
@@ -42,7 +41,6 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
     permalink,
     tournamentPermalink,
     category,
-    format,
   });
 
   if (!responseTeam.team && !responseTeam.ok) {
