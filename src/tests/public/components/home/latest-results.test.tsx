@@ -56,13 +56,7 @@ describe('Test on <LatestResults /> component', () => {
     latestMatches.forEach((match) => {
       // Check for links
       expect(screen.getByTestId(`match-${match.id}`))
-        .toHaveAttribute(
-          'href',
-          `/resultados/${match.id}/` +
-          `${match.localTeam.permalink}` +
-          '-vs-' +
-          `${match.localTeam.permalink}`,
-        );
+        .toHaveAttribute('href', '/resultados/' + match.id);
     });
   });
 

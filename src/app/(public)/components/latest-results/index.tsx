@@ -28,12 +28,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
         {(matches.length > 0) && matches.map((match, index) => (
           <Link
             key={match.id}
-            href={
-              `/resultados/${match.id}/` +
-              `${match.localTeam.permalink}` +
-              '-vs-' +
-              `${match.localTeam.permalink}`
-            }
+            href={`/resultados/${match.id}/`}
             target="_blank"
             data-testid={`match-${match.id}`}
           >
