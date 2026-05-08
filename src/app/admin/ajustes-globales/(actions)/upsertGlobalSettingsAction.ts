@@ -66,6 +66,11 @@ export const upsertGlobalSettingsAction = async (
     contactEmail: formData.get('contactEmail') ?? undefined,
     fromEmail: formData.get('fromEmail') ?? undefined,
     replyToEmail: formData.get('replyToEmail') ?? undefined,
+
+    // SEO
+    seoTitle: formData.get('seoTitle') ?? undefined,
+    seoDescription: formData.get('seoDescription') ?? undefined,
+    ogImageUrl: formData.get('ogImageUrl') as File ?? undefined,
   };
 
   const dataVerified = GlobalSettingsSchema.safeParse(rawData);
@@ -78,7 +83,7 @@ export const upsertGlobalSettingsAction = async (
     };
   }
 
-  const { logoImage, logoAdminImage, faviconImage, ...settingsToSave } = dataVerified.data;
+  const { logoImage, logoAdminImage, faviconImage, ogImageUrl, ...settingsToSave } = dataVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -135,7 +140,7 @@ export const upsertGlobalSettingsAction = async (
 
       if (faviconImage instanceof File) {
         const faviconUploaded = await handleUploadImage({
-          publicId: globalSettings.logoAdminPublicId,
+          publicId: globalSettings.faviconUrl,
           imageFile: faviconImage,
           folder: 'general-settings',
         });
@@ -151,6 +156,26 @@ export const upsertGlobalSettingsAction = async (
         // Update event object to return.
         globalSettings.faviconUrl = faviconUploaded.secureUrl;
         globalSettings.favIconPublicId = faviconUploaded.publicId;
+      }
+
+      if (ogImageUrl instanceof File) {
+        const ogImageUploaded = await handleUploadImage({
+          publicId: globalSettings.ogImagePublicId,
+          imageFile: ogImageUrl,
+          folder: 'general-settings',
+        });
+
+        await transaction.globalSettings.update({
+          where: { id: 1 },
+          data: {
+            ogImageUrl: ogImageUploaded.secureUrl,
+            ogImagePublicId: ogImageUploaded.publicId,
+          },
+        });
+
+        // Update event object to return.
+        globalSettings.ogImageUrl = ogImageUploaded.secureUrl;
+        globalSettings.ogImagePublicId = ogImageUploaded.publicId;
       }
 
       return {

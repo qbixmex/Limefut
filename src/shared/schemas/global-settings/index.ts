@@ -118,26 +118,6 @@ export const GlobalSettingsSchema = z.object({
       .max(255, { error: 'El mensaje de mantenimiento debe ser menor a 255 caracteres' }),
   ]).optional(),
 
-  // COLORS
-  primaryColor: z.union([
-    z.literal(''),
-    z.string({ error: 'El color primario debe ser una cadena de texto' })
-      .min(4, { error: 'El color primario debe ser mayor a 4 caracteres' })
-      .max(50, { error: 'El color primario debe ser menor a 50 caracteres' }),
-  ]).optional(),
-  secondaryColor: z.union([
-    z.literal(''),
-    z.string({ error: 'El color secundario debe ser una cadena de texto' })
-      .min(4, { error: 'El color secundario debe ser mayor a 4 caracteres' })
-      .max(50, { error: 'El color secundario debe ser menor a 50 caracteres' }),
-  ]).optional(),
-  accentColor: z.union([
-    z.literal(''),
-    z.string({ error: 'El color de acento debe ser una cadena de texto' })
-      .min(4, { error: 'El color de acento debe ser mayor a 4 caracteres' })
-      .max(50, { error: 'El color de acento debe ser menor a 50 caracteres' }),
-  ]).optional(),
-
   // ANALYTICS
   googleAnalyticsId: z.union([
     z.literal(''),
@@ -181,6 +161,25 @@ export const GlobalSettingsSchema = z.object({
     z.literal(''),
     z.email('El correo del destinatario es incorrecto'),
   ]).optional(),
+
+  // SEO
+  seoTitle: z.union([
+    z.literal(''),
+    z.string('El título SEO del sitio deber ser una cadena de texto')
+      .min(3, { message: 'El título SEO del sitio debe ser mayor a 3 caracteres' })
+      .max(70, { message: 'El título SEO del sitio debe ser menor a 70 caracteres' }),
+  ]).optional(),
+  seoDescription: z.union([
+    z.literal(''),
+    z.string('La descripción SEO del sitio deber ser una cadena de texto')
+      .min(4, { message: 'La descripción SEO del sitio debe ser mayor a 4 caracteres' })
+      .max(165, { message: 'La descripción SEO del sitio debe ser menor a 165 caracteres' }),
+  ]).optional(),
+  ogImageUrl: z
+    .instanceof(File, { message: 'La imagen debe ser un archivo' })
+    .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen OG deber ser menor a 2MB')
+    .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
+    .optional(),
 });
 
 export const SeoSectionSchema = z.object({

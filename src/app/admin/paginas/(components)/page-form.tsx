@@ -235,7 +235,7 @@ export const PageForm: FC<Props> = ({ page }) => {
 
           <section className="flex flex-col gap-5 lg:flex-row">
             <div className="w-full lg:w-1/2 flex flex-col gap-5">
-              <div>
+              <>
                 <FormField
                   control={form.control}
                   name="seoTitle"
@@ -275,7 +275,7 @@ export const PageForm: FC<Props> = ({ page }) => {
                     />
                   </div>
                 )}
-              </div>
+              </>
               <FormField
                 control={form.control}
                 name="seoRobots"

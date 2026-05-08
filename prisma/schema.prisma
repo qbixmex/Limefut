@@ -397,8 +397,8 @@ model Standings {
   // Relations
   tournamentId String     @map("tournament_id")
   tournament   Tournament @relation(fields: [tournamentId], references: [id])
-  teamId           String @unique() @map("team_id")
-  team             Team   @relation(fields: [teamId], references: [id])
+  teamId       String     @unique() @map("team_id")
+  team         Team       @relation(fields: [teamId], references: [id])
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -598,11 +598,6 @@ model GlobalSettings {
   maintenanceMode    Boolean @default(false) @map("maintenance_mode")
   maintenanceMessage String? @map("maintenance_message") @db.VarChar(255)
 
-  // COLORS
-  primaryColor   String? @map("primary_color") @db.VarChar(50)
-  secondaryColor String? @map("secondary_color") @db.VarChar(50)
-  accentColor    String? @map("accent_color") @db.VarChar(50)
-
   // ANALYTICS
   googleAnalyticsId String? @map("google_analytics_id") @db.VarChar(255)
   googleTagManager  String? @map("google_tag_manager") @db.VarChar(255)
@@ -617,7 +612,13 @@ model GlobalSettings {
   fromEmail    String? @map("from_email") @db.VarChar(255)
   replyToEmail String? @map("reply_to_email") @db.VarChar(255)
 
-  // SEO
+  // GLOBAL SEO
+  seoTitle        String? @map("seo_title") @db.VarChar(100)
+  seoDescription  String? @map("seo_description") @db.VarChar(200)
+  ogImageUrl      String? @map("og_image_url") @db.VarChar(255)
+  ogImagePublicId String? @map("og_image_id") @db.VarChar(255)
+
+  // SEO PAGES
   seoSections SeoSection[]
 
   // TIMESTAMPS
@@ -629,8 +630,8 @@ model GlobalSettings {
 
 model SeoSection {
   id          String @id @default(uuid())
-  permalink   String @unique
   title       String @db.VarChar(70)
+  permalink   String @unique
   description String @db.VarChar(165)
   robots      String @default("index, follow") @db.VarChar(20)
 
