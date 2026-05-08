@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,11 +28,17 @@ import { LoaderCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { upsertGlobalSettingsAction } from '../(actions)/upsertGlobalSettingsAction';
 import { FormImage } from './form-image';
+import CharactersCounter from '@/shared/components/characters-counter';
 
 type Props = Readonly<{
   session: Session;
   globalSettings: GlobalSettings | null;
 }>;
+
+type CountCharacters = {
+  count: number;
+  focused: boolean;
+};
 
 export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
   const form = useForm<z.infer<typeof GlobalSettingsSchema>>({
@@ -51,9 +58,6 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
       whatsApp: globalSettings?.whatsApp ?? '',
       maintenanceMode: globalSettings?.maintenanceMode ?? false,
       maintenanceMessage: globalSettings?.maintenanceMessage ?? '',
-      primaryColor: globalSettings?.primaryColor ?? '',
-      secondaryColor: globalSettings?.secondaryColor ?? '',
-      accentColor: globalSettings?.accentColor ?? '',
       googleAnalyticsId: globalSettings?.googleAnalyticsId ?? '',
       googleTagManager: globalSettings?.googleTagManager ?? '',
       metaPixelId: globalSettings?.metaPixelId ?? '',
@@ -62,7 +66,19 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
       contactEmail: globalSettings?.contactEmail ?? '',
       fromEmail: globalSettings?.fromEmail ?? '',
       replyToEmail: globalSettings?.replyToEmail ?? '',
+      seoTitle: globalSettings?.seoTitle ?? '',
+      seoDescription: globalSettings?.seoDescription ?? '',
     },
+  });
+
+  const [seoTitleChars, setSeoTitleChars] = useState<CountCharacters>({
+    count: globalSettings?.seoTitle ? globalSettings.seoTitle?.length : 0,
+    focused: false,
+  });
+
+  const [seoDescriptionChars, setSeoDescriptionChars] = useState<CountCharacters>({
+    count: globalSettings?.seoDescription ? globalSettings.seoDescription?.length : 0,
+    focused: false,
   });
 
   const onSubmit = async (data: z.infer<typeof GlobalSettingsSchema>) => {
@@ -91,9 +107,6 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
     formData.append('whatsAppUrl', data.whatsApp as string);
     formData.append('maintenanceMode', String(data.maintenanceMode));
     formData.append('maintenanceMessage', data.maintenanceMessage as string);
-    formData.append('primaryColor', data.primaryColor as string);
-    formData.append('secondaryColor', data.secondaryColor as string);
-    formData.append('accentColor', data.accentColor as string);
     formData.append('googleAnalyticsId', data.googleAnalyticsId as string);
     formData.append('googleTagManager', data.googleTagManager as string);
     formData.append('metaPixelId', data.metaPixelId as string);
@@ -102,6 +115,11 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
     formData.append('contactEmail', data.contactEmail as string);
     formData.append('fromEmail', data.fromEmail as string);
     formData.append('replyToEmail', data.replyToEmail as string);
+    formData.append('seoTitle', data.seoTitle as string);
+    formData.append('seoDescription', data.seoDescription as string);
+    if (data.ogImageUrl && data.ogImageUrl instanceof File) {
+      formData.append('ogImageUrl', data.ogImageUrl);
+    }
 
     // Upsert video
     const response = await upsertGlobalSettingsAction(
@@ -596,65 +614,6 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
           />
         </section>
 
-        <h2 className="text-2xl font-semibold text-sky-500">Colores del sitio</h2>
-
-        <section className="flex flex-col lg:flex-row gap-5">
-          <div className="w-full md:w-1/3">
-            <FormField
-              control={form.control}
-              name="primaryColor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Color Primario
-                    <span className='text-sm text-gray-600'>(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="#FF0000" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full md:w-1/3">
-            <FormField
-              control={form.control}
-              name="secondaryColor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Color Secundario
-                    <span className='text-sm text-gray-600'>(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="#00FF00" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full md:w-1/3">
-            <FormField
-              control={form.control}
-              name="accentColor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Color de Acento
-                    <span className='text-sm text-gray-600'>(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="#0000FF" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </section>
-
         <h2 className="text-2xl font-semibold text-sky-500">Analíticas</h2>
 
         <section className="flex flex-col lg:flex-row gap-5">
@@ -765,6 +724,133 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </section>
+
+        <h2 className="text-2xl font-semibold text-sky-500">SEO Global</h2>
+
+        <section className="flex flex-col lg:flex-row gap-5">
+          <div className="w-full lg:1/2 flex flex-col gap-5">
+            <FormField
+              control={form.control}
+              name="seoTitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Título SEO
+                    <span className='text-sm text-gray-600'>(opcional)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <div>
+                      <Input
+                        {...field}
+                        value={field.value ?? ''}
+                        onFocus={() => setSeoTitleChars((prev) => ({
+                          ...prev,
+                          focused: true,
+                        }))}
+                        onBlur={() => setSeoTitleChars((prev) => ({
+                          ...prev,
+                          focused: false,
+                        }))}
+                        onChange={(event) => {
+                          field.onChange(event);
+                          setSeoTitleChars(prev => ({
+                            ...prev,
+                            count: event.target.value.length,
+                          }));
+                        }}
+                      />
+                      {seoTitleChars.focused && (
+                        <div className="mt-3 ml-2">
+                          <CharactersCounter
+                            charactersCount={seoTitleChars.count}
+                            limit={70}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="w-full flex gap-5">
+              <FormImage
+                imageUrl={globalSettings?.ogImageUrl as string}
+                logoType="open-graph-image"
+              />
+              <FormField
+                control={form.control}
+                name="ogImageUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Imagen para redes sociales
+                      <span className='text-sm text-gray-600'>(opcional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          field.onChange(file);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="w-full lg:1/2">
+            <FormField
+              control={form.control}
+              name="seoDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Descripción SEO
+                    <span className='text-sm text-gray-600'>(opcional)</span>
+                  </FormLabel>
+                  <FormControl>
+                    <div>
+                      <Textarea
+                        {...field}
+                        value={field.value ?? ''}
+                        rows={5}
+                        className="resize-none"
+                        onFocus={() => setSeoDescriptionChars((prev) => ({
+                          ...prev,
+                          focused: true,
+                        }))}
+                        onBlur={() => setSeoDescriptionChars((prev) => ({
+                          ...prev,
+                          focused: false,
+                        }))}
+                        onChange={(event) => {
+                          field.onChange(event);
+                          setSeoDescriptionChars(prev => ({
+                            ...prev,
+                            count: event.target.value.length,
+                          }));
+                        }}
+                      />
+                      {seoDescriptionChars.focused && (
+                        <div className="mt-3 ml-2">
+                          <CharactersCounter
+                            charactersCount={seoDescriptionChars.count}
+                            limit={160}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

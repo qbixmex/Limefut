@@ -4,44 +4,46 @@ import { Container, Footer, Header } from './components';
 import { fetchPublicGlobalSettingsAction } from '../admin/ajustes-globales/(actions)/fetchPublicGlobalSettingsAction';
 import '@/app/globals.css';
 
-const DOMAIN = process.env.DOMAIN ?? 'http://localhost:3000';
+export const generateMetadata = async (): Promise<Metadata> => {
+  const { globalSettings } = await fetchPublicGlobalSettingsAction();
 
-export const metadata: Metadata = {
-  title: {
-    default: 'Limefut - Liga menor de futbol',
-    template: '%s - Limefut',
-  },
-  description: 'Liga menor de futbol',
-  icons: {
-    icon: [
-      { url: '/favicon.png', type: 'image/png' },
-    ],
-  },
-  openGraph: {
-    locale: 'es_MX',
-    type: 'website',
-    images: [
-      {
-        url: `${DOMAIN}/limefut-logo-1200-x-630.webp`,
-        width: 1200,
-        height: 630,
-        alt: 'Liga menor de fútbol',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Limefut - Liga menor de futbol',
-    description: 'Liga menor de futbol para niños y jóvenes en México',
-    images: [
-      {
-        url: `${DOMAIN}/limefut-logo-1200-x-630.webp`,
-        width: 1200,
-        height: 630,
-        alt: 'Liga menor de futbol Limefut',
-      },
-    ],
-  },
+  const siteName = globalSettings?.siteName ?? 'Nombre de la liga';
+  const seoTitle = globalSettings?.seoTitle ?? 'Liga de fútbol';
+  const seoDescription = globalSettings?.seoDescription;
+  const ogImageUrl = globalSettings?.ogImageUrl;
+
+  return {
+    title: {
+      default: seoTitle,
+      template: `%s - ${siteName}`,
+    },
+    description: seoDescription,
+    icons: {
+      icon: [
+        { url: globalSettings?.faviconUrl ?? '/favicon.png', type: 'image/png' },
+      ],
+    },
+    openGraph: {
+      type: 'website',
+      images: [
+        {
+          url: ogImageUrl ?? '/favicon.png',
+          alt: siteName,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: globalSettings?.seoTitle ?? 'Liga de fútbol',
+      description: seoDescription,
+      images: [
+        {
+          url: ogImageUrl ?? '/favicon.png',
+          alt: siteName,
+        },
+      ],
+    },
+  };
 };
 
 type Props = Readonly<{ children: ReactNode; }>
