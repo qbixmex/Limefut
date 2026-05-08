@@ -3,7 +3,6 @@ import { ResultsSkeleton } from './results-skeleton';
 import { ResultsList } from './results-list';
 import { redirect } from 'next/navigation';
 import {
-  type TeamType,
   fetchTeamsByTournamentAndCategoryAction,
 } from '../(actions)/fetchTeamsByTournamentAndCategoryAction';
 
@@ -29,19 +28,13 @@ export const ResultsContent: FC<Props> = async ({ searchParams }) => {
     return null;
   }
 
-  let teams: TeamType[] = [];
+  const { ok, message, teams } = await fetchTeamsByTournamentAndCategoryAction({
+    tournamentPermalink: tournament as string,
+    categoryPermalink: category as string,
+  });
 
-  if (tournament && category && roles === 'team') {
-    const response = await fetchTeamsByTournamentAndCategoryAction({
-      tournamentPermalink: tournament as string,
-      categoryPermalink: category as string,
-    });
-
-    if (!response.ok && response.teams.length === 0) {
-      redirect(`/resultados?error=${encodeURIComponent(response.message)}`);
-    }
-
-    teams = response.teams;
+  if (!ok && teams.length === 0) {
+    redirect(`/resultados?error=${encodeURIComponent(message)}`);
   }
 
   return (

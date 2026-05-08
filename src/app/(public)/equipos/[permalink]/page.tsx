@@ -9,7 +9,6 @@ type Props = Readonly<{
   searchParams: Promise<{
     torneo?: string;
     categoria?: string;
-    formato?: string;
   }>;
 }>;
 

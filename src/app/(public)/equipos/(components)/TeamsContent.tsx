@@ -25,7 +25,6 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
       <TeamsList
         tournamentPermalink={params.torneo}
         category={params.categoria}
-        format={params.formato}
       />
     </Suspense>
   );
