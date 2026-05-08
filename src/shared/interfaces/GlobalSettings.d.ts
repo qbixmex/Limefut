@@ -28,11 +28,6 @@ export interface GlobalSettings {
   maintenanceMode: boolean;
   maintenanceMessage: string | null;
 
-  // COLORS
-  primaryColor: string | null;
-  secondaryColor: string | null;
-  accentColor: string | null;
-
   // ANALYTICS
   googleAnalyticsId: string | null;
   googleTagManager: string | null;
@@ -46,6 +41,12 @@ export interface GlobalSettings {
   contactEmail: string | null;
   fromEmail: string | null;
   replyToEmail: string | null;
+
+  // SEO SETTINGS
+  seoTitle: string | null;
+  seoDescription: string | null;
+  ogImageUrl: string | null;
+  ogImagePublicId: string | null;
 
   // TIMESTAMPS
   createdAt: Date;

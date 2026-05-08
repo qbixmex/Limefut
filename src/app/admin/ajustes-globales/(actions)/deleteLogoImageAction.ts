@@ -12,10 +12,12 @@ export type ResponseDeleteAction = Promise<{
 export const deleteLogoImageAction = async ({
   deleteLogoImage = false,
   deleteLogoAdminImage = false,
+  deleteOpenGraphImage = false,
   deleteFavIcon = false,
 }: {
   deleteLogoImage: boolean;
   deleteLogoAdminImage: boolean;
+  deleteOpenGraphImage: boolean;
   deleteFavIcon: boolean;
 }): ResponseDeleteAction => {
   const settings = await prisma.globalSettings.findFirst({
@@ -23,6 +25,7 @@ export const deleteLogoImageAction = async ({
     select: {
       logoPublicId: true,
       logoAdminPublicId: true,
+      ogImagePublicId: true,
       favIconPublicId: true,
     },
   });
@@ -60,6 +63,21 @@ export const deleteLogoImageAction = async ({
       await prisma.globalSettings.update({
         where: { id: 1 },
         data: { logoAdminUrl: null, logoAdminPublicId: null },
+      });
+    }
+
+    if (deleteOpenGraphImage) {
+      if (settings.ogImagePublicId) {
+        // Delete logo image from cloudinary.
+        const responseOpenGraphImage = await deleteImage(settings.ogImagePublicId);
+        if (!responseOpenGraphImage.ok) {
+          throw new Error('Error al eliminar la imagen de cloudinary');
+        }
+      }
+
+      await prisma.globalSettings.update({
+        where: { id: 1 },
+        data: { ogImageUrl: null, ogImagePublicId: null },
       });
     }
 
