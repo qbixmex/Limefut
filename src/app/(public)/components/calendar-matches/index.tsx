@@ -39,12 +39,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
         {(matches.length > 0) ? matches.map((match, index) => (
           <Link
             key={match.id}
-            href={
-              `/resultados/${match.id}/` +
-              `${match.localTeam.permalink}` +
-              '-vs-' +
-              `${match.localTeam.permalink}`
-            }
+            href={`/resultados/${match.id}`}
             target="_blank"
           >
             <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">

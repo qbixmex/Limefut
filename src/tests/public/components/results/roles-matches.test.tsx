@@ -233,7 +233,7 @@ describe('Test on <RolesMatches /> component', () => {
     const matchLinks = screen.getAllByRole('button', { name: /detalles del partido entre/i });
 
     matchLinks.forEach((link, index) => {
-      const expectedHref = `/resultados/${matches[index].id}/${matches[index].local.permalink}-vs-${matches[index].visitor.permalink}`;
+      const expectedHref = '/resultados/' + matches[index].id;
       expect(link).toHaveAttribute('href', expectedHref);
     });
   });

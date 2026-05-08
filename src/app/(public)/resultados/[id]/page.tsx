@@ -1,6 +1,6 @@
 import { Suspense, type FC } from 'react';
-import { MatchContent } from '../../(components)/match-content';
-import { Heading } from '../../../components';
+import { MatchContent } from '../(components)/match-content';
+import { Heading } from '../../components';
 
 type Props = Readonly<{
   params: Promise<{
