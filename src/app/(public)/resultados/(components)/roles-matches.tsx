@@ -191,7 +191,7 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                     <Tooltip>
                       <TooltipTrigger>
                         <Link
-                          href={`/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
+                          href={`/resultados/${match.id}`}
                           target="_blank"
                           className={buttonVariants({ variant: 'outline-info', size: 'icon-sm' })}
                           role="button"
