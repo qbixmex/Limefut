@@ -42,12 +42,10 @@ export const fetchTeamAction = async ({
   permalink,
   tournamentPermalink,
   category,
-  format,
 }: {
   permalink: string;
   tournamentPermalink: string;
   category: string;
-  format: string;
 }): FetchTeamResponse => {
   'use cache';
 
@@ -62,7 +60,6 @@ export const fetchTeamAction = async ({
           permalink: tournamentPermalink,
         },
         category,
-        format,
       },
       select: {
         id: true,
