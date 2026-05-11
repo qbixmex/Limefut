@@ -305,7 +305,7 @@ export const MatchForm: FC<Props> = ({
       route.replace(
         ROUTES.ADMIN_MATCHES +
         `?torneo=${currentMatch?.tournament.permalink}` +
-        `&category=${currentMatch?.tournament.category}` +
+        `&categoria=${currentMatch?.tournament.category}` +
         `&sortWeek=${match?.week}`,
       );
     }
