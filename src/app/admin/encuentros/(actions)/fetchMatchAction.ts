@@ -71,6 +71,7 @@ export type MatchType = {
 export type TournamentType = {
   id: string;
   name: string;
+  permalink: string;
   category: string;
   format: string;
 };
@@ -161,6 +162,7 @@ export const fetchMatchAction = async (
           select: {
             id: true,
             name: true,
+            permalink: true,
             category: true,
             format: true,
           },
@@ -234,6 +236,7 @@ export const fetchMatchAction = async (
         tournament: {
           id: match.tournament.id,
           name: match.tournament.name,
+          permalink: match.tournament.permalink,
           category: match.tournament.category,
           format: match.tournament.format,
         },
