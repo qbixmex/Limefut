@@ -23,6 +23,7 @@ type CreateResponseAction = Promise<{
       id: string;
       name: string;
       permalink: string;
+      category: string;
     };
     local: {
       id: string;
@@ -129,6 +130,7 @@ export const createMatchAction = async (
               id: true,
               name: true,
               permalink: true,
+              category: true,
             },
           },
         },
