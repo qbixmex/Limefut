@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
 import { FormWeekSelector } from './formWeekSelector';
 
 type Props = Readonly<{
@@ -11,6 +11,8 @@ export const WeekSelector: FC<Props> = async ({ sortWeekPromise }) => {
   const { sortWeek } = await sortWeekPromise;
 
   return (
-    <FormWeekSelector key={sortWeek ?? 'week'} />
+    <Suspense>
+      <FormWeekSelector key={sortWeek ?? 'week'} />
+    </Suspense>
   );
 };
