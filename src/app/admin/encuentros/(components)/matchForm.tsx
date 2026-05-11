@@ -213,6 +213,7 @@ export const MatchForm: FC<Props> = ({
         toast.success(response.message);
         route.replace(ROUTES.ADMIN_MATCHES +
           `?torneo=${response.match?.tournament.permalink}` +
+          `&categoria=${response.match?.tournament.category}` +
           `&sortWeek=${response.match?.week}`,
         );
         return;
@@ -236,7 +237,8 @@ export const MatchForm: FC<Props> = ({
       if (response.ok) {
         toast.success(response.message);
         route.replace(ROUTES.ADMIN_MATCHES +
-          `?torneo=${match.tournament.id}` +
+          `?torneo=${match.tournament.permalink}` +
+          `&categoria=${response.match?.tournament.category}` +
           `&sortWeek=${response.match?.week}`,
         );
       }
@@ -268,7 +270,9 @@ export const MatchForm: FC<Props> = ({
 
       if (params.size === 0) {
         route.replace(
-          `${ROUTES.ADMIN_MATCHES}?torneo=${match.tournament.permalink}`,
+          `${ROUTES.ADMIN_MATCHES}?torneo=${match.tournament.permalink}` +
+          `?categoria=${match.tournament.category}` +
+          `&sortWeek=${match.week}`,
         );
       } else {
         route.replace(
@@ -289,7 +293,7 @@ export const MatchForm: FC<Props> = ({
       visitorId: match?.visitorTeam.id as string,
     };
 
-    const { ok, message } = await updateMatchScoreAction(data);
+    const { ok, message, currentMatch } = await updateMatchScoreAction(data);
 
     if (!ok) {
       toast.error(message);
@@ -298,361 +302,293 @@ export const MatchForm: FC<Props> = ({
 
     if (ok) {
       toast.success(message);
-      route.replace(ROUTES.ADMIN_MATCH(match!.id));
-    }
-  };
-
-  const handleNavigateBack = () => {
-    const params = new URLSearchParams(searchParams);
-    const tournament = params.get('torneo');
-
-    if (params.has('semana')) params.delete('semana');
-
-    if (!match && tournament && params.size === 0) {
-      // When the user wants to create a new match.
       route.replace(
-        `${ROUTES.ADMIN_MATCHES}?torneo=${tournament}`,
+        ROUTES.ADMIN_MATCHES +
+        `?torneo=${currentMatch?.tournament.permalink}` +
+        `&category=${currentMatch?.tournament.category}` +
+        `&sortWeek=${match?.week}`,
       );
-    } else if (match && params.size === 0) {
-      // When the user wants to edit a match and didn't set filters.
-      route.replace(ROUTES.ADMIN_MATCHES);
-    } else if ((!match || match) && params.size > 0) {
-      // When the user wants to create a new match and set filters.
-      route.replace(`${ROUTES.ADMIN_MATCHES}?${params}`);
-    } else {
-      // For anything else
-      route.replace(ROUTES.ADMIN_MATCHES);
     }
   };
 
-  const handleFlipTeams = () => {
-    const localTeamId = form.getValues('localTeamId');
-    const visitorTeamId = form.getValues('visitorTeamId');
+const handleNavigateBack = () => {
+  const params = new URLSearchParams(searchParams);
+  const tournament = params.get('torneo');
 
-    form.setValue('localTeamId', visitorTeamId);
-    form.setValue('visitorTeamId', localTeamId);
-  };
+  if (params.has('semana')) params.delete('semana');
 
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8"
-      >
-        {/* Local Team and Visitor Team */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_50px_1fr] place-items-center lg:place-items-end gap-5">
-          <div className="w-full">
-            <FormField
-              control={form.control}
-              name="localTeamId"
-              render={({ field }) => {
-                const selectedTeam = teams.find((t) => t.id === field.value) ??
-                  (
-                    match
-                      ? (
-                        field.value === match.visitorTeam.id
-                          ? match.visitorTeam
-                          : match.localTeam
-                      )
-                      : undefined
-                  );
-                const visitorTeamId = form.watch('visitorTeamId');
-                return (
-                  <FormItem>
-                    <FormLabel>Equipo Local <span className="text-amber-500">*</span></FormLabel>
-                    <Popover open={localTeamsOpen} onOpenChange={setLocalTeamsOpen}>
-                      <FormControl>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline-secondary"
-                            role="combobox"
-                            aria-expanded={localTeamsOpen}
-                            className={cn(
-                              'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
-                              { 'border-destructive!': form.formState.errors.localTeamId },
-                            )}
-                          >
-                            {
-                              selectedTeam
-                                ? selectedTeam.name
-                                : 'Seleccione un equipo'
-                            }
-                            <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                      </FormControl>
-                      <PopoverContent className="w-full p-0">
-                        <Command>
-                          <CommandInput placeholder="Buscar equipo" className="h-9" />
-                          <CommandList>
-                            <CommandEmpty>No se encontró el equipo.</CommandEmpty>
-                            <CommandGroup>
-                              {teams.map((team) => (
-                                <CommandItem
-                                  key={team.id}
-                                  value={team.name}
-                                  onSelect={(currentValue) => {
-                                    const selected = teams.find((t) => t.name === currentValue);
-                                    // Validate if team is already selected as visitor
-                                    if (selected && selected.id === visitorTeamId) {
-                                      toast.error('Este equipo ya está seleccionado como visitante');
-                                      return;
-                                    }
-                                    if (selected) {
-                                      field.onChange(selected.id);
-                                      form.setValue('localTeamId', selected.id);
-                                    }
-                                    setLocalTeamsOpen(false);
-                                  }}
-                                  disabled={team.id === visitorTeamId}
-                                  className={cn(
-                                    team.id === visitorTeamId && 'opacity-50 cursor-not-allowed',
-                                  )}
-                                >
-                                  {team.name}
-                                  <Check
-                                    className={cn(
-                                      'ml-auto',
-                                      field.value === team.id ? 'opacity-100' : 'opacity-0',
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
+  if (!match && tournament && params.size === 0) {
+    // When the user wants to create a new match.
+    route.replace(
+      `${ROUTES.ADMIN_MATCHES}?torneo=${tournament}`,
+    );
+  } else if (match && params.size === 0) {
+    // When the user wants to edit a match and didn't set filters.
+    route.replace(ROUTES.ADMIN_MATCHES);
+  } else if ((!match || match) && params.size > 0) {
+    // When the user wants to create a new match and set filters.
+    route.replace(`${ROUTES.ADMIN_MATCHES}?${params}`);
+  } else {
+    // For anything else
+    route.replace(ROUTES.ADMIN_MATCHES);
+  }
+};
+
+const handleFlipTeams = () => {
+  const localTeamId = form.getValues('localTeamId');
+  const visitorTeamId = form.getValues('visitorTeamId');
+
+  form.setValue('localTeamId', visitorTeamId);
+  form.setValue('visitorTeamId', localTeamId);
+};
+
+return (
+  <Form {...form}>
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="space-y-8"
+    >
+      {/* Local Team and Visitor Team */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_50px_1fr] place-items-center lg:place-items-end gap-5">
+        <div className="w-full">
+          <FormField
+            control={form.control}
+            name="localTeamId"
+            render={({ field }) => {
+              const selectedTeam = teams.find((t) => t.id === field.value) ??
+                (
+                  match
+                    ? (
+                      field.value === match.visitorTeam.id
+                        ? match.visitorTeam
+                        : match.localTeam
+                    )
+                    : undefined
                 );
-              }}
-            />
-          </div>
-          <div>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline-primary"
-                  type="button"
-                  onClick={handleFlipTeams}
-                  role="button"
-                  aria-label="Invertir equipos"
-                >
-                  <FlipHorizontal2 />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="top">
-                <span>Invertir Equipos</span>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-          <div className="w-full">
-            <FormField
-              control={form.control}
-              name="visitorTeamId"
-              render={({ field }) => {
-                const selectedTeam = teams.find((t) => t.id === field.value) ??
-                  (
-                    match
-                      ? (
-                        field.value === match.localTeam.id
-                          ? match.localTeam
-                          : match.visitorTeam
-                      )
-                      : undefined
-                  );
-                const localTeamId = form.watch('localTeamId');
-
-                return (
-                  <FormItem>
-                    <FormLabel>Equipo Visitante <span className="text-amber-500">*</span></FormLabel>
-                    <Popover open={visitorTeamsOpen} onOpenChange={setVisitorTeamOpen}>
+              const visitorTeamId = form.watch('visitorTeamId');
+              return (
+                <FormItem>
+                  <FormLabel>Equipo Local <span className="text-amber-500">*</span></FormLabel>
+                  <Popover open={localTeamsOpen} onOpenChange={setLocalTeamsOpen}>
+                    <FormControl>
                       <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline-secondary"
-                            role="combobox"
-                            aria-expanded={visitorTeamsOpen}
-                            className={cn(
-                              'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
-                              { 'border-destructive!': form.formState.errors.visitorTeamId },
-                            )}
-                          >
-                            {selectedTeam
+                        <Button
+                          variant="outline-secondary"
+                          role="combobox"
+                          aria-expanded={localTeamsOpen}
+                          className={cn(
+                            'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+                            { 'border-destructive!': form.formState.errors.localTeamId },
+                          )}
+                        >
+                          {
+                            selectedTeam
                               ? selectedTeam.name
-                              : 'Selecciona un equipo'}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
+                              : 'Seleccione un equipo'
+                          }
+                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                        </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command>
-                          <CommandInput placeholder="Buscar equipo" className="h-9" />
-                          <CommandList>
-                            <CommandEmpty>No se encontró el equipo.</CommandEmpty>
-                            <CommandGroup>
-                              {teams.map((team) => (
-                                <CommandItem
-                                  key={team.id}
-                                  value={team.name}
-                                  onSelect={(currentValue) => {
-                                    const selected = teams.find((t) => t.name === currentValue);
-                                    if (selected && selected.id === localTeamId) {
-                                      toast.error('Este equipo ya está seleccionado como local');
-                                      return;
-                                    }
-                                    if (selected) {
-                                      field.onChange(selected.id);
-                                      form.setValue('visitorTeamId', selected.id);
-                                    }
-                                    setVisitorTeamOpen(false);
-                                  }}
-                                  disabled={team.id === localTeamId}
+                    </FormControl>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar equipo" className="h-9" />
+                        <CommandList>
+                          <CommandEmpty>No se encontró el equipo.</CommandEmpty>
+                          <CommandGroup>
+                            {teams.map((team) => (
+                              <CommandItem
+                                key={team.id}
+                                value={team.name}
+                                onSelect={(currentValue) => {
+                                  const selected = teams.find((t) => t.name === currentValue);
+                                  // Validate if team is already selected as visitor
+                                  if (selected && selected.id === visitorTeamId) {
+                                    toast.error('Este equipo ya está seleccionado como visitante');
+                                    return;
+                                  }
+                                  if (selected) {
+                                    field.onChange(selected.id);
+                                    form.setValue('localTeamId', selected.id);
+                                  }
+                                  setLocalTeamsOpen(false);
+                                }}
+                                disabled={team.id === visitorTeamId}
+                                className={cn(
+                                  team.id === visitorTeamId && 'opacity-50 cursor-not-allowed',
+                                )}
+                              >
+                                {team.name}
+                                <Check
                                   className={cn(
-                                    team.id === localTeamId && 'opacity-50 cursor-not-allowed',
+                                    'ml-auto',
+                                    field.value === team.id ? 'opacity-100' : 'opacity-0',
                                   )}
-                                >
-                                  {team.name}
-                                  <Check
-                                    className={cn(
-                                      'ml-auto',
-                                      field.value === team.id ? 'opacity-100' : 'opacity-0',
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-          </div>
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
         </div>
+        <div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline-primary"
+                type="button"
+                onClick={handleFlipTeams}
+                role="button"
+                aria-label="Invertir equipos"
+              >
+                <FlipHorizontal2 />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <span>Invertir Equipos</span>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+        <div className="w-full">
+          <FormField
+            control={form.control}
+            name="visitorTeamId"
+            render={({ field }) => {
+              const selectedTeam = teams.find((t) => t.id === field.value) ??
+                (
+                  match
+                    ? (
+                      field.value === match.localTeam.id
+                        ? match.localTeam
+                        : match.visitorTeam
+                    )
+                    : undefined
+                );
+              const localTeamId = form.watch('localTeamId');
 
-        {/* Local Score and Visitor Score */}
-        {!hiddenScores && (
-          <div className="flex flex-col gap-5 lg:flex-row">
-            <div className="w-full lg:w-1/2">
-              <FormField
-                control={form.control}
-                name="localScore"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Marcador Local</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="localScore"
-                        type="number"
-                        {...field}
-                        min={0}
-                        max={50}
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
-                        className="w-full lg:w-[75px]"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="w-full lg:w-1/2">
-              <FormField
-                control={form.control}
-                name="visitorScore"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Marcador Visitante</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="visitorScore"
-                        type="number"
-                        {...field}
-                        min={0}
-                        max={50}
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
-                        className="w-full lg:w-[75px]"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-        )}
+              return (
+                <FormItem>
+                  <FormLabel>Equipo Visitante <span className="text-amber-500">*</span></FormLabel>
+                  <Popover open={visitorTeamsOpen} onOpenChange={setVisitorTeamOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline-secondary"
+                          role="combobox"
+                          aria-expanded={visitorTeamsOpen}
+                          className={cn(
+                            'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+                            { 'border-destructive!': form.formState.errors.visitorTeamId },
+                          )}
+                        >
+                          {selectedTeam
+                            ? selectedTeam.name
+                            : 'Selecciona un equipo'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar equipo" className="h-9" />
+                        <CommandList>
+                          <CommandEmpty>No se encontró el equipo.</CommandEmpty>
+                          <CommandGroup>
+                            {teams.map((team) => (
+                              <CommandItem
+                                key={team.id}
+                                value={team.name}
+                                onSelect={(currentValue) => {
+                                  const selected = teams.find((t) => t.name === currentValue);
+                                  if (selected && selected.id === localTeamId) {
+                                    toast.error('Este equipo ya está seleccionado como local');
+                                    return;
+                                  }
+                                  if (selected) {
+                                    field.onChange(selected.id);
+                                    form.setValue('visitorTeamId', selected.id);
+                                  }
+                                  setVisitorTeamOpen(false);
+                                }}
+                                disabled={team.id === localTeamId}
+                                className={cn(
+                                  team.id === localTeamId && 'opacity-50 cursor-not-allowed',
+                                )}
+                              >
+                                {team.name}
+                                <Check
+                                  className={cn(
+                                    'ml-auto',
+                                    field.value === team.id ? 'opacity-100' : 'opacity-0',
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        </div>
+      </div>
 
-        {/* Place and week */}
+      {/* Local Score and Visitor Score */}
+      {!hiddenScores && (
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="place"
-              render={({ field }) => {
-                // Get the local team based on the selected localTeamId
-                // to show its fields in the place select
-                const localTeamId = form.watch('localTeamId');
-                const localTeam = match?.localTeam.id === localTeamId
-                  ? match?.localTeam
-                  : teams.find(t => t.id === localTeamId) || initialTeams.find(t => t.id === localTeamId);
-
-                return (
-                  <FormItem>
-                    <FormLabel>
-                      Sede <span className="text-sm text-gray-500">(opcional)</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value === 'none' ? '' : value);
-                        }}
-                        value={field.value ?? ''}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue
-                            placeholder={
-                              localTeamId
-                                ? 'Seleccione una sede'
-                                : 'Seleccione un equipo local primero'
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="none">Ninguna</SelectItem>
-                          {localTeam?.fields && localTeam.fields.length > 0 ? (
-                            localTeam.fields.map((fieldItem) => (
-                              <SelectItem key={fieldItem.id} value={fieldItem.name}>
-                                {fieldItem.name}
-                              </SelectItem>
-                            ))
-                          ) : null}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
+              name="localScore"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Marcador Local</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="localScore"
+                      type="number"
+                      {...field}
+                      min={0}
+                      max={50}
+                      value={field.value ?? ''}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      className="w-full lg:w-[75px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="referee"
+              name="visitorScore"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Arbitro <span className="text-sm text-gray-500">(opcional)</span>
-                  </FormLabel>
+                  <FormLabel>Marcador Visitante</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
+                    <Input
+                      id="visitorScore"
+                      type="number"
+                      {...field}
+                      min={0}
+                      max={50}
+                      value={field.value ?? ''}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      className="w-full lg:w-[75px]"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -660,254 +596,327 @@ export const MatchForm: FC<Props> = ({
             />
           </div>
         </div>
+      )}
 
-        {/* Match Date and Week */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            {(!enabledDate && !match?.matchDate) && (
-              <div className="flex items-center gap-5">
-                <Switch
-                  id="set-date"
-                  checked={enabledDate}
-                  onCheckedChange={() => setEnabledDate(prev => !prev)}
-                />
-                <Label htmlFor='set-date'>Programar Fecha y Hora</Label>
-              </div>
-            )}
+      {/* Place and week */}
+      <div className="flex flex-col gap-5 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="place"
+            render={({ field }) => {
+              // Get the local team based on the selected localTeamId
+              // to show its fields in the place select
+              const localTeamId = form.watch('localTeamId');
+              const localTeam = match?.localTeam.id === localTeamId
+                ? match?.localTeam
+                : teams.find(t => t.id === localTeamId) || initialTeams.find(t => t.id === localTeamId);
 
-            {(enabledDate || match?.matchDate) && (
-              <div className="flex gap-5">
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="date-picker" className="px-1">
-                    Fecha
-                  </Label>
-                  <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id="date-picker"
-                        variant="secondary"
-                        className="w-[225px] justify-between font-normal"
-                      >
-                        {selectedDate
-                          ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                          : (
-                            <span>
-                              Seleccione Fecha&nbsp;
-                              <span className="text-sm text-gray-500">(optional)</span>
-                            </span>
-                          )
-                        }
-                        <ChevronDownIcon />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        startMonth={new Date(2020, 0)}
-                        endMonth={new Date(new Date().getFullYear() + 10, 11)}
-                        selected={selectedDate}
-                        defaultMonth={selectedDate}
-                        captionLayout="dropdown"
-                        onSelect={(date) => {
-                          setSelectedDate(date);
-                          form.setValue('matchDate', date);
-                          setOpenCalendar(false);
-                        }}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="time-picker" className="px-1">
-                    Hora
-                  </Label>
-                  <Input
-                    id="time-picker"
-                    type="time"
-                    step="1"
-                    min="00:00:00"
-                    value={selectedTime}
-                    onChange={(e) => {
-                      const value = !e.target.value ? '00:00:00' : e.target.value;
-                      setSelectedTime(value);
-                    }}
-                    className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className='w-full lg:w-1/2 flex justify-end gap-5'>
-            {(match?.status !== 'completed') && (
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Estado</FormLabel>
+              return (
+                <FormItem>
+                  <FormLabel>
+                    Sede <span className="text-sm text-gray-500">(opcional)</span>
+                  </FormLabel>
+                  <FormControl>
                     <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
+                      onValueChange={(value) => {
+                        field.onChange(value === 'none' ? '' : value);
+                      }}
+                      value={field.value ?? ''}
                     >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un estado" />
-                        </SelectTrigger>
-                      </FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={
+                            localTeamId
+                              ? 'Seleccione una sede'
+                              : 'Seleccione un equipo local primero'
+                          }
+                        />
+                      </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
-                        <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
-                        <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
-                        <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
+                        <SelectItem value="none">Ninguna</SelectItem>
+                        {localTeam?.fields && localTeam.fields.length > 0 ? (
+                          localTeam.fields.map((fieldItem) => (
+                            <SelectItem key={fieldItem.id} value={fieldItem.name}>
+                              {fieldItem.name}
+                            </SelectItem>
+                          ))
+                        ) : null}
                       </SelectContent>
                     </Select>
-                  </FormItem>
-                )}
-              />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="referee"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Arbitro <span className="text-sm text-gray-500">(opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-            {match && (
-              <FormField
-                control={form.control}
-                name="week"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Jornada</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        min={0}
-                        value={field.value}
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
-                        className="w-[75px]"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+          />
+        </div>
+      </div>
+
+      {/* Match Date and Week */}
+      <div className="flex flex-col gap-5 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          {(!enabledDate && !match?.matchDate) && (
+            <div className="flex items-center gap-5">
+              <Switch
+                id="set-date"
+                checked={enabledDate}
+                onCheckedChange={() => setEnabledDate(prev => !prev)}
               />
-            )}
-          </div>
+              <Label htmlFor='set-date'>Programar Fecha y Hora</Label>
+            </div>
+          )}
+
+          {(enabledDate || match?.matchDate) && (
+            <div className="flex gap-5">
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="date-picker" className="px-1">
+                  Fecha
+                </Label>
+                <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id="date-picker"
+                      variant="secondary"
+                      className="w-[225px] justify-between font-normal"
+                    >
+                      {selectedDate
+                        ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                        : (
+                          <span>
+                            Seleccione Fecha&nbsp;
+                            <span className="text-sm text-gray-500">(optional)</span>
+                          </span>
+                        )
+                      }
+                      <ChevronDownIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      startMonth={new Date(2020, 0)}
+                      endMonth={new Date(new Date().getFullYear() + 10, 11)}
+                      selected={selectedDate}
+                      defaultMonth={selectedDate}
+                      captionLayout="dropdown"
+                      onSelect={(date) => {
+                        setSelectedDate(date);
+                        form.setValue('matchDate', date);
+                        setOpenCalendar(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="time-picker" className="px-1">
+                  Hora
+                </Label>
+                <Input
+                  id="time-picker"
+                  type="time"
+                  step="1"
+                  min="00:00:00"
+                  value={selectedTime}
+                  onChange={(e) => {
+                    const value = !e.target.value ? '00:00:00' : e.target.value;
+                    setSelectedTime(value);
+                  }}
+                  className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Buttons */}
-        <div className="flex justify-end gap-3">
+        <div className='w-full lg:w-1/2 flex justify-end gap-5'>
+          {(match?.status !== 'completed') && (
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Estado</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona un estado" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
+                      <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
+                      <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
+                      <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          )}
+          {match && (
+            <FormField
+              control={form.control}
+              name="week"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Jornada</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      {...field}
+                      min={0}
+                      value={field.value}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      className="w-[75px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-end gap-3">
+        <Button
+          type="button"
+          variant="outline-secondary"
+          size="lg"
+          onClick={handleNavigateBack}
+        >
+          cancelar
+        </Button>
+        <Button
+          type="submit"
+          variant="outline-primary"
+          size="lg"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? (
+            <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+              <span className="text-sm italic">Espere</span>
+              <LoaderCircle className="size-4 animate-spin" />
+            </span>
+          ) : (
+            !match ? 'crear' : 'actualizar'
+          )}
+        </Button>
+        <Activity mode={hiddenScores ? 'visible' : 'hidden'}>
           <Button
             type="button"
-            variant="outline-secondary"
-            size="lg"
-            onClick={handleNavigateBack}
+            variant="outline-info"
+            onClick={() => setHiddenScores(false)}
           >
-            cancelar
+            Modificar Marcador
           </Button>
-          <Button
-            type="submit"
-            variant="outline-primary"
-            size="lg"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? (
-              <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                <span className="text-sm italic">Espere</span>
-                <LoaderCircle className="size-4 animate-spin" />
-              </span>
-            ) : (
-              !match ? 'crear' : 'actualizar'
-            )}
-          </Button>
-          <Activity mode={hiddenScores ? 'visible' : 'hidden'}>
-            <Button
-              type="button"
-              variant="outline-info"
-              onClick={() => setHiddenScores(false)}
-            >
-              Modificar Marcador
-            </Button>
-          </Activity>
+        </Activity>
 
-          <Activity mode={(
-            match?.status === MATCH_STATUS.COMPLETED &&
-            !hiddenScores
-          ) ? 'visible' : 'hidden'}>
+        <Activity mode={(
+          match?.status === MATCH_STATUS.COMPLETED &&
+          !hiddenScores
+        ) ? 'visible' : 'hidden'}>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                type="button"
+                variant="outline-success"
+                onClick={() => { }}
+              >
+                Actualizar Marcador
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-center">¿ Confirmas que quieres actualizar el marcador ?</AlertDialogTitle>
+                <AlertDialogDescription className="text-center text-emerald-500 font-bold">
+                  ¡ La Tabla de Posiciones y Estadísticas serán afectadas !
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+                <AlertDialogAction
+                  className="finish-btn"
+                  onClick={onUpdateMatchScore}
+                >
+                  Proceder
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </Activity>
+
+        {match && (match.status !== MATCH_STATUS.COMPLETED) && (
+          <div className="absolute top-5 right-5">
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
                   type="button"
                   variant="outline-success"
-                  onClick={() => { }}
+                  size="lg"
+                  disabled={form.formState.isSubmitting}
                 >
-                  Actualizar Marcador
+                  {form.formState.isSubmitting ? (
+                    <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                      <span className="text-sm italic">Espere</span>
+                      <LoaderCircle className="size-4 animate-spin" />
+                    </span>
+                  ) : (
+                    <span>Finalizar Encuentro</span>
+                  )}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="text-center">¿ Confirmas que quieres actualizar el marcador ?</AlertDialogTitle>
-                  <AlertDialogDescription className="text-center text-emerald-500 font-bold">
-                    ¡ La Tabla de Posiciones y Estadísticas serán afectadas !
+                  <AlertDialogTitle>¿ Confirmas que quieres finalizar el encuentro ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Al finalizar el encuentro el resultado final impactará la tabla de posiciones.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
                   <AlertDialogAction
                     className="finish-btn"
-                    onClick={onUpdateMatchScore}
+                    onClick={() => {
+                      form.handleSubmit(async () => {
+                        await onFinishMatch();
+                      })();
+                    }}
                   >
                     Proceder
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-          </Activity>
-
-          {match && (match.status !== MATCH_STATUS.COMPLETED) && (
-            <div className="absolute top-5 right-5">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline-success"
-                    size="lg"
-                    disabled={form.formState.isSubmitting}
-                  >
-                    {form.formState.isSubmitting ? (
-                      <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                        <span className="text-sm italic">Espere</span>
-                        <LoaderCircle className="size-4 animate-spin" />
-                      </span>
-                    ) : (
-                      <span>Finalizar Encuentro</span>
-                    )}
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>¿ Confirmas que quieres finalizar el encuentro ?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Al finalizar el encuentro el resultado final impactará la tabla de posiciones.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
-                    <AlertDialogAction
-                      className="finish-btn"
-                      onClick={() => {
-                        form.handleSubmit(async () => {
-                          await onFinishMatch();
-                        })();
-                      }}
-                    >
-                      Proceder
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          )}
-        </div>
-      </form>
-    </Form>
-  );
+          </div>
+        )}
+      </div>
+    </form>
+  </Form>
+);
 };
 
 export default MatchForm;
