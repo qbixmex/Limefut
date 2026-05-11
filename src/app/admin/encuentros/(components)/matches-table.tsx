@@ -1,7 +1,7 @@
 'use client';
 
 import { type FC, useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -182,21 +182,27 @@ export const MatchesTable: FC<Props> = ({
                   <TableCell>
                     <div className="flex gap-3">
                       <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link href={`/admin/encuentros/detalles/${match.id}`}>
-                            <Button variant="outline-info" size="icon">
-                              <InfoIcon />
-                            </Button>
+                        <TooltipTrigger>
+                          <Link
+                            href={`/admin/encuentros/detalles/${match.id}`}
+                            className={buttonVariants({
+                              variant: 'outline-info',
+                              size: 'icon',
+                            })}
+                          >
+                            <InfoIcon />
                           </Link>
                         </TooltipTrigger>
-                        <TooltipContent side="top">
+                        <TooltipContent side="left">
                           detalles
                         </TooltipContent>
                       </Tooltip>
                       <EditMatch matchId={match.id} />
-                      {match.status !== MATCH_STATUS.COMPLETED && (
-                        <DeleteMatch id={match.id} roles={roles} />
-                      )}
+                      <DeleteMatch
+                        id={match.id}
+                        roles={roles}
+                        status={match.status}
+                      />
                     </div>
                   </TableCell>
                 </TableRow>

@@ -49,20 +49,6 @@ describe('Tests on <RoleTypeSelector />', () => {
     expect(handleRoleSelectionMock).toHaveBeenCalledWith('team');
   });
 
-  test.skip('Should call handleRoleSelection on click field role button', async () => {
-    render(<RoleTypeSelector />);
-
-    const button = screen.getByRole('button', {
-      name: /cancha/i,
-    });
-    expect(button).toBeInTheDocument();
-    const user = userEvent.setup();
-
-    await user.click(button);
-
-    expect(handleRoleSelectionMock).toHaveBeenCalledWith('field');
-  });
-
   test("Should remove 'roles=complete' from url", async () => {
     render(<RoleTypeSelector />);
 
@@ -95,6 +81,22 @@ describe('Tests on <RoleTypeSelector />', () => {
     expect(handleRoleSelectionMock).toHaveBeenCalledTimes(2);
     expect(handleRoleSelectionMock).toHaveBeenNthCalledWith(1, 'team');
     expect(handleRoleSelectionMock).toHaveBeenNthCalledWith(2, 'team');
+  });
+
+  // ? These tests are skipped until field (cancha) feature is available
+
+  test.skip('Should call handleRoleSelection on click field role button', async () => {
+    render(<RoleTypeSelector />);
+
+    const button = screen.getByRole('button', {
+      name: /cancha/i,
+    });
+    expect(button).toBeInTheDocument();
+    const user = userEvent.setup();
+
+    await user.click(button);
+
+    expect(handleRoleSelectionMock).toHaveBeenCalledWith('field');
   });
 
   test.skip("Should remove 'roles=field' from url", async () => {
