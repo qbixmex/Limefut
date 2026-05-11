@@ -212,7 +212,7 @@ export const MatchForm: FC<Props> = ({
       if (response.ok) {
         toast.success(response.message);
         route.replace(ROUTES.ADMIN_MATCHES +
-          `?torneo=${response.match?.tournament.id}` +
+          `?torneo=${response.match?.tournament.permalink}` +
           `&sortWeek=${response.match?.week}`,
         );
         return;
@@ -268,7 +268,7 @@ export const MatchForm: FC<Props> = ({
 
       if (params.size === 0) {
         route.replace(
-          `${ROUTES.ADMIN_MATCHES}?torneo=${match.tournament.id}`,
+          `${ROUTES.ADMIN_MATCHES}?torneo=${match.tournament.permalink}`,
         );
       } else {
         route.replace(
