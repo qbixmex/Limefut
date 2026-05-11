@@ -13,6 +13,7 @@ export const FormWeekSelector = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const sortedWeek = searchParams.get('sortWeek');
+  const selectedCategory = searchParams.get('categoria');
   const selectedWeek = searchParams.get('semana');
   const tournamentSearchParam = searchParams.get('torneo');
 
@@ -23,13 +24,18 @@ export const FormWeekSelector = () => {
   const [debouncedWeek] = useDebounce(weekValue, 500);
 
   useEffect(() => {
+    const semana = searchParams.get('semana');
+    const sortWeek = searchParams.get('sortWeek');
+    if (semana === String(debouncedWeek) && sortWeek === String(debouncedWeek)) {
+      return;
+    }
     const params = new URLSearchParams(searchParams);
     params.set('semana', String(debouncedWeek));
     params.set('sortWeek', String(debouncedWeek));
-    router.push(`${pathname}?${params}`);
+    router.replace(`${pathname}?${params}`);
   }, [debouncedWeek, pathname, router, searchParams]);
 
-  if (!tournamentSearchParam) return null;
+  if (!tournamentSearchParam || !selectedCategory) return null;
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setWeekValue(Number(event.target.value) || 0);

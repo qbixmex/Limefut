@@ -309,23 +309,18 @@ export const MatchForm: FC<Props> = ({
     if (params.has('semana')) params.delete('semana');
 
     if (!match && tournament && params.size === 0) {
+      // When the user wants to create a new match.
       route.replace(
         `${ROUTES.ADMIN_MATCHES}?torneo=${tournament}`,
       );
     } else if (match && params.size === 0) {
-      route.replace(
-        ROUTES.ADMIN_MATCHES +
-        `?torneo=${match?.tournament.id}`,
-      );
-    } else if (!match && params.size > 0) {
+      // When the user wants to edit a match and didn't set filters.
+      route.replace(ROUTES.ADMIN_MATCHES);
+    } else if ((!match || match) && params.size > 0) {
+      // When the user wants to create a new match and set filters.
       route.replace(`${ROUTES.ADMIN_MATCHES}?${params}`);
-    } else if (match && params.size > 0) {
-      route.replace(
-        ROUTES.ADMIN_MATCHES +
-        `?torneo=${match.tournament.id}` +
-        `&${params}`,
-      );
     } else {
+      // For anything else
       route.replace(ROUTES.ADMIN_MATCHES);
     }
   };
