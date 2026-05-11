@@ -27,6 +27,8 @@ type EditResponseAction = Promise<{
     tournament: {
       id: string;
       name: string;
+      permalink: string;
+      category: string;
     };
     local: {
       id: string;
@@ -154,6 +156,8 @@ export const updateMatchAction = async ({
               select: {
                 id: true,
                 name: true,
+                permalink: true,
+                category: true,
               },
             },
           },
@@ -186,6 +190,8 @@ export const updateMatchAction = async ({
             tournament: {
               id: updatedMatch.tournament.id,
               name: updatedMatch.tournament.name,
+              permalink: updatedMatch.tournament.permalink,
+              category: updatedMatch.tournament.category,
             },
           },
         };

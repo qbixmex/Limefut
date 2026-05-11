@@ -7,6 +7,12 @@ import { updateTag } from 'next/cache';
 export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
+  currentMatch: {
+    tournament: {
+      permalink: string;
+      category: string;
+    };
+  } | null;
 }>;
 
 type Props = {
@@ -27,6 +33,12 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       select: {
         localScore: true,
         visitorScore: true,
+        tournament: {
+          select: {
+            permalink: true,
+            category: true,
+          },
+        },
       },
     });
 
@@ -34,6 +46,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       return {
         ok: false,
         message: '¡ Partido no encontrado !',
+        currentMatch: null,
       };
     }
 
@@ -87,6 +100,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       return {
         ok: false,
         message: '¡ Error al revertir estadísticas del equipo local !',
+        currentMatch: null,
       };
     }
 
@@ -111,6 +125,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       return {
         ok: false,
         message: '¡ Error al revertir estadísticas del equipo visitante !',
+        currentMatch: null,
       };
     }
 
@@ -135,6 +150,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       return {
         ok: false,
         message: '¡ Error al actualizar estadísticas del equipo local !',
+        currentMatch: null,
       };
     }
 
@@ -159,6 +175,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       return {
         ok: false,
         message: '¡ Error al actualizar estadísticas del equipo visitante !',
+        currentMatch: null,
       };
     }
 
@@ -169,6 +186,15 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
         localScore,
         visitorScore,
         status: MATCH_STATUS.COMPLETED,
+      },
+      select: {
+        tournament: {
+          select: {
+            id: true,
+            permalink: true,
+            category: true,
+          },
+        },
       },
     });
 
@@ -188,18 +214,23 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       return {
         ok: false,
         message: '¡ No se pudo actualizar el partido !',
+        currentMatch: null,
       };
     }
 
     return {
       ok: true,
       message: '¡ El marcador del partido se actualizó correctamente ⚽️🎉 !',
+      currentMatch: {
+        tournament: updatedMatch.tournament,
+      },
     };
   } catch (error) {
     console.error(`Error: ${(error as Error).message}`);
     return {
       ok: false,
       message: '¡ Error inesperado al actualizar el partido !',
+      currentMatch: null,
     };
   }
 };
