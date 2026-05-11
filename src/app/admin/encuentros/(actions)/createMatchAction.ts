@@ -22,6 +22,7 @@ type CreateResponseAction = Promise<{
     tournament: {
       id: string;
       name: string;
+      permalink: string;
     };
     local: {
       id: string;
@@ -127,6 +128,7 @@ export const createMatchAction = async (
             select: {
               id: true,
               name: true,
+              permalink: true,
             },
           },
         },
