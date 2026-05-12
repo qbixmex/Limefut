@@ -10,15 +10,17 @@ import { ROUTES } from '@/shared/constants/routes';
 
 export const CreateTeam: FC = () => {
   const params = useSearchParams();
-  const tournamentId = params.get('torneo');
 
   return (
     <Tooltip>
       <TooltipTrigger>
         <Link href={
-          !tournamentId
-            ? ROUTES.ADMIN_TEAM_CREATE
-            : `${ROUTES.ADMIN_TEAM_CREATE}?torneo=${tournamentId}`
+          (params.has('torneo') && params.has('categoria'))
+            ? (ROUTES.ADMIN_TEAM_CREATE +
+                `?torneo=${params.get('torneo')}` +
+                `&categoria=${params.get('categoria')}`
+              )
+            : ROUTES.ADMIN_TEAM_CREATE
           }
           className={
             buttonVariants({ variant: 'outline-primary', size: 'icon' })

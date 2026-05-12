@@ -15,6 +15,8 @@ type FetchTeamResponse = Promise<{
     tournament: {
       id: string;
       name: string;
+      permalink: string;
+      category: string;
     } | null;
     coach: CoachType | null;
     players: PlayerType[] | null;
@@ -47,6 +49,8 @@ export const fetchTeamAction = async (
           select: {
             id: true,
             name: true,
+            permalink: true,
+            category: true,
           },
         },
         coach: {
