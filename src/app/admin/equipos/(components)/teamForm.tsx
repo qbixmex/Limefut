@@ -50,7 +50,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
-import type { Coach, Team, Tournament } from '@/shared/interfaces';
+import type { Coach, Team } from '@/shared/interfaces';
 import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
 import type { Session } from '@/lib/auth-client';
 import { cn, slugify } from '@/lib/utils';
@@ -65,11 +65,18 @@ type Props = Readonly<{
   coaches: Coach[];
   fields: FIELD_TYPE[];
   team?: Team & {
-    tournament: Pick<Tournament, 'id' | 'name'> | null;
+    tournament: Tournament | null;
     coach: Pick<Coach, 'id' | 'name'> | null;
     fields: FIELD_TYPE[];
   };
 }>;
+
+type Tournament = {
+  id: string;
+  name: string;
+  permalink: string;
+  category: string;
+};
 
 export const TeamForm: FC<Props> = ({
   session,
@@ -85,16 +92,6 @@ export const TeamForm: FC<Props> = ({
   const [coachesOpen, setCoachesOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  let tournamentId: string | undefined = '';
-
-  if (team && team.tournament) {
-    tournamentId = team.tournament.id;
-  } else if (params.has('torneo')) {
-    tournamentId = params.get('torneo') as string;
-  } else {
-    tournamentId = undefined;
-  }
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -103,7 +100,7 @@ export const TeamForm: FC<Props> = ({
       category: team?.category ?? '',
       format: team?.format ?? '',
       gender: team?.gender ?? '',
-      tournamentId,
+      tournamentId: team?.tournament?.id ?? '',
       country: team?.country ?? '',
       state: team?.state ?? '',
       city: team?.city ?? '',
@@ -168,31 +165,30 @@ export const TeamForm: FC<Props> = ({
 
     // Create team
     if (!team) {
-      const response = await createTeamAction(
+      const { ok, message, team } = await createTeamAction(
         formData,
         session?.user.roles ?? null,
       );
 
-      if (!response.ok) {
-        toast.error(response.message);
+      if (!ok && !team) {
+        toast.error(message);
         return;
       }
 
-      if (data.tournamentId && response.team?.id) {
+      if (data.tournamentId && team?.id) {
         await addTeamToStandingsAction({
           tournamentId: data.tournamentId,
-          teamId: response.team.id,
+          teamId: team.id,
           userRole: session.user.roles ?? [],
         });
       }
 
-      if (response.ok) {
+      if (ok && team && team.tournament) {
         form.reset();
-        toast.success(response.message);
-        route.replace(
-          tournamentId
-            ? `${ROUTES.ADMIN_TEAMS}?torneo=${tournamentId}`
-            : ROUTES.ADMIN_TEAMS,
+        toast.success(message);
+        route.replace(ROUTES.ADMIN_TEAMS +
+          `?torneo=${team.tournament.permalink}` +
+          `&categoria=${team.tournament.category}`,
         );
         return;
       }
@@ -200,34 +196,39 @@ export const TeamForm: FC<Props> = ({
 
     // Update team
     if (team) {
-      const response = await updateTeamAction({
+      const { ok, message, updatedTeam } = await updateTeamAction({
         formData,
         teamId: team.id,
         userRoles: session.user.roles as string[],
         authenticatedUserId: session?.user.id,
       });
 
-      if (!response.ok) {
-        toast.error(response.message);
+      if (!ok && !updatedTeam) {
+        toast.error(message);
         return;
       }
 
-      if (response.ok) {
-        toast.success(response.message);
-        route.replace(
-          tournamentId
-            ? `${ROUTES.ADMIN_TEAMS}?torneo=${tournamentId}`
-            : ROUTES.ADMIN_TEAMS,
+      if (ok && updatedTeam && updatedTeam.tournament) {
+        toast.success(message);
+        route.replace(ROUTES.ADMIN_TEAMS +
+          `?torneo=${updatedTeam.tournament.permalink}` +
+          `&categoria=${updatedTeam.tournament.category}`,
         );
       }
     }
   };
 
   const handleNavigateBack = () => {
-    if (team && team.tournament) {
-      route.replace(`${ROUTES.ADMIN_TEAMS}?torneo=${team.tournament.id}`);
-    } else if (tournamentId) {
-      route.replace(`${ROUTES.ADMIN_TEAMS}?torneo=${tournamentId}`);
+    if (!team && (params.has('torneo') && params.has('categoria'))) {
+      route.replace(ROUTES.ADMIN_TEAMS +
+        `?torneo=${params.get('torneo')}` +
+        `&categoria=${params.get('categoria')}`,
+      );
+    } else if (team && team.tournament) {
+      route.replace(ROUTES.ADMIN_TEAMS +
+        `?torneo=${team.tournament.permalink}` +
+        `&categoria=${team.tournament.category}`,
+      );
     } else {
       route.replace(ROUTES.ADMIN_TEAMS);
     }
@@ -427,7 +428,7 @@ export const TeamForm: FC<Props> = ({
                         <SelectGroup>
                           {tournaments.map((tournament) => (
                             <SelectItem key={tournament.id} value={tournament.id}>
-                              {tournament.name}, {tournament.category}, {tournament.format} vs {tournament.format}
+                              {tournament.name}, {tournament.category}
                             </SelectItem>
                           ))}
                         </SelectGroup>

@@ -7,10 +7,15 @@ import { uploadImage } from '@/shared/actions';
 import type { CloudinaryResponse } from '@/shared/interfaces';
 import type { GENDER_TYPE } from '@/shared/enums';
 
-type CreateResponseAction = Promise<{
+type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  team: Team | null;
+  team: Team & {
+    tournament: {
+      permalink: string;
+      category: string;
+    } | null;
+  } | null;
 }>;
 
 type Team = {
@@ -37,7 +42,7 @@ type Team = {
 export const createTeamAction = async (
   formData: FormData,
   userRole: string[] | null,
-): CreateResponseAction => {
+): ResponseAction => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
       ok: false,
@@ -112,6 +117,14 @@ export const createTeamAction = async (
           active: teamToSave.active,
           tournamentId: teamToSave.tournamentId ?? null,
           coachId: teamToSave.coachId ?? null,
+        },
+        include: {
+          tournament: {
+            select: {
+              permalink: true,
+              category: true,
+            },
+          },
         },
       });
 

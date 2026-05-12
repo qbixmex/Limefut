@@ -7,7 +7,6 @@ export type TournamentType = {
   id: string;
   name: string;
   category: string;
-  format: string;
 };
 
 export type ResponseFetchAction = Promise<{
@@ -33,7 +32,6 @@ export const fetchTournamentsForTeam = async (): ResponseFetchAction => {
         id: true,
         name: true,
         category: true,
-        format: true,
       },
     });
 
