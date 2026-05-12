@@ -12,29 +12,33 @@ type Options = {
   authenticatedUserId: string;
 };
 
-type EditResponseAction = Promise<{
+type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  team: Team | null;
+  updatedTeam: Team & {
+    tournament: {
+      permalink: string;
+      category: string;
+    } | null;
+  } | null;
 }>;
 
 type Team = {
   id: string;
   name: string;
-  imageUrl: string | null;
-  state: string | null;
-  address: string | null;
   permalink: string;
-  imagePublicID: string | null;
   category: string;
   format: string;
   gender: string;
   country: string | null;
+  state: string | null;
   city: string | null;
-  active: boolean;
-  tournamentId: string | null;
   coachId: string | null;
   emails: string[];
+  address: string | null;
+  active: boolean;
+  imageUrl: string | null;
+  imagePublicID: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -44,12 +48,12 @@ export const updateTeamAction = async ({
   teamId,
   userRoles,
   authenticatedUserId,
-}: Options): EditResponseAction => {
+}: Options): ResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
       message: '¡ Usuario no autenticado !',
-      team: null,
+      updatedTeam: null,
     };
   }
 
@@ -57,7 +61,7 @@ export const updateTeamAction = async ({
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      team: null,
+      updatedTeam: null,
     };
   }
 
@@ -87,7 +91,7 @@ export const updateTeamAction = async ({
     return {
       ok: false,
       message: teamVerified.error.message,
-      team: null,
+      updatedTeam: null,
     };
   }
 
@@ -104,7 +108,7 @@ export const updateTeamAction = async ({
           return {
             ok: false,
             message: '¡ El equipo no existe o ha sido eliminado !',
-            team: null,
+            updatedTeam: null,
           };
         }
 
@@ -124,6 +128,14 @@ export const updateTeamAction = async ({
             active: teamToSave.active,
             tournamentId: teamToSave.tournamentId,
             coachId: teamToSave.coachId ?? undefined,
+          },
+          include: {
+            tournament: {
+              select: {
+                permalink: true,
+                category: true,
+              },
+            },
           },
         });
 
@@ -190,7 +202,7 @@ export const updateTeamAction = async ({
         return {
           ok: true,
           message: '¡ El equipo fue actualizado correctamente 👍 !',
-          team: updatedTeam,
+          updatedTeam,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
@@ -199,20 +211,20 @@ export const updateTeamAction = async ({
             return {
               ok: false,
               message: `¡ El campo "${fieldError}", está duplicado !`,
-              team: null,
+              updatedTeam: null,
             };
           }
 
           return {
             ok: false,
             message: '¡ Error al actualizar el equipo, revise los logs del servidor !',
-            team: null,
+            updatedTeam: null,
           };
         }
         return {
           ok: false,
           message: '¡ Error inesperado, revise los logs !',
-          team: null,
+          updatedTeam: null,
         };
       }
     });
@@ -223,7 +235,7 @@ export const updateTeamAction = async ({
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
-      team: null,
+      updatedTeam: null,
     };
   }
 };
