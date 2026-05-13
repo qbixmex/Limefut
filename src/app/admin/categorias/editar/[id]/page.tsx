@@ -1,5 +1,6 @@
+import type { FC } from 'react';
+import { Suspense } from 'react';
 import { randomUUID } from 'node:crypto';
-import { Suspense, type FC } from 'react';
 import {
   Card,
   CardContent,
@@ -9,19 +10,14 @@ import {
 import { auth } from '@/lib/auth';
 import type { Session } from '@/lib/auth-client';
 import { redirect } from 'next/navigation';
-import { fetchTournamentAction } from '../../(actions)';
-import { TournamentForm } from '../../(components)/tournamentForm';
-import type { Tournament } from '@/shared/interfaces';
+import type { Category } from '@/shared/interfaces';
 import { headers } from 'next/headers';
+import { fetchCategoryAction } from '../../(actions)/fetch-category.action';
+import { CategoryForm } from '../../(components)/category-form';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
-    id: string;
-  }>;
-}>;
-
-type EditTournamentContentProps = Readonly<{
-  paramsPromise: Promise<{
     id: string;
   }>;
 }>;
@@ -32,11 +28,11 @@ const EditTournamentPage: FC<Props> = ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Editar Torneo</CardTitle>
+            <CardTitle className="admin-page-card-title">Editar Categoría</CardTitle>
           </CardHeader>
           <CardContent>
             <Suspense>
-              {/* <EditTournamentContent paramsPromise={params} /> */}
+              <EditCategoryContent params={params} />
             </Suspense>
           </CardContent>
         </Card>
@@ -45,24 +41,24 @@ const EditTournamentPage: FC<Props> = ({ params }) => {
   );
 };
 
-// const EditTournamentContent: FC<EditTournamentContentProps> = async ({ paramsPromise }) => {
-//   const session = await auth.api.getSession({
-//     headers: await headers(),
-//   });
-//   const tournamentId = (await paramsPromise).id;
-//   const response = await fetchTournamentAction(tournamentId, session?.user.roles ?? null);
+const EditCategoryContent: FC<Props> = async ({ params }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const categoryId = (await params).id;
+  const { ok, message, category } = await fetchCategoryAction(categoryId, session?.user.roles ?? null);
 
-//   if (!response.ok) {
-//     redirect(`/admin/torneos?error=${encodeURIComponent(response.message)}`);
-//   }
+  if (!ok && !category) {
+    redirect(`${ROUTES.ADMIN_CATEGORIES}?error=${encodeURIComponent(message)}`);
+  }
 
-//   return (
-//     <TournamentForm
-//       key={randomUUID()}
-//       session={session as Session}
-//       tournament={response.tournament as Tournament}
-//     />
-//   );
-// };
+  return (
+    <CategoryForm
+      key={randomUUID()}
+      session={session as Session}
+      category={category as Category}
+    />
+  );
+};
 
 export default EditTournamentPage;

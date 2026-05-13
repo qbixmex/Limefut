@@ -15,17 +15,16 @@ import {
 import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Button } from '@/components/ui/button';
-import { createCategorySchema, editCategorySchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import type { Category } from '@/shared/interfaces';
-// import { createCategoryAction, updateCategoryAction } from '../(actions)';
 import { LoaderCircle } from 'lucide-react';
-import { slugify } from '@/lib/utils';
+import { createCategorySchema, editCategorySchema } from '@/shared/schemas';
 import type { Session } from '@/lib/auth-client';
-import { ROUTES } from '@/shared/constants/routes';
-import { router } from 'better-auth/api';
 import { createCategoryAction } from '../(actions)/create-category.action';
+import type { Category } from '@/shared/interfaces';
+import { slugify } from '@/lib/utils';
+import { ROUTES } from '@/shared/constants/routes';
+import { updateCategoryAction } from '../(actions)/update-category.action';
 
 type Props = Readonly<{
   session: Session;
@@ -93,23 +92,22 @@ export const CategoryForm: FC<Props> = ({ session, category }) => {
     }
 
     if (category) {
-    //   const response = await updateCategoryAction({
-    //     formData,
-    //     categoryId: category?.id,
-    //     userRoles: session.user.roles as string[] ?? null,
-    //     authenticatedUserId: session?.user.id,
-    //   });
+      const response = await updateCategoryAction({
+        formData,
+        categoryId: category?.id,
+        userRoles: session.user.roles as string[] ?? null,
+        authenticatedUserId: session?.user.id,
+      });
 
-    //   if (!response.ok) {
-    //     toast.error(response.message);
-    //     return;
-    //   }
+      if (!response.ok) {
+        toast.error(response.message);
+        return;
+      }
 
-    //   if (response.ok) {
-    //     toast.success(response.message);
-    //     route.replace(ROUTES.ADMIN_CATEGORIES);
-    //   }
-      console.log('POR IMPLEMENTARSE');
+      if (response.ok) {
+        toast.success(response.message);
+        route.replace(ROUTES.ADMIN_CATEGORIES);
+      }
     }
   };
 
