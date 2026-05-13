@@ -161,6 +161,18 @@ model Tournament {
   @@map("tournaments")
 }
 
+model Category {
+  id        String @id @default(uuid())
+  name      String @db.VarChar(255)
+  permalink String @unique @db.VarChar(255)
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("categories")
+}
+
 model Team {
   id            String   @id @default(uuid())
   name          String
