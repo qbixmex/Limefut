@@ -492,19 +492,6 @@ model CustomPageImage {
   @@map("custom_page_images")
 }
 
-model Carousel {
-  id           String   @id @default(uuid())
-  time         Int      @default(5)
-  play         Boolean  @default(false)
-  loop         Boolean  @default(false)
-  section      String
-  showControls Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@map("carousels")
-}
-
 model HeroBanner {
   id            String    @id @default(uuid())
   title         String    @unique @db.VarChar
