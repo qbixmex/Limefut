@@ -169,6 +169,7 @@ model Category {
 
   // Relations
   tournaments TournamentCategory[]
+  matches     Match[]
 
   // Timestamps
   createdAt  DateTime       @default(now()) @map("created_at")
@@ -259,7 +260,8 @@ model Field {
   permalink String  @unique()
 
   // Relationship
-  teams TeamField[]
+  teams   TeamField[]
+  matches Match[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -332,12 +334,17 @@ model Match {
   tournament      Tournament       @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   local           Team             @relation("HomeMatches", fields: [localId], references: [id])
   visitor         Team             @relation("AwayMatches", fields: [visitorId], references: [id])
+  categoryId      String?          @map("category_id")
+  category        Category?        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  fieldId         String?          @map("field_id")
+  field           Field?           @relation(fields: [fieldId], references: [id], onDelete: Restrict)
   penaltyShootout PenaltyShootout?
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@index([tournamentId, localId, visitorId, categoryId, fieldId])
   @@map("matches")
 }
 
