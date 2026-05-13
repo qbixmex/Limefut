@@ -152,6 +152,7 @@ model Tournament {
   credentials Credential[]
   teams       Team[]
   standings   Standings[]
+  categories  TournamentCategory[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -159,6 +160,33 @@ model Tournament {
 
   @@index([permalink, category, format, gender])
   @@map("tournaments")
+}
+
+model Category {
+  id        String @id @default(uuid())
+  name      String @db.VarChar(255)
+  permalink String @unique @db.VarChar(255)
+
+  // Relations
+  tournaments TournamentCategory[]
+  matches     Match[]
+
+  // Timestamps
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+  categories TeamCategory[]
+
+  @@map("categories")
+}
+
+model TournamentCategory {
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  categoryId   String
+  category     Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([tournamentId, categoryId])
+  @@map("tournament_category")
 }
 
 model Team {
@@ -191,6 +219,7 @@ model Team {
   wonShootouts     PenaltyShootout[] @relation("ShootoutWinnerTeam")
   penaltyKicks     PenaltyKick[]
   fields           TeamField[]
+  categories       TeamCategory[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -198,6 +227,16 @@ model Team {
 
   @@index([permalink, category, format])
   @@map("teams")
+}
+
+model TeamCategory {
+  teamId     String
+  team       Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([teamId, categoryId])
+  @@map("team_category")
 }
 
 model TeamField {
@@ -221,7 +260,8 @@ model Field {
   permalink String  @unique()
 
   // Relationship
-  teams TeamField[]
+  teams   TeamField[]
+  matches Match[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -294,12 +334,17 @@ model Match {
   tournament      Tournament       @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   local           Team             @relation("HomeMatches", fields: [localId], references: [id])
   visitor         Team             @relation("AwayMatches", fields: [visitorId], references: [id])
+  categoryId      String?          @map("category_id")
+  category        Category?        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  fieldId         String?          @map("field_id")
+  field           Field?           @relation(fields: [fieldId], references: [id], onDelete: Restrict)
   penaltyShootout PenaltyShootout?
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@index([tournamentId, localId, visitorId, categoryId, fieldId])
   @@map("matches")
 }
 
@@ -490,19 +535,6 @@ model CustomPageImage {
   customPage   CustomPage @relation(fields: [customPageId], references: [id], onDelete: Cascade)
 
   @@map("custom_page_images")
-}
-
-model Carousel {
-  id           String   @id @default(uuid())
-  time         Int      @default(5)
-  play         Boolean  @default(false)
-  loop         Boolean  @default(false)
-  section      String
-  showControls Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@map("carousels")
 }
 
 model HeroBanner {
