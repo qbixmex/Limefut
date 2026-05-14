@@ -7,7 +7,7 @@ import Link from 'next/link';
 export const CreateCategory = () => {
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
+      <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_CATEGORIES_CREATE}
           className={buttonVariants({

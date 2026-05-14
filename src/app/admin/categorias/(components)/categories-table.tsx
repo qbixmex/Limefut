@@ -7,15 +7,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-// import { fetchTournamentsAction, updateTournamentStateAction } from '../(actions)';
 import { auth } from '@/lib/auth';
-// import { DeleteTournament } from './delete-category';
 import { cn } from '@/lib/utils';
 import { headers } from 'next/headers';
-import type { Category, Pagination as PaginationType } from '@/shared/interfaces';
 import { Pagination } from '@/shared/components/pagination';
 import { EditCategory } from './edit-category';
 import { fetchCategoriesAction } from '../(actions)/fetch-categories.action';
+import { DeleteCategory } from './delete-category';
 
 type Props = Readonly<{
   query: string;
@@ -50,7 +48,7 @@ export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
                   <TableHead>#</TableHead>
                   <TableHead>Nombre</TableHead>
                   <TableHead>Enlace Permanente</TableHead>
-                  <TableHead className="w-[150px]">Acciones</TableHead>
+                  <TableHead className="w-[100px]">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -64,10 +62,10 @@ export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell>
                       <div className="flex gap-3">
                         <EditCategory categoryId={category.id as string} />
-                        {/* <DeleteCategory
-                          tournamentId={tournament.id}
+                        <DeleteCategory
+                          categoryId={category.id}
                           roles={session?.user.roles as string[] ?? null}
-                        /> */}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
