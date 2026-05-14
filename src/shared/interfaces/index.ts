@@ -1,6 +1,7 @@
 export { ROLE, type ROLE_TYPE, type User } from './User';
 export type { Pagination } from './Pagination';
 export type { Tournament } from './Tournament';
+export type { Category } from './Category';
 export type { Team } from './Team';
 export type { Field } from './Field';
 export type { Coach } from './Coach';
