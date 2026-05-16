@@ -5,7 +5,6 @@ import { uploadImage } from '@/shared/actions';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { createTournamentSchema } from '@/shared/schemas';
 import { revalidatePath, updateTag } from 'next/cache';
-import type { GENDER_TYPE } from '@/shared/enums';
 import { Prisma } from '@/generated/prisma/client';
 
 type ResponseCreateAction = Promise<{

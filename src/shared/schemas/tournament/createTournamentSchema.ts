@@ -54,30 +54,30 @@ export const createTournamentSchema = z.object({
     z.literal(''),
     z.string('¡ El país debe ser una cadena de texto !')
       .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
-      .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' })
+      .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),
   ]).optional(),
   state: z.union([
     z.literal(''),
     z.string('¡ El estado debe ser una cadena de texto !')
       .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
-      .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' })
+      .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' }),
   ]).optional(),
   city: z.union([
     z.literal(''),
     z.string('¡ La ciudad debe ser una cadena de texto !')
       .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
-      .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' })
+      .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' }),
   ]).optional(),
   description: z.union([
     z.literal(''),
     z.string('¡ La descripción debe ser una cadena de texto !')
-      .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' })
+      .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' }),
   ]).optional(),
   season: z.union([
     z.literal(''),
     z.string('¡ La temporada debe ser una cadena de texto !')
       .min(3, { message: '¡ La temporada debe ser mayor a 3 caracteres !' })
-      .max(200, { message: '¡ La temporada debe ser menor a 200 caracteres !' })
+      .max(200, { message: '¡ La temporada debe ser menor a 200 caracteres !' }),
   ]).optional(),
   startDate: z.date({ message: 'La fecha de inicio debe ser una fecha válida' }),
   endDate: z.date({ message: 'La fecha final debe ser una fecha válida' }),

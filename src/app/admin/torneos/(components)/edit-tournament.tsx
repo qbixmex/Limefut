@@ -4,9 +4,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
 
-type Props = Readonly<{ tournamentId: string }>;
+type Props = Readonly<{
+  tournamentId: string;
+  side?: 'top' | 'right' | 'bottom' | 'left'
+}>;
 
-export const EditTournament: FC<Props> = ({ tournamentId }) => {
+export const EditTournament: FC<Props> = ({ tournamentId, side = 'top' }) => {
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -20,7 +23,7 @@ export const EditTournament: FC<Props> = ({ tournamentId }) => {
           <Pencil />
         </Link>
       </TooltipTrigger>
-      <TooltipContent side="top">
+      <TooltipContent side={side}>
         <p>editar</p>
       </TooltipContent>
     </Tooltip>
