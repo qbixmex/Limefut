@@ -6,6 +6,7 @@ import { editTournamentSchema } from '@/shared/schemas';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
 import type { GENDER_TYPE } from '@/shared/enums';
+import { Prisma } from '@/generated/prisma/client';
 
 type Options = {
   formData: FormData;
@@ -50,8 +51,10 @@ export const updateTournamentAction = async ({
     name: formData.get('name') ?? undefined,
     permalink: formData.get('permalink') ?? undefined,
     image: formData.get('image'),
+    categoriesIds: formData.has('categoriesIds')
+      ? JSON.parse(formData.get('categoriesIds') as string ?? 'undefined')
+      : undefined,
     description: formData.get('description') ?? undefined,
-    category: formData.get('category') ?? undefined,
     format: formData.get('format') as string,
     gender: formData.get('gender') as string,
     country: formData.get('country') ?? undefined,
@@ -74,7 +77,7 @@ export const updateTournamentAction = async ({
     };
   }
 
-  const { image, ...tournamentToSave } = tournamentVerified.data;
+  const { image, categoriesIds, ...tournamentToSave } = tournamentVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
   let cloudinaryResponse: CloudinaryResponse | null = null;
@@ -110,6 +113,24 @@ export const updateTournamentAction = async ({
             imagePublicID: cloudinaryResponse?.publicId ?? undefined,
           },
         });
+
+        // Update TeamField records for the many-to-many relationship
+        if (categoriesIds !== undefined) {
+          // Delete existing relationships
+          await transaction.tournamentCategory.deleteMany({
+            where: { tournamentId },
+          });
+
+          // Create new relationships if any
+          if (categoriesIds.length > 0) {
+            await transaction.tournamentCategory.createMany({
+              data: categoriesIds.map((categoryId) => ({
+                tournamentId,
+                categoryId,
+              })),
+            });
+          }
+        }
 
         if (image !== null) {
           // Delete previous image from cloudinary.
@@ -160,26 +181,29 @@ export const updateTournamentAction = async ({
           tournament: updatedTournament,
         };
       } catch (error) {
-        if (error instanceof Error && 'meta' in error && error.meta) {
-          if ('code' in error && error.code as string === 'P2002') {
-            const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2002') {
+            if (error.meta) {
+              console.log('ERROR METADATA:', error.meta);
+            }
+
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: '¡ Hay campos duplicados, revise los logs del servidor !',
               tournament: null,
             };
           }
-          console.log(error.message);
+
           return {
             ok: false,
             message: '¡ Error al actualizar el torneo, revise los logs del servidor !',
             tournament: null,
           };
         }
-        console.log((error as Error).message);
+        console.log(error);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: '¡ Error inesperado, revise los logs del servidor !',
           tournament: null,
         };
       }

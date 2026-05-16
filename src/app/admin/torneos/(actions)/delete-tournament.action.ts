@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { deleteImage } from '@/shared/actions';
+import { Prisma } from '@/generated/prisma/client';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -25,9 +26,33 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
     };
   }
 
-  await prisma.tournament.delete({
-    where: { id: tournamentId },
-  });
+  try {
+    await prisma.tournament.delete({
+      where: { id: tournamentId },
+    });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return {
+        ok: false,
+        message: error.message,
+      };
+    }
+    if (error instanceof Error) {
+      console.log('Error name:', error.name);
+      console.log('Error cause:', error.cause);
+      console.log('Error message:', error.message);
+
+      return {
+        ok: false,
+        message: 'No se pudo eliminar el torneo, revise los logs del servidor',
+      };
+    }
+    console.log(error);
+    return {
+      ok: false,
+      message: 'Error del servidor no esperado, revise los logs del servidor',
+    };
+  }
 
   // Delete image from cloudinary.
   if (tournament.imagePublicID) {

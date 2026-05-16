@@ -9,21 +9,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Pencil,
-  InfoIcon,
-  Trophy,
-} from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import { fetchTournamentsAction, updateTournamentStateAction } from '../(actions)';
 import { auth } from '@/lib/auth';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
 import { DeleteTournament } from './delete-tournament';
 import { Pagination } from '@/shared/components/pagination';
 import { cn, getGenderTranslation, getStageTranslation } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '~/src/components/ui/badge';
 import { headers } from 'next/headers';
+import { ShowTournamentDetails } from './show-tournament-details';
+import { EditTournament } from './edit-tournament';
 
 type Props = Readonly<{
   query: string;
@@ -142,30 +138,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/torneos/${tournament.id}`}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            detalles
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/torneos/editar/${tournament.id}`}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <ShowTournamentDetails tournamentId={tournament.id} />
+                        <EditTournament tournamentId={tournament.id} />
                         <DeleteTournament
                           tournamentId={tournament.id}
                           roles={session?.user.roles as string[] ?? null}
@@ -186,12 +160,10 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
       ) : (
         <div className="border border-sky-600 p-5 rounded">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay torneos
+            Aún no hay torneos creados
           </p>
         </div>
       )}
     </>
   );
 };
-
-export default TournamentsTable;

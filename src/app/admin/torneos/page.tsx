@@ -1,17 +1,10 @@
 import { type FC, Suspense } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Plus } from 'lucide-react';
-import { TournamentsTable } from './(components)/tournamentsTable';
+import { TournamentsTable } from './(components)/tournaments-table';
 import { TournamentsTableSkeleton } from './(components)/tournaments-table-skeleton';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
+import { CreateTournament } from './(components)/create-tournament';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -42,18 +35,7 @@ const TournamentContent: FC<Props> = async ({ searchParams }) => {
               <CardTitle className="admin-page-card-title">Torneos</CardTitle>
               <section className="flex gap-5 mt-3 lg:mt-0 items-center">
                 <Search placeholder="Buscar torneo ..." />
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link href="/admin/torneos/crear">
-                      <Button variant="outline-primary" size="icon">
-                        <Plus strokeWidth={3} />
-                      </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">
-                    <p>crear</p>
-                  </TooltipContent>
-                </Tooltip>
+                <CreateTournament />
               </section>
             </CardHeader>
             <CardContent>

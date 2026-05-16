@@ -4,21 +4,13 @@ import type { FC, ChangeEvent } from 'react';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createTournamentSchema, editTournamentSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import type { Tournament } from '@/shared/interfaces';
 import { createTournamentAction, updateTournamentAction } from '../(actions)';
 import { ChevronDownIcon, LoaderCircle } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
@@ -31,13 +23,29 @@ import { es } from 'date-fns/locale';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn, slugify } from '@/lib/utils';
 import type { Session } from '@/lib/auth-client';
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxValue,
+} from '@/components/ui/combobox';
+import type { TournamentType } from '../(actions)/fetch-tournament.action';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   session: Session;
-  tournament?: Tournament;
+  tournament?: TournamentType;
+  categories: Category[];
 }>;
 
-export const TournamentForm: FC<Props> = ({ session, tournament }) => {
+type Category = { id: string; name: string; };
+
+export const TournamentForm: FC<Props> = ({ session, tournament, categories }) => {
   const route = useRouter();
   const formSchema = !tournament ? createTournamentSchema : editTournamentSchema;
   const isPermalinkEdited = useRef(false);
@@ -49,7 +57,9 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
     defaultValues: {
       name: tournament?.name ?? '',
       permalink: tournament?.permalink ?? '',
-      category: tournament?.category ?? undefined,
+      categoriesIds: (tournament?.categories && tournament.categories.length > 0)
+        ? tournament?.categories.map((c) => c.id)
+        : [],
       format: tournament?.format ?? undefined,
       gender: tournament?.gender ?? undefined,
       country: tournament?.country ?? undefined,
@@ -79,23 +89,30 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
 
-    formData.append('name', data.name as string);
-    formData.append('permalink', data.permalink as string);
+    formData.append('name', (data.name as string).trim());
+    formData.append('permalink', (data.permalink as string).trim());
 
-    if (data.category) formData.append('category', data.category as string);
-    formData.append('format', data.format as string);
-    formData.append('gender', data.gender as string);
-    if (data.country) formData.append('country', data.country as string);
-    if (data.state) formData.append('state', data.state as string);
-    if (data.city) formData.append('city', data.city as string);
-
+    if (data.categoriesIds && data.categoriesIds.length > 0) {
+      formData.append('categoriesIds', JSON.stringify(data.categoriesIds));
+    }
+    if (data.format) {
+      formData.append('format', (data.format as string).trim());
+    }
+    if (data.gender) {
+      formData.append('gender', (data.gender as string).trim());
+    }
+    if (data.country) formData.append('country', (data.country as string).trim());
+    if (data.state) formData.append('state', (data.state as string).trim());
+    if (data.city) formData.append('city', (data.city as string).trim());
     if (data.image && typeof data.image === 'object') {
       formData.append('image', data.image);
     }
-
-    if (data.description) formData.append('description', data.description as string);
-    if (data.season) formData.append('season', data.season as string);
-
+    if (data.description) {
+      formData.append('description', (data.description as string).trim());
+    }
+    if (data.season) {
+      formData.append('season', (data.season as string).trim());
+    }
     formData.append('startDate',
       data.startDate
         ? (data.startDate as Date).toISOString()
@@ -123,7 +140,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(`/admin/torneos/${response.tournament?.id}`);
+        route.replace(ROUTES.ADMIN_TOURNAMENTS);
       }
       return;
     }
@@ -143,7 +160,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace(`/admin/torneos/${response.tournament?.id}`);
+        route.replace(ROUTES.ADMIN_TOURNAMENTS);
       }
     }
   };
@@ -206,16 +223,51 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Categoría</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="categoriesIds"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      Categorías <span className="text-gray-500">(opcional)</span>
+                    </FormLabel>
+                    <Combobox
+                      multiple
+                      items={categories}
+                      itemToStringValue={(field) => field.name}
+                      value={categories.filter((c) => field.value?.includes(c.id))}
+                      onValueChange={(selectedCategories) => {
+                        form.setValue('categoriesIds', selectedCategories.map((f) => f.id));
+                      }}
+                    >
+                      <ComboboxChips className="w-full">
+                        <ComboboxValue>
+                          {(values) => (
+                            <>
+                              {values.map((field: Category) => (
+                                <ComboboxChip key={field.id}>
+                                  {field.name}
+                                </ComboboxChip>
+                              ))}
+                            </>
+                          )}
+                        </ComboboxValue>
+                        <ComboboxChipsInput placeholder="Buscar categoría" />
+                      </ComboboxChips>
+                      <ComboboxContent>
+                        <ComboboxEmpty>No se encontró la categoría</ComboboxEmpty>
+                        <ComboboxList>
+                          {(item) => (
+                            <ComboboxItem key={item.id} value={item}>
+                              {item.name}
+                            </ComboboxItem>
+                          )}
+                        </ComboboxList>
+                      </ComboboxContent>
+                    </Combobox>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           </div>
           <div className="w-full lg:w-1/2 flex flex-col lg:flex-row gap-5">
@@ -225,11 +277,13 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                 name="format"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Formato</FormLabel>
+                    <FormLabel>
+                      Formato <span className="text-gray-500">(opcional)</span>
+                    </FormLabel>
                     <FormControl>
                       <Select
                         key={String(field.value ?? 'none')}
-                        value={field.value ?? undefined}
+                        value={field.value ?? ''}
                         onValueChange={(value) => field.onChange(value)}
                       >
                         <SelectTrigger
@@ -258,11 +312,13 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                 name="gender"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Género</FormLabel>
+                    <FormLabel>
+                      Género <span className="text-gray-500">(opcional)</span>
+                    </FormLabel>
                     <FormControl>
                       <Select
                         key={String(field.value ?? 'none')}
-                        value={field.value ?? undefined}
+                        value={field.value ?? ''}
                         onValueChange={(value) => field.onChange(value)}
                       >
                         <SelectTrigger
@@ -294,7 +350,9 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>País</FormLabel>
+                  <FormLabel>
+                    País <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -309,7 +367,9 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               name="state"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Estado</FormLabel>
+                  <FormLabel>
+                    Estado <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -328,7 +388,9 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ciudad</FormLabel>
+                  <FormLabel>
+                    Ciudad <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -343,7 +405,9 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               name="season"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Temporada</FormLabel>
+                  <FormLabel>
+                    Temporada <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
                   </FormControl>
@@ -362,7 +426,9 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Imagen</FormLabel>
+                  <FormLabel>
+                    Imagen <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="file"
@@ -383,7 +449,9 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Descripción</FormLabel>
+                  <FormLabel>
+                    Descripción <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
@@ -408,7 +476,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                 render={({ field }) => (
                   <FormItem>
                     <Label htmlFor="date-picker" className="px-1">
-                      Fecha Inicial
+                      Fecha Inicial <span className="text-amber-500">*</span>
                     </Label>
                     <Popover
                       open={openInitDateCalendar}
@@ -454,7 +522,7 @@ export const TournamentForm: FC<Props> = ({ session, tournament }) => {
                 render={({ field }) => (
                   <FormItem>
                     <Label htmlFor="date-picker" className="px-1">
-                      Fecha Final
+                      Fecha Final <span className="text-amber-500">*</span>
                     </Label>
                     <Popover
                       open={openEndDateCalendar}
