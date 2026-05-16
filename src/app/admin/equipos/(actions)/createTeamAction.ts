@@ -65,7 +65,7 @@ export const createTeamAction = async (
     emails: JSON.parse(formData.get('emails') as string),
     address: formData.get('address') as string,
     image: formData.get('image') as File,
-    fieldsIds: formData.get('fieldsIds')
+    fieldsIds: formData.has('fieldsIds')
       ? JSON.parse(formData.get('fieldsIds') as string ?? 'undefined')
       : undefined,
     active: (formData.get('active') === 'true')

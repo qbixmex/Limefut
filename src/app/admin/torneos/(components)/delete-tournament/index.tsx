@@ -17,7 +17,7 @@ import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
 import { deleteTournamentAction } from '../../(actions)';
-import './styles.css';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   tournamentId: string;
@@ -25,13 +25,17 @@ type Props = Readonly<{
 }>;
 
 export const DeleteTournament: FC<Props> = ({ tournamentId, roles }) => {
-  const onDeleteTeam = async (tournamentId: string) => {
+  const onDeleteTournament = async () => {
     if (roles && !roles.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar torneos !');
       return;
     }
-    const response = await deleteTournamentAction(tournamentId);
-    toast.success(response.message);
+    const { ok, message } = await deleteTournamentAction(tournamentId);
+    if (!ok) {
+      toast.error(message);
+      return;
+    }
+    toast.success(message);
   };
 
   return (
@@ -56,10 +60,10 @@ export const DeleteTournament: FC<Props> = ({ tournamentId, roles }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+          <AlertDialogCancel className={styles.cancelBtn}>cancelar</AlertDialogCancel>
           <AlertDialogAction
-            className="delete-btn"
-            onClick={() => onDeleteTeam(tournamentId)}
+            className={styles.deleteBtn}
+            onClick={onDeleteTournament}
             autoFocus
           >
             eliminar

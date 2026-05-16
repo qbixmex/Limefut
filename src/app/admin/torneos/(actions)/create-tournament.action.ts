@@ -6,6 +6,7 @@ import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { createTournamentSchema } from '@/shared/schemas';
 import { revalidatePath, updateTag } from 'next/cache';
 import type { GENDER_TYPE } from '@/shared/enums';
+import { Prisma } from '@/generated/prisma/client';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -33,9 +34,11 @@ export const createTournamentAction = async (
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
     image: formData.get('image') as File,
-    category: formData.get('category') ?? undefined,
+    categoriesIds: formData.has('categoriesIds')
+      ? JSON.parse(formData.get('categoriesIds') as string ?? 'undefined')
+      : undefined,
     format: formData.get('format') ?? '',
-    gender: formData.get('gender') ?? '',
+    gender: formData.get('gender') ?? 'unknown',
     country: formData.get('country') ?? undefined,
     state: formData.get('state') ?? undefined,
     city: formData.get('city') ?? undefined,
@@ -57,7 +60,7 @@ export const createTournamentAction = async (
     };
   }
 
-  const { image, ...tournamentToSave } = tournamentVerified.data;
+  const { image, categoriesIds, ...tournamentToSave } = tournamentVerified.data;
 
   // Upload Image to third-party storage (cloudinary).
   let cloudinaryResponse: CloudinaryResponse | null = null;
@@ -74,11 +77,24 @@ export const createTournamentAction = async (
       const createdTournament = await transaction.tournament.create({
         data: {
           ...tournamentToSave,
-          gender: tournamentToSave.gender as GENDER_TYPE,
+          format: '9',
+          gender: 'male',
+          category: 'unknown',
+          stage: 'regular',
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
         },
       });
+
+      // Create Tournament Category records for the many-to-many relationship
+      if (categoriesIds && categoriesIds.length > 0) {
+        await transaction.tournamentCategory.createMany({
+          data: categoriesIds.map((categoryId) => ({
+            tournamentId: createdTournament.id,
+            categoryId,
+          })),
+        });
+      }
 
       return {
         ok: true,
@@ -103,12 +119,15 @@ export const createTournamentAction = async (
 
     return prismaTransaction;
   } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        if (error.meta) {
+          console.log('ERROR METADATA:', error.meta);
+        }
+
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: '¡ Hay campos duplicados, revise los logs del servidor !',
           tournament: null,
         };
       }

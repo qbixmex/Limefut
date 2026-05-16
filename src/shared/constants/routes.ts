@@ -1,6 +1,9 @@
 export const ROUTES = {
   HOME: '/',
   ADMIN_TOURNAMENTS: '/admin/torneos',
+  ADMIN_TOURNAMENT: (id: string) => `/admin/torneos/${id}`,
+  ADMIN_TOURNAMENTS_CREATE: '/admin/torneos/crear',
+  ADMIN_TOURNAMENTS_EDIT: (id: string) => `/admin/torneos/editar/${id}`,
   ADMIN_CATEGORIES: '/admin/categorias',
   ADMIN_CATEGORIES_CREATE: '/admin/categorias/crear',
   ADMIN_CATEGORIES_EDIT: (id: string) => `/admin/categorias/editar/${id}`,

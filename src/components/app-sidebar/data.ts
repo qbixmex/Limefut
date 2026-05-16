@@ -39,7 +39,7 @@ export const navMain: NavItem[] = [
       },
       {
         label: 'Crear',
-        url: ROUTES.ADMIN_CATEGORIES_CREATE,
+        url: ROUTES.ADMIN_TOURNAMENTS_CREATE,
         icon: PlusIcon,
       },
     ],
