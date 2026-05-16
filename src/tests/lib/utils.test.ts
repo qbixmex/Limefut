@@ -29,11 +29,11 @@ describe('Test on Utils', () => {
 
   test('Should sleep the timer', async () => {
     const start = Date.now();
-    await sleep(0.1);
+    await sleep(0.2);
     const end = Date.now();
     const elapsed = (end - start) / 1000;
 
-    expect(elapsed).toBeGreaterThanOrEqual(0.1);
+    expect(elapsed).toBeGreaterThanOrEqual(0.2);
   });
 
   test('Should get stage translation', async () => {

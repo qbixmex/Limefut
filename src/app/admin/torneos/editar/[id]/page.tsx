@@ -9,10 +9,11 @@ import {
 import { auth } from '@/lib/auth';
 import type { Session } from '@/lib/auth-client';
 import { redirect } from 'next/navigation';
-import { fetchTournamentAction } from '../../(actions)';
-import { TournamentForm } from '../../(components)/tournamentForm';
-import type { Tournament } from '@/shared/interfaces';
+import type { TournamentType } from '../../(actions)';
+import { fetchTournamentAction, fetchCategoriesAction } from '../../(actions)';
+import { TournamentForm } from '../../(components)/tournament-form';
 import { headers } from 'next/headers';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
@@ -50,17 +51,24 @@ const EditTournamentContent: FC<EditTournamentContentProps> = async ({ paramsPro
     headers: await headers(),
   });
   const tournamentId = (await paramsPromise).id;
-  const response = await fetchTournamentAction(tournamentId, session?.user.roles ?? null);
+  const responseTournament = await fetchTournamentAction(tournamentId, session?.user.roles ?? null);
 
-  if (!response.ok) {
-    redirect(`/admin/torneos?error=${encodeURIComponent(response.message)}`);
+  if (!responseTournament.ok) {
+    redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(responseTournament.message)}`);
+  }
+
+  const responseCategories = await fetchCategoriesAction();
+
+  if (!responseCategories.ok) {
+    redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(responseCategories.message)}`);
   }
 
   return (
     <TournamentForm
       key={randomUUID()}
       session={session as Session}
-      tournament={response.tournament as Tournament}
+      tournament={responseTournament.tournament as TournamentType}
+      categories={responseCategories.categories}
     />
   );
 };

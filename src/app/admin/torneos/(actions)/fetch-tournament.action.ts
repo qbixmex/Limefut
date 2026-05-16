@@ -23,6 +23,10 @@ export type TournamentType = {
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
+  categories: {
+    id: string;
+    name: string;
+  }[];
   teams: {
     id: string;
     name: string;
@@ -64,6 +68,16 @@ export const fetchTournamentAction = async (
             name: true,
           },
         },
+        categories: {
+          include: {
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         _count: {
           select: { teams: true },
         },
@@ -84,6 +98,9 @@ export const fetchTournamentAction = async (
       tournament: {
         ...tournament,
         teamsQuantity: tournament._count.teams ?? 0,
+        categories: tournament.categories.map((tournamentCategory) => {
+          return tournamentCategory.category;
+        }),
       },
     };
   } catch (error) {

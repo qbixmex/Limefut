@@ -3,7 +3,7 @@
 import type { FC } from 'react';
 import { DeleteImage } from '@/shared/components/delete-image';
 import { toast } from 'sonner';
-import { deleteTournamentImageAction } from '../../(actions)/deleteTournamentImageAction';
+import { deleteTournamentImageAction } from '../../(actions)';
 
 type Props = Readonly<{
   roles: string[];

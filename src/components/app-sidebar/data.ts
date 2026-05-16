@@ -20,11 +20,10 @@ import {
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
 import { RiFolderVideoLine } from 'react-icons/ri';
 import { GiWhistle, GiSodaCan } from 'react-icons/gi';
-import {
-  SoccerPlayer,
-  SoccerField,
-} from '@/shared/components/icons';
+import { SoccerPlayer, SoccerField } from '@/shared/components/icons';
+import { BiCategory } from 'react-icons/bi';
 import { SoccerPlayerFrontIcon } from '@/shared/components/icons/soccer-player-front.icon';
+import { ROUTES } from '@/shared/constants/routes';
 
 export const navMain: NavItem[] = [
   {
@@ -35,12 +34,30 @@ export const navMain: NavItem[] = [
     subItems: [
       {
         label: 'Lista',
-        url: '/admin/torneos',
+        url: ROUTES.ADMIN_TOURNAMENTS,
         icon: ListIcon,
       },
       {
         label: 'Crear',
-        url: '/admin/torneos/crear',
+        url: ROUTES.ADMIN_TOURNAMENTS_CREATE,
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: 'Categorías',
+    url: '#',
+    icon: BiCategory,
+    isActive: false,
+    subItems: [
+      {
+        label: 'Lista',
+        url: ROUTES.ADMIN_CATEGORIES,
+        icon: ListIcon,
+      },
+      {
+        label: 'Crear',
+        url: ROUTES.ADMIN_CATEGORIES_CREATE,
         icon: PlusIcon,
       },
     ],

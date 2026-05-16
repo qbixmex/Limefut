@@ -1,6 +1,6 @@
 @reference "tailwindcss";
 
-.cancel-btn {
+.cancelBtn {
   @apply
     bg-gray-100
     hover:bg-gray-200
@@ -13,7 +13,7 @@
     dark:hover:text-gray-100;
 }
 
-.delete-btn {
+.deleteBtn {
   @apply 
     text-pink-50
     border-pink-600

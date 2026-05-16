@@ -5,17 +5,16 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { Table, TableBody, TableHead, TableCell, TableRow } from '@/components/ui/table';
-import { Pencil, Trophy } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import type { TournamentType } from '../(actions)';
 import { fetchTournamentAction } from '../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import type { TournamentType } from '../(actions)/fetchTournamentAction';
 import { getGenderTranslation, getStageTranslation } from '@/lib/utils';
 import { headers } from 'next/headers';
 import { DeleteTournamentImage } from '../(components)/delete-tournament-image';
+import { EditTournament } from '../(components)/edit-tournament';
 
 type TournamentPageProps = Readonly<{
   params: Promise<{
@@ -107,10 +106,6 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                         <TableRow>
                           <TableHead className="font-semibold">Temporada</TableHead>
                           <TableCell>{tournament.season}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">Categoría</TableHead>
-                          <TableCell>{tournament.category}</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableHead className="font-semibold">Formato</TableHead>
@@ -209,11 +204,33 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                     </Table>
                   </div>
                 </div>
-                <section>
-                  <p className="font-semibold mb-2">Descripción</p>
-                  <p className="text-pretty">{tournament.description}</p>
+                <section className="mb-5">
+                  <p className="font-semibold mb-2">Categorías</p>
+                  <div className="flex flex-wrap gap-2">
+                    {(tournament.categories.length > 0) ? tournament.categories.map((category) => (
+                      <Badge
+                        key={category.id}
+                        variant="outline-info"
+                      >
+                        {category.name}
+                      </Badge>
+                    )) : (
+                      <Badge variant="outline-secondary">
+                        No asociadas
+                      </Badge>
+                    )}
+                  </div>
                 </section>
               </div>
+            </section>
+
+            <section className="mb-5">
+              <p className="font-semibold mb-2">Descripción</p>
+              {tournament.description ? (
+                <p className="text-pretty">{tournament.description}</p>
+              ) : (
+                <Badge variant="outline-secondary">No suministrada</Badge>
+              )}
             </section>
 
             <section>
@@ -241,18 +258,7 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
             </section>
 
             <div className="absolute top-5 right-5">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href={`/admin/torneos/editar/${tournament.id}`}>
-                    <Button variant="outline-warning" size="icon">
-                      <Pencil />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="left">
-                  <p>editar</p>
-                </TooltipContent>
-              </Tooltip>
+              <EditTournament tournamentId={tournamentId} side="left" />
             </div>
           </CardContent>
         </Card>

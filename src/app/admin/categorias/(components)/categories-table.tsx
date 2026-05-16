@@ -82,7 +82,7 @@ export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
       ) : (
         <div className="border border-sky-600 p-5 rounded">
           <p className="text-sky-500 text-center text-xl font-semibold">
-            Aún No hay categorías
+            Aún no hay categorías creadas
           </p>
         </div>
       )}

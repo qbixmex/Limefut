@@ -57,8 +57,6 @@ import { cn, slugify } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
 import { addTeamToStandingsAction } from '../(actions)/addTeamToStandingsAction';
 
-type FIELD_TYPE = { id: string; name: string; };
-
 type Props = Readonly<{
   session: Session;
   tournaments: TournamentType[];
@@ -70,6 +68,8 @@ type Props = Readonly<{
     fields: FIELD_TYPE[];
   };
 }>;
+
+type FIELD_TYPE = { id: string; name: string; };
 
 type Tournament = {
   id: string;
@@ -636,7 +636,6 @@ export const TeamForm: FC<Props> = ({
                         <FormLabel>
                           Canchas <span className="text-gray-500">(opcional)</span>
                         </FormLabel>
-
                         <Combobox
                           multiple
                           items={fields}
