@@ -51,15 +51,18 @@ import {
 } from '@/components/ui/command';
 import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
 import type { Coach, Team } from '@/shared/interfaces';
-import { type TournamentType, createTeamAction, updateTeamAction } from '../(actions)';
+import type { CategoryType, TournamentType } from '../(actions)';
+import { createTeamAction, updateTeamAction } from '../(actions)';
 import type { Session } from '@/lib/auth-client';
 import { cn, slugify } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
 import { addTeamToStandingsAction } from '../(actions)/addTeamToStandingsAction';
+import { Badge } from '@/components/ui/badge';
 
 type Props = Readonly<{
   session: Session;
   tournaments: TournamentType[];
+  categories: CategoryType[];
   coaches: Coach[];
   fields: FIELD_TYPE[];
   team?: Team & {
@@ -81,6 +84,7 @@ type Tournament = {
 export const TeamForm: FC<Props> = ({
   session,
   tournaments,
+  categories,
   coaches,
   fields = [],
   team,
@@ -127,6 +131,10 @@ export const TeamForm: FC<Props> = ({
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (categories.length === 0) {
+      toast.error('Debe crear por lo menos una categoría para poder crear equipos');
+      return;
+    }
     const formData = new FormData();
 
     formData.append('name', data.name as string);
@@ -299,28 +307,10 @@ export const TeamForm: FC<Props> = ({
                     Categoría <span className="text-orange-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      value={field.value ?? ''}
-                      className="w-full"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="format"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Formato <span className="text-orange-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Select
+                    {categories.length === 0 ? (
+                      <Badge variant="outline-warning">Aún no hay categorías creadas</Badge>
+                    ) : (
+                      <Select
                       value={field.value ?? undefined}
                       onValueChange={(value) => field.onChange(value)}
                     >
@@ -329,405 +319,441 @@ export const TeamForm: FC<Props> = ({
                           'border-destructive ring-0.5 ring-destructive': form.formState.errors.format,
                         })}
                       >
-                        <SelectValue placeholder="Seleccione Formato" />
+                        <SelectValue placeholder="Seleccione categoría" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="11">11 vs 11</SelectItem>
-                        <SelectItem value="9">9 vs 9</SelectItem>
-                        <SelectItem value="7">7 vs 7</SelectItem>
-                        <SelectItem value="5">5 vs 5</SelectItem>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
         </div>
-
-        {/* Image and Gender */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Imagen <span className="text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      ref={fileInputRef}
-                      type="file"
-                      value={undefined}
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        field.onChange(file);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Rama <span className="text-orange-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Select
-                      value={field.value ?? undefined}
-                      onValueChange={(value) => field.onChange(value)}
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="format"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Formato <span className="text-orange-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.value ?? undefined}
+                    onValueChange={(value) => field.onChange(value)}
+                  >
+                    <SelectTrigger
+                      className={cn('w-full', {
+                        'border-destructive ring-0.5 ring-destructive': form.formState.errors.format,
+                      })}
                     >
-                      <SelectTrigger
-                        className={cn('w-full', {
-                          'border-destructive ring-0.5 ring-destructive': form.formState.errors.gender,
-                        })}
+                      <SelectValue placeholder="Seleccione Formato" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="11">11 vs 11</SelectItem>
+                      <SelectItem value="9">9 vs 9</SelectItem>
+                      <SelectItem value="7">7 vs 7</SelectItem>
+                      <SelectItem value="5">5 vs 5</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+
+      {/* Image and Gender */}
+      <div className="flex flex-col gap-5 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Imagen <span className="text-gray-500">(opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    ref={fileInputRef}
+                    type="file"
+                    value={undefined}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      field.onChange(file);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Rama <span className="text-orange-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.value ?? undefined}
+                    onValueChange={(value) => field.onChange(value)}
+                  >
+                    <SelectTrigger
+                      className={cn('w-full', {
+                        'border-destructive ring-0.5 ring-destructive': form.formState.errors.gender,
+                      })}
+                    >
+                      <SelectValue placeholder="Seleccione Género" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Varonil</SelectItem>
+                      <SelectItem value="female">Femenil</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+
+      {/* Tournament and Country */}
+      <div className="flex flex-col gap-5 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="tournamentId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Torneo</FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.value ?? ''}
+                    onValueChange={(value) => field.onChange(value || undefined)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Seleccione Torneo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {tournaments.map((tournament) => (
+                          <SelectItem key={tournament.id} value={tournament.id}>
+                            {tournament.name}, {tournament.category}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  País <span className="text-gray-500">(opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+
+      {/* State and City */}
+      <div className="flex flex-col gap-5 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Estado <span className="text-gray-500">(opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Ciudad <span className="text-gray-500">(opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+
+      {/* Coach and Emails */}
+      <div className="flex flex-col gap-5 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="coachId"
+            render={({ field }) => {
+              const selectedCoach = coaches.find((c) => c.id === field.value);
+              return (
+                <FormItem>
+                  <FormLabel>
+                    Entrenador <span className="text-gray-500">(opcional)</span>
+                  </FormLabel>
+                  <Popover open={coachesOpen} onOpenChange={setCoachesOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline-secondary"
+                        role="combobox"
+                        aria-expanded={coachesOpen}
+                        className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
                       >
-                        <SelectValue placeholder="Seleccione Género" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="male">Varonil</SelectItem>
-                        <SelectItem value="female">Femenil</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Tournament and Country */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="tournamentId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Torneo</FormLabel>
-                  <FormControl>
-                    <Select
-                      value={field.value ?? ''}
-                      onValueChange={(value) => field.onChange(value || undefined)}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Seleccione Torneo" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {tournaments.map((tournament) => (
-                            <SelectItem key={tournament.id} value={tournament.id}>
-                              {tournament.name}, {tournament.category}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    País <span className="text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* State and City */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="state"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Estado <span className="text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="city"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Ciudad <span className="text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        {/* Coach and Emails */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="coachId"
-              render={({ field }) => {
-                const selectedCoach = coaches.find((c) => c.id === field.value);
-                return (
-                  <FormItem>
-                    <FormLabel>
-                      Entrenador <span className="text-gray-500">(opcional)</span>
-                    </FormLabel>
-                    <Popover open={coachesOpen} onOpenChange={setCoachesOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline-secondary"
-                          role="combobox"
-                          aria-expanded={coachesOpen}
-                          className="w-full justify-between border-input dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
-                        >
-                          {field.value && selectedCoach ? selectedCoach.name : 'Sin entrenador asignado'}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command>
-                          <CommandInput placeholder="Buscar entrenador" className="h-9" />
-                          <CommandList>
-                            <CommandEmpty>¡ No se encontró el entrenador !</CommandEmpty>
-                            <CommandGroup>
+                        {field.value && selectedCoach ? selectedCoach.name : 'Sin entrenador asignado'}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar entrenador" className="h-9" />
+                        <CommandList>
+                          <CommandEmpty>¡ No se encontró el entrenador !</CommandEmpty>
+                          <CommandGroup>
+                            <CommandItem
+                              value=""
+                              onSelect={() => {
+                                form.setValue('coachId', '');
+                                setCoachesOpen(false);
+                              }}
+                            >
+                              Sin entrenador asignado
+                              <Check
+                                className={cn(
+                                  'ml-auto',
+                                  !field.value ? 'opacity-100' : 'opacity-0',
+                                )}
+                              />
+                            </CommandItem>
+                            {coaches.map((coach) => (
                               <CommandItem
-                                value=""
-                                onSelect={() => {
-                                  form.setValue('coachId', '');
+                                key={coach.id}
+                                value={coach.name}
+                                onSelect={(currentName) => {
+                                  const matched = coaches.find(c => c.name === currentName);
+                                  if (!matched) {
+                                    form.setValue('coachId', '');
+                                    setCoachesOpen(false);
+                                    return;
+                                  }
+                                  form.setValue('coachId', matched.id === field.value ? '' : matched.id);
                                   setCoachesOpen(false);
                                 }}
                               >
-                                Sin entrenador asignado
+                                {coach.name}
                                 <Check
                                   className={cn(
                                     'ml-auto',
-                                    !field.value ? 'opacity-100' : 'opacity-0',
+                                    field.value === coach.id ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                               </CommandItem>
-                              {coaches.map((coach) => (
-                                <CommandItem
-                                  key={coach.id}
-                                  value={coach.name}
-                                  onSelect={(currentName) => {
-                                    const matched = coaches.find(c => c.name === currentName);
-                                    if (!matched) {
-                                      form.setValue('coachId', '');
-                                      setCoachesOpen(false);
-                                      return;
-                                    }
-                                    form.setValue('coachId', matched.id === field.value ? '' : matched.id);
-                                    setCoachesOpen(false);
-                                  }}
-                                >
-                                  {coach.name}
-                                  <Check
-                                    className={cn(
-                                      'ml-auto',
-                                      field.value === coach.id ? 'opacity-100' : 'opacity-0',
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="emails"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Correos Electrónicos <span className="text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <EmailInput
-                      value={field.value || []}
-                      onChange={field.onChange}
-                      placeholder="Escribe un email y después presiona Enter"
-                    />
-                  </FormControl>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
-              )}
-            />
-          </div>
+              );
+            }}
+          />
         </div>
-
-        {/* Address, Fields and Active */}
-        <div className="flex flex-col gap-5 lg:flex-row">
-          <div className="w-full lg:w-1/2">
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Dirección <span className="text-gray-500">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      value={field.value ?? ''}
-                      className="resize-none"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full lg:w-1/2 flex justify-end gap-5 items-center">
-            {fields.length > 0 && (
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="fieldsIds"
-                  render={({ field: input }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>
-                          Canchas <span className="text-gray-500">(opcional)</span>
-                        </FormLabel>
-                        <Combobox
-                          multiple
-                          items={fields}
-                          itemToStringValue={(field) => field.name}
-                          value={fields.filter((f) => input.value?.includes(f.id))}
-                          onValueChange={(selectedFields) => {
-                            form.setValue('fieldsIds', selectedFields.map((f) => f.id));
-                          }}
-                        >
-                          <ComboboxChips className="w-full">
-                            <ComboboxValue>
-                              {(values) => (
-                                <>
-                                  {values.map((field: FIELD_TYPE) => (
-                                    <ComboboxChip key={field.id}>
-                                      {field.name}
-                                    </ComboboxChip>
-                                  ))}
-                                </>
-                              )}
-                            </ComboboxValue>
-                            <ComboboxChipsInput placeholder="Buscar cancha" />
-                          </ComboboxChips>
-                          <ComboboxContent>
-                            <ComboboxEmpty>No se encontró la cancha.</ComboboxEmpty>
-                            <ComboboxList>
-                              {(item) => (
-                                <ComboboxItem key={item.id} value={item}>
-                                  {item.name}
-                                </ComboboxItem>
-                              )}
-                            </ComboboxList>
-                          </ComboboxContent>
-                        </Combobox>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-              </div>
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="emails"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Correos Electrónicos <span className="text-gray-500">(opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <EmailInput
+                    value={field.value || []}
+                    onChange={field.onChange}
+                    placeholder="Escribe un email y después presiona Enter"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-            <div className="ml-auto">
+          />
+        </div>
+      </div>
+
+      {/* Address, Fields and Active */}
+      <div className="flex flex-col gap-5 lg:flex-row">
+        <div className="w-full lg:w-1/2">
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Dirección <span className="text-gray-500">(opcional)</span>
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    value={field.value ?? ''}
+                    className="resize-none"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="w-full lg:w-1/2 flex justify-end gap-5 items-center">
+          {fields.length > 0 && (
+            <div className="w-full">
               <FormField
                 control={form.control}
-                name="active"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-3 mt-5">
-                      <Label htmlFor="active">Activo</Label>
-                      <FormControl>
-                        <Switch
-                          id="active"
-                          checked={field.value ?? false}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </div>
-                  </FormItem>
-                )}
+                name="fieldsIds"
+                render={({ field: input }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>
+                        Canchas <span className="text-gray-500">(opcional)</span>
+                      </FormLabel>
+                      <Combobox
+                        multiple
+                        items={fields}
+                        itemToStringValue={(field) => field.name}
+                        value={fields.filter((f) => input.value?.includes(f.id))}
+                        onValueChange={(selectedFields) => {
+                          form.setValue('fieldsIds', selectedFields.map((f) => f.id));
+                        }}
+                      >
+                        <ComboboxChips className="w-full">
+                          <ComboboxValue>
+                            {(values) => (
+                              <>
+                                {values.map((field: FIELD_TYPE) => (
+                                  <ComboboxChip key={field.id}>
+                                    {field.name}
+                                  </ComboboxChip>
+                                ))}
+                              </>
+                            )}
+                          </ComboboxValue>
+                          <ComboboxChipsInput placeholder="Buscar cancha" />
+                        </ComboboxChips>
+                        <ComboboxContent>
+                          <ComboboxEmpty>No se encontró la cancha.</ComboboxEmpty>
+                          <ComboboxList>
+                            {(item) => (
+                              <ComboboxItem key={item.id} value={item}>
+                                {item.name}
+                              </ComboboxItem>
+                            )}
+                          </ComboboxList>
+                        </ComboboxContent>
+                      </Combobox>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
             </div>
+          )}
+          <div className="ml-auto">
+            <FormField
+              control={form.control}
+              name="active"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-3 mt-5">
+                    <Label htmlFor="active">Activo</Label>
+                    <FormControl>
+                      <Switch
+                        id="active"
+                        checked={field.value ?? false}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </div>
+                </FormItem>
+              )}
+            />
           </div>
         </div>
+      </div>
 
-        {/* Buttons */}
-        <div className="flex justify-end gap-3">
-          <Button
-            type="button"
-            variant="outline-secondary"
-            size="lg"
-            onClick={handleNavigateBack}
-          >
-            cancelar
-          </Button>
-          <Button
-            type="submit"
-            variant="outline-primary"
-            size="lg"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? (
-              <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                <span className="text-sm italic">Espere</span>
-                <LoaderCircle className="size-4 animate-spin" />
-              </span>
-            ) : (
-              !team ? 'crear' : 'actualizar'
-            )}
-          </Button>
-        </div>
-      </form>
-    </Form>
+      {/* Buttons */}
+      <div className="flex justify-end gap-3">
+        <Button
+          type="button"
+          variant="outline-secondary"
+          size="lg"
+          onClick={handleNavigateBack}
+        >
+          cancelar
+        </Button>
+        <Button
+          type="submit"
+          variant="outline-primary"
+          size="lg"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? (
+            <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+              <span className="text-sm italic">Espere</span>
+              <LoaderCircle className="size-4 animate-spin" />
+            </span>
+          ) : (
+            !team ? 'crear' : 'actualizar'
+          )}
+        </Button>
+      </div>
+    </form>
+    </Form >
   );
 };
 

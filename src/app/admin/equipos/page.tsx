@@ -10,7 +10,8 @@ import { SearchParamsSelectors } from './(components)/search-params-selectors';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
+    tournament?: string;
+    category?: string;
     query?: string;
     page?: string;
   }>;
