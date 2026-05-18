@@ -2,23 +2,17 @@ import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
-import { TeamsSelectorSkeleton } from './(components)/teams-selector-skeleton';
-import { PlayersContent } from './(components)/players-content';
-import { TeamsSelector } from './(components)/teams-selector';
-import { fetchTeamsAction } from '~/src/shared/actions/fetchTeamsAction';
-import { TournamentsSelector } from '../(components)/tournaments-selector';
-import { fetchTournamentsAction } from '~/src/shared/actions/fetchTournamentsAction';
-import TournamentsSelectorSkeleton from '../equipos/(components)/TournamentsSelectorSkeleton';
+import { TournamentsSelectorSkeleton } from '../equipos/(components)/TournamentsSelectorSkeleton';
 import { CreatePlayerButton } from './(components)/create-player-button';
-import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
-import { redirect } from 'next/navigation';
-import { ROUTES } from '@/shared/constants/routes';
+import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
+import { PlayersContent } from './(components)/players-content';
+import { TeamsContent } from './(components)/teams-content';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
-    categoria?: string;
-    equipo?: string;
+    tournament?: string;
+    category?: string;
+    team?: string;
     query?: string;
     page?: string;
   }>;
@@ -39,12 +33,14 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
               </section>
             </CardHeader>
             <CardContent>
-              <section className="mb-10">
+              <div className="space-y-5 mb-10">
                 <Suspense fallback={<TournamentsSelectorSkeleton />}>
-                  <SearchParamsSelector />
+                  <SearchParamsSelectors />
                 </Suspense>
-                <TeamsContent searchParams={searchParams} />
-              </section>
+                <Suspense>
+                  <TeamsContent searchParams={searchParams} />
+                </Suspense>
+              </div>
               <Suspense>
                 <PlayersContent searchParams={searchParams} />
               </Suspense>
@@ -53,49 +49,6 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
         </div>
       </div>
     </>
-  );
-};
-
-const SearchParamsSelector = async () => {
-  const { tournaments } = await fetchTournamentsAction();
-  return (
-    <section className="w-full lg:w-1/2 2xl:w-full 2xl:max-w-[600px]">
-      <TournamentsSelector tournaments={tournaments} />
-    </section>
-  );
-};
-
-const TeamsContent: FC<Props> = async ({ searchParams }) => {
-  const tournamentPermalink = (await searchParams).torneo;
-  const categoryPermalink = (await searchParams).categoria;
-
-  if (!tournamentPermalink || !categoryPermalink) {
-    return null;
-  }
-
-  const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
-    permalink: tournamentPermalink,
-    category: categoryPermalink,
-  });
-
-  if (!ok && !tournamentId) {
-    redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(message)}`);
-  }
-
-  return (
-    <Suspense fallback={<TeamsSelectorSkeleton />}>
-      <TeamsWrapper tournamentId={tournamentId as string} />
-    </Suspense>
-  );
-};
-
-const TeamsWrapper: FC<{ tournamentId: string }> = async ({ tournamentId }) => {
-  const { teams } = await fetchTeamsAction(tournamentId as string);
-
-  return (
-    <section className="w-full lg:w-1/2 2xl:w-full 2xl:max-w-[600px]">
-      <TeamsSelector teams={teams} />
-    </section>
   );
 };
 

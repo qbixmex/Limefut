@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   usePathname,
   useRouter,
@@ -29,9 +30,9 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   const router = useRouter();
   const params = new URLSearchParams(searchParams);
 
-  const uniqueTournaments = [
+  const uniqueTournaments = useMemo(() => [
     ...new Map(tournaments.map(item => [item.name, item])).values(),
-  ];
+  ], [tournaments]);
 
   const setTournamentParam = (permalink: string) => {
     if (!permalink) return;
@@ -39,6 +40,14 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
     params.set('tournament', permalink);
     router.push(`${pathname}?${params}`);
   };
+
+  useEffect(() => {
+    if (!tournamentPermalink && uniqueTournaments.length > 0) {
+      params.set('tournament', uniqueTournaments[0].permalink);
+      router.replace(`${pathname}?${params}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tournamentPermalink, uniqueTournaments, pathname, router, searchParams]);
 
   return (
     <div className="w-full">

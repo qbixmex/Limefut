@@ -1,12 +1,13 @@
 import { Suspense, type FC } from 'react';
-import { ErrorHandler } from '~/src/shared/components/errorHandler';
-import PlayersTableSkeleton from './players-table-skeleton';
-import PlayersTable from './players-table';
+import { ErrorHandler } from '@/shared/components/errorHandler';
+import { PlayersTableSkeleton } from './players-table-skeleton';
+import { PlayersTable } from './players-table';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
-    equipo?: string;
+    tournament?: string;
+    category?: string;
+    team?: string;
     query?: string;
     page?: string;
   }>;
@@ -14,23 +15,29 @@ type Props = Readonly<{
 
 export const PlayersContent: FC<Props> = async ({ searchParams }) => {
   const {
-    torneo: tournamentId,
-    equipo: teamId,
+    tournament: tournamentPermalink,
+    category: categoryPermalink,
+    team: teamPermalink,
     query = '',
     page: currentPage = 1,
   } = await searchParams;
 
-  if (!tournamentId || !teamId) return null;
+  if (!tournamentPermalink || !categoryPermalink || !teamPermalink) return null;
 
   return (
     <>
       <ErrorHandler />
       <Suspense
-        key={`${tournamentId ?? 'tournament'}-${teamId ?? 'team'}-${query ?? 'query'}-${currentPage}`}
+        key={
+          `${tournamentPermalink ?? 'tournament'}-` +
+          `${categoryPermalink ?? 'category'}-` +
+          `${teamPermalink ?? 'team'}-` +
+          `${query ?? 'query'}-${currentPage}`
+        }
         fallback={<PlayersTableSkeleton colCount={6} rowCount={5} />}
       >
         <PlayersTable
-          teamId={teamId as string}
+          teamId={teamPermalink as string}
           query={query}
           currentPage={currentPage as number}
         />
@@ -38,5 +45,3 @@ export const PlayersContent: FC<Props> = async ({ searchParams }) => {
     </>
   );
 };
-
-export default PlayersContent;

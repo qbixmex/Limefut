@@ -3,9 +3,10 @@
 import type { FC } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import type { CategoryType } from '../equipos/(actions)';
 
-type Props = Readonly<{ categories: CategoryType[] }>;
+type Props = Readonly<{
+  categories: {id: string; category: string; }[];
+}>;
 
 export const CategoriesSelector: FC<Props> = ({ categories }) => {
   const searchParams = useSearchParams();
@@ -34,9 +35,9 @@ export const CategoriesSelector: FC<Props> = ({ categories }) => {
         <SelectValue placeholder="Seleccione la categoría" />
       </SelectTrigger>
       <SelectContent>
-        {categories.map(({ id, name, permalink }) => (
-          <SelectItem key={id} value={permalink}>
-            {name}
+        {categories.map(({ id, category }) => (
+          <SelectItem key={id} value={category}>
+            {category}
           </SelectItem>
         ))}
       </SelectContent>

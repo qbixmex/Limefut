@@ -10,11 +10,11 @@ type FetchTeamResponse = Promise<{
 }>;
 
 export const fetchTournamentByPermalinkAndCategory = async ({
-  permalink,
-  category,
+  tournamentPermalink,
+  categoryPermalink,
 }: {
-  permalink: string;
-  category: string;
+  tournamentPermalink: string;
+  categoryPermalink: string;
 }): FetchTeamResponse => {
   'use cache';
 
@@ -23,14 +23,17 @@ export const fetchTournamentByPermalinkAndCategory = async ({
 
   try {
     const tournament = await prisma.tournament.findFirst({
-      where: { permalink, category },
+      where: {
+        permalink: tournamentPermalink,
+        category: categoryPermalink,
+      },
       select: { id: true },
     });
 
     if (!tournament) {
       return {
         ok: false,
-        message: `¡ El torneo con el enlace permanente: "${permalink}" y categoría "${category}" no existe ❌ !`,
+        message: `¡ El torneo con el enlace permanente: "${tournamentPermalink}" y categoría "${categoryPermalink}" no existe ❌ !`,
         tournamentId: null,
       };
     }
