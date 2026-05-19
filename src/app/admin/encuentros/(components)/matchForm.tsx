@@ -313,14 +313,14 @@ export const MatchForm: FC<Props> = ({
 
 const handleNavigateBack = () => {
   const params = new URLSearchParams(searchParams);
-  const tournament = params.get('torneo');
+  const tournament = params.get('tournament');
 
-  if (params.has('semana')) params.delete('semana');
+  if (params.has('selected-week')) params.delete('selected-week');
 
   if (!match && tournament && params.size === 0) {
     // When the user wants to create a new match.
     route.replace(
-      `${ROUTES.ADMIN_MATCHES}?torneo=${tournament}`,
+      `${ROUTES.ADMIN_MATCHES}?tournament=${tournament}`,
     );
   } else if (match && params.size === 0) {
     // When the user wants to edit a match and didn't set filters.

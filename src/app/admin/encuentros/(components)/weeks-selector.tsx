@@ -7,13 +7,13 @@ type Props = Readonly<{ weeks: number[] }>;
 
 export const WeeksSelector: FC<Props> = ({ weeks }) => {
   const searchParams = useSearchParams();
-  const sortWeek = searchParams.get('sortWeek');
+  const sortWeek = searchParams.get('sort-week');
   const pathname = usePathname();
   const router = useRouter();
 
   const setWeek = (sort: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set('sortWeek', sort);
+    params.set('sort-week', sort);
     router.push(`${pathname}?${params}`);
   };
 

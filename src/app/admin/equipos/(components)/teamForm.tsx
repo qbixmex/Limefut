@@ -184,15 +184,20 @@ export const TeamForm: FC<Props> = ({
         });
       }
 
-      if (ok && team && team.tournament) {
+      if (ok) {
         form.reset();
         toast.success(message);
-        route.replace(ROUTES.ADMIN_TEAMS +
-          `?torneo=${team.tournament.permalink}` +
-          `&categoria=${team.tournament.category}`,
-        );
-        return;
+
+        if (team && team.tournament) {
+          route.replace(ROUTES.ADMIN_TEAMS +
+            `?tournament=${team.tournament.permalink}` +
+            `&category=${team.tournament.category}`,
+          );
+        } else {
+          route.replace(ROUTES.ADMIN_TEAMS);
+        }
       }
+      return;
     }
 
     // Update team
@@ -212,23 +217,23 @@ export const TeamForm: FC<Props> = ({
       if (ok && updatedTeam && updatedTeam.tournament) {
         toast.success(message);
         route.replace(ROUTES.ADMIN_TEAMS +
-          `?torneo=${updatedTeam.tournament.permalink}` +
-          `&categoria=${updatedTeam.tournament.category}`,
+          `?tournament=${updatedTeam.tournament.permalink}` +
+          `&category=${updatedTeam.tournament.category}`,
         );
       }
     }
   };
 
   const handleNavigateBack = () => {
-    if (!team && (params.has('torneo') && params.has('categoria'))) {
+    if (!team && (params.has('tournament') && params.has('category'))) {
       route.replace(ROUTES.ADMIN_TEAMS +
-        `?torneo=${params.get('torneo')}` +
-        `&categoria=${params.get('categoria')}`,
+        `?tournament=${params.get('tournament')}` +
+        `&category=${params.get('category')}`,
       );
     } else if (team && team.tournament) {
       route.replace(ROUTES.ADMIN_TEAMS +
-        `?torneo=${team.tournament.permalink}` +
-        `&categoria=${team.tournament.category}`,
+        `?tournament=${team.tournament.permalink}` +
+        `&category=${team.tournament.category}`,
       );
     } else {
       route.replace(ROUTES.ADMIN_TEAMS);

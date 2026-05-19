@@ -12,16 +12,16 @@ type Props = Readonly<{
     page?: string;
     sortMatchDate?: 'asc' | 'desc';
     sortWeek?: 'asc' | 'desc';
-    torneo?: string;
-    categoria?: string;
+    tournament?: string;
+    category?: string;
     status?: MATCH_STATUS_TYPE;
   }>;
 }>;
 
 export const MatchesContent: FC<Props> = async ({ searchParams }) => {
   const {
-    torneo: tournamentPermalink,
-    categoria: categoryPermalink,
+    tournament: tournamentPermalink,
+    category: categoryPermalink,
     query,
     page: currentPage,
     sortWeek = 'asc',
@@ -34,8 +34,8 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
   }
 
   const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
-    permalink: tournamentPermalink,
-    category: categoryPermalink,
+    tournamentPermalink,
+    categoryPermalink,
   });
 
   if (!ok && !tournamentId) {

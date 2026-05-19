@@ -2,19 +2,19 @@ import { type FC, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MatchWrapper } from './create-match-content';
 import { TournamentsSelectorSkeleton } from '@/app/(public)/components';
-import { SearchParamsSelectors } from '../../equipos/(components)/search-params-selectors';
 import { WeekSelector } from '../(components)/week-selector';
+import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
-    categoria?: string;
-    sortWeek?: string;
+    tournament?: string;
+    category?: string;
+    'sort-week'?: string;
   }>;
 }>;
 
 const CreateMatchPage: FC<Props> = ({ searchParams }) => {
-  const sortWeekPromise = searchParams.then((sp) => ({ sortWeek: sp.sortWeek }));
+  const sortWeekPromise = searchParams.then((sp) => ({ 'sort-week': sp['sort-week'] }));
 
   return (
     <div className="admin-page">
