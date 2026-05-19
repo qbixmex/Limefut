@@ -12,10 +12,10 @@ export const FormWeekSelector = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const sortedWeek = searchParams.get('sort-week');
-  const selectedWeek = searchParams.get('selected-week');
   const tournamentParam = searchParams.get('tournament');
   const categoryParam = searchParams.get('category');
+  const sortedWeek = searchParams.get('sort-week');
+  const selectedWeek = searchParams.get('selected-week');
 
   const [weekValue, setWeekValue] = useState(() => {
     return Number(selectedWeek ?? sortedWeek ?? 0);
@@ -24,16 +24,12 @@ export const FormWeekSelector = () => {
   const [debouncedWeek] = useDebounce(weekValue, 500);
 
   useEffect(() => {
-    const selectedWeek = searchParams.get('selected-week');
-    const sortedWeek = searchParams.get('sort-week');
-    if (selectedWeek === String(debouncedWeek) && sortedWeek === String(debouncedWeek)) {
-      return;
-    }
     const params = new URLSearchParams(searchParams);
     params.set('selected-week', String(debouncedWeek));
     params.set('sort-week', String(debouncedWeek));
     router.replace(`${pathname}?${params}`);
-  }, [debouncedWeek, pathname, router, searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedWeek, pathname, router]);
 
   if (!tournamentParam || !categoryParam) return null;
 

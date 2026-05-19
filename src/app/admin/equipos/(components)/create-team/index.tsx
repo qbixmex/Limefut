@@ -9,21 +9,24 @@ import { useSearchParams } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 
 export const CreateTeam: FC = () => {
-  const params = useSearchParams();
+  const searchParams = useSearchParams();
 
   return (
     <Tooltip>
       <TooltipTrigger>
         <Link href={
-          (params.has('torneo') && params.has('categoria'))
+          (searchParams.has('tournament') && searchParams.has('category'))
             ? (ROUTES.ADMIN_TEAM_CREATE +
-                `?torneo=${params.get('torneo')}` +
-                `&categoria=${params.get('categoria')}`
+                `?tournament=${searchParams.get('tournament')}` +
+                `&category=${searchParams.get('category')}`
               )
             : ROUTES.ADMIN_TEAM_CREATE
           }
           className={
-            buttonVariants({ variant: 'outline-primary', size: 'icon' })
+            buttonVariants({
+              variant: 'outline-primary',
+              size: 'icon',
+            })
           }
         >
           <Plus strokeWidth={3} />

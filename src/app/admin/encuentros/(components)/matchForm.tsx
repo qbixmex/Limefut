@@ -47,7 +47,6 @@ import { MATCH_STATUS } from '@/shared/enums';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { Label } from '@/components/ui/label';
-import { finishMatchAction } from '../(actions)/finishMatchAction';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -212,9 +211,9 @@ export const MatchForm: FC<Props> = ({
       if (response.ok) {
         toast.success(response.message);
         route.replace(ROUTES.ADMIN_MATCHES +
-          `?torneo=${response.match?.tournament.permalink}` +
-          `&categoria=${response.match?.tournament.category}` +
-          `&sortWeek=${response.match?.week}`,
+          `?tournament=${response.match?.tournament.permalink}` +
+          `&category=${response.match?.tournament.category}` +
+          `&sort-week=${response.match?.week}`,
         );
         return;
       }
@@ -237,48 +236,9 @@ export const MatchForm: FC<Props> = ({
       if (response.ok) {
         toast.success(response.message);
         route.replace(ROUTES.ADMIN_MATCHES +
-          `?torneo=${match.tournament.permalink}` +
-          `&categoria=${response.match?.tournament.category}` +
-          `&sortWeek=${response.match?.week}`,
-        );
-      }
-    }
-  };
-
-  const onFinishMatch = async () => {
-    const data = {
-      matchId: match?.id as string,
-      localScore: form.getValues('localScore') as number,
-      visitorScore: form.getValues('visitorScore') as number,
-      localId: match?.localTeam.id as string,
-      visitorId: match?.visitorTeam.id as string,
-    };
-
-    const { ok, message } = await finishMatchAction(data);
-
-    if (!ok) {
-      toast.error(message);
-      return;
-    }
-
-    if (ok && match) {
-      const params = new URLSearchParams(searchParams);
-
-      if (params.has('semana')) params.delete('semana');
-
-      toast.success(message);
-
-      if (params.size === 0) {
-        route.replace(
-          `${ROUTES.ADMIN_MATCHES}?torneo=${match.tournament.permalink}` +
-          `?categoria=${match.tournament.category}` +
-          `&sortWeek=${match.week}`,
-        );
-      } else {
-        route.replace(
-          ROUTES.ADMIN_MATCHES +
-          `?torneo=${match.tournament.id}` +
-          `&${params}`,
+          `?tournament=${response.match?.tournament.permalink}` +
+          `&category=${response.match?.tournament.category}` +
+          `&sort-week=${response.match?.week}`,
         );
       }
     }
@@ -304,23 +264,25 @@ export const MatchForm: FC<Props> = ({
       toast.success(message);
       route.replace(
         ROUTES.ADMIN_MATCHES +
-        `?torneo=${currentMatch?.tournament.permalink}` +
-        `&categoria=${currentMatch?.tournament.category}` +
-        `&sortWeek=${match?.week}`,
+        `?tournament=${currentMatch?.tournament.permalink}` +
+        `&category=${currentMatch?.tournament.category}` +
+        `&sort-week=${match?.week}`,
       );
     }
   };
 
 const handleNavigateBack = () => {
   const params = new URLSearchParams(searchParams);
+  const category = params.get('category');
   const tournament = params.get('tournament');
 
   if (params.has('selected-week')) params.delete('selected-week');
 
-  if (!match && tournament && params.size === 0) {
+  if (!match && tournament && category && params.size === 0) {
     // When the user wants to create a new match.
-    route.replace(
-      `${ROUTES.ADMIN_MATCHES}?tournament=${tournament}`,
+    route.replace(ROUTES.ADMIN_MATCHES +
+      `?tournament=${tournament}` +
+      `&category=${category}`,
     );
   } else if (match && params.size === 0) {
     // When the user wants to edit a match and didn't set filters.
@@ -868,51 +830,6 @@ return (
             </AlertDialogContent>
           </AlertDialog>
         </Activity>
-
-        {match && (match.status !== MATCH_STATUS.COMPLETED) && (
-          <div className="absolute top-5 right-5">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline-success"
-                  size="lg"
-                  disabled={form.formState.isSubmitting}
-                >
-                  {form.formState.isSubmitting ? (
-                    <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                      <span className="text-sm italic">Espere</span>
-                      <LoaderCircle className="size-4 animate-spin" />
-                    </span>
-                  ) : (
-                    <span>Finalizar Encuentro</span>
-                  )}
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>¿ Confirmas que quieres finalizar el encuentro ?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Al finalizar el encuentro el resultado final impactará la tabla de posiciones.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="finish-btn"
-                    onClick={() => {
-                      form.handleSubmit(async () => {
-                        await onFinishMatch();
-                      })();
-                    }}
-                  >
-                    Proceder
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        )}
       </div>
     </form>
   </Form>

@@ -7,18 +7,18 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const ClearFilters = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const tournamentId = searchParams.get('torneo');
 
   const onClearFilters = () => {
     const params = new URLSearchParams();
-    if (tournamentId) params.set('torneo', tournamentId.toString());
-    router.replace(`${pathname}?${params}`);
+    for (const key of params.keys()) {
+      params.delete(key);
+    }
+    router.replace(pathname);
     router.refresh();
   };
 

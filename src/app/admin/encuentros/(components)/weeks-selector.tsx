@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { X } from 'lucide-react';
 
 type Props = Readonly<{ weeks: number[] }>;
 
@@ -10,10 +10,11 @@ export const WeeksSelector: FC<Props> = ({ weeks }) => {
   const sortWeek = searchParams.get('sort-week');
   const pathname = usePathname();
   const router = useRouter();
+  const params = new URLSearchParams(searchParams);
 
-  const setWeek = (sort: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('sort-week', sort);
+  const setWeek = (filter: 'asc' | 'desc' | 'clear') => {
+    if (filter === 'clear') params.delete('sort-week');
+    else params.set('sort-week', filter);
     router.push(`${pathname}?${params}`);
   };
 
@@ -26,14 +27,17 @@ export const WeeksSelector: FC<Props> = ({ weeks }) => {
         <SelectValue placeholder="Jornada" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="asc">ascendente <ArrowUp /></SelectItem>
-        <SelectItem value="desc">descendente <ArrowDown /></SelectItem>
+        {params.has('sort-week') && (
+          <SelectItem value="clear">borrar filtro <X /></SelectItem>
+        )}
+        <SelectItem value="asc">ascendente</SelectItem>
+        <SelectItem value="desc">descendente</SelectItem>
         {
           (weeks.length > 0) && weeks.map((week) => (
-              <SelectItem key={week} value={`${week}`}>
-                jornada {week}
-              </SelectItem>
-            ))
+            <SelectItem key={week} value={`${week}`}>
+              jornada {week}
+            </SelectItem>
+          ))
         }
       </SelectContent>
     </Select>

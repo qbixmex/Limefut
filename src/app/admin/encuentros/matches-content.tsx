@@ -10,10 +10,10 @@ type Props = Readonly<{
   searchParams: Promise<{
     query?: string;
     page?: string;
-    sortMatchDate?: 'asc' | 'desc';
-    sortWeek?: 'asc' | 'desc';
     tournament?: string;
     category?: string;
+    'sort-match-date'?: 'asc' | 'desc';
+    'sort-week'?: 'asc' | 'desc';
     status?: MATCH_STATUS_TYPE;
   }>;
 }>;
@@ -24,9 +24,9 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
     category: categoryPermalink,
     query,
     page: currentPage,
-    sortWeek = 'asc',
+    'sort-week': sortWeek = 'asc',
+    'sort-match-date': sortMatchDate = 'asc',
     status,
-    sortMatchDate = 'asc',
   } = await searchParams;
 
   if (!tournamentPermalink || !categoryPermalink) {
