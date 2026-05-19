@@ -13,8 +13,8 @@ export const fetchTournamentByPermalinkAndCategory = async ({
   tournamentPermalink,
   categoryPermalink,
 }: {
-  tournamentPermalink: string;
-  categoryPermalink: string;
+  tournamentPermalink: string | undefined;
+  categoryPermalink: string | undefined;
 }): FetchTeamResponse => {
   'use cache';
 
