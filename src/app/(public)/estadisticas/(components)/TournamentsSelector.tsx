@@ -8,5 +8,3 @@ export const TournamentsSelector = async () => {
     <SelectTournament tournaments={tournaments} />
   );
 };
-
-export default TournamentsSelector;

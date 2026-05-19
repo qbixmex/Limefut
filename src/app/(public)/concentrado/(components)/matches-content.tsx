@@ -4,16 +4,13 @@ import { ConcentratedMatchesSkeleton } from './concentrated-matches-skeleton';
 
 type Props = Readonly<{
   searchParamsPromise: Promise<{
-    torneo?: string;
-    categoria?: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
 export const MatchesContent: FC<Props> = async ({ searchParamsPromise }) => {
-  const {
-    torneo: tournament,
-    categoria: category,
-  } = await searchParamsPromise;
+  const { tournament, category } = await searchParamsPromise;
 
   if (!tournament || !category) {
     return null;

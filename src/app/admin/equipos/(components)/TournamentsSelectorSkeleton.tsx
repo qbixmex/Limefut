@@ -8,5 +8,3 @@ export const TournamentsSelectorSkeleton: FC = () => {
     </div>
   );
 };
-
-export default TournamentsSelectorSkeleton;

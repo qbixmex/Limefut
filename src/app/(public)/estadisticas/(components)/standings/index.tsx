@@ -4,17 +4,13 @@ import { StandingsSkeleton } from './standings-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
-    categoria?: string;
-    formato?: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
 export const Standings: FC<Props> = async ({ searchParams }) => {
-  const {
-    torneo: tournament,
-    categoria: category,
-  } = await searchParams;
+  const { tournament, category } = await searchParams;
 
   if (!tournament || !category) {
     return null;

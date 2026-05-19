@@ -13,7 +13,7 @@ import {
 import { Pencil, ShieldBan } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchTeamAction } from '../(actions)';
 import { format } from 'date-fns';
@@ -47,7 +47,7 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
   const response = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
   if (!response.ok) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(response.message)}`);
   }
 
   const team = response.team!;
@@ -252,11 +252,15 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
 
             <div className="absolute top-5 right-5">
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href={`/admin/equipos/editar/${team.id}`}>
-                    <Button variant="outline-warning" size="icon">
-                      <Pencil />
-                    </Button>
+                <TooltipTrigger>
+                  <Link
+                    href={`/admin/equipos/editar/${team.id}`}
+                    className={buttonVariants({
+                      variant: 'outline-warning',
+                      size: 'icon',
+                    })}
+                  >
+                    <Pencil />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">

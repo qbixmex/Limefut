@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   usePathname,
   useRouter,
@@ -19,44 +20,43 @@ type Props = Readonly<{
     id: string;
     name: string;
     permalink: string;
-    category: string;
   }[];
 }>;
 
 export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   const searchParams = useSearchParams();
-  const tournamentPermalink = searchParams.get('torneo');
-  const categoryPermalink = searchParams.get('categoria');
+  const tournamentPermalink = searchParams.get('tournament');
   const pathname = usePathname();
   const router = useRouter();
   const params = new URLSearchParams(searchParams);
 
-  const uniqueTournaments = [
+  const uniqueTournaments = useMemo(() => [
     ...new Map(tournaments.map(item => [item.name, item])).values(),
-  ];
+  ], [tournaments]);
 
-  const setTournamentParam = (value: string) => {
-    if (!value) return;
+  const setTournamentParam = (permalink: string) => {
+    if (!permalink) return;
 
-    params.set('torneo', value);
+    params.set('tournament', permalink);
     router.push(`${pathname}?${params}`);
   };
 
-  const setCategoryParam = (value: string) => {
-     if (!value) return;
-
-     params.set('categoria', value);
-     router.push(`${pathname}?${params}`);
-  };
+  useEffect(() => {
+    if (!tournamentPermalink && uniqueTournaments.length > 0) {
+      params.set('tournament', uniqueTournaments[0].permalink);
+      router.replace(`${pathname}?${params}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tournamentPermalink, uniqueTournaments, pathname, router, searchParams]);
 
   return (
-    <div className="w-full flex flex-col gap-5 mb-5">
+    <div className="w-full">
       <Select
         value={tournamentPermalink ?? ''}
         onValueChange={setTournamentParam}
       >
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Seleccione el torneo" />
+          <SelectValue placeholder="Seleccione torneo" />
         </SelectTrigger>
         <SelectContent>
           {uniqueTournaments.map((tournament) => (
@@ -69,24 +69,6 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
           ))}
         </SelectContent>
       </Select>
-
-      {params.has('torneo') && (
-        <Select
-          value={categoryPermalink ?? ''}
-          onValueChange={setCategoryParam}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Seleccione la categoría" />
-          </SelectTrigger>
-          <SelectContent>
-            {tournaments.map(({ id, category }) => (
-              <SelectItem key={id} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )}
     </div>
   );
 };

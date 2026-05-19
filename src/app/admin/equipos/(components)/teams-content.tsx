@@ -9,24 +9,24 @@ type Props = Readonly<{
   searchParamsPromise: Promise<{
     query?: string;
     page?: string;
-    torneo?: string;
-    categoria?: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
 export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
   const {
-    torneo: permalink,
-    categoria: category,
+    tournament: tournamentPermalink,
+    category: categoryPermalink,
     query = '',
     page: currentPage = 1,
   } = await searchParamsPromise;
 
-  if (!permalink || !category) return null;
+  if (!tournamentPermalink || !categoryPermalink) return null;
 
   const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
-    permalink,
-    category,
+    tournamentPermalink,
+    categoryPermalink,
   });
 
   if (!ok && !tournamentId) {
@@ -36,7 +36,12 @@ export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
   return (
     <>
       <Suspense
-        key={`${permalink ?? 'permalink'}-${query ?? 'query'}-${currentPage}`}
+        key={
+          `${tournamentPermalink ?? 'tournament'}-` +
+          `${categoryPermalink ?? 'category'}-` +
+          `${query ?? 'query'}-` +
+          `${currentPage}`
+        }
         fallback={<TeamsTableSkeleton colCount={9} rowCount={6} />}
       >
         <TeamsWrapper

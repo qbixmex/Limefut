@@ -6,11 +6,12 @@ import { TournamentsSelectorSkeleton } from './(components)/TournamentsSelectorS
 import { Search } from '@/shared/components/search';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { CreateTeam } from './(components)/create-team';
-import { SearchParamsSelectors } from './(components)/search-params-selectors';
+import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
+    tournament?: string;
+    category?: string;
     query?: string;
     page?: string;
   }>;

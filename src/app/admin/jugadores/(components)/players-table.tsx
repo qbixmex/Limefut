@@ -145,5 +145,3 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
     </>
   );
 };
-
-export default PlayersTable;

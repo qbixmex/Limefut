@@ -3,16 +3,20 @@
 import type { FC } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { X } from 'lucide-react';
 
-export const DateSelector: FC = () => {
+type Props = Readonly<{ label: 'date' | 'hour' }>;
+
+export const DateSelector: FC<Props> = ({ label }) => {
   const searchParams = useSearchParams();
-  const sortDate = searchParams.get('sortMatchDate');
+  const sortDate = searchParams.get('sort-match-date');
   const pathname = usePathname();
   const router = useRouter();
+  const params = new URLSearchParams(searchParams);
 
-  const setDate = (sort: 'asc' | 'desc') => {
-    const params = new URLSearchParams(searchParams);
-    params.set('sortMatchDate', sort);
+  const setDate = (filter: 'asc' | 'desc' | 'clear') => {
+    if (filter === 'clear') params.delete('sort-match-date');
+    else params.set('sort-match-date', filter);
     router.push(`${pathname}?${params}`);
   };
 
@@ -22,11 +26,14 @@ export const DateSelector: FC = () => {
       value={sortDate ?? ''}
     >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Fecha" />
+        <SelectValue placeholder={label === 'date' ? 'Fecha' : label === 'hour' ? 'Hora' : 'Ordenar'} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="asc">Recientes</SelectItem>
-        <SelectItem value="desc">Antiguos</SelectItem>
+        {params.has('sort-match-date') && (
+          <SelectItem value="clear">borrar filtro <X /></SelectItem>
+        )}
+        <SelectItem value="asc">ascendente</SelectItem>
+        <SelectItem value="desc">descendente</SelectItem>
       </SelectContent>
     </Select>
   );

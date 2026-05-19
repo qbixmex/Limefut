@@ -34,6 +34,7 @@ import { DateSelector } from './date-selector';
 import { StatusSelector } from './status-selector';
 import { formatInTimeZone } from 'date-fns-tz';
 import { EditMatch } from './edit-match';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   matches: Match[];
@@ -81,7 +82,10 @@ export const MatchesTable: FC<Props> = ({
                   <WeeksSelector weeks={matchesWeeks} />
                 </TableHead>
                 <TableHead className="w-25 text-center">
-                  <DateSelector />
+                  <DateSelector label='date' />
+                </TableHead>
+                <TableHead className="w-25">
+                  <DateSelector label='hour' />
                 </TableHead>
                 <TableHead className="w-[120px]" colSpan={2}>
                   <StatusSelector />
@@ -127,7 +131,7 @@ export const MatchesTable: FC<Props> = ({
                         )}
                       </div>
                       <div className="text-left">
-                        <Link href={`/admin/equipos/${match.visitorTeam.id}`}>
+                        <Link href={ROUTES.ADMIN_TEAMS + match.visitorTeam.id}>
                           <div className="space-x-2">
                             <span>{match.visitorTeam.name}</span>
                             {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
@@ -142,23 +146,30 @@ export const MatchesTable: FC<Props> = ({
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {match.place ? (
-                      <p className="text-balance">{match.place}</p>
+                      <span className="font-semibold text-gray-600 dark:text-gray-500 text-balance">
+                        {match.place}
+                      </span>
                     ) : (
-                      <Badge variant="outline-secondary">No definida</Badge>
+                      <Badge variant="outline-secondary">No disponible</Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge variant="outline-info">{match.week}</Badge>
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell>
                     {match.matchDate ? (
-                      <>
-                        {format(match.matchDate as Date, 'dd / MMM / y', { locale: es }).toUpperCase()},
-                        {' '}
-                        {formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })}
-                      </>
+                      <span className="font-semibold text-gray-600 dark:text-gray-500">
+                        {format(match.matchDate as Date, 'EEE dd MMM, y', { locale: es }).toUpperCase()}
+                      </span>
                     ) : (
-                      <Badge variant="outline-secondary">No definida</Badge>
+                      <Badge variant="outline-secondary">No disponible</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="font-semibold text-gray-600 dark:text-gray-500">
+                    {match.matchDate ? (
+                      formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })
+                    ) : (
+                      <Badge variant="outline-secondary">No disponible</Badge>
                     )}
                   </TableCell>
                   <TableCell>
@@ -167,7 +178,7 @@ export const MatchesTable: FC<Props> = ({
                         <span className="text-emerald-500 font-semibold">Finalizado</span>
                       </div>
                     ) : (
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2">
                         <MatchStatus matchId={match.id} status={match.status} />
                         <FinishMatch
                           matchId={match.id}

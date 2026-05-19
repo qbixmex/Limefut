@@ -6,6 +6,7 @@ const { pushMock, useSearchParamsMock } = vi.hoisted(() => ({
   useSearchParamsMock: vi.fn(() => ({
     get: () => null,
     toString: () => '',
+    has: () => false,
   })),
 }));
 
@@ -47,6 +48,7 @@ describe('Tests on <RoleTypeSelector />', () => {
     vi.mocked(useSearchParamsMock).mockReturnValue({
       get: (key: string) => (key === 'roles' ? 'complete' : null),
       toString: () => 'roles=complete',
+      has: (key: string) => key === 'roles',
     } as never);
 
     const { result } = renderHook(() => useRoleTypeSelector());
@@ -59,6 +61,7 @@ describe('Tests on <RoleTypeSelector />', () => {
     vi.mocked(useSearchParamsMock).mockReturnValue({
       get: (key: string) => (key === 'roles' ? 'team' : null),
       toString: () => 'roles=team',
+      has: (key: string) => key === 'roles',
     } as never);
 
     const { result } = renderHook(() => useRoleTypeSelector());
@@ -71,6 +74,7 @@ describe('Tests on <RoleTypeSelector />', () => {
     vi.mocked(useSearchParamsMock).mockReturnValue({
       get: (key: string) => (key === 'roles' ? 'field' : null),
       toString: () => 'roles=field',
+      has: (key: string) => key === 'roles',
     } as never);
 
     const { result } = renderHook(() => useRoleTypeSelector());

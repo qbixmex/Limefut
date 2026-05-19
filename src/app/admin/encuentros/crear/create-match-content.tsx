@@ -11,26 +11,26 @@ import { ROUTES } from '@/shared/constants/routes';
 
 type MatchWrapperProps = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
-    categoria?: string;
-    semana?: string;
+    tournament?: string;
+    category?: string;
+    ['selected-week']?: string;
   }>;
 }>;
 
 export const MatchWrapper: FC<MatchWrapperProps> = async ({ searchParams }) => {
   const {
-    torneo: tournament,
-    categoria: category,
-    semana: week,
+    tournament: tournamentPermalink,
+    category: categoryPermalink,
+    'selected-week': selectedWeek,
   } = await searchParams;
 
-  if (!tournament || !category || !week) {
+  if (!tournamentPermalink || !categoryPermalink || !selectedWeek) {
     return null;
   }
 
   const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
-    permalink: tournament,
-    category,
+    tournamentPermalink,
+    categoryPermalink,
   });
 
   if (!ok && !tournamentId) {
@@ -39,12 +39,15 @@ export const MatchWrapper: FC<MatchWrapperProps> = async ({ searchParams }) => {
 
   return (
     <Suspense
-      key={`${tournament ?? 'tournament'}-${category ?? 'category'}-${week ?? 'week'}`}
+      key={
+        `${tournamentPermalink ?? 'tournament'}-` +
+        `${categoryPermalink ?? 'category'}-` +
+        `${selectedWeek ?? 'selected-week'}`}
       fallback={<FormSkeleton />}
     >
       <CreateMatchContent
         tournamentId={tournamentId as string}
-        week={week}
+        week={selectedWeek}
       />
     </Suspense>
   );

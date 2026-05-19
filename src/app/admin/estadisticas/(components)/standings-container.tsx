@@ -7,22 +7,22 @@ import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo: string;
-    categoria: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
 export const StandingsContainer: FC<Props> = async ({ searchParams }) => {
-  const tournamentPermalink = (await searchParams).torneo;
-  const categoryPermalink = (await searchParams).categoria;
+  const tournamentPermalink = (await searchParams).tournament;
+  const categoryPermalink = (await searchParams).category;
 
   if (!tournamentPermalink || !categoryPermalink) {
     return null;
   }
 
   const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
-    permalink: tournamentPermalink,
-    category: categoryPermalink,
+    tournamentPermalink,
+    categoryPermalink,
   });
 
   if (!ok && !tournamentId) {

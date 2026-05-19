@@ -12,6 +12,7 @@ import { getMatchStatus } from '../(helpers)/status';
 import { getMatchesSortedByWeeks } from './utils/get-matches-sorted-by-weeks';
 import { getUniqueMatches } from './utils/get-unique-matches';
 import Link from 'next/link';
+import { ROUTES } from '@/shared/constants/routes';
 
 const TIME_ZONE = 'America/Mexico_City';
 
@@ -91,9 +92,9 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                       </div>
                     ) : (
                       <span
-                      className="text-gray-600"
-                      role="time"
-                      aria-label="Hora del partido no definida"
+                        className="text-gray-600"
+                        role="time"
+                        aria-label="Hora del partido no definida"
                       >No definida</span>
                     )}
                   </TableCell>
@@ -113,70 +114,80 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                     )}
                   </TableCell>
                   <TableCell>
-                    <Link
-                      href={`/resultados/${match.id}/${match.local.permalink}-vs-${match.visitor.permalink}`}
-                      className="font-semibold italic"
-                      target="_blank"
-                    >
-                      <div className="grid grid-cols-[1fr_120px_1fr]">
-                        <span
-                          className="text-right"
-                          role="team-name"
-                          aria-label="Nombre equipo local"
+                    <div className="grid grid-cols-[1fr_120px_1fr]">
+                      <span
+                        className="text-right"
+                        role="team-name"
+                        aria-label="Nombre equipo local"
+                      >
+                        <Link
+                          href={ROUTES.PUBLIC_TEAMS +
+                            `/${match.local.permalink}` +
+                            `?torneo=${match.tournament.permalink}` +
+                            `&categoria=${match.tournament.category}`
+                          }
                         >
                           {
                             match.local.name.toLowerCase().includes('descanso')
                               ? <span className="text-gray-400 font-semibold italic">{match.local.name}</span>
                               : <span>{match.local.name}</span>
                           }
-                        </span>
-                        <span className="text-center flex justify-center items-center gap-2">
-                          {match.penaltyShootout && (
-                            <span
-                              className="text-gray-500 text-sm font-[400]"
-                              role="score"
-                              aria-label={'Penales equipo local'}
-                            >
-                              ({match.penaltyShootout!.localGoals})
-                            </span>
-                          )}
+                        </Link>
+                      </span>
+                      <span className="text-center flex justify-center items-center gap-2">
+                        {match.penaltyShootout && (
                           <span
-                            className="text-xl text-sky-500 font-medium"
+                            className="text-gray-500 text-sm font-[400]"
                             role="score"
-                            aria-label={'Goles equipo local'}
+                            aria-label={'Penales equipo local'}
                           >
-                            {match.localScore}
+                            ({match.penaltyShootout!.localGoals})
                           </span>
-                          <span>-</span>
-                          <span
-                            className="text-xl text-sky-500 font-medium"
-                            role="score"
-                            aria-label={'Goles equipo visitante'}
-                          >
-                            {match.visitorScore}
-                          </span>
-                          {match.penaltyShootout && (
-                            <span
-                              className="text-gray-500 text-sm font-[400]"
-                              role="score"
-                              aria-label={'Penales equipo visitante'}
-                            >
-                              ({match.penaltyShootout!.visitorGoals})
-                            </span>
-                          )}
-                        </span>
+                        )}
                         <span
-                          role="team-name"
-                          aria-label="Nombre equipo visitante"
+                          className="text-xl text-sky-500 font-medium"
+                          role="score"
+                          aria-label={'Goles equipo local'}
+                        >
+                          {match.localScore}
+                        </span>
+                        <span>-</span>
+                        <span
+                          className="text-xl text-sky-500 font-medium"
+                          role="score"
+                          aria-label={'Goles equipo visitante'}
+                        >
+                          {match.visitorScore}
+                        </span>
+                        {match.penaltyShootout && (
+                          <span
+                            className="text-gray-500 text-sm font-[400]"
+                            role="score"
+                            aria-label={'Penales equipo visitante'}
+                          >
+                            ({match.penaltyShootout!.visitorGoals})
+                          </span>
+                        )}
+                      </span>
+                      <span
+                        role="team-name"
+                        aria-label="Nombre equipo visitante"
+                      >
+                        <Link
+                          href={ROUTES.PUBLIC_TEAMS +
+                            `/${match.visitor.permalink}` +
+                            `?torneo=${match.tournament.permalink}` +
+                            `&categoria=${match.tournament.category}`
+                          }
                         >
                           {
                             match.visitor.name.toLowerCase().includes('descanso')
                               ? (<span className="text-gray-400 font-semibold italic">{match.visitor.name}</span>)
                               : (<span>{match.visitor.name}</span>)
                           }
-                        </span>
-                      </div>
-                    </Link>
+                        </Link>
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     <Badge

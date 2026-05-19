@@ -4,9 +4,8 @@ import { TeamsList } from './TeamsList';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
-    categoria?: string;
-    formato?: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
@@ -16,15 +15,14 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
   return (
     <Suspense
       key={
-        `${params.torneo ?? 'tournament'}` +
-        `-${params.categoria ?? 'category'}` +
-        `-${params.formato ?? 'format'}`
+        `${params.tournament ?? 'tournament'}` +
+        `-${params.category ?? 'category'}`
       }
       fallback={<TeamsSkeleton />}
     >
       <TeamsList
-        tournamentPermalink={params.torneo}
-        category={params.categoria}
+        tournamentPermalink={params.tournament}
+        category={params.category}
       />
     </Suspense>
   );
