@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 type RoleStatus = {
   complete: boolean;
@@ -14,10 +15,18 @@ export const useRoleTypeSelector = () => {
   const router = useRouter();
 
   const rolesState: RoleStatus = {
-    complete: searchParams.get('roles') === 'complete',
+    complete: !searchParams.has('roles') || searchParams.get('roles') === 'complete',
     team: searchParams.get('roles') === 'team',
     field: searchParams.get('roles') === 'field',
   };
+
+  useEffect(() => {
+    if (searchParams.has('tournament') && searchParams.has('category') && !searchParams.has('roles')) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('roles', 'complete');
+      router.push(`${pathname}?${params}`);
+    }
+  }, [searchParams, pathname, router]);
 
   const handleRoleSelection = (type: 'complete' | 'team' | 'field') => {
     const params = new URLSearchParams(searchParams.toString());
@@ -40,6 +49,8 @@ export const useRoleTypeSelector = () => {
         if (currentRole === type) params.delete('roles');
         else params.set('roles', 'field');
         break;
+      default:
+        params.set('roles', 'complete');
     }
 
     router.push(params.toString() ? `${pathname}?${params}` : pathname);

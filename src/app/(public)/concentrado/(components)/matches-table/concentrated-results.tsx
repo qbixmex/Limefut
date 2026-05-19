@@ -4,6 +4,7 @@ import { type FC } from 'react';
 import Link from 'next/link';
 import type { DataType } from '../../(actions)/fetchResultsAction';
 import { useConcentratedResults } from '../../(hooks)/use-concentrated-results';
+import { ROUTES } from '@/shared/constants/routes';
 import './styles.css';
 
 type Props = Readonly<{
@@ -43,11 +44,10 @@ export const ConcentratedResults: FC<Props> = ({ data }) => {
             <tr key={rowTeam.id} data-row={rowIndex + 1} data-team={rowTeam.id}>
               <td data-row-label>
                 <Link
-                  href={
-                    `/equipos/${rowTeam.permalink}` +
+                  href={ROUTES.PUBLIC_TEAMS +
+                    `/${rowTeam.permalink}` +
                     `?torneo=${tournament.permalink}` +
-                    `&categoria=${rowTeam.category}` +
-                    `&formato=${rowTeam.format}`
+                    `&categoria=${rowTeam.category}`
                   }
                   target="_blank"
                 >
@@ -75,14 +75,7 @@ export const ConcentratedResults: FC<Props> = ({ data }) => {
                         ? <span>&nbsp;</span>
                         : (
                           <Link
-                            href={
-                              '/resultados/' +
-                              cellData.matchId +
-                              '/' +
-                              rowTeam.permalink +
-                              '-vs-' +
-                              colTeam.permalink
-                            }
+                            href={`${ROUTES.PUBLIC_RESULTS}/${cellData.matchId}`}
                             target="_blank"
                           >
                             <span className="match-result">

@@ -8,8 +8,8 @@ import {
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
-    categoria?: string;
+    tournament?: string;
+    category?: string;
     formato?: string;
     roles?: 'complete' | 'team' | 'field';
     team?: string;
@@ -18,8 +18,8 @@ type Props = Readonly<{
 
 export const ResultsContent: FC<Props> = async ({ searchParams }) => {
   const {
-    torneo: tournament,
-    categoria: category,
+    tournament,
+    category,
     roles,
     team,
   } = await searchParams;

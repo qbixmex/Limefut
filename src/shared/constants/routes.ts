@@ -49,6 +49,10 @@ export const ROUTES = {
   ADMIN_VIDEOS_EDIT: (id: string) => `/admin/videos/editar/${id}`,
   PUBLIC_VIDEOS: '/videos',
   PUBLIC_VIDEOS_SHOW: (id: string) => `/videos/${id}`,
+  PUBLIC_TEAMS: '/equipos',
+  PUBLIC_RESULTS: '/resultados',
   PUBLIC_CONCENTRATED: '/concentrado',
   PUBLIC_STANDINGS: '/estadisticas',
+  PUBLIC_IMAGES: '/imagenes',
+  PUBLIC_CONTACT: '/contacto',
 } as const;

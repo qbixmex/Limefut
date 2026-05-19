@@ -4,10 +4,10 @@ import { Standings } from './(components)/standings';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import {
   Heading,
-  SearchParamsSelector,
   TournamentsSelectorSkeleton,
 } from '../components';
 import './styles.css';
+import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
 
 export const metadata: Metadata = {
   title: 'Tabla de posiciones',
@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo: string;
-    categoria: string;
+    tournament: string;
+    category: string;
   }>;
 }>;
 
@@ -30,7 +30,7 @@ export const StandingsPage: FC<Props> = ({ searchParams }) => {
       </Heading>
 
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <SearchParamsSelector />
+        <SearchParamsSelectors />
       </Suspense>
 
       <Suspense>

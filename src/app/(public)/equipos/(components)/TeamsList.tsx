@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { fetchTeamsAction } from '../(actions)/fetchTeamsAction';
 import { ShieldBan } from 'lucide-react';
+import { ROUTES } from '@/shared/constants/routes';
 
 type TeamsListProps = Readonly<{
   tournamentPermalink?: string;
@@ -38,8 +39,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
               {(!team.imageUrl) ? (
                 <div className="size-[250px] text-gray-400 bg-gray-200 dark:bg-gray-700 rounded grid place-content-center">
                   <Link
-                    href={
-                      `/equipos/${team.permalink}` +
+                    href={ROUTES.PUBLIC_TEAMS +
+                      `/${team.permalink}` +
                       `?torneo=${tournamentPermalink}` +
                       `&categoria=${team.category}`
                     }
@@ -49,8 +50,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
                 </div>
               ) : (
                 <Link
-                  href={
-                    `/equipos/${team.permalink}` +
+                  href={ROUTES.PUBLIC_TEAMS +
+                    `/${team.permalink}` +
                     `?torneo=${tournamentPermalink}` +
                     `&categoria=${team.category}`
                   }
@@ -66,8 +67,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
               )}
             </figure>
             <Link
-              href={
-                `/equipos/${team.permalink}` +
+              href={ROUTES.PUBLIC_TEAMS +
+                `/${team.permalink}` +
                 `?torneo=${tournamentPermalink}` +
                 `&categoria=${team.category}`
               }

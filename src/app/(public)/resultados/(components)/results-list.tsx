@@ -6,6 +6,7 @@ import { RolesMatches } from './roles-matches';
 import { TeamsSelector } from './teams-selector';
 import { EmptyMatches } from './empty-matches';
 import type { TeamType } from '../(actions)/fetchTeamsByTournamentAndCategoryAction';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   teams: TeamType[];
@@ -30,7 +31,7 @@ export const ResultsList: FC<Props> = async ({
   });
 
   if (!ok) {
-    redirect(`/resultados?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.PUBLIC_RESULTS}?error=${encodeURIComponent(message)}`);
   }
 
   return (
