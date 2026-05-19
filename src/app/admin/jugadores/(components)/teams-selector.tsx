@@ -28,7 +28,7 @@ type Props = Readonly<{
 
 export const TeamsSelector: FC<Props> = ({ teams }) => {
   const searchParams = useSearchParams();
-  const teamId = searchParams.get('equipo') ?? '';
+  const teamId = searchParams.get('team') ?? '';
   const pathname = usePathname();
   const router = useRouter();
 
@@ -37,7 +37,7 @@ export const TeamsSelector: FC<Props> = ({ teams }) => {
 
   const setTeamIdParam = (id: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set('equipo', id);
+    params.set('team', id);
     router.push(`${pathname}?${params}`);
     setOpen(false);
   };

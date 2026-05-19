@@ -1,8 +1,9 @@
 import { type FC, Suspense } from 'react';
 import type { Metadata } from 'next';
-import { Heading, SearchParamsSelector, TournamentsSelectorSkeleton } from '../components';
+import { Heading, TournamentsSelectorSkeleton } from '../components';
 import { TeamsContent } from './(components)/TeamsContent';
 import { ErrorHandler } from '@/shared/components/errorHandler';
+import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
 
 export const metadata: Metadata = {
   title: 'Equipos',
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
@@ -24,7 +26,7 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
       </Heading>
 
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <SearchParamsSelector />
+        <SearchParamsSelectors />
       </Suspense>
 
       <Suspense>

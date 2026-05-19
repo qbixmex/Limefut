@@ -3,16 +3,16 @@ import { FormWeekSelector } from './formWeekSelector';
 
 type Props = Readonly<{
   sortWeekPromise: Promise<{
-    sortWeek?: string;
+    'sort-week'?: string;
   }>;
 }>;
 
 export const WeekSelector: FC<Props> = async ({ sortWeekPromise }) => {
-  const { sortWeek } = await sortWeekPromise;
+  const sortWeek = (await sortWeekPromise)['sort-week'];
 
   return (
     <Suspense>
-      <FormWeekSelector key={sortWeek ?? 'week'} />
+      <FormWeekSelector key={sortWeek ?? 'sort-week'} />
     </Suspense>
   );
 };

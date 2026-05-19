@@ -10,7 +10,7 @@ import {
 import { TeamForm } from '../(components)/teamForm';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { fetchCategoriesAction, type CategoryType, fetchTournamentsForTeam } from '../(actions)';
+import { fetchTournamentsForTeam } from '../(actions)';
 import type { Coach } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from '../(actions)/fetchCoachesForTeam';
 import type { Session } from '@/lib/auth-client';
@@ -44,12 +44,6 @@ const CreateTeamPageContent: FC = async () => {
     redirect(`/admin/equipos?error=${encodeURIComponent('¡ No puedes crear un equipo sin torneos activos !')}`);
   }
 
-  const responseCategories = await fetchCategoriesAction();
-
-  if (!responseCategories.ok) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(responseCategories.message)}`);
-  }
-
   const responseCoaches = await fetchCoachesForTeam();
 
   if (!responseCoaches.ok) {
@@ -63,7 +57,6 @@ const CreateTeamPageContent: FC = async () => {
   const responseFields = await fetchFieldsForTeam();
 
   const tournaments = responseTournaments.tournaments;
-  const categories = responseCategories.categories;
   const coaches = responseCoaches.coaches;
 
   return (
@@ -78,7 +71,6 @@ const CreateTeamPageContent: FC = async () => {
               key={crypto.randomUUID()}
               session={session as Session}
               tournaments={tournaments}
-              categories={categories as CategoryType[]}
               coaches={coaches as Coach[]}
               fields={responseFields.fields}
             />

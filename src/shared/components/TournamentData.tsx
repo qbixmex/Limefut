@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { type Tournament } from '@/shared/interfaces';
+import { ROUTES } from '../constants/routes';
 
 type Props = Readonly<{
   tournament: Partial<Tournament> & {
@@ -35,11 +36,7 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
                 <TableHead className="text-gray-400">Torneo</TableHead>
                 <TableCell>
                   <Link
-                    href={
-                      `/torneos/${tournament.permalink}` +
-                      `?categoria=${tournament.category}` +
-                      `&formato=${tournament.format}`
-                    }
+                    href={`${ROUTES.ADMIN_TOURNAMENTS}/${tournament.id}`}
                     target="_blank"
                     className="font-semibold italic"
                   >

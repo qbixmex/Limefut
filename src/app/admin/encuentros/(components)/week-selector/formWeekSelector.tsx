@@ -12,10 +12,10 @@ export const FormWeekSelector = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const sortedWeek = searchParams.get('sortWeek');
-  const selectedCategory = searchParams.get('categoria');
-  const selectedWeek = searchParams.get('semana');
-  const tournamentSearchParam = searchParams.get('torneo');
+  const tournamentParam = searchParams.get('tournament');
+  const categoryParam = searchParams.get('category');
+  const sortedWeek = searchParams.get('sort-week');
+  const selectedWeek = searchParams.get('selected-week');
 
   const [weekValue, setWeekValue] = useState(() => {
     return Number(selectedWeek ?? sortedWeek ?? 0);
@@ -24,18 +24,14 @@ export const FormWeekSelector = () => {
   const [debouncedWeek] = useDebounce(weekValue, 500);
 
   useEffect(() => {
-    const semana = searchParams.get('semana');
-    const sortWeek = searchParams.get('sortWeek');
-    if (semana === String(debouncedWeek) && sortWeek === String(debouncedWeek)) {
-      return;
-    }
     const params = new URLSearchParams(searchParams);
-    params.set('semana', String(debouncedWeek));
-    params.set('sortWeek', String(debouncedWeek));
+    params.set('selected-week', String(debouncedWeek));
+    params.set('sort-week', String(debouncedWeek));
     router.replace(`${pathname}?${params}`);
-  }, [debouncedWeek, pathname, router, searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedWeek, pathname, router]);
 
-  if (!tournamentSearchParam || !selectedCategory) return null;
+  if (!tournamentParam || !categoryParam) return null;
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setWeekValue(Number(event.target.value) || 0);
@@ -51,7 +47,7 @@ export const FormWeekSelector = () => {
 
   return (
     <div className={styles.weekSelector}>
-      <label htmlFor="week" className={styles.weekLabel}>
+      <label htmlFor="selected-week" className={styles.weekLabel}>
         <span>Jornada</span>
       </label>
 
@@ -66,8 +62,8 @@ export const FormWeekSelector = () => {
           <MinusIcon className="size-6" strokeWidth={3} />
         </Button>
         <input
-          id="week"
-          name="week"
+          id="selected-week"
+          name="selected-week"
           min={0}
           value={weekValue}
           onChange={onInputChange}
