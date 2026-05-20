@@ -31,10 +31,7 @@ export const RolesMatches: FC<Props> = async ({
   teamPermalink,
   roles,
 }) => {
-  if (
-    (!roles && roles !== 'team' && !teamPermalink) ||
-    (roles !== 'complete')
-  ) {
+  if ((!roles && roles !== 'team' && !teamPermalink) || !roles) {
     return null;
   }
 

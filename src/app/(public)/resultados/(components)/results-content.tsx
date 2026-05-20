@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import {
   fetchTeamsByTournamentAndCategoryAction,
 } from '../(actions)/fetchTeamsByTournamentAndCategoryAction';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -33,7 +34,7 @@ export const ResultsContent: FC<Props> = async ({ searchParams }) => {
   });
 
   if (!ok && teams.length === 0) {
-    redirect(`/resultados?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.PUBLIC_RESULTS}?error=${encodeURIComponent(message)}`);
   }
 
   return (
