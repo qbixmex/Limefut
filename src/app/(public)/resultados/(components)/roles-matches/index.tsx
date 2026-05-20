@@ -1,3 +1,5 @@
+'use client';
+
 import type { FC } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
@@ -7,22 +9,53 @@ import { Info } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-import type { MatchType } from '../(actions)/fetchResultsAction';
-import { getMatchStatus } from '../(helpers)/status';
-import { getMatchesSortedByWeeks } from './utils/get-matches-sorted-by-weeks';
-import { getUniqueMatches } from './utils/get-unique-matches';
+import { getMatchStatus } from '../../(helpers)/status';
+import { getMatchesSortedByWeeks } from '../utils/get-matches-sorted-by-weeks';
+import { getUniqueMatches } from '../utils/get-unique-matches';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
+import { EmptyMatches } from '../empty-matches';
+import { fetchResultsAction } from '../../(actions)/fetchResultsAction';
 
 const TIME_ZONE = 'America/Mexico_City';
 
-type Props = Readonly<{ matches: MatchType[] }>;
+type Props = Readonly<{
+  tournamentPermalink: string;
+  categoryPermalink: string;
+  teamPermalink: string | undefined;
+  roles: string;
+}>;
 
-export const RolesMatches: FC<Props> = ({ matches }) => {
+export const RolesMatches: FC<Props> = async ({
+  tournamentPermalink,
+  categoryPermalink,
+  teamPermalink,
+  roles,
+}) => {
+  if (
+    (!roles && roles !== 'team' && !teamPermalink) ||
+    (roles !== 'complete')
+  ) {
+    return null;
+  }
+
+  const { ok, message, matches } = await fetchResultsAction({
+    tournamentPermalink,
+    categoryPermalink,
+    teamPermalink,
+    roles,
+  });
+
+  if (!ok) {
+    redirect(`${ROUTES.PUBLIC_RESULTS}?error=${encodeURIComponent(message)}`);
+  }
   const matchesByWeek = getUniqueMatches(matches);
   const matchesSortedWeeks = getMatchesSortedByWeeks(matchesByWeek);
 
-  if (matches.length === 0) return null;
+  if (matches.length === 0) {
+    return <EmptyMatches />;
+  };
 
   return (
     <>
@@ -123,8 +156,8 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                         <Link
                           href={ROUTES.PUBLIC_TEAMS +
                             `/${match.local.permalink}` +
-                            `?torneo=${match.tournament.permalink}` +
-                            `&categoria=${match.tournament.category}`
+                            `?tournament=${match.tournament.permalink}` +
+                            `&category=${match.tournament.category}`
                           }
                         >
                           {
@@ -176,8 +209,8 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                         <Link
                           href={ROUTES.PUBLIC_TEAMS +
                             `/${match.visitor.permalink}` +
-                            `?torneo=${match.tournament.permalink}` +
-                            `&categoria=${match.tournament.category}`
+                            `?tournament=${match.tournament.permalink}` +
+                            `&category=${match.tournament.category}`
                           }
                         >
                           {
@@ -202,7 +235,7 @@ export const RolesMatches: FC<Props> = ({ matches }) => {
                     <Tooltip>
                       <TooltipTrigger>
                         <Link
-                          href={`/resultados/${match.id}`}
+                          href={`${ROUTES.PUBLIC_RESULTS}/${match.id}`}
                           target="_blank"
                           className={buttonVariants({ variant: 'outline-info', size: 'icon-sm' })}
                           role="button"

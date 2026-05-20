@@ -1,5 +1,4 @@
 import { Suspense, type FC } from 'react';
-import { ResultsSkeleton } from './results-skeleton';
 import { ResultsList } from './results-list';
 import { redirect } from 'next/navigation';
 import {
@@ -44,7 +43,6 @@ export const ResultsContent: FC<Props> = async ({ searchParams }) => {
         `-${category ?? 'category'}` +
         `-${roles ?? 'roles'}`
       }
-      fallback={<ResultsSkeleton />}
     >
       <ResultsList
         tournament={tournament as string}
