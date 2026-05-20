@@ -1,5 +1,3 @@
-'use client';
-
 import type { FC } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
