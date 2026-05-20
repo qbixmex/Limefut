@@ -19,10 +19,10 @@ import { fetchResultsAction } from '../../(actions)/fetchResultsAction';
 const TIME_ZONE = 'America/Mexico_City';
 
 type Props = Readonly<{
-  tournamentPermalink: string;
-  categoryPermalink: string;
+  tournamentPermalink: string | undefined;
+  categoryPermalink: string | undefined;
   teamPermalink: string | undefined;
-  roles: string;
+  roles: 'complete' | 'team' | 'field' | undefined;
 }>;
 
 export const RolesMatches: FC<Props> = async ({
@@ -31,13 +31,18 @@ export const RolesMatches: FC<Props> = async ({
   teamPermalink,
   roles,
 }) => {
-  if ((!roles && roles !== 'team' && !teamPermalink) || !roles) {
-    return null;
-  }
+  // Scenario 1: tournament and category must be present in order to make any API call
+  if (!tournamentPermalink || !categoryPermalink) return null;
+
+  // Scenario 2: only 'complete' and 'team' roles render here
+  if (roles !== 'complete' && roles !== 'team') return null;
+
+  // Scenario 3: 'team' role requires a teamPermalink
+  if (roles === 'team' && !teamPermalink) return null;
 
   const { ok, message, matches } = await fetchResultsAction({
-    tournamentPermalink,
-    categoryPermalink,
+    tournamentPermalink: tournamentPermalink as string,
+    categoryPermalink: categoryPermalink as string,
     teamPermalink,
     roles,
   });
