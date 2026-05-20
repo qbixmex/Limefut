@@ -6,18 +6,39 @@ import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { getMatchStatus } from '@/app/(public)/resultados/(helpers)/status';
+import { fetchResultsAction } from '@/app/(public)/resultados/(actions)/fetchResultsAction';
+
+vi.mock('@/app/(public)/resultados/(actions)/fetchResultsAction');
 
 describe('Test on <RolesMatches /> component', () => {
-  test('Should render correctly', () => {
-    render(<RolesMatches matches={[]} />);
+  test('Should render correctly', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches: [],
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
   });
 
-  test('Should show matches day date', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should show matches day date', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchDays = screen.getAllByRole('date', { name: /día del partido/i });
 
@@ -27,12 +48,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should matches month date', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should matches month date', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchMonths = screen.getAllByRole('date', { name: /mes del partido/i });
 
@@ -42,12 +70,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should matches year date', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should matches year date', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchMonths = screen.getAllByRole('date', { name: /año del partido/i });
 
@@ -57,12 +92,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should show not defined message if date is null', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matchesWithoutDates} />
-      </TooltipProvider>,
-    );
+  test('Should show not defined message if date is null', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches: matchesWithoutDates,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchDays = screen.getAllByRole('date', { name: /Fecha del partido no definida/i });
 
@@ -71,12 +113,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should matches hour date', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should matches hour date', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchMonths = screen.getAllByRole('time', { name: /hora del partido/i });
 
@@ -87,12 +136,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should show not defined message if time is null', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matchesWithoutDates} />
-      </TooltipProvider>,
-    );
+  test('Should show not defined message if time is null', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches: matchesWithoutDates,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchMonths = screen.getAllByRole('time', { name: /hora del partido/i });
 
@@ -101,12 +157,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should show match place', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should show match place', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchLocations = screen.getAllByRole('location', { name: /sede del partido/i });
 
@@ -115,12 +178,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should show not defined message if match place is null', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matchesWithoutPlaces} />
-      </TooltipProvider>,
-    );
+  test('Should show not defined message if match place is null', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches: matchesWithoutPlaces,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchLocations = screen.getAllByRole('location', { name: /sede del partido no definida/i });
 
@@ -129,12 +199,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should matches status', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should matches status', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchStatuses = screen.getAllByRole('status', { name: /estado del partido/i });
 
@@ -144,12 +221,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should show matches team names', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should show matches team names', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const localTeamNames = screen.getAllByRole('team-name', { name: /nombre equipo local/i });
 
@@ -164,12 +248,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should show the matches scores', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should show the matches scores', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const localScores = screen.getAllByRole('score', { name: /goles equipo local/i });
 
@@ -184,12 +275,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should not show penalty kicks if no one was made', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should not show penalty kicks if no one was made', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const localPenalties = screen.queryAllByRole('score', { name: /Penales equipo local/i });
     expect(localPenalties).toHaveLength(0);
@@ -199,12 +297,19 @@ describe('Test on <RolesMatches /> component', () => {
     expect(visitorPenalties).toHaveLength(0);
   });
 
-  test('Should show penalties shoots', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matchesWithPenalties} />
-      </TooltipProvider>,
-    );
+  test('Should show penalties shoots', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches: matchesWithPenalties,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const localPenalties = screen.queryAllByRole('score', { name: /Penales equipo local/i });
 
@@ -223,12 +328,19 @@ describe('Test on <RolesMatches /> component', () => {
     });
   });
 
-  test('Should contains match link', () => {
-    render(
-      <TooltipProvider>
-        <RolesMatches matches={matches} />
-      </TooltipProvider>,
-    );
+  test('Should contains match link', async () => {
+    vi.mocked(fetchResultsAction).mockResolvedValue({
+      ok: true,
+      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
 
     const matchLinks = screen.getAllByRole('button', { name: /detalles del partido entre/i });
 

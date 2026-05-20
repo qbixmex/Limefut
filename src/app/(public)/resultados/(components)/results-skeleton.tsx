@@ -20,5 +20,3 @@ export const ResultsSkeleton: FC = () => {
     </div>
   );
 };
-
-export default ResultsSkeleton;
