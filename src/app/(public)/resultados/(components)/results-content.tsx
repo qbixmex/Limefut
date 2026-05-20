@@ -46,9 +46,9 @@ export const ResultsContent: FC<Props> = async ({ searchParams }) => {
       }
     >
       <ResultsList
-        tournament={tournament as string}
-        category={category as string}
-        roles={roles!}
+        tournament={tournament}
+        category={category}
+        roles={roles}
         teams={teams}
         teamPermalink={team}
       />
