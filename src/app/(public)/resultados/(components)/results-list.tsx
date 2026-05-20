@@ -6,11 +6,11 @@ import type { TeamType } from '../(actions)/fetchTeamsByTournamentAndCategoryAct
 import { ResultsSkeleton } from './results-skeleton';
 
 type Props = Readonly<{
+  tournament: string | undefined;
+  category: string | undefined;
+  teamPermalink: string | undefined;
+  roles: 'complete' | 'team' | 'field' | undefined;
   teams: TeamType[];
-  tournament: string;
-  category: string;
-  roles: 'complete' | 'team' | 'field';
-  teamPermalink?: string;
 }>;
 
 export const ResultsList: FC<Props> = ({
