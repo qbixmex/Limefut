@@ -11,22 +11,22 @@ import {
   TableCell,
   TableRow,
 } from '@/components/ui/table';
-import { Minus, Pencil } from 'lucide-react';
+import { Minus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { fetchMatchAction } from '../../(actions)';
+import { fetchMatchAction } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { TbSoccerField } from 'react-icons/tb';
 import { MATCH_STATUS } from '@/shared/enums';
 import { SHOOTOUT_STATUS } from '@/shared/enums/shoutout-status.enum';
-import { getMatchStatus } from '../../(helpers)/place';
-import type { MatchType } from '../../(actions)/fetchMatchAction';
+import { getMatchStatus } from '@/app/admin/encuentros/(helpers)/place';
+import type { MatchType } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
-import { PenaltiesForm } from '../../(components)/penalties-form';
+import { PenaltiesForm } from '@/app/admin/encuentros/(components)/penalties-form';
 import { formatInTimeZone } from 'date-fns-tz';
+import { ROUTES } from '@/shared/constants/routes';
+import { EditMatch } from '../../(components)/edit-match';
 const TIME_ZONE = 'America/Mexico_City';
 
 type Props = Readonly<{
@@ -42,7 +42,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
   const response = await fetchMatchAction(id, session?.user.roles ?? null);
 
   if (!response.ok) {
-    redirect(`/admin/encuentros?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(response.message)}`);
   }
 
   const match = response.match as MatchType;
@@ -63,6 +63,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
             <CardTitle className="admin-page-card-title">Información del Encuentro</CardTitle>
+            <EditMatch matchId={match.id} />
           </CardHeader>
           <CardContent>
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
@@ -85,7 +86,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                       <Minus strokeWidth={2} />
                       <Badge variant="outline-info">{match.visitorScore}</Badge>
                       <Link
-                        href={`/admin/equipos/${match.visitorTeam.id}`}
+                        href={`${ROUTES.ADMIN_TEAMS}/${match.visitorTeam.id}`}
                         className="text-wrap"
                         target="_blank"
                       >
@@ -144,7 +145,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="w-[180px] font-semibold">Torneo</TableHead>
                     <TableCell>
-                      <Link href={`/admin/torneos/${match.tournament.id}`} target="_blank">
+                      <Link href={`${ROUTES.ADMIN_TOURNAMENTS}/${match.tournament.id}`} target="_blank">
                         {match.tournament.name}
                       </Link>
                     </TableCell>
@@ -206,21 +207,6 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   </section>
                 </>
               )}
-
-            <div className="absolute top-5 right-5">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href={`/admin/encuentros/editar/${match.id}`}>
-                    <Button variant="outline-warning" size="icon">
-                      <Pencil />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="left">
-                  <p>editar</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
           </CardContent>
         </Card>
       </div>

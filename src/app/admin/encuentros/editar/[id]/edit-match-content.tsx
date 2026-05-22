@@ -1,15 +1,15 @@
 import type { FC } from 'react';
 import { auth } from '@/lib/auth';
-import { MatchForm } from '../../(components)/matchForm';
-import { fetchMatchAction } from '../../(actions)';
+import { MatchForm } from '@/app/admin/encuentros/(components)/match-form';
+import { fetchTournamentsForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
+import { fetchMatchAction } from '@/app/admin/encuentros/(actions)/fetch-match.action';
+import { fetchTeamsForMatchEditAction } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-edit.action';
+import { fetchCategoriesForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
 import { redirect } from 'next/navigation';
-import { fetchTeamsForMatchAction } from '../../(actions)/fetchTeamsForMatchAction';
-import type { Session } from '@/lib/auth-client';
 import { headers } from 'next/headers';
+import { ROUTES } from '@/shared/constants/routes';
 
-type Props = Readonly<{
-  matchId: string;
-}>;
+type Props = Readonly<{ matchId: string }>;
 
 export const EditMatchContent: FC<Props> = async ({ matchId }) => {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -17,25 +17,35 @@ export const EditMatchContent: FC<Props> = async ({ matchId }) => {
   const responseMatch = await fetchMatchAction(matchId, session?.user.roles ?? null);
 
   if (!responseMatch.ok) {
-    redirect(`/admin/encuentros?error=${encodeURIComponent(responseMatch.message)}`);
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseMatch.message)}`);
   }
 
-  const responseTeams = await fetchTeamsForMatchAction({
-    tournamentId: responseMatch.match?.tournament.id as string,
-    week: responseMatch.match?.week as number,
-  });
+  const tournamentsResponse = await fetchTournamentsForMatchAction();
+
+  if (!tournamentsResponse.ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(tournamentsResponse.message)}`);
+  }
+
+  const categoriesResponse = await fetchCategoriesForMatchAction();
+
+  if (!categoriesResponse.ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(categoriesResponse.message)}`);
+  }
+
+  const responseTeams = await fetchTeamsForMatchEditAction(responseMatch.match?.tournament.id as string);
 
   if (!responseTeams.ok) {
-    redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseTeams.message)}`);
   }
 
   return (
     <MatchForm
-      session={session as Session}
+      authenticatedUserId={session?.user.id}
+      sessionUserRoles={session?.user.roles ?? []}
       match={responseMatch.match}
-      initialTeams={responseTeams.teams}
+      teams={responseTeams.teams}
+      tournaments={tournamentsResponse.tournaments}
+      categories={categoriesResponse.categories}
     />
   );
 };
-
-export default EditMatchContent;

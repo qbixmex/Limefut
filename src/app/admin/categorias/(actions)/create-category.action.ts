@@ -68,6 +68,7 @@ export const createCategoryAction = async (
 
     // Refresh Cache
     updateTag('admin-categories');
+    updateTag('admin-categories-for-match');
 
     return prismaTransaction;
   } catch (error) {

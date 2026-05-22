@@ -1,0 +1,15 @@
+@reference "tailwindcss";
+
+.teamsWrapper {
+  display: grid;
+  place-items: center;
+  gap: calc(var(--spacing) * 5);
+  @apply grid-cols-1 lg:grid-cols-[1fr_auto_1fr] lg:place-items-end;
+  & .teamField {
+    width: 100%;
+  }
+}
+
+.buttons {
+  @apply flex justify-end gap-3;
+}

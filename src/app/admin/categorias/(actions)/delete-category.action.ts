@@ -24,6 +24,7 @@ export const deleteCategoryAction = async (categoryId: string): ResponseDeleteAc
 
   // Update Cache
   updateTag('admin-categories');
+  updateTag('admin-categories-for-match');
 
   return {
     ok: true,

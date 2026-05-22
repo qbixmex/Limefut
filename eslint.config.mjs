@@ -37,6 +37,7 @@ const eslintConfig = defineConfig([
       quotes: 'warn',
       semi: ['warn', 'always'],
       indent: 'off',
+      camelcase: 'off',
       'no-tabs': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/consistent-type-imports': ['warn', { prefer: 'type-imports' }],

@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { buttonVariants } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{ matchId: string; }>;
 
@@ -14,9 +15,12 @@ export const EditMatch: FC<Props> = ({ matchId }) => {
 
   const getURL = () => {
     const params = new URLSearchParams(searchParams);
-    const baseURL = `/admin/encuentros/editar/${matchId}`;
+    const sortWeek = params.get('sort-week');
+    const baseURL = ROUTES.ADMIN_MATCHES_EDIT(matchId);
 
-    // if (params.has('torneo')) params.delete('torneo');
+    if (sortWeek && sortWeek === 'unassigned') {
+      params.delete('sort-week');
+    }
 
     const queryString = params.toString();
     return queryString ? `${baseURL}?${queryString}` : baseURL;

@@ -2,7 +2,7 @@
 
 import type { ChangeEvent, FC } from 'react';
 import { useEffect, useState } from 'react';
-import { updateStatusAction } from '../../(actions)/updateMatchScore';
+import { updateMatchInputScoreAction } from '@/app/admin/encuentros/(actions)/update-match-input-score.action';
 import { toast } from 'sonner';
 
 type Props = Readonly<{
@@ -29,7 +29,7 @@ export const MatchScoreInput: FC<Props> = (props) => {
     const numericValue = Number(scoreValue);
     const finalScore = isNaN(numericValue) ? 0 : numericValue;
 
-    const response = await updateStatusAction({
+    const response = await updateMatchInputScoreAction({
       matchId,
       score: finalScore,
       local,
@@ -55,5 +55,3 @@ export const MatchScoreInput: FC<Props> = (props) => {
     />
   );
 };
-
-export default MatchScoreInput;

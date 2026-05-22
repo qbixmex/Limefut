@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import './styles.css';
 import { toast } from 'sonner';
-import { deletePenaltyShootoutAction } from '../../(actions)/deletePenaltyShootoutAction';
+import { deletePenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/delete-penalty-shootout.action';
 
 type Props = Readonly<{
   penaltyShootoutsId: string;

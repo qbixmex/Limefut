@@ -12,7 +12,7 @@ type Options = Readonly<{
   page?: number;
   take?: number;
   sortMatchDate?: 'asc' | 'desc';
-  sortWeek?: `${number}` | 'asc' | 'desc' | undefined;
+  sortWeek?: `${number}` | 'asc' | 'desc' | 'unassigned' | undefined;
   status?: MATCH_STATUS_TYPE;
 }>;
 
@@ -76,7 +76,11 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
 
   const whereCondition: Prisma.MatchWhereInput = {
     tournamentId,
-    week: !isNaN(Number(sortWeek)) ? Number(sortWeek) : undefined,
+    week: sortWeek === 'unassigned'
+      ? null
+      : sortWeek !== undefined && !isNaN(Number(sortWeek))
+        ? Number(sortWeek)
+        : undefined,
     status,
   };
 
@@ -130,7 +134,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
     const matches = await prisma.match.findMany({
       where: whereCondition,
       orderBy: [
-        { week: isNaN(parseInt(sortWeek as string)) ? sortWeek as 'asc' | 'desc' : undefined },
+        { week: sortWeek === 'unassigned' ? undefined : (isNaN(parseInt(sortWeek as string)) ? sortWeek as 'asc' | 'desc' : undefined) },
         { matchDate: sortMatchDate },
       ],
       take,

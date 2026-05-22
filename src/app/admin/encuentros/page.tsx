@@ -13,11 +13,11 @@ type Props = Readonly<{
   searchParams: Promise<{
     query?: string;
     page?: string;
-    sortMatchDate?: 'asc' | 'desc';
-    sortWeek?: 'asc' | 'desc';
     tournament?: string;
     category?: string;
     status?: MATCH_STATUS_TYPE;
+    'sort-week'?: 'asc' | 'desc';
+    'sort-match-date'?: 'asc' | 'desc';
   }>;
 }>;
 
@@ -30,9 +30,9 @@ export const MatchesPage: FC<Props> = ({ searchParams }) => {
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
               <CardTitle className="admin-page-card-title">Encuentros</CardTitle>
-              <section className="flex lg:w-1/2 justify-end gap-5 items-center">
+              <section className="flex gap-2.5">
+                <Search placeholder="ejemplo: chivas vs atlas" />
                 <ClearFilters />
-                <Search placeholder="ejemplo: country vs tepeyac" />
                 <CreateMatch />
               </section>
             </CardHeader>

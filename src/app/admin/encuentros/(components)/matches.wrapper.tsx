@@ -1,9 +1,10 @@
 import type { FC } from 'react';
 import { auth } from '@/lib/auth';
-import { fetchMatchesAction, fetchTournamentForMatchAction } from '../(actions)';
 import { MatchesTable } from './matches-table';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { headers } from 'next/headers';
+import { fetchTournamentForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournament-for-match.action';
+import { fetchMatchesAction } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
 
 type Props = Readonly<{
   tournamentId: string;
@@ -44,5 +45,3 @@ export const MatchesWrapper: FC<Props> = async ({
     />
   );
 };
-
-export default MatchesWrapper;

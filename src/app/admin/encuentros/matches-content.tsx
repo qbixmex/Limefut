@@ -47,16 +47,16 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
   return (
     <section className="mt-10">
       <Suspense
-        key={
-          `${tournamentId ?? 'tournamentId'}` +
-          `-${categoryPermalink ?? 'category'}` +
-          `-${query ?? 'query'}` +
-          `-${currentPage ?? 'page'}` +
-          `-${sortWeek ?? 'week'}`
-        }
         fallback={<MatchesTableSkeleton colCount={6} rowCount={16} />}
       >
         <MatchesWrapper
+          key={
+            `${tournamentId ?? 'tournamentId'}` +
+            `-${categoryPermalink ?? 'category'}` +
+            `-${query ?? 'query'}` +
+            `-${currentPage ?? 'page'}` +
+            `-${sortWeek ?? 'sort-week'}`
+          }
           tournamentId={tournamentId}
           query={query as string}
           currentPage={Number(currentPage as string)}
