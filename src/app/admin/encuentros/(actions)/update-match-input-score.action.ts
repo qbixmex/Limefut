@@ -15,7 +15,7 @@ type Params = Readonly<{
   visitor: boolean;
 }>;
 
-export const updateStatusAction = async (params: Params): ResponseAction => {
+export const updateMatchInputScoreAction = async (params: Params): ResponseAction => {
   const { matchId, score, local, visitor } = params;
 
   const updatedMatch = await prisma.match.update({

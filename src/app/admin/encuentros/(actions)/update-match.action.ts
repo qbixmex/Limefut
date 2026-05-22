@@ -6,10 +6,10 @@ import { editMatchSchema } from '@/shared/schemas';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
 type Options = {
+  authenticatedUserId: string | undefined;
+  sessionUserRoles: string[];
   formData: FormData;
-  id: string;
-  userRoles: string[];
-  authenticatedUserId: string;
+  matchId: string;
 };
 
 type EditResponseAction = Promise<{
@@ -43,8 +43,8 @@ type EditResponseAction = Promise<{
 
 export const updateMatchAction = async ({
   formData,
-  id,
-  userRoles,
+  matchId,
+  sessionUserRoles,
   authenticatedUserId,
 }: Options): EditResponseAction => {
   if (!authenticatedUserId) {
@@ -55,7 +55,7 @@ export const updateMatchAction = async ({
     };
   }
 
-  if (!userRoles.includes('admin')) {
+  if (!sessionUserRoles.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -73,9 +73,10 @@ export const updateMatchAction = async ({
     matchDate: formData.get('matchDate')
       ? new Date(formData.get('matchDate') as string)
       : undefined,
-    week: parseInt(formData.get('week') as string) ?? 1,
     status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
-    tournamentId: formData.get('tournamentId') ?? undefined,
+    tournament: formData.get('tournament') ?? '',
+    category: formData.get('category') ?? '',
+    week: formData.get('week') ? Number(formData.get('week')) : 0,
   };
 
   const matchVerified = editMatchSchema.safeParse(rawData);
@@ -88,13 +89,17 @@ export const updateMatchAction = async ({
     };
   }
 
-  const { tournamentId, ...matchToSave } = matchVerified.data;
+  const {
+    tournament: tournamentPermalink,
+    category: categoryPermalink,
+    ...matchToSave
+  } = matchVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
         const isMatchExists = await transaction.match.count({
-          where: { id },
+          where: { id: matchId },
         });
 
         if (!isMatchExists) {
@@ -105,31 +110,36 @@ export const updateMatchAction = async ({
           };
         }
 
-        const tournament = await transaction.tournament.count({
-          where: { id: tournamentId },
+        const tournament = await transaction.tournament.findFirst({
+          where: {
+            permalink: tournamentPermalink,
+            category: categoryPermalink,
+          },
         });
 
         if (!tournament) {
           return {
             ok: false,
-            message: `¡ El torneo con el ID: "${tournamentId}" no existe !`,
+            message: `¡ El torneo: "${tournamentPermalink}" con la categoría: "${categoryPermalink}" no existe !`,
             match: null,
           };
         }
 
         const updatedMatch = await transaction.match.update({
-          where: { id },
+          where: { id: matchId },
           data: {
             localId: matchToSave.localTeamId,
             visitorId: matchToSave.visitorTeamId,
             place: matchToSave.place ?? null,
-            week: matchToSave.week,
             referee: matchToSave.referee,
             localScore: matchToSave.localScore,
             visitorScore: matchToSave.visitorScore,
             matchDate: matchToSave.matchDate,
             status: matchToSave.status as MATCH_STATUS_TYPE,
-            tournamentId,
+            tournamentId: tournament.id,
+            week: matchToSave.week !== 0
+              ? matchToSave.week
+              : null,
           },
           select: {
             id: true,

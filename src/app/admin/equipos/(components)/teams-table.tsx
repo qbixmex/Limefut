@@ -66,7 +66,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                   <TableRow key={team.id}>
                     <TableCell className="font-bold text-center">{index + 1}</TableCell>
                     <TableCell>
-                      <Link href={ROUTES.ADMIN_TEAM(team.id)}>
+                      <Link href={ROUTES.ADMIN_TEAMS_SHOW(team.id)}>
                         {
                           !team.imageUrl ? (
                             <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
@@ -120,7 +120,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={ROUTES.ADMIN_TEAM(team.id)}>
+                            <Link href={ROUTES.ADMIN_TEAMS_SHOW(team.id)}>
                               <Button variant="outline-info" size="icon">
                                 <InfoIcon />
                               </Button>

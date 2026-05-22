@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
-import { createPenaltyShootoutAction } from '../../(actions)/createPenaltyShootouts';
+import { createPenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/create-penalty-shootouts.action';
 import type z from 'zod';
 import { createPenaltyShootoutSchema } from './createPenaltyShootout.schema';
 import { toast } from 'sonner';

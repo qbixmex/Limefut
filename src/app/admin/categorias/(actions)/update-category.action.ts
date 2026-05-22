@@ -93,6 +93,7 @@ export const updateCategoryAction = async ({
 
         // Update Cache
         updateTag('admin-categories');
+        updateTag('admin-categories-for-match');
 
         return {
           ok: true,

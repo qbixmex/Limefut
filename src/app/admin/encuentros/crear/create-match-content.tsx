@@ -1,13 +1,13 @@
 import { Suspense, type FC } from 'react';
 import { headers } from 'next/headers';
-import { MatchForm } from '../(components)/matchForm';
-import { redirect } from 'next/navigation';
-import { fetchTeamsForMatchAction } from '../(actions)/fetchTeamsForMatchAction';
 import { auth } from '@/lib/auth';
-import type { Session } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
+import { MatchForm } from '../(components)/match-form';
 import { FormSkeleton } from '../(components)/form-skeleton';
-import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
 import { ROUTES } from '@/shared/constants/routes';
+import { fetchTournamentsForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
+import { fetchCategoriesForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
+import { fetchTeamsForMatchCreateAction, type TEAM_TYPE } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
 
 type MatchWrapperProps = Readonly<{
   searchParams: Promise<{
@@ -24,67 +24,81 @@ export const MatchWrapper: FC<MatchWrapperProps> = async ({ searchParams }) => {
     'selected-week': selectedWeek,
   } = await searchParams;
 
-  if (!tournamentPermalink || !categoryPermalink || !selectedWeek) {
-    return null;
-  }
+  let tournament_category: string = 'tournament-category';
 
-  const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
-    tournamentPermalink,
-    categoryPermalink,
-  });
-
-  if (!ok && !tournamentId) {
-    redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(message)}`);
+  if (tournamentPermalink && categoryPermalink) {
+    tournament_category = `${tournamentPermalink}-${categoryPermalink}`;
   }
 
   return (
     <Suspense
       key={
-        `${tournamentPermalink ?? 'tournament'}-` +
-        `${categoryPermalink ?? 'category'}-` +
-        `${selectedWeek ?? 'selected-week'}`}
+        tournament_category +
+        `${selectedWeek ?? 'selected-week'}`
+      }
       fallback={<FormSkeleton />}
     >
       <CreateMatchContent
-        tournamentId={tournamentId as string}
-        week={selectedWeek}
+        tournamentPermalink={tournamentPermalink}
+        categoryPermalink={categoryPermalink}
       />
     </Suspense>
   );
 };
 
 type CreateMatchContentProps = Readonly<{
-  tournamentId: string | undefined;
-  week: string | undefined;
+  tournamentPermalink: string | undefined;
+  categoryPermalink: string | undefined;
 }>;
 
-const CreateMatchContent: FC<CreateMatchContentProps> = async ({ tournamentId, week }) => {
-  if (!tournamentId || !week) return null;
+const CreateMatchContent: FC<CreateMatchContentProps> = async ({
+  tournamentPermalink,
+  categoryPermalink,
+}) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   if (!(session?.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear encuentros !';
-    redirect(`/admin/encuentros?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(message)}`);
   }
 
-  const responseTeams = await fetchTeamsForMatchAction({
-    tournamentId: tournamentId as string,
-    week: parseInt(week as string),
-  });
+  const tournamentsResponse = await fetchTournamentsForMatchAction();
 
-  if (!responseTeams.ok) {
-    redirect(`/admin/encuentros?error=${encodeURIComponent(responseTeams.message)}`);
+  if (!tournamentsResponse.ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(tournamentsResponse.message)}`);
+  }
+
+  const categoriesResponse = await fetchCategoriesForMatchAction();
+
+  if (!categoriesResponse.ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(categoriesResponse.message)}`);
+  }
+
+  let teams: TEAM_TYPE[] = [];
+
+  if (tournamentPermalink && categoryPermalink) {
+    const responseTeams = await fetchTeamsForMatchCreateAction({
+      tournamentPermalink,
+      categoryPermalink,
+    });
+
+    if (!responseTeams.ok) {
+      redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseTeams.message)}`);
+    }
+
+    teams = responseTeams.teams;
   }
 
   return (
     <section className="mt-10">
       <MatchForm
-        session={session as Session}
-        initialTeams={responseTeams.teams}
-        tournamentId={tournamentId}
-        week={parseInt(week)}
+        authenticatedUserId={session?.user.id}
+        sessionUserRoles={session?.user.roles ?? []}
+        tournaments={tournamentsResponse.tournaments}
+        categories={categoriesResponse.categories}
+        teams={teams}
       />
     </section>
   );

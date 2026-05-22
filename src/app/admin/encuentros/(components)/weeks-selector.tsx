@@ -7,12 +7,13 @@ type Props = Readonly<{ weeks: number[] }>;
 
 export const WeeksSelector: FC<Props> = ({ weeks }) => {
   const searchParams = useSearchParams();
-  const sortWeek = searchParams.get('sort-week');
+  const sortWeek = searchParams.get('sort-week') ?? '';
   const pathname = usePathname();
   const router = useRouter();
-  const params = new URLSearchParams(searchParams);
 
-  const setWeek = (filter: 'asc' | 'desc' | 'clear') => {
+  const setWeek = (filter: string) => {
+    if (!filter || filter === sortWeek) return;
+    const params = new URLSearchParams(searchParams);
     if (filter === 'clear') params.delete('sort-week');
     else params.set('sort-week', filter);
     router.push(`${pathname}?${params}`);
@@ -20,18 +21,19 @@ export const WeeksSelector: FC<Props> = ({ weeks }) => {
 
   return (
     <Select
+      value={sortWeek}
       onValueChange={setWeek}
-      value={sortWeek ?? ''}
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Jornada" />
       </SelectTrigger>
       <SelectContent>
-        {params.has('sort-week') && (
+        {sortWeek && (
           <SelectItem value="clear">borrar filtro <X /></SelectItem>
         )}
         <SelectItem value="asc">ascendente</SelectItem>
         <SelectItem value="desc">descendente</SelectItem>
+        <SelectItem value="unassigned">sin asignar</SelectItem>
         {
           (weeks.length > 0) && weeks.map((week) => (
             <SelectItem key={week} value={`${week}`}>

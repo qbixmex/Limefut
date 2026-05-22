@@ -1,6 +1,6 @@
 'use client';
 
-import { type FC, useEffect, useState } from 'react';
+import { type FC } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import {
   Table,
@@ -27,8 +27,7 @@ import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import type { Match } from '../(actions)/fetchMatchesAction';
-import { useSearchParams } from 'next/navigation';
+import type { Match } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
 import { WeeksSelector } from './weeks-selector';
 import { DateSelector } from './date-selector';
 import { StatusSelector } from './status-selector';
@@ -52,23 +51,6 @@ export const MatchesTable: FC<Props> = ({
   pagination,
   roles,
 }) => {
-  const searchParams = useSearchParams();
-  const [sortMatchDate, setSortMatchDate] = useState<'asc' | 'desc' | undefined>(undefined);
-  const [sortWeek, setSortWeek] = useState<'asc' | 'desc' | undefined>(undefined);
-
-  useEffect(() => {
-    const urlSortMatchDate = searchParams.get('sortMatchDate') as 'asc' | 'desc' | null;
-    const urlSortWeek = searchParams.get('sortWeek') as 'asc' | 'desc' | null;
-
-    if (urlSortMatchDate !== sortMatchDate) {
-      setSortMatchDate(urlSortMatchDate ?? undefined);
-    }
-    if (urlSortWeek !== sortWeek) {
-      setSortWeek(urlSortWeek ?? undefined);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-
   return (
     <>
       <div className="flex-1 flex flex-col">
@@ -98,7 +80,7 @@ export const MatchesTable: FC<Props> = ({
                   <TableCell className="w-25">
                     <div className="grid grid-cols-[1fr_120px_1fr] gap-2 items-center font-semibold text-gray-500">
                       <div className="text-right">
-                        <Link href={`/admin/equipos/${match.localTeam.id}`}>
+                        <Link href={ROUTES.ADMIN_TEAMS_SHOW(match.localTeam.id)}>
                           <div className="space-x-2">
                             {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
                               <Badge variant="outline-secondary">
@@ -150,11 +132,19 @@ export const MatchesTable: FC<Props> = ({
                         {match.place}
                       </span>
                     ) : (
-                      <Badge variant="outline-secondary">No disponible</Badge>
+                      <Badge variant="outline-secondary">no disponible</Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-center">
-                    <Badge variant="outline-info">{match.week}</Badge>
+                    {match.week ? (
+                      <Badge variant="outline-info">
+                        {match.week}
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline-secondary">
+                        <span>ninguna</span>
+                      </Badge>
+                    )}
                   </TableCell>
                   <TableCell>
                     {match.matchDate ? (
@@ -239,5 +229,3 @@ export const MatchesTable: FC<Props> = ({
     </>
   );
 };
-
-export default MatchesTable;

@@ -3,10 +3,6 @@
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
-type OptionsType = {
-  currentWeek?: number;
-};
-
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
@@ -14,35 +10,25 @@ export type ResponseFetchAction = Promise<{
     id: string;
     name: string;
     permalink: string;
-    category: string;
   }[];
 }>;
 
-export const fetchTournamentsForMatchAction = async (options?: OptionsType)
-  : ResponseFetchAction => {
+export const fetchTournamentsForMatchAction = async (): ResponseFetchAction => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-tournaments-for-match');
 
-  const { currentWeek } = options ?? {};
-
   try {
     const tournaments = await prisma.tournament.findMany({
-      where: {
-        active: true,
-        ...(currentWeek && (currentWeek > 0) && { currentWeek }),
-      },
+      where: { active: true },
       orderBy: [
         { name: 'asc' },
-        { category: 'desc' },
-        { format: 'desc' },
       ],
       select: {
         id: true,
         name: true,
         permalink: true,
-        category: true,
       },
     });
 

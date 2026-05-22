@@ -1,6 +1,5 @@
 import z from 'zod';
 import { MATCH_STATUS } from '../../enums';
-import { requiredUUID } from '~/src/lib/helpers';
 
 export const createMatchSchema = z.object({
   localTeamId: z.uuid({
@@ -23,10 +22,6 @@ export const createMatchSchema = z.object({
     .min(3, { message: '¡ El arbitro debe ser mayor a 3 caracteres !' })
     .max(50, { message: '¡ El arbitro debe ser menor a 50 caracteres !' })
     .optional(),
-  week: z
-    .int()
-    .min(0, { message: '¡ La sede debe ser mínimo 1 !' })
-    .optional(),
   localScore: z
     .int()
     .min(0, { message: '¡ El marcador local debe ser un número positivo !' })
@@ -42,8 +37,13 @@ export const createMatchSchema = z.object({
   matchDate: z
     .date({ message: 'La fecha del encuentro debe ser una fecha válida' })
     .optional(),
-  tournamentId: requiredUUID(
-    '¡ Seleccione el torneo !',
-    '¡ El id del torneo debe ser un UUID válido !',
-  ).optional(),
+  week: z
+    .int()
+    .min(0, { message: '¡ La sede debe ser mínimo 1 !' }),
+  tournament: z
+    .string('¡ El torneo debe ser una cadena de texto !')
+    .min(1, '¡ Debe seleccionar un torneo de la lista !'),
+  category: z
+    .string('¡ La categoría debe ser una cadena de texto !')
+    .min(1, '¡ Debe seleccionar una categoría de la lista !'),
 });

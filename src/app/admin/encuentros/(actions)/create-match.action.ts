@@ -38,7 +38,7 @@ type CreateResponseAction = Promise<{
 
 export const createMatchAction = async (
   formData: FormData,
-  userRole: string[] | null,
+  userRole: string[],
 ): CreateResponseAction => {
   if ((userRole !== null) && (!userRole.includes('admin'))) {
     return {
@@ -58,9 +58,10 @@ export const createMatchAction = async (
     matchDate: formData.get('matchDate')
       ? new Date(formData.get('matchDate') as string)
       : undefined,
-    week: parseInt(formData.get('week') as string) ?? 0,
     status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
-    tournamentId: formData.get('tournamentId') ?? undefined,
+    tournament: formData.get('tournament') ?? '',
+    category: formData.get('category') ?? '',
+    week: formData.get('week') ? Number(formData.get('week')) : 0,
   };
 
   const matchVerified = createMatchSchema.safeParse(rawData);
@@ -73,18 +74,26 @@ export const createMatchAction = async (
     };
   }
 
-  const { tournamentId, ...matchToSave } = matchVerified.data;
+  const {
+    tournament: tournamentPermalink,
+    category: categoryPermalink,
+    ...matchToSave
+  } = matchVerified.data;
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const tournament = await transaction.tournament.count({
-        where: { id: tournamentId },
+      const tournament = await transaction.tournament.findFirst({
+        where: {
+          permalink: tournamentPermalink,
+          category: categoryPermalink,
+        },
+        select: { id: true },
       });
 
       if (!tournament) {
         return {
           ok: false,
-          message: `¡ El torneo con el ID: "${tournamentId}" no existe !`,
+          message: `¡ El torneo: "${tournamentPermalink}" con la categoría: "${categoryPermalink}" no existe !`,
           match: null,
         };
       }
@@ -96,11 +105,13 @@ export const createMatchAction = async (
           visitorId: matchToSave.visitorTeamId,
           visitorScore: matchToSave.visitorScore,
           place: matchToSave.place ?? undefined,
-          week: matchToSave.week as number,
           referee: matchToSave.referee,
           matchDate: matchToSave.matchDate,
           status: matchToSave.status as MATCH_STATUS_TYPE,
-          tournamentId: tournamentId as string,
+          tournamentId: tournament.id,
+          week: matchToSave.week !== 0
+            ? matchToSave.week as number
+            : null,
         },
         select: {
           id: true,
