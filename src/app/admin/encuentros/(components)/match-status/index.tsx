@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { updateStatusAction } from '../../(actions)/updateStatusAction';
+import { updateStatusAction } from '@/app/admin/encuentros/(actions)/update-status.action';
 import { toast } from 'sonner';
 
 type Props = Readonly<{

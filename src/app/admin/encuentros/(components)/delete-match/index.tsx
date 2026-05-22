@@ -16,9 +16,9 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
-import { deleteMatchAction } from '../../(actions)';
-import './styles.css';
+import { deleteMatchAction } from '@/app/admin/encuentros/(actions)/delete-match.action';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import './styles.css';
 
 type Props = Readonly<{
   id: string;

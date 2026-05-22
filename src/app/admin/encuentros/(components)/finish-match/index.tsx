@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { finishMatchAction } from '../../(actions)/finishMatchAction';
+import { finishMatchAction } from '@/app/admin/encuentros/(actions)/finish-match.action';
 import { toast } from 'sonner';
 
 type Props = Readonly<{
