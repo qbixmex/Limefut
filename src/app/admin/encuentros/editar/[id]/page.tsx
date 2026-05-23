@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EditMatchContent } from './edit-match-content';
+import { FormSkeleton } from '../../(components)/form-skeleton';
 
 type Props = Readonly<{
   params: Promise<{
@@ -19,7 +20,7 @@ export const EditMatchPage: FC<Props> = ({ params }) => {
             <CardTitle className="admin-page-card-title">Editar Encuentro</CardTitle>
           </CardHeader>
           <CardContent>
-            <Suspense>
+            <Suspense fallback={<FormSkeleton />}>
               <EditMatchContent params={params} />
             </Suspense>
           </CardContent>

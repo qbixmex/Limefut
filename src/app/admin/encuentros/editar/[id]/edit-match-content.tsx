@@ -1,7 +1,6 @@
-import { Suspense, type FC } from 'react';
+import type { FC } from 'react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import FormSkeleton from '../../(components)/form-skeleton';
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { fetchMatchAction } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { fetchTournamentsForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
@@ -46,21 +45,17 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
   }
 
   return (
-    <Suspense
+    <EditMatchForm
       key={
         `${responseMatch.match?.tournament.id ?? 'tournament'}-` +
         `${responseMatch.match?.tournament.category ?? 'category'}`
       }
-      fallback={<FormSkeleton />}
-    >
-      <EditMatchForm
-        tournaments={tournamentsResponse.tournaments}
-        categories={categoriesResponse.categories}
-        teams={responseTeams.teams}
-        authenticatedUserId={session?.user.id}
-        authenticatedUserRoles={session?.user.roles}
-        match={responseMatch.match as MATCH_TYPE}
-      />
-    </Suspense>
+      tournaments={tournamentsResponse.tournaments}
+      categories={categoriesResponse.categories}
+      teams={responseTeams.teams}
+      authenticatedUserId={session?.user.id}
+      authenticatedUserRoles={session?.user.roles}
+      match={responseMatch.match as MATCH_TYPE}
+    />
   );
 };

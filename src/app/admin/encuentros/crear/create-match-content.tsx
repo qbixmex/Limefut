@@ -1,5 +1,4 @@
-import { Suspense, type FC } from 'react';
-import { FormSkeleton } from '../(components)/form-skeleton';
+import type { FC } from 'react';
 import { CreateMatchForm } from '../(components)/create-match-form';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
@@ -26,7 +25,6 @@ export const MatchContent: FC<Props> = async ({ searchParams }) => {
   const {
     tournament: tournamentPermalink,
     category: categoryPermalink,
-    'selected-week': selectedWeek,
   } = await searchParams;
 
   let tournament_category: string = 'tournament-category';
@@ -63,20 +61,13 @@ export const MatchContent: FC<Props> = async ({ searchParams }) => {
   }
 
   return (
-    <Suspense
-      key={
-        tournament_category +
-        `${selectedWeek ?? 'selected-week'}`
-      }
-      fallback={<FormSkeleton />}
-    >
-      <CreateMatchForm
-        tournaments={tournamentsResponse.tournaments}
-        categories={categoriesResponse.categories}
-        teams={teams}
-        authenticatedUserId={session?.user.id}
-        authenticatedUserRoles={session?.user.roles}
-      />
-    </Suspense>
+    <CreateMatchForm
+      key={tournament_category}
+      tournaments={tournamentsResponse.tournaments}
+      categories={categoriesResponse.categories}
+      teams={teams}
+      authenticatedUserId={session?.user.id}
+      authenticatedUserRoles={session?.user.roles}
+    />
   );
 };
