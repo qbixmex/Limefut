@@ -1,6 +1,7 @@
 import { type FC, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MatchContent } from './create-match-content';
+import { FormSkeleton } from '../(components)/form-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -19,7 +20,7 @@ const CreateMatchPage: FC<Props> = ({ searchParams }) => {
             <CardTitle className="admin-page-card-title">Crear Encuentro</CardTitle>
           </CardHeader>
           <CardContent>
-            <Suspense>
+            <Suspense fallback={<FormSkeleton />}>
               <MatchContent searchParams={searchParams} />
             </Suspense>
           </CardContent>
