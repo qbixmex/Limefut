@@ -11,6 +11,7 @@ import type { CATEGORY_TYPE } from '@/app/admin/encuentros/(actions)/fetch-categ
 import { Button } from '@/components/ui/button';
 import { MATCH_STATUS } from '@/shared/enums';
 import { UpdateMatchScore } from '../../(components)/form-fields/update-match-score';
+import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
   authenticatedUserId: string | undefined;
@@ -85,8 +86,16 @@ export const EditMatchForm: FC<Props> = ({
               type="submit"
               variant="outline-primary"
               size="lg"
+              disabled={form.formState.isSubmitting}
             >
-              guardar
+              {form.formState.isSubmitting ? (
+                <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                  <span className="text-sm italic">Espere</span>
+                  <LoaderCircle className="size-4 animate-spin" />
+                </span>
+              ) : (
+                <span>guardar</span>
+              )}
             </Button>
           )}
         </section>
