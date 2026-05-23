@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type MatchType = {
+export type MATCH_TYPE = {
   id: string;
   place: string | null;
   matchDate: Date | null;
@@ -79,7 +79,7 @@ export type TournamentType = {
 type FetchResponse = Promise<{
   ok: boolean;
   message: string;
-  match: MatchType | null,
+  match: MATCH_TYPE | null,
 }>;
 
 export const fetchMatchAction = async (

@@ -1,22 +1,24 @@
 'use client';
 
+import type { FC } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 import { updateMatchScoreAction } from '@/app/admin/encuentros/(actions)/update-match-score.action';
-import type { MatchType } from '@/app/admin/encuentros/(actions)/fetch-match.action';
+import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = {
-  match: MatchType;
+  match: MATCH_TYPE;
+  setHiddenScores: (value: boolean) => void;
 };
 
-export const UpdateMatchScore = ({ match }: Props) => {
+export const UpdateMatchScore: FC<Props> = ({ match, setHiddenScores }) => {
   const router = useRouter();
   const { getValues } = useFormContext();
 
@@ -36,6 +38,8 @@ export const UpdateMatchScore = ({ match }: Props) => {
       return;
     }
 
+    setHiddenScores(true);
+
     toast.success(message);
     router.replace(
       ROUTES.ADMIN_MATCHES +
@@ -47,27 +51,25 @@ export const UpdateMatchScore = ({ match }: Props) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button
-          type="button"
-          variant="outline-success"
-          onClick={() => {}}
-        >
-          Actualizar Marcador
-        </Button>
+      <AlertDialogTrigger className={
+        buttonVariants({ variant: 'outline-success' })
+      }>
+        actualizar marcador
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-center">¿ Confirmas que quieres actualizar el marcador ?</AlertDialogTitle>
-          <AlertDialogDescription className="text-center text-emerald-500 font-bold">
-            ¡ La Tabla de Posiciones y Estadísticas serán afectadas !
+          <AlertDialogTitle className="text-center">¿ Esta seguro que quieres actualizar el marcador ?</AlertDialogTitle>
+          <AlertDialogDescription className="text-center text-orange-500 font-medium">
+            La tabla de posiciones y estadísticas serán actualizadas
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+          <AlertDialogCancel
+            className={buttonVariants({ variant: 'outline-secondary' })}
+          >cancelar</AlertDialogCancel>
           <AlertDialogAction
-            className="finish-btn"
             onClick={handleUpdateScore}
+            className={buttonVariants({ variant: 'outline-warning' })}
           >
             Proceder
           </AlertDialogAction>

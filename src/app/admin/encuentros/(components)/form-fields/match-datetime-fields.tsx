@@ -15,10 +15,10 @@ import { Switch } from '@/components/ui/switch';
 import { useFormContext } from 'react-hook-form';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import type { MatchType } from '@/app/admin/encuentros/(actions)/fetch-match.action';
+import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 
 type Props = {
-  match: MatchType | null | undefined;
+  match: MATCH_TYPE | null | undefined;
 };
 
 export const MatchDateTimeFields = ({ match }: Props) => {

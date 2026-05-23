@@ -1,15 +1,16 @@
 import { Suspense, type FC } from 'react';
+import { FormSkeleton } from '../(components)/form-skeleton';
+import { CreateMatchForm } from '../(components)/create-match-form';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
-import { redirect } from 'next/navigation';
-import { MatchForm } from '../(components)/match-form';
-import { FormSkeleton } from '../(components)/form-skeleton';
-import { ROUTES } from '@/shared/constants/routes';
 import { fetchTournamentsForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
 import { fetchCategoriesForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
-import { fetchTeamsForMatchCreateAction, type TEAM_TYPE } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
+import type { TEAM_TYPE } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
+import { fetchTeamsForMatchCreateAction } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
+import { redirect } from 'next/navigation';
+import { ROUTES } from '@/shared/constants/routes';
 
-type MatchWrapperProps = Readonly<{
+type Props = Readonly<{
   searchParams: Promise<{
     tournament?: string;
     category?: string;
@@ -17,7 +18,11 @@ type MatchWrapperProps = Readonly<{
   }>;
 }>;
 
-export const MatchWrapper: FC<MatchWrapperProps> = async ({ searchParams }) => {
+export const MatchContent: FC<Props> = async ({ searchParams }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   const {
     tournament: tournamentPermalink,
     category: categoryPermalink,
@@ -28,40 +33,6 @@ export const MatchWrapper: FC<MatchWrapperProps> = async ({ searchParams }) => {
 
   if (tournamentPermalink && categoryPermalink) {
     tournament_category = `${tournamentPermalink}-${categoryPermalink}`;
-  }
-
-  return (
-    <Suspense
-      key={
-        tournament_category +
-        `${selectedWeek ?? 'selected-week'}`
-      }
-      fallback={<FormSkeleton />}
-    >
-      <CreateMatchContent
-        tournamentPermalink={tournamentPermalink}
-        categoryPermalink={categoryPermalink}
-      />
-    </Suspense>
-  );
-};
-
-type CreateMatchContentProps = Readonly<{
-  tournamentPermalink: string | undefined;
-  categoryPermalink: string | undefined;
-}>;
-
-const CreateMatchContent: FC<CreateMatchContentProps> = async ({
-  tournamentPermalink,
-  categoryPermalink,
-}) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!(session?.user.roles as string[]).includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear encuentros !';
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(message)}`);
   }
 
   const tournamentsResponse = await fetchTournamentsForMatchAction();
@@ -92,14 +63,20 @@ const CreateMatchContent: FC<CreateMatchContentProps> = async ({
   }
 
   return (
-    <section className="mt-10">
-      <MatchForm
-        authenticatedUserId={session?.user.id}
-        sessionUserRoles={session?.user.roles ?? []}
+    <Suspense
+      key={
+        tournament_category +
+        `${selectedWeek ?? 'selected-week'}`
+      }
+      fallback={<FormSkeleton />}
+    >
+      <CreateMatchForm
         tournaments={tournamentsResponse.tournaments}
         categories={categoriesResponse.categories}
         teams={teams}
+        authenticatedUserId={session?.user.id}
+        authenticatedUserRoles={session?.user.roles}
       />
-    </section>
+    </Suspense>
   );
 };

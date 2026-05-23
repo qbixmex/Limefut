@@ -6,12 +6,14 @@ import { cacheLife, cacheTag } from 'next/cache';
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
-  tournaments: {
-    id: string;
-    name: string;
-    permalink: string;
-  }[];
+  tournaments: TOURNAMENT_TYPE[];
 }>;
+
+export type TOURNAMENT_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+};
 
 export const fetchTournamentsForMatchAction = async (): ResponseFetchAction => {
   'use cache';
