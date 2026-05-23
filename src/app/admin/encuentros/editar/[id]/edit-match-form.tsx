@@ -82,10 +82,9 @@ export const EditMatchForm: FC<Props> = ({
 
           {hiddenScores && (
             <Button
-              type="button"
+              type="submit"
               variant="outline-primary"
               size="lg"
-              onClick={() => { }}
             >
               guardar
             </Button>
