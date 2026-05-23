@@ -5,13 +5,6 @@ import { updateTag } from 'next/cache';
 import { editMatchSchema } from '@/shared/schemas';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
-type Options = {
-  authenticatedUserId: string | undefined;
-  sessionUserRoles: string[];
-  formData: FormData;
-  matchId: string;
-};
-
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
@@ -44,9 +37,14 @@ type EditResponseAction = Promise<{
 export const updateMatchAction = async ({
   formData,
   matchId,
-  sessionUserRoles,
   authenticatedUserId,
-}: Options): EditResponseAction => {
+  authenticatedUserRoles,
+}: {
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+  formData: FormData;
+  matchId: string;
+}): EditResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
@@ -55,7 +53,7 @@ export const updateMatchAction = async ({
     };
   }
 
-  if (!sessionUserRoles.includes('admin')) {
+  if (authenticatedUserRoles && !authenticatedUserRoles.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',

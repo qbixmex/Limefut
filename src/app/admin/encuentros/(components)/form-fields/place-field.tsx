@@ -15,12 +15,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useWatch } from 'react-hook-form';
-import type { MatchType } from '@/app/admin/encuentros/(actions)/fetch-match.action';
+import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import type { Team } from './form-types';
 
 type Props = {
   teams: Team[];
-  match: MatchType | null | undefined;
+  match: MATCH_TYPE | null | undefined;
 };
 
 export const PlaceField = ({ teams, match }: Props) => {

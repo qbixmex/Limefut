@@ -6,12 +6,14 @@ import { cacheLife, cacheTag } from 'next/cache';
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
-  categories: {
-    id: string;
-    name: string;
-    permalink: string;
-  }[];
+  categories: CATEGORY_TYPE[];
 }>;
+
+export type CATEGORY_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+};
 
 export const fetchCategoriesForMatchAction = async (): ResponseFetchAction => {
   'use cache';
