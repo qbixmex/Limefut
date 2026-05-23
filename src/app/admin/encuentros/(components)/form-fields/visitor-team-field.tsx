@@ -26,31 +26,31 @@ import {
 } from '@/components/ui/popover';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
-import type { MatchType } from '@/app/admin/encuentros/(actions)/fetch-match.action';
+import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import type { Team } from './form-types';
 
 type Props = {
   teams: Team[];
-  match: MatchType | null | undefined;
+  match: MATCH_TYPE | null | undefined;
 };
 
-export const LocalTeamField = ({ teams, match }: Props) => {
+export const VisitorTeamField = ({ teams, match }: Props) => {
   const [open, setOpen] = useState(false);
   const { formState } = useFormContext();
-  const visitorTeamId = useWatch({ name: 'visitorTeamId' });
+  const localTeamId = useWatch({ name: 'localTeamId' });
 
   return (
     <FormField
-      name="localTeamId"
+      name="visitorTeamId"
       render={({ field }) => {
         const selectedTeam = teams.find((t) => t.id === field.value) ??
           (match
-            ? (field.value === match.visitorTeam.id ? match.visitorTeam : match.localTeam)
+            ? (field.value === match.localTeam.id ? match.localTeam : match.visitorTeam)
             : undefined);
 
         return (
           <FormItem>
-            <FormLabel>Equipo Local <span className="text-amber-500">*</span></FormLabel>
+            <FormLabel>Equipo Visitante <span className="text-amber-500">*</span></FormLabel>
             <Popover open={open} onOpenChange={setOpen}>
               <FormControl>
                 <PopoverTrigger asChild>
@@ -60,10 +60,10 @@ export const LocalTeamField = ({ teams, match }: Props) => {
                     aria-expanded={open}
                     className={cn(
                       'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
-                      { 'border-destructive!': formState.errors.localTeamId },
+                      { 'border-destructive!': formState.errors.visitorTeamId },
                     )}
                   >
-                    {selectedTeam ? selectedTeam.name : 'Seleccione un equipo'}
+                    {selectedTeam ? selectedTeam.name : 'Selecciona un equipo'}
                     <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -80,8 +80,8 @@ export const LocalTeamField = ({ teams, match }: Props) => {
                           value={team.name}
                           onSelect={(currentValue) => {
                             const selected = teams.find((t) => t.name === currentValue);
-                            if (selected && selected.id === visitorTeamId) {
-                              toast.error('Este equipo ya está seleccionado como visitante');
+                            if (selected && selected.id === localTeamId) {
+                              toast.error('Este equipo ya está seleccionado como local');
                               return;
                             }
                             if (selected) {
@@ -89,9 +89,9 @@ export const LocalTeamField = ({ teams, match }: Props) => {
                             }
                             setOpen(false);
                           }}
-                          disabled={team.id === visitorTeamId}
+                          disabled={team.id === localTeamId}
                           className={cn(
-                            team.id === visitorTeamId && 'opacity-50 cursor-not-allowed',
+                            team.id === localTeamId && 'opacity-50 cursor-not-allowed',
                           )}
                         >
                           {team.name}

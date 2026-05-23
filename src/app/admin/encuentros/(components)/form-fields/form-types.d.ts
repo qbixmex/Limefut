@@ -1,13 +1,12 @@
 import type { MatchType } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 
 export type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  sessionUserRoles: string[];
   tournaments: Tournament[];
   categories: Category[];
   teams: Team[];
   week?: number;
   match?: MatchType | null;
+  hiddenScores?: boolean;
 }>;
 
 export type Team = {

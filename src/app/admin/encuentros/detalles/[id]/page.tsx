@@ -21,7 +21,7 @@ import { TbSoccerField } from 'react-icons/tb';
 import { MATCH_STATUS } from '@/shared/enums';
 import { SHOOTOUT_STATUS } from '@/shared/enums/shoutout-status.enum';
 import { getMatchStatus } from '@/app/admin/encuentros/(helpers)/place';
-import type { MatchType } from '@/app/admin/encuentros/(actions)/fetch-match.action';
+import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
 import { PenaltiesForm } from '@/app/admin/encuentros/(components)/penalties-form';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -45,7 +45,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(response.message)}`);
   }
 
-  const match = response.match as MatchType;
+  const match = response.match as MATCH_TYPE;
   const usedShooterIds = match.penaltyShootout?.kicks
     ?.map(kick => kick.playerId) ?? [];
 

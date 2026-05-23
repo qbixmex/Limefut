@@ -9,7 +9,3 @@
     width: 100%;
   }
 }
-
-.buttons {
-  @apply flex justify-end gap-3;
-}

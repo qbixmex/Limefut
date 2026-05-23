@@ -1,6 +1,6 @@
 import { type FC, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MatchWrapper } from './create-match-content';
+import { MatchContent } from './create-match-content';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -20,7 +20,7 @@ const CreateMatchPage: FC<Props> = ({ searchParams }) => {
           </CardHeader>
           <CardContent>
             <Suspense>
-              <MatchWrapper searchParams={searchParams} />
+              <MatchContent searchParams={searchParams} />
             </Suspense>
           </CardContent>
         </Card>

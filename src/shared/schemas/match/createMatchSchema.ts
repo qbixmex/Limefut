@@ -7,11 +7,17 @@ export const createMatchSchema = z.object({
       ? '! El equipo local es obligatorio !'
       : '¡ El id del equipo local no es un UUID válido !',
   }),
+  localScore: z
+    .number()
+    .min(0, { message: '¡ El marcador local debe ser un número positivo !' }),
   visitorTeamId: z.uuid({
     error: (issue) => (issue.input === '')
       ? '! El equipo visitante es obligatorio !'
       : '¡ El id del equipo visitante no es un UUID válido !',
   }),
+  visitorScore: z
+    .int()
+    .min(0, { message: '¡ El marcador visitante debe ser un número positivo !' }),
   place: z.union([
     z.literal(''),
     z.string()
@@ -21,14 +27,6 @@ export const createMatchSchema = z.object({
   referee: z.string()
     .min(3, { message: '¡ El arbitro debe ser mayor a 3 caracteres !' })
     .max(50, { message: '¡ El arbitro debe ser menor a 50 caracteres !' })
-    .optional(),
-  localScore: z
-    .int()
-    .min(0, { message: '¡ El marcador local debe ser un número positivo !' })
-    .optional(),
-  visitorScore: z
-    .int()
-    .min(0, { message: '¡ El marcador visitante debe ser un número positivo !' })
     .optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],

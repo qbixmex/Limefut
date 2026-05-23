@@ -36,11 +36,27 @@ type CreateResponseAction = Promise<{
   } | null;
 }>;
 
-export const createMatchAction = async (
-  formData: FormData,
-  userRole: string[],
-): CreateResponseAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+export const createMatchAction = async ({
+  formData,
+  authenticatedUserId,
+  authenticatedUserRoles,
+} : {
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+  formData: FormData;
+}): CreateResponseAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Usuario no autenticado !',
+      match: null,
+    };
+  }
+
+  if (
+    (authenticatedUserRoles && authenticatedUserRoles.length > 0) &&
+    (!authenticatedUserRoles.includes('admin'))
+  ) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
