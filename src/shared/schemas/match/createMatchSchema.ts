@@ -24,10 +24,12 @@ export const createMatchSchema = z.object({
       .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
       .max(50, { message: '¡ La sede debe ser menor a 50 caracteres !' }),
   ]).optional(),
-  referee: z.string()
-    .min(3, { message: '¡ El arbitro debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El arbitro debe ser menor a 50 caracteres !' })
-    .optional(),
+  referee: z.union([
+    z.literal(''),
+    z.string()
+      .min(3, { message: '¡ El arbitro debe ser mayor a 3 caracteres !' })
+      .max(50, { message: '¡ El arbitro debe ser menor a 50 caracteres !' }),
+  ]).optional(),
   status: z.enum(
     Object.values(MATCH_STATUS) as [string, ...string[]],
     { message: '¡ El estado del partido debe ser válido !' },
