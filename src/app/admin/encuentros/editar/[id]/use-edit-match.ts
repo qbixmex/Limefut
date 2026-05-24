@@ -8,9 +8,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ROUTES } from '@/shared/constants/routes';
 import { toast } from 'sonner';
 import { editMatchSchema } from '@/shared/schemas';
-import { MATCH_STATUS } from '@/shared/enums';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type z from 'zod';
+import { MATCH_STATUS } from '@/shared/enums';
 
 type Options = {
   authenticatedUserId: string | undefined;
@@ -28,7 +28,32 @@ export const useEditMatch = (options: Options) => {
     match,
   } = options;
 
-  const [hiddenScores, setHiddenScores] = useState(match.status === MATCH_STATUS.COMPLETED);
+  const [hiddenScores, setHiddenScores] = useState(() => {
+    if (match) {
+      switch (match.status) {
+        case MATCH_STATUS.SCHEDULED: {
+          return false;
+        }
+        case MATCH_STATUS.IN_PROGRESS: {
+          return false;
+        }
+        case MATCH_STATUS.POST_POSED: {
+          return true;
+        }
+        case MATCH_STATUS.COMPLETED: {
+          return true;
+        }
+        case MATCH_STATUS.CANCELED: {
+          return true;
+        }
+        default:
+          return false;
+      }
+    }
+    return false;
+  });
+
+  const [isModifyingScores, setIsModifyingScores] = useState(false);
 
   // Initialize Form
   const form = useForm<z.infer<typeof editMatchSchema>>({
@@ -75,6 +100,13 @@ export const useEditMatch = (options: Options) => {
       authenticatedUserRoles,
     });
 
+    if (match.status === MATCH_STATUS.COMPLETED) {
+      setHiddenScores(true);
+      setIsModifyingScores(false);
+    } else {
+      setHiddenScores(false);
+    }
+
     if (!response.ok) {
       toast.error(response.message);
       return;
@@ -92,12 +124,16 @@ export const useEditMatch = (options: Options) => {
   const handleNavigateBack = () => {
     const params = new URLSearchParams(searchParams);
 
+    if (match.status === MATCH_STATUS.COMPLETED) {
+      setIsModifyingScores(false);
+      setHiddenScores(true);
+    } else {
+      setHiddenScores(false);
+    }
+
     if (params.has('selected-week')) params.delete('selected-week');
 
-    setHiddenScores(true);
-
     if (match && params.size > 0) {
-      setHiddenScores(true);
       router.replace(`${ROUTES.ADMIN_MATCHES}?${params}`);
     } else {
       router.replace(ROUTES.ADMIN_MATCHES);
@@ -107,6 +143,8 @@ export const useEditMatch = (options: Options) => {
   return {
     form,
     hiddenScores,
+    isModifyingScores,
+    setIsModifyingScores,
     setHiddenScores,
     handleNavigateBack,
     onSubmit,
