@@ -4,8 +4,8 @@ export type Props = Readonly<{
   tournaments: Tournament[];
   categories: Category[];
   teams: Team[];
+  match?: MatchType;
   week?: number;
-  match?: MatchType | null;
   hiddenScores?: boolean;
 }>;
 
