@@ -1,6 +1,6 @@
 'use client';
 
-import type { FC } from 'react';
+import { type FC } from 'react';
 import { Form } from '@/components/ui/form';
 import { FormFields } from '../../(components)/form-fields';
 import { useEditMatch } from './use-edit-match';
@@ -36,6 +36,8 @@ export const EditMatchForm: FC<Props> = ({
     handleNavigateBack,
     hiddenScores,
     setHiddenScores,
+    isModifyingScores,
+    setIsModifyingScores,
   } = useEditMatch({
     authenticatedUserId,
     authenticatedUserRoles,
@@ -56,7 +58,7 @@ export const EditMatchForm: FC<Props> = ({
           hiddenScores={hiddenScores}
         />
 
-        <section className={'flex justify-end gap-3'}>
+        <section className="flex justify-end gap-3">
           <Button
             type="button"
             variant="outline-secondary"
@@ -66,11 +68,14 @@ export const EditMatchForm: FC<Props> = ({
             cancelar
           </Button>
 
-          {hiddenScores && (
+          {hiddenScores && match.status === MATCH_STATUS.COMPLETED && (
             <Button
               type="button"
               variant="outline-info"
-              onClick={() => setHiddenScores(false)}
+              onClick={() => {
+                setIsModifyingScores(true);
+                setHiddenScores(false);
+              }}
               className="absolute top-5 right-5"
             >
               modificar marcadores
@@ -78,10 +83,16 @@ export const EditMatchForm: FC<Props> = ({
           )}
 
           {!hiddenScores && match?.status === MATCH_STATUS.COMPLETED && (
-            <UpdateMatchScore match={match} setHiddenScores={(value) => setHiddenScores(value)} />
+            <UpdateMatchScore
+              match={match}
+              setHiddenScores={(value) => {
+                setHiddenScores(value);
+                setIsModifyingScores(false);
+              }}
+            />
           )}
 
-          {hiddenScores && (
+          {!isModifyingScores && (
             <Button
               type="submit"
               variant="outline-primary"
