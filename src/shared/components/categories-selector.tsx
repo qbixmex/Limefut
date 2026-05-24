@@ -13,11 +13,20 @@ export const CategoriesSelector: FC<Props> = ({ categories }) => {
   const pathname = usePathname();
   const router = useRouter();
   const params = new URLSearchParams(searchParams);
-  const categoryPermalink = searchParams.get('category');
+  const tournamentPermalink = params.get('tournament');
+  const categoryPermalink = params.get('category');
 
   const setCategoryParam = (permalink: string) => {
     if (!permalink) return;
 
+    // Clear params
+    params.keys().forEach(key => {
+      params.delete(key);
+    });
+
+    if (tournamentPermalink) {
+      params.set('tournament', tournamentPermalink);
+    }
     params.set('category', permalink);
     router.push(`${pathname}?${params}`);
   };
