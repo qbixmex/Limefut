@@ -43,7 +43,6 @@ export const generatePlayersAction = async ({
     : (gender === 'female')
       ? femalePlayers
       : malePlayers;
-  const shuffledPlayers = shuffleArray(genericPlayers);
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -52,7 +51,7 @@ export const generatePlayersAction = async ({
         data: {
           players: {
             createMany: {
-              data: shuffledPlayers,
+              data: genericPlayers,
             },
           },
         },

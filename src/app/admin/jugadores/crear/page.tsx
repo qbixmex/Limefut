@@ -12,10 +12,12 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchTeamsForPlayer } from '../(actions)';
 import { headers } from 'next/headers';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   searchParams: Promise<{
-    torneo?: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
@@ -28,20 +30,24 @@ const CreatePlayerPage: FC<Props> = ({ searchParams }) => {
 };
 
 const CreatePlayerContent: FC<Props> = async ({ searchParams }) => {
-  const tournamentId = (await searchParams).torneo;
+  const { tournament, category } = await searchParams;
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   if (session && !(session?.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear jugadores !';
-    redirect(`/admin/jugadores?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(message)}`);
   }
 
-  const responseTeams = await fetchTeamsForPlayer(tournamentId ?? '');
+  const responseTeams = await fetchTeamsForPlayer({
+    tournamentPermalink: tournament,
+    categoryPermalink: category,
+  });
 
   if (!responseTeams.ok) {
-    redirect(`/admin/jugadores?error=${encodeURIComponent(responseTeams.message)}`);
+    redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(responseTeams.message)}`);
   }
 
   const teams = responseTeams.teams!;

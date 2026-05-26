@@ -8,12 +8,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 export const CreatePlayerButton = () => {
   const searchParams = useSearchParams();
+  const tournament = searchParams.get('tournament');
+  const category = searchParams.get('category');
   const route = useRouter();
 
-  if (!searchParams.has('torneo')) return;
+  if (!tournament || !category) return;
 
   const handleNavigate = () => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams();
+
+    // Set Tournament and Category params
+    params.set('tournament', tournament);
+    params.set('category', category);
+
+    // Redirect to create a player with params
     route.push(`${ROUTES.ADMIN_PLAYERS_CREATE}?${params}`);
   };
 
@@ -29,7 +37,7 @@ export const CreatePlayerButton = () => {
         </Button>
       </TooltipTrigger>
       <TooltipContent side="left">
-        <p>crear</p>
+        <span>crear jugador</span>
       </TooltipContent>
     </Tooltip>
   );
