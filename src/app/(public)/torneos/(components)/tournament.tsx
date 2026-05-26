@@ -5,6 +5,7 @@ import type { TournamentType } from '../(actions)/fetchTournamentsAction';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Trophy } from 'lucide-react';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   tournament: TournamentType;
@@ -15,9 +16,8 @@ export const Tournament: FC<Props> = ({ tournament }) => {
 
   const onTournamentSelected = () => {
     router.push(
-      `torneos/${tournament.permalink}` +
-      `?categoria=${tournament.category}` +
-      `&formato=${tournament.format}`,
+      `${ROUTES.PUBLIC_TOURNAMENTS}/${tournament.permalink}` +
+      `?category=${tournament.category}`,
     );
   };
 
@@ -58,5 +58,3 @@ export const Tournament: FC<Props> = ({ tournament }) => {
     </section>
   );
 };
-
-export default Tournament;

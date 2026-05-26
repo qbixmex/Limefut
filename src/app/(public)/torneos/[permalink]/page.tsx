@@ -14,8 +14,7 @@ type Props = Readonly<{
     permalink: string;
   }>;
   searchParams: Promise<{
-    categoria?: string;
-    formato?: string;
+    category?: string;
   }>;
 }>;
 

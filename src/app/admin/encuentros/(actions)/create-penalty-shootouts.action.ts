@@ -13,9 +13,9 @@ type CreateResponseAction = Promise<{
 
 export const createPenaltyShootoutAction = async (
   formData: FormData,
-  userRole: string[] | null,
+  userRoles: string[] | null | undefined,
 ): CreateResponseAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  if ((userRoles) && (!userRoles.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',

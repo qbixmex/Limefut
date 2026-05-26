@@ -2,7 +2,6 @@
 
 import { type FC } from 'react';
 import { useForm } from 'react-hook-form';
-import type { Session } from '@/lib/auth-client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
@@ -27,7 +26,7 @@ import { createPenaltyShootoutSchema } from './createPenaltyShootout.schema';
 import { toast } from 'sonner';
 
 type Props = Readonly<{
-  session: Session | null;
+  userRoles: string[] | null | undefined;
   currentMatchId: string;
   localTeam: Team;
   visitorTeam: Team;
@@ -43,7 +42,7 @@ type Team = {
 }
 
 export const PenaltiesForm: FC<Props> = ({
-  session,
+  userRoles,
   currentMatchId,
   localTeam,
   visitorTeam,
@@ -86,7 +85,7 @@ export const PenaltiesForm: FC<Props> = ({
     // Create match
     const response = await createPenaltyShootoutAction(
       formData,
-      session?.user.roles ?? null,
+      userRoles,
     );
 
     if (!response.ok) {
@@ -237,5 +236,3 @@ export const PenaltiesForm: FC<Props> = ({
     </>
   );
 };
-
-export default PenaltiesForm;

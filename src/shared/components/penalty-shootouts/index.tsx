@@ -3,7 +3,6 @@ import { Check, MinusIcon, XIcon } from 'lucide-react';
 import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { SHOOTOUT_STATUS } from '@/shared/enums';
-import { DeletePenaltyShootouts } from '@/app/admin/encuentros/(components)/delete-penalty-shootouts';
 
 type Shootout = {
   id: string;
@@ -33,13 +32,12 @@ type Kick = {
 
 type Props = Readonly<{
   shootout: Shootout | null | undefined;
-  admin?: boolean;
 }>;
 
-export const PenaltyShootout: FC<Props> = ({ shootout, admin = false }) => {
+export const PenaltyShootout: FC<Props> = ({ shootout }) => {
   return (
     <>
-      {(shootout) ? (
+      {(shootout) && (
         <>
           <section className="relative w-full max-w-[300px] mb-10">
             <Table>
@@ -54,6 +52,26 @@ export const PenaltyShootout: FC<Props> = ({ shootout, admin = false }) => {
                     />
                   </TableCell>
                 </TableRow>
+                {(shootout.kicks.length === 0) && (
+                  <>
+                    <TableRow>
+                      <TableHead>{shootout.localTeam.name}</TableHead>
+                      <TableCell>
+                        <span className="text-sky-600 dark:text-sky-500 font-bold">
+                          {shootout.localGoals}
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableHead>{shootout.visitorTeam.name}</TableHead>
+                      <TableCell>
+                        <span className="text-sky-600 dark:text-sky-500 font-bold">
+                          {shootout.visitorGoals}
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  </>
+                )}
                 <TableRow>
                   <TableHead>Estado:</TableHead>
                   <TableCell>
@@ -63,63 +81,53 @@ export const PenaltyShootout: FC<Props> = ({ shootout, admin = false }) => {
                 </TableRow>
               </TableBody>
             </Table>
-            {admin && (
-              <div className="absolute -top-5 -right-10">
-                <DeletePenaltyShootouts
-                  penaltyShootoutsId={shootout.id}
-                  winnerTeamId={shootout.winnerTeamId}
-                />
-              </div>
-            )}
           </section>
 
-          <div className="w-full lg:max-w-md flex flex-col gap-5">
-            <div className="grid grid-cols-2 items-center gap-5">
-              <span className="justify-self-end space-x-2">
-                <span className="text-sm text-gray-500">( {shootout.localGoals} )</span>
-                <span className="text-gray-200 font-semibold">
-                  {shootout.localTeam.name}
+          {(shootout.kicks.length > 0) && (
+            <div className="w-full lg:max-w-md flex flex-col gap-5 mb-8">
+              <div className="grid grid-cols-2 items-center gap-5">
+                <span className="justify-self-end space-x-2">
+                  <span className="text-sm text-gray-500">( {shootout.localGoals} )</span>
+                  <span className="text-gray-200 font-semibold">
+                    {shootout.localTeam.name}
+                  </span>
                 </span>
-              </span>
-              <span className="justify-self-start space-x-2">
-                <span className="text-gray-200 font-semibold">
-                  {shootout.visitorTeam.name}
+                <span className="justify-self-start space-x-2">
+                  <span className="text-gray-200 font-semibold">
+                    {shootout.visitorTeam.name}
+                  </span>
+                  <span className="text-sm text-gray-500">( {shootout.visitorGoals} )</span>
                 </span>
-                <span className="text-sm text-gray-500">( {shootout.visitorGoals} )</span>
-              </span>
-            </div>
+              </div>
 
-            <div className="grid grid-cols-2 items-center gap-5">
-              {shootout.kicks.map((kick) => (
-                <div
-                  key={kick.id}
-                  className={cn('flex items-center gap-5', {
-                    'justify-end': kick.teamId === shootout.localTeam.id,
-                    'justify-start': kick.teamId === shootout.visitorTeam.id,
-                  })}
-                >
-                  <span
-                    className={cn({
-                      'order-1': kick.teamId === shootout.localTeam.id,
-                      'order-2': kick.teamId === shootout.visitorTeam.id,
+              <div className="grid grid-cols-2 items-center gap-5">
+                {shootout.kicks.map((kick) => (
+                  <div
+                    key={kick.id}
+                    className={cn('flex items-center gap-5', {
+                      'justify-end': kick.teamId === shootout.localTeam.id,
+                      'justify-start': kick.teamId === shootout.visitorTeam.id,
                     })}
-                  >{kick.shooterName}</span>
-                  <PenaltiIcon
-                    isGoal={kick.isGoal}
-                    className={cn({
-                      'order-2': kick.teamId === shootout.localTeam.id,
-                      'order-1': kick.teamId === shootout.visitorTeam.id,
-                    })}
-                  />
-                </div>
-              ))}
+                  >
+                    <span
+                      className={cn({
+                        'order-1': kick.teamId === shootout.localTeam.id,
+                        'order-2': kick.teamId === shootout.visitorTeam.id,
+                      })}
+                    >{kick.shooterName}</span>
+                    <PenaltiIcon
+                      isGoal={kick.isGoal}
+                      className={cn({
+                        'order-2': kick.teamId === shootout.localTeam.id,
+                        'order-1': kick.teamId === shootout.visitorTeam.id,
+                      })}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </>
-      ) : (
-        <div className="inline-block border border-sky-600 p-4 rounded-lg">
-          <p className="text-sky-500 font-semibold italic">No se han realizado tiros penales</p>
-        </div>
       )}
     </>
   );
@@ -174,5 +182,3 @@ const PenaltiIcon: FC<{
     </div>
   );
 };
-
-export default PenaltyShootout;

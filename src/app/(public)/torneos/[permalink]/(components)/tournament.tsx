@@ -14,6 +14,7 @@ import { format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
 import { getGenderTranslation, getStageTranslation } from '@/lib/utils';
+import { ROUTES } from '@/shared/constants/routes';
 import './style.css';
 
 type Props = Readonly<{
@@ -21,26 +22,24 @@ type Props = Readonly<{
     permalink: string;
   }>
   searchParams: Promise<{
-    categoria?: string;
-    formato?: string;
+    category?: string;
   }>;
 }>;
 
 export const Tournament: FC<Props> = async ({ params, searchParams }) => {
   const permalink = (await params).permalink;
-  const {
-    categoria: category,
-    formato: format,
-  } = await searchParams;
+  const category = (await searchParams).category;
 
-  if (!category || !format) {
-    redirect(`/torneos?error=${encodeURIComponent('¡ La categoría y formato son obligatorios !')}`);
+  if (!category) {
+    redirect(`${ROUTES.PUBLIC_TOURNAMENTS}?error=${encodeURIComponent(
+      '¡ La categoría es obligatoria !',
+    )}`);
   }
 
-  const response = await fetchTournamentAction(permalink, category, format);
+  const response = await fetchTournamentAction(permalink, category);
 
   if (!response.ok) {
-    redirect(`/torneos?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.PUBLIC_TOURNAMENTS}?error=${encodeURIComponent(response.message)}`);
   }
 
   const tournament = response.tournament as TournamentType;
@@ -198,10 +197,9 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
             <section key={team.id} className="teamCard">
               <Link
                 href={
-                  `/equipos/${team.permalink}` +
-                  `?torneo=${tournament.permalink}` +
-                  `&categoria=${team.category}` +
-                  `&formato=${team.format}`
+                  ROUTES.PUBLIC_TEAM_SHOW(team.permalink) +
+                  `?tournament=${tournament.permalink}` +
+                  `&category=${team.category}`
                 }
               >
                 {!team.imageUrl ? (
@@ -221,10 +219,9 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                 )}
               </Link>
               <Link href={
-                `/equipos/${team.permalink}` +
-                `?torneo=${tournament.permalink}` +
-                `&categoria=${team.category}` +
-                `&formato=${team.format}`
+                ROUTES.PUBLIC_TOURNAMENT_SHOW(team.permalink) +
+                `?tournament=${tournament.permalink}` +
+                `&category=${team.category}`
               }>
                 {team.name}
               </Link>

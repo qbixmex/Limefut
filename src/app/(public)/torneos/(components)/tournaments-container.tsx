@@ -13,5 +13,3 @@ export const TournamentsContainer: FC = async () => {
     </>
   );
 };
-
-export default TournamentsContainer;

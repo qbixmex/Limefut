@@ -9,6 +9,8 @@ import { fetchCategoriesForMatchAction } from '@/app/admin/encuentros/(actions)/
 import { auth } from '@/lib/auth';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditMatchForm } from './edit-match-form';
+import { MATCH_STATUS } from '@/shared/enums';
+import { PenaltyShoots } from './penalty-shoots';
 
 type Props = Readonly<{
   params: Promise<{
@@ -25,6 +27,19 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
   if (!responseMatch.ok) {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseMatch.message)}`);
   }
+
+  const match = responseMatch.match as MATCH_TYPE;
+
+  const usedShooterIds = match.penaltyShootout?.kicks
+    ?.map(kick => kick.playerId) ?? [];
+
+  const availableLocalPlayers = match.localTeam.players
+    ?.filter(({ id }) => !usedShooterIds.includes(id))
+    .map(({ id, name }) => ({ id, name })) ?? [];
+
+  const availableVisitorPlayers = match.visitorTeam.players
+    ?.filter(({ id }) => !usedShooterIds.includes(id))
+    .map(({ id, name }) => ({ id, name })) ?? [];
 
   const tournamentsResponse = await fetchTournamentsForMatchAction();
 
@@ -45,17 +60,51 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
   }
 
   return (
-    <EditMatchForm
-      key={
-        `${responseMatch.match?.tournament.id ?? 'tournament'}-` +
-        `${responseMatch.match?.tournament.category ?? 'category'}`
-      }
-      tournaments={tournamentsResponse.tournaments}
-      categories={categoriesResponse.categories}
-      teams={responseTeams.teams}
-      authenticatedUserId={session?.user.id}
-      authenticatedUserRoles={session?.user.roles}
-      match={responseMatch.match as MATCH_TYPE}
-    />
+    <>
+      <section>
+        <EditMatchForm
+          key={
+            `${responseMatch.match?.tournament.id ?? 'tournament'}-` +
+            `${responseMatch.match?.tournament.category ?? 'category'}`
+          }
+          tournaments={tournamentsResponse.tournaments}
+          categories={categoriesResponse.categories}
+          teams={responseTeams.teams}
+          authenticatedUserId={session?.user.id}
+          authenticatedUserRoles={session?.user.roles}
+          match={responseMatch.match as MATCH_TYPE}
+        />
+      </section>
+
+      {
+        (match.status === MATCH_STATUS.COMPLETED) &&
+        (match.localScore === match.visitorScore) && (
+          <>
+            <div className="w-full h-0.25 bg-gray-300 dark:bg-gray-700 my-8" />
+            <PenaltyShoots
+              userRoles={session?.user.roles}
+              match={{
+                id: match.id,
+                status: match.status,
+                localScore: match.localScore,
+                visitorScore: match.visitorScore,
+              }}
+              localTeam={{
+                id: match.localTeam.id,
+                name: match.localTeam.name,
+              }}
+              visitorTeam={{
+                id: match.visitorTeam.id,
+                name: match.visitorTeam.name,
+              }}
+              penaltyShootout={match.penaltyShootout}
+              availablePlayers={{
+                localPlayers: availableLocalPlayers,
+                visitorPlayers: availableVisitorPlayers,
+              }}
+            />
+          </>
+        )}
+    </>
   );
 };

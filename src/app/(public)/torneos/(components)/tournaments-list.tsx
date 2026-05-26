@@ -47,5 +47,3 @@ export const TournamentsList: FC<Props> = ({ tournaments }) => {
     </>
   );
 };
-
-export default TournamentsList;
