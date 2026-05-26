@@ -11,10 +11,25 @@ type Props = Readonly<{ playerId: string }>;
 
 export const EditPlayer: FC<Props> = ({ playerId }) => {
   const searchParams = useSearchParams();
+  const tournament = searchParams.get('tournament');
+  const category = searchParams.get('category');
   const route = useRouter();
+
+  if (!tournament && !category) {
+    return null;
+  }
 
   const handleNavigate = () => {
     const params = new URLSearchParams(searchParams);
+
+    // Clear unnecessary params
+    params.keys().forEach(key => params.delete(key));
+
+    // Set Tournament and Category params
+    params.set('tournament', tournament as string);
+    params.set('category', category as string);
+
+    // Redirect to edit player with params
     route.push(`${ROUTES.ADMIN_PLAYERS_EDIT(playerId)}?${params}`);
   };
 
@@ -29,7 +44,7 @@ export const EditPlayer: FC<Props> = ({ playerId }) => {
         </Button>
       </TooltipTrigger>
       <TooltipContent side="top">
-        <p>editar</p>
+        <span>editar</span>
       </TooltipContent>
     </Tooltip>
   );

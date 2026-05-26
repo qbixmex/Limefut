@@ -127,11 +127,6 @@ export const navMain: NavItem[] = [
         url: '/admin/jugadores',
         icon: ListIcon,
       },
-      {
-        label: 'Crear',
-        url: '/admin/jugadores/crear',
-        icon: PlusIcon,
-      },
     ],
   },
   {
