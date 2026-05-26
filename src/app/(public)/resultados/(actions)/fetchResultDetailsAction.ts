@@ -25,14 +25,12 @@ export type MatchType = {
     permalink: string;
     imageUrl: string | null;
     category: string;
-    format: string;
   };
   visitor: {
     name: string;
     permalink: string;
     imageUrl: string | null;
     category: string;
-    format: string;
   };
   penaltyShootout: {
     id: string;
@@ -103,7 +101,6 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
             permalink: true,
             imageUrl: true,
             category: true,
-            format: true,
           },
         },
         visitor: {
@@ -112,7 +109,6 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
             permalink: true,
             imageUrl: true,
             category: true,
-            format: true,
           },
         },
         penaltyShootout: {

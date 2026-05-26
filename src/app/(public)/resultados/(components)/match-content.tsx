@@ -11,11 +11,9 @@ export const MatchContent: FC<Props> = async ({ params }) => {
   const matchId = (await params).id;
 
   return (
-    <>
-      <Suspense>
-        <MatchDetails matchId={matchId} />
-      </Suspense>
-    </>
+    <Suspense>
+      <MatchDetails matchId={matchId} />
+    </Suspense>
   );
 };
 

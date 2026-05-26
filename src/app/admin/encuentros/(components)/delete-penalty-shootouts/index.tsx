@@ -46,7 +46,7 @@ export const DeletePenaltyShootouts: FC<Props> = ({ penaltyShootoutsId, winnerTe
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="left">
-          <p>Eliminar Tanda</p>
+          <span>eliminar tanda</span>
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
@@ -69,5 +69,3 @@ export const DeletePenaltyShootouts: FC<Props> = ({ penaltyShootoutsId, winnerTe
     </AlertDialog>
   );
 };
-
-export default DeletePenaltyShootouts;

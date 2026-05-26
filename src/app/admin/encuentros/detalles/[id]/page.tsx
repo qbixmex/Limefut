@@ -3,7 +3,6 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
-import type { Session } from '@/lib/auth-client';
 import {
   Table,
   TableBody,
@@ -19,11 +18,9 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { TbSoccerField } from 'react-icons/tb';
 import { MATCH_STATUS } from '@/shared/enums';
-import { SHOOTOUT_STATUS } from '@/shared/enums/shoutout-status.enum';
 import { getMatchStatus } from '@/app/admin/encuentros/(helpers)/place';
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
-import { PenaltiesForm } from '@/app/admin/encuentros/(components)/penalties-form';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditMatch } from '../../(components)/edit-match';
@@ -46,16 +43,6 @@ export const MatchPage: FC<Props> = async ({ params }) => {
   }
 
   const match = response.match as MATCH_TYPE;
-  const usedShooterIds = match.penaltyShootout?.kicks
-    ?.map(kick => kick.playerId) ?? [];
-
-  const availableLocalPlayers = match.localTeam.players
-    ?.filter(({ id }) => !usedShooterIds.includes(id))
-    .map(({ id, name }) => ({ id, name })) ?? [];
-
-  const availableVisitorPlayers = match.visitorTeam.players
-    ?.filter(({ id }) => !usedShooterIds.includes(id))
-    .map(({ id, name }) => ({ id, name })) ?? [];
 
   return (
     <div className="admin-page">
@@ -178,32 +165,11 @@ export const MatchPage: FC<Props> = async ({ params }) => {
             ) && (
                 <>
                   <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
+
                   <section className="flex flex-col lg:flex-row gap-5">
                     <div className="w-full lg:w-1/2">
-                      <PenaltyShootout shootout={match.penaltyShootout} admin />
+                      <PenaltyShootout shootout={match.penaltyShootout} />
                     </div>
-                    {(
-                      match.penaltyShootout === null ||
-                      match.penaltyShootout?.status === SHOOTOUT_STATUS.IN_PROGRESS
-                    ) && (
-                        <div className="w-full lg:w-1/2">
-                          <h3 className="text-medium font-bold text-emerald-500 mb-5">Crear Tanda de Penales</h3>
-                          <PenaltiesForm
-                            session={session as Session}
-                            currentMatchId={match.id}
-                            localTeam={{
-                              id: match.localTeam.id,
-                              name: match.localTeam.name,
-                              players: availableLocalPlayers,
-                            }}
-                            visitorTeam={{
-                              id: match.visitorTeam.id,
-                              name: match.visitorTeam.name,
-                              players: availableVisitorPlayers,
-                            }}
-                          />
-                        </div>
-                      )}
                   </section>
                 </>
               )}
