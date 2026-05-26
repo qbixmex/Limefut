@@ -40,7 +40,6 @@ type FetchTournamentResponse = Promise<{
 export const fetchTournamentAction = async (
   permalink: string,
   category: string,
-  format: string,
 ): FetchTournamentResponse => {
   'use cache';
 
@@ -52,7 +51,6 @@ export const fetchTournamentAction = async (
       where: {
         permalink,
         category,
-        format,
       },
       select: {
         id: true,

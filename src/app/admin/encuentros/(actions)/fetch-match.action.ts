@@ -41,31 +41,33 @@ export type MATCH_TYPE = {
     }[];
   }
   tournament: TournamentType;
-  penaltyShootout: {
+  penaltyShootout: PENALTY_SHOOTOUT_TYPE | null;
+};
+
+export type PENALTY_SHOOTOUT_TYPE = {
+  id: string;
+  localTeam: {
     id: string;
-    localTeam: {
-      id: string;
-      name: string;
-      permalink: string;
-    };
-    visitorTeam: {
-      id: string;
-      name: string;
-      permalink: string;
-    };
-    localGoals: number;
-    visitorGoals: number;
-    winnerTeamId: string | null;
-    status: string;
-    kicks: {
-      id: string;
-      teamId: string;
-      playerId: string | null;
-      shooterName: string | null;
-      order: number;
-      isGoal: boolean | null;
-    }[];
-  } | null;
+    name: string;
+    permalink: string;
+  };
+  visitorTeam: {
+    id: string;
+    name: string;
+    permalink: string;
+  };
+  localGoals: number;
+  visitorGoals: number;
+  winnerTeamId: string | null;
+  status: string;
+  kicks: {
+    id: string;
+    teamId: string;
+    playerId: string | null;
+    shooterName: string | null;
+    order: number;
+    isGoal: boolean | null;
+  }[];
 };
 
 export type TournamentType = {

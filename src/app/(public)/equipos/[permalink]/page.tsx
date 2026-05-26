@@ -7,8 +7,8 @@ type Props = Readonly<{
     permalink: string;
   }>;
   searchParams: Promise<{
-    torneo?: string;
-    categoria?: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 

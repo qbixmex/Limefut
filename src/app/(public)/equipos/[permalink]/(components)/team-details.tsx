@@ -14,27 +14,29 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import type { StandingsType } from '../../(actions)/fetchTeamStandingsAction';
 import { fetchTeamStandingsAction } from '../../(actions)/fetchTeamStandingsAction';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
     permalink: string;
   }>;
   searchParams: Promise<{
-    torneo?: string;
-    categoria?: string;
-    formato?: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
 export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
   const permalink = (await params).permalink;
   const {
-    torneo: tournamentPermalink,
-    categoria: category,
+    tournament: tournamentPermalink,
+    category,
   } = await searchParams;
 
   if (!tournamentPermalink || !category) {
-    redirect(`/equipos?error=${encodeURIComponent('¡ El torneo, categoría y formato son obligatorios !')}`);
+    redirect(`${ROUTES.PUBLIC_TEAMS}/?error=${encodeURIComponent(
+      '¡ El torneo y categoría son obligatorios !',
+    )}`);
   };
 
   const responseTeam = await fetchTeamAction({

@@ -18,6 +18,7 @@ import {
 import { MatchStatus } from './match-status';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
+import { ROUTES } from '@/shared/constants/routes';
 import './styles.css';
 
 const TIME_ZONE = 'America/Mexico_City';
@@ -29,7 +30,9 @@ type Props = Readonly<{
 export const MatchDetails: FC<Props> = async ({ matchId }) => {
   const { ok, message, match } = await fetchResultDetailsAction(matchId);
 
-  if (!ok) redirect(`/resultados?error=${encodeURIComponent(message)}`);
+  if (!ok) {
+    redirect(`${ROUTES.PUBLIC_RESULTS}?error=${encodeURIComponent(message)}`);
+  }
 
   const tournament = (match as MatchType).tournament;
   const localTeam = (match as MatchType).local;
@@ -43,10 +46,9 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             <div className="team team-local">
               <Link
                 href={
-                  `/equipos/${localTeam.permalink}` +
-                  `?torneo=${tournament.permalink}` +
-                  `&categoria=${localTeam.category}` +
-                  `&formato=${localTeam.format}`
+                  `${ROUTES.PUBLIC_TEAMS}/${localTeam.permalink}` +
+                  `?tournament=${tournament.permalink}` +
+                  `&category=${localTeam.category}`
                 }
                 target="_blank"
               >
@@ -61,10 +63,9 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <div className="team-name">
                 <Link
                   href={
-                    `/equipos/${localTeam.permalink}` +
-                    `?torneo=${tournament.permalink}` +
-                    `&categoria=${localTeam.category}` +
-                    `&formato=${localTeam.format}`
+                    `${ROUTES.PUBLIC_TEAMS}/${localTeam.permalink}` +
+                    `?tournament=${tournament.permalink}` +
+                    `&category=${localTeam.category}`
                   }
                   className="text-gray-100"
                   target="_blank"
@@ -77,10 +78,9 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             <div className="team team-visitor">
               <Link
                 href={
-                  `/equipos/${visitorTeam.permalink}` +
-                  `?torneo=${tournament.permalink}` +
-                  `&categoria=${visitorTeam.category}` +
-                  `&formato=${visitorTeam.format}`
+                  `${ROUTES.PUBLIC_TEAMS}/${visitorTeam.permalink}` +
+                  `?tournament=${tournament.permalink}` +
+                  `&category=${visitorTeam.category}`
                 }
                 target="_blank"
               >
@@ -95,10 +95,9 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <div className="team-name">
                 <Link
                   href={
-                    `/equipos/${visitorTeam.permalink}` +
-                    `?torneo=${tournament.permalink}` +
-                    `&categoria=${visitorTeam.category}` +
-                    `&formato=${visitorTeam.format}`
+                    `${ROUTES.PUBLIC_TEAMS}/${visitorTeam.permalink}` +
+                    `?tournament=${tournament.permalink}` +
+                    `&category=${visitorTeam.category}`
                   }
                   className="text-gray-100"
                   target="_blank"
@@ -126,9 +125,8 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 <TableCell>
                   <Link
                     href={
-                      `/torneos/${tournament.permalink}` +
-                      `?categoria=${tournament.category}` +
-                      `&formato=${tournament.format}`
+                      ROUTES.PUBLIC_TOURNAMENT_SHOW(tournament.permalink) +
+                      `?category=${tournament.category}`
                     }
                     target="_blank"
                   >
@@ -237,5 +235,3 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
     </>
   );
 };
-
-export default MatchDetails;
