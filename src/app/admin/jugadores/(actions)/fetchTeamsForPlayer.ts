@@ -12,16 +12,48 @@ export type ResponseFetchTeams = Promise<{
   }[] | null;
 }>;
 
-export const fetchTeamsForPlayer = async (tournamentId: string): ResponseFetchTeams => {
+export const fetchTeamsForPlayer = async ({
+  tournamentPermalink,
+  categoryPermalink,
+}: {
+  tournamentPermalink: string | undefined;
+  categoryPermalink: string | undefined;
+}): ResponseFetchTeams => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-teams-for-player');
 
+  if (!tournamentPermalink && !categoryPermalink) {
+    return {
+      ok: false,
+      message: '¡ El torneo y la categoría son obligatorios !',
+      teams: [],
+    };
+  }
+
   try {
+    const tournament = await prisma.tournament.findFirst({
+      where: {
+        permalink: tournamentPermalink,
+        category: categoryPermalink,
+      },
+      select: { id: true },
+    });
+
+    if (!tournament) {
+      return {
+        ok: false,
+        message: '¡ No hay equipos registrados con el torneo y categoría subministrados !',
+        teams: [],
+      };
+    }
+
     const teams = await prisma.team.findMany({
       orderBy: { name: 'asc' },
-      where: { tournamentId },
+      where: {
+        tournamentId: tournament.id,
+      },
       select: {
         id: true,
         name: true,

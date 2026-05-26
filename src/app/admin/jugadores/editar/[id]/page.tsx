@@ -11,13 +11,15 @@ import { auth } from '@/lib/auth';
 import type { Session } from '@/lib/auth-client';
 import { fetchPlayerAction, fetchTeamsForPlayer } from '../../(actions)';
 import { PlayerForm } from '../../(components)/playerForm';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
     id: string;
   }>;
   searchParams: Promise<{
-    torneo?: string;
+    tournament?: string;
+    category?: string;
   }>;
 }>;
 
@@ -33,21 +35,23 @@ const EditPlayerPage: FC<Props> = ({ params, searchParams }) => {
 };
 
 export const EditPlayerContent: FC<Props> = async ({ params, searchParams }) => {
-  const tournamentId = (await searchParams).torneo;
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const coachId = (await params).id;
-  const responsePlayer = await fetchPlayerAction(coachId, session?.user.roles ?? null);
+  const session = await auth.api.getSession({ headers: await headers() });
+  const playerId = (await params).id;
+  const { tournament, category } = await searchParams;
+
+  const responsePlayer = await fetchPlayerAction(playerId, session?.user.roles ?? null);
 
   if (!responsePlayer.ok) {
-    redirect(`/admin/jugadores?error=${encodeURIComponent(responsePlayer.message)}`);
+    redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(responsePlayer.message)}`);
   }
 
-  const responseTeams = await fetchTeamsForPlayer(tournamentId ?? '');
+  const responseTeams = await fetchTeamsForPlayer({
+    tournamentPermalink: tournament,
+    categoryPermalink: category,
+  });
 
   if (!responseTeams.ok) {
-    redirect(`/admin/jugadores?error=${encodeURIComponent(responseTeams.message)}`);
+    redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(responseTeams.message)}`);
   }
 
   const player = responsePlayer.player!;

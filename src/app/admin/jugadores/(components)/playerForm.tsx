@@ -68,8 +68,8 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
       phone: player?.phone ?? undefined,
       birthday: player?.birthday ?? new Date(2000, 0, 1),
       nationality: player?.nationality ?? undefined,
-      active: player?.active ?? false,
       teamId: player?.team?.id ?? '',
+      active: player?.active ?? false,
     },
   });
 
@@ -79,13 +79,19 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
   });
 
   const handleCancel = () => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams();
+    const tournament = searchParams.get('tournament');
+    const category = searchParams.get('category');
+
+    if (tournament) params.set('tournament', tournament);
+    if (category) params.set('category', category);
+    if (player && player.team) params.set('team', player.team.id);
+
     route.push(`${ROUTES.ADMIN_PLAYERS}?${params}`);
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
-    const params = new URLSearchParams(searchParams);
 
     formData.append('name', data.name as string);
     if (data.email) formData.append('email', data.email as string);
@@ -115,10 +121,16 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
       if (ok) {
         toast.success(message);
         form.reset();
+        const params = new URLSearchParams();
+        const tournament = searchParams.get('tournament');
+        const category = searchParams.get('category');
+
+        if (tournament) params.set('tournament', tournament);
+        if (category) params.set('category', category);
+
         route.push(`${ROUTES.ADMIN_PLAYERS}?${params}`);
         return;
       }
-      return;
     }
 
     // Update player
@@ -137,6 +149,15 @@ export const PlayerForm: FC<Props> = ({ session, player, teams }) => {
 
       if (ok) {
         toast.success(message);
+
+        const params = new URLSearchParams();
+        const tournament = searchParams.get('tournament');
+        const category = searchParams.get('category');
+
+        if (tournament) params.set('tournament', tournament);
+        if (category) params.set('category', category);
+        if (player && player.team) params.set('team', player.team.id);
+
         route.push(`${ROUTES.ADMIN_PLAYERS}?${params}`);
       }
     }
