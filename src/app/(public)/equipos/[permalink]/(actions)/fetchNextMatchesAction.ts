@@ -32,7 +32,7 @@ export const fetchNextMatchesAction = async ({
   count,
 }: {
   teamId: string;
-  count: number;
+  count?: number;
 }): FetchTeamResponse => {
   'use cache';
 
