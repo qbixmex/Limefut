@@ -41,8 +41,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
                   <Link
                     href={ROUTES.PUBLIC_TEAMS +
                       `/${team.permalink}` +
-                      `?torneo=${tournamentPermalink}` +
-                      `&categoria=${team.category}`
+                      `?tournament=${tournamentPermalink}` +
+                      `&category=${team.category}`
                     }
                   >
                     <ShieldBan size={250} strokeWidth={1} className="text-gray-500" />
@@ -52,8 +52,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
                 <Link
                   href={ROUTES.PUBLIC_TEAMS +
                     `/${team.permalink}` +
-                    `?torneo=${tournamentPermalink}` +
-                    `&categoria=${team.category}`
+                    `?tournament=${tournamentPermalink}` +
+                    `&category=${team.category}`
                   }
                   >
                   <Image
@@ -69,8 +69,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
             <Link
               href={ROUTES.PUBLIC_TEAMS +
                 `/${team.permalink}` +
-                `?torneo=${tournamentPermalink}` +
-                `&categoria=${team.category}`
+                `?tournament=${tournamentPermalink}` +
+                `&category=${team.category}`
               }
               className="italic font-bold"
             >
