@@ -6,18 +6,45 @@ import { ShieldBan } from 'lucide-react';
 import { formatInTimeZone } from 'date-fns-tz';
 import { es } from 'date-fns/locale';
 import { cn, getStatusTranslation } from '@/lib/utils';
-import type { NEXT_MATCH_TYPE } from '../../(actions)/fetchNextMatchesAction';
-import type { LAST_MATCH_TYPE, Team } from '../../(actions)/fetchLastMatchesAction';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import './styles.css';
 
 type Props = Readonly<{
-  match: NEXT_MATCH_TYPE | LAST_MATCH_TYPE;
+  localScore: number;
+  visitorScore: number;
+  penaltyShootout: PENALTY_SHOOTOUT | null;
+  matchDetails: {
+    matchDate: Date | null;
+    status: string;
+    place: string | null;
+    week: number | null;
+  };
+  localTeam: TEAM_TYPE;
+  visitorTeam: TEAM_TYPE;
   showScore?: boolean;
 }>;
 
-export const Match: FC<Props> = ({ match, showScore }) => {
-  const { localTeam, visitorTeam, matchDetails } = match;
+type TEAM_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+  imageUrl: string | null;
+};
+
+type PENALTY_SHOOTOUT = {
+  localGoals: number;
+  visitorGoals: number;
+};
+
+export const Match: FC<Props> = ({
+  localScore,
+  visitorScore,
+  penaltyShootout,
+  matchDetails,
+  localTeam,
+  visitorTeam,
+  showScore,
+}) => {
   const [showData, setShowData] = useState(false);
 
   return (
@@ -54,21 +81,21 @@ export const Match: FC<Props> = ({ match, showScore }) => {
           {
             showScore ? (
               <div className="match-score">
-                {(match as LAST_MATCH_TYPE).penaltyShoots && (
+                {penaltyShootout && (
                   <span className="penalty-result">
-                    ({(match as LAST_MATCH_TYPE).penaltyShoots!.localGoals})
+                    ({penaltyShootout.localGoals})
                   </span>
                 )}
                 <span className="local-score">
-                  {(localTeam as Team).score}
+                  {localScore}
                 </span>
                 <span className="score-separator">-</span>
                 <span className="visitor-score">
-                  {(visitorTeam as Team).score}
+                  {visitorScore}
                 </span>
-                {(match as LAST_MATCH_TYPE).penaltyShoots && (
+                {penaltyShootout && (
                   <span className="penalty-result">
-                    ({(match as LAST_MATCH_TYPE).penaltyShoots!.visitorGoals})
+                    {penaltyShootout.visitorGoals}
                   </span>
                 )}
               </div>
@@ -107,25 +134,36 @@ export const Match: FC<Props> = ({ match, showScore }) => {
       })}>
         <p className="match-date">
           <b>Fecha:</b>&nbsp;
-          <i>
-            {formatInTimeZone(
-              matchDetails.matchDate as Date,
-              'America/Mexico_City',
-              'd \'de\' LLLL \'del\' yyyy',
-              { locale: es },
-            )}
-          </i>
+          {matchDetails.matchDate ? (
+            <i>
+              {
+                formatInTimeZone(
+                  matchDetails.matchDate as Date,
+                  'America/Mexico_City',
+                  'd \'de\' LLLL \'del\' yyyy',
+                  { locale: es },
+                )}
+            </i>
+          ) : (
+            <span className="text-gray-500">sin definir</span>
+          )}
         </p>
         <p>
           <b>Hora:</b>&nbsp;
-          <i>
-            {formatInTimeZone(
-              matchDetails.matchDate as Date,
-              'America/Mexico_City',
-              'h:mm a',
-              { locale: es },
-            )}
-          </i>
+          {
+            matchDetails.matchDate ? (
+              <i>
+                {formatInTimeZone(
+                  matchDetails.matchDate,
+                  'America/Mexico_City',
+                  'h:mm a',
+                  { locale: es },
+                )}
+              </i>
+            ) : (
+              <span className="text-gray-500">sin definir</span>
+            )
+          }
         </p>
         <p>
           <b>Estado:</b>&nbsp;
@@ -135,7 +173,7 @@ export const Match: FC<Props> = ({ match, showScore }) => {
           <b>Sede:</b> <i>{matchDetails.place}</i>
         </p>
         <p className="match-week">
-          <b>Jornada:</b> <i>{matchDetails.week}</i>
+          <b>Jornada:</b> <i>{matchDetails.week ?? 'no asignada'}</i>
         </p>
       </div>
     </section>

@@ -1,20 +1,18 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { fetchTeamAction } from '../../(actions)/fetchTeamAction';
+import { type TEAM_TYPE, fetchTeamAction } from '../../(actions)/fetchTeamAction';
 import { redirect } from 'next/navigation';
 import { ShieldBan, Table2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/components/ui/table';
 import { Badge } from '~/src/components/ui/badge';
 import { Heading } from '../../../components';
-import { Match } from './next-match';
-import { fetchNextMatchesAction } from '../(actions)/fetchNextMatchesAction';
-import { fetchLastMatchesAction } from '../(actions)/fetchLastMatchesAction';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
-import type { StandingsType } from '../../(actions)/fetchTeamStandingsAction';
-import { fetchTeamStandingsAction } from '../../(actions)/fetchTeamStandingsAction';
+import { buttonVariants } from '@/components/ui/button';
 import { ROUTES } from '@/shared/constants/routes';
+import { TeamStandings } from './teams-standings';
+import { LastResults } from './last-results';
+import { NextMatches } from './next-matches';
 
 type Props = Readonly<{
   params: Promise<{
@@ -46,35 +44,12 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
   });
 
   if (!responseTeam.team && !responseTeam.ok) {
-    redirect(`/equipos?error=${encodeURIComponent(responseTeam.message)}`);
+    redirect(
+      `${ROUTES.PUBLIC_TEAMS}?error=${encodeURIComponent(responseTeam.message)}`,
+    );
   }
 
-  const team = responseTeam.team;
-
-  const responseStandings = await fetchTeamStandingsAction({
-    teamId: team!.id,
-    tournamentId: team?.tournament!.id as string,
-  });
-
-  const responseNextMatches = await fetchNextMatchesAction({
-    teamId: team!.id,
-    count: 3,
-  });
-
-  if (!responseNextMatches.ok) {
-    redirect(`/equipos?error=${encodeURIComponent(responseNextMatches.message)}`);
-  }
-
-  const responseLastMatches = await fetchLastMatchesAction({
-    teamId: team!.id,
-    count: 3,
-  });
-
-  if (!responseLastMatches.ok) {
-    redirect(`/equipos?error=${encodeURIComponent(responseLastMatches.message)}`);
-  }
-
-  const standings = responseStandings.standings as StandingsType;
+  const team = responseTeam.team as TEAM_TYPE;
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-0 lg:p-5">
@@ -173,9 +148,9 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                   {team?.tournament ? (
                     <Link
                       href={
-                        `/torneos/${team?.tournament.permalink}` +
-                        `?categoria=${team.tournament.category}` +
-                        `&formato=${team.tournament.format}`
+                        ROUTES.PUBLIC_TOURNAMENTS +
+                        `/${team?.tournament.permalink}` +
+                        `?category=${team.tournament.category}`
                       }
                       className="text-wrap"
                     >
@@ -202,7 +177,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="w-[120px] font-semibold">
                   Sede{team!.fields.length > 1 ? 's' : ''}
                 </TableHead>
-                <TableCell>
+                <TableCell className="flex flex-col gap-2">
                   {(team!.fields.length > 0) ? team!.fields.map((field) => (
                     <Badge key={field.id} variant="outline-info">{field.name}</Badge>
                   )) : (
@@ -227,19 +202,20 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
         <div className="flex justify-between">
           <h2 className="text-2xl font-semibold mb-3">Estadísticas</h2>
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger>
               <Link
                 href={
-                  '/estadisticas' +
-                  `?torneo=${team?.tournament?.permalink}` +
-                  `&categoria=${team?.tournament?.category}` +
-                  `&formato=${team?.tournament?.format}`
+                  ROUTES.PUBLIC_STANDINGS +
+                  `?tournament=${team?.tournament?.permalink}` +
+                  `&category=${team?.tournament?.category}`
                 }
                 target='_blank'
+                className={buttonVariants({
+                  variant: 'outline-info',
+                  size: 'icon',
+                })}
               >
-                <Button variant="outline-info" size="icon">
-                  <Table2 />
-                </Button>
+                <Table2 />
               </Link>
             </TooltipTrigger>
             <TooltipContent side="left">
@@ -248,120 +224,16 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
           </Tooltip>
         </div>
 
-        {(!responseStandings.ok && responseStandings.standings!.matchesPlayed === 0) ? (
-          <div className="w-fit px-5 py-2.5 border border-sky-500 rounded mb-5">
-            <p className="text-sky-500 font-bold italic">
-              Aún no hay estadísticas disponibles
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col md:flex-row md:gap-5">
-            <div className="w-full md:w-1/2">
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableHead>Juegos Jugados</TableHead>
-                    <TableCell>{standings.matchesPlayed}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead>Juegos Ganados</TableHead>
-                    <TableCell>{standings.wins}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead>Juegos Empatados</TableHead>
-                    <TableCell>{standings.draws}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead>Juegos Perdidos</TableHead>
-                    <TableCell>{standings.losses}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead>Goles a Favor</TableHead>
-                    <TableCell>{standings.goalsFor}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-            <div className="w-full md:w-1/2">
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableHead>Goles en Contra</TableHead>
-                    <TableCell>{standings.goalsAgainst}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead>Diferencia de Goles</TableHead>
-                    <TableCell>{standings.goalsDifference}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead>Puntos</TableHead>
-                    <TableCell>{standings.points}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead>Puntos Adicionales</TableHead>
-                    <TableCell>{standings.additionalPoints}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead>Puntos Totales</TableHead>
-                    <TableCell>{standings.totalPoints}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-              <div className="w-full flex justify-end items-center mt-5 gap-5">
-                <p className="text-lg font-semibold">Posición en la tabla</p>
-                <Badge variant="outline-info" className="text-lg px-4">
-                  {standings.position}
-                </Badge>
-              </div>
-            </div>
-          </div>
-        )}
+        <TeamStandings
+          tournamentId={responseTeam.team?.tournament?.id as string}
+          teamId={team.id}
+        />
       </section>
 
-      <section className="flex flex-col md:flex-row gap-5">
-        <div className="w-full md:w-1/2">
-          <h2 className="text-2xl font-semibold mb-5">Próximos encuentros:</h2>
-
-          {(responseNextMatches.matches.length === 0) && (
-            <div className="w-fit px-5 py-2.5 border border-sky-500 rounded mb-5">
-              <p className="text-sky-500 font-bold italic">Aún no hay encuentros programados</p>
-            </div>
-          )}
-
-          {(responseNextMatches.matches.length > 0) && (
-            <div className="space-y-5">
-              {responseNextMatches.matches.map((match) => (
-                <Match key={match.id} match={match} />
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="w-full md:w-1/2">
-          <h2 className="text-2xl font-semibold mb-5">Últimos resultados:</h2>
-
-          {(responseLastMatches.matches.length === 0) && (
-            <div className="w-fit px-5 py-2.5 border border-sky-500 rounded mb-5">
-              <p className="text-sky-500 font-bold italic">
-                No hay encuentros completados
-              </p>
-            </div>
-          )}
-
-          {(responseLastMatches.matches.length > 0) && (
-            <div className="space-y-5">
-              {responseLastMatches.matches.map((match) => (
-                <Match
-                  key={match.id}
-                  match={match}
-                  showScore
-                />
-              ))}
-            </div>
-          )}
-        </div>
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <LastResults matches={team.matches} />
+        <NextMatches matches={team.matches} />
       </section>
     </div>
   );
 };
-
-export default TeamDetails;

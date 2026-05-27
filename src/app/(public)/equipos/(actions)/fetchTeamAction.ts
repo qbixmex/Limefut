@@ -7,7 +7,13 @@ type CoachType = { id: string; name: string; };
 type PlayerType = { id: string; name: string; };
 type FieldType = { id: string; name: string; };
 
-export type TeamType = {
+type FetchTeamResponse = Promise<{
+  ok: boolean;
+  message: string;
+  team: TEAM_TYPE | null;
+}>;
+
+export type TEAM_TYPE = {
   id: string;
   name: string;
   permalink: string;
@@ -19,24 +25,47 @@ export type TeamType = {
   city: string | null;
   state: string | null;
   address: string | null;
+} & {
+  tournament: {
+    id: string;
+    name: string;
+    permalink: string;
+    category: string;
+    format: string;
+  } | null;
+  coach: CoachType | null;
+  players: PlayerType[] | null;
+  fields: FieldType[],
+  matches: MATCH_TYPE[],
+}
+
+export type MATCH_TYPE = {
+  id: string;
+  tournamentId: string;
+  localTeam: MATCH_TEAM;
+  visitorTeam: MATCH_TEAM;
+  localScore: number | null;
+  visitorScore: number | null;
+  place: string | null;
+  matchDate: Date | null;
+  week: number | null;
+  status: string;
+  categoryId: string | null;
+  fieldId: string | null;
+  penaltyShootout: PENALTY_SHOOTOUT | null;
 };
 
-type FetchTeamResponse = Promise<{
-  ok: boolean;
-  message: string;
-  team: TeamType & {
-    tournament: {
-      id: string;
-      name: string;
-      permalink: string;
-      category: string;
-      format: string;
-    } | null;
-    coach: CoachType | null;
-    players: PlayerType[] | null;
-    fields: FieldType[],
-  } | null;
-}>;
+type MATCH_TEAM = {
+  id: string;
+  name: string;
+  permalink: string;
+  imageUrl: string | null;
+};
+
+type PENALTY_SHOOTOUT = {
+  localGoals: number;
+  visitorGoals: number;
+};
 
 export const fetchTeamAction = async ({
   permalink,
@@ -105,6 +134,96 @@ export const fetchTeamAction = async ({
             },
           },
         },
+        homeMatches: {
+          where: {
+            OR: [
+              { status: 'completed' },
+              { status: 'scheduled' },
+            ],
+          },
+          select: {
+            id: true,
+            local: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+                imageUrl: true,
+              },
+            },
+            visitor: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+                imageUrl: true,
+              },
+            },
+            localScore: true,
+            visitorScore: true,
+            place: true,
+            matchDate: true,
+            week: true,
+            status: true,
+            tournamentId: true,
+            categoryId: true,
+            fieldId: true,
+            penaltyShootout: {
+              select: {
+                localGoals: true,
+                visitorGoals: true,
+              },
+            },
+          },
+          orderBy: {
+            week: 'asc',
+          },
+        },
+        awayMatches: {
+          where: {
+            OR: [
+              { status: 'completed' },
+              { status: 'scheduled' },
+            ],
+          },
+          select: {
+            id: true,
+            local: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+                imageUrl: true,
+              },
+            },
+            visitor: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+                imageUrl: true,
+              },
+            },
+            localScore: true,
+            visitorScore: true,
+            place: true,
+            matchDate: true,
+            week: true,
+            status: true,
+            tournamentId: true,
+            categoryId: true,
+            fieldId: true,
+            penaltyShootout: {
+              select: {
+                localGoals: true,
+                visitorGoals: true,
+              },
+            },
+          },
+          orderBy: {
+            week: 'asc',
+          },
+        },
       },
     });
 
@@ -124,12 +243,35 @@ export const fetchTeamAction = async ({
       };
     }
 
+    const teamMatches: MATCH_TYPE[] = [
+      ...team.homeMatches,
+      ...team.awayMatches,
+    ].map(match => ({
+      ...match,
+      localTeam: match.local,
+      visitorTeam: match.visitor,
+    })).sort((a, b) => (a.week ?? 0) - (b.week ?? 0));
+
     return {
       ok: true,
       message: '¡ Equipo obtenido correctamente 👍 !',
       team: {
-        ...team,
+        id: team.id,
+        name: team.name,
+        permalink: team.permalink,
+        imageUrl: team.imageUrl,
+        category: team.category,
+        format: team.format,
+        gender: team.gender,
+        country: team.country,
+        city: team.city,
+        state: team.state,
+        address: team.address,
+        tournament: team.tournament,
+        coach: team.coach,
+        players: team.players,
         fields: team.fields.map((teamField) => teamField.field),
+        matches: teamMatches,
       },
     };
   } catch (error) {

@@ -3,7 +3,7 @@
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type StandingsType = {
+export type STANDINGS_TYPE = {
     matchesPlayed: number;
     wins: number;
     draws: number;
@@ -20,7 +20,7 @@ export type StandingsType = {
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
-  standings: StandingsType | null;
+  standings: STANDINGS_TYPE | null;
 }>;
 
 export const fetchTeamStandingsAction = async ({
