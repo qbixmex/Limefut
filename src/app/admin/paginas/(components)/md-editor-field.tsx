@@ -10,7 +10,7 @@ type Props = Readonly<{
   markdownString: string | undefined;
   setContent: (value: string) => void;
   updateContentImage?: (pageImage: CustomPageImage) => void;
-  resourceId: string;
+  resourceId?: string;
 }>;
 
 export const MdEditorField: FC<Props> = ({

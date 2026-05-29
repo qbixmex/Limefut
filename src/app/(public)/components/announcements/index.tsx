@@ -4,6 +4,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 import { Newspaper } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
 import { fetchPublicAnnouncementsAction } from '../../(actions)/home/fetchPublicAnnouncements';
+import Image from 'next/image';
 import './announcements.css';
 
 export const Announcements = async () => {
@@ -25,21 +26,34 @@ export const Announcements = async () => {
 
         {(announcements.length > 0) && (
           <div className="announcements">
-            {announcements.map(({ id, permalink, title, description, publishedDate }) => (
+            {announcements.map((announcement) => (
               <article
-                key={id}
+                key={announcement.id}
                 className="announcement"
-                aria-label={`Anuncio: ${title}`}
+                aria-label={`Anuncio: ${announcement.title}`}
               >
-                <h3 className="subtitle">{title}</h3>
+                <h3 className="subtitle">{announcement.title}</h3>
+
+                {announcement?.imageUrl && (
+                  <figure>
+                    <Image
+                      width={250}
+                      height={250}
+                      src={announcement.imageUrl}
+                      alt={`${announcement.title} imagen`}
+                      className="w-full max-w-[250px] my-5 rounded-md"
+                    />
+                  </figure>
+                )}
+
                 <p className="date" role="contentinfo">
-                  {formatInTimeZone(publishedDate, 'America/Mexico_City', "d 'de' MMMM 'del' yyyy", { locale: es })}
+                  {formatInTimeZone(announcement.publishedDate, 'America/Mexico_City', "d 'de' MMMM 'del' yyyy", { locale: es })}
                 </p>
-                <p className="description" role="region">{description}</p>
+                <p className="description" role="region">{announcement.description}</p>
                 <Link
-                  href={ROUTES.PUBLIC_ANNOUNCEMENTS_SHOW(permalink)}
+                  href={ROUTES.PUBLIC_ANNOUNCEMENTS_SHOW(announcement.permalink)}
                   className="more"
-                  aria-label={`Ver más sobre el anuncio: ${title}`}
+                  aria-label={`Ver más sobre el anuncio: ${announcement.title}`}
                 >
                   Ver más
                 </Link>

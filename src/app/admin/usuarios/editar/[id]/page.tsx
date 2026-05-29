@@ -12,6 +12,7 @@ import { fetchUserAction } from '../../(actions)/fetchUserAction';
 import { redirect } from 'next/navigation';
 import type { Session } from '@/lib/auth-client';
 import type { User } from '@/shared/interfaces';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
@@ -25,7 +26,7 @@ export const EditUser: FC<Props> = async ({ params }) => {
   const response = await fetchUserAction(userId, session?.user.roles ?? null);
 
   if (!response.ok) {
-    redirect(`/admin/users?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(response.message)}`);
   }
 
   return (

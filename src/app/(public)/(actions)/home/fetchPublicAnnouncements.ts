@@ -3,18 +3,19 @@
 import { cacheLife, cacheTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 
-export type AnnouncementType = {
+export type ANNOUNCEMENT_TYPE = {
   id: string;
   title: string;
   permalink: string;
   publishedDate: Date;
+  imageUrl: string | null;
   description: string;
 };
 
 export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  announcements: AnnouncementType[];
+  announcements: ANNOUNCEMENT_TYPE[];
 }>;
 
 export const fetchPublicAnnouncementsAction = async (): ResponseAction => {
@@ -31,6 +32,7 @@ export const fetchPublicAnnouncementsAction = async (): ResponseAction => {
         id: true,
         title: true,
         permalink: true,
+        imageUrl: true,
         publishedDate: true,
         description: true,
       },

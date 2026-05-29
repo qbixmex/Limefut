@@ -85,34 +85,34 @@ describe('Tests on <RoleTypeSelector />', () => {
 
   // ? These tests are skipped until field (cancha) feature is available
 
-  test.skip('Should call handleRoleSelection on click field role button', async () => {
-    render(<RoleTypeSelector />);
+  // test.skip('Should call handleRoleSelection on click field role button', async () => {
+  //   render(<RoleTypeSelector />);
 
-    const button = screen.getByRole('button', {
-      name: /cancha/i,
-    });
-    expect(button).toBeInTheDocument();
-    const user = userEvent.setup();
+  //   const button = screen.getByRole('button', {
+  //     name: /cancha/i,
+  //   });
+  //   expect(button).toBeInTheDocument();
+  //   const user = userEvent.setup();
 
-    await user.click(button);
+  //   await user.click(button);
 
-    expect(handleRoleSelectionMock).toHaveBeenCalledWith('field');
-  });
+  //   expect(handleRoleSelectionMock).toHaveBeenCalledWith('field');
+  // });
 
-  test.skip("Should remove 'roles=field' from url", async () => {
-    render(<RoleTypeSelector />);
+  // test.skip("Should remove 'roles=field' from url", async () => {
+  //   render(<RoleTypeSelector />);
 
-    const button = screen.getByRole('button', {
-      name: /cancha/i,
-    });
-    expect(button).toBeInTheDocument();
-    const user = userEvent.setup();
-    await user.click(button);
+  //   const button = screen.getByRole('button', {
+  //     name: /cancha/i,
+  //   });
+  //   expect(button).toBeInTheDocument();
+  //   const user = userEvent.setup();
+  //   await user.click(button);
 
-    await user.click(button);
+  //   await user.click(button);
 
-    expect(handleRoleSelectionMock).toHaveBeenCalledTimes(2);
-    expect(handleRoleSelectionMock).toHaveBeenNthCalledWith(1, 'field');
-    expect(handleRoleSelectionMock).toHaveBeenNthCalledWith(2, 'field');
-  });
+  //   expect(handleRoleSelectionMock).toHaveBeenCalledTimes(2);
+  //   expect(handleRoleSelectionMock).toHaveBeenNthCalledWith(1, 'field');
+  //   expect(handleRoleSelectionMock).toHaveBeenNthCalledWith(2, 'field');
+  // });
 });

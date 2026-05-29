@@ -14,6 +14,7 @@ import type { Coach } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from '../../(actions)/fetchCoachesForTeam';
 import { headers } from 'next/headers';
 import { fetchFieldsForTeam } from '../../(actions)/fetchFieldsForTeam';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
@@ -38,19 +39,19 @@ const EditTeamPageContent: FC<Props> = async ({ params }) => {
   const responseTeam = await fetchTeamAction(teamId, session?.user.roles ?? null);
 
   if (!responseTeam.team) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(responseTeam.message)}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseTeam.message)}`);
   }
 
   const responseTournaments = await fetchTournamentsForTeam();
 
   if (!responseTournaments.ok) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(responseTournaments.message)}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseTournaments.message)}`);
   }
 
   const responseCoaches = await fetchCoachesForTeam();
 
   if (!responseCoaches.ok) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(responseCoaches.message)}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseCoaches.message)}`);
   }
 
   const responseFields = await fetchFieldsForTeam();

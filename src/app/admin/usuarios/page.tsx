@@ -12,6 +12,7 @@ import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
 import { UsersTable } from './(components)/users-table';
 import { UsersTableSkeleton } from './(components)/users-table-skeleton';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -44,7 +45,7 @@ const UsersContent: FC<Props> = async ({ searchParams }) => {
                 <Search placeholder="Buscar usuario ..." />
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link href="/admin/usuarios/crear">
+                    <Link href={ROUTES.ADMIN_USERS_CREATE}>
                       <Button variant="outline-primary" size="icon">
                         <UserPlusIcon />
                       </Button>

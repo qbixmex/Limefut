@@ -1,2 +1,2 @@
-export { createAnnouncementSchema } from './createAnnouncementSchema';
-export { editAnnouncementSchema } from './editAnnouncementSchema';
+export { CreateAnnouncementSchema } from './create-announcement.schema';
+export { EditAnnouncementSchema } from './edit-announcement.schema';

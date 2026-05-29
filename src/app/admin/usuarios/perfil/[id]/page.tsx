@@ -13,11 +13,12 @@ import {
 import { Pencil, UserIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { type User } from '@/shared/interfaces';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
@@ -42,7 +43,7 @@ const UserProfileContent: FC<Props> = async ({ params }) => {
   );
 
   if (!response.ok) {
-    redirect(`/admin/users?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(response.message)}`);
   }
 
   const user = response.user as User;
@@ -121,10 +122,14 @@ const UserProfileContent: FC<Props> = async ({ params }) => {
             <div className="absolute top-5 right-5">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={`/admin/usuarios/editar/${user.id}`}>
-                    <Button variant="outline-warning" size="icon">
-                      <Pencil />
-                    </Button>
+                  <Link
+                    href={ROUTES.ADMIN_USERS_EDIT(user.id)}
+                    className={buttonVariants({
+                      variant: 'outline-warning',
+                      size: 'icon',
+                    })}
+                  >
+                    <Pencil />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="left">

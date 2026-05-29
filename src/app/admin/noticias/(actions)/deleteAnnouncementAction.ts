@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { deleteImage } from '@/shared/actions';
 import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
@@ -11,7 +12,10 @@ export type ResponseDeleteAction = Promise<{
 export const deleteAnnouncementAction = async (announcementId: string): ResponseDeleteAction => {
   const announcement = await prisma.announcement.findFirst({
     where: { id: announcementId },
-    select: { title: true },
+    select: {
+      title: true,
+      imagePublicID: true,
+    },
   });
 
   if (!announcement) {
@@ -24,6 +28,14 @@ export const deleteAnnouncementAction = async (announcementId: string): Response
   await prisma.announcement.delete({
     where: { id: announcementId },
   });
+
+  // Delete image from cloudinary.
+  if (announcement.imagePublicID) {
+    const response = await deleteImage(announcement.imagePublicID);
+    if (!response.ok) {
+      throw new Error('Error al eliminar la imagen de cloudinary');
+    }
+  }
 
   // Update Cache
   updateTag('admin-announcements');
