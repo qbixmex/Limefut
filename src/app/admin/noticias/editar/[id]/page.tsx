@@ -1,13 +1,13 @@
 import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchAnnouncementAction } from '../../(actions)';
-import { AnnouncementForm } from '../../(components)/announcement-form';
 import { ROUTES } from '@/shared/constants/routes';
+import { EditAnnouncementForm } from './edit-announcement.form';
+import type { Announcement } from '@/shared/interfaces';
 
 type Props = Readonly<{
   params: Promise<{
@@ -22,13 +22,13 @@ const EditAnnouncementPage: FC<Props> = ({ params }) => {
 };
 
 const EditAnnouncementContent: FC<Props> = async ({ params }) => {
-  const sponsorId = (await params).id;
+  const announcementId = (await params).id;
   const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, announcement } = await fetchAnnouncementAction(session?.user.roles ?? [], sponsorId);
+  const { ok, announcement } = await fetchAnnouncementAction(session?.user.roles ?? [], announcementId);
 
   if (!ok) {
-    const message = `¡ La noticia con el id: "${sponsorId}", no existe ❌ !`;
+    const message = `¡ La noticia con el id: "${announcementId}", no existe ❌ !`;
     redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(message)}`);
   }
 
@@ -40,10 +40,11 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
             <CardTitle className="admin-page-card-title">Editar Noticia</CardTitle>
           </CardHeader>
           <CardContent>
-            <AnnouncementForm
+            <EditAnnouncementForm
               key={randomUUID()}
-              session={session as Session}
-              announcement={announcement!}
+              announcement={announcement as Announcement}
+              authenticatedUserId={session?.user.id}
+              authenticatedUserRoles={session?.user.roles}
             />
           </CardContent>
         </Card>

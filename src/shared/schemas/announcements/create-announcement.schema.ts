@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const createAnnouncementSchema = z.object({
+export const CreateAnnouncementSchema = z.object({
   title: z
     .string('¡ El nombre debe ser una cadena de texto !')
     .min(3, { message: '¡ El título debe ser mayor a 3 caracteres !' })

@@ -2,14 +2,14 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
-import { editAnnouncementSchema } from '@/shared/schemas';
 import type { Announcement } from '@/shared/interfaces';
+import { EditAnnouncementSchema } from '@/shared/schemas';
 
 type Options = {
   formData: FormData;
   announcementId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
 };
 
 type EditResponseAction = Promise<{
@@ -21,18 +21,18 @@ type EditResponseAction = Promise<{
 export const updateAnnouncementAction = async ({
   formData,
   announcementId,
-  userRoles,
   authenticatedUserId,
+  authenticatedUserRoles,
 }: Options): EditResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
-      message: '¡ Usuario no autenticado !',
+      message: '¡ Tienes que estar autentificado para realizar esta acción !',
       announcement: null,
     };
   }
 
-  if (!userRoles.includes('admin')) {
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -43,14 +43,16 @@ export const updateAnnouncementAction = async ({
   const rawData = {
     title: formData.get('title') as string ?? '',
     permalink: formData.get('permalink') ?? '',
-    publishedDate: formData.get('publishedDate') ? new Date(formData.get('publishedDate') as string) : null,
+    publishedDate: formData.get('publishedDate')
+      ? new Date(formData.get('publishedDate') as string)
+      : null,
     description: formData.get('description') ?? '',
     content: formData.get('content') ?? '',
     image: formData.get('image') as File,
     active: formData.get('active') === 'true',
   };
 
-  const announcementVerified = editAnnouncementSchema.safeParse(rawData);
+  const announcementVerified = EditAnnouncementSchema.safeParse(rawData);
 
   if (!announcementVerified.success) {
     return {

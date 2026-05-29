@@ -12,7 +12,7 @@ type UploadArticleImageResponse = Promise<{
 
 export const uploadPageContentImageAction = async (
   file: File,
-  pageId: string,
+  pageId?: string,
 ): UploadArticleImageResponse => {
   const imageUploaded = await uploadImage(file, 'pages');
 

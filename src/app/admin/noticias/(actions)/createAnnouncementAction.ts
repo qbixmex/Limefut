@@ -3,7 +3,7 @@
 import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 import type { Announcement } from '@/shared/interfaces';
-import { createAnnouncementSchema } from '@/shared/schemas';
+import { CreateAnnouncementSchema } from '@/shared/schemas';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -11,11 +11,24 @@ type ResponseCreateAction = Promise<{
   announcement: Announcement | null;
 }>;
 
-export const createAnnouncementAction = async (
+export const createAnnouncementAction = async ({
+  formData,
+  authenticatedUserId,
+  authenticatedUserRoles,
+} : {
   formData: FormData,
-  userRole: string[] | null,
-): ResponseCreateAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+}): ResponseCreateAction => {
+  if ((!authenticatedUserId)) {
+    return {
+      ok: false,
+      message: '¡ Tienes que estar autentificado para realizar esta acción !',
+      announcement: null,
+    };
+  }
+
+  if ((!authenticatedUserRoles?.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -33,7 +46,7 @@ export const createAnnouncementAction = async (
     active: formData.get('active') === 'true',
   };
 
-  const announcementVerified = createAnnouncementSchema.safeParse(rawData);
+  const announcementVerified = CreateAnnouncementSchema.safeParse(rawData);
 
   if (!announcementVerified.success) {
     return {

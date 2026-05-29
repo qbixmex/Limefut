@@ -2,9 +2,8 @@ import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { headers } from 'next/headers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AnnouncementForm } from '../(components)/announcement-form';
-import type { Session } from '@/lib/auth-client';
 import { auth } from '@/lib/auth';
+import { CreateAnnouncementForm } from './create-announcement.form';
 
 const CreateAnnouncementPage: FC = async () => {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -17,9 +16,10 @@ const CreateAnnouncementPage: FC = async () => {
             <CardTitle className="admin-page-card-title">Crear Noticia</CardTitle>
           </CardHeader>
           <CardContent>
-            <AnnouncementForm
+            <CreateAnnouncementForm
               key={randomUUID()}
-              session={session as Session}
+              authenticatedUserId={session?.user.id}
+              authenticatedUserRoles={session?.user.roles}
             />
           </CardContent>
         </Card>
