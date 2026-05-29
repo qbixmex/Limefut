@@ -2,13 +2,25 @@
 
 import { cacheLife, cacheTag } from 'next/cache';
 import prisma from '@/lib/prisma';
-import type { Announcement } from '@/shared/interfaces';
 
 type FetchAnnouncementResponse = Promise<{
   ok: boolean;
   message: string;
-  announcement: Announcement | null;
+  announcement: ANNOUNCEMENT_TYPE | null;
 }>;
+
+export type ANNOUNCEMENT_TYPE = {
+  id: string;
+  title: string;
+  permalink: string;
+  description: string;
+  content: string;
+  publishedDate: Date;
+  imageUrl: string | null;
+  active: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
 
 export const fetchAnnouncementAction = async (
   userRoles: string[] | null,
@@ -30,6 +42,16 @@ export const fetchAnnouncementAction = async (
   try {
     const announcement = await prisma.announcement.findFirst({
       where: { id: announcementId },
+      select: {
+        id: true,
+        title: true,
+        permalink: true,
+        description: true,
+        content: true,
+        publishedDate: true,
+        imageUrl: true,
+        active: true,
+      },
     });
 
     if (!announcement) {

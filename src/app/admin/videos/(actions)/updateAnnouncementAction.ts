@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
-import { editAnnouncementSchema } from '@/shared/schemas';
+import { EditAnnouncementSchema } from '@/shared/schemas';
 import type { Announcement } from '@/shared/interfaces';
 
 type Options = {
@@ -50,7 +50,7 @@ export const updateAnnouncementAction = async ({
     active: formData.get('active') === 'true',
   };
 
-  const announcementVerified = editAnnouncementSchema.safeParse(rawData);
+  const announcementVerified = EditAnnouncementSchema.safeParse(rawData);
 
   if (!announcementVerified.success) {
     return {

@@ -1,0 +1,16 @@
+@reference 'tailwindcss';
+
+.imagePlaceHolder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 512px;
+  height: 512px;
+  @apply rounded-lg bg-gray-300/50;
+}
+
+:global(.dark) {
+  .imagePlaceHolder {
+    @apply bg-gray-800;
+  }
+}

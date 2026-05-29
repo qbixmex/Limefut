@@ -39,6 +39,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, Eye, EyeClosed, LoaderCircle } from 'lucide-react';
 import { updateUserAction } from '../(actions)/updateUserAction';
+import { ROUTES } from '@/shared/constants/routes';
 
 const roles = [
   { value: 'user', label: 'Usuario' },
@@ -101,7 +102,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
       if (response.ok) {
         toast.success(response.message);
         form.reset();
-        route.replace('/admin/usuarios');
+        route.replace(ROUTES.ADMIN_USERS);
         return;
       }
       return;
@@ -122,7 +123,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
 
       if (response.ok) {
         toast.success(response.message);
-        route.replace('/admin/usuarios');
+        route.replace(ROUTES.ADMIN_USERS);
       }
     }
   };

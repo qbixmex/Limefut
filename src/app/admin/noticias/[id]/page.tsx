@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/u
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
-import { Pencil } from 'lucide-react';
+import { Newspaper, Pencil } from 'lucide-react';
 import { fetchAnnouncementAction } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +17,8 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import rehypeYoutube from '@/lib/rehype-youtube';
+import Image from 'next/image';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   params: Promise<{
@@ -38,7 +40,7 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
 
   const { ok, message, announcement } = await fetchAnnouncementAction(session?.user?.roles ?? [], sponsorId);
 
-  if (!ok) {
+  if (!ok && !announcement) {
     redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(message)}`);
   }
 
@@ -52,8 +54,29 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col lg:flex-row gap:5 lg:gap-10 mb-5">
-              <div className="flex-1">
+            <section className="flex flex-col lg:flex-row gap-5">
+              <div className="w-full lg:w-1/2">
+                <div className="mb-10">
+                  {announcement?.imageUrl ? (
+                    <Image
+                      src={announcement?.imageUrl}
+                      width={512}
+                      height={512}
+                      alt={`${announcement?.title} imagen`}
+                      className="w-full rounded max-w-[512px] h-auto"
+                    />
+                  ) : (
+                    <div className={styles.imagePlaceHolder}>
+                      <Newspaper
+                        size="90%"
+                        strokeWidth={1}
+                        className="stroke-gray-400 dark:stroke-gray-500"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="w-full lg:w-1/2">
                 <Table>
                   <TableBody>
                     <TableRow>
@@ -86,12 +109,6 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                         }
                       </TableCell>
                     </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-              <div className='flex-1'>
-                <Table>
-                  <TableBody>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Estado</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
@@ -123,7 +140,7 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                   </TableBody>
                 </Table>
               </div>
-            </div>
+            </section>
 
             <section>
               <h2 className="text-xl text-blue-600 font-semibold">Contenido</h2>

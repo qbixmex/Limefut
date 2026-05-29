@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { fetchAnnouncementAction } from '../../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditAnnouncementForm } from './edit-announcement.form';
-import type { Announcement } from '@/shared/interfaces';
+import type { ANNOUNCEMENT_TYPE } from '../../(actions)/fetchAnnouncementAction';
 
 type Props = Readonly<{
   params: Promise<{
@@ -42,7 +42,7 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
           <CardContent>
             <EditAnnouncementForm
               key={randomUUID()}
-              announcement={announcement as Announcement}
+              announcement={announcement as ANNOUNCEMENT_TYPE}
               authenticatedUserId={session?.user.id}
               authenticatedUserRoles={session?.user.roles}
             />

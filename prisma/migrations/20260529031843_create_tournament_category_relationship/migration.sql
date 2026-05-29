@@ -1,3 +1,7 @@
+-- AlterTable
+ALTER TABLE "announcements" ADD COLUMN     "image_public_id" TEXT,
+ADD COLUMN     "image_url" TEXT;
+
 -- CreateTable
 CREATE TABLE "tournament_category" (
     "tournamentId" TEXT NOT NULL,

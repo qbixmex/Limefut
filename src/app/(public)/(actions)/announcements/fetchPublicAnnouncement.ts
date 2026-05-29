@@ -3,18 +3,19 @@
 import { cacheLife, cacheTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 
-type AnnouncementType = {
-  id: string;
-  title: string;
-  content: string;
-  publishedDate: Date;
-}
-
 type FetchAnnouncementResponse = Promise<{
   ok: boolean;
   message: string;
-  announcement: AnnouncementType | null;
+  announcement: ANNOUNCEMENT_TYPE | null;
 }>;
+
+export type ANNOUNCEMENT_TYPE = {
+  id: string;
+  title: string;
+  content: string;
+  imageUrl: string | null;
+  publishedDate: Date;
+}
 
 export const fetchPublicAnnouncementAction = async (permalink: string): FetchAnnouncementResponse => {
   'use cache';
@@ -34,6 +35,7 @@ export const fetchPublicAnnouncementAction = async (permalink: string): FetchAnn
         id: true,
         title: true,
         content: true,
+        imageUrl: true,
         publishedDate: true,
       },
     });

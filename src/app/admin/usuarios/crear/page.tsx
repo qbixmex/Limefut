@@ -10,6 +10,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
+import { ROUTES } from '@/shared/constants/routes';
 
 const CreateUserPage = () => {
   return (
@@ -24,7 +25,7 @@ const CreateUserContent = async () => {
 
   if (session && !(session?.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear usuarios !';
-    redirect(`/admin/users?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(message)}`);
   }
 
   return (

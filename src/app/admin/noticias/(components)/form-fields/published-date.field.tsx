@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
-import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover';
+import { Calendar } from '@/components/ui/calendar';
 import { es } from 'date-fns/locale';
 import { ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useFormContext } from 'react-hook-form';
 import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export const PublishedDateField = () => {
   const { formState, getValues, setValue } = useFormContext();

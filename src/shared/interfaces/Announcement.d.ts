@@ -3,6 +3,8 @@ export interface Announcement {
   title: string;
   permalink: string;
   publishedDate: Date;
+  imageUrl: string | null;
+  imagePublicID: string | null;
   description: string;
   content: string;
   active: boolean;

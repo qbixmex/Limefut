@@ -4,10 +4,10 @@ import { useRouter } from 'next/navigation';
 import { CreateAnnouncementSchema } from '@/shared/schemas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type z from 'zod';
 import { createAnnouncementAction } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { toast } from 'sonner';
+import type z from 'zod';
 
 export const useCreateAnnouncement = ({
   authenticatedUserId,
@@ -41,6 +41,9 @@ export const useCreateAnnouncement = ({
     formData.append('publishedDate', (data.publishedDate as Date).toString());
     formData.append('description', data.description as string ?? '');
     formData.append('content', data.content ?? '');
+    if (data.image && typeof data.image === 'object') {
+      formData.append('image', data.image as File);
+    }
     formData.append('active', String(data.active ?? false));
 
     const response = await createAnnouncementAction({

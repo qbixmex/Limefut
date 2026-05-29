@@ -6,12 +6,12 @@ import { FormFields } from '../../(components)/form-fields';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import { useEditAnnouncement } from './use-edit-announcement';
-import type { Announcement } from '@/shared/interfaces';
+import type { ANNOUNCEMENT_TYPE } from '../../(actions)/fetchAnnouncementAction';
 
 type Props = Readonly<{
   authenticatedUserId: string | undefined;
   authenticatedUserRoles: string[] | null | undefined;
-  announcement: Announcement;
+  announcement: ANNOUNCEMENT_TYPE;
 }>;
 
 export const EditAnnouncementForm: FC<Props> = ({
@@ -35,7 +35,7 @@ export const EditAnnouncementForm: FC<Props> = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-5"
       >
-        <FormFields />
+        <FormFields imageUrl={announcement.imageUrl} />
 
         {/* Buttons */}
         <div className="flex justify-end gap-3">
