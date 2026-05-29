@@ -2,8 +2,9 @@
 
 import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
-import type { Announcement } from '@/shared/interfaces';
-import { createAnnouncementSchema } from '@/shared/schemas';
+import type { Announcement, CloudinaryResponse } from '@/shared/interfaces';
+import { CreateAnnouncementSchema } from '@/shared/schemas';
+import { uploadImage } from '@/shared/actions';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -11,11 +12,24 @@ type ResponseCreateAction = Promise<{
   announcement: Announcement | null;
 }>;
 
-export const createAnnouncementAction = async (
+export const createAnnouncementAction = async ({
+  formData,
+  authenticatedUserId,
+  authenticatedUserRoles,
+}: {
   formData: FormData,
-  userRole: string[] | null,
-): ResponseCreateAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+}): ResponseCreateAction => {
+  if ((!authenticatedUserId)) {
+    return {
+      ok: false,
+      message: '¡ Tienes que estar autentificado para realizar esta acción !',
+      announcement: null,
+    };
+  }
+
+  if ((!authenticatedUserRoles?.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -29,11 +43,11 @@ export const createAnnouncementAction = async (
     publishedDate: formData.get('publishedDate') ? new Date(formData.get('publishedDate') as string) : null,
     description: formData.get('description') ?? '',
     content: formData.get('content') ?? '',
-    image: formData.get('image') as File,
+    image: formData.get('image') as File | null ?? undefined,
     active: formData.get('active') === 'true',
   };
 
-  const announcementVerified = createAnnouncementSchema.safeParse(rawData);
+  const announcementVerified = CreateAnnouncementSchema.safeParse(rawData);
 
   if (!announcementVerified.success) {
     return {
@@ -43,10 +57,26 @@ export const createAnnouncementAction = async (
     };
   }
 
+  const { image, ...announcementToSave } = announcementVerified.data;
+
+  // Upload Image to third-party storage (cloudinary).
+  let cloudinaryResponse: CloudinaryResponse | null = null;
+
+  if (image) {
+    cloudinaryResponse = await uploadImage(image as File, 'announcements');
+    if (!cloudinaryResponse) {
+      throw new Error('Error subiendo imagen a cloudinary');
+    }
+  }
+
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdAnnouncement = await transaction.announcement.create({
-        data: announcementVerified.data,
+        data: {
+          ...announcementToSave,
+          imageUrl: cloudinaryResponse?.secureUrl ?? undefined,
+          imagePublicID: cloudinaryResponse?.publicId ?? undefined,
+        },
       });
 
       return {

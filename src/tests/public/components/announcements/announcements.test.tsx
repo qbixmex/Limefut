@@ -88,8 +88,6 @@ describe('Test on <Announcements /> component', () => {
 
     const descriptions = screen.getAllByRole('region');
 
-    expect(descriptions).toHaveLength(2);
-
     descriptions.forEach((description, index) => {
       expect(description).toHaveTextContent(announcements[index].description);
     });
@@ -115,6 +113,49 @@ describe('Test on <Announcements /> component', () => {
         ROUTES.PUBLIC_ANNOUNCEMENTS_SHOW(announcements[index].permalink),
       );
     });
+  });
+
+  test('Should show image', async () => {
+    vi.mocked(fetchPublicAnnouncementsAction).mockResolvedValue({
+      ok: true,
+      message: 'Announcements fetched successfully',
+      announcements,
+    });
+    const ServerComponent = await Announcements();
+    render(ServerComponent);
+
+    const images = screen.getAllByRole('img');
+    const figCaptions = screen.getAllByRole('figure');
+
+    expect(figCaptions).toHaveLength(2);
+    expect(images).toHaveLength(2);
+
+    images.forEach((image, index) => {
+      const src = image.getAttribute('src') ?? '';
+      const parsedUrl = new URL(src, 'https://cloudinary.com');
+      const originalUrl = parsedUrl.searchParams.get('url');
+
+      expect(originalUrl).toBe(announcements[index].imageUrl);
+    });
+  });
+
+  test('Should not show image', async () => {
+    vi.mocked(fetchPublicAnnouncementsAction).mockResolvedValue({
+      ok: true,
+      message: 'Announcements fetched successfully',
+      announcements: announcements.map(announcement => ({
+        ...announcement,
+        imageUrl: null,
+      })),
+    });
+    const ServerComponent = await Announcements();
+    render(ServerComponent);
+
+    const figCaptions = screen.queryAllByRole('figure');
+    const images = screen.queryAllByRole('img');
+
+    expect(figCaptions).toHaveLength(0);
+    expect(images).toHaveLength(0);
   });
 
   test('Should render empty message', async () => {

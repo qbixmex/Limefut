@@ -19,7 +19,7 @@ export const CreateAnnouncement: FC = () => {
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">
-        <p>crear</p>
+        <span>crear</span>
       </TooltipContent>
     </Tooltip>
   );
