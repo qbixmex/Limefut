@@ -63,5 +63,3 @@ export const Search: FC<Props> = ({ placeholder }) => {
     </div>
   );
 };
-
-export default Search;

@@ -20,13 +20,13 @@ export const createMatchSchema = z.object({
     .min(0, { message: '¡ El marcador visitante debe ser un número positivo !' }),
   place: z.union([
     z.literal(''),
-    z.string()
+    z.string('¡ La sede debe ser una cadena de texto !')
       .min(3, { message: '¡ La sede debe ser mayor a 3 caracteres !' })
       .max(50, { message: '¡ La sede debe ser menor a 50 caracteres !' }),
   ]).optional(),
   referee: z.union([
     z.literal(''),
-    z.string()
+    z.string('¡ El arbitro debe ser una cadena de texto !')
       .min(3, { message: '¡ El arbitro debe ser mayor a 3 caracteres !' })
       .max(50, { message: '¡ El arbitro debe ser menor a 50 caracteres !' }),
   ]).optional(),
@@ -45,5 +45,6 @@ export const createMatchSchema = z.object({
     .min(1, '¡ Debe seleccionar un torneo de la lista !'),
   category: z
     .string('¡ La categoría debe ser una cadena de texto !')
+    .trim()
     .min(1, '¡ Debe seleccionar una categoría de la lista !'),
 });
