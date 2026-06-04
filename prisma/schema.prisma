@@ -33,6 +33,7 @@ enum Stage {
 enum Status {
   scheduled
   inProgress
+  inReview
   completed
   postPosed
   canceled
@@ -339,6 +340,7 @@ model Match {
   fieldId         String?          @map("field_id")
   field           Field?           @relation(fields: [fieldId], references: [id], onDelete: Restrict)
   penaltyShootout PenaltyShootout?
+  remarks         String?          @db.VarChar(255)
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")

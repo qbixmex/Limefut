@@ -39,6 +39,10 @@ export type MatchResponse = {
   week: number | null;
   place: string | null;
   matchDate: Date | null;
+  penaltyShoots: {
+    localGoals: number;
+    visitorGoals: number;
+  } | null;
 };
 
 export type ResponseFetchAction = Promise<{
@@ -86,6 +90,11 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   try {
     const data = await prisma.match.findMany({
       where: {
+        OR: [
+          { status: 'scheduled' },
+          { status: 'completed' },
+          { status: 'canceled' },
+        ],
         matchDate: {
           gte: startOfDate,
           lte: endOfDate,
@@ -122,6 +131,12 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
             imageUrl: true,
           },
         },
+        penaltyShootout: {
+          select: {
+            localGoals: true,
+            visitorGoals: true,
+          },
+        },
         localScore: true,
         visitorScore: true,
         status: true,
@@ -154,6 +169,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         week: match.week,
         place: match.place,
         matchDate: match.matchDate,
+        penaltyShoots: match.penaltyShootout,
       })) : [],
       pagination: {
         nextMatches,

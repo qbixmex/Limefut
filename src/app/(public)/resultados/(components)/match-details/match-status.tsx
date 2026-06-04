@@ -8,6 +8,7 @@ type Props = Readonly<{
 
 const STATUS_LABELS: Record<MATCH_STATUS_TYPE, string> = {
   [MATCH_STATUS.SCHEDULED]: 'programado',
+  [MATCH_STATUS.IN_REVIEW]: 'en revisión',
   [MATCH_STATUS.COMPLETED]: 'finalizado',
   [MATCH_STATUS.IN_PROGRESS]: 'en progreso',
   [MATCH_STATUS.POST_POSED]: 'pospuesto',

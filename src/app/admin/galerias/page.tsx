@@ -5,7 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import Search from '@/shared/components/search';
+import { Search } from '@/shared/components/search';
 import { GalleriesTableSkeleton } from './(components)/galleries-table-skeleton';
 import { GalleriesTable } from './(components)/galleries-table';
 import { ROUTES } from '@/shared/constants/routes';
