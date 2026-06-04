@@ -57,6 +57,12 @@ enum Alignment {
   right
 }
 
+enum PlayoffRound {
+  quarterfinal
+  semifinal
+  final
+}
+
 model User {
   id            String   @id @default(uuid())
   name          String?
@@ -154,6 +160,7 @@ model Tournament {
   teams       Team[]
   standings   Standings[]
   categories  TournamentCategory[]
+  playoffs    Playoff[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -171,6 +178,7 @@ model Category {
   // Relations
   tournaments TournamentCategory[]
   matches     Match[]
+  playoffs    Playoff[]
 
   // Timestamps
   createdAt  DateTime       @default(now()) @map("created_at")
@@ -207,20 +215,23 @@ model Team {
   active        Boolean  @default(false)
 
   // Relations
-  coachId          String?           @map("coach_id")
-  coach            Coach?            @relation(fields: [coachId], references: [id])
-  players          Player[]
-  tournamentId     String?           @map("tournament_id")
-  tournament       Tournament?       @relation(fields: [tournamentId], references: [id])
-  standings        Standings[]
-  homeMatches      Match[]           @relation("HomeMatches")
-  awayMatches      Match[]           @relation("AwayMatches")
-  localShootouts   PenaltyShootout[] @relation("ShootoutLocalTeam")
-  visitorShootouts PenaltyShootout[] @relation("ShootoutVisitorTeam")
-  wonShootouts     PenaltyShootout[] @relation("ShootoutWinnerTeam")
-  penaltyKicks     PenaltyKick[]
-  fields           TeamField[]
-  categories       TeamCategory[]
+  coachId             String?           @map("coach_id")
+  coach               Coach?            @relation(fields: [coachId], references: [id])
+  players             Player[]
+  tournamentId        String?           @map("tournament_id")
+  tournament          Tournament?       @relation(fields: [tournamentId], references: [id])
+  standings           Standings[]
+  homeMatches         Match[]           @relation("HomeMatches")
+  awayMatches         Match[]           @relation("AwayMatches")
+  playoffLocalMatches  PlayoffMatch[]   @relation("PlayoffLocal")
+  playoffVisitorMatches PlayoffMatch[]  @relation("PlayoffVisitor")
+  playoffWinnerMatches  PlayoffMatch[]  @relation("PlayoffWinner")
+  localShootouts      PenaltyShootout[] @relation("ShootoutLocalTeam")
+  visitorShootouts    PenaltyShootout[] @relation("ShootoutVisitorTeam")
+  wonShootouts        PenaltyShootout[] @relation("ShootoutWinnerTeam")
+  penaltyKicks        PenaltyKick[]
+  fields              TeamField[]
+  categories          TeamCategory[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -261,8 +272,9 @@ model Field {
   permalink String  @unique()
 
   // Relationship
-  teams   TeamField[]
-  matches Match[]
+  teams          TeamField[]
+  matches        Match[]
+  playoffMatches PlayoffMatch[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -307,7 +319,7 @@ model Player {
   // Relations
   credential   Credential?
   teamId       String?       @map("team_id")
-  team         Team?         @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  team         Team?         @relation(fields: [teamId], references: [id], onDelete: Restrict)
   penaltyKicks PenaltyKick[]
 
   // Timestamps
@@ -350,12 +362,68 @@ model Match {
   @@map("matches")
 }
 
+model Playoff {
+  id            String       @id @default(uuid())
+  teamIds       String[]     @map("team_ids")
+  startingRound PlayoffRound @default(quarterfinal) @map("starting_round")
+
+  // Relations
+  tournamentId String     @map("tournament_id")
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Restrict)
+  categoryId   String?    @map("category_id")
+  category     Category?  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  matches      PlayoffMatch[]
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("playoffs")
+}
+
+model PlayoffMatch {
+  id            String       @id @default(uuid())
+  round         PlayoffRound
+  group         String       @default("general")
+  position      Int
+  localScore    Int?         @default(0) @map("local_score")
+  visitorScore  Int?         @default(0) @map("visitor_score")
+  status        Status       @default(scheduled)
+  matchDate     DateTime?    @map("match_date")
+  referee       String?
+  remarks       String?      @db.VarChar(255)
+
+  // Relations
+  playoffId       String       @map("playoff_id")
+  playoff         Playoff      @relation(fields: [playoffId], references: [id], onDelete: Cascade)
+  localId         String       @map("local_id")
+  local           Team         @relation("PlayoffLocal", fields: [localId], references: [id])
+  visitorId       String       @map("visitor_id")
+  visitor         Team         @relation("PlayoffVisitor", fields: [visitorId], references: [id])
+  winnerId        String?      @map("winner_id")
+  winner          Team?        @relation("PlayoffWinner", fields: [winnerId], references: [id])
+  fieldId         String?      @map("field_id")
+  field           Field?       @relation(fields: [fieldId], references: [id], onDelete: Restrict)
+  penaltyShootout PenaltyShootout?
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([playoffId, round, group, position])
+  @@map("playoff_matches")
+}
+
 model PenaltyShootout {
   id String @id @default(uuid())
 
-  // Match (1–1)
-  matchId String @unique @map("match_id")
-  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  // Match (1–1) - regular season
+  matchId       String?      @unique @map("match_id")
+  match         Match?       @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  // Playoff match (1–1)
+  playoffMatchId String?     @unique @map("playoff_match_id")
+  playoffMatch   PlayoffMatch? @relation(fields: [playoffMatchId], references: [id], onDelete: Cascade)
 
   // Local team
   localTeamId String @map("local_team_id")
