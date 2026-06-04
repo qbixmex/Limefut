@@ -1,5 +1,6 @@
 import { Suspense, type FC } from 'react';
 import { Heading } from '../../components';
+import { SecretKeyGate } from './secret-key-gate';
 import { MatchForm } from './match-form';
 import { CategorySelect } from './category-select';
 import { FieldSelect } from './field-select';
@@ -28,16 +29,18 @@ const SaveMatchContent: FC<Props> = async ({ searchParams }) => {
   const { category } = await searchParams;
 
   return (
-    <MatchForm
-      categorySlot={<CategorySelect />}
-      fieldSlot={<FieldSelect />}
-      teamsSlot={
-        <TeamsSlot
-          key={`${category ?? 'category'}`}
-          categoryPermalink={category}
-        />
-      }
-    />
+    <SecretKeyGate>
+      <MatchForm
+        categorySlot={<CategorySelect />}
+        fieldSlot={<FieldSelect />}
+        teamsSlot={
+          <TeamsSlot
+            key={`${category ?? 'category'}`}
+            categoryPermalink={category}
+          />
+        }
+      />
+    </SecretKeyGate>
   );
 };
 
