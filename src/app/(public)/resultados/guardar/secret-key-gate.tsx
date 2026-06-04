@@ -44,7 +44,7 @@ export const SecretKeyGate: FC<Props> = ({ children }) => {
       try {
         localStorage.setItem(
           STORAGE_KEY,
-          JSON.stringify({ expiresAt: Date.now() + EXPIRATION_MS })
+          JSON.stringify({ expiresAt: Date.now() + EXPIRATION_MS }),
         );
       } catch { /* ignore */ }
       setIsVerified(true);

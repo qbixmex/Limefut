@@ -28,6 +28,10 @@ export const nextMatches = [
     week: 1,
     place: 'Soccer Field',
     matchDate: new Date('2022-06-02T18:00:00.000'),
+    penaltyShoots: {
+      localGoals: 3,
+      visitorGoals: 1,
+    },
   },
 ];
 

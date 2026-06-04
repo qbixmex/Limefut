@@ -1,7 +1,7 @@
 import { Suspense, type FC } from 'react';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Search from '@/shared/components/search';
+import { Search } from '@/shared/components/search';
 import { PagesTableSkeleton } from './(components)/pages-table-skeleton';
 import { PagesTable } from './(components)/pages-table';
 import { CreatePage } from './(components)/create-page';
