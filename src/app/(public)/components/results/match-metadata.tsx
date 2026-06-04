@@ -49,5 +49,3 @@ export const MatchMetadata: FC<Props> = ({
     </div>
   );
 };
-
-export default MatchMetadata;

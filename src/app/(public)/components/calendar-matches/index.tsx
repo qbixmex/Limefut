@@ -60,14 +60,32 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                     imageUrl={match.localTeam.imageUrl}
                     name={match.localTeam.name}
                   />
-                  <div className="flex justify-center items-center gap-2 font-bold text-3xl lg:text-4xl">
-                    <span className="text-blue-700 dark:text-blue-500">
+                  <div className="flex justify-center items-center gap-2">
+                    {match.penaltyShoots && (
+                      <span className="font-semibold text-gray-500">
+                        ({match.penaltyShoots.localGoals})
+                      </span>
+                    )}
+                    <span
+                      className="font-bold text-2xl text-blue-700 dark:text-blue-500"
+                      role="heading"
+                      aria-level={3}
+                      aria-label={`Goles del equipo local ${match.localTeam.name}`}
+                    >
                       {match.localScore}
                     </span>
                     <span>-</span>
-                    <span className="text-blue-700 dark:text-blue-500">
+                    <span
+                      className="font-bold text-2xl text-blue-700 dark:text-blue-500"
+                      aria-label={`Goles del equipo visitante ${match.visitorTeam.name}`}
+                    >
                       {match.visitorScore}
                     </span>
+                    {match.penaltyShoots && (
+                      <span className="font-semibold text-gray-500">
+                        ({match.penaltyShoots.visitorGoals})
+                      </span>
+                    )}
                   </div>
                   <Team
                     imageUrl={match.visitorTeam.imageUrl}

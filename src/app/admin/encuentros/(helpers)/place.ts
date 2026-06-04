@@ -23,6 +23,8 @@ export const getMatchStatus = (status: MATCH_STATUS_TYPE): {
   variant: BadgeVariant;
 } => {
   switch (status) {
+    case MATCH_STATUS.IN_REVIEW:
+      return { label: 'En revisión', variant: 'outline-warning' };
     case MATCH_STATUS.SCHEDULED:
       return { label: 'Programado', variant: 'outline-primary' };
     case MATCH_STATUS.IN_PROGRESS:

@@ -39,6 +39,7 @@ export const MatchStatus: FC<Props> = ({ matchId, status }) => {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
+          <SelectItem value={MATCH_STATUS.IN_REVIEW}>En revisión</SelectItem>
           <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
           <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
           <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>

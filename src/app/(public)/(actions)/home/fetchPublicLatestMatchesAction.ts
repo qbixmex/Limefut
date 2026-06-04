@@ -76,7 +76,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
     endDate.setDate(now.getDate());
     endDate.setHours(23, 59, 59, 999);
 
-    const data = await prisma.match.findMany({
+    const matches = await prisma.match.findMany({
       where: {
         OR: [
           { status: 'completed' },
@@ -145,7 +145,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
     return {
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
-      matches: data.map((match) => ({
+      matches: matches.map((match) => ({
         id: match.id,
         tournament: match.tournament,
         localTeam: match.local,

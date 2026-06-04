@@ -286,6 +286,8 @@ export const getGenderTranslation = (gender: string) => {
  */
 export const getStatusTranslation = (status: MATCH_STATUS_TYPE): string => {
   switch (status) {
+    case MATCH_STATUS.IN_REVIEW:
+      return 'en revisión';
     case MATCH_STATUS.SCHEDULED:
       return 'programado';
     case MATCH_STATUS.IN_PROGRESS:

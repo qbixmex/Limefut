@@ -1,6 +1,7 @@
 export const MATCH_STATUS = {
   SCHEDULED: 'scheduled',
   IN_PROGRESS: 'inProgress',
+  IN_REVIEW: 'inReview',
   COMPLETED: 'completed',
   POST_POSED: 'postPosed',
   CANCELED: 'canceled',

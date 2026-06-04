@@ -1,0 +1,21 @@
+@reference 'tailwindcss';
+
+.fieldsGroup {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: calc(var(--spacing) * 5);
+  margin-bottom: calc(var(--spacing) * 5);
+}
+
+.goalsGroup {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: calc(var(--spacing) * 5);
+}
+
+.buttonsGroup {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: calc(var(--spacing) * 2);
+}
