@@ -2,47 +2,59 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { type PLAYOFF_ROUND_TYPE, type MATCH_STATUS_TYPE, MATCH_STATUS } from '@/shared/enums';
 import type { Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
-  tournamentId: string;
+  tournamentPermalink: string;
+  categoryPermalink: string;
   searchTerm: string;
   page?: number;
   take?: number;
   sortMatchDate?: 'asc' | 'desc';
-  sortWeek?: `${number}` | 'asc' | 'desc' | 'unassigned' | undefined;
   status?: MATCH_STATUS_TYPE;
 }>;
-
-export type Match = {
-  id: string;
-  localTeam: Team;
-  visitorTeam: Team;
-  localScore: number;
-  visitorScore: number;
-  status: MATCH_STATUS_TYPE;
-  week: number | null;
-  place: string | null;
-  matchDate: Date | null;
-  penaltyShootout: PenaltyShootout | null;
-};
-
-type Team = {
-  id: string;
-  name: string;
-  permalink: string;
-};
 
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
-  matches: Match[];
+  matches: PLAYOFF_MATCH[];
   pagination: Pagination;
 }>;
 
-export type PenaltyShootout = {
+export type PLAYOFFS_TYPE = {
+  id: string;
+  teamIds: string[];
+  startingRound: string;
+};
+
+export type PLAYOFF_MATCH = {
+  id: string;
+  status: MATCH_STATUS_TYPE;
+  visitor: TEAM_TYPE;
+  local: TEAM_TYPE;
+  round: PLAYOFF_ROUND_TYPE;
+  group: string;
+  position: number;
+  localScore: number | null;
+  visitorScore: number | null;
+  matchDate: Date | null;
+  field: FIELD_TYPE | null;
+  penaltyShootout: PENALTY_SHOOTOUT_TYPE | null;
+};
+
+export type FIELD_TYPE = {
+  id: string;
+  name: string;
+};
+
+export type TEAM_TYPE = {
+  id: string;
+  name: string;
+};
+
+export type PENALTY_SHOOTOUT_TYPE = {
   id: string;
   status: string;
   localGoals: number;
@@ -50,16 +62,16 @@ export type PenaltyShootout = {
   winnerTeamId: string | null;
 };
 
-export const fetchMatchesAction = async (options?: Options): ResponseFetchAction => {
+export const fetchPlayoffMatchesAction = async (options?: Options): ResponseFetchAction => {
   'use cache';
 
   cacheLife('days');
-  cacheTag('admin-matches');
+  cacheTag('admin-playoff-matches');
 
-  const tournamentId = options?.tournamentId;
+  const tournamentPermalink = options?.tournamentPermalink;
+  const categoryPermalink = options?.categoryPermalink;
   let { page = 1, take = 12 } = options ?? {};
   const sortMatchDate = options?.sortMatchDate;
-  const sortWeek = options?.sortWeek;
   const status = options?.status;
 
   // In case is an invalid number like (lorem)
@@ -68,32 +80,27 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
 
   const STATUS_MAP: Record<string, MATCH_STATUS_TYPE> = {
     programado: MATCH_STATUS.SCHEDULED,
+    'en revision': MATCH_STATUS.IN_REVIEW,
     'en progreso': MATCH_STATUS.IN_PROGRESS,
     finalizado: MATCH_STATUS.COMPLETED,
     pospuesto: MATCH_STATUS.POST_POSED,
     cancelado: MATCH_STATUS.CANCELED,
   };
 
-  const whereCondition: Prisma.MatchWhereInput = {
-    tournamentId,
-    week: sortWeek === 'unassigned'
-      ? null
-      : sortWeek !== undefined && !isNaN(Number(sortWeek))
-        ? Number(sortWeek)
-        : undefined,
+  const wherePlayoffMatchCondition: Prisma.PlayoffMatchWhereInput = {
     status,
   };
 
+  // SEARCH QUERY PARAMS
   if (options?.searchTerm) {
     const searchTerm = options.searchTerm;
-    const weekNumber = parseInt(searchTerm, 10);
 
     if (searchTerm.includes('vs')) {
       const segments = searchTerm.split('vs');
       const localTeam = segments[0].trim().toLowerCase();
       const visitorTeam = segments[1].trim().toLowerCase();
 
-      whereCondition.AND = [
+      wherePlayoffMatchCondition.AND = [
         {
           local: {
             is: { name: { contains: localTeam, mode: 'insensitive' } },
@@ -106,7 +113,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         },
       ];
     } else {
-      whereCondition.OR = [
+      wherePlayoffMatchCondition.OR = [
         { // Search by local team name
           local: { name: { contains: searchTerm, mode: 'insensitive' } },
         },
@@ -115,82 +122,105 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         },
       ];
 
-      // If the search term is a valid number, add the condition to search by week.
-      if (!isNaN(weekNumber)) {
-        whereCondition.OR.push({
-          week: { equals: weekNumber },
-        });
-      }
       // Search by status in Spanish
       const searchTermLower = searchTerm.toLowerCase();
       const status = STATUS_MAP[searchTermLower];
 
       if (status) {
-        whereCondition.OR.push({ status: { equals: status } });
+        wherePlayoffMatchCondition.OR.push({ status: { equals: status } });
       }
     }
   }
 
   try {
-    const matches = await prisma.match.findMany({
-      where: whereCondition,
-      orderBy: [
-        { week: sortWeek === 'unassigned' ? undefined : (isNaN(parseInt(sortWeek as string)) ? sortWeek as 'asc' | 'desc' : undefined) },
-        { matchDate: sortMatchDate },
-      ],
-      take,
-      skip: (page - 1) * take,
+    const tournament = await prisma.tournament.findFirst({
+      where: {
+        permalink: tournamentPermalink,
+        category: categoryPermalink,
+      },
+      select: { id: true },
+    });
+
+    if (!tournament) {
+      return {
+        ok: false,
+        message: `¡ El torneo (${tournamentPermalink}) con categoría (${categoryPermalink}) no existe !`,
+        matches: [],
+        pagination: {
+          currentPage: 0,
+          totalPages: 0,
+        },
+      };
+    }
+
+    const playoffs = await prisma.playoff.findFirst({
+      where: { tournamentId: tournament.id },
+      select: { id: true },
+    });
+
+    if (!playoffs) {
+      return {
+        ok: false,
+        message: `¡ No se pudo encontrar la liguilla con el id del torneo: (${tournament.id}) !`,
+        matches: [],
+        pagination: {
+          currentPage: 0,
+          totalPages: 0,
+        },
+      };
+    }
+
+    const matches = await prisma.playoffMatch.findMany({
+      where: {
+        playoffId: playoffs.id,
+        ...wherePlayoffMatchCondition,
+      },
+      orderBy: { matchDate: sortMatchDate },
       select: {
         id: true,
-        localScore: true,
-        visitorScore: true,
-        status: true,
-        week: true,
-        place: true,
-        matchDate: true,
+        round: true,
+        group: true,
+        position: true,
         local: {
           select: {
             id: true,
             name: true,
-            permalink: true,
           },
         },
+        localScore: true,
         visitor: {
           select: {
             id: true,
             name: true,
-            permalink: true,
+          },
+        },
+        visitorScore: true,
+        status: true,
+        matchDate: true,
+        field: {
+          select: {
+            id: true,
+            name: true,
           },
         },
         penaltyShootout: {
           select: {
             id: true,
+            status: true,
             localGoals: true,
             visitorGoals: true,
             winnerTeamId: true,
-            status: true,
           },
         },
       },
     });
 
-    const totalCount = await prisma.match.count({ where: whereCondition });
+    const totalCount = await prisma.playoffMatch.count({ where: wherePlayoffMatchCondition });
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
-      matches: matches.map((match) => ({
-        id: match.id,
-        localTeam: match.local,
-        visitorTeam: match.visitor,
-        localScore: match.localScore ?? 0,
-        visitorScore: match.visitorScore ?? 0,
-        status: match.status as MATCH_STATUS_TYPE,
-        week: match.week,
-        place: match.place,
-        matchDate: match.matchDate,
-        penaltyShootout: match.penaltyShootout,
-      })),
+      message: '! Los encuentros de liguilla fueron obtenidos correctamente 👍',
+      matches,
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),
