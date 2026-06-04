@@ -13,6 +13,7 @@ import { Remarks } from './remarks';
 import { FieldSkeleton } from './field-skeleton';
 import { FieldsSkeleton } from './fields-skeleton';
 import styles from './styles.module.css';
+import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
   categorySlot: ReactNode;
@@ -54,7 +55,16 @@ export const MatchForm: FC<Props> = ({ categorySlot, fieldSlot, teamsSlot }) => 
             <Button
               type="submit"
               variant="outline-primary"
-            >guardar</Button>
+            >
+              {form.formState.isSubmitting ? (
+                <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                  <span className="text-sm italic">Espere</span>
+                  <LoaderCircle className="size-4 animate-spin" />
+                </span>
+              ) : (
+                <span>guardar</span>
+              )}
+            </Button>
           </section>
         </form>
       </Form>

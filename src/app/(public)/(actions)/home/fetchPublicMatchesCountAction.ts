@@ -40,8 +40,13 @@ export const fetchPublicMatchesCountAction = async (options?: Options): Response
   const endDateUTC = fromZonedTime(endDate, timeZone);
 
   try {
-    const data = await prisma.match.findMany({
+    const matches = await prisma.match.findMany({
       where: {
+        OR: [
+          { status: 'scheduled' },
+          { status: 'completed' },
+          { status: 'canceled' },
+        ],
         matchDate: {
           gte: startDateUTC,
           lte: endDateUTC,
@@ -56,7 +61,7 @@ export const fetchPublicMatchesCountAction = async (options?: Options): Response
     return {
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
-      matchesDates: data.map((match) => {
+      matchesDates: matches.map((match) => {
         return {
           id: match.id,
           matchDate: match.matchDate

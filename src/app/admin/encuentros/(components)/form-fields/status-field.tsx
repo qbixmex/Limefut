@@ -31,6 +31,7 @@ export const StatusField = () => (
               <SelectValue placeholder="Selecciona un estado" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value={MATCH_STATUS.IN_REVIEW}>En revisión</SelectItem>
               <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
               <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
               <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>

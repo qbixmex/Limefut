@@ -36,6 +36,7 @@ export const StatusSelector = () => {
         {params.has('status') && (
           <SelectItem value="clear">borrar filtro <X /></SelectItem>
         )}
+        <SelectItem value={MATCH_STATUS.IN_REVIEW}>En Revisión</SelectItem>
         <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
         <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
         <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
