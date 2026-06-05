@@ -5,7 +5,7 @@ import { Search } from '@/shared/components/search';
 import { ClearFilters } from '../../encuentros/(components)/clear-filters';
 import { CreateMatch } from '../../encuentros/(components)/create-match';
 
-export const CreatePlayoffPage: FC = () => {
+export const CreatePlayoffMatchPage: FC = () => {
   return (
     <>
       <ErrorHandler />
@@ -30,4 +30,4 @@ export const CreatePlayoffPage: FC = () => {
   );
 };
 
-export default CreatePlayoffPage;
+export default CreatePlayoffMatchPage;

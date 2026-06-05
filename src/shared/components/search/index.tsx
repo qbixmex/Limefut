@@ -8,9 +8,10 @@ import './styles.css';
 
 type Props = Readonly<{
   placeholder?: string;
+  time?: number;
 }>;
 
-export const Search: FC<Props> = ({ placeholder }) => {
+export const Search: FC<Props> = ({ placeholder, time = 500 }) => {
   const searchParams = useSearchParams();
   const query = searchParams.get('query')?.toString() ?? '';
   const pathname = usePathname();
@@ -32,7 +33,7 @@ export const Search: FC<Props> = ({ placeholder }) => {
       params.delete('query');
     }
     router.replace(`${pathname}?${params.toString()}`);
-  }, 500);
+  }, time);
 
   const handleClearSearch = () => {
     setInputValue('');
