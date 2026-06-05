@@ -1,12 +1,13 @@
-import { Suspense, type FC, type ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
+import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
+import { auth } from '@/lib/auth';
+import { fetchAdminGlobalSettingsAction } from '@/app/admin/ajustes-globales/(actions)/fetchAdminGlobalSettingsAction';
 import { MainLayout } from './(components)/main-layout';
 import DashboardSkeleton from './(components)/dashboard-skeleton';
-import { auth } from '@/lib/auth';
 import './layout.styles.css';
-import { fetchAdminGlobalSettingsAction } from './ajustes-globales/(actions)/fetchAdminGlobalSettingsAction';
 
 export const metadata: Metadata = {
   title: 'Limefut - Admin',
