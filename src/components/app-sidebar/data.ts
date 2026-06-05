@@ -7,7 +7,6 @@ import {
   PlusIcon,
   Flag,
   Trophy,
-  // IdCard,
   Files,
   Sheet,
   TrendingUp,
@@ -16,6 +15,7 @@ import {
   Newspaper,
   Settings2,
   Settings,
+  Medal,
 } from 'lucide-react';
 import { PiFlagBannerFoldBold } from 'react-icons/pi';
 import { RiFolderVideoLine } from 'react-icons/ri';
@@ -143,6 +143,24 @@ export const navMain: NavItem[] = [
       {
         label: 'Crear',
         url: '/admin/encuentros/crear',
+        icon: PlusIcon,
+      },
+    ],
+  },
+  {
+    label: 'Liguilla',
+    url: '#',
+    icon: Medal,
+    isActive: false,
+    subItems: [
+      {
+        label: 'Lista',
+        url: '/admin/liguilla',
+        icon: ListIcon,
+      },
+      {
+        label: 'Crear',
+        url: '/admin/liguilla/crear',
         icon: PlusIcon,
       },
     ],

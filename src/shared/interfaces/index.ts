@@ -22,5 +22,7 @@ export type { Announcement } from './Announcement';
 export type { Video } from './Video';
 export type { GlobalSettings } from './GlobalSettings';
 export type { SeoSection } from './SeoSection';
+export type { Playoff } from './Playoff';
+export type { PlayoffMatch } from './PlayoffMatch';
 
 export type { CloudinaryResponse } from './Cloudinary';
