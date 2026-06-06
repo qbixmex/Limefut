@@ -25,7 +25,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ROUTES } from '@/shared/constants/routes';
-import type { PLAYOFFS_TYPE } from './(actions)/fetch-playoff.action';
+import type { PLAYOFFS_TYPE } from './(actions)/fetch-playoffs.action';
 
 type Props = Readonly<{
   playoffs: PLAYOFFS_TYPE[];

@@ -5,6 +5,7 @@ import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
 // import { ClearFilters } from './(components)/clear-filters';
 import { PlayoffsContent } from './playoffs-content';
+import { CreatePlayoff } from './(components)/create-match';
 // import { CreatePlayoff } from './(components)/create-playoff';
 
 type Props = Readonly<{
@@ -29,7 +30,7 @@ export const PlayoffsPage: FC<Props> = ({ searchParams }) => {
                   time={750}
                 />
                 {/* <ClearFilters /> */}
-                {/* <CreateMatch /> */}
+                <CreatePlayoff />
               </section>
             </CardHeader>
             <CardContent>

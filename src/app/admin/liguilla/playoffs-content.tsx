@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
-import { fetchPlayoffAction } from './(actions)/fetch-playoff.action';
+import { fetchPlayoffsAction } from './(actions)/fetch-playoffs.action';
 import { PlayoffsTable } from './playoffs-table';
 
 type Props = Readonly<{
@@ -22,7 +22,7 @@ export const PlayoffsContent: FC<Props> = async ({ searchParams }) => {
   const currentPage = parseInt(page ?? '1') ?? 1;
   const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, message, playoffs, pagination } = await fetchPlayoffAction({
+  const { ok, message, playoffs, pagination } = await fetchPlayoffsAction({
     authenticatedUserId: session?.user.id,
     authenticatedUserRoles: session?.user.roles,
     page: currentPage,

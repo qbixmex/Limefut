@@ -26,7 +26,7 @@ export type PLAYOFFS_TYPE = {
   } | null;
 };
 
-export const fetchPlayoffAction = async ({
+export const fetchPlayoffsAction = async ({
   authenticatedUserId,
   authenticatedUserRoles,
   page = 1,
@@ -59,7 +59,7 @@ export const fetchPlayoffAction = async ({
   if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
-      message: '¡ No tienes permisos para consular playoffs !',
+      message: '¡ No tienes permisos para realizar esta acción !',
       playoffs: [],
       pagination: {
         currentPage: 0,
