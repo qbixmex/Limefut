@@ -31,7 +31,6 @@ export const ROUTES = {
   ADMIN_PLAYOFFS_MATCHES: '/admin/liguilla/encuentros',
   ADMIN_PLAYOFFS_MATCHES_CREATE: '/admin/liguilla/encuentros/crear',
   ADMIN_PLAYOFFS_MATCHES_SHOW: (id: string) => `/admin/liguilla/encuentros/detalles/${id}`,
-  ADMIN_PLAYOFFS_MATCHES_EDIT: (id: string) => `/admin/liguilla/encuentros/editar/${id}`,
   ADMIN_STANDINGS: '/admin/estadisticas',
   ADMIN_PAGES: '/admin/paginas',
   ADMIN_BANNERS: '/admin/banners',

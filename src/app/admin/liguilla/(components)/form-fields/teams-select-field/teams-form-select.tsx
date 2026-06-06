@@ -1,6 +1,5 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import {
   Combobox,
   ComboboxChip,
@@ -17,8 +16,7 @@ import {
   FieldLabel,
   FieldError,
 } from '@/components/ui/field';
-import { useSearchParams } from 'next/navigation';
-import { useState, type FC } from 'react';
+import { type FC } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 type Props = Readonly<{ teams: TEAM_TYPE[] }>;
@@ -28,13 +26,19 @@ type TEAM_TYPE = {
 };
 
 export const TeamsFormSelect: FC<Props> = ({ teams }) => {
-  const searchParams = useSearchParams();
   const { control, setValue } = useFormContext();
-  const [teamsCount, setTeamsCount] = useState(0);
-  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string; }[]>([]);
   const teamsIds = useWatch({ name: 'teamsIds' });
+  const category = useWatch({ name: 'category' });
 
-  const disabled = !searchParams.has('category') || teams.length === 0;
+  const selectedTeams = teamsIds?.length
+    ? teams
+        .filter((t) => teamsIds.includes(t.id))
+        .map((t) => ({ id: t.id, name: t.name }))
+    : [];
+
+  const teamsCount = selectedTeams.length;
+
+  const disabled = !category || teams.length === 0;
 
   return (
     <>
@@ -49,12 +53,8 @@ export const TeamsFormSelect: FC<Props> = ({ teams }) => {
               items={teams}
               itemToStringValue={(field) => field.name}
               value={teams.filter((t) => field.value?.includes(t.id))}
-              onValueChange={(selectedTeams) => {
-                setSelectedTeams(() => {
-                  return selectedTeams.map((t) => ({ id: t.id, name: t.name }));
-                });
-                setTeamsCount(selectedTeams.length);
-                setValue('teamsIds', selectedTeams.map((t) => t.id));
+              onValueChange={(selected) => {
+                setValue('teamsIds', selected.map((t) => t.id));
               }}
               disabled={disabled}
             >

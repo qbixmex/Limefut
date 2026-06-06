@@ -12,7 +12,7 @@ type Props = Readonly<{
 }>;
 
 export const CategoryFormSelect: FC<Props> = ({ categories }) => {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -42,6 +42,7 @@ export const CategoryFormSelect: FC<Props> = ({ categories }) => {
                   setCategorySearchParam(category.permalink);
                 }
                 field.onChange(categoryPermalink);
+                setValue('teamsIds', []);
               }}
             >
               <SelectTrigger

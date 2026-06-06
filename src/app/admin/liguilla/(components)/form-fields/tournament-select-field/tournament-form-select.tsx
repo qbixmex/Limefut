@@ -20,7 +20,7 @@ type TOURNAMENT_TYPE = {
 };
 
 export const TournamentFormSelect: FC<Props> = ({ tournaments }) => {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -32,6 +32,7 @@ export const TournamentFormSelect: FC<Props> = ({ tournaments }) => {
   const setTournamentSearchParam = (tournamentPermalink: string) => {
     const params = new URLSearchParams(searchParams);
     params.set('tournament', tournamentPermalink);
+    params.delete('category');
     router.push(`${pathname}?${params}`);
   };
 
@@ -51,6 +52,8 @@ export const TournamentFormSelect: FC<Props> = ({ tournaments }) => {
                 setTournamentSearchParam(tournament.permalink);
               }
               field.onChange(tournamentPermalink);
+              setValue('category', '');
+              setValue('teamsIds', []);
             }}
           >
             <SelectTrigger

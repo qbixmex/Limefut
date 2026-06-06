@@ -6,7 +6,7 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import { useCreatePlayoffs } from './use-create-playoffs';
-import { FieldSkeleton } from './field-skeleton';
+import { FieldSkeleton } from '../(components)/field-skeleton';
 import { StartingRoundField } from '../(components)/form-fields/starting-round-field';
 import styles from '../(components)/form-fields/form-fields.module.css';
 

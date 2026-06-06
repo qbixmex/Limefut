@@ -15,12 +15,9 @@ type Props = Readonly<{
 }>;
 
 export const PlayoffsContent: FC<Props> = async ({ searchParams }) => {
-  const {
-    query,
-    page,
-  } = await searchParams;
-  const currentPage = parseInt(page ?? '1') ?? 1;
   const session = await auth.api.getSession({ headers: await headers() });
+  const { query, page } = await searchParams;
+  const currentPage = parseInt(page ?? '1') ?? 1;
 
   const { ok, message, playoffs, pagination } = await fetchPlayoffsAction({
     authenticatedUserId: session?.user.id,
@@ -42,6 +39,8 @@ export const PlayoffsContent: FC<Props> = async ({ searchParams }) => {
         <PlayoffsTable
           playoffs={playoffs}
           pagination={pagination}
+          authenticatedUserId={session?.user.id}
+          authenticatedUserRoles={session?.user.roles}
         />
       </Suspense>
     </section>

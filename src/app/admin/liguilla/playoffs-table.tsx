@@ -26,9 +26,13 @@ import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ROUTES } from '@/shared/constants/routes';
 import type { PLAYOFFS_TYPE } from './(actions)/fetch-playoffs.action';
+import { ShowDetails } from './(components)/show-details';
+import { DeletePlayoff } from './(components)/delete-playoff';
 
 type Props = Readonly<{
   playoffs: PLAYOFFS_TYPE[];
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -37,6 +41,8 @@ type Props = Readonly<{
 
 export const PlayoffsTable: FC<Props> = ({
   playoffs,
+  authenticatedUserId,
+  authenticatedUserRoles,
   pagination,
 }) => {
   return (
@@ -72,48 +78,14 @@ export const PlayoffsTable: FC<Props> = ({
                   <TableCell>
                     <Badge variant="outline-info">{playoff.teamsCount}</Badge>
                   </TableCell>
-                  {/* <TableCell>
-                    {match.matchDate ? (
-                      <span className="font-semibold text-gray-600 dark:text-gray-500">
-                        {format(match.matchDate as Date, 'EEE dd MMM, y', { locale: es }).toUpperCase()}
-                      </span>
-                    ) : (
-                      <Badge variant="outline-secondary">No disponible</Badge>
-                    )}
-                  </TableCell> */}
-                  {/* <TableCell className="font-semibold text-gray-600 dark:text-gray-500">
-                    {match.matchDate ? (
-                      formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })
-                    ) : (
-                      <Badge variant="outline-secondary">No disponible</Badge>
-                    )}
-                  </TableCell> */}
                   <TableCell>
                     <div className="flex gap-3">
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Link
-                            href={ROUTES.ADMIN_PLAYOFFS_SHOW(playoff.id)}
-                            className={buttonVariants({
-                              variant: 'outline-info',
-                              size: 'icon',
-                            })}
-                          >
-                            <InfoIcon />
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent side="left">
-                          detalles
-                        </TooltipContent>
-                      </Tooltip>
-                      {/* <EditMatch matchId={match.id} /> */}
-                      {/* <DeleteMatch
-                        id={match.id}
-                        roles={roles}
-                        status={match.status}
-                        /> */}
-                      <p className="text-amber-500">EDITAR</p>
-                      <p className="text-pink-500">ELIMINAR</p>
+                      <ShowDetails playoffId={playoff.id} />
+                      <DeletePlayoff
+                        id={playoff.id}
+                        authenticatedUserId={authenticatedUserId}
+                        authenticatedUserRoles={authenticatedUserRoles}
+                      />
                     </div>
                   </TableCell>
                 </TableRow>
