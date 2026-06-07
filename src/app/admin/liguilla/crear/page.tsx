@@ -1,11 +1,16 @@
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { Search } from '@/shared/components/search';
-import { ClearFilters } from '../../encuentros/(components)/clear-filters';
-import { CreateMatch } from '../../encuentros/(components)/create-match';
+import { PlayoffContent } from './playoff-content';
 
-export const CreatePlayoffPage: FC = () => {
+type Props = Readonly<{
+  searchParams: Promise<{
+    tournament?: string;
+    category?: string;
+  }>;
+}>;
+
+export const CreatePlayoffPage: FC<Props> = ({ searchParams }) => {
   return (
     <>
       <ErrorHandler />
@@ -13,15 +18,13 @@ export const CreatePlayoffPage: FC = () => {
         <div className="admin-page-container">
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
-              <CardTitle className="admin-page-card-title">Encuentros</CardTitle>
-              <section className="flex gap-2.5">
-                <Search placeholder="ejemplo: chivas vs atlas" />
-                <ClearFilters />
-                <CreateMatch />
-              </section>
+              <CardTitle className="admin-page-card-title">Crear Liguilla</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">Crear Partido</p>
+              {/* // TODO: <Suspense fallback={<FormSkeleton />}> */}
+              <Suspense fallback={<p>Cargando formulario ...</p>}>
+                <PlayoffContent searchParams={searchParams} />
+              </Suspense>
             </CardContent>
           </Card>
         </div>

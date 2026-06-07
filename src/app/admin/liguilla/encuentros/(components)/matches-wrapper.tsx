@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { auth } from '@/lib/auth';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { headers } from 'next/headers';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { MatchesTable } from './matches-table';
 import { fetchPlayoffMatchesAction } from '../(actions)/fetch-playoff-matches.action';
 

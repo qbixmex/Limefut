@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -12,12 +12,13 @@ type Props = Readonly<{
 }>;
 
 export const CategoryFormSelect: FC<Props> = ({ categories }) => {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
+  const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
- const setCategorySearchParam = (categoryPermalink: string) => {
-    const params = new URLSearchParams();
+  const setCategorySearchParam = (categoryPermalink: string) => {
+    const params = new URLSearchParams(searchParams);
     params.set('category', categoryPermalink);
     router.push(`${pathname}?${params}`);
   };
@@ -41,6 +42,7 @@ export const CategoryFormSelect: FC<Props> = ({ categories }) => {
                   setCategorySearchParam(category.permalink);
                 }
                 field.onChange(categoryPermalink);
+                setValue('teamsIds', []);
               }}
             >
               <SelectTrigger

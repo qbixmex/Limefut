@@ -5,7 +5,7 @@ import { Search } from '@/shared/components/search';
 import { ClearFilters } from '../../../encuentros/(components)/clear-filters';
 import { CreateMatch } from '../../../encuentros/(components)/create-match';
 
-export const EditPlayoffPage: FC = () => {
+export const PlayoffMatchDetailsPage: FC = () => {
   return (
     <>
       <ErrorHandler />
@@ -21,7 +21,7 @@ export const EditPlayoffPage: FC = () => {
               </section>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">Editar Partido</p>
+              <p className="text-2xl font-bold">Detalles del Partido</p>
             </CardContent>
           </Card>
         </div>
@@ -30,4 +30,4 @@ export const EditPlayoffPage: FC = () => {
   );
 };
 
-export default EditPlayoffPage;
+export default PlayoffMatchDetailsPage;

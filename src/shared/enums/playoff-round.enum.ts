@@ -1,6 +1,6 @@
 export const PLAYOFF_ROUND = {
-  QUARTERFINAL: 'quarterfinal',
-  SEMIFINAL: 'semifinal',
+  QUARTER_FINAL: 'quarterfinal',
+  SEMI_FINAL: 'semifinal',
   FINAL: 'final',
 } as const;
 
