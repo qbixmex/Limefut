@@ -39,7 +39,6 @@ type Props = Readonly<{
 export const MatchesTable: FC<Props> = ({
   matches,
   pagination,
-  roles,
 }) => {
   return (
     <>
