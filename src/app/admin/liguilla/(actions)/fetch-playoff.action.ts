@@ -11,29 +11,25 @@ export type ResponseAction = Promise<{
 
 export type PLAYOFF_TYPE = {
   id: string;
-  teamIds: string[];
   startingRound: string;
-  tournament: {
-    id: string;
-    name: string;
-    permalink: string;
-  };
-  category: {
-    id: string;
-    name: string;
-    permalink: string;
-  } | null;
+  tournament: TOURNAMENT_TYPE;
+  category: CATEGORY_TYPE | undefined;
+  teams: TEAM_TYPE[];
 };
 
-export const fetchPlayoffAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-  playoffId,
-} : {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-  playoffId: string;
-}): ResponseAction => {
+type TOURNAMENT_TYPE = { id: string; name: string; };
+type CATEGORY_TYPE = { name: string; };
+type TEAM_TYPE = { id: string; name: string; };
+
+export const fetchPlayoffAction = async (
+  playoffId: string, {
+    authenticatedUserId,
+    authenticatedUserRoles,
+  }: {
+    authenticatedUserId: string | undefined;
+    authenticatedUserRoles: string[] | null | undefined;
+  },
+): ResponseAction => {
   'use cache';
 
   cacheLife('max');
@@ -69,23 +65,43 @@ export const fetchPlayoffAction = async ({
           select: {
             id: true,
             name: true,
-            permalink: true,
           },
         },
         category: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
+          select: { name: true },
         },
       },
     });
 
+    if (!playoff) {
+      return {
+        ok: false,
+        message: '¡ No se pudo obtener detalles de la liguilla !',
+        playoff: null,
+      };
+    }
+
+    const teams = await prisma.team.findMany({
+      where: { id: { in: playoff?.teamIds } },
+      select: { id: true, name: true },
+    });
+
+    const teamsMap = new Map(teams.map((team) => [team.id, team]));
+
+    const orderedTeams = playoff.teamIds
+      .map((id) => teamsMap.get(id))
+      .filter((team): team is TEAM_TYPE => team !== undefined);
+
     return {
       ok: true,
       message: '! La liguilla fue obtenida correctamente 👍 !',
-      playoff,
+      playoff: {
+        id: playoff.id,
+        startingRound: playoff.startingRound,
+        tournament: playoff.tournament,
+        category: playoff.category ?? undefined,
+        teams: orderedTeams,
+      },
     };
   } catch (error) {
     if (error instanceof Error) {

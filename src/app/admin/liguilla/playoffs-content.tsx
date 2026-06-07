@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 import { auth } from '@/lib/auth';
@@ -31,18 +30,11 @@ export const PlayoffsContent: FC<Props> = async ({ searchParams }) => {
   }
 
   return (
-    <section className="mt-10">
-      <Suspense
-        // TODO: fallback={<MatchesTableSkeleton />}
-        fallback={<p>Cargando partidos</p>}
-      >
-        <PlayoffsTable
-          playoffs={playoffs}
-          pagination={pagination}
-          authenticatedUserId={session?.user.id}
-          authenticatedUserRoles={session?.user.roles}
-        />
-      </Suspense>
-    </section>
+    <PlayoffsTable
+      playoffs={playoffs}
+      pagination={pagination}
+      authenticatedUserId={session?.user.id}
+      authenticatedUserRoles={session?.user.roles}
+    />
   );
 };

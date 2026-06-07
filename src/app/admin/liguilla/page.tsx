@@ -3,10 +3,10 @@ import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
-// import { ClearFilters } from './(components)/clear-filters';
 import { PlayoffsContent } from './playoffs-content';
 import { CreatePlayoff } from './(components)/create-match';
-// import { CreatePlayoff } from './(components)/create-playoff';
+import { ClearFilters } from './(components)/clear-filters';
+import { PlayoffsTableSkeleton } from './(components)/playoffs-table-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -29,12 +29,12 @@ export const PlayoffsPage: FC<Props> = ({ searchParams }) => {
                   placeholder="buscar por torneo ó categoría"
                   time={750}
                 />
-                {/* <ClearFilters /> */}
+                <ClearFilters />
                 <CreatePlayoff />
               </section>
             </CardHeader>
             <CardContent>
-              <Suspense>
+              <Suspense fallback={<PlayoffsTableSkeleton />}>
                 <PlayoffsContent searchParams={searchParams} />
               </Suspense>
             </CardContent>
