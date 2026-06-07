@@ -16,8 +16,6 @@ export const TeamsSlot: FC<Props> = async ({ categoryPermalink }) => {
   }
 
   return (
-    <LocalVisitorTeams
-      teams={teams}
-    />
+    <LocalVisitorTeams teams={teams} />
   );
 };

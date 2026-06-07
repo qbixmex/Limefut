@@ -15,6 +15,7 @@ import { getGenderTranslation, getStageTranslation } from '@/lib/utils';
 import { headers } from 'next/headers';
 import { DeleteTournamentImage } from '../(components)/delete-tournament-image';
 import { EditTournament } from '../(components)/edit-tournament';
+import { ROUTES } from '@/shared/constants/routes';
 
 type TournamentPageProps = Readonly<{
   params: Promise<{
@@ -44,7 +45,7 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
   const response = await fetchTournamentAction(tournamentId, session?.user.roles ?? null);
 
   if (!response.ok) {
-    redirect(`/admin/torneos?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(response.message)}`);
   }
 
   const tournament = response.tournament as TournamentType;
@@ -92,7 +93,7 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                         <TableRow>
                           <TableHead className="w-auto md:w-28 font-semibold">Nombre</TableHead>
                           <TableCell>
-                            <p className="text-pretty">{tournament.name}</p>
+                            <p className="text-wrap">{tournament.name}</p>
                           </TableCell>
                         </TableRow>
                         <TableRow>

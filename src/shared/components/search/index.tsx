@@ -8,9 +8,10 @@ import './styles.css';
 
 type Props = Readonly<{
   placeholder?: string;
+  time?: number;
 }>;
 
-export const Search: FC<Props> = ({ placeholder }) => {
+export const Search: FC<Props> = ({ placeholder, time = 500 }) => {
   const searchParams = useSearchParams();
   const query = searchParams.get('query')?.toString() ?? '';
   const pathname = usePathname();
@@ -25,14 +26,15 @@ export const Search: FC<Props> = ({ placeholder }) => {
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
     if (term) {
       params.set('query', term);
+      params.set('page', '1');
     } else {
       params.delete('query');
+      params.delete('page', '1');
     }
     router.replace(`${pathname}?${params.toString()}`);
-  }, 500);
+  }, time);
 
   const handleClearSearch = () => {
     setInputValue('');

@@ -3,15 +3,25 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { buttonVariants } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 import Link from 'next/link';
 
-export const CreatePlayoff = () => {
+export const CreateMatch = () => {
+  const searchParams = useSearchParams();
+
   return (
     <Tooltip>
       <TooltipTrigger>
         <Link
-          href={ROUTES.ADMIN_PLAYOFFS_CREATE}
+          href={
+            (searchParams.has('tournament') && searchParams.has('category'))
+              ? (ROUTES.ADMIN_PLAYOFFS +
+                `?tournament=${searchParams.get('tournament')}` +
+                `&category=${searchParams.get('category')}`
+              )
+              : ROUTES.ADMIN_PLAYOFFS_CREATE
+          }
           className={
             buttonVariants({
               variant: 'outline-primary',
