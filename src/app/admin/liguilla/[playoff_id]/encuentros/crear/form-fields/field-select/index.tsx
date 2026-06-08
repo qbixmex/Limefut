@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Controller, useFormContext } from 'react-hook-form';
-import type { FIELD_TYPE } from '@/app/admin/liguilla/encuentros/(actions)/fetch-fields.action';
+import type { FIELD_TYPE } from '../../../(actions)/fetch-fields.action';
 
 type Props = Readonly<{ fields: FIELD_TYPE[] }>;
 
