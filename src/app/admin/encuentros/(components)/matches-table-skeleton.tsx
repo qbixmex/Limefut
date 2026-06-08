@@ -22,5 +22,3 @@ export const MatchesTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) 
     </div>
   );
 };
-
-export default MatchesTableSkeleton;

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
 import { PlayoffsContent } from './playoffs-content';
-import { CreatePlayoff } from './(components)/create-match';
+import { CreatePlayoff } from './(components)/create-playoff';
 import { ClearFilters } from './(components)/clear-filters';
 import { PlayoffsTableSkeleton } from './(components)/playoffs-table-skeleton';
 
@@ -25,10 +25,7 @@ export const PlayoffsPage: FC<Props> = ({ searchParams }) => {
             <CardHeader className="admin-page-card-header">
               <CardTitle className="admin-page-card-title">Liguilla</CardTitle>
               <section className="flex gap-2.5">
-                <Search
-                  placeholder="buscar por torneo ó categoría"
-                  time={750}
-                />
+                <Search placeholder="buscar por torneo ó categoría" />
                 <ClearFilters />
                 <CreatePlayoff />
               </section>

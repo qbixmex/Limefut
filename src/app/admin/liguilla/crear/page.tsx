@@ -21,8 +21,7 @@ export const CreatePlayoffPage: FC<Props> = ({ searchParams }) => {
               <CardTitle className="admin-page-card-title">Crear Liguilla</CardTitle>
             </CardHeader>
             <CardContent>
-              {/* // TODO: <Suspense fallback={<FormSkeleton />}> */}
-              <Suspense fallback={<p>Cargando formulario ...</p>}>
+              <Suspense>
                 <PlayoffContent searchParams={searchParams} />
               </Suspense>
             </CardContent>
