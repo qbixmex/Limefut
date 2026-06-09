@@ -13,7 +13,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const PlayoffContent: FC<Props> = async ({ searchParams }) => {
+export const CreatePlayoffContent: FC<Props> = async ({ searchParams }) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

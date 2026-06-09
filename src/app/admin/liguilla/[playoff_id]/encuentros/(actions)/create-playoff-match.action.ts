@@ -42,17 +42,21 @@ export const createPlayoffMatchAction = async ({
   const rawData = {
     localTeamId: formData.get('localTeamId') ?? '',
     visitorTeamId: formData.get('visitorTeamId') ?? '',
-    localTeamScore: parseInt(formData.get('localTeamScore') as string ?? '0'),
-    visitorTeamScore: parseInt(formData.get('visitorTeamScore') as string ?? '0'),
+    localTeamScore: formData.has('localTeamScore')
+      ? Number(formData.get('localTeamScore'))
+      : 0,
+    visitorTeamScore: formData.has('visitorTeamScore')
+      ? Number(formData.get('visitorTeamScore'))
+      : 0,
     referee: formData.get('referee') ?? undefined,
     fieldId: formData.get('fieldId') ?? '',
-    matchDate: formData.get('matchDate')
+    matchDate: formData.has('matchDate')
       ? new Date(formData.get('matchDate') as string)
       : undefined,
     remarks: formData.get('remarks') ?? undefined,
-    group: formData.get('group'),
-    round: formData.get('round'),
-    status: formData.get('status'),
+    group: formData.get('group') ?? undefined,
+    round: formData.get('round') ?? undefined,
+    status: formData.get('status') ?? undefined,
   };
 
   const matchVerified = CreatePlayoffsMatchSchema.safeParse(rawData);

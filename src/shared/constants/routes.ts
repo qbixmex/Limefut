@@ -30,7 +30,12 @@ export const ROUTES = {
   ADMIN_PLAYOFFS_EDIT: (id: string) => `/admin/liguilla/editar/${id}`,
   ADMIN_PLAYOFFS_MATCHES: (id: string) => `/admin/liguilla/${id}/encuentros`,
   ADMIN_PLAYOFFS_MATCHES_CREATE: (id: string) => `/admin/liguilla/${id}/encuentros/crear`,
-  ADMIN_PLAYOFFS_MATCHES_SHOW: (playoffId: string, matchId: string) => `/admin/liguilla/${playoffId}/encuentros/${matchId}`,
+  ADMIN_PLAYOFFS_MATCHES_SHOW: (playoffId: string, matchId: string) => {
+    return `/admin/liguilla/${playoffId}/encuentros/detalles/${matchId}`;
+  },
+  ADMIN_PLAYOFFS_MATCHES_EDIT: (playoffId: string, matchId: string) => {
+    return `/admin/liguilla/${playoffId}/encuentros/editar/${matchId}`;
+  },
   ADMIN_STANDINGS: '/admin/estadisticas',
   ADMIN_PAGES: '/admin/paginas',
   ADMIN_BANNERS: '/admin/banners',

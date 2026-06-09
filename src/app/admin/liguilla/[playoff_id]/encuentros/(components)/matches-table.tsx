@@ -1,7 +1,6 @@
 'use client';
 
 import type { FC } from 'react';
-import { buttonVariants } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -10,12 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { InfoIcon, Minus } from 'lucide-react';
+import { Minus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { MATCH_STATUS } from '@/shared/enums';
@@ -26,20 +20,24 @@ import { es } from 'date-fns/locale';
 import type { PLAYOFF_MATCH } from '../(actions)/fetch-playoff-matches.action';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ROUTES } from '@/shared/constants/routes';
+import { DeleteMatch } from './delete-match';
+import { ShowInfo } from './show-info';
+import { EditMatch } from './edit-match';
 
 type Props = Readonly<{
   playoffId: string;
   matches: PLAYOFF_MATCH[];
+  authenticatedUserRoles: string[] | null | undefined;
   pagination: {
     currentPage: number;
     totalPages: number;
   };
-  roles: string[];
 }>;
 
 export const MatchesTable: FC<Props> = ({
   playoffId,
   matches,
+  authenticatedUserRoles,
   pagination,
 }) => {
   return (
@@ -184,30 +182,13 @@ export const MatchesTable: FC<Props> = ({
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-3">
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Link
-                            href={ROUTES.ADMIN_PLAYOFFS_MATCHES_SHOW(playoffId, match.id)}
-                            className={buttonVariants({
-                              variant: 'outline-info',
-                              size: 'icon',
-                            })}
-                          >
-                            <InfoIcon />
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent side="left">
-                          detalles
-                        </TooltipContent>
-                      </Tooltip>
-                      {/* <EditMatch matchId={match.id} /> */}
-                      {/* <DeleteMatch
+                      <ShowInfo playoffId={playoffId} matchId={match.id} />
+                      <EditMatch playoffId={playoffId} matchId={match.id} />
+                      <DeleteMatch
                         id={match.id}
-                        roles={roles}
+                        authenticatedUserRoles={authenticatedUserRoles}
                         status={match.status}
-                        /> */}
-                      <p className="text-amber-500">EDITAR</p>
-                      <p className="text-pink-500">ELIMINAR</p>
+                      />
                     </div>
                   </TableCell>
                 </TableRow>

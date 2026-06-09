@@ -19,7 +19,7 @@ export const MatchesWrapper: FC<Props> = async ({ playoffId, matches, pagination
       playoffId={playoffId}
       matches={matches}
       pagination={pagination}
-      roles={session?.user.roles as string[]}
+      authenticatedUserRoles={session?.user.roles}
     />
   );
 };

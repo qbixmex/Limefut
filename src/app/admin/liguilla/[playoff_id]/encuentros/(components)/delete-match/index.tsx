@@ -22,15 +22,15 @@ import './styles.css';
 
 type Props = Readonly<{
   id: string;
-  roles: string[];
   status: MATCH_STATUS_TYPE;
+  authenticatedUserRoles: string[] | null | undefined;
 }>;
 
-export const DeleteMatch: FC<Props> = ({ id, roles, status }) => {
+export const DeleteMatch: FC<Props> = ({ id, status, authenticatedUserRoles }) => {
   if (status === MATCH_STATUS.COMPLETED) return null;
 
   const onDeleteMatch = async (id: string) => {
-    if (!roles.includes('admin')) {
+    if (!authenticatedUserRoles?.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar encuentros !');
       return;
     }
@@ -58,7 +58,7 @@ export const DeleteMatch: FC<Props> = ({ id, roles, status }) => {
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿ Estas seguro de eliminar el encuentro ?</AlertDialogTitle>
+          <AlertDialogTitle>¿ Estas seguro de eliminar el encuentro de liguilla ?</AlertDialogTitle>
           <AlertDialogDescription>
             Esta acción no se puede deshacer y el encuentro será eliminado de la base de datos permanentemente.
           </AlertDialogDescription>

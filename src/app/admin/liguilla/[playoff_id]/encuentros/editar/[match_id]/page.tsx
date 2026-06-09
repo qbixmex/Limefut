@@ -1,8 +1,16 @@
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
+import { EditPlayoffMatchContent } from './edit-playoff-match-content';
 
-export const EditPlayoffMatchPage: FC = () => {
+type Props = Readonly<{
+  params: Promise<{
+    playoff_id: string;
+    match_id: string;
+  }>;
+}>;
+
+export const EditPlayoffMatchPage: FC<Props> = ({ params }) => {
   return (
     <>
       <ErrorHandler />
@@ -13,7 +21,7 @@ export const EditPlayoffMatchPage: FC = () => {
               <CardTitle className="admin-page-card-title">Editar Encuentro</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold">Editar Partido</p>
+              <EditPlayoffMatchContent params={params} />
             </CardContent>
           </Card>
         </div>

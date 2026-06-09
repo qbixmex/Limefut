@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
-import { ClearFilters } from '../../encuentros/(components)/clear-filters';
+import { ClearFilters } from '../../../encuentros/(components)/clear-filters';
 
 type Props = Readonly<{
   params: Promise<{

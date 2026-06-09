@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlayoffMatchContent } from './playoff-match-content';
+import { CreatePlayoffMatchContent } from './create-playoff-match-content';
 
 type Props = Readonly<{
   params: Promise<{
@@ -17,7 +17,7 @@ export const CreatePlayoffMatchPage: FC<Props> = ({ params }) => {
             <CardTitle className="admin-page-card-title">Crear Encuentro</CardTitle>
           </CardHeader>
           <CardContent>
-            <PlayoffMatchContent params={params} />
+            <CreatePlayoffMatchContent params={params} />
           </CardContent>
         </Card>
       </div>

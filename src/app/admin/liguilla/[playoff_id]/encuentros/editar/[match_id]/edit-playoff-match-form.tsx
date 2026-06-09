@@ -5,16 +5,17 @@ import { Suspense } from 'react';
 import { Form } from '@/components/ui/form';
 import { LoaderCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useCreatePlayoffsMatch } from './use-create-playoffs-match';
-import { LocalAndVisitorGoals } from '../(components)/form-fields/local-and-visitor-goals';
-import { RefereeInputField } from '../(components)/form-fields/referee-input-field';
-import { RemarksTextAreaField } from '../(components)/form-fields/remarks-textarea-field';
-import { MatchDateTime } from '../(components)/form-fields/match-date-time';
-import { GroupRadioSelect } from '../(components)/form-fields/group-radio-select';
-import { MatchStatusSelectField } from '../(components)/form-fields/match-status-select-field';
+import { useEditPlayoffsMatch } from './use-edit-playoffs-match';
+import { LocalAndVisitorGoals } from '../../(components)/form-fields/local-and-visitor-goals';
+import { RefereeInputField } from '../../(components)/form-fields/referee-input-field';
+import { RemarksTextAreaField } from '../../(components)/form-fields/remarks-textarea-field';
+import { MatchDateTime } from '../../(components)/form-fields/match-date-time';
+import { GroupRadioSelect } from '../../(components)/form-fields/group-radio-select';
+import { MatchStatusSelectField } from '../../(components)/form-fields/match-status-select-field';
 import { FieldSkeleton } from '@/app/admin/liguilla/(components)/field-skeleton';
 import { FieldsSkeleton } from '@/app/admin/liguilla/(components)/fields-skeleton';
-import { RoundSelectField } from '../(components)/form-fields/round-select-field';
+import { RoundSelectField } from '../../(components)/form-fields/round-select-field';
+import type { MATCH_TYPE } from '../../(actions)/fetch-match-for-edit.action';
 
 type Props = Readonly<{
   authenticatedUserId: string | undefined;
@@ -22,19 +23,22 @@ type Props = Readonly<{
   playoffId: string;
   teamsSlot: ReactNode;
   fieldsSlot: ReactNode;
+  match: MATCH_TYPE;
 }>;
 
-export const CreatePlayoffsMatchForm: FC<Props> = ({
+export const EditPlayoffsMatchForm: FC<Props> = ({
   authenticatedUserId,
   authenticatedUserRoles,
   playoffId,
   teamsSlot,
   fieldsSlot,
+  match,
 }) => {
-  const { form, onSubmit, handleNavigateBack } = useCreatePlayoffsMatch({
+  const { form, onSubmit, handleNavigateBack } = useEditPlayoffsMatch({
     authenticatedUserId,
     authenticatedUserRoles,
     playoffId,
+    match,
   });
 
   return (
@@ -94,7 +98,7 @@ export const CreatePlayoffsMatchForm: FC<Props> = ({
                   <LoaderCircle className="size-4 animate-spin" />
                 </span>
               ) : (
-                <span>crear</span>
+                <span>guardar</span>
               )}
             </Button>
           </section>
