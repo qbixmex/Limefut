@@ -16,8 +16,8 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
-import { deleteMatchAction } from '@/app/admin/encuentros/(actions)/delete-match.action';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { deletePlayoffMatchAction } from '../../(actions)/delete-playoff-match.action';
 import './styles.css';
 
 type Props = Readonly<{
@@ -34,7 +34,7 @@ export const DeleteMatch: FC<Props> = ({ id, status, authenticatedUserRoles }) =
       toast.error('¡ No tienes permisos administrativos para eliminar encuentros !');
       return;
     }
-    const response = await deleteMatchAction(id);
+    const response = await deletePlayoffMatchAction(id);
     if (!response.ok) {
       toast.error(response.message);
       return;

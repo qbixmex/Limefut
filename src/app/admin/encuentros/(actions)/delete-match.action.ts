@@ -9,19 +9,19 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
-  const player = await prisma.match.findUnique({
+  const match = await prisma.match.findUnique({
     where: { id },
     select: { id: true },
   });
 
-  if (!player) {
+  if (!match) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el jugador, quizás fue eliminado ó no existe !',
+      message: '¡ No se puede eliminar el encuentro, quizás fue eliminado ó no existe !',
     };
   }
 
-  await prisma.match.delete({ where: { id: player.id } });
+  await prisma.match.delete({ where: { id: match.id } });
 
   updateTag('admin-matches');
   updateTag('admin-match');
