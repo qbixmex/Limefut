@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { Search } from '@/shared/components/search';
-import { ClearFilters } from '../../../encuentros/(components)/clear-filters';
+import { PlayoffMatchContent } from './playoff-match-content';
+import { EditMatch } from '../../(components)/edit-match';
 
 type Props = Readonly<{
   params: Promise<{
@@ -11,7 +11,10 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const PlayoffMatchDetailsPage: FC<Props> = ({ params }) => {
+export const PlayoffMatchDetailsPage: FC<Props> = async ({ params }) => {
+  const playoffId = (await params).playoff_id;
+  const matchId = (await params).match_id;
+
   return (
     <>
       <ErrorHandler />
@@ -20,37 +23,14 @@ export const PlayoffMatchDetailsPage: FC<Props> = ({ params }) => {
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
               <CardTitle className="admin-page-card-title">Encuentro</CardTitle>
-              <section className="flex gap-2.5">
-                <Search placeholder="ejemplo: chivas vs atlas" />
-                <ClearFilters />
-              </section>
+              <EditMatch playoffId={playoffId} matchId={matchId} />
             </CardHeader>
             <CardContent>
-              <MatchContent params={params} />
+              <PlayoffMatchContent params={params} />
             </CardContent>
           </Card>
         </div>
       </div>
-    </>
-  );
-};
-
-const MatchContent: FC<Props> = async ({ params }) => {
-  const {
-    playoff_id: playoffId,
-    match_id: matchId,
-  } = await params;
-
-  return (
-    <>
-      <p className="text-2xl space-x-2">
-        <span className="text-blue-600 font-semibold">Playoff ID:</span>
-        <span className="text-gray-400">{ playoffId }</span>
-      </p>
-      <p className="text-2xl space-x-2">
-        <span className="text-blue-600 font-semibold">Match ID:</span>
-        <span className="text-gray-400">{ matchId }</span>
-      </p>
     </>
   );
 };
