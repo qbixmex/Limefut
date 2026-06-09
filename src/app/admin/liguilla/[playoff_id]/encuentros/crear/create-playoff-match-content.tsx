@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
@@ -17,6 +18,7 @@ export const CreatePlayoffMatchContent: FC<Props> = async ({ params }) => {
 
   return (
     <CreatePlayoffsMatchForm
+      key={randomUUID()}
       authenticatedUserId={session?.user.id}
       authenticatedUserRoles={session?.user.roles}
       playoffId={playoffId}

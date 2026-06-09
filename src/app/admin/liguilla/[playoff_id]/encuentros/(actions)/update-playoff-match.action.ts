@@ -119,7 +119,7 @@ export const updatePlayoffMatchAction = async ({
         });
 
         // Update Cache
-        updateTag('admin-playoffs-matches');
+        updateTag('admin-playoff-matches');
         updateTag('admin-playoff-match');
 
         return {

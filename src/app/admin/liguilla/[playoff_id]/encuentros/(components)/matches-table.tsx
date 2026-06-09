@@ -12,7 +12,7 @@ import {
 import { Minus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_STATUS, PLAYOFF_ROUND } from '@/shared/enums';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -126,10 +126,27 @@ export const MatchesTable: FC<Props> = ({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline-primary">{match.group}</Badge>
+                    <Badge
+                      variant='outline-info'
+                      className={cn({
+                        'border-amber-500 text-amber-500': match.group === 'gold',
+                        'border-gray-400 text-gray-400': match.group === 'silver',
+                      })}
+                    >
+                      {match.group}
+                    </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline-primary">{match.round}</Badge>
+                    <Badge
+                      variant="outline-primary"
+                      className={cn({
+                        'border-emerald-500 text-emerald-500': match.round === PLAYOFF_ROUND.FINAL,
+                        'border-sky-400 text-sky-400': match.round === PLAYOFF_ROUND.SEMI_FINAL,
+                        'border-purple-400 text-purple-400': match.round === PLAYOFF_ROUND.QUARTER_FINAL,
+                      })}
+                    >
+                      {match.round}
+                    </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {match.field ? (

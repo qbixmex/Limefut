@@ -55,7 +55,7 @@ export const fetchMatchForEditAction = async ({
   }
 
   cacheLife('days');
-  cacheTag('admin-match');
+  cacheTag('admin-playoff-match');
 
   try {
     const match = await prisma.playoffMatch.findFirst({
