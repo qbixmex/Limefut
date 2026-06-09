@@ -23,6 +23,9 @@ import { ROUTES } from '@/shared/constants/routes';
 import { DeleteMatch } from './delete-match';
 import { ShowInfo } from './show-info';
 import { EditMatch } from './edit-match';
+import { MatchStatus } from './match-status';
+import { FinishMatch } from './finish-match';
+import { MatchScoreInput } from './match-score-input';
 
 type Props = Readonly<{
   playoffId: string;
@@ -87,23 +90,21 @@ export const MatchesTable: FC<Props> = ({
                       </div>
                       <div className="flex justify-center items-center gap-2">
                         {match.status !== MATCH_STATUS.COMPLETED ? (
-                          // <MatchScoreInput
-                          //   matchId={match.id}
-                          //   score={match.localScore}
-                          //   local
-                          // />
-                          <div>({match.localScore})</div>
+                          <MatchScoreInput
+                            matchId={match.id}
+                            score={match.localScore as number}
+                            local
+                          />
                         ) : (
                           <Badge variant="outline">{match.localScore}</Badge>
                         )}
                         <Minus strokeWidth={2} />
                         {match.status !== MATCH_STATUS.COMPLETED ? (
-                          // <MatchScoreInput
-                          //   matchId={match.id}
-                          //   score={match.visitorScore}
-                          //   visitor
-                          // />
-                          <div>({match.visitorScore})</div>
+                          <MatchScoreInput
+                            matchId={match.id}
+                            score={match.visitorScore as number}
+                            visitor
+                          />
                         ) : (
                           <Badge variant="outline">{match.visitorScore}</Badge>
                         )}
@@ -163,14 +164,14 @@ export const MatchesTable: FC<Props> = ({
                   </TableCell>
                   <TableCell>
                     {match.matchDate ? (
-                      <span className="font-semibold text-gray-600 dark:text-gray-500">
+                      <span className="text-indigo-600 dark:text-indigo-400">
                         {format(match.matchDate as Date, 'EEE dd MMM, y', { locale: es }).toUpperCase()}
                       </span>
                     ) : (
                       <Badge variant="outline-secondary">No disponible</Badge>
                     )}
                   </TableCell>
-                  <TableCell className="font-semibold text-gray-600 dark:text-gray-500">
+                  <TableCell className="text-blue-600 dark:text-blue-500">
                     {match.matchDate ? (
                       formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })
                     ) : (
@@ -184,16 +185,14 @@ export const MatchesTable: FC<Props> = ({
                       </div>
                     ) : (
                       <div className="flex flex-col gap-2">
-                        {/* <MatchStatus matchId={match.id} status={match.status} />
+                        <MatchStatus matchId={match.id} status={match.status} />
                         <FinishMatch
                           matchId={match.id}
-                          localScore={match.localScore}
-                          visitorScore={match.visitorScore}
-                          localId={match.localTeam.id}
-                          visitorId={match.visitorTeam.id}
-                        /> */}
-                        <div className="text-blue-500">STATUS</div>
-                        <div className="text-sky-500">FINISH</div>
+                          localScore={match.localScore as number}
+                          visitorScore={match.visitorScore as number}
+                          localId={match.local.id}
+                          visitorId={match.visitor.id}
+                        />
                       </div>
                     )}
                   </TableCell>
