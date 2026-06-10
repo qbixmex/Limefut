@@ -35,7 +35,7 @@ export const useCreatePlayoffsMatch = ({
     if (data.remarks) formData.append('remarks', data.remarks);
     formData.append('localTeamScore', data.localTeamScore.toString());
     formData.append('visitorTeamScore', data.visitorTeamScore.toString());
-    formData.append('matchDate', data.matchDate.toString());
+    if (data.matchDate) formData.append('matchDate', data.matchDate.toString());
     formData.append('round', data.round);
     formData.append('group', data.group);
     formData.append('status', data.status);
@@ -70,14 +70,11 @@ export const useCreatePlayoffsMatch = ({
   };
 };
 
-const initialDate = new Date();
-initialDate.setHours(8, 0, 0, 0);
-
 const DEFAULT_FORM_VALUES = {
   group: '',
   localTeamScore: 0,
   visitorTeamScore: 0,
-  matchDate: initialDate,
+  matchDate: undefined,
   status: undefined,
   referee: '',
   remarks: '',
