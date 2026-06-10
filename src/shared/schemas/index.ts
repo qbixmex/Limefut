@@ -7,6 +7,7 @@ export { createCoachSchema, editCoachSchema } from './coach';
 export { createPlayerSchema, editPlayerSchema } from './player';
 export { createMatchSchema, editMatchSchema, SaveMatchSchema } from './match';
 export { CreatePlayoffsSchema } from './playoffs';
+export { CreatePlayoffsMatchSchema, EditPlayoffsMatchSchema } from './playoffs-match';
 export { createPenaltyShootoutSchema, SimplePenaltyShootoutsSchema } from './penalty-shootout';
 export { createCredentialSchema, editCredentialSchema } from './credential';
 export { createStandingsSchema } from './standings';

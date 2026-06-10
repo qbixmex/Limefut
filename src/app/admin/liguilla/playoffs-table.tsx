@@ -17,6 +17,7 @@ import { ROUTES } from '@/shared/constants/routes';
 import type { PLAYOFFS_TYPE } from './(actions)/fetch-playoffs.action';
 import { ShowDetails } from './(components)/show-details';
 import { DeletePlayoff } from './(components)/delete-playoff';
+import { ShowPlayoffMatches } from './(components)/show-playoff-matches';
 
 type Props = Readonly<{
   playoffs: PLAYOFFS_TYPE[];
@@ -70,6 +71,7 @@ export const PlayoffsTable: FC<Props> = ({
                   <TableCell>
                     <div className="flex gap-3">
                       <ShowDetails playoffId={playoff.id} />
+                      <ShowPlayoffMatches playoffId={playoff.id} />
                       <DeletePlayoff
                         id={playoff.id}
                         authenticatedUserId={authenticatedUserId}

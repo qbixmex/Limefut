@@ -1,7 +1,7 @@
 import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { PlayoffContent } from './playoff-content';
+import { CreatePlayoffContent } from './create-playoff-content';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -21,9 +21,8 @@ export const CreatePlayoffPage: FC<Props> = ({ searchParams }) => {
               <CardTitle className="admin-page-card-title">Crear Liguilla</CardTitle>
             </CardHeader>
             <CardContent>
-              {/* // TODO: <Suspense fallback={<FormSkeleton />}> */}
-              <Suspense fallback={<p>Cargando formulario ...</p>}>
-                <PlayoffContent searchParams={searchParams} />
+              <Suspense>
+                <CreatePlayoffContent searchParams={searchParams} />
               </Suspense>
             </CardContent>
           </Card>

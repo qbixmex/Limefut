@@ -31,7 +31,7 @@ export const CreatePlayoffsForm: FC<Props> = ({
   });
 
   return (
-    <section className="mt-10">
+    <div className="mt-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -89,6 +89,6 @@ export const CreatePlayoffsForm: FC<Props> = ({
           </section>
         </form>
       </Form>
-    </section>
+    </div>
   );
 };

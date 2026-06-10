@@ -68,7 +68,7 @@ export const createMatchAction = async ({
     localTeamId: formData.get('localTeamId') ?? '',
     localScore: parseInt(formData.get('localScore') as string ?? '0'),
     visitorTeamId: formData.get('visitorTeamId') ?? '',
-    visitorScore: parseInt(formData.get('visitorScore') as string ?? '0') ?? '',
+    visitorScore: parseInt(formData.get('visitorScore') as string ?? '0'),
     place: formData.get('place') ?? undefined,
     referee: formData.get('referee') ?? undefined,
     matchDate: formData.get('matchDate')
