@@ -174,6 +174,9 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
           },
         });
       }
+    }, {
+      maxWait: 5000,
+      timeout: 20000,
     });
 
     // Update cache
