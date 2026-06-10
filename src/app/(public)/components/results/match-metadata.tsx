@@ -22,7 +22,7 @@ export const MatchMetadata: FC<Props> = ({
   tournamentName,
   category,
   format,
-  week = 0,
+  week,
   round,
   group,
   place,
@@ -43,9 +43,34 @@ export const MatchMetadata: FC<Props> = ({
         </div>
         <div className="w-full md:1/2">
           {round && group && <MatchStatus status={status} />}
-          <p aria-label="Fecha del partido"><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, "EEEE dd 'de' LLLL, yyyy", { locale: es })}</p>
-          <p aria-label="Hora del partido"><b>Hora:</b> {formatInTimeZone(date as Date, TIME_ZONE, 'h:mm a', { locale: es })}</p>
-          {(week !== undefined) && (<p aria-label="Jornada del partido"><b>Jornada:</b> {week}</p>)}
+
+          <p aria-label="Fecha del partido">
+            <b>Fecha:</b>{' '}
+            <span className="text-gray-500">
+              {
+                date
+                  ? formatInTimeZone(date as Date, TIME_ZONE, "EEEE dd 'de' LLLL, yyyy", { locale: es })
+                  : 'No disponible'
+              }
+            </span>
+          </p>
+          <p aria-label="Hora del partido">
+            <b>Hora:</b>{' '}
+            <span className="text-gray-500">
+              {
+                date
+                  ? formatInTimeZone(date as Date, TIME_ZONE, 'h:mm a', { locale: es })
+                  : 'No disponible'
+              }
+            </span>
+          </p>
+          {
+            week && (
+              <p aria-label="Jornada del partido">
+                <b>Jornada:</b> {week ?? 0}
+              </p>
+            )
+          }
         </div>
       </section>
     </div>

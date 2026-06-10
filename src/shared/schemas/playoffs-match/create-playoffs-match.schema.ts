@@ -15,7 +15,8 @@ export const CreatePlayoffsMatchSchema = z.object({
     .number('¡ El marcador del equipo visitante debe ser un número !')
     .gte(0, '¡ El marcador del equipo local debe ser número positivo !'),
   matchDate: z
-    .date('¡ La fecha del encuentro debe ser una fecha válida !'),
+    .date('¡ La fecha del encuentro debe ser una fecha válida !')
+    .optional(),
   status: z.enum(MATCH_STATUS, '¡ Debe seleccionar un estado !'),
   referee: z
     .union([
