@@ -15,9 +15,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { es } from 'date-fns/locale';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export const MatchDateTime: FC = () => {
   const { control } = useFormContext();
+  const [enabledDate, setEnabledDate] = useState(false);
   const [open, setOpen] = useState(false);
 
   return (
@@ -53,54 +56,69 @@ export const MatchDateTime: FC = () => {
           : '';
 
         return (
-          <section className="flex flex-row gap-5">
-            <Field className="flex-2">
-              <FieldLabel htmlFor="game-date">
-                Fecha <span className="text-amber-500">*</span>
-              </FieldLabel>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    id="game-date"
-                    variant="outline-secondary"
-                    className="w-64 justify-between font-normal"
-                    aria-invalid={fieldState.invalid}
-                  >
-                    {dateValue
-                      ? format(dateValue, 'PPPP', { locale: es })
-                      : 'Selecciona fecha del encuentro'}
-                    <ChevronDownIcon />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-auto overflow-hidden p-0"
-                  align="start"
-                >
-                  <Calendar
-                    mode="single"
-                    selected={dateValue}
-                    captionLayout="dropdown"
-                    defaultMonth={dateValue}
-                    onSelect={handleDateSelect}
+          <>
+            {(!enabledDate) && (
+              <div className="flex items-center gap-5">
+                <Switch
+                  id="set-date"
+                  checked={enabledDate}
+                  onCheckedChange={() => setEnabledDate(prev => !prev)}
+                />
+                <Label htmlFor='set-date'>Programar Fecha y Hora</Label>
+              </div>
+            )}
+
+            {enabledDate && (
+              <section className="flex flex-row gap-5">
+                <Field className="flex-2">
+                  <FieldLabel htmlFor="game-date">
+                    Fecha <span className="text-amber-500">*</span>
+                  </FieldLabel>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="game-date"
+                        variant="outline-secondary"
+                        className="w-64 justify-between font-normal"
+                        aria-invalid={fieldState.invalid}
+                      >
+                        {dateValue
+                          ? format(dateValue, 'PPPP', { locale: es })
+                          : 'Selecciona fecha del encuentro'}
+                        <ChevronDownIcon />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-auto overflow-hidden p-0"
+                      align="start"
+                    >
+                      <Calendar
+                        mode="single"
+                        selected={dateValue}
+                        captionLayout="dropdown"
+                        defaultMonth={dateValue}
+                        onSelect={handleDateSelect}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+                <Field className="flex-1">
+                  <FieldLabel htmlFor="game-hour">Hora</FieldLabel>
+                  <Input
+                    id="game-hour"
+                    type="time"
+                    step="1"
+                    value={timeValue}
+                    onChange={handleTimeChange}
+                    className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                   />
-                </PopoverContent>
-              </Popover>
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
-            </Field>
-            <Field className="flex-1">
-              <FieldLabel htmlFor="game-hour">Hora</FieldLabel>
-              <Input
-                id="game-hour"
-                type="time"
-                step="1"
-                value={timeValue}
-                onChange={handleTimeChange}
-                className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-              />
-            </Field>
-          </section>
+                </Field>
+              </section>
+            )}
+          </>
         );
       }}
     />
