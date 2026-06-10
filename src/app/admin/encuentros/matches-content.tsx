@@ -2,9 +2,9 @@ import { Suspense, type FC } from 'react';
 import { MatchesTableSkeleton } from './(components)/matches-table-skeleton';
 import { MatchesWrapper } from './(components)/matches.wrapper';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
-import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
+import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
 
 type Props = Readonly<{
   searchParams: Promise<{

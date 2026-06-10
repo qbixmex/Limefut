@@ -26,11 +26,16 @@ export const ROUTES = {
   ADMIN_MATCHES_EDIT: (id: string) => `/admin/encuentros/editar/${id}`,
   ADMIN_PLAYOFFS: '/admin/liguilla',
   ADMIN_PLAYOFFS_CREATE: '/admin/liguilla/crear',
-  ADMIN_PLAYOFFS_SHOW: (id: string) => `/admin/liguilla/detalles/${id}`,
+  ADMIN_PLAYOFFS_SHOW: (id: string) => `/admin/liguilla/${id}`,
   ADMIN_PLAYOFFS_EDIT: (id: string) => `/admin/liguilla/editar/${id}`,
-  ADMIN_PLAYOFFS_MATCHES: '/admin/liguilla/encuentros',
-  ADMIN_PLAYOFFS_MATCHES_CREATE: '/admin/liguilla/encuentros/crear',
-  ADMIN_PLAYOFFS_MATCHES_SHOW: (id: string) => `/admin/liguilla/encuentros/detalles/${id}`,
+  ADMIN_PLAYOFFS_MATCHES: (id: string) => `/admin/liguilla/${id}/encuentros`,
+  ADMIN_PLAYOFFS_MATCHES_CREATE: (id: string) => `/admin/liguilla/${id}/encuentros/crear`,
+  ADMIN_PLAYOFFS_MATCHES_SHOW: (playoffId: string, matchId: string) => {
+    return `/admin/liguilla/${playoffId}/encuentros/detalles/${matchId}`;
+  },
+  ADMIN_PLAYOFFS_MATCHES_EDIT: (playoffId: string, matchId: string) => {
+    return `/admin/liguilla/${playoffId}/encuentros/editar/${matchId}`;
+  },
   ADMIN_STANDINGS: '/admin/estadisticas',
   ADMIN_PAGES: '/admin/paginas',
   ADMIN_BANNERS: '/admin/banners',

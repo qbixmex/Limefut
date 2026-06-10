@@ -1,10 +1,16 @@
 @reference 'tailwindcss';
 
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 5);
+  margin-bottom: calc(var(--spacing) * 10);
+}
+
 .fieldsGroup {
   display: flex;
   gap: calc(var(--spacing) * 5);
   width: 100%;
-
 }
 
 .field {
