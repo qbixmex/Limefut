@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
-import { getStatusTranslation } from '@/lib/utils';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { getPlayoffGroup, getPlayoffRound, getStatusTranslation } from '@/lib/utils';
+import type { MATCH_STATUS_TYPE, ROUND_TYPE } from '@/shared/enums';
 
 const TIME_ZONE = 'America/Mexico_City';
 
@@ -10,7 +10,9 @@ type Props = Readonly<{
   tournamentName: string;
   category: string | null;
   format: string | null;
-  week: number | null;
+  week?: number | null;
+  round?: ROUND_TYPE;
+  group?: string;
   place: string | null;
   date: Date | null;
   status: string;
@@ -21,6 +23,8 @@ export const MatchMetadata: FC<Props> = ({
   category,
   format,
   week = 0,
+  round,
+  group,
   place,
   date,
   status,
@@ -33,19 +37,28 @@ export const MatchMetadata: FC<Props> = ({
           <p><b>Categoría:</b> {category ?? <span>No especificada</span>}</p>
           <p><b>Formato:</b> {format} vs {format}</p>
           <p><b>Sede:</b> {place ?? <span>No especificado</span>}</p>
-          <p>
-            <b>Estado:</b>&nbsp;
-            <span className="capitalize italic">
-              {getStatusTranslation(status as MATCH_STATUS_TYPE)}
-            </span>
-          </p>
+          {!round && !group && <MatchStatus status={status} />}
+          {round && (<p><b>Ronda:</b> {getPlayoffRound(round)}</p>)}
+          {group && (<p><b>Grupo:</b> {getPlayoffGroup(group)}</p>)}
         </div>
         <div className="w-full md:1/2">
+          {round && group && <MatchStatus status={status} />}
           <p aria-label="Fecha del partido"><b>Fecha:</b> {formatInTimeZone(date as Date, TIME_ZONE, "EEEE dd 'de' LLLL, yyyy", { locale: es })}</p>
           <p aria-label="Hora del partido"><b>Hora:</b> {formatInTimeZone(date as Date, TIME_ZONE, 'h:mm a', { locale: es })}</p>
-          <p aria-label="Jornada del partido"><b>Jornada:</b> {week}</p>
+          {(week !== undefined) && (<p aria-label="Jornada del partido"><b>Jornada:</b> {week}</p>)}
         </div>
       </section>
     </div>
+  );
+};
+
+const MatchStatus: FC<{ status: string }> = ({ status }) => {
+  return (
+    <p>
+      <b>Estado:</b>&nbsp;
+      <span className="capitalize italic">
+        {getStatusTranslation(status as MATCH_STATUS_TYPE)}
+      </span>
+    </p>
   );
 };

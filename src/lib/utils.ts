@@ -2,8 +2,8 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ROBOTS } from '../shared/interfaces';
 import { PAGE_STATUS } from '../shared/interfaces/Page';
-import type { LANGUAGE_TYPE, MATCH_STATUS_TYPE } from '../shared/enums';
-import { GENDER, LANGUAGE, MATCH_STATUS } from '../shared/enums';
+import type { LANGUAGE_TYPE, MATCH_STATUS_TYPE, ROUND_TYPE } from '../shared/enums';
+import { GENDER, LANGUAGE, MATCH_STATUS, ROUND } from '../shared/enums';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -378,5 +378,35 @@ export const getSiteLanguage = (language: LANGUAGE_TYPE | string) => {
       return 'inglés';
     default:
       return 'ninguno';
+  }
+};
+
+/**
+ * Translate from english to spanish playoff match round.
+ * @param round The round to evaluate as 'quaterfinal', 'semifinal', 'final'.
+ * @returns The translated round in spanish
+ */
+export const getPlayoffRound = (round: ROUND_TYPE) => {
+  switch (round) {
+    case ROUND.QUARTER_FINAL:
+      return 'Cuartos de final';
+    case ROUND.SEMI_FINAL:
+      return 'Semifinal';
+    case ROUND.FINAL:
+      return 'Final';
+  }
+};
+
+/**
+ * Translate from english to spanish playoff match group.
+ * @param group The group to evaluate: 'quaterfinal', 'semifinal', 'final'.
+ * @returns The translated group in spanish
+ */
+export const getPlayoffGroup = (group: string) => {
+  switch (group) {
+    case 'gold':
+      return 'Oro';
+    case 'silver':
+      return 'Plata';
   }
 };
