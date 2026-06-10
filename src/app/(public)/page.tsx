@@ -9,11 +9,13 @@ import { ErrorHandler } from '@/shared/components/errorHandler';
 import { LatestImages } from './components/latest-images';
 import { Sidebar } from './components/sidebar';
 import { LatestImagesSkeleton } from './components/latest-images/latest-images-skeleton';
+import { PlayoffMatches } from './components/playoff-matches';
 
 type Props = Readonly<{
   searchParams: Promise<{
     'next-matches'?: string;
     'latest-results'?: string;
+    'playoffs-results'?: string;
     'selected-day'?: string;
   }>;
 }>;
@@ -21,6 +23,7 @@ type Props = Readonly<{
 const HomePage: FC<Props> = ({ searchParams }) => {
   const matchesPromise = searchParams.then((sp) => ({ matchesPage: sp['next-matches'] }));
   const resultsPromise = searchParams.then((sp) => ({ latestResultsPage: sp['latest-results'] }));
+  const playoffsPromise = searchParams.then((sp) => ({ playoffsPage: sp['playoffs-results'] }));
   const selectedDayPromise = searchParams.then((sp) => ({ selectedDay: sp['selected-day'] }));
 
   return (
@@ -50,11 +53,11 @@ const HomePage: FC<Props> = ({ searchParams }) => {
           </Suspense>
 
           <Suspense fallback={<MatchesSkeleton />}>
-            <LatestResults
-              resultsPromise={
-                resultsPromise as Promise<{ latestResultsPage: string }>
-              }
-            />
+            <PlayoffMatches playoffsPromise={playoffsPromise} />
+          </Suspense>
+
+          <Suspense fallback={<MatchesSkeleton />}>
+            <LatestResults resultsPromise={resultsPromise} />
           </Suspense>
 
           <Suspense fallback={<LatestImagesSkeleton />}>
