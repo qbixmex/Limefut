@@ -2,7 +2,7 @@
 
 import type { FC } from 'react';
 import { useState } from 'react';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { format } from 'date-fns';
 import { ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
