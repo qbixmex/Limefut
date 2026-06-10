@@ -1,19 +1,19 @@
 import type { FC } from 'react';
-import { fetchPublicLatestMatchesAction } from '../../(actions)/home/fetchPublicLatestMatchesAction';
 import { Pagination } from '@/shared/components/pagination';
-import { GameScore } from '@/shared/components/icons';
-import Link from 'next/link';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
+import { Medal } from 'lucide-react';
+import type { ROUND_TYPE } from '@/shared/enums';
+import { fetchPublicPlayoffMatchesAction } from '../../(actions)/home/fetchPublicPlayoffMatchesAction';
 
 type Props = Readonly<{
-  resultsPromise: Promise<{ latestResultsPage?: string }>;
+  playoffsPromise: Promise<{ playoffsPage?: string }>;
 }>;
 
-export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
-  const latestResultsPage = (await resultsPromise).latestResultsPage;
+export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
+  const latestResultsPage = (await playoffsPromise).playoffsPage;
 
-  const { matches, pagination } = await fetchPublicLatestMatchesAction({
+  const { matches, pagination } = await fetchPublicPlayoffMatchesAction({
     take: 4,
     nextMatches: latestResultsPage ? Number(latestResultsPage) : 1,
   });
@@ -21,29 +21,25 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
   return (
     <section>
       <div className="bg-emerald-700 text-emerald-50 px-5 py-3 rounded-t-lg flex items-center gap-3">
-        <GameScore size={50} strokeWidth={1.5} />
-        <p className="font-bold text-2xl">Resultados Recientes</p>
+        <Medal size={50} strokeWidth={1.5} />
+        <p className="font-bold text-2xl">Encuentros de Liguilla</p>
       </div>
 
       <div className="border border-green-900/90 rounded-b-lg p-5">
-        {(matches.length > 0) && matches.map((match, index) => (
-          <Link
-            key={match.id}
-            href={`/resultados/${match.id}/`}
-            target="_blank"
-            data-testid={`match-${match.id}`}
-          >
-            <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
+        {(matches.length > 0) && (
+          matches.map((match, index) => (
+            <div key={match.id} className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
               <div className="flex flex-col gap-5 md:flex-row md:gap-5">
                 <div className="w-full lg:w-1/2 order-2 lg:order-1">
                   <MatchMetadata
                     tournamentName={match.tournament.name}
-                    category={match.localTeam.category}
-                    format={match.localTeam.format}
-                    week={match.week}
+                    category={match.tournament.category}
+                    format={match.tournament.format}
                     place={match.place}
                     date={match.matchDate}
                     status={match.status}
+                    round={match.round as ROUND_TYPE}
+                    group={match.group}
                   />
                 </div>
                 <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 lg:order-2">
@@ -88,15 +84,15 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                 <div className="w-full h-0.5 bg-gray-300 my-3" />
               )}
             </div>
-          </Link>
-        ))}
-
+          ))
+        )}
         {(matches.length === 0) && (
           <div className="text-green-800 dark:text-green-500 text-center font-bold text-xl italic">
-            ¡ No hay encuentros recientes !
+            ¡ Aún no hay encuentros de liguilla disponibles !
           </div>
         )}
       </div>
+
       {(pagination.totalPages > 1) && (
         <section className="flex justify-center mt-5">
           <Pagination totalPages={pagination.totalPages} propName="latest-results" />
@@ -105,5 +101,3 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
     </section>
   );
 };
-
-export default LatestResults;
