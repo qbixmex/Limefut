@@ -56,15 +56,15 @@ export const MatchesTable: FC<Props> = ({
                 <TableHead className="hidden md:table-cell md:min-w-[150px]">Sede</TableHead>
                 <TableHead className="w-25">
                   {/* <DateSelector label='date' /> */}
-                  FECHA
+                  Fecha
                 </TableHead>
                 <TableHead className="w-25">
                   {/* <DateSelector label='hour' /> */}
-                  HORA
+                  Hora
                 </TableHead>
                 <TableHead className="w-[120px]" colSpan={2}>
                   {/* <StatusSelector /> */}
-                  ESTADO
+                  Estado
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -203,7 +203,6 @@ export const MatchesTable: FC<Props> = ({
                       <DeleteMatch
                         id={match.id}
                         authenticatedUserRoles={authenticatedUserRoles}
-                        status={match.status}
                       />
                     </div>
                   </TableCell>
