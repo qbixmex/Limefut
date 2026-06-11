@@ -16,19 +16,15 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { deletePlayoffMatchAction } from '../../(actions)/delete-playoff-match.action';
 import './styles.css';
 
 type Props = Readonly<{
   id: string;
-  status: MATCH_STATUS_TYPE;
   authenticatedUserRoles: string[] | null | undefined;
 }>;
 
-export const DeleteMatch: FC<Props> = ({ id, status, authenticatedUserRoles }) => {
-  if (status === MATCH_STATUS.COMPLETED) return null;
-
+export const DeleteMatch: FC<Props> = ({ id, authenticatedUserRoles }) => {
   const onDeleteMatch = async (id: string) => {
     if (!authenticatedUserRoles?.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar encuentros !');

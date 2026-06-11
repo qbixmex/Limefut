@@ -11,11 +11,11 @@ type Props = Readonly<{
 }>;
 
 export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
-  const latestResultsPage = (await playoffsPromise).playoffsPage;
+  const playoffsPage = (await playoffsPromise).playoffsPage;
 
   const { matches, pagination } = await fetchPublicPlayoffMatchesAction({
     take: 4,
-    nextMatches: latestResultsPage ? Number(latestResultsPage) : 1,
+    nextMatches: playoffsPage ? Number(playoffsPage) : 1,
   });
 
   return (
@@ -95,7 +95,7 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
 
       {(pagination.totalPages > 1) && (
         <section className="flex justify-center mt-5">
-          <Pagination totalPages={pagination.totalPages} propName="latest-results" />
+          <Pagination totalPages={pagination.totalPages} propName="playoffs-results" />
         </section>
       )}
     </section>
