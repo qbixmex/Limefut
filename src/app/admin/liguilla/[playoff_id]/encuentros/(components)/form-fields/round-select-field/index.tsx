@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ROUND } from '@/shared/enums';
+import { getPlayoffRound } from '@/lib/utils';
 
 export const RoundSelectField: FC = () => {
   const { control } = useFormContext();
@@ -34,13 +35,13 @@ export const RoundSelectField: FC = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={ROUND.QUARTER_FINAL}>
-                Cuartos de final
+                {getPlayoffRound(ROUND.QUARTER_FINAL)}
               </SelectItem>
               <SelectItem value={ROUND.SEMI_FINAL}>
-                Semi final
+                {getPlayoffRound(ROUND.SEMI_FINAL)}
               </SelectItem>
               <SelectItem value={ROUND.FINAL}>
-                Final
+                {getPlayoffRound(ROUND.FINAL)}
               </SelectItem>
             </SelectContent>
           </Select>
