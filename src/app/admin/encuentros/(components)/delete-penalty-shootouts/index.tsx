@@ -3,8 +3,7 @@
 import type { FC } from 'react';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
-import { Tooltip, TooltipContent } from '@/components/ui/tooltip';
-import { TooltipTrigger } from '@radix-ui/react-tooltip';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import {
   AlertDialog,
   AlertDialogContent,
