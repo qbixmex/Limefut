@@ -17,16 +17,21 @@ import {
 } from '@/components/ui/alert-dialog';
 import './styles.css';
 import { toast } from 'sonner';
-import { deletePenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/delete-penalty-shootout.action';
+import { deletePenaltyShootoutAction } from '@/shared/actions/delete-penalty-shootout.action';
 
 type Props = Readonly<{
   penaltyShootoutsId: string;
   winnerTeamId: string | null;
+  phase: 'regular' | 'playoffs';
 }>;
 
-export const DeletePenaltyShootouts: FC<Props> = ({ penaltyShootoutsId, winnerTeamId }) => {
+export const DeletePenaltyShootouts: FC<Props> = ({ penaltyShootoutsId, winnerTeamId, phase }) => {
   const handleDeletePenaltyShootouts = async () => {
-    const response = await deletePenaltyShootoutAction(penaltyShootoutsId, winnerTeamId);
+    const response = await deletePenaltyShootoutAction({
+      id: penaltyShootoutsId,
+      winnerTeamId,
+      phase,
+    });
     if (!response.ok) {
       toast.error(response.message);
       return;

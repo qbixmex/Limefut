@@ -26,7 +26,7 @@ export const PlayoffsMatchesContent: FC<Props> = async ({ playoffIdPromise, sear
     status,
   } = await searchParams;
 
-  const { ok, message, matches, pagination } = await fetchPlayoffMatchesAction({
+  const { ok, message, matches } = await fetchPlayoffMatchesAction({
     playoffId,
     searchTerm: query,
     sortMatchDate,
@@ -45,11 +45,7 @@ export const PlayoffsMatchesContent: FC<Props> = async ({ playoffIdPromise, sear
         key={`${query ?? 'query'}-${currentPage ?? 'page'}`}
         fallback={<MatchesTableSkeleton />}
       >
-        <MatchesWrapper
-          playoffId={playoffId}
-          matches={matches}
-          pagination={pagination}
-        />
+        <MatchesWrapper playoffId={playoffId} matches={matches} />
       </Suspense>
     </section>
   );

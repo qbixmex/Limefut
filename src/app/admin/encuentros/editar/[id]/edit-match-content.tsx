@@ -10,7 +10,7 @@ import { auth } from '@/lib/auth';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditMatchForm } from './edit-match-form';
 import { MATCH_STATUS } from '@/shared/enums';
-import { PenaltyShoots } from './penalty-shoots';
+import { PenaltyShoots } from '@/shared/components/penalty-shoots';
 
 type Props = Readonly<{
   params: Promise<{
@@ -102,6 +102,7 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
                 localPlayers: availableLocalPlayers,
                 visitorPlayers: availableVisitorPlayers,
               }}
+              phase="regular"
             />
           </>
         )}
