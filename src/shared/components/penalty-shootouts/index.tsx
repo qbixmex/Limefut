@@ -3,35 +3,10 @@ import { Check, MinusIcon, XIcon } from 'lucide-react';
 import { cn } from '~/src/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { SHOOTOUT_STATUS } from '@/shared/enums';
-
-type Shootout = {
-  id: string;
-  localTeam: Team;
-  visitorTeam: Team;
-  localGoals: number;
-  visitorGoals: number;
-  winnerTeamId: string | null;
-  status: string;
-  kicks: Kick[];
-};
-
-type Team = {
-  id: string;
-  name: string;
-  permalink: string;
-};
-
-type Kick = {
-  id: string;
-  teamId: string;
-  playerId: string | null;
-  shooterName: string | null;
-  order: number;
-  isGoal: boolean | null;
-};
+import type { PENALTY_SHOOTOUT_TYPE } from '@/shared/types/penalty_shootout_type';
 
 type Props = Readonly<{
-  shootout: Shootout | null | undefined;
+  shootout: PENALTY_SHOOTOUT_TYPE | null | undefined;
 }>;
 
 export const PenaltyShootout: FC<Props> = ({ shootout }) => {
@@ -135,8 +110,8 @@ export const PenaltyShootout: FC<Props> = ({ shootout }) => {
 
 const ShootoutWinner: FC<{
   winnerTeamId: string | null;
-  localTeam: Team;
-  visitorTeam: Team;
+  localTeam: { id: string; name: string; };
+  visitorTeam: { id: string; name: string; };
 }> = ({ winnerTeamId, localTeam, visitorTeam }) => {
   return (
     <>

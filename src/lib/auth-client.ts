@@ -3,6 +3,7 @@ import {
   inferAdditionalFields,
   customSessionClient,
 } from 'better-auth/client/plugins';
+import { nextCookies } from 'better-auth/next-js';
 import type { auth } from './auth';
 
 export const authClient = createAuthClient({
@@ -10,6 +11,7 @@ export const authClient = createAuthClient({
   plugins: [
     inferAdditionalFields<typeof auth>(),
     customSessionClient<typeof auth>(),
+    nextCookies(),
   ],
 });
 

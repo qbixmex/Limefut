@@ -4,11 +4,12 @@ import { useState, type FC } from 'react';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { MATCH_STATUS, SHOOTOUT_STATUS } from '@/shared/enums';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
-import type { PENALTY_SHOOTOUT_TYPE } from '../../(actions)/fetch-match.action';
-import { DeletePenaltyShootouts } from '../../(components)/delete-penalty-shootouts';
-import { PenaltiesForm } from '../../(components)/penalties-form';
 import { Switch } from '@/components/ui/switch';
-import { SimplePenaltyShootoutForm } from './components/simple-penalty-shootout-form';
+
+import { DeletePenaltyShootouts } from '@/shared/components/delete-penalty-shootouts';
+import { PenaltiesForm } from '@/shared/components/penalties-form';
+import { SimplePenaltyShootoutForm } from '@/shared/components/simple-penalty-shootout-form';
+import type { PENALTY_SHOOTOUT_TYPE } from '../types/penalty_shootout_type';
 
 type Props = Readonly<{
   userRoles: string[] | null | undefined;
@@ -25,6 +26,7 @@ type Props = Readonly<{
     localPlayers: AVAILABLE_PLAYER_TYPE[];
     visitorPlayers: AVAILABLE_PLAYER_TYPE[];
   }
+  phase: 'regular' | 'playoffs';
 }>;
 
 type TEAM_TYPE = {
@@ -44,6 +46,7 @@ export const PenaltyShoots: FC<Props> = ({
   visitorTeam,
   penaltyShootout,
   availablePlayers,
+  phase,
 }) => {
   const [penaltyShootsWithDetails, setPenaltyShootsWithDetails] = useState(false);
 
@@ -77,6 +80,7 @@ export const PenaltyShoots: FC<Props> = ({
                 <DeletePenaltyShootouts
                   penaltyShootoutsId={penaltyShootout.id}
                   winnerTeamId={penaltyShootout.winnerTeamId}
+                  phase={phase}
                 />
               )
             }
@@ -109,6 +113,7 @@ export const PenaltyShoots: FC<Props> = ({
                 id: visitorTeam.id,
                 name: visitorTeam.name,
               }}
+              phase={phase}
             />
           </>
         )}

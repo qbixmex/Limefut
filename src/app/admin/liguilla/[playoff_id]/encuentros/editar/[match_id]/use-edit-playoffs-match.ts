@@ -26,9 +26,8 @@ export const useEditPlayoffsMatch = ({
   const form = useForm<z.infer<typeof EditPlayoffsMatchSchema>>({
     resolver: zodResolver(EditPlayoffsMatchSchema),
     defaultValues: {
-      localTeamId: match.localId,
-      visitorTeamId: match.visitorId,
-      group: match.group,
+      localTeamId: match.localTeam.id,
+      visitorTeamId: match.visitorTeam.id,
       localTeamScore: match.localScore ?? 0,
       visitorTeamScore: match.visitorScore ?? 0,
       matchDate: match.matchDate ?? new Date(),
@@ -36,6 +35,7 @@ export const useEditPlayoffsMatch = ({
       referee: match.referee ?? '',
       remarks: match.remarks ?? '',
       fieldId: match.fieldId ?? '',
+      group: match.group,
       round: match.round,
     },
   });

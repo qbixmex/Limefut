@@ -7,14 +7,13 @@ import { cacheLife, cacheTag } from 'next/cache';
 
 export type MATCH_TYPE = {
   id: string;
-  localScore: number | null;
-  visitorScore: number | null;
+  place: string | null;
   matchDate: Date | null;
+  week: number | null;
   referee: string | null;
+  localScore: number;
+  visitorScore: number;
   status: MATCH_STATUS_TYPE;
-  group: string;
-  round: string;
-  remarks: string | null;
   localTeam: {
     id: string;
     name: string;
@@ -22,17 +21,33 @@ export type MATCH_TYPE = {
       id: string;
       name: string;
     }[];
-  };
+    fields: {
+      id: string;
+      name: string;
+    }[];
+  }
   visitorTeam: {
-        id: string;
-        name: string;
-        players: {
-            id: string;
-            name: string;
-        }[];
-    };
-  fieldId: string | null;
+    id: string;
+    name: string;
+    players: {
+      id: string;
+      name: string;
+    }[];
+    fields: {
+      id: string;
+      name: string;
+    }[];
+  }
+  tournament: TournamentType;
   penaltyShootout: PENALTY_SHOOTOUT_TYPE | null;
+};
+
+export type TournamentType = {
+  id: string;
+  name: string;
+  permalink: string;
+  category: string;
+  format: string;
 };
 
 type FetchResponse = Promise<{
@@ -41,51 +56,35 @@ type FetchResponse = Promise<{
   match: MATCH_TYPE | null,
 }>;
 
-export const fetchMatchForEditAction = async ({
-  playoffId,
-  matchId,
-  authenticatedUserId,
-  authenticatedUserRoles,
-}: {
-  playoffId: string,
-  matchId: string,
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}): FetchResponse => {
+export const fetchMatchAction = async (
+  id: string,
+  userRole: string[] | null,
+): FetchResponse => {
   'use cache';
 
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      match: null,
-    };
-  }
-
-  if ((!authenticatedUserRoles?.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      match: null,
-    };
-  }
-
   cacheLife('days');
-  cacheTag('admin-playoff-match');
+  cacheTag('admin-match');
+
+  if ((userRole !== null) && (!userRole.includes('admin'))) {
+    return {
+      ok: false,
+      message: '¡ No tienes permisos administrativos !',
+      match: null,
+    };
+  }
 
   try {
-    const playoffMatch = await prisma.playoffMatch.findFirst({
-      where: { id: matchId, playoffId },
+    const match = await prisma.match.findUnique({
+      where: { id },
       select: {
         id: true,
+        place: true,
         matchDate: true,
+        week: true,
         referee: true,
         localScore: true,
         visitorScore: true,
         status: true,
-        group: true,
-        round: true,
-        remarks: true,
         local: {
           select: {
             id: true,
@@ -94,6 +93,16 @@ export const fetchMatchForEditAction = async ({
               select: {
                 id: true,
                 name: true,
+              },
+            },
+            fields: {
+              include: {
+                field: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
               },
             },
           },
@@ -108,9 +117,27 @@ export const fetchMatchForEditAction = async ({
                 name: true,
               },
             },
+            fields: {
+              include: {
+                field: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
+              },
+            },
           },
         },
-        fieldId: true,
+        tournament: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+            category: true,
+            format: true,
+          },
+        },
         penaltyShootout: {
           select: {
             id: true,
@@ -146,10 +173,10 @@ export const fetchMatchForEditAction = async ({
       },
     });
 
-    if (!playoffMatch) {
+    if (!match) {
       return {
         ok: false,
-        message: `¡ El encuentro no existe con el id [${matchId}] ❌ !`,
+        message: '¡ Encuentro no encontrado ❌ !',
         match: null,
       };
     }
@@ -158,19 +185,30 @@ export const fetchMatchForEditAction = async ({
       ok: true,
       message: '¡ Encuentro obtenido correctamente 👍 !',
       match: {
-        id: playoffMatch.id,
-        matchDate: playoffMatch.matchDate,
-        referee: playoffMatch.referee,
-        localScore: playoffMatch.localScore,
-        visitorScore: playoffMatch.visitorScore,
-        status: playoffMatch.status,
-        group: playoffMatch.group,
-        round: playoffMatch.round,
-        remarks: playoffMatch.remarks,
-        localTeam: playoffMatch.local,
-        visitorTeam: playoffMatch.visitor,
-        fieldId: playoffMatch.fieldId,
-        penaltyShootout: playoffMatch.penaltyShootout,
+        id: match.id,
+        localTeam: {
+          ...match.local,
+          fields: match.local.fields.map((teamField) => teamField.field),
+        },
+        visitorTeam: {
+          ...match.visitor,
+          fields: match.visitor.fields.map((teamField) => teamField.field),
+        },
+        place: match.place,
+        matchDate: match.matchDate,
+        week: match.week,
+        referee: match.referee,
+        localScore: match.localScore ?? 0,
+        visitorScore: match.visitorScore ?? 0,
+        status: match.status as MATCH_STATUS_TYPE,
+        tournament: {
+          id: match.tournament.id,
+          name: match.tournament.name,
+          permalink: match.tournament.permalink,
+          category: match.tournament.category,
+          format: match.tournament.format,
+        },
+        penaltyShootout: match.penaltyShootout,
       },
     };
   } catch (error) {
