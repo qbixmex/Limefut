@@ -8,10 +8,15 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deletePenaltyShootoutAction = async (
-  id: string,
-  winnerTeamId: string | null,
-): Promise<ResponseDeleteAction> => {
+export const deletePenaltyShootoutAction = async ({
+  id,
+  winnerTeamId,
+  phase,
+} : {
+  id: string;
+  winnerTeamId: string | null;
+  phase: 'regular' | 'playoffs';
+}): Promise<ResponseDeleteAction> => {
   const shootout = await prisma.penaltyShootout.findUnique({
     where: { id },
   });
@@ -19,14 +24,14 @@ export const deletePenaltyShootoutAction = async (
   if (!shootout) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el la tanda de penales, quizás fue eliminado ó no existe !',
+      message: '¡ No se puede eliminar el la tanda de penales, quizás fue eliminada ó no existe !',
     };
   }
 
   await prisma.penaltyShootout.delete({ where: { id: shootout.id } });
 
   // Remove Additional Points is there is a winner on Penalty Shootouts
-  if (winnerTeamId) {
+  if (phase === 'regular' && winnerTeamId) {
     await prisma.$transaction(async (transaction) => {
       const standings = await transaction.standings.findUnique({
         where: { teamId: winnerTeamId },
@@ -57,13 +62,22 @@ export const deletePenaltyShootoutAction = async (
   }
 
   // Update Cache
-  updateTag('admin-matches');
-  updateTag('admin-match');
-  updateTag('public-matches');
-  updateTag('public-results-roles');
-  updateTag('public-result-details');
-  updateTag('public-matches-count');
-  updateTag('public-team-standings');
+  if (phase === 'regular') {
+    updateTag('admin-matches');
+    updateTag('admin-match');
+    updateTag('public-matches');
+    updateTag('public-results-roles');
+    updateTag('public-result-details');
+    updateTag('public-matches-count');
+    updateTag('public-team-standings');
+  }
+
+  if (phase === 'playoffs') {
+    updateTag('admin-playoff-matches');
+    updateTag('admin-playoff-match');
+    updateTag('public-playoff-matches');
+    updateTag('public-playoff-match');
+  }
 
   return {
     ok: true,

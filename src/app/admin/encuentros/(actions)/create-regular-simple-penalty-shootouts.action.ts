@@ -11,7 +11,7 @@ type CreateResponseAction = Promise<{
   penaltyShootout: PenaltyShootout | null;
 }>;
 
-export const createSimplePenaltyShootoutAction = async (
+export const createRegularSimplePenaltyShootoutAction = async (
   formData: FormData,
   userRoles: string[] | null | undefined,
 ): CreateResponseAction => {
@@ -66,7 +66,7 @@ export const createSimplePenaltyShootoutAction = async (
       if (!matchExists) {
         return {
           ok: false,
-          message: `¡ El encuentro con el ID: "${shootoutVerified.data.matchId}" no existe !`,
+          message: '¡ El encuentro con el id subministrado no existe !',
           penaltyShootout: null,
         };
       }

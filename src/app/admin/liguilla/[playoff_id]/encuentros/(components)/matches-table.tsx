@@ -13,7 +13,6 @@ import { Minus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { MATCH_STATUS, PLAYOFF_ROUND } from '@/shared/enums';
-import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -31,17 +30,12 @@ type Props = Readonly<{
   playoffId: string;
   matches: PLAYOFF_MATCH[];
   authenticatedUserRoles: string[] | null | undefined;
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-  };
 }>;
 
 export const MatchesTable: FC<Props> = ({
   playoffId,
   matches,
   authenticatedUserRoles,
-  pagination,
 }) => {
   return (
     <>
@@ -54,18 +48,9 @@ export const MatchesTable: FC<Props> = ({
                 <TableHead className="hidden md:table-cell md:min-w-20">Grupo</TableHead>
                 <TableHead className="hidden md:table-cell md:min-w-20">Ronda</TableHead>
                 <TableHead className="hidden md:table-cell md:min-w-[150px]">Sede</TableHead>
-                <TableHead className="w-25">
-                  {/* <DateSelector label='date' /> */}
-                  Fecha
-                </TableHead>
-                <TableHead className="w-25">
-                  {/* <DateSelector label='hour' /> */}
-                  Hora
-                </TableHead>
-                <TableHead className="w-[120px]" colSpan={2}>
-                  {/* <StatusSelector /> */}
-                  Estado
-                </TableHead>
+                <TableHead className="w-25">Fecha</TableHead>
+                <TableHead className="w-25">Hora</TableHead>
+                <TableHead className="w-[120px]" colSpan={2}>Estado</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -219,11 +204,6 @@ export const MatchesTable: FC<Props> = ({
               )}
             </TableBody>
           </Table>
-        </div>
-        <div className={cn('flex justify-center mt-10', {
-          hidden: matches.length === 0 || pagination!.totalPages === 1,
-        })}>
-          <Pagination totalPages={pagination!.totalPages as number} />
         </div>
       </div>
     </>

@@ -8,14 +8,17 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SimplePenaltyShootoutsSchema } from '@/shared/schemas/penalty-shootout';
 import type { z } from 'zod';
-import { createSimplePenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/create-simple-penalty-shootouts.action';
+import { createRegularSimplePenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/create-regular-simple-penalty-shootouts.action';
 import { toast } from 'sonner';
+import { createPlayoffSimplePenaltyShootoutAction } from '@/app/admin/liguilla/(actions)/create-playoff-simple-penalty-shootout.action';
+import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
   userRoles: string[] | null | undefined;
   matchId: string;
   localTeam: Team;
   visitorTeam: Team;
+  phase: 'regular' | 'playoffs';
 }>;
 
 type Team = {
@@ -28,6 +31,7 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
   matchId,
   localTeam,
   visitorTeam,
+  phase,
 }) => {
   const form = useForm<z.infer<typeof SimplePenaltyShootoutsSchema>>({
     resolver: zodResolver(SimplePenaltyShootoutsSchema),
@@ -49,10 +53,28 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
     formData.append('localGoals', data.localGoals.toString());
     formData.append('visitorGoals', data.visitorGoals.toString());
 
-    const { ok, message } = await createSimplePenaltyShootoutAction(
-      formData,
-      userRoles,
-    );
+    let ok = false;
+    let message = '';
+
+    if (phase === 'regular') {
+      const response = await createRegularSimplePenaltyShootoutAction(
+        formData,
+        userRoles,
+      );
+
+      ok = response.ok;
+      message = response.message;
+    }
+
+    if (phase === 'playoffs') {
+      const response = await createPlayoffSimplePenaltyShootoutAction(
+        formData,
+        userRoles,
+      );
+
+      ok = response.ok;
+      message = response.message;
+    }
 
     if (!ok) {
       toast.error(message);
@@ -75,7 +97,7 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex gap-5 mb-10">
-            <div className="w-full">
+            <div className="w-1/3">
               <FormField
                 control={form.control}
                 name="localGoals"
@@ -95,7 +117,7 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
                 )}
               />
             </div>
-            <div className="w-full">
+            <div className="w-1/3">
               <FormField
                 control={form.control}
                 name="visitorGoals"
@@ -115,14 +137,23 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
                 )}
               />
             </div>
-          </div>
-
-          <div className="flex lg:justify-end">
-            <Button
-              variant="outline-primary"
-              type="submit"
-              className="w-full lg:w-fit"
-            >Guardar</Button>
+            <div className="w-1/3 self-end">
+              <Button
+                variant="outline-primary"
+                type="submit"
+                className="w-full lg:w-fit"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting ? (
+                  <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                    <span className="text-sm italic">Espere</span>
+                    <LoaderCircle className="size-4 animate-spin" />
+                  </span>
+                ) : (
+                  <span>Guardar</span>
+                )}
+              </Button>
+            </div>
           </div>
         </form>
       </Form>
