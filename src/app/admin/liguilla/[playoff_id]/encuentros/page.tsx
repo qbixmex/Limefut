@@ -30,7 +30,9 @@ export const PlayoffsMatchesPage: FC<Props> = ({ params, searchParams }) => {
         <div className="admin-page-container">
           <Card className="admin-page-card">
             <CardHeader className="admin-page-card-header">
-              <CardTitle className="admin-page-card-title">Partidos de Liguilla</CardTitle>
+              <CardTitle className="admin-page-card-title">
+                Encuentros de Liguilla
+              </CardTitle>
               <section className="flex gap-2.5">
                 <Search placeholder="ejemplo: chivas vs atlas" />
                 <ClearFilters />

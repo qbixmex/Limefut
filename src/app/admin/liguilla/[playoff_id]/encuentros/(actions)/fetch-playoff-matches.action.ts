@@ -32,6 +32,7 @@ export type PLAYOFF_MATCH = {
   matchDate: Date | null;
   field: FIELD_TYPE | null;
   penaltyShootout: PENALTY_SHOOTOUT_TYPE | null;
+  category: string | undefined;
 };
 
 export type FIELD_TYPE = {
@@ -129,12 +130,19 @@ export const fetchPlayoffMatchesAction = async ({
   }
 
   try {
-    const playoffs = await prisma.playoff.findFirst({
+    const playoff = await prisma.playoff.findFirst({
       where: { id: playoffId },
-      select: { id: true },
+      select: {
+        id: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
-    if (!playoffs) {
+    if (!playoff) {
       return {
         ok: false,
         message: '¡ No se pudo encontrar la liguilla con el id subministrado !',
@@ -148,7 +156,7 @@ export const fetchPlayoffMatchesAction = async ({
 
     const matches = await prisma.playoffMatch.findMany({
       where: {
-        playoffId: playoffs.id,
+        playoffId: playoff.id,
         ...wherePlayoffMatchCondition,
       },
       orderBy: { matchDate: sortMatchDate },
@@ -196,7 +204,10 @@ export const fetchPlayoffMatchesAction = async ({
     return {
       ok: true,
       message: '! Los encuentros de liguilla fueron obtenidos correctamente 👍',
-      matches,
+      matches: matches.map(match => ({
+        ...match,
+        category: playoff.category?.name,
+      })),
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / take),

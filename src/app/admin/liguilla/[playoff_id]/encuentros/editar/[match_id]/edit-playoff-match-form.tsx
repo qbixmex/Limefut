@@ -65,7 +65,7 @@ export const EditPlayoffsMatchForm: FC<Props> = ({
 
           <section className="flex flex-col lg:flex-row gap-5">
             <div className="w-full lg:w-1/2">
-              <MatchDateTime />
+              <MatchDateTime isMatchDate={!!match.matchDate} />
             </div>
             <div className="w-full lg:w-1/2">
               <div className="flex flex-col lg:flex-row gap-5">

@@ -9,12 +9,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { MATCH_STATUS } from '@/shared/enums';
 import { getStatusTranslation } from '@/lib/utils';
 
 export const MatchStatusSelectField: FC = () => {
   const { control } = useFormContext();
+  const status = useWatch({ name: 'status' });
+
+  if (status === MATCH_STATUS.COMPLETED) {
+    return (
+      <Field>
+        <FieldLabel>Estado</FieldLabel>
+        <div className="border-2 border-primary rounded py-1 px-2">
+          <p className="text-primary text-center font-semibold">
+            {getStatusTranslation(MATCH_STATUS.COMPLETED)}
+          </p>
+        </div>
+      </Field>
+    );
+  }
 
   return (
     <Controller
@@ -24,7 +38,7 @@ export const MatchStatusSelectField: FC = () => {
         <Field>
           <FieldLabel>Estado</FieldLabel>
           <Select
-            value={field.value}
+            value={field.value ?? ''}
             onValueChange={field.onChange}
           >
             <SelectTrigger

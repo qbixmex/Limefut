@@ -118,6 +118,18 @@ export const updatePlayoffMatchAction = async ({
           select: { id: true },
         });
 
+        const winnerId = setMatchWinner({
+          localTeamId: matchData.localTeamId as string,
+          localTeamScore: matchData.localTeamScore ?? 0,
+          visitorTeamId: matchData.visitorTeamId as string,
+          visitorTeamScore: matchData.visitorTeamScore ?? 0,
+        });
+
+        await transaction.playoffMatch.update({
+          where: { id: matchId },
+          data: { winnerId },
+        });
+
         // Update Cache
         updateTag('admin-playoff-matches');
         updateTag('admin-playoff-match');
@@ -185,5 +197,28 @@ export const updatePlayoffMatchAction = async ({
       message: '¡ Error inesperado, revise los logs del servidor !',
       match: null,
     };
+  }
+};
+
+const setMatchWinner = ({
+  localTeamId,
+  localTeamScore,
+  visitorTeamId,
+  visitorTeamScore,
+}: {
+  localTeamId: string,
+  localTeamScore: number,
+  visitorTeamId: string,
+  visitorTeamScore: number,
+}): string | null => {
+  switch (true) {
+    case localTeamScore > visitorTeamScore:
+      return localTeamId;
+    case visitorTeamScore === localTeamScore:
+      return null;
+    case visitorTeamScore > localTeamScore:
+      return visitorTeamId;
+    default:
+      return null;
   }
 };
