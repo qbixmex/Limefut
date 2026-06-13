@@ -18,9 +18,11 @@ import { es } from 'date-fns/locale';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 
-export const MatchDateTime: FC = () => {
+type Props = Readonly<{ isMatchDate: boolean; }>;
+
+export const MatchDateTime: FC<Props> = ({ isMatchDate }) => {
   const { control } = useFormContext();
-  const [enabledDate, setEnabledDate] = useState(false);
+  const [enabledDate, setEnabledDate] = useState(isMatchDate);
   const [open, setOpen] = useState(false);
 
   return (
