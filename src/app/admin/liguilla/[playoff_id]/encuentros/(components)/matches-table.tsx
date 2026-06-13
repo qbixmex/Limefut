@@ -45,12 +45,13 @@ export const MatchesTable: FC<Props> = ({
             <TableHeader>
               <TableRow className="h-16">
                 <TableHead className="w-full md:w-1/2">Encuentro</TableHead>
+                <TableHead className="hidden md:table-cell md:min-w-20">Categoría</TableHead>
                 <TableHead className="hidden md:table-cell md:min-w-20">Grupo</TableHead>
                 <TableHead className="hidden md:table-cell md:min-w-20">Ronda</TableHead>
                 <TableHead className="hidden md:table-cell md:min-w-[150px]">Sede</TableHead>
-                <TableHead className="w-25">Fecha</TableHead>
-                <TableHead className="w-25">Hora</TableHead>
-                <TableHead className="w-[120px]" colSpan={2}>Estado</TableHead>
+                <TableHead className="hidden md:table-cell md:min-w-25">Fecha</TableHead>
+                <TableHead className="hidden md:table-cell md:min-w-25">Hora</TableHead>
+                <TableHead className="hidden md:table-cell md:w-[120px]" colSpan={2}>Estado</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -111,7 +112,12 @@ export const MatchesTable: FC<Props> = ({
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Badge variant="outline-info" className="lowercase">
+                      {match.category}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
                     <Badge
                       variant='outline-info'
                       className={cn({
@@ -122,7 +128,7 @@ export const MatchesTable: FC<Props> = ({
                       {match.group}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     <Badge
                       variant="outline-primary"
                       className={cn({
@@ -147,7 +153,7 @@ export const MatchesTable: FC<Props> = ({
                       <Badge variant="outline-secondary">no disponible</Badge>
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     {match.matchDate ? (
                       <span className="text-indigo-600 dark:text-indigo-400">
                         {format(match.matchDate as Date, 'EEE dd MMM, y', { locale: es }).toUpperCase()}
@@ -156,14 +162,16 @@ export const MatchesTable: FC<Props> = ({
                       <Badge variant="outline-secondary">No disponible</Badge>
                     )}
                   </TableCell>
-                  <TableCell className="text-blue-600 dark:text-blue-500">
-                    {match.matchDate ? (
-                      formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })
-                    ) : (
-                      <Badge variant="outline-secondary">No disponible</Badge>
-                    )}
+                  <TableCell className="hidden md:table-cell">
+                    <p className="text-blue-600 dark:text-blue-500">
+                      {match.matchDate ? (
+                        formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })
+                      ) : (
+                        <Badge variant="outline-secondary">No disponible</Badge>
+                      )}
+                    </p>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     {match.status === MATCH_STATUS.COMPLETED ? (
                       <div className="w-full max-w-[150px] border border-emerald-500 text-center rounded-lg py-2 px-4">
                         <span className="text-emerald-500 font-semibold">Finalizado</span>
