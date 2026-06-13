@@ -20,16 +20,18 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
-import { createPenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/create-penalty-shootouts.action';
-import type z from 'zod';
 import { createPenaltyShootoutSchema } from './createPenaltyShootout.schema';
 import { toast } from 'sonner';
+import type z from 'zod';
+import { createPlayoffPenaltyShootoutAction } from '@/app/admin/liguilla/(actions)/create-playoff-penalty-shootout.action';
+import { createRegularPenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/create-regular-penalty-shootouts.action';
 
 type Props = Readonly<{
   userRoles: string[] | null | undefined;
   currentMatchId: string;
   localTeam: Team;
   visitorTeam: Team;
+  phase: 'regular' | 'playoff';
 }>;
 
 type Team = {
@@ -46,6 +48,7 @@ export const PenaltiesForm: FC<Props> = ({
   currentMatchId,
   localTeam,
   visitorTeam,
+  phase,
 }) => {
   const formSchema = createPenaltyShootoutSchema;
 
@@ -82,19 +85,37 @@ export const PenaltiesForm: FC<Props> = ({
     formData.append('localIsGoal', data.localIsGoal);
     formData.append('visitorIsGoal', data.visitorIsGoal);
 
-    // Create match
-    const response = await createPenaltyShootoutAction(
-      formData,
-      userRoles,
-    );
+    let ok = false;
+    let message = '';
 
-    if (!response.ok) {
-      toast.error(response.message);
+    // Create match
+    if (phase === 'regular') {
+      const response = await createRegularPenaltyShootoutAction(
+        formData,
+        userRoles,
+      );
+
+      ok = response.ok;
+      message = response.message;
+    }
+
+    if (phase === 'playoff') {
+      const response = await createPlayoffPenaltyShootoutAction(
+        formData,
+        userRoles,
+      );
+
+      ok = response.ok;
+      message = response.message;
+    }
+
+    if (!ok) {
+      toast.error(message);
       return;
     }
 
-    if (response.ok) {
-      toast.success(response.message);
+    if (ok) {
+      toast.success(message);
       form.reset();
     }
   };

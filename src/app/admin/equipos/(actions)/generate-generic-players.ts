@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { malePlayers } from '@/shared/data/male-players';
 import { femalePlayers } from '@/shared/data/female-players';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 type Options = {
   userRoles: string[] | undefined;
@@ -37,11 +38,7 @@ export const generatePlayersAction = async ({
     };
   }
 
-  const genericPlayers = (gender === 'male')
-    ? malePlayers
-    : (gender === 'female')
-      ? femalePlayers
-      : malePlayers;
+  const genericPlayers = getGenericPlayers(gender);
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
@@ -69,11 +66,12 @@ export const generatePlayersAction = async ({
     updateTag('public-teams');
     updateTag('public-team');
     updateTag('admin-players');
+    updateTag('admin-playoff-match');
 
     return prismaTransaction;
   } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
@@ -91,5 +89,14 @@ export const generatePlayersAction = async ({
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
     };
+  }
+};
+
+const getGenericPlayers = (gender: 'male' | 'female') => {
+  switch (gender) {
+    case 'male':
+      return malePlayers;
+    case 'female':
+      return femalePlayers;
   }
 };

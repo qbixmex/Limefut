@@ -48,7 +48,7 @@ export const PenaltyShoots: FC<Props> = ({
   availablePlayers,
   phase,
 }) => {
-  const [penaltyShootsWithDetails, setPenaltyShootsWithDetails] = useState(false);
+  const [penaltyShootsWithDetails, setPenaltyShootsWithDetails] = useState(!!penaltyShootout);
 
   return (
     <>
@@ -143,6 +143,7 @@ export const PenaltyShoots: FC<Props> = ({
                 name: visitorTeam.name,
                 players: availablePlayers.visitorPlayers,
               }}
+              phase="playoff"
             />
           </section>
         )}

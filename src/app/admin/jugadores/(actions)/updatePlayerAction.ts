@@ -122,6 +122,7 @@ export const updatePlayerAction = async ({
         // Update Cache
         updateTag('admin-players');
         updateTag('admin-player');
+        updateTag('admin-playoff-match');
 
         return {
           ok: true,
