@@ -20,7 +20,7 @@ export const fetchTeamsAction = async ({
   authenticatedUserRoles,
   tournamentPermalink,
   categoryPermalink,
-} : {
+}: {
   authenticatedUserId: string | undefined;
   authenticatedUserRoles: string[] | null | undefined;
   tournamentPermalink: string;
@@ -50,8 +50,10 @@ export const fetchTeamsAction = async ({
   try {
     const teams = await prisma.team.findMany({
       where: {
-        tournament: { permalink: tournamentPermalink },
-        category: categoryPermalink,
+        tournament: {
+          permalink: tournamentPermalink,
+          category: categoryPermalink,
+        },
       },
       orderBy: {
         name: 'desc',
