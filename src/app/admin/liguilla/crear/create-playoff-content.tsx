@@ -37,7 +37,7 @@ export const CreatePlayoffContent: FC<Props> = async ({ searchParams }) => {
       }
       teamsSlot={
         <TeamsSelectField
-          key={`${category ?? 'category'}`}
+          key={`${tournament ?? 'tournament'}-${category ?? 'category'}`}
           authenticatedUserId={session?.user.id}
           authenticatedUserRoles={session?.user.roles}
           tournamentPermalink={tournament}
