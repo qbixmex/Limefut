@@ -24,7 +24,7 @@ export const MatchStatusSelectField: FC = () => {
         <Field>
           <FieldLabel>Estado</FieldLabel>
           <Select
-            value={field.value}
+            value={field.value ?? ''}
             onValueChange={field.onChange}
           >
             <SelectTrigger
