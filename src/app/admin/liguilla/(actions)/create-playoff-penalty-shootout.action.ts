@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import type { PenaltyShootout } from '@/shared/interfaces';
 import { createPenaltyShootoutSchema } from '~/src/shared/schemas';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -11,7 +12,7 @@ type CreateResponseAction = Promise<{
   penaltyShootout: PenaltyShootout | null;
 }>;
 
-export const createPenaltyShootoutAction = async (
+export const createPlayoffPenaltyShootoutAction = async (
   formData: FormData,
   userRoles: string[] | null | undefined,
 ): CreateResponseAction => {
@@ -50,21 +51,21 @@ export const createPenaltyShootoutAction = async (
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       // Verify that the match exists
-      const match = await transaction.match.findUnique({
+      const playoffMatch = await transaction.playoffMatch.findFirst({
         where: { id: matchId },
       });
 
-      if (!match) {
+      if (!playoffMatch) {
         return {
           ok: false,
-          message: `¡ El encuentro con el ID: "${matchId}" no existe !`,
+          message: '¡ El encuentro de liguilla con el id subministrado no existe !',
           penaltyShootout: null,
         };
       }
 
       // Get the existing penalty shootout
-      let penaltyShootout = await transaction.penaltyShootout.findUnique({
-        where: { matchId },
+      let penaltyShootout = await transaction.penaltyShootout.findFirst({
+        where: { playoffMatchId: matchId },
         include: {
           kicks: {
             orderBy: { order: 'desc' },
@@ -82,7 +83,7 @@ export const createPenaltyShootoutAction = async (
       if (!penaltyShootout) {
         penaltyShootout = await transaction.penaltyShootout.create({
           data: {
-            matchId,
+            playoffMatchId: matchId,
             localTeamId: shootoutToSave.localTeamId,
             visitorTeamId: shootoutToSave.visitorTeamId,
           },
@@ -116,10 +117,10 @@ export const createPenaltyShootoutAction = async (
         (shootoutToSave.visitorIsGoal === 'scored' ? 1 : 0);
 
       // Check if both teams have completed their 3 mandatory rounds
-      const localCompleted3 = localKicksAfter >= 3;
+      const localCompleted = localKicksAfter >= 3;
       const visitorCompleted3 = visitorKicksAfter >= 3;
 
-      if (localCompleted3 && visitorCompleted3) {
+      if (localCompleted && visitorCompleted3) {
         // Phase 1: Both teams completed mandatory 3 rounds each (6 total kicks)
         if (finalLocalGoals !== finalVisitorGoals) {
           // There is a winner - penalty shootout ends here
@@ -182,29 +183,6 @@ export const createPenaltyShootoutAction = async (
         include: { kicks: true },
       });
 
-      if (
-        updatedShootout.winnerTeamId !== null &&
-        updatedShootout.status === 'completed'
-      ) {
-        await transaction.standings.upsert({
-          where: { teamId: updatedShootout.winnerTeamId },
-          update: {
-            additionalPoints: {
-              increment: 1,
-            },
-            totalPoints: {
-              increment: 1,
-            },
-          },
-          create: {
-            teamId: updatedShootout.winnerTeamId,
-            tournamentId: match.tournamentId,
-            additionalPoints: 1,
-            totalPoints: 1,
-          },
-        });
-      }
-
       return {
         ok: true,
         message: '¡ Tanda de penales creada correctamente 👍 !',
@@ -213,22 +191,19 @@ export const createPenaltyShootoutAction = async (
     });
 
     // Refresh Cache
-    updateTag('admin-matches');
-    updateTag('admin-match');
-    updateTag('public-matches');
-    updateTag('public-results-roles');
-    updateTag('public-result-details');
-    updateTag('public-matches-count');
-    updateTag('public-team-standings');
+    updateTag('admin-playoff-matches');
+    updateTag('admin-playoff-match');
+    updateTag('public-playoff-matches');
+    updateTag('public-playoff-match');
 
     return prismaTransaction;
   } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        console.log('ERROR MESSAGE:', error.message);
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: error.message,
           penaltyShootout: null,
         };
       }
@@ -243,8 +218,8 @@ export const createPenaltyShootoutAction = async (
         penaltyShootout: null,
       };
     }
-    console.log('Error Cause:', (error as Error).cause);
-    console.log('Error Message:', (error as Error).message);
+    console.log('ERROR CAUSE:', (error as Error).cause);
+    console.log('ERROR MESSAGE:', (error as Error).message);
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',

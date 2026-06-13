@@ -24,7 +24,7 @@ export const RoundSelectField: FC = () => {
         <Field>
           <FieldLabel>Ronda</FieldLabel>
           <Select
-            value={field.value}
+            value={field.value ?? ''}
             onValueChange={field.onChange}
           >
             <SelectTrigger

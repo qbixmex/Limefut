@@ -48,8 +48,8 @@ export const useEditPlayoffsMatch = ({
     if (data.fieldId) formData.append('fieldId', data.fieldId);
     if (data.referee) formData.append('referee', data.referee);
     if (data.remarks) formData.append('remarks', data.remarks);
-    if (data.localTeamScore) formData.append('localTeamScore', data.localTeamScore.toString());
-    if (data.visitorTeamScore) formData.append('visitorTeamScore', data.visitorTeamScore.toString());
+    if (data.localTeamScore !== undefined) formData.append('localTeamScore', data.localTeamScore.toString());
+    if (data.visitorTeamScore !== undefined) formData.append('visitorTeamScore', data.visitorTeamScore.toString());
     if (data.matchDate) formData.append('matchDate', data.matchDate.toString());
     if (data.round) formData.append('round', data.round);
     if (data.group) formData.append('group', data.group);

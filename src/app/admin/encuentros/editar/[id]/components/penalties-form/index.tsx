@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
-import { createPenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/create-penalty-shootouts.action';
+import { createRegularPenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/create-regular-penalty-shootouts.action';
 import type z from 'zod';
 import { createPenaltyShootoutSchema } from './createPenaltyShootout.schema';
 import { toast } from 'sonner';
@@ -83,7 +83,7 @@ export const PenaltiesForm: FC<Props> = ({
     formData.append('visitorIsGoal', data.visitorIsGoal);
 
     // Create match
-    const response = await createPenaltyShootoutAction(
+    const response = await createRegularPenaltyShootoutAction(
       formData,
       userRoles,
     );
