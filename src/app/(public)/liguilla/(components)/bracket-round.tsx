@@ -1,9 +1,13 @@
+'use client';
+
 import type { FC } from 'react';
 import { MatchCard, type Match } from './match-card';
-import { Trophy } from 'lucide-react';
 import { BracketConnector } from './bracket-connector';
 import { PLAYOFF_ROUND, type PLAYOFF_ROUND_TYPE } from '@/shared/enums';
 import { cn } from '@/lib/utils';
+import { useBracketRound } from '../use-bracket-round';
+import { FinalCell } from './final-cell';
+import { ChampionDisplay } from './champion-display';
 
 type Props = Readonly<{
   quarterFinals?: [Match, Match, Match, Match];
@@ -14,82 +18,11 @@ type Props = Readonly<{
   startingRound: PLAYOFF_ROUND_TYPE;
 }>;
 
-const getWinner = (match: Match | undefined): 'local' | 'visitor' | null => {
-  if (!match) return null;
-  if (match.status !== 'completed') return null;
-  if (match.localScore === null || match.visitorScore === null) return null;
-  if (match.localScore > match.visitorScore) return 'local';
-  if (match.visitorScore > match.localScore) return 'visitor';
-  if (match.penaltyShoots) {
-    if (
-      match.penaltyShoots.localGoals > match.penaltyShoots.visitorGoals
-    ) {
-      return 'local';
-    }
-    if (
-      match.penaltyShoots.visitorGoals > match.penaltyShoots.localGoals
-    ) {
-      return 'visitor';
-    }
-  }
-  return null;
-};
-
-const getLoser = (match: Match): 'local' | 'visitor' | null => {
-  const winner = getWinner(match);
-  if (!winner) return null;
-  return winner === 'local' ? 'visitor' : 'local';
-};
-
-const ChampionDisplay: FC<{
-  final: Match;
-  isFinalCompleted: boolean;
-  championColor: 'amber' | 'slate';
-}> = ({ final, isFinalCompleted, championColor }) => {
-  const finalWinner = getWinner(final);
-  return isFinalCompleted && finalWinner ? (
-    <div className="flex flex-col items-center gap-2">
-      <Trophy
-        size={64}
-        className={`shrink-0 ${championColor === 'amber' ? 'stroke-amber-500' : 'stroke-slate-400'}`}
-        strokeWidth={1.5}
-      />
-      <span className="text-xl font-bold text-primary">
-        {finalWinner === 'local' ? final.localTeam.name : final.visitorTeam.name}
-      </span>
-      <span className={`text-2xl font-bold ${championColor === 'amber' ? 'text-amber-500' : 'text-slate-400'}`}>
-        Campeón
-      </span>
-    </div>
-  ) : null;
-};
-
 const RoundLabel: FC<{ label: string }> = ({ label }) => (
   <span className="text-lg font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest text-center">
     {label}
   </span>
 );
-
-const FinalCell: FC<{
-  final: Match;
-  isFinalCompleted: boolean;
-  championColor: 'amber' | 'slate';
-}> = ({ final, isFinalCompleted, championColor }) => {
-  const finalWinner = getWinner(final);
-  return (
-    <span className="text-center">
-      {isFinalCompleted && finalWinner ? (
-        <span className="flex flex-col items-center gap-0.5">
-          <ChampionDisplay final={final} isFinalCompleted={isFinalCompleted} championColor={championColor} />
-        </span>
-      ) : (
-        <span className="text-lg font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-          Final
-        </span>
-      )}
-    </span>
-  );
-};
 
 const ConnectorSpacer: FC = () => <span />;
 
@@ -101,6 +34,7 @@ export const BracketRound: FC<Props> = ({
   variant = 'oro',
   startingRound,
 }) => {
+  const { getWinner, getLoser } = useBracketRound();
   const finalWinner = getWinner(final);
   const isFinalCompleted = final.status === 'completed';
   const championColor = variant === 'oro' ? 'amber' : 'slate';
@@ -200,7 +134,11 @@ export const BracketRound: FC<Props> = ({
           >
             <RoundLabel label="Semifinal" />
             <ConnectorSpacer />
-            <FinalCell final={final} isFinalCompleted={isFinalCompleted} championColor={championColor} />
+            <FinalCell
+              final={final}
+              isFinalCompleted={isFinalCompleted}
+              championColor={championColor}
+            />
             <ConnectorSpacer />
             <RoundLabel label="Semifinal" />
           </div>
@@ -252,7 +190,11 @@ export const BracketRound: FC<Props> = ({
             {isFinalCompleted && (
               <>
                 {finalWinner && (
-                  <ChampionDisplay final={final} isFinalCompleted={isFinalCompleted} championColor={championColor} />
+                  <ChampionDisplay
+                    final={final}
+                    isFinalCompleted={isFinalCompleted}
+                    championColor={championColor}
+                  />
                 )}
                 {getLoser(final) && (
                   <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 italic text-center">
