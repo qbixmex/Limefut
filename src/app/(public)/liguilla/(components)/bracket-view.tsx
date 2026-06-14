@@ -160,6 +160,7 @@ export const BracketView: FC = () => {
         semiFinals={MOCK_ORO.semiFinals}
         final={MOCK_ORO.final}
         groupName="Oro"
+        variant="oro"
       />
 
       <div className="w-full h-px bg-gray-300 dark:bg-gray-700" />
@@ -169,6 +170,7 @@ export const BracketView: FC = () => {
         semiFinals={MOCK_PLATA.semiFinals}
         final={MOCK_PLATA.final}
         groupName="Plata"
+        variant="plata"
       />
     </div>
   );

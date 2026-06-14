@@ -1,5 +1,34 @@
 import type { FC } from 'react';
 
+function ConnectorSkeleton({ type }: { type: 'qf-to-sf' | 'sf-to-final' }) {
+  return (
+    <svg
+      viewBox="0 0 40 100"
+      preserveAspectRatio="none"
+      className="w-full h-full text-gray-300 dark:text-gray-600 overflow-visible"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {type === 'qf-to-sf' ? (
+        <>
+          <path
+            d="M 0 15 L 16 15 M 24 50 L 40 50 M 0 85 L 16 85"
+            strokeWidth="0.75"
+          />
+          <path
+            d="M 16 15 Q 20 15 20 19 L 20 46 Q 20 50 24 50 M 16 85 Q 20 85 20 81 L 20 54 Q 20 50 24 50"
+            strokeWidth="1"
+          />
+        </>
+      ) : (
+        <path d="M 0 50 L 40 50" strokeWidth="1" />
+      )}
+    </svg>
+  );
+}
+
 const MatchCardSkeleton: FC = () => (
   <div className="flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 min-w-[140px] animate-pulse">
     <div className="flex items-center justify-between gap-2">
@@ -27,31 +56,34 @@ export const BracketSkeleton: FC = () => (
     <div>
       <div className="h-6 w-16 bg-gray-300 dark:bg-gray-600 rounded mb-4 animate-pulse" />
 
-      <div className="hidden lg:grid grid-cols-[1fr_20px_1fr_20px_1fr_20px_1fr_20px_1fr] gap-0 overflow-visible min-h-[350px]">
+      <div
+        className="hidden lg:grid min-h-[350px] overflow-visible"
+        style={{ gridTemplateColumns: '1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr' }}
+      >
         <div className="flex flex-col justify-between py-1">
           <MatchCardSkeleton />
           <MatchCardSkeleton />
         </div>
-        <div className="relative">
-          <div className="absolute left-1/2 top-0 w-0.5 h-full bg-gray-300 dark:bg-gray-600 -translate-x-1/2 animate-pulse" />
+        <div className="animate-pulse">
+          <ConnectorSkeleton type="qf-to-sf" />
         </div>
-        <div className="flex items-center">
+        <div className="flex flex-col justify-center py-1">
           <MatchCardSkeleton />
         </div>
-        <div className="relative">
-          <div className="absolute left-1/2 top-0 w-0.5 h-full bg-gray-300 dark:bg-gray-600 -translate-x-1/2 animate-pulse" />
+        <div className="animate-pulse">
+          <ConnectorSkeleton type="sf-to-final" />
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex flex-col justify-center py-1">
           <MatchCardSkeleton />
         </div>
-        <div className="relative">
-          <div className="absolute left-1/2 top-0 w-0.5 h-full bg-gray-300 dark:bg-gray-600 -translate-x-1/2 animate-pulse" />
+        <div className="animate-pulse">
+          <ConnectorSkeleton type="sf-to-final" />
         </div>
-        <div className="flex items-center">
+        <div className="flex flex-col justify-center py-1">
           <MatchCardSkeleton />
         </div>
-        <div className="relative">
-          <div className="absolute left-1/2 top-0 w-0.5 h-full bg-gray-300 dark:bg-gray-600 -translate-x-1/2 animate-pulse" />
+        <div className="animate-pulse">
+          <ConnectorSkeleton type="qf-to-sf" />
         </div>
         <div className="flex flex-col justify-between py-1">
           <MatchCardSkeleton />

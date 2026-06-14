@@ -35,16 +35,17 @@ export const MatchCard: FC<Props> = ({ match, winner }) => {
             {match.localTeam.name}
           </span>
         </div>
-        <span className={`font-bold text-base tabular-nums shrink-0 ml-2 ${winner === 'local' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-700 dark:text-blue-400'}`}>
-          {isScheduled ? '-' : hasScore ? match.localScore : '?'}
-        </span>
-      </div>
-
-      {match.penaltyShoots && (
-        <div className="flex justify-end text-[10px] text-gray-500 -mt-0.5 mr-1">
-          ({match.penaltyShoots.localGoals})
+        <div className="flex items-center gap-1">
+          {match.penaltyShoots && (
+            <div className="flex justify-end text-[10px] font-semibold text-gray-500">
+              ({match.penaltyShoots.localGoals})
+            </div>
+          )}
+          <span className={`font-bold text-base tabular-nums shrink-0 ${winner === 'local' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-700 dark:text-blue-400'}`}>
+            {isScheduled ? '-' : hasScore ? match.localScore : '-'}
+          </span>
         </div>
-      )}
+      </div>
 
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
@@ -53,19 +54,20 @@ export const MatchCard: FC<Props> = ({ match, winner }) => {
             {match.visitorTeam.name}
           </span>
         </div>
-        <span className={`font-bold text-base tabular-nums shrink-0 ml-2 ${winner === 'visitor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-700 dark:text-blue-400'}`}>
-          {isScheduled ? '-' : hasScore ? match.visitorScore : '?'}
-        </span>
+        <div className="flex items-center gap-1">
+          {match.penaltyShoots && (
+            <div className="flex justify-end text-[10px] font-semibold text-gray-500">
+              ({match.penaltyShoots.visitorGoals})
+            </div>
+          )}
+          <span className={`font-bold text-base tabular-nums shrink-0 ${winner === 'local' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-700 dark:text-blue-400'}`}>
+            {isScheduled ? '-' : hasScore ? match.visitorScore : '-'}
+          </span>
+        </div>
       </div>
 
-      {match.penaltyShoots && (
-        <div className="flex justify-end text-[10px] text-gray-500 -mt-0.5 mr-1">
-          ({match.penaltyShoots.visitorGoals})
-        </div>
-      )}
-
       {match.matchDate && (
-        <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5 pt-1.5 border-t border-gray-200 dark:border-gray-700 text-center">
+        <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mt-1.5 pt-1.5 border-t border-gray-200 dark:border-gray-700 text-center">
           {match.matchDate}
         </p>
       )}

@@ -7,7 +7,7 @@ export const ResultsPage: FC = () => {
   return (
     <div className="wrapper">
       <Heading level="h1" className="text-emerald-600">
-        Playoffs
+        Encuentros de Liguilla
       </Heading>
       <Suspense fallback={<BracketSkeleton />}>
         <BracketView />
