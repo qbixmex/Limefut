@@ -1,31 +1,33 @@
 import type { FC } from 'react';
 
-function ConnectorSkeleton({ type }: { type: 'qf-to-sf' | 'sf-to-final' }) {
+function ConnectorSkeleton({ type, flip }: { type: 'qf-to-sf' | 'sf-to-final'; flip?: boolean }) {
   return (
-    <svg
-      viewBox="0 0 40 100"
-      preserveAspectRatio="none"
-      className="w-full h-full text-gray-300 dark:text-gray-600 overflow-visible"
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {type === 'qf-to-sf' ? (
-        <>
-          <path
-            d="M 0 15 L 16 15 M 24 50 L 40 50 M 0 85 L 16 85"
-            strokeWidth="0.75"
-          />
-          <path
-            d="M 16 15 Q 20 15 20 19 L 20 46 Q 20 50 24 50 M 16 85 Q 20 85 20 81 L 20 54 Q 20 50 24 50"
-            strokeWidth="1"
-          />
-        </>
-      ) : (
-        <path d="M 0 50 L 40 50" strokeWidth="1" />
-      )}
-    </svg>
+    <div className={`flex items-stretch h-full w-full ${flip ? '-scale-x-100' : ''}`}>
+      <svg
+        viewBox="0 0 40 100"
+        preserveAspectRatio="none"
+        className="w-full h-full text-gray-300 dark:text-gray-600 overflow-visible"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {type === 'qf-to-sf' ? (
+          <>
+            <path
+              d="M 0 15 L 16 15 M 24 50 L 40 50 M 0 85 L 16 85"
+              strokeWidth="0.75"
+            />
+            <path
+              d="M 16 15 Q 20 15 20 19 L 20 46 Q 20 50 24 50 M 16 85 Q 20 85 20 81 L 20 54 Q 20 50 24 50"
+              strokeWidth="1"
+            />
+          </>
+        ) : (
+          <path d="M 0 50 L 40 50" strokeWidth="1" />
+        )}
+      </svg>
+    </div>
   );
 }
 
@@ -83,7 +85,7 @@ export const BracketSkeleton: FC = () => (
           <MatchCardSkeleton />
         </div>
         <div className="animate-pulse">
-          <ConnectorSkeleton type="qf-to-sf" />
+          <ConnectorSkeleton type="qf-to-sf" flip />
         </div>
         <div className="flex flex-col justify-between py-1">
           <MatchCardSkeleton />
