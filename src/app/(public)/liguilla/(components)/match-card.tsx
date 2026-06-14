@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { ShieldQuestion } from 'lucide-react';
+import Image from 'next/image';
 
 export type Team = {
   name: string;
@@ -18,19 +19,30 @@ export type Match = {
 };
 
 type Props = Readonly<{
-  match: Match;
+  match: Match | undefined;
   winner?: 'local' | 'visitor' | null;
 }>;
 
 export const MatchCard: FC<Props> = ({ match, winner }) => {
+  if (!match) return null;
   const isScheduled = match.status === 'scheduled';
   const hasScore = match.localScore !== null && match.visitorScore !== null;
 
   return (
-    <div className="flex flex-col bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 min-w-[160px] shadow-sm hover:shadow-md transition-shadow">
+    <div className="flex flex-col gap-2 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 min-w-[160px] shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
-          <ShieldQuestion className="size-4 text-gray-400 shrink-0" />
+          {!match.localTeam.imageUrl ? (
+            <ShieldQuestion className="size-4 text-gray-400 shrink-0" />
+          ) : (
+            <Image
+              src={match.localTeam.imageUrl}
+              width={40}
+              height={40}
+              alt={`${match.localTeam.name} imagen`}
+              className="rounded"
+            />
+          )}
           <span className={`text-sm font-semibold truncate ${winner === 'local' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-800 dark:text-gray-200'}`}>
             {match.localTeam.name}
           </span>
@@ -49,7 +61,17 @@ export const MatchCard: FC<Props> = ({ match, winner }) => {
 
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
-          <ShieldQuestion className="size-4 text-gray-400 shrink-0" />
+          {!match.visitorTeam.imageUrl ? (
+            <ShieldQuestion className="size-4 text-gray-400 shrink-0" />
+          ) : (
+            <Image
+              src={match.visitorTeam.imageUrl}
+              width={40}
+              height={40}
+              alt={`${match.visitorTeam.name} imagen`}
+              className="rounded"
+            />
+          )}
           <span className={`text-sm font-semibold truncate ${winner === 'visitor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-800 dark:text-gray-200'}`}>
             {match.visitorTeam.name}
           </span>

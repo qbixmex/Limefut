@@ -1,10 +1,15 @@
 import { Suspense, type FC } from 'react';
 import { Heading, TournamentsSelectorSkeleton } from '../components';
-import { BracketView } from './(components)/bracket-view';
 import { BracketSkeleton } from './(components)/bracket-skeleton';
+import { BracketContent } from './(components)/bracket-content';
 import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
+import { ErrorHandler } from '@/shared/components/errorHandler';
 
-export const ResultsPage: FC = () => {
+type Props = Readonly<{
+  searchParams: Promise<{ tournament?: string; category?: string }>;
+}>;
+
+export const ResultsPage: FC<Props> = ({ searchParams }) => {
   return (
     <div className="wrapper">
       <Heading level="h1" className="text-emerald-600">
@@ -14,7 +19,8 @@ export const ResultsPage: FC = () => {
         <SearchParamsSelectors />
       </Suspense>
       <Suspense fallback={<BracketSkeleton />}>
-        <BracketView />
+        <ErrorHandler />
+        <BracketContent searchParams={searchParams} />
       </Suspense>
     </div>
   );
