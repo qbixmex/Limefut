@@ -5,6 +5,7 @@ import { MatchMetadata } from '../results/match-metadata';
 import { Medal } from 'lucide-react';
 import type { ROUND_TYPE } from '@/shared/enums';
 import { fetchPublicPlayoffMatchesAction } from '../../(actions)/home/fetchPublicPlayoffMatchesAction';
+import Link from 'next/link';
 
 type Props = Readonly<{
   playoffsPromise: Promise<{ playoffsPage?: string }>;
@@ -20,9 +21,14 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
 
   return (
     <section>
-      <div className="bg-emerald-700 text-emerald-50 px-5 py-3 rounded-t-lg flex items-center gap-3">
-        <Medal size={50} strokeWidth={1.5} />
-        <p className="font-bold text-2xl">Encuentros de Liguilla</p>
+      <div className="bg-emerald-700 text-emerald-50 px-5 py-3 rounded-t-lg">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Medal size={50} strokeWidth={1.5} />
+            <p className="font-bold text-2xl">Encuentros de Liguilla</p>
+          </div>
+          <Link href="/liguilla" className='text-white font-semibold hover:text-gray-300'>ver encuentros</Link>
+        </div>
       </div>
 
       <div className="border border-green-900/90 rounded-b-lg p-5">
