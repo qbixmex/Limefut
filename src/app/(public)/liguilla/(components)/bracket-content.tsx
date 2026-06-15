@@ -26,7 +26,13 @@ export const BracketContent = async ({ searchParams }: Props) => {
     redirect(`/liguilla?error=${encodeURIComponent(message)}`);
   }
 
-  if (brackets.length === 0) return null;
+  if (brackets.length === 0) {
+    return (
+      <div className="flex-1 grid place-content-center">
+        <p className="text-sky-500 text-2xl font-bold text-center">{ message }</p>
+      </div>
+    );
+  };
 
   return (
     <>

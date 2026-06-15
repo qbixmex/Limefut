@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { ShieldQuestion } from 'lucide-react';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 export type Team = {
   name: string;
@@ -21,15 +22,18 @@ export type Match = {
 type Props = Readonly<{
   match: Match | undefined;
   winner?: 'local' | 'visitor' | null;
+  isJustFinal?: boolean;
 }>;
 
-export const MatchCard: FC<Props> = ({ match, winner }) => {
+export const MatchCard: FC<Props> = ({ match, winner, isJustFinal = false }) => {
   if (!match) return null;
   const isScheduled = match.status === 'scheduled';
   const hasScore = match.localScore !== null && match.visitorScore !== null;
 
   return (
-    <div className="flex flex-col gap-2 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 min-w-[160px] shadow-sm hover:shadow-md transition-shadow">
+    <div className={cn('flex flex-col gap-2 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 w-full min-w-[160px] shadow-sm hover:shadow-md transition-shadow', {
+      'max-w-1/4': isJustFinal,
+    })}>
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
           {!match.localTeam.imageUrl ? (
@@ -40,7 +44,7 @@ export const MatchCard: FC<Props> = ({ match, winner }) => {
               width={40}
               height={40}
               alt={`${match.localTeam.name} imagen`}
-              className="rounded"
+              className="rounded size-10 object-cover"
             />
           )}
           <span className={`text-sm font-semibold truncate ${winner === 'local' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-800 dark:text-gray-200'}`}>
