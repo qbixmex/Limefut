@@ -7,20 +7,29 @@ export const useBracketRound = () => {
     if (!match) return null;
     if (match.status !== 'completed') return null;
     if (match.localScore === null || match.visitorScore === null) return null;
-    if (match.localScore > match.visitorScore) return 'local';
-    if (match.visitorScore > match.localScore) return 'visitor';
-    if (match.penaltyShoots) {
-      if (
-        match.penaltyShoots.localGoals > match.penaltyShoots.visitorGoals
-      ) {
+
+    if (!match.penaltyShoots) {
+      if (match.localScore > match.visitorScore) {
         return 'local';
       }
-      if (
-        match.penaltyShoots.visitorGoals > match.penaltyShoots.localGoals
-      ) {
+
+      if (match.visitorScore > match.localScore) {
+        return 'visitor';
+      }
+      if (match.localScore === match.visitorScore) {
+        return null;
+      }
+    }
+
+    if (match.penaltyShoots) {
+      if (match.localTeam.id === match.penaltyShoots.winnerTeamId) {
+        return 'local';
+      }
+      if (match.visitorTeam.id === match.penaltyShoots.winnerTeamId) {
         return 'visitor';
       }
     }
+
     return null;
   };
 

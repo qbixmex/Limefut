@@ -49,7 +49,7 @@ export const SponsorCarousel: FC<Props> = ({ sponsors = [], time = 10 }) => {
           height={0}
           src={sponsor.imageUrl ?? ''}
           alt={`Patrocinador ${sponsor.name.toLowerCase() ?? 'Sponsor Image'}`}
-          className="w-full max-w-[288px] h-auto rounded"
+          className="w-full max-w-[300px] h-auto rounded"
         />
       </motion.figure>
     </button>

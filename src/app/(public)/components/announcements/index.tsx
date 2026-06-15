@@ -37,11 +37,11 @@ export const Announcements = async () => {
                 {announcement?.imageUrl && (
                   <figure>
                     <Image
-                      width={250}
-                      height={250}
+                      width={0}
+                      height={0}
                       src={announcement.imageUrl}
                       alt={`${announcement.title} imagen`}
-                      className="w-full max-w-[250px] my-5 rounded-md"
+                      className="w-full max-w-[300px] h-auto my-5 rounded-md"
                     />
                   </figure>
                 )}

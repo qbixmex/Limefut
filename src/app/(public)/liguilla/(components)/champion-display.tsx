@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, type FC } from 'react';
-import { ShieldQuestion, Trophy } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import { confetti } from '@tsparticles/confetti';
 import type { Match } from './match-card';
 import { useBracketRound } from '../use-bracket-round';
@@ -26,16 +26,17 @@ export const ChampionDisplay: FC<{
     }
   }, [isFinalCompleted]);
 
+  const winnerTeam = (winner === 'local') ? final.localTeam : final.visitorTeam;
+
   return isFinalCompleted && winner ? (
     <div className="flex flex-col items-center gap-2 mt-5">
-      {!final.localTeam.imageUrl ? (
-        <ShieldQuestion className="size-4 text-gray-400 shrink-0" />
-      ) : (
+      {(final.winnerId || final.penaltyShoots?.winnerTeamId) && (
         <Image
-          src={final.localTeam.imageUrl}
+          src={winnerTeam.imageUrl as string}
           width={200}
           height={200}
-          alt={`${final.localTeam.name} imagen`}
+          alt={`${winnerTeam.name} imagen`}
+          loading="eager"
           className={`rounded border-4 size-50 object-cover ${
             championColor === 'amber' ? 'border-amber-500' : 'stroke-slate-400'}`}
         />
