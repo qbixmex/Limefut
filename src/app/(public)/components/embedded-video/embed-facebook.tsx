@@ -39,8 +39,8 @@ export const EmbedFacebook: FC<Props> = ({ url, title, className }) => {
             />
           ) : (
             <Image
-              width={230}
-              height={408}
+              width={0}
+              height={0}
               className="thumbnail-image"
               src={thumbnailUrl}
               alt={title || 'Facebook thumbnail'}
