@@ -94,8 +94,8 @@ export const fetchPublicPlayoffsAction = async ({
 
     if (playoffs.length === 0) {
       return {
-        ok: false,
-        message: 'No hay liguillas disponibles para este torneo',
+        ok: true,
+        message: 'No hay liguilla disponible para esta categoría',
         brackets: [],
       };
     }
