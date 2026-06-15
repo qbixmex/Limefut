@@ -4,7 +4,6 @@ import type { FC } from 'react';
 import { MatchCard, type Match } from './match-card';
 import { BracketConnector } from './bracket-connector';
 import { PLAYOFF_ROUND, type PLAYOFF_ROUND_TYPE } from '@/shared/enums';
-import { cn } from '@/lib/utils';
 import { useBracketRound } from '../use-bracket-round';
 import { FinalCell } from './final-cell';
 import { ChampionDisplay } from './champion-display';
@@ -34,7 +33,7 @@ export const BracketRound: FC<Props> = ({
   variant = 'oro',
   startingRound,
 }) => {
-  const { getWinner, getLoser } = useBracketRound();
+  const { getWinner } = useBracketRound();
   const finalWinner = getWinner(final);
   const isFinalCompleted = final.status === 'completed';
   const championColor = variant === 'oro' ? 'amber' : 'slate';
@@ -48,7 +47,7 @@ export const BracketRound: FC<Props> = ({
 
   return (
     <div>
-      <h3 className={`text-lg font-bold mb-4 uppercase tracking-wide ${championColor === 'amber' ? 'text-amber-500' : 'text-slate-400'}`}>
+      <h3 className={`text-2xl text-center font-bold mb-4 uppercase tracking-wide ${championColor === 'amber' ? 'text-amber-500' : 'text-slate-400'}`}>
         {groupName}
       </h3>
 
@@ -146,11 +145,19 @@ export const BracketRound: FC<Props> = ({
       ) : (
         /* Final only bracket */
         <>
-          <div className="hidden lg:flex justify-start py-1">
-            <MatchCard match={final} winner={finalWinner} />
+          <div className="hidden lg:flex justify-center py-1">
+            <MatchCard
+              match={final}
+              winner={finalWinner}
+              isJustFinal
+            />
           </div>
-          <div className={cn('hidden lg:flex mt-2', { 'justify-center': hasQuarterFinals || hasSemiFinals })}>
-            <FinalCell final={final} isFinalCompleted={isFinalCompleted} championColor={championColor} />
+          <div className="hidden lg:flex mt-2 justify-center">
+            <FinalCell
+              final={final}
+              isFinalCompleted={isFinalCompleted}
+              championColor={championColor}
+            />
           </div>
         </>
       )}
@@ -182,9 +189,6 @@ export const BracketRound: FC<Props> = ({
           </div>
         )}
         <div>
-          <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-            Final
-          </h4>
           <div className="flex flex-col items-center gap-2">
             <MatchCard match={final} winner={finalWinner} />
             {isFinalCompleted && (
@@ -196,14 +200,12 @@ export const BracketRound: FC<Props> = ({
                     championColor={championColor}
                   />
                 )}
-                {getLoser(final) && (
-                  <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 italic text-center">
-                    Finalista
-                  </span>
-                )}
               </>
             )}
           </div>
+          <h4 className="text-lg text-center font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-2">
+            Final
+          </h4>
         </div>
       </div>
     </div>

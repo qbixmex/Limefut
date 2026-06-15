@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, type FC } from 'react';
-import { Trophy } from 'lucide-react';
+import { ShieldQuestion, Trophy } from 'lucide-react';
 import { confetti } from '@tsparticles/confetti';
 import type { Match } from './match-card';
 import { useBracketRound } from '../use-bracket-round';
+import Image from 'next/image';
 
 export const ChampionDisplay: FC<{
   final: Match;
@@ -26,16 +27,30 @@ export const ChampionDisplay: FC<{
   }, [isFinalCompleted]);
 
   return isFinalCompleted && winner ? (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2 mt-5">
+      {!final.localTeam.imageUrl ? (
+        <ShieldQuestion className="size-4 text-gray-400 shrink-0" />
+      ) : (
+        <Image
+          src={final.localTeam.imageUrl}
+          width={200}
+          height={200}
+          alt={`${final.localTeam.name} imagen`}
+          className={`rounded border-4 size-50 object-cover ${
+            championColor === 'amber' ? 'border-amber-500' : 'stroke-slate-400'}`}
+        />
+      )}
+      <span className={`text-2xl font-black uppercase ${
+        championColor === 'amber' ? 'text-orange-500' : 'stroke-slate-400'}`
+      }>
+        {winner === 'local' ? final.localTeam.name : final.visitorTeam.name}
+      </span>
       <Trophy
         size={128}
         className={`shrink-0 ${championColor === 'amber' ? 'stroke-amber-500' : 'stroke-slate-400'}`}
         strokeWidth={1.5}
       />
-      <span className="text-xl font-bold text-primary">
-        {winner === 'local' ? final.localTeam.name : final.visitorTeam.name}
-      </span>
-      <span className={`text-2xl font-bold ${championColor === 'amber' ? 'text-amber-500' : 'text-slate-400'}`}>
+      <span className={`text-xl font-bold ${championColor === 'amber' ? 'text-amber-500' : 'text-slate-400'}`}>
         Campeón
       </span>
     </div>
