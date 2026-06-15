@@ -2,12 +2,12 @@
 
 #facebook {
   .loading-block {
-    @apply block w-[230px] h-[408px] bg-gray-500 rounded animate-pulse;
+    @apply block w-full max-w-[300px] h-auto bg-gray-500 rounded animate-pulse;
   }
   .placeholder-block {
-    @apply block w-[230px] h-[408px] bg-gray-500 rounded;
+    @apply block w-full max-w-[300px] h-auto bg-gray-500 rounded;
   }
   .thumbnail-image {
-    @apply block w-[230px] h-[408px];
+    @apply block w-full max-w-[300px] h-auto rounded;
   }
 }
