@@ -4,7 +4,8 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 export type Team = {
-  name: string;
+  id: string | null;
+  name: string | null;
   imageUrl?: string | null;
 };
 
@@ -15,7 +16,12 @@ export type Match = {
   localScore: number | null;
   visitorScore: number | null;
   matchDate: string | null;
-  penaltyShoots?: { localGoals: number; visitorGoals: number } | null;
+  winnerId: string | null;
+  penaltyShoots?: {
+    localGoals: number;
+    visitorGoals: number;
+    winnerTeamId: string | null;
+  } | null;
   status: 'scheduled' | 'completed' | 'canceled';
 };
 

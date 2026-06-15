@@ -40,11 +40,12 @@ const createEmptyMatch = (): Match => {
   emptyId++;
   return {
     id: `empty-${emptyId}`,
-    localTeam: { name: '—' },
-    visitorTeam: { name: '—' },
+    localTeam: { id: null, name: null },
+    visitorTeam: { id: null, name: null },
     localScore: null,
     visitorScore: null,
     matchDate: null,
+    winnerId: null,
     status: 'scheduled',
     penaltyShoots: null,
   };
@@ -100,6 +101,7 @@ export const fetchPublicPlayoffsAction = async ({
         visitorScore: true,
         status: true,
         matchDate: true,
+        winnerId: true,
         local: {
           select: {
             id: true,
@@ -118,6 +120,7 @@ export const fetchPublicPlayoffsAction = async ({
           select: {
             localGoals: true,
             visitorGoals: true,
+            winnerTeamId: true,
           },
         },
       },
@@ -156,21 +159,25 @@ export const fetchPublicPlayoffsAction = async ({
       const matchData: Match = {
         id: match.id,
         localTeam: {
+          id: match.local.id,
           name: match.local.name,
           imageUrl: match.local.imageUrl,
         },
         visitorTeam: {
+          id: match.visitor.id,
           name: match.visitor.name,
           imageUrl: match.visitor.imageUrl,
         },
         localScore: match.localScore,
         visitorScore: match.visitorScore,
+        winnerId: match.winnerId,
         matchDate: formatDate(match.matchDate),
         status: mapStatus(match.status),
         penaltyShoots: match.penaltyShootout
           ? {
               localGoals: match.penaltyShootout.localGoals,
               visitorGoals: match.penaltyShootout.visitorGoals,
+              winnerTeamId: match.penaltyShootout.winnerTeamId,
             }
           : null,
       };
