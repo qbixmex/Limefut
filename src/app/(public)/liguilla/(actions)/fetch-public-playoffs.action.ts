@@ -63,31 +63,14 @@ export const fetchPublicPlayoffsAction = async ({
   cacheTag('public-playoffs');
 
   try {
-    const tournament = await prisma.tournament.findFirst({
-      where: {
-        permalink: tournamentPermalink,
-        category: categoryPermalink,
-      },
-      select: { id: true },
-    });
-
-    if (!tournament) {
-      return {
-        ok: false,
-        message: 'Torneo no encontrado',
-        brackets: [],
-      };
-    }
-
-    const categoryFilter: Record<string, { permalink: string }> = {};
-    if (categoryPermalink) {
-      categoryFilter.category = { permalink: categoryPermalink };
-    }
-
     const playoffs = await prisma.playoff.findMany({
       where: {
-        tournamentId: tournament.id,
-        ...categoryFilter,
+        tournament: {
+          permalink: tournamentPermalink,
+        },
+        category: {
+          permalink: categoryPermalink,
+        },
       },
       select: { id: true, startingRound: true },
     });
