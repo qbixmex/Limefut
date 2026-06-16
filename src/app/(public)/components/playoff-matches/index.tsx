@@ -3,10 +3,11 @@ import Link from 'next/link';
 import { Pagination } from '@/shared/components/pagination';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
-import { Medal } from 'lucide-react';
-import type { ROUND_TYPE } from '@/shared/enums';
+import { Medal, Minus } from 'lucide-react';
+import { MATCH_STATUS, type ROUND_TYPE } from '@/shared/enums';
 import { fetchPublicPlayoffMatchesAction } from '../../(actions)/home/fetchPublicPlayoffMatchesAction';
 import { EditPlayoffMatch } from '../edit-playoff-match';
+import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   playoffsPromise: Promise<{ playoffsPage?: string }>;
@@ -58,7 +59,7 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
                       group={match.group}
                     />
                   </div>
-                  <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 lg:order-2">
+                  <div className="w-full lg:w-1/2 grid grid-cols-3 items-center order-1 lg:order-2">
                     <Team
                       imageUrl={match.localTeam.imageUrl}
                       name={match.localTeam.name}
@@ -70,20 +71,58 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
                         </span>
                       )}
                       <span
-                        className="font-bold text-2xl text-blue-700 dark:text-blue-500"
+                        className={cn('font-bold text-2xl', {
+                          'text-gray-700 dark:text-gray-500': match.status !== MATCH_STATUS.COMPLETED,
+                          'text-blue-700 dark:text-blue-500': match.status === MATCH_STATUS.COMPLETED,
+                        })}
                         role="heading"
                         aria-level={3}
                         aria-label={`Goles del equipo local ${match.localTeam.name}`}
                       >
-                        {match.localScore}
+                        {
+                          (
+                            match.status === MATCH_STATUS.SCHEDULED ||
+                            match.status === MATCH_STATUS.POST_POSED ||
+                            match.status === MATCH_STATUS.IN_PROGRESS ||
+                            match.status === MATCH_STATUS.CANCELED
+                          ) && <Minus strokeWidth={5} width={15} />
+                        }
+
+                        {match.status === MATCH_STATUS.COMPLETED && match.localScore}
                       </span>
-                      <span>-</span>
+
+                      {
+                        (
+                          match.status === MATCH_STATUS.SCHEDULED ||
+                          match.status === MATCH_STATUS.IN_PROGRESS ||
+                          match.status === MATCH_STATUS.POST_POSED ||
+                          match.status === MATCH_STATUS.CANCELED
+                        )
+                          ? <div className="w-1 h-5 bg-gray-500 rounded" />
+                          : <div className="w-3 h-1 bg-gray-500 rounded" />
+                      }
+
                       <span
-                        className="font-bold text-2xl text-blue-700 dark:text-blue-500"
-                        aria-label={`Goles del equipo visitante ${match.visitorTeam.name}`}
+                        className={cn('font-bold text-2xl', {
+                          'text-gray-700 dark:text-gray-500': match.status !== MATCH_STATUS.COMPLETED,
+                          'text-blue-700 dark:text-blue-500': match.status === MATCH_STATUS.COMPLETED,
+                        })}
+                        role="heading"
+                        aria-level={3}
+                        aria-label={`Goles del equipo local ${match.localTeam.name}`}
                       >
-                        {match.visitorScore}
+                        {
+                          (
+                            match.status === MATCH_STATUS.SCHEDULED ||
+                            match.status === MATCH_STATUS.IN_PROGRESS ||
+                            match.status === MATCH_STATUS.POST_POSED ||
+                            match.status === MATCH_STATUS.CANCELED
+                          ) && <Minus strokeWidth={5} width={15} />
+                        }
+
+                        {match.status === MATCH_STATUS.COMPLETED && match.visitorScore}
                       </span>
+
                       {match.penaltyShoots && (
                         <span className="font-semibold text-gray-500">
                           ({match.penaltyShoots.visitorGoals})
