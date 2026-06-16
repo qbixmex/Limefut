@@ -33,11 +33,11 @@ export const ChampionDisplay: FC<{
       {(final.winnerId || final.penaltyShoots?.winnerTeamId) && (
         <Image
           src={winnerTeam.imageUrl as string}
-          width={200}
-          height={200}
+          width={0}
+          height={0}
           alt={`${winnerTeam.name} imagen`}
           loading="eager"
-          className={`rounded border-4 size-50 object-cover ${
+          className={`rounded border-4 w-[200px] h-[200px] object-cover ${
             championColor === 'amber' ? 'border-amber-500' : 'stroke-slate-400'}`}
         />
       )}
