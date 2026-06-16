@@ -204,25 +204,33 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
               <TableRow>
                 <TableHead>Fecha</TableHead>
                 <TableCell>
-                  <p className="dark:text-gray-200">
-                    <span>
-                      {`${formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'dd', { locale: es })}`}
-                    </span>
-                    <span>{' de '}</span>
-                    <span className="capitalize">
-                      {formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'LLLL', { locale: es })}
-                    </span>
-                    <span>{' del '}</span>
-                    <span>
-                      &nbsp;{formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'y', { locale: es })}
-                    </span>
-                  </p>
+                  {match.matchDate ? (
+                    <p className="dark:text-gray-200">
+                      <span>
+                        {`${formatInTimeZone(match.matchDate, TIME_ZONE, 'dd', { locale: es })}`}
+                      </span>
+                      <span>{' de '}</span>
+                      <span className="capitalize">
+                        {formatInTimeZone(match.matchDate, TIME_ZONE, 'LLLL', { locale: es })}
+                      </span>
+                      <span>{' del '}</span>
+                      <span>
+                        &nbsp;{formatInTimeZone(match.matchDate, TIME_ZONE, 'y', { locale: es })}
+                      </span>
+                    </p>
+                  ) : (
+                    <Badge variant="outline-secondary">no disponible</Badge>
+                  )}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>Hora</TableHead>
                 <TableCell>
-                  {formatInTimeZone(match?.matchDate as Date, TIME_ZONE, 'h:mm aaa', { locale: es })}
+                  {match.matchDate ? (
+                    formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm aaa', { locale: es })
+                  ) : (
+                    <Badge variant="outline-secondary">no disponible</Badge>
+                  )}
                 </TableCell>
               </TableRow>
               <TableRow>
