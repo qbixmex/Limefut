@@ -15,7 +15,7 @@ export const FinalCell: FC<{
   const winner = getWinner(final);
 
   return (
-    <span className="text-center">
+    <>
       {isFinalCompleted && winner ? (
         <span className="flex flex-col items-center gap-0.5">
           <ChampionDisplay
@@ -29,6 +29,6 @@ export const FinalCell: FC<{
           Final
         </span>
       )}
-    </span>
+    </>
   );
 };

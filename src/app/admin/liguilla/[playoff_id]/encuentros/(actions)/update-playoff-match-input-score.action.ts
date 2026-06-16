@@ -28,6 +28,8 @@ export const updatePlayoffMatchInputScoreAction = async (params: Params): Respon
 
   updateTag('admin-playoff-matches');
   updateTag('admin-playoff-match');
+  updateTag('public-playoff-matches');
+  updateTag('public-playoff-match');
 
   if (!updatedMatch) {
     return {

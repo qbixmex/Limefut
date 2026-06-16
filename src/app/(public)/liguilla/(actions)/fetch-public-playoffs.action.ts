@@ -40,8 +40,8 @@ const createEmptyMatch = (): Match => {
   emptyId++;
   return {
     id: `empty-${emptyId}`,
-    localTeam: { id: null, name: null },
-    visitorTeam: { id: null, name: null },
+    localTeam: { id: null, name: null, permalink: null },
+    visitorTeam: { id: null, name: null, permalink: null },
     localScore: null,
     visitorScore: null,
     matchDate: null,
@@ -61,7 +61,7 @@ export const fetchPublicPlayoffsAction = async ({
   'use cache';
 
   cacheLife('days');
-  cacheTag('public-playoffs');
+  cacheTag('public-playoff-matches');
 
   try {
     const playoffs = await prisma.playoff.findMany({
@@ -73,8 +73,13 @@ export const fetchPublicPlayoffsAction = async ({
           permalink: categoryPermalink,
         },
       },
-      select: { id: true, startingRound: true },
+      select: {
+        id: true,
+        startingRound: true,
+      },
     });
+
+    console.log('PLAYOFFS', playoffs);
 
     if (playoffs.length === 0) {
       return {
@@ -106,6 +111,7 @@ export const fetchPublicPlayoffsAction = async ({
           select: {
             id: true,
             name: true,
+            permalink: true,
             imageUrl: true,
           },
         },
@@ -113,6 +119,7 @@ export const fetchPublicPlayoffsAction = async ({
           select: {
             id: true,
             name: true,
+            permalink: true,
             imageUrl: true,
           },
         },
@@ -161,11 +168,13 @@ export const fetchPublicPlayoffsAction = async ({
         localTeam: {
           id: match.local.id,
           name: match.local.name,
+          permalink: match.local.permalink,
           imageUrl: match.local.imageUrl,
         },
         visitorTeam: {
           id: match.visitor.id,
           name: match.visitor.name,
+          permalink: match.visitor.permalink,
           imageUrl: match.visitor.imageUrl,
         },
         localScore: match.localScore,
