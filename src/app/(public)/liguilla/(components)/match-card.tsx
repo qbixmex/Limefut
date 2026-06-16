@@ -38,7 +38,7 @@ export const MatchCard: FC<Props> = ({ match, winner, isJustFinal = false }) => 
   const hasScore = match.localScore !== null && match.visitorScore !== null;
 
   return (
-    <div className={cn('flex flex-col gap-2 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 w-full min-w-[160px] shadow-sm hover:shadow-md transition-shadow', {
+    <div className={cn('w-full min-w-[250px] flex flex-col gap-2 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow', {
       'max-w-1/4': isJustFinal,
     })}>
       <div className="flex items-center justify-between gap-2">
@@ -51,7 +51,8 @@ export const MatchCard: FC<Props> = ({ match, winner, isJustFinal = false }) => 
               width={40}
               height={40}
               alt={`${match.localTeam.name} imagen`}
-              className="rounded size-10 object-cover"
+              className="rounded"
+              style={{ width: 40, height: 40 }}
             />
           )}
           <span className={`text-sm font-semibold truncate ${winner === 'local' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-800 dark:text-gray-200'}`}>
@@ -81,6 +82,7 @@ export const MatchCard: FC<Props> = ({ match, winner, isJustFinal = false }) => 
               height={40}
               alt={`${match.visitorTeam.name} imagen`}
               className="rounded"
+              style={{ width: 40, height: 40 }}
             />
           )}
           <span className={`text-sm font-semibold truncate ${winner === 'visitor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-800 dark:text-gray-200'}`}>
