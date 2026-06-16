@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 export type Team = {
   id: string | null;
   name: string | null;
+  permalink: string | null;
   imageUrl?: string | null;
 };
 

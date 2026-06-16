@@ -127,6 +127,8 @@ export const createPlayoffMatchAction = async ({
     // Update Cache
     updateTag('admin-playoff-matches');
     updateTag('admin-playoff-match');
+    updateTag('public-playoff-matches');
+    updateTag('public-playoff-match');
 
     return prismaTransaction;
   } catch (error) {
