@@ -1,11 +1,12 @@
 import type { FC } from 'react';
+import Link from 'next/link';
 import { Pagination } from '@/shared/components/pagination';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
 import { Medal } from 'lucide-react';
 import type { ROUND_TYPE } from '@/shared/enums';
 import { fetchPublicPlayoffMatchesAction } from '../../(actions)/home/fetchPublicPlayoffMatchesAction';
-import Link from 'next/link';
+import { EditPlayoffMatch } from '../edit-playoff-match';
 
 type Props = Readonly<{
   playoffsPromise: Promise<{ playoffsPage?: string }>;
@@ -34,7 +35,7 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
       <div className="border border-green-900/90 rounded-b-lg p-5">
         {(matches.length > 0) && (
           matches.map((match, index) => (
-            <div key={match.id} className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
+            <div key={match.id} className="flex flex-col gap-3 text-gray-800 dark:text-gray-200 relative">
               <Link
                 href={
                   '/liguilla/encuentro' +
@@ -99,6 +100,10 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
               {((matches.length - 1) !== index) && (
                 <div className="w-full h-0.5 bg-gray-300 my-3" />
               )}
+              <EditPlayoffMatch
+                playoffId={match.playoffId}
+                playoffMatchId={match.id}
+              />
             </div>
           ))
         )}
@@ -109,11 +114,13 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
         )}
       </div>
 
-      {(pagination.totalPages > 1) && (
-        <section className="flex justify-center mt-5">
-          <Pagination totalPages={pagination.totalPages} propName="playoffs-results" />
-        </section>
-      )}
-    </section>
+      {
+        (pagination.totalPages > 1) && (
+          <section className="flex justify-center mt-5">
+            <Pagination totalPages={pagination.totalPages} propName="playoffs-results" />
+          </section>
+        )
+      }
+    </section >
   );
 };
