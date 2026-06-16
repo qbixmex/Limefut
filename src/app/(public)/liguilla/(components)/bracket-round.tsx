@@ -252,11 +252,19 @@ export const BracketRound: FC<Props> = ({
       ) : (
         <section>
           <div className="hidden lg:flex justify-center py-1">
-            <MatchCard
-              match={final}
-              winner={finalWinner}
-              isJustFinal
-            />
+            <Link href={
+              '/liguilla/encuentro' +
+              `?tournament=${tournament}` +
+              `&category=${category}` +
+              `&local_team=${final.localTeam.permalink ?? 'none'}` +
+              `&visitor_team=${final.visitorTeam.permalink ?? 'none'}`
+            }>
+              <MatchCard
+                match={final}
+                winner={finalWinner}
+                isJustFinal
+              />
+            </Link>
           </div>
           <div className="hidden lg:flex mt-2 justify-center">
             <FinalCell
