@@ -7,6 +7,7 @@ import { PLAYOFF_ROUND, type PLAYOFF_ROUND_TYPE } from '@/shared/enums';
 import { useBracketRound } from '../use-bracket-round';
 import { FinalCell } from './final-cell';
 import { ChampionDisplay } from './champion-display';
+import Link from 'next/link';
 
 type Props = Readonly<{
   quarterFinals?: [Match, Match, Match, Match];
@@ -15,6 +16,8 @@ type Props = Readonly<{
   groupName: string;
   variant?: 'oro' | 'plata';
   startingRound: PLAYOFF_ROUND_TYPE;
+  tournament: string;
+  category: string;
 }>;
 
 const RoundLabel: FC<{ label: string }> = ({ label }) => (
@@ -32,6 +35,8 @@ export const BracketRound: FC<Props> = ({
   groupName,
   variant = 'oro',
   startingRound,
+  tournament,
+  category,
 }) => {
   const { getWinner } = useBracketRound();
   const finalWinner = getWinner(final);
@@ -53,79 +58,181 @@ export const BracketRound: FC<Props> = ({
 
       {/* Desktop */}
       {hasQuarterFinals ? (
-        /* Full bracket (QF → SF → Final) */
-        <>
+        <section>
+          <div
+            className="hidden lg:grid mb-5 items-center"
+            style={{ gridTemplateColumns: '1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr' }}
+          >
+            <RoundLabel label="Cuartos" />
+
+            <ConnectorSpacer />
+
+            <RoundLabel label="Semifinal" />
+
+            <ConnectorSpacer />
+
+            <RoundLabel label="Final" />
+
+            <ConnectorSpacer />
+
+            <RoundLabel label="Semifinal" />
+
+            <ConnectorSpacer />
+
+            <RoundLabel label="Cuartos" />
+          </div>
           <div
             className="hidden lg:grid min-h-[350px] overflow-visible"
             style={{ gridTemplateColumns: '1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr' }}
           >
             <div className="flex flex-col justify-between py-1">
-              <MatchCard match={quarterFinalMatches[0]} />
-              <MatchCard match={quarterFinalMatches[1]} />
+              <Link
+                href={
+                  '/liguilla/encuentro' +
+                  `?tournament=${tournament}` +
+                  `&category=${category}` +
+                  `&local_team=${quarterFinalMatches[0]?.localTeam.permalink ?? 'none'}` +
+                  `&visitor_team=${quarterFinalMatches[0]?.visitorTeam.permalink ?? 'none'}`
+                }
+                target="_blank"
+              >
+                <MatchCard match={quarterFinalMatches[0]} />
+              </Link>
+              <Link href={
+                '/liguilla/encuentro' +
+                `?tournament=${tournament}` +
+                `&category=${category}` +
+                `&local_team=${quarterFinalMatches[1]?.localTeam.permalink ?? 'none'}` +
+                `&visitor_team=${quarterFinalMatches[1]?.visitorTeam.permalink ?? 'none'}`
+              }>
+                <MatchCard match={quarterFinalMatches[1]} />
+              </Link>
             </div>
             <div><BracketConnector type="qf-to-sf" /></div>
             <div className="flex flex-col justify-center py-1">
-              <MatchCard match={sf1} winner={getWinner(sf1)} />
+              <Link
+                href={
+                  '/liguilla/encuentro' +
+                  `?tournament=${tournament}` +
+                  `&category=${category}` +
+                  `&local_team=${sf1?.localTeam.permalink ?? 'none'}` +
+                  `&visitor_team=${sf1?.visitorTeam.permalink ?? 'none'}`
+                }
+                target="_blank"
+              >
+                <MatchCard match={sf1} winner={getWinner(sf1)} />
+              </Link>
             </div>
             <div><BracketConnector type="sf-to-final" /></div>
             <div className="flex flex-col justify-center py-1">
-              <MatchCard match={final} winner={finalWinner} />
+              <Link
+                href={
+                  '/liguilla/encuentro' +
+                  `?tournament=${tournament}` +
+                  `&category=${category}` +
+                  `&local_team=${final.localTeam.permalink}` +
+                  `&visitor_team=${final.visitorTeam.permalink}`
+                }
+                target="_blank"
+              >
+                <MatchCard match={final} winner={finalWinner} />
+              </Link>
             </div>
             <div><BracketConnector type="sf-to-final" /></div>
             <div className="flex flex-col justify-center py-1">
-              <MatchCard match={sf2} winner={getWinner(sf2)} />
+              <Link
+                href={
+                  '/liguilla/encuentro' +
+                  `?tournament=${tournament}` +
+                  `&category=${category}` +
+                  `&local_team=${sf2?.localTeam.permalink ?? 'none'}` +
+                  `&visitor_team=${sf2?.visitorTeam.permalink ?? 'none'}`
+                }
+                target="_blank"
+              >
+                <MatchCard match={sf2} winner={getWinner(sf2)} />
+              </Link>
             </div>
             <div><BracketConnector type="qf-to-sf" flip /></div>
             <div className="flex flex-col justify-between py-1">
-              <MatchCard match={quarterFinalMatches[2]} />
-              <MatchCard match={quarterFinalMatches[3]} />
+              <Link
+                href={
+                  '/liguilla/encuentro' +
+                  `?tournament=${tournament}` +
+                  `&category=${category}` +
+                  `&local_team=${quarterFinalMatches[2]?.localTeam.permalink ?? 'none'}` +
+                  `&visitor_team=${quarterFinalMatches[2]?.visitorTeam.permalink ?? 'none'}`
+                }
+                target="_blank"
+              >
+                <MatchCard match={quarterFinalMatches[2]} />
+              </Link>
+              <Link
+                href={
+                  '/liguilla/encuentro' +
+                  `?tournament=${tournament}` +
+                  `&category=${category}` +
+                  `&local_team=${quarterFinalMatches[3]?.localTeam.permalink ?? 'none'}` +
+                  `&visitor_team=${quarterFinalMatches[3]?.visitorTeam.permalink ?? 'none'}`
+                }
+                target="_blank"
+              >
+                <MatchCard match={quarterFinalMatches[3]} />
+              </Link>
             </div>
           </div>
-          <div
-            className="hidden lg:grid mt-2 items-center"
-            style={{ gridTemplateColumns: '1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr' }}
-          >
-            <RoundLabel label="Cuartos" />
-
-            <ConnectorSpacer />
-
-            <RoundLabel label="Semifinal" />
-
-            <ConnectorSpacer />
-
+          <div>
             <FinalCell
               final={final}
               isFinalCompleted={isFinalCompleted}
               championColor={championColor}
             />
-
-            <ConnectorSpacer />
-
-            <RoundLabel label="Semifinal" />
-
-            <ConnectorSpacer />
-
-            <RoundLabel label="Cuartos" />
           </div>
-        </>
+        </section>
       ) : hasSemiFinals ? (
-        /* Semifinal → Final bracket (no QF) */
-        <>
+        <section>
           <div
-            className="hidden lg:grid min-h-[200px] overflow-visible"
+            className="hidden lg:grid items-center overflow-visible"
             style={{ gridTemplateColumns: '1fr 40px 1fr 40px 1fr' }}
           >
-            <div className="flex flex-col justify-center py-1">
+            <Link
+              href={
+                '/liguilla/encuentro' +
+                `?tournament=${tournament}` +
+                `&category=${category}` +
+                `&local_team=${sf1?.localTeam.permalink ?? 'none'}` +
+                `&visitor_team=${sf1?.visitorTeam.permalink ?? 'none'}`
+              }
+              target="_blank"
+            >
               <MatchCard match={sf1} winner={getWinner(sf1)} />
-            </div>
+            </Link>
             <div><BracketConnector type="sf-to-final" /></div>
-            <div className="flex flex-col justify-center py-1">
+            <Link
+              href={
+                '/liguilla/encuentro' +
+                `?tournament=${tournament}` +
+                `&category=${category}` +
+                `&local_team=${final.localTeam.permalink}` +
+                `&visitor_team=${final.visitorTeam.permalink}`
+              }
+              target="_blank"
+            >
               <MatchCard match={final} winner={finalWinner} />
-            </div>
+            </Link>
             <div><BracketConnector type="sf-to-final" /></div>
-            <div className="flex flex-col justify-center py-1">
+            <Link
+              href={
+                '/liguilla/encuentro' +
+                `?tournament=${tournament}` +
+                `&category=${category}` +
+                `&local_team=${sf2?.localTeam.permalink ?? 'none'}` +
+                `&visitor_team=${sf2?.visitorTeam.permalink ?? 'none'}`
+              }
+              target="_blank"
+            >
               <MatchCard match={sf2} winner={getWinner(sf2)} />
-            </div>
+            </Link>
           </div>
           <div
             className="hidden lg:grid mt-2 items-center"
@@ -141,10 +248,9 @@ export const BracketRound: FC<Props> = ({
             <ConnectorSpacer />
             <RoundLabel label="Semifinal" />
           </div>
-        </>
+        </section>
       ) : (
-        /* Final only bracket */
-        <>
+        <section>
           <div className="hidden lg:flex justify-center py-1">
             <MatchCard
               match={final}
@@ -159,38 +265,75 @@ export const BracketRound: FC<Props> = ({
               championColor={championColor}
             />
           </div>
-        </>
+        </section>
       )}
 
       {/* Mobile */}
       <div className="lg:hidden space-y-5">
         {hasQuarterFinals && (
           <div>
-            <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+            <h4 className="text-lg font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
               Cuartos de Final
             </h4>
             <div className="space-y-2">
               {quarterFinalMatches.map((match) => (
-                <MatchCard key={match.id} match={match} />
+                <Link
+                  key={match.id}
+                  href={
+                    '/liguilla/encuentro' +
+                    `?tournament=${tournament}` +
+                    `&category=${category}` +
+                    `&local_team=${match.localTeam.permalink}` +
+                    `&visitor_team=${match.visitorTeam.permalink}`
+                  }
+                >
+                  <MatchCard match={match} />
+                </Link>
               ))}
             </div>
           </div>
         )}
         {hasSemiFinals && (
           <div>
-            <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+            <h4 className="text-lg font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
               Semifinales
             </h4>
             <div className="flex flex-col gap-2">
               {semiFinalMatches.map((match) => (
-                <MatchCard key={match.id} match={match} winner={getWinner(match)} />
+                <Link
+                  key={match.id}
+                  href={
+                    '/liguilla/encuentro' +
+                    `?tournament=${tournament}` +
+                    `&category=${category}` +
+                    `&local_team=${match.localTeam.permalink}` +
+                    `&visitor_team=${match.visitorTeam.permalink}`
+                  }
+                  target="_blank"
+                >
+                  <MatchCard match={match} winner={getWinner(match)} />
+                </Link>
               ))}
             </div>
           </div>
         )}
         <div>
+          <h4 className="text-lg font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+            Final
+          </h4>
           <div className="flex flex-col items-center gap-2">
-            <MatchCard match={final} winner={finalWinner} />
+            <Link
+              href={
+                '/liguilla/encuentro' +
+                `?tournament=${tournament}` +
+                `&category=${category}` +
+                `&local_team=${final.localTeam.permalink}` +
+                `&visitor_team=${final.visitorTeam.permalink}`
+              }
+              className="w-full"
+            >
+              <MatchCard match={final} winner={finalWinner} />
+            </Link>
             {isFinalCompleted && (
               <>
                 {finalWinner && (
@@ -203,9 +346,6 @@ export const BracketRound: FC<Props> = ({
               </>
             )}
           </div>
-          <h4 className="text-lg text-center font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-2">
-            Final
-          </h4>
         </div>
       </div>
     </div>

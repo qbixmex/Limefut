@@ -1,0 +1,68 @@
+@reference "tailwindcss";
+
+.mainWrapper {
+  @apply flex flex-col lg:flex-row gap-5;
+}
+
+.team {
+  @apply relative flex justify-center items-center w-1/2 h-[250px];
+}
+
+.teamLocal {
+  @apply bg-emerald-700 rounded-l-xl;
+}
+
+.fieldDot {
+  @apply absolute top-1/2 left-1/2 -translate-1/2 size-2 bg-white rounded-full;
+}
+
+.fieldDivider {
+  @apply absolute top-1/2 left-1/2 -translate-1/2 w-0.5 h-full bg-white;
+}
+
+.teamVisitor {
+  @apply bg-emerald-700 rounded-r-xl;
+}
+
+.teamName {
+  @apply w-full text-center font-semibold absolute top-[calc(50%+70px)] translate-y-[-50%];
+}
+
+.shieldIconWrapper {
+  @apply bg-emerald-200/50 rounded size-25 grid place-content-center;
+}
+
+.shieldIcon {
+  @apply stroke-emerald-900;
+}
+
+.team .teamShield {
+  object-fit: cover;
+  object-position: center;
+  @apply size-25 rounded-lg;
+}
+
+.matchResults {
+  @apply absolute left-[50%] top-[50%] translate-[-50%] size-18 md:size-25 xl:size-26;
+  @apply border-2 bg-emerald-950 border-white text-xl rounded-full;
+  @apply flex justify-center items-center;
+  & p {
+    @apply flex justify-center items-center gap-4 lg:gap-5;
+    @apply text-xl lg:text-2xl text-green-50 font-bold;
+  }
+}
+
+:global(.dark) {
+  .teamLocal {
+    @apply bg-emerald-800/80;
+  }
+  .teamVisitor {
+    @apply bg-emerald-800/80;
+  }
+  .shieldIconWrapper {
+    @apply bg-emerald-950;
+  }
+  .shieldIcon {
+    @apply stroke-emerald-100;
+  }
+}

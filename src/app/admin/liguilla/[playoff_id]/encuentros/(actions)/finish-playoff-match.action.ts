@@ -35,6 +35,8 @@ export const finishPlayoffMatchAction = async (props: Props): ResponseAction => 
   // Refresh Match
   updateTag('admin-playoff-matches');
   updateTag('admin-playoff-match');
+  updateTag('public-playoff-matches');
+  updateTag('public-playoff-match');
 
   if (!updatedMatch) {
     return {

@@ -45,6 +45,8 @@ export const BracketContent = async ({ searchParams }: Props) => {
           quarterFinals={group.quarterFinals}
           semiFinals={group.semiFinals}
           final={group.final}
+          tournament={tournamentPermalink}
+          category={categoryPermalink}
         />
       ))}
     </>
