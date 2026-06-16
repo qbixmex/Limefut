@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import './styles.css';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   title: string;
@@ -25,7 +25,7 @@ export const BannerImage: FC<Props> = (props) => {
   } = props;
 
   return (
-    <figure className="figure-container">
+    <figure className={styles.figureContainer}>
       <Image
         src={imageUrl}
         width={1280}
@@ -35,8 +35,8 @@ export const BannerImage: FC<Props> = (props) => {
         loading={position === 1 ? 'eager' : 'lazy'}
       />
       {showData && (
-        <section className="data-wrapper">
-          <h2 className={cn('heading', {
+        <section className={styles.dataWrapper}>
+          <h2 className={cn(styles.heading, {
             'align-left': dataAlignment === 'left',
             'align-center': dataAlignment === 'center',
             'align-right': dataAlignment === 'right',
@@ -44,10 +44,10 @@ export const BannerImage: FC<Props> = (props) => {
             {title}
           </h2>
 
-          <p className={cn('description', {
-            'align-left': dataAlignment === 'left',
-            'align-center': dataAlignment === 'center',
-            'align-right': dataAlignment === 'right',
+          <p className={cn(styles.description, {
+            [styles.alignLeft]: dataAlignment === 'left',
+            [styles.alignCenter]: dataAlignment === 'center',
+            [styles.alignRight]: dataAlignment === 'right',
           })}>
             {description}
           </p>
