@@ -79,8 +79,6 @@ export const fetchPublicPlayoffsAction = async ({
       },
     });
 
-    console.log('PLAYOFFS', playoffs);
-
     if (playoffs.length === 0) {
       return {
         ok: true,
