@@ -55,60 +55,56 @@ const MatchCardSkeleton: FC = () => (
 
 export const BracketSkeleton: FC = () => (
   <div className="flex flex-col gap-8" role="status" aria-label="Cargando bracket">
-    <div>
-      <div className="h-6 w-16 bg-gray-300 dark:bg-gray-600 rounded mb-4 animate-pulse" />
-
-      <div
-        className="hidden lg:grid min-h-[350px] overflow-visible"
-        style={{ gridTemplateColumns: '1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr' }}
-      >
-        <div className="flex flex-col justify-between py-1">
-          <MatchCardSkeleton />
-          <MatchCardSkeleton />
-        </div>
-        <div className="animate-pulse">
-          <ConnectorSkeleton type="qf-to-sf" />
-        </div>
-        <div className="flex flex-col justify-center py-1">
-          <MatchCardSkeleton />
-        </div>
-        <div className="animate-pulse">
-          <ConnectorSkeleton type="sf-to-final" />
-        </div>
-        <div className="flex flex-col justify-center py-1">
-          <MatchCardSkeleton />
-        </div>
-        <div className="animate-pulse">
-          <ConnectorSkeleton type="sf-to-final" />
-        </div>
-        <div className="flex flex-col justify-center py-1">
-          <MatchCardSkeleton />
-        </div>
-        <div className="animate-pulse">
-          <ConnectorSkeleton type="qf-to-sf" flip />
-        </div>
-        <div className="flex flex-col justify-between py-1">
-          <MatchCardSkeleton />
-          <MatchCardSkeleton />
-        </div>
+    <div
+      className="hidden lg:grid min-h-[350px] overflow-visible"
+      style={{ gridTemplateColumns: '1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr' }}
+    >
+      <div className="flex flex-col justify-between py-1">
+        <MatchCardSkeleton />
+        <MatchCardSkeleton />
       </div>
+      <div className="animate-pulse">
+        <ConnectorSkeleton type="qf-to-sf" />
+      </div>
+      <div className="flex flex-col justify-center py-1">
+        <MatchCardSkeleton />
+      </div>
+      <div className="animate-pulse">
+        <ConnectorSkeleton type="sf-to-final" />
+      </div>
+      <div className="flex flex-col justify-center py-1">
+        <MatchCardSkeleton />
+      </div>
+      <div className="animate-pulse">
+        <ConnectorSkeleton type="sf-to-final" />
+      </div>
+      <div className="flex flex-col justify-center py-1">
+        <MatchCardSkeleton />
+      </div>
+      <div className="animate-pulse">
+        <ConnectorSkeleton type="qf-to-sf" flip />
+      </div>
+      <div className="flex flex-col justify-between py-1">
+        <MatchCardSkeleton />
+        <MatchCardSkeleton />
+      </div>
+    </div>
 
-      <div className="lg:hidden space-y-5">
-        {[1, 2, 3].map((section) => (
-          <div key={section}>
-            <div className="h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded mb-2 animate-pulse" />
-            <div className="space-y-2">
-              {section < 3 ? (
-                Array.from({ length: section === 2 ? 2 : 4 }).map((_, i) => (
-                  <MatchCardSkeleton key={i} />
-                ))
-              ) : (
-                <MatchCardSkeleton />
-              )}
-            </div>
+    <div className="lg:hidden space-y-5">
+      {[1, 2, 3].map((section) => (
+        <div key={section}>
+          <div className="h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded mb-2 animate-pulse" />
+          <div className="space-y-2">
+            {section < 3 ? (
+              Array.from({ length: section === 2 ? 2 : 4 }).map((_, i) => (
+                <MatchCardSkeleton key={i} />
+              ))
+            ) : (
+              <MatchCardSkeleton />
+            )}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   </div>
 );

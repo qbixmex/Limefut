@@ -1,6 +1,5 @@
 import { Suspense, type FC } from 'react';
 import { Heading, TournamentsSelectorSkeleton } from '../components';
-import { BracketSkeleton } from './(components)/bracket-skeleton';
 import { BracketContent } from './(components)/bracket-content';
 import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
 import { ErrorHandler } from '@/shared/components/errorHandler';
@@ -18,7 +17,7 @@ export const ResultsPage: FC<Props> = ({ searchParams }) => {
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
         <SearchParamsSelectors />
       </Suspense>
-      <Suspense fallback={<BracketSkeleton />}>
+      <Suspense>
         <ErrorHandler />
         <BracketContent searchParams={searchParams} />
       </Suspense>
