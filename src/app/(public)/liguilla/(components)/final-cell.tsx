@@ -25,7 +25,7 @@ export const FinalCell: FC<{
           />
         </span>
       ) : (
-        <span className="text-lg font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+        <span className="text-lg text-center font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
           Final
         </span>
       )}
