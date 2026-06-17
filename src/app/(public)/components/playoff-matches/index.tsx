@@ -6,7 +6,7 @@ import { MatchMetadata } from '../results/match-metadata';
 import { Medal, Minus } from 'lucide-react';
 import { MATCH_STATUS, type ROUND_TYPE } from '@/shared/enums';
 import { fetchPublicPlayoffMatchesAction } from '../../(actions)/home/fetchPublicPlayoffMatchesAction';
-import { EditPlayoffMatch } from '../edit-playoff-match';
+import { EditMatch } from '../edit-match';
 import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
@@ -139,9 +139,10 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
               {((matches.length - 1) !== index) && (
                 <div className="w-full h-0.5 bg-gray-300 my-3" />
               )}
-              <EditPlayoffMatch
+              <EditMatch
                 playoffId={match.playoffId}
-                playoffMatchId={match.id}
+                matchId={match.id}
+                phase="playoff"
               />
             </div>
           ))

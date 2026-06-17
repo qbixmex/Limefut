@@ -8,12 +8,22 @@ import { headers } from 'next/headers';
 import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
-  playoffId: string;
-  playoffMatchId: string;
+  matchId: string;
+  phase: 'regular' | 'playoff';
+  playoffId?: string;
 }>;
 
-export const EditPlayoffMatch: FC<Props> = async ({ playoffId, playoffMatchId }) => {
+export const EditMatch: FC<Props> = async ({ matchId, phase, playoffId }) => {
   const session = await auth.api.getSession({ headers: await headers() });
+
+  let URL = '';
+  switch (phase) {
+    case 'regular':
+      URL = ROUTES.ADMIN_MATCHES_EDIT(matchId);
+      break;
+    case 'playoff':
+      URL = ROUTES.ADMIN_PLAYOFFS_MATCHES_EDIT(playoffId as string, matchId);
+  }
 
   if (!session?.user && !session?.user.roles?.includes('admin')) {
     return null;
@@ -21,7 +31,7 @@ export const EditPlayoffMatch: FC<Props> = async ({ playoffId, playoffMatchId })
 
   return (
     <Link
-      href={ROUTES.ADMIN_PLAYOFFS_MATCHES_EDIT(playoffId, playoffMatchId)}
+      href={URL}
       className={cn([
         'absolute top-0 right-0',
         buttonVariants({ variant: 'outline-warning', size: 'icon' }),
