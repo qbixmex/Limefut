@@ -41,6 +41,8 @@ export const BracketContent = async ({ searchParams }: Props) => {
           key={group.groupName}
           groupName={group.groupName}
           variant={group.variant}
+          categoryName={group.categoryName}
+          isSingleGroup={brackets.length === 1}
           startingRound={group.startingRound as PLAYOFF_ROUND_TYPE}
           quarterFinals={group.quarterFinals}
           semiFinals={group.semiFinals}

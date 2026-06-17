@@ -31,8 +31,8 @@ export const MatchMetadata: FC<Props> = ({
 }) => {
   return (
     <div className="h-full flex flex-col justify-center gap-2">
-      <h3 className="text-lg font-semibold">{tournamentName}</h3>
-      <section className="flex flex-col md:flex-row">
+      <h3 className="text-lg font-semibold text-emerald-700 dark:text-primary">{tournamentName}</h3>
+      <section className="flex flex-col md:flex-row text-gray-500 dark:text-gray-300">
         <div className="w-full md:1/2">
           <p><b>Categoría:</b> {category ?? <span>No especificada</span>}</p>
           <p><b>Formato:</b> {format} vs {format}</p>

@@ -53,11 +53,11 @@ const HomePage: FC<Props> = ({ searchParams }) => {
           </Suspense>
 
           <Suspense fallback={<MatchesSkeleton />}>
-            <PlayoffMatches playoffsPromise={playoffsPromise} />
+            <LatestResults resultsPromise={resultsPromise} />
           </Suspense>
 
           <Suspense fallback={<MatchesSkeleton />}>
-            <LatestResults resultsPromise={resultsPromise} />
+            <PlayoffMatches playoffsPromise={playoffsPromise} />
           </Suspense>
 
           <Suspense fallback={<LatestImagesSkeleton />}>

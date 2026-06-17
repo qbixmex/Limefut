@@ -7,6 +7,10 @@ import { SoccerField } from '@/shared/components/icons';
 import { HorizontalCalendar } from '../horizontal-calendar';
 import { fetchPublicMatchesAction } from '../../(actions)/home/fetchPublicMatchesAction';
 import { fetchPublicMatchesCountAction } from '../../(actions)/home/fetchPublicMatchesCountAction';
+import { MATCH_STATUS } from '@/shared/enums';
+import { cn } from '@/lib/utils';
+import { Minus } from 'lucide-react';
+import { EditMatch } from '../edit-match';
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string | undefined }>;
@@ -32,72 +36,107 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
 
       <div className="bg-emerald-700 text-emerald-50 px-6 py-3 rounded-t-lg flex items-center gap-4">
         <SoccerField size={50} strokeWidth={1.5} />
-        <p className="text-2xl font-semibold">Encuentros</p>
+        <p className="text-2xl font-semibold">
+          Encuentros{' '}
+          <span className="text-xs text-gray-300">(temporada regular)</span>
+        </p>
       </div>
 
       <div className="border border-green-900/90 rounded-b-lg p-5">
         {(matches.length > 0) ? matches.map((match, index) => (
-          <Link
-            key={match.id}
-            href={`/resultados/${match.id}`}
-            target="_blank"
-          >
-            <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
-              <div className="flex flex-col gap-5 md:flex-row md:gap-5">
-                <div className="w-full lg:mx-w-1/2 order-2 md:order-1">
-                  <MatchMetadata
-                    tournamentName={match.tournament.name}
-                    category={match.localTeam.category}
-                    format={match.localTeam.format}
-                    week={match.week}
-                    place={match.place}
-                    date={match.matchDate}
-                    status={match.status}
-                  />
-                </div>
-                <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 md:order-2">
-                  <Team
-                    imageUrl={match.localTeam.imageUrl}
-                    name={match.localTeam.name}
-                  />
-                  <div className="flex justify-center items-center gap-2">
-                    {match.penaltyShoots && (
-                      <span className="font-semibold text-gray-500">
-                        ({match.penaltyShoots.localGoals})
-                      </span>
-                    )}
-                    <span
-                      className="font-bold text-2xl text-blue-700 dark:text-blue-500"
-                      role="heading"
-                      aria-level={3}
-                      aria-label={`Goles del equipo local ${match.localTeam.name}`}
-                    >
-                      {match.localScore}
-                    </span>
-                    <span>-</span>
-                    <span
-                      className="font-bold text-2xl text-blue-700 dark:text-blue-500"
-                      aria-label={`Goles del equipo visitante ${match.visitorTeam.name}`}
-                    >
-                      {match.visitorScore}
-                    </span>
-                    {match.penaltyShoots && (
-                      <span className="font-semibold text-gray-500">
-                        ({match.penaltyShoots.visitorGoals})
-                      </span>
-                    )}
+          <div key={match.id} className="relative">
+            <Link
+              href={`/resultados/${match.id}`}
+              target="_blank"
+            >
+              <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
+                <div className="flex flex-col gap-5 md:flex-row md:gap-5">
+                  <div className="w-full lg:w-1/2 order-2 md:order-1">
+                    <MatchMetadata
+                      tournamentName={match.tournament.name}
+                      category={match.localTeam.category}
+                      format={match.localTeam.format}
+                      week={match.week}
+                      place={match.place}
+                      date={match.matchDate}
+                      status={match.status}
+                    />
                   </div>
-                  <Team
-                    imageUrl={match.visitorTeam.imageUrl}
-                    name={match.visitorTeam.name}
-                  />
+                  <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 md:order-2">
+                    <Team
+                      imageUrl={match.localTeam.imageUrl}
+                      name={match.localTeam.name}
+                    />
+                    <div className="flex justify-center items-center gap-2">
+                      {match.penaltyShoots && (
+                        <span className="font-semibold text-gray-500">
+                          ({match.penaltyShoots.localGoals})
+                        </span>
+                      )}
+                      <span
+                        className={cn('font-bold text-2xl', {
+                          'text-gray-700 dark:text-gray-500': match.status !== MATCH_STATUS.COMPLETED,
+                          'text-blue-700 dark:text-blue-500': match.status === MATCH_STATUS.COMPLETED,
+                        })}
+                        role="heading"
+                        aria-level={3}
+                        aria-label={`Goles del equipo local ${match.localTeam.name}`}
+                      >
+                        {
+                          (
+                            match.status === MATCH_STATUS.SCHEDULED ||
+                            match.status === MATCH_STATUS.CANCELED
+                          ) && <Minus strokeWidth={5} width={15} />
+                        }
+                        {match.status === MATCH_STATUS.COMPLETED && match.localScore}
+                      </span>
+                      {
+                        (
+                          match.status === MATCH_STATUS.SCHEDULED ||
+                          match.status === MATCH_STATUS.CANCELED
+                        )
+                          ? <div className="w-1 h-5 bg-gray-500 rounded" />
+                          : <div className="w-3 h-1 bg-gray-500 rounded" />
+                      }
+                      <span
+                        className={cn('font-bold text-2xl', {
+                          'text-gray-700 dark:text-gray-500': match.status !== MATCH_STATUS.COMPLETED,
+                          'text-blue-700 dark:text-blue-500': match.status === MATCH_STATUS.COMPLETED,
+                        })}
+                        role="heading"
+                        aria-level={3}
+                        aria-label={`Goles del equipo local ${match.localTeam.name}`}
+                      >
+                        {
+                          (
+                            match.status === MATCH_STATUS.SCHEDULED ||
+                            match.status === MATCH_STATUS.CANCELED
+                          ) && <Minus strokeWidth={5} width={15} />
+                        }
+                        {match.status === MATCH_STATUS.COMPLETED && match.visitorScore}
+                      </span>
+                      {match.penaltyShoots && (
+                        <span className="font-semibold text-gray-500">
+                          ({match.penaltyShoots.visitorGoals})
+                        </span>
+                      )}
+                    </div>
+                    <Team
+                      imageUrl={match.visitorTeam.imageUrl}
+                      name={match.visitorTeam.name}
+                    />
+                  </div>
                 </div>
+                {((matches.length - 1) !== index) && (
+                  <div className="w-full h-0.5 bg-gray-300 my-3" />
+                )}
               </div>
-              {((matches.length - 1) !== index) && (
-                <div className="w-full h-0.5 bg-gray-300 my-3" />
-              )}
-            </div>
-          </Link>
+            </Link>
+            <EditMatch
+              matchId={match.id}
+              phase="regular"
+            />
+          </div>
         )) : (
           <p className="text-2xl text-green-800 dark:text-green-500 font-semibold italic text-center">
             No hay encuentros programados
