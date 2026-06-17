@@ -8,6 +8,7 @@ import { PLAYOFF_ROUND, type PLAYOFF_ROUND_TYPE } from '@/shared/enums';
 export type BracketGroupData = {
   groupName: string;
   variant: 'oro' | 'plata';
+  categoryName: string;
   startingRound: PLAYOFF_ROUND_TYPE;
   quarterFinals?: [Match, Match, Match, Match];
   semiFinals?: [Match, Match];
@@ -76,6 +77,9 @@ export const fetchPublicPlayoffsAction = async ({
       select: {
         id: true,
         startingRound: true,
+        category: {
+          select: { name: true },
+        },
       },
     });
 
@@ -87,6 +91,7 @@ export const fetchPublicPlayoffsAction = async ({
       };
     }
 
+    const categoryName = playoffs[0].category?.name ?? categoryPermalink ?? '';
     const playoffIds = playoffs.map((p) => p.id);
     const startingRoundByPlayoff = new Map(
       playoffs.map((p) => [p.id, p.startingRound]),
@@ -152,12 +157,12 @@ export const fetchPublicPlayoffsAction = async ({
 
     for (const match of matches) {
       if (!groups.has(match.position)) {
-        const sr = startingRoundByPlayoff.get(match.playoffId) ?? 'quarterfinal';
+        const startingRound = startingRoundByPlayoff.get(match.playoffId) ?? 'quarterfinal';
         groups.set(match.position, {
           quarterFinals: [],
           semiFinals: [],
           finals: [],
-          startingRound: sr,
+          startingRound,
         });
       }
 
@@ -215,6 +220,7 @@ export const fetchPublicPlayoffsAction = async ({
       const bracket: BracketGroupData = {
         groupName: position === 1 ? 'Oro' : 'Plata',
         variant: position === 1 ? 'oro' : 'plata',
+        categoryName,
         startingRound: group.startingRound as PLAYOFF_ROUND_TYPE,
         final: finalMatch,
       };

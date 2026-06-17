@@ -7,7 +7,7 @@ type Props = Readonly<{
 
 export const BracketConnector: FC<Props> = ({ type, flip }) => {
   return (
-    <div className={`flex items-stretch h-full w-full px-1 ${flip ? '-scale-x-100' : ''}`}>
+    <div className={`flex items-stretch w-full h-full px-1 overflow-hidden ${flip ? '-scale-x-100' : ''}`}>
       <svg
         viewBox="0 0 40 400"
         className="w-full h-full text-emerald-600 dark:text-emerald-400 overflow-visible"
