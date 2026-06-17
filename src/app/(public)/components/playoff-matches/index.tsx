@@ -8,6 +8,7 @@ import { MATCH_STATUS, type ROUND_TYPE } from '@/shared/enums';
 import { fetchPublicPlayoffMatchesAction } from '../../(actions)/home/fetchPublicPlayoffMatchesAction';
 import { EditMatch } from '../edit-match';
 import { cn } from '@/lib/utils';
+import { GiSoccerBall } from 'react-icons/gi';
 
 type Props = Readonly<{
   playoffsPromise: Promise<{ playoffsPage?: string }>;
@@ -29,7 +30,12 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
             <Medal size={50} strokeWidth={1.5} />
             <p className="font-bold text-2xl">Encuentros de Liguilla</p>
           </div>
-          <Link href="/liguilla" className='text-white font-semibold hover:text-gray-300'>ver encuentros</Link>
+          <Link href="/liguilla" className="text-emerald-100 hover:text-emerald-300 font-semibold">
+            <span className="inline-flex items-center gap-1">
+              encuentros de liguilla
+              <GiSoccerBall />
+            </span>
+          </Link>
         </div>
       </div>
 
