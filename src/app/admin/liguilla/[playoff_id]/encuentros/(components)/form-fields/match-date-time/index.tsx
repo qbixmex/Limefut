@@ -21,9 +21,13 @@ import { Label } from '@/components/ui/label';
 type Props = Readonly<{ isMatchDate?: boolean; }>;
 
 export const MatchDateTime: FC<Props> = ({ isMatchDate = false }) => {
-  const { control } = useFormContext();
+  const { control, getValues } = useFormContext();
   const [enabledDate, setEnabledDate] = useState(isMatchDate);
   const [open, setOpen] = useState(false);
+  const defaultTime = getValues('matchDate') as Date | undefined;
+  const [selectedTime, setSelectedTime] = useState<string>(
+    defaultTime ? format(new Date(defaultTime), 'HH:mm:ss') : '00:00:00',
+  );
 
   return (
     <Controller
@@ -42,20 +46,15 @@ export const MatchDateTime: FC<Props> = ({ isMatchDate = false }) => {
         };
 
         const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const [hours, minutes] = e.target.value.split(':').map(Number);
-          const next = dateValue ? new Date(dateValue) : new Date();
-          next.setHours(
-            isNaN(hours) ? 0 : hours,
-            isNaN(minutes) ? 0 : minutes,
-            0,
-            0,
-          );
-          field.onChange(next);
+          const value = !e.target.value ? '00:00:00' : e.target.value;
+          setSelectedTime(value);
+          if (dateValue) {
+            const [hours, minutes, seconds] = value.split(':').map(Number);
+            const combined = new Date(dateValue);
+            combined.setHours(hours, minutes, seconds);
+            field.onChange(combined);
+          }
         };
-
-        const timeValue = dateValue
-          ? `${String(dateValue.getHours()).padStart(2, '0')}:${String(dateValue.getMinutes()).padStart(2, '0')}`
-          : '';
 
         return (
           <>
@@ -113,7 +112,7 @@ export const MatchDateTime: FC<Props> = ({ isMatchDate = false }) => {
                     id="game-hour"
                     type="time"
                     step="1"
-                    value={timeValue}
+                    value={selectedTime}
                     onChange={handleTimeChange}
                     className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                   />

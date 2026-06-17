@@ -106,6 +106,8 @@ export const createRegularSimplePenaltyShootoutAction = async (
     updateTag('public-result-details');
     updateTag('public-matches-count');
     updateTag('public-team-standings');
+    updateTag('public-playoff-matches');
+    updateTag('public-playoff');
 
     return prismaTransaction;
   } catch (error) {
