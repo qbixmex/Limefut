@@ -1,0 +1,40 @@
+@reference 'tailwindcss';
+
+.championDisplayContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing) * 2);
+}
+
+.winnerTeamImage {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: calc(var(--spacing) * 1); /* 4px */
+  @apply border border-zinc-200;
+  @apply shadow shadow-zinc-100;
+}
+
+.winnerTeamName {
+  text-transform: uppercase;
+  @apply text-2xl font-black;
+}
+
+.championLabel {
+  @apply text-xl font-bold;
+}
+
+.goldColor {
+  color: var(--color-amber-600);
+}
+
+.silverColor {
+  color: var(--color-slate-400);
+}
+
+:global(.dark) {
+  .winnerTeamImage {
+    @apply shadow-transparent border-0;
+  }
+}
