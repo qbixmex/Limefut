@@ -32,6 +32,17 @@ export const MatchDateTimeFields = ({ match }: Props) => {
     match?.matchDate ? format(new Date(match.matchDate), 'HH:mm:ss') : '00:00:00',
   );
 
+  const handleTimeChange = (date: Date | undefined) => {
+    setSelectedDate(date);
+    if (date) {
+      const [hours, minutes, seconds] = selectedTime.split(':').map(Number);
+      const combined = new Date(date);
+      combined.setHours(hours, minutes, seconds);
+      setValue('matchDate', combined);
+    }
+    setOpenCalendar(false);
+  };
+
   return (
     <>
       {(!enabledDate && !match?.matchDate) && (
@@ -78,16 +89,7 @@ export const MatchDateTimeFields = ({ match }: Props) => {
                   selected={selectedDate}
                   defaultMonth={selectedDate}
                   captionLayout="dropdown"
-                  onSelect={(date) => {
-                    setSelectedDate(date);
-                    if (date) {
-                      const [hours, minutes, seconds] = selectedTime.split(':').map(Number);
-                      const combined = new Date(date);
-                      combined.setHours(hours, minutes, seconds);
-                      setValue('matchDate', combined);
-                    }
-                    setOpenCalendar(false);
-                  }}
+                  onSelect={handleTimeChange}
                 />
               </PopoverContent>
             </Popover>

@@ -34,6 +34,8 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
   updateTag('admin-tournament-for-match');
   updateTag('public-team-matches');
   updateTag('public-team-standings');
+  updateTag('public-playoff-matches');
+  updateTag('public-playoff');
 
   return {
     ok: true,

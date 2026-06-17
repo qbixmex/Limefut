@@ -8,6 +8,7 @@ import { useBracketRound } from '../use-bracket-round';
 import { FinalCell } from './final-cell';
 import { ChampionDisplay } from './champion-display';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
   quarterFinals?: [Match, Match, Match, Match];
@@ -15,6 +16,8 @@ type Props = Readonly<{
   final: Match;
   groupName: string;
   variant?: 'oro' | 'plata';
+  categoryName: string;
+  isSingleGroup: boolean;
   startingRound: PLAYOFF_ROUND_TYPE;
   tournament: string;
   category: string;
@@ -34,6 +37,8 @@ export const BracketRound: FC<Props> = ({
   final,
   groupName,
   variant = 'oro',
+  categoryName,
+  isSingleGroup,
   startingRound,
   tournament,
   category,
@@ -52,8 +57,15 @@ export const BracketRound: FC<Props> = ({
 
   return (
     <div>
-      <h3 className={`text-2xl text-center font-bold mb-4 uppercase tracking-wide ${championColor === 'amber' ? 'text-amber-500' : 'text-slate-400'}`}>
-        {groupName}
+      <h3 className={cn([
+        'text-2xl text-center font-bold mb-4 uppercase tracking-wide',
+        {
+          'text-amber-500': championColor === 'amber',
+          'text-slate-400': championColor === 'slate',
+          'text-sky-500': isSingleGroup,
+        },
+      ])}>
+        Finales {isSingleGroup ? categoryName : groupName}
       </h3>
 
       {/* Desktop */}

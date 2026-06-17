@@ -7,28 +7,29 @@ type Props = Readonly<{
 
 export const BracketConnector: FC<Props> = ({ type, flip }) => {
   return (
-    <div className={`flex items-stretch h-full w-full px-1 ${flip ? '-scale-x-100' : ''}`}>
+    <div className={`flex items-stretch w-full h-full px-1 overflow-hidden ${flip ? '-scale-x-100' : ''}`}>
       <svg
-        viewBox="0 0 40 400"
+        viewBox="0 0 40 200"
         className="w-full h-full text-emerald-600 dark:text-emerald-400 overflow-visible"
         fill="none"
         stroke="currentColor"
+        preserveAspectRatio="none"
       >
         {type === 'qf-to-sf' ? (
           <>
             <path
-              d="M 0 60 L 16 60 M 24 200 L 40 200 M 0 340 L 16 340"
+              d="M 0 30 L 16 30 M 24 100 L 40 100 M 0 170 L 16 170"
               strokeWidth="1"
             />
             <path
-              d="M 16 60 Q 20 60 20 76 L 20 184 Q 20 200 24 200 M 16 340 Q 20 340 20 324 L 20 216 Q 20 200 24 200"
+              d="M 16 30 Q 20 30 20 38 L 20 92 Q 20 100 24 100 M 16 170 Q 20 170 20 162 L 20 108 Q 20 100 24 100"
               strokeWidth="1"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
           </>
         ) : (
-          <path d="M 0 200 L 40 200" strokeWidth="1" />
+          <path d="M 0 100 L 40 100" strokeWidth="1" />
         )}
       </svg>
     </div>

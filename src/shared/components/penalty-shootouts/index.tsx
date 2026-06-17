@@ -30,7 +30,11 @@ export const PenaltyShootout: FC<Props> = ({ shootout }) => {
                 {(shootout.kicks.length === 0) && (
                   <>
                     <TableRow>
-                      <TableHead>{shootout.localTeam.name}</TableHead>
+                      <TableHead>
+                        <span className="text-wrap">
+                          {shootout.localTeam.name}
+                        </span>
+                      </TableHead>
                       <TableCell>
                         <span className="text-sky-600 dark:text-sky-500 font-bold">
                           {shootout.localGoals}
@@ -38,7 +42,11 @@ export const PenaltyShootout: FC<Props> = ({ shootout }) => {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableHead>{shootout.visitorTeam.name}</TableHead>
+                      <TableHead>
+                        <span className="text-wrap">
+                          {shootout.visitorTeam.name}
+                        </span>
+                      </TableHead>
                       <TableCell>
                         <span className="text-sky-600 dark:text-sky-500 font-bold">
                           {shootout.visitorGoals}

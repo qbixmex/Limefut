@@ -14,6 +14,7 @@ import { ShieldBan } from 'lucide-react';
 import styles from './styles.module.css';
 import { cn, getPlayoffRound } from '@/lib/utils';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
+import { WinnerTeam } from './winner-team';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -175,20 +176,47 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
               </TableRow>
               <TableRow>
                 <TableHead>Ronda</TableHead>
-                <TableCell>{getPlayoffRound(match.round)}</TableCell>
+                <TableCell>
+                  <Badge variant="outline-info">
+                    {getPlayoffRound(match.round)}
+                  </Badge>
+                </TableCell>
               </TableRow>
               <TableRow>
-                <TableHead>Ganador</TableHead>
-                <TableCell>{match.winner?.name ?? 'Empate'}</TableCell>
+                <TableHead>
+                  Ganador del<br />encuentro
+                </TableHead>
+                <TableCell>
+                  <WinnerTeam
+                    winnerTeamName={match.winner?.name}
+                    matchStatus={match.status as MATCH_STATUS_TYPE}
+                    localScore={match.localScore ?? 0}
+                    visitorScore={match.visitorScore ?? 0}
+                  />
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>Grupo</TableHead>
                 <TableCell>
-                  {(match.group === 'gold')
-                    ? 'Oro'
-                    : (match.group === 'silver')
-                      ? 'Plata'
-                      : 'General'
+                  {(match.group === 'golder')
+                    ? (
+                      <Badge
+                        variant="outline-warning"
+                        className="text-amber-500 border-amber-500"
+                      >oro</Badge>
+                    )
+                    : (match.group === 'silvered')
+                      ? (
+                        <Badge
+                          variant="outline-warning"
+                          className="text-zinc-500 border-zinc-500 dark:text-zinc-400 dark:border-zinc-400"
+                        >plata</Badge>
+                      )
+                      : (
+                        <Badge
+                          variant="outline-info"
+                        >general</Badge>
+                      )
                   }
                 </TableCell>
               </TableRow>
