@@ -8,7 +8,7 @@ import { useBracketRound } from '../use-bracket-round';
 export const FinalCell: FC<{
   final: Match;
   isFinalCompleted: boolean;
-  championColor: 'amber' | 'slate';
+  championColor: 'gold' | 'silver' | 'general';
 }> = ({ final, isFinalCompleted, championColor }) => {
   const { getWinner } = useBracketRound();
 
@@ -16,17 +16,13 @@ export const FinalCell: FC<{
 
   return (
     <>
-      {isFinalCompleted && winner ? (
+      {isFinalCompleted && winner && (
         <span className="flex flex-col items-center gap-0.5">
           <ChampionDisplay
             final={final}
             isFinalCompleted={isFinalCompleted}
             championColor={championColor}
           />
-        </span>
-      ) : (
-        <span className="text-lg text-center font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-          Final
         </span>
       )}
     </>

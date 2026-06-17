@@ -1,0 +1,142 @@
+@reference 'tailwindcss';
+
+.roundLabel {
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-gray-400);
+  @apply text-lg font-semibold tracking-widest;
+}
+
+.heading {
+  text-transform: uppercase;
+  margin-bottom: calc(var(--spacing) * 4);
+  text-align: center;
+  @apply text-2xl font-bold tracking-wide;
+}
+
+.desktop {
+  display: none;
+  @apply xl:block;
+
+  .quarterFinals {
+    .branchesHeadings {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr;
+      @apply hidden lg:grid mb-5 items-center;
+    }
+
+    .branches {
+      display: none;
+      min-height: 350px;
+      overflow: visible;
+      grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr 40px 1fr;
+      @apply lg:grid;
+    }
+
+    .quarterFinalsBranches,
+    .semifinalBranch,
+    .finalBranch {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .quarterFinalsBranches {
+      gap: calc(var(--spacing) * 5);
+    }
+  }
+
+  .semifinals {
+    .headings {
+      display: none;
+      align-items: center;
+      margin-bottom: calc(var(--spacing) * 2);
+      color: tomato !important;
+      grid-template-columns: 1fr 40px 1fr 40px 1fr;
+      @apply lg:grid;
+    }
+
+    .branches {
+      display: none;
+      align-items: center;
+      overflow: visible;
+      grid-template-columns: 1fr 40px 1fr 40px 1fr;
+      @apply lg:grid;
+    }
+
+    .championTeam {
+      margin: 0 auto;
+    }
+  }
+
+  .finals {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.mobile {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 5);
+  @apply md:w-1/2 lg:w-1/3 md:mx-auto xl:hidden;
+
+  .mobileHeading {
+    margin-bottom: calc(var(--spacing) * 2);
+    text-transform: uppercase;
+    margin-bottom: calc(var(--spacing) * 2);
+    color: var(--color-gray-500);
+    @apply text-lg font-semibold tracking-wider;
+  }
+
+  .quarterFinals {
+    .mobileQuarterFinals {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 5);
+    }
+  }
+
+  .semifinals {
+    .mobileSemifinals {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 5);
+    }
+  }
+
+  .finals {
+    .mobileFinals {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: calc(var(--spacing) * 8);
+    }
+  }
+}
+
+:global(.dark) {
+  .roundLabel {
+    color: var(--color-gray-500);
+  }
+
+  .mobile {
+    .mobileHeading {
+      color: var(--color-gray-400);
+    }
+  }
+}
+
+.goldColor {
+  color: var(--color-amber-500);
+}
+
+.silverColor {
+  color: var(--color-slate-400);
+}
+
+.generalColor {
+  color: var(--color-sky-500);
+}
