@@ -22,10 +22,10 @@ export const useBracketRound = () => {
     }
 
     if (match.penaltyShoots) {
-      if (match.localTeam.id === match.penaltyShoots.winnerTeamId) {
+      if (match.penaltyShoots.localGoals > match.penaltyShoots.visitorGoals) {
         return 'local';
       }
-      if (match.visitorTeam.id === match.penaltyShoots.winnerTeamId) {
+      if (match.penaltyShoots.visitorGoals > match.penaltyShoots.localGoals) {
         return 'visitor';
       }
     }
