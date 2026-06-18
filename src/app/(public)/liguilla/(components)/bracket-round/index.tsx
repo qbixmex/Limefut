@@ -1,13 +1,13 @@
 'use client';
 
 import type { FC } from 'react';
+import Link from 'next/link';
 import { MatchCard, type Match } from '../match-card';
 import { BracketConnector } from '../bracket-connector';
 import { PLAYOFF_ROUND, type PLAYOFF_ROUND_TYPE } from '@/shared/enums';
 import { useBracketRound } from '../../use-bracket-round';
 import { FinalCell } from '../final-cell';
 import { ChampionDisplay } from '../champion-display';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import styles from './styles.module.css';
 
@@ -53,6 +53,8 @@ export const BracketRound: FC<Props> = ({
 
   const quarterFinalMatches = quarterFinals ?? [];
   const semiFinalMatches = semiFinals ?? [];
+
+  const [qf1, qf2, qf3, qf4] = quarterFinalMatches;
   const [sf1, sf2] = semiFinalMatches;
 
   return (
@@ -95,7 +97,10 @@ export const BracketRound: FC<Props> = ({
                   }
                   target="_blank"
                 >
-                  <MatchCard match={quarterFinalMatches[0]} />
+                  <MatchCard
+                    match={quarterFinalMatches[0]}
+                    winner={getWinner(qf1)}
+                  />
                 </Link>
                 <Link href={
                   '/liguilla/encuentro' +
@@ -104,7 +109,10 @@ export const BracketRound: FC<Props> = ({
                   `&local_team=${quarterFinalMatches[1]?.localTeam.permalink ?? 'none'}` +
                   `&visitor_team=${quarterFinalMatches[1]?.visitorTeam.permalink ?? 'none'}`
                 }>
-                  <MatchCard match={quarterFinalMatches[1]} />
+                  <MatchCard
+                    match={quarterFinalMatches[1]}
+                    winner={getWinner(qf2)}
+                  />
                 </Link>
               </div>
               <div><BracketConnector type="qf-to-sf" /></div>
@@ -164,7 +172,10 @@ export const BracketRound: FC<Props> = ({
                   }
                   target="_blank"
                 >
-                  <MatchCard match={quarterFinalMatches[2]} />
+                  <MatchCard
+                    match={quarterFinalMatches[2]}
+                    winner={getWinner(qf3)}
+                  />
                 </Link>
                 <Link
                   href={
@@ -176,7 +187,10 @@ export const BracketRound: FC<Props> = ({
                   }
                   target="_blank"
                 >
-                  <MatchCard match={quarterFinalMatches[3]} />
+                  <MatchCard
+                    match={quarterFinalMatches[3]}
+                    winner={getWinner(qf4)}
+                  />
                 </Link>
               </div>
             </div>
@@ -286,7 +300,10 @@ export const BracketRound: FC<Props> = ({
                     `&visitor_team=${match.visitorTeam.permalink}`
                   }
                 >
-                  <MatchCard match={match} />
+                  <MatchCard
+                    match={match}
+                    winner={getWinner(match)}
+                  />
                 </Link>
               ))}
             </div>
