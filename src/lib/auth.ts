@@ -24,58 +24,44 @@ const options = {
   },
   user: {
     additionalFields: {
-      username: {
-        type: 'string',
-        required: false,
-      },
-      roles: {
-        type: 'string[]',
-        required: false,
-        defaultValue: [ROLE.USER],
-        input: false,
-      },
-      imageUrl: {
-        type: 'string',
-        required: false,
-        defaultValue: '',
-        input: false,
-      },
+      username: { type: 'string', required: false },
+      roles: { type: 'string[]', required: false, defaultValue: [ROLE.USER], input: false },
+      imageUrl: { type: 'string', required: false, defaultValue: '', input: false },
     },
   },
   plugins: [
-    nextCookies(),
     admin({
       defaultRole: ROLE.USER,
       adminRoles: [ROLE.ADMIN],
     }),
+    // 1. Ponemos customSession aquí arriba
+    customSession(async ({ user, session }) => {
+       const extendedUser = user as typeof user & {
+        username?: string;
+        roles?: string[];
+        imageUrl?: string;
+      };
+
+      return {
+        user: {
+          id: extendedUser.id,
+          name: extendedUser.name,
+          username: extendedUser.username,
+          email: extendedUser.email,
+          emailVerified: extendedUser.emailVerified,
+          roles: extendedUser.roles,
+          image: extendedUser.imageUrl,
+        },
+        session: {
+          createdAt: session.createdAt,
+          expiresAt: session.expiresAt,
+          token: session.token,
+          userAgent: session.userAgent,
+        },
+      };
+    }),
+    nextCookies(),
   ],
 } satisfies BetterAuthOptions;
 
-export const auth = betterAuth({
-  ...options,
-  plugins: [
-    ...(options.plugins ?? []),
-    customSession(
-      async ({ user, session }) => {
-        return {
-          user: {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            email: user.email,
-            emailVerified: user.emailVerified,
-            roles: user.roles,
-            image: user.imageUrl,
-          },
-          session: {
-            createdAt: session.createdAt,
-            expiresAt: session.expiresAt,
-            token: session.token,
-            userAgent: session.userAgent,
-          },
-        };
-      },
-      options,
-    ),
-  ],
-});
+export const auth = betterAuth(options);
