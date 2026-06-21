@@ -297,7 +297,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
 
         <p>{
           match.remarks
-            ? <span>match.remarks</span>
+            ? <span>{ match.remarks }</span>
             : <span className="text-gray-500">Sin comentarios</span>
         }</p>
       </section>
