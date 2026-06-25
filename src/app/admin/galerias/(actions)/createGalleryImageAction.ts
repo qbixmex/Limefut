@@ -29,7 +29,7 @@ export const createGalleryImageAction = async ({
     };
   }
 
-  const gallery = await prisma.gallery.findUnique({
+  const gallery = await prisma.gallery.findFirst({
     where: { id: galleryId },
     select: {
       id: true,

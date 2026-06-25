@@ -1,0 +1,41 @@
+@reference 'tailwindcss';
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  @apply md:max-w-[450px];
+}
+
+.position {
+  position: absolute;
+  bottom: calc(var(--spacing) * 5);
+  left: calc(var(--spacing) * 5);
+  z-index: 20;
+  color: var(--color-neutral-50);
+  font-weight: bold;
+  border: solid var(--color-neutral-50) 2px;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  opacity: 0.75;
+  box-shadow: -2px 2px 5px 2px rgba(0, 0, 0, 0.5);
+}
+
+.maximizeBtn {
+  z-index: 20;
+  right: calc(var(--spacing) * 5);
+  bottom: calc(var(--spacing) * 5);
+  padding: calc(var(--spacing) * 2);
+  color: var(--color-neutral-50);
+  @apply absolute hover:bg-blue-500/70 focus:outline-0 rounded;
+  @apply transition-colors duration-300 ease-in-out;
+}
+
+.dialogContent {
+  @apply max-w-4xl md:max-w-3xl;
+}

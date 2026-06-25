@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { auth } from '@/lib/auth';
 import { fetchGalleriesAction, updateGalleryStateAction } from '../(actions)';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { InfoIcon, Pencil } from 'lucide-react';
+import { ImagesIcon, Pencil } from 'lucide-react';
 import { format } from 'date-fns/format';
 import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { es } from 'date-fns/locale';
@@ -81,11 +81,11 @@ export const GalleriesTable: FC<Props> = async ({
                                 size: 'icon',
                               })}
                             >
-                              <InfoIcon />
+                              <ImagesIcon />
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent side="top">
-                            detalles
+                            imágenes
                           </TooltipContent>
                         </Tooltip>
                         <Tooltip>

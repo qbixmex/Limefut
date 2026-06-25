@@ -41,7 +41,7 @@ type Props = Readonly<{
   imagesQuantity: number;
 }>;
 
-export const GalleryImageForm: FC<Props> = ({ session, galleryId, imagesQuantity }) => {
+export const AddImage: FC<Props> = ({ session, galleryId, imagesQuantity }) => {
   const { galleryImage, clearGalleryImage } = useImageGallery();
   const [isOpen, setIsOpen] = useState(false);
   const formSchema = !galleryImage

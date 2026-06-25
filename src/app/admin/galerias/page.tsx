@@ -43,7 +43,10 @@ const GalleryContent: FC<Props> = async ({ searchParams }) => {
                   <TooltipTrigger>
                     <Link
                       href={ROUTES.ADMIN_GALLERIES_CREATE}
-                      className={buttonVariants({ variant: 'outline-primary', size: 'icon' })}
+                      className={buttonVariants({
+                        variant: 'outline-primary',
+                        size: 'icon',
+                      })}
                     >
                       <Plus strokeWidth={3} />
                     </Link>
