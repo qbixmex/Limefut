@@ -4,14 +4,15 @@ import type { FC } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import Image from 'next/image';
-import { GalleryImage } from './gallery-image';
+import { GalleryImage } from '../gallery-image';
 import { Maximize2 } from 'lucide-react';
-import './styles.css';
+import styles from './styles.module.css';
 
 type GalleryImageProps = Readonly<{
   images: {
@@ -27,18 +28,16 @@ export const GalleryImages: FC<GalleryImageProps> = ({ images }) => {
   return (
     <>
       {images.map((image) => (
-        <div key={image.id} className="w-full md:max-w-[450px] h-[250px] group relative">
+        <div key={image.id} className={styles.imageWrapper}>
           <GalleryImage galleyImage={image} />
-          <p className="text-2xl text-transparent group-hover:text-white font-bold absolute top-[50%] left-[50%] -translate-[50%,50%] transition-colors duration-500 ease-in-out">
-            {image.position}
-          </p>
+          <p className={styles.position}>{image.position}</p>
           <Dialog key={image.id}>
             <DialogTrigger asChild>
-              <button className="absolute hover:bg-gray-500/50 focus:outline-0 p-2 rounded text-white right-2 bottom-5 z-20">
+              <button className={styles.maximizeBtn}>
                 <Maximize2 size={20} />
               </button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl md:max-w-3xl">
+            <DialogContent className={styles.dialogContent}>
               <DialogHeader>
                 <DialogTitle className="mb-5">{image.title}</DialogTitle>
                 <Image
@@ -48,6 +47,9 @@ export const GalleryImages: FC<GalleryImageProps> = ({ images }) => {
                   alt={image.title}
                   className="rounded"
                 />
+                <DialogDescription className="sr-only">
+                  Imagen de {image.title}
+                </DialogDescription>
               </DialogHeader>
             </DialogContent>
           </Dialog>
