@@ -1,0 +1,43 @@
+@reference 'tailwindcss';
+
+.imageContainer {
+  position: relative;
+  @apply space-y-2;
+}
+
+.image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  @apply lg:max-w-[400px] rounded;
+}
+
+.backgroundOverlay {
+  width: 100%;
+  height: 250px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.25);
+  @apply rounded;
+}
+
+.hiddenIcon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%);
+  z-index: 20;
+  color: var(--color-neutral-50);
+  opacity: 0.8;
+}
+
+.editButton {
+  position: absolute;
+  top: calc(var(--spacing) * 5);
+  left: calc(var(--spacing) * 5);
+  z-index: 20;
+}

@@ -1,24 +1,30 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Gallery } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
-
-type GalleryImageType = {
-  id: string;
-  title: string;
-  imageUrl: string;
-  active: boolean;
-  position: number;
-};
 
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
-  gallery: Gallery & {
-    images: GalleryImageType[];
-  } | null;
+  gallery: GALLERY_TYPE | null;
 }>;
+
+export type GALLERY_TYPE = {
+  id: string;
+  title: string;
+  permalink: string;
+  galleryDate: Date;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  images: {
+    id: string;
+    title: string;
+    imageUrl: string;
+    active: boolean;
+    position: number;
+  }[];
+};
 
 export const fetchGalleryAction = async (
   userRoles: string[],

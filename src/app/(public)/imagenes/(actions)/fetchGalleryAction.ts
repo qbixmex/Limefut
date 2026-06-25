@@ -38,6 +38,7 @@ export const fetchGalleryAction = async (galleryPermalink: string): ResponseActi
         permalink: true,
         galleryDate: true,
         images: {
+          where: { active: true },
           select: {
             id: true,
             title: true,
