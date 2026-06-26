@@ -15,7 +15,7 @@ export const EmbedYoutube: FC<Props> = ({ url, title, className }) => {
 
   return (
     <img
-      className={cn('block w-[300px] h-auto', className)}
+      className={cn('block w-full h-auto rounded', className)}
       src={thumbnailUrl}
       alt={title || 'Video thumbnail'}
     />

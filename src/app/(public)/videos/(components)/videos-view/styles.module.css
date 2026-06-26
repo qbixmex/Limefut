@@ -1,0 +1,88 @@
+@reference 'tailwindcss';
+
+.videosContainer {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: calc(var(--spacing) * 5);
+  @apply md:grid-cols-2 lg:grid-cols-4;
+}
+
+.videoCard {
+  padding: calc(var(--spacing) * 5);
+  background-color: var(--color-gray-200);
+  border-color: var(--color-gray-300);
+  border-width: 1px;
+  @apply rounded-lg;
+}
+
+.thumbnail {
+  margin-bottom: calc(var(--spacing) * 3);
+  @apply rounded;
+}
+
+.videoHeading {
+  font-style: italic;
+  margin-bottom: calc(var(--spacing) * 2);
+  font-weight: 600;
+  text-wrap: wrap;
+  color: var(--color-emerald-600);
+  @apply text-lg;
+}
+
+.cardData {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 1);
+}
+
+.videoDate {
+  display: flex;
+  gap: calc(var(--spacing) * 2);
+  color: var(--color-sky-600);
+}
+
+.videoPlatform {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 2);
+  span {
+    font-style: italic;
+    font-weight: 600;
+  }
+}
+
+.facebook {
+  color: var(--color-sky-600);
+}
+
+.youtube {
+  color: var(--color-red-500);
+}
+
+.tiktok {
+  color: var(--color-blue-500);
+}
+
+.instagram {
+  color: var(--color-pink-500);
+}
+
+:global(.dark) {
+  .videoCard {
+    background-color: var(--color-gray-800);
+    border-color: var(--color-gray-700);
+  }
+  .videoHeading {
+    color: var(--color-emerald-400);
+  }
+  .videoDate {
+    color: var(--color-sky-500);
+    span {
+      font-style: italic;
+      font-weight: 600;
+    }
+  }
+  .facebook {
+    color: var(--color-sky-500);
+  }
+}
