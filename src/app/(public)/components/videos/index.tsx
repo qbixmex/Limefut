@@ -5,46 +5,49 @@ import { ROUTES } from '@/shared/constants/routes';
 import { BsFilm } from 'react-icons/bs';
 import { fetchPublicVideosAction } from '../../(actions)/home/fetchPublicVideosAction';
 import { EmbeddedVideo } from '../embedded-video';
-import './videos.css';
+import styles from './videos.module.css';
 
 export const Videos = async () => {
   const { ok, videos } = await fetchPublicVideosAction();
 
   return (
-    <section id="videos">
-      <header>
-        <h2 className="heading">Videos</h2>
+    <section className={styles.videosContainer}>
+      <header className={styles.header}>
+        <h2 className={styles.heading}>Videos</h2>
+        <Link href="/videos" className={styles.videosLink}>ver todos</Link>
       </header>
 
-      <div className="content">
+      <div className={styles.content}>
         {(!ok || videos.length === 0) && (
-          <div className="empty-content">
-            <p role="region">No hay videos que mostrar por el momento</p>
-            <BsFilm className="icon" />
+          <div className={styles.emptyContent}>
+            <p role="region">
+              No hay videos que mostrar<br />por el momento.
+            </p>
+            <BsFilm className={styles.icon} />
           </div>
         )}
 
         {(videos.length > 0) && (
-          <div className="videos">
+          <div className={styles.videos}>
             {videos.map((video) => (
               <article
                 key={video.id}
-                className="video"
+                className={styles.video}
                 aria-label={`Video: ${video.title}`}
               >
-                <h3 className="subtitle">{video.title}</h3>
+                <h3 className={styles.videoSubtitle}>{video.title}</h3>
                 <Link
                   href={ROUTES.PUBLIC_VIDEOS_SHOW(video.permalink)}
                   title={`Ver video: ${video.title}`}
                 >
                   <EmbeddedVideo
-                    className="thumbnail"
+                    className={styles.videoThumbnail}
                     title={video.title}
                     url={video.url}
                     platform={video.platform}
                   />
                 </Link>
-                <p className="date" role="contentinfo">
+                <p className={styles.videoDate} role="contentinfo">
                   {
                     formatInTimeZone(
                       video.publishedDate,

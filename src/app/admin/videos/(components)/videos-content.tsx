@@ -5,7 +5,6 @@ import { Search } from '@/shared/components/search';
 import { VideosTable } from './videos-table';
 import { CreateVideo } from './create-video';
 import { VideosTableSkeleton } from './videos-table-skeleton';
-// import { videoTableSkeleton } from './video-table-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
