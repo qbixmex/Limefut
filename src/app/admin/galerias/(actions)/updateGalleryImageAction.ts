@@ -1,5 +1,6 @@
 'use server';
 
+import { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { editGalleryImageSchema } from '@/shared/schemas';
@@ -62,103 +63,39 @@ export const updateGalleryImageAction = async ({
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      try {
-        const isGalleryImageExists = await transaction.galleryImage.count({
-          where: { id: galleryImageId },
-        });
+      const existingImage = await transaction.galleryImage.findUnique({
+        where: { id: galleryImageId },
+        select: { id: true, position: true, galleryId: true, imagePublicID: true },
+      });
 
-        if (!isGalleryImageExists) {
-          return {
-            ok: false,
-            message: '¡ La imagen de la galería no existe o ha sido eliminada !',
-            galleryImage: null,
-          };
-        }
+      if (!existingImage) {
+        return {
+          ok: false,
+          message: '¡ La imagen de la galería no existe o ha sido eliminada !',
+          galleryImage: null,
+        };
+      }
 
-        const galleryImages = await transaction.galleryImage.findMany({
-          select: {
-            id: true,
-            position: true,
-          },
-          orderBy: { position: 'asc' },
-        });
+      const { position: currentPosition, galleryId } = existingImage;
 
-        const maxPosition = galleryImages.length;
-        const updatedPosition = Math.max(1, Math.min(rawData.position, maxPosition));
-        const currentPosition = galleryImages.find((image) => image.id === galleryImageId)?.position ?? 0;
+      const galleryImages = await transaction.galleryImage.findMany({
+        where: { galleryId },
+        select: {
+          id: true,
+          position: true,
+        },
+        orderBy: { position: 'asc' },
+      });
 
-        // If position unchanged, just update the imageGallery fields (ensure position kept)
-        if (updatedPosition === currentPosition) {
-          const updatedGalleryImage = await transaction.galleryImage.update({
-            where: { id: galleryImageId },
-            data: {
-              title: data.title,
-              active: data.active,
-            },
-          });
+      const updatedPosition = data.position ?? currentPosition;
 
-          if (image) {
-            const { imageUrl, imagePublicID } = await updateImage({
-              image,
-              imagePublicId: updatedGalleryImage.imagePublicID,
-            });
-
-            // Update image data to database.
-            await transaction.galleryImage.update({
-              where: { id: galleryImageId },
-              data: { imageUrl, imagePublicID },
-            });
-          }
-
-          // Update Cache
-          updateTag('admin-galleries');
-          updateTag('admin-gallery');
-          updateTag('dashboard-images');
-          updateTag('public-galleries');
-          updateTag('public-gallery');
-          updateTag('public-home-images');
-
-          return {
-            ok: true,
-            message: '¡ La imagen de la galería fue actualizada correctamente 👍 !',
-            galleryImage: updatedGalleryImage,
-          };
-        }
-
-        // When moving up (to a smaller number): increment affected positions,
-        // update in descending order to avoid unique position conflicts.
-        if (updatedPosition < currentPosition) {
-          const affected = galleryImages
-            .filter((image) => image.position! >= updatedPosition && image.position! < currentPosition)
-            .sort((a, b) => b.position! - a.position!); // descending
-
-          for (const image of affected) {
-            await transaction.galleryImage.update({
-              where: { id: image.id },
-              data: { position: image.position! + 1 },
-            });
-          }
-        } else {
-          // Moving down (to a larger number): decrement affected positions,
-          // update in ascending order to avoid unique position conflicts.
-          const affected = galleryImages
-            .filter((images) => images.position! <= updatedPosition && images.position! > currentPosition)
-            .sort((a, b) => a.position! - b.position!); // ascending
-
-          for (const image of affected) {
-            await transaction.galleryImage.update({
-              where: { id: image.id },
-              data: { position: image.position! - 1 },
-            });
-          }
-        }
-
+      // If position unchanged, just update the imageGallery fields (ensure position kept)
+      if (updatedPosition === currentPosition) {
         const updatedGalleryImage = await transaction.galleryImage.update({
           where: { id: galleryImageId },
           data: {
             title: data.title,
             active: data.active,
-            position: updatedPosition,
           },
         });
 
@@ -181,48 +118,131 @@ export const updateGalleryImageAction = async ({
         updateTag('dashboard-images');
         updateTag('public-galleries');
         updateTag('public-gallery');
+        updateTag('public-home-images');
 
         return {
           ok: true,
           message: '¡ La imagen de la galería fue actualizada correctamente 👍 !',
           galleryImage: updatedGalleryImage,
         };
-      } catch (error) {
-        if (error instanceof Error && 'meta' in error && error.meta) {
-          if ('code' in error && error.code as string === 'P2002') {
-            const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
-            return {
-              ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
-              galleryImage: null,
-            };
-          }
-
-          console.log('Error Name:', error.name);
-          console.log('Error Message:', error.message);
-
-          return {
-            ok: false,
-            message: '¡ Error al actualizar la imagen de la galería, revise los logs del servidor !',
-            galleryImage: null,
-          };
-        }
-        console.log('Error Name:', (error as Error).name);
-        console.log('Error Cause:', (error as Error).cause);
-        console.log('Error Message:', (error as Error).message);
-        return {
-          ok: false,
-          message: '¡ Error inesperado, revise los logs !',
-          galleryImage: null,
-        };
       }
+
+      // When moving up (to a smaller number): increment affected positions,
+      // update in descending order to avoid unique position conflicts.
+      if (updatedPosition < currentPosition) {
+        const affected = galleryImages
+          .filter((image) => image.position! >= updatedPosition && image.position! < currentPosition)
+          .sort((a, b) => b.position! - a.position!); // descending
+
+        for (const image of affected) {
+          await transaction.galleryImage.update({
+            where: { id: image.id },
+            data: { position: image.position! + 1 },
+          });
+        }
+      } else {
+        // Moving down (to a larger number): decrement affected positions,
+        // update in ascending order to avoid unique position conflicts.
+        const affected = galleryImages
+          .filter((images) => images.position! <= updatedPosition && images.position! > currentPosition)
+          .sort((a, b) => a.position! - b.position!); // ascending
+
+        for (const image of affected) {
+          await transaction.galleryImage.update({
+            where: { id: image.id },
+            data: { position: image.position! - 1 },
+          });
+        }
+      }
+
+      const updatedGalleryImage = await transaction.galleryImage.update({
+        where: { id: galleryImageId },
+        data: {
+          title: data.title,
+          active: data.active,
+          position: updatedPosition,
+        },
+      });
+
+      if (image) {
+        const { imageUrl, imagePublicID } = await updateImage({
+          image,
+          imagePublicId: updatedGalleryImage.imagePublicID,
+        });
+
+        // Update image data to database.
+        await transaction.galleryImage.update({
+          where: { id: galleryImageId },
+          data: { imageUrl, imagePublicID },
+        });
+      }
+
+      // Update Cache
+      updateTag('admin-galleries');
+      updateTag('admin-gallery');
+      updateTag('dashboard-images');
+      updateTag('public-galleries');
+      updateTag('public-gallery');
+      updateTag('public-home-images');
+
+      return {
+        ok: true,
+        message: '¡ La imagen de la galería fue actualizada correctamente 👍 !',
+        galleryImage: updatedGalleryImage,
+      };
     });
 
     return prismaTransaction;
   } catch (error) {
-    console.log('Error Name:', (error as Error).name);
-    console.log('Cause:', (error as Error).cause);
-    console.log('Error Message:', (error as Error).message);
+    if (error instanceof Error && 'meta' in error && error.meta) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          console.log('ERROR NAME:', error.name);
+          console.log('ERROR CAUSE:', error.cause);
+          console.log('ERROR CODE:', 'P2002');
+          console.log('ERROR MESSAGE:', error.message);
+
+          const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+          return {
+            ok: false,
+            message: `¡ El campo "${fieldError}", está duplicado !`,
+            galleryImage: null,
+          };
+        }
+      }
+
+      console.log('='.repeat(40) + ' ERROR ' + '='.repeat(40));
+      console.log('NAME:', error.name);
+      console.log('CAUSE:', error.cause);
+      console.log('CODE:', error instanceof Prisma.PrismaClientKnownRequestError ? error.code : 'N/A');
+      console.log('MESSAGE:', error.message);
+      console.log('='.repeat(87));
+
+      return {
+        ok: false,
+        message: '¡ Error al actualizar la imagen de la galería, revise los logs del servidor !',
+        galleryImage: null,
+      };
+    }
+
+    if (error instanceof Error) {
+      console.log('='.repeat(40) + ' ERROR ' + '='.repeat(40));
+      console.log('NAME:', error.name);
+      console.log('CAUSE:', error.cause);
+      console.log('MESSAGE:', error.message);
+      console.log('='.repeat(87));
+
+      return {
+        ok: false,
+        message: '¡ Error al actualizar la imagen de la galería, revise los logs del servidor !',
+        galleryImage: null,
+      };
+    }
+
+    console.log('='.repeat(40) + ' ERROR ' + '='.repeat(40));
+    console.log(error);
+    console.log('='.repeat(87));
+
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',

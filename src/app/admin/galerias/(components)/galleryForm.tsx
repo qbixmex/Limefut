@@ -138,7 +138,9 @@ export const GalleryForm: FC<Props> = ({ session, gallery }) => {
                       <Switch
                         id="active"
                         checked={field.value ?? false}
-                        onCheckedChange={field.onChange}
+                        onCheckedChange={(value) => {
+                          return field.onChange(value);
+                        }}
                       />
                     </FormControl>
                     <Label htmlFor="active">Activo</Label>
