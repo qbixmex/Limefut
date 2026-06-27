@@ -13,6 +13,13 @@ import type { Gallery } from '@/shared/interfaces';
 import type z from 'zod';
 import { ROUTES } from '@/shared/constants/routes';
 
+const FORM_DEFAULT = {
+  title: '',
+  permalink: '',
+  galleryDate: new Date(),
+  active: false,
+};
+
 export const useGalleryForm = ({ gallery, userId, roles }: {
   gallery?: Gallery | null;
   userId: string | null;
@@ -34,12 +41,7 @@ export const useGalleryForm = ({ gallery, userId, roles }: {
 
   useEffect(() => {
     if (!gallery) {
-      form.reset({
-        title: '',
-        permalink: '',
-        galleryDate: new Date(),
-        active: false,
-      });
+      form.reset(FORM_DEFAULT);
     }
   }, [form, gallery]);
 
@@ -126,6 +128,7 @@ export const useGalleryForm = ({ gallery, userId, roles }: {
   };
 
   const handleCancel = () => {
+    form.reset(FORM_DEFAULT);
     route.replace(ROUTES.ADMIN_GALLERIES);
   };
 

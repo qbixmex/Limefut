@@ -1,5 +1,6 @@
 'use server';
 
+import { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import type { CloudinaryResponse, GalleryImage } from '@/shared/interfaces';
 import { createGalleryImageSchema } from '@/shared/schemas';
@@ -75,31 +76,15 @@ export const createGalleryImageAction = async ({
   }
 
   try {
-    const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      // Find the maximum position
-      const maxPositionResult = await transaction.galleryImage.aggregate({
-        _max: { position: true },
-      });
-
-      // Calculate the new position
-      const newPosition = (maxPositionResult._max.position || 0) + 1;
-
-      const createdImageGallery = await transaction.galleryImage.create({
-        data: {
-          title: data.title,
-          imageUrl: cloudinaryResponse?.secureUrl as string,
-          imagePublicID: cloudinaryResponse?.publicId as string,
-          active: data.active,
-          position: newPosition,
-          galleryId: gallery.id,
-        },
-      });
-
-      return {
-        ok: true,
-        message: '¡ La imagen fue subida correctamente 👍 !',
-        galleryImage: createdImageGallery,
-      };
+    const createdImageGallery = await prisma.galleryImage.create({
+      data: {
+        title: data.title,
+        imageUrl: cloudinaryResponse?.secureUrl as string,
+        imagePublicID: cloudinaryResponse?.publicId as string,
+        active: data.active,
+        position: data.position,
+        galleryId: gallery.id,
+      },
     });
 
     // Refresh Cache
@@ -110,17 +95,35 @@ export const createGalleryImageAction = async ({
     updateTag('public-gallery');
     updateTag('public-home-images');
 
-    return prismaTransaction;
+    return {
+      ok: true,
+      message: '¡ La imagen su cargó correctamente 👍 !',
+      galleryImage: createdImageGallery,
+    };
   } catch (error) {
     if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
-        return {
-          ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
-          galleryImage: null,
-        };
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          console.log('ERROR NAME:', error.name);
+          console.log('ERROR CAUSE:', error.cause);
+          console.log('ERROR CODE:', 'P2002');
+          console.log('ERROR MESSAGE:', error.message);
+
+          const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+          return {
+            ok: false,
+            message: `¡ El campo "${fieldError}", está duplicado !`,
+            galleryImage: null,
+          };
+        }
       }
+
+      console.log('='.repeat(40) + ' ERROR ' + '='.repeat(40));
+      console.log('NAME:', error.name);
+      console.log('CAUSE:', error.cause);
+      console.log('CODE:', 'P2002');
+      console.log('MESSAGE:', error.message);
+      console.log('='.repeat(87));
 
       return {
         ok: false,
@@ -128,7 +131,25 @@ export const createGalleryImageAction = async ({
         galleryImage: null,
       };
     }
+
+    if (error instanceof Error) {
+      console.log('='.repeat(40) + ' ERROR ' + '='.repeat(40));
+      console.log('NAME:', error.name);
+      console.log('CAUSE:', error.cause);
+      console.log('MESSAGE:', error.message);
+      console.log('='.repeat(87));
+
+      return {
+        ok: false,
+        message: '¡ Error al subir la imagen, revise los logs del servidor !',
+        galleryImage: null,
+      };
+    }
+
+    console.log('='.repeat(40) + ' ERROR ' + '='.repeat(40));
     console.log(error);
+    console.log('='.repeat(87));
+
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
