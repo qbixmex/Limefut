@@ -43,10 +43,9 @@ export const MatchMetadata: FC<Props> = ({
           <p><b>Sede:</b> {place ?? <span>No especificado</span>}</p>
           {!round && !group && <MatchStatus status={status} />}
           {stage && (
-            <p><b>Etapa:</b>{' '}
-              <Badge variant={getStageTranslation(stage).variant}>
-                {getStageTranslation(stage).label}
-              </Badge>
+            <p>
+              <b>Etapa:</b>{' '}
+              <span>{getStageTranslation(stage).label}</span>
             </p>
           )}
           {round && (<p><b>Ronda:</b> {getPlayoffRound(round)}</p>)}

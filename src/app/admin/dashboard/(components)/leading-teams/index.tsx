@@ -2,20 +2,21 @@ import { Badge } from '~/src/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/src/components/ui/table';
 import { fetchLeadingTeamsAction } from '../../(actions)/fetchLeadingTeamsAction';
 import Link from 'next/link';
-import '../../styles.css';
+import styles from '../../styles.module.css';
+import { ROUTES } from '@/shared/constants/routes';
 
 export const LeadingTeams = async () => {
   const { leadingTeams } = await fetchLeadingTeamsAction({ quantity: 8 });
 
   return (
-    <div className="widget">
-      <h2 className="widgetTitle">
+    <div className={styles.widget}>
+      <h2 className={styles.widgetTitle}>
         Equipos Punteros
       </h2>
       {
         (leadingTeams.length === 0) && (
-          <div className="widgetMessageContainer">
-            <p className="widgetMessageText">
+          <div className={styles.widgetMessageContainer}>
+            <p className={styles.widgetMessageText}>
               No hay información disponible
             </p>
           </div>
@@ -35,7 +36,7 @@ export const LeadingTeams = async () => {
                 <TableRow key={leading.team.id}>
                   <TableCell>
                     <Link
-                      href={`/admin/equipos/${leading.team.id}`}
+                      href={ROUTES.ADMIN_TEAMS_SHOW(leading.team.id)}
                       className="text-wrap space-x-1"
                       target="_blank"
                     >

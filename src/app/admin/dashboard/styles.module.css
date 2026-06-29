@@ -21,24 +21,27 @@
 
 .widgetMessageContainer {
   flex: 1;
+  min-height: 200px;
   display: flex;
-  border: solid 1px var(--color-gray-400);
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--color-gray-400);
   align-items: center;
   justify-content: center;
   @apply rounded-lg;
 }
 
 .widgetMessageText {
-  color: color(--color-gray-500);
-  font-weight: 600;
+  color: var(--color-gray-500);
+  font-weight: 500;
   @apply text-xl;
 }
 
 :global(.dark) {
   .widgetMessageContainer {
-    @apply border-blue-500/50;
+    border-color: var(--color-gray-500);
   }
   .widgetMessageText {
-    color: color(--color-blue-600);
+    color: var(--color-gray-400);
   }
 }

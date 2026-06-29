@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS_TYPE, STAGE_TYPE } from '@/shared/enums';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
@@ -29,7 +29,6 @@ export type MatchResponse = {
   tournament: {
     name: string;
     permalink: string;
-    stage: STAGE_TYPE;
   },
   localTeam: {
     id: string;
@@ -112,7 +111,6 @@ export const fetchPublicPlayoffMatchesAction = async (options?: Options): Respon
               select: {
                 name: true,
                 permalink: true,
-                stage: true,
               },
             },
           },

@@ -2,20 +2,21 @@ import { Badge } from '~/src/components/ui/badge';
 import { fetchLatestResultsAction } from '../../(actions)/fetchLatestResultsAction';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/src/components/ui/table';
 import { LinkDetails } from '../link-details';
-import '../../styles.css';
+import styles from '../../styles.module.css';
+import { ROUTES } from '@/shared/constants/routes';
 
 export const LatestResults = async () => {
-  const { latestResults } = await fetchLatestResultsAction({ quantity: 7 });
+  const { latestResults } = await fetchLatestResultsAction({ quantity: 10 });
 
   return (
-    <div className="widget">
-      <h2 className="widgetTitle">
+    <div className={styles.widget}>
+      <h2 className={styles.widgetTitle}>
         <span>Últimos Resultados</span>
       </h2>
       {
         (latestResults.length === 0) && (
-          <div className="widgetMessageContainer">
-            <p className="widgetMessageText">
+          <div className={styles.widgetMessageContainer}>
+            <p className={styles.widgetMessageText}>
               No hay resultados disponibles
             </p>
           </div>
@@ -66,7 +67,7 @@ export const LatestResults = async () => {
                     }
                   </TableCell>
                   <TableCell>
-                    <LinkDetails url={`/admin/encuentros/detalles/${result.id}`} />
+                    <LinkDetails url={ROUTES.ADMIN_MATCHES_SHOW(result.id)} />
                   </TableCell>
                 </TableRow>
               ))}

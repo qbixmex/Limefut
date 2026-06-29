@@ -62,7 +62,6 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
                       status={match.status}
                       round={match.round as ROUND_TYPE}
                       group={match.group}
-                      stage={match.tournament.stage}
                     />
                   </div>
                   <div className="w-full lg:w-1/2 grid grid-cols-3 items-center order-1 lg:order-2">
