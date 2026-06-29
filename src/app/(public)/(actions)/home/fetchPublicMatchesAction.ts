@@ -1,5 +1,6 @@
 'use server';
 
+import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import type { MATCH_STATUS_TYPE, STAGE_TYPE } from '@/shared/enums';
 import { fromZonedTime, toZonedTime } from 'date-fns-tz';
@@ -38,7 +39,6 @@ export type MatchResponse = {
   status: MATCH_STATUS_TYPE;
   week: number | null;
   place: string | null;
-  stage: STAGE_TYPE;
   matchDate: Date | null;
   category: {
     id: string;
@@ -94,6 +94,55 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   if (isNaN(take)) take = 12;
 
   try {
+    const matchSelect = {
+      id: true,
+      tournament: {
+        select: {
+          name: true,
+          permalink: true,
+          currentWeek: true,
+          state: true,
+        },
+      },
+      local: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+          category: true,
+          format: true,
+          imageUrl: true,
+        },
+      },
+      visitor: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+          imageUrl: true,
+        },
+      },
+      penaltyShootout: {
+        select: {
+          localGoals: true,
+          visitorGoals: true,
+        },
+      },
+      localScore: true,
+      visitorScore: true,
+      status: true,
+      week: true,
+      place: true,
+      matchDate: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+    } satisfies Prisma.MatchSelect;
+
     const data = await prisma.match.findMany({
       where: {
         OR: [
@@ -109,55 +158,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
       orderBy: { matchDate: 'asc' },
       take,
       skip: (nextMatches - 1) * take,
-      select: {
-        id: true,
-        tournament: {
-          select: {
-            name: true,
-            permalink: true,
-            currentWeek: true,
-            state: true,
-          },
-        },
-        local: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-            category: true,
-            format: true,
-            imageUrl: true,
-          },
-        },
-        visitor: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-            imageUrl: true,
-          },
-        },
-        penaltyShootout: {
-          select: {
-            localGoals: true,
-            visitorGoals: true,
-          },
-        },
-        localScore: true,
-        visitorScore: true,
-        status: true,
-        week: true,
-        place: true,
-        matchDate: true,
-        stage: true,
-        category: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-      },
+      select: matchSelect,
     });
 
     const totalCount = await prisma.match.count({

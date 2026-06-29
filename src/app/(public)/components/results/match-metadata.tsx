@@ -17,7 +17,7 @@ type Props = Readonly<{
   place: string | null;
   date: Date | null;
   status: string;
-  stage: STAGE_TYPE;
+  stage?: STAGE_TYPE;
   week?: number | null;
   round?: ROUND_TYPE;
   group?: string;

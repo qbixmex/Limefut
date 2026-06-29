@@ -80,7 +80,6 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
             id: true,
             name: true,
             permalink: true,
-            stage: true,
           },
         },
       },

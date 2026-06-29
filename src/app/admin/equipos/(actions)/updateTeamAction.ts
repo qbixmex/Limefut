@@ -19,11 +19,11 @@ type ResponseAction = Promise<{
     tournament: {
       permalink: string;
     } | null;
-    category: {
+    categories: {
       id: string;
       name: string;
       permalink: string;
-    } | null;
+    }[];
   } | null;
 }>;
 
@@ -140,11 +140,15 @@ export const updateTeamAction = async ({
                 category: true,
               },
             },
-            category: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
+            categories: {
+              include: {
+                category: {
+                  select: {
+                    id: true,
+                    name: true,
+                    permalink: true,
+                  },
+                },
               },
             },
           },
@@ -213,7 +217,10 @@ export const updateTeamAction = async ({
         return {
           ok: true,
           message: '¡ El equipo fue actualizado correctamente 👍 !',
-          updatedTeam,
+          updatedTeam: {
+            ...updatedTeam,
+            categories: updatedTeam.categories.map(tc => tc.category),
+          },
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {
