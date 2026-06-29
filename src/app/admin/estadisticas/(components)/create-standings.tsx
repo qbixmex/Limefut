@@ -6,10 +6,10 @@ import { toast } from 'sonner';
 import { cn } from '~/src/lib/utils';
 import { LoaderCircle } from 'lucide-react';
 import { createStandingsAction } from '../(actions)/createStandingsAction';
-import type { TournamentType } from '../(actions)/fetchStandingsAction';
+import type { TOURNAMENT_TYPE } from '../(actions)/fetchStandingsAction';
 
 type Props = Readonly<{
-  tournament: TournamentType;
+  tournament: TOURNAMENT_TYPE;
 }>;
 
 export const CreateStandings: FC<Props> = ({ tournament }) => {

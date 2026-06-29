@@ -13,7 +13,7 @@ import { ErrorHandler } from '~/src/shared/components/errorHandler';
 import { format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
-import { getGenderTranslation, getStageTranslation } from '@/lib/utils';
+import { getStageTranslation } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
 import './style.css';
 
@@ -85,41 +85,13 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                     <TableCell>{tournament.season}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Categoría</TableHead>
-                    <TableCell>{tournament.category}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Formato</TableHead>
+                    <TableHead className="font-semibold">Categorías</TableHead>
                     <TableCell>
-                      {tournament.format} vs {tournament.format}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Rama</TableHead>
-                    <TableCell>
-                      <Badge variant={
-                        (tournament.gender === 'male')
-                          ? 'outline-info'
-                          : (tournament.gender === 'female')
-                            ? 'outline-danger'
-                            : 'outline-secondary'
-                      }>
-                        {getGenderTranslation(tournament.gender)}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Jornada</TableHead>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          (tournament.currentWeek as number > 0)
-                            ? 'outline-info'
-                            : 'outline-secondary'
-                        }
-                      >
-                        {tournament.currentWeek}
-                      </Badge>
+                      {tournament.categories.map(({ id, name }) => (
+                        <Badge key={id} variant="outline-info">
+                          { name }
+                        </Badge>
+                      ))}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -149,15 +121,13 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
                     <TableCell>{tournament.country}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Estado</TableHead>
-                    <TableCell>{tournament.state}</TableCell>
-                  </TableRow>
-                  <TableRow>
                     <TableHead className="font-semibold">
                       Ciudad
                     </TableHead>
                     <TableCell>
-                      <p className="text-wrap">{tournament.city}</p>
+                      <p className="text-wrap">
+                        {tournament.cities?.join(', ')}
+                      </p>
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -238,5 +208,3 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
     </>
   );
 };
-
-export default Tournament;

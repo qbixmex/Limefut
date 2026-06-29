@@ -1,4 +1,4 @@
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_STATUS, STAGE } from '@/shared/enums';
 
 export const nextMatches = [
   {
@@ -28,6 +28,12 @@ export const nextMatches = [
     week: 1,
     place: 'Soccer Field',
     matchDate: new Date('2022-06-02T18:00:00.000'),
+    stage: STAGE.REGULAR,
+    category: {
+      id: '000dfcc7-6c7e-47e5-9f55-62becd5aaa19',
+      name: '2022',
+      permalink: '2022',
+    },
     penaltyShoots: {
       localGoals: 3,
       visitorGoals: 1,

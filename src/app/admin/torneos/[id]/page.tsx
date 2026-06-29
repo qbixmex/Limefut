@@ -11,7 +11,7 @@ import type { TournamentType } from '../(actions)';
 import { fetchTournamentAction } from '../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { getGenderTranslation, getStageTranslation } from '@/lib/utils';
+import { getStageTranslation } from '@/lib/utils';
 import { headers } from 'next/headers';
 import { DeleteTournamentImage } from '../(components)/delete-tournament-image';
 import { EditTournament } from '../(components)/edit-tournament';
@@ -109,26 +109,6 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                           <TableCell>{tournament.season}</TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableHead className="font-semibold">Formato</TableHead>
-                          <TableCell>
-                            {tournament.format} vs {tournament.format}
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">Rama</TableHead>
-                          <TableCell>
-                            {getGenderTranslation(tournament.gender)}
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">Jornada</TableHead>
-                          <TableCell>
-                            <Badge variant={(tournament.currentWeek as number > 0) ? 'outline-info' : 'outline-secondary'}>
-                              {tournament.currentWeek}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
                           <TableHead className="font-semibold">Fase</TableHead>
                           <TableCell>
                             <Badge variant={getStageTranslation(tournament.stage).variant}>
@@ -147,15 +127,11 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                           <TableCell>{tournament.country}</TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableHead className="font-semibold">Estado</TableHead>
-                          <TableCell>{tournament.state}</TableCell>
-                        </TableRow>
-                        <TableRow>
                           <TableHead className="font-semibold">
-                            Ciudad
+                            Ciudades
                           </TableHead>
                           <TableCell>
-                            <p className="text-wrap">{tournament.city}</p>
+                            <p className="text-wrap">{tournament.cities.join(', ')}</p>
                           </TableCell>
                         </TableRow>
                         <TableRow>
@@ -177,21 +153,6 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableHead className="font-semibold">
-                            Equipos
-                          </TableHead>
-                          <TableCell>
-                            <Badge
-                              variant={(tournament.teamsQuantity > 0)
-                                ? 'outline-info'
-                                : 'outline-secondary'
-                              }
-                            >
-                              {tournament.teamsQuantity}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
                           <TableHead className="font-medium">Activo</TableHead>
                           <TableCell>
                             {
@@ -205,28 +166,11 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                     </Table>
                   </div>
                 </div>
-                <section className="mb-5">
-                  <p className="font-semibold mb-2">Categorías</p>
-                  <div className="flex flex-wrap gap-2">
-                    {(tournament.categories.length > 0) ? tournament.categories.map((category) => (
-                      <Badge
-                        key={category.id}
-                        variant="outline-info"
-                      >
-                        {category.name}
-                      </Badge>
-                    )) : (
-                      <Badge variant="outline-secondary">
-                        No asociadas
-                      </Badge>
-                    )}
-                  </div>
-                </section>
               </div>
             </section>
 
             <section className="mb-5">
-              <p className="font-semibold mb-2">Descripción</p>
+              <p className="text-lg font-semibold text-emerald-600 dark:text-emerald-500 mb-2">Descripción</p>
               {tournament.description ? (
                 <p className="text-pretty">{tournament.description}</p>
               ) : (
@@ -234,9 +178,33 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
               )}
             </section>
 
+            <section className="mb-5">
+              <h2 className="text-lg font-semibold text-emerald-600 dark:text-emerald-500 mb-5">
+                Categorías{' '}
+                <span className="text-gray-500 text-base font-semibold">
+                  ({tournament.categories.length})
+                </span>
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {(tournament.categories.length > 0) && (
+                  tournament.categories.map((category) => (
+                    <Badge key={category.id} variant="outline-info">
+                      {category.name}
+                    </Badge>
+                  ))
+                )}
+
+                {(tournament.categories.length === 0) && (
+                  <Badge variant="outline-secondary">
+                    No asociadas
+                  </Badge>
+                )}
+              </div>
+            </section>
+
             <section>
-              <h2 className="text-lg font-semibold text-sky-600 mb-5">
-                Equipos Registrados&nbsp;
+              <h2 className="text-lg font-semibold text-emerald-600 dark:text-emerald-500 mb-5">
+                Equipos Registrados{' '}
                 <span className="text-gray-500 text-base font-semibold">
                   ({tournament.teams.length})
                 </span>

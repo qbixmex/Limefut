@@ -5,7 +5,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type Props = Readonly<{
-  categories: {id: string; category: string; }[];
+  categories: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
 }>;
 
 export const CategoriesSelector: FC<Props> = ({ categories }) => {
@@ -44,9 +48,9 @@ export const CategoriesSelector: FC<Props> = ({ categories }) => {
         <SelectValue placeholder="Seleccione la categoría" />
       </SelectTrigger>
       <SelectContent>
-        {categories.map(({ id, category }) => (
-          <SelectItem key={id} value={category}>
-            {category}
+        {categories.map(({ id, name, permalink }) => (
+          <SelectItem key={id} value={permalink}>
+            { name }
           </SelectItem>
         ))}
       </SelectContent>

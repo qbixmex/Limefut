@@ -50,7 +50,7 @@ export const createRegularPenaltyShootoutAction = async (
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       // Verify that the match exists
-      const match = await transaction.match.findUnique({
+      const match = await transaction.match.findFirst({
         where: { id: matchId },
       });
 
@@ -63,7 +63,7 @@ export const createRegularPenaltyShootoutAction = async (
       }
 
       // Get the existing penalty shootout
-      let penaltyShootout = await transaction.penaltyShootout.findUnique({
+      let penaltyShootout = await transaction.penaltyShootout.findFirst({
         where: { matchId },
         include: {
           kicks: {
@@ -187,7 +187,13 @@ export const createRegularPenaltyShootoutAction = async (
         updatedShootout.status === 'completed'
       ) {
         await transaction.standings.upsert({
-          where: { teamId: updatedShootout.winnerTeamId },
+          where: {
+            tournamentId_teamId_categoryId: {
+              tournamentId: match.tournamentId,
+              teamId: updatedShootout.winnerTeamId,
+              categoryId: match.categoryId!,
+            },
+          },
           update: {
             additionalPoints: {
               increment: 1,
@@ -199,6 +205,7 @@ export const createRegularPenaltyShootoutAction = async (
           create: {
             teamId: updatedShootout.winnerTeamId,
             tournamentId: match.tournamentId,
+            categoryId: match.categoryId,
             additionalPoints: 1,
             totalPoints: 1,
           },

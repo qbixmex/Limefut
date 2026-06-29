@@ -54,12 +54,12 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                   <div className="w-full lg:w-1/2 order-2 md:order-1">
                     <MatchMetadata
                       tournamentName={match.tournament.name}
-                      category={match.localTeam.category}
-                      format={match.localTeam.format}
+                      category={match.category}
                       week={match.week}
                       place={match.place}
                       date={match.matchDate}
                       status={match.status}
+                      stage={match.stage}
                     />
                   </div>
                   <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 md:order-2">

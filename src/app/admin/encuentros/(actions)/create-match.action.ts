@@ -19,11 +19,15 @@ type CreateResponseAction = Promise<{
     matchDate: Date | null;
     localId: string;
     visitorId: string;
+    category: {
+      id: string;
+      name: string;
+      permalink: string;
+    } | null,
     tournament: {
       id: string;
       name: string;
       permalink: string;
-      category: string;
     };
     local: {
       id: string;
@@ -157,7 +161,13 @@ export const createMatchAction = async ({
               id: true,
               name: true,
               permalink: true,
-              category: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+              permalink: true,
             },
           },
         },
@@ -173,6 +183,7 @@ export const createMatchAction = async ({
           localScore: createdMatch.localScore as number,
           visitorScore: createdMatch.visitorScore as number,
           status: createdMatch.status as MATCH_STATUS_TYPE,
+          category: createdMatch.category,
         },
       };
     });

@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_STATUS_TYPE, STAGE_TYPE } from '@/shared/enums';
 import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -38,7 +38,13 @@ export type MatchResponse = {
   status: MATCH_STATUS_TYPE;
   week: number | null;
   place: string | null;
+  stage: STAGE_TYPE;
   matchDate: Date | null;
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
   penaltyShoots: {
     localGoals: number;
     visitorGoals: number;
@@ -143,6 +149,14 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         week: true,
         place: true,
         matchDate: true,
+        stage: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
       },
     });
 
@@ -159,16 +173,11 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches: (data.length > 0) ? data.map((match) => ({
-        id: match.id,
-        tournament: match.tournament,
+        ...match,
         localTeam: match.local,
         visitorTeam: match.visitor,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
-        status: match.status as MATCH_STATUS_TYPE,
-        week: match.week,
-        place: match.place,
-        matchDate: match.matchDate,
         penaltyShoots: match.penaltyShootout,
       })) : [],
       pagination: {

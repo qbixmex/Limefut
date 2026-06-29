@@ -13,7 +13,11 @@ type ResponseAction = Promise<{
   team: Team & {
     tournament: {
       permalink: string;
-      category: string;
+    } | null;
+    category: {
+      id: string;
+      name: string;
+      permalink: string;
     } | null;
   } | null;
 }>;
@@ -122,7 +126,13 @@ export const createTeamAction = async (
           tournament: {
             select: {
               permalink: true,
-              category: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+              permalink: true,
             },
           },
         },

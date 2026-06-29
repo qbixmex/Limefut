@@ -8,7 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
-import { fetchStandingsAction, type TournamentType } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
+import { fetchStandingsAction, type TOURNAMENT_TYPE } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
 import { TournamentData } from '~/src/shared/components/TournamentData';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
@@ -44,7 +44,7 @@ export const StandingsTable: FC<Props> = async ({
   return (
     <>
       <TournamentData
-        tournament={response.tournament as TournamentType}
+        tournament={response.tournament as TOURNAMENT_TYPE}
         standings={response.standings.length > 0}
       />
 
@@ -75,20 +75,15 @@ export const StandingsTable: FC<Props> = async ({
                 <TableCell className="text-center">{index + 1}</TableCell>
                 <TableCell>
                   <Link
-                    href={
-                      `/equipos/${standing.team.permalink}` +
-                      `?torneo=${response.tournament?.permalink}` +
-                      `&categoria=${response.tournament?.category}` +
-                      `&formato=${response.tournament?.format}`
-                    }
-                      target="_blank"
+                    href="#"
+                    target="_blank"
                     className="font-semibold italic"
                   >
                     {standing.team.name}
                   </Link>
                 </TableCell>
                 <TableCell className="text-blue-500 text-center">{standing.matchesPlayed}</TableCell>
-                <TableCell className="text-blue-500 text-center">{standing.wings}</TableCell>
+                <TableCell className="text-blue-500 text-center">{standing.wins}</TableCell>
                 <TableCell className="text-blue-500 text-center">{standing.draws}</TableCell>
                 <TableCell className="text-blue-500 text-center">{standing.losses}</TableCell>
                 <TableCell className="text-blue-500 text-center">{standing.goalsFor}</TableCell>

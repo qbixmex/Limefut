@@ -6,7 +6,13 @@ import { cacheLife, cacheTag } from 'next/cache';
 export type TournamentType = {
   id: string;
   name: string;
-  category: string;
+  categories: CATEGORY_TYPE[]
+};
+
+type CATEGORY_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
 };
 
 export type ResponseFetchAction = Promise<{
@@ -31,14 +37,27 @@ export const fetchTournamentsForTeam = async (): ResponseFetchAction => {
       select: {
         id: true,
         name: true,
-        category: true,
+        categories: {
+          include: {
+            category: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+          },
+        },
       },
     });
 
     return {
       ok: true,
       message: '! Los torneos fueron obtenidos correctamente 👍',
-      tournaments,
+      tournaments: tournaments.map(tournament => ({
+        ...tournament,
+        categories: tournament.categories.map(tc => tc.category),
+      })),
     };
   } catch (error) {
     if (error instanceof Error) {

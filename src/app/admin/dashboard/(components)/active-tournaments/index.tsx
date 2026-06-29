@@ -1,21 +1,21 @@
 import { fetchLatestTournamentsAction } from '../../(actions)/fetchLatestTournamentsAction';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import './active-tournaments.css';
 import { LinkDetails } from '../link-details';
-import '../../styles.css';
+import './active-tournaments.css';
+import style from '../../styles.module.css';
 
 export const ActiveTournaments = async () => {
   const { tournaments } = await fetchLatestTournamentsAction();
 
   return (
-    <div className="widget">
-      <h2 className="widgetTitle">
+    <div className={style.widget}>
+      <h2 className={style.widgetTitle}>
         Torneos Activos
       </h2>
       {
         (tournaments.length === 0) && (
-          <div className="widgetMessageContainer">
-            <p className="widgetMessageText">
+          <div className={style.widgetMessageContainer}>
+            <p className={style.widgetMessageText}>
               No hay torneos para mostrar
             </p>
           </div>
@@ -25,11 +25,11 @@ export const ActiveTournaments = async () => {
         <section className="tournaments-list">
           <Table>
             <TableBody>
-              {tournaments.map(({ id, name, category, format }) => (
+              {tournaments.map(({ id, name }) => (
                 <TableRow key={id}>
                   <TableCell>
                     <p className="text-pretty">
-                      {name}, {category}, {format} vs {format}
+                      {name}
                     </p>
                   </TableCell>
                   <TableCell>
@@ -44,5 +44,3 @@ export const ActiveTournaments = async () => {
     </div>
   );
 };
-
-export default ActiveTournaments;

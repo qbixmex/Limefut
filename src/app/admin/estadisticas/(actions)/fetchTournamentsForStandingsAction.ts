@@ -1,24 +1,29 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import type { STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type TournamentType = {
+export type TOURNAMENT_TYPE = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
-  format: string;
   imageUrl: string | null;
   season: string | null;
   startDate: Date;
   endDate: Date;
+  stage: STAGE_TYPE;
+  categories: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
 };
 
 export type ResponseFetchTournaments = Promise<{
   ok: boolean;
   message: string;
-  tournaments: TournamentType[];
+  tournaments: TOURNAMENT_TYPE[];
 }>;
 
 export const fetchTournamentsForStandingsAction = async (userRoles: string[] | null)
@@ -48,19 +53,32 @@ export const fetchTournamentsForStandingsAction = async (userRoles: string[] | n
         id: true,
         name: true,
         permalink: true,
-        category: true,
-        format: true,
         imageUrl: true,
         season: true,
         startDate: true,
         endDate: true,
+        stage: true,
+        categories: {
+          include: {
+            category: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+          },
+        },
       },
     });
 
     return {
       ok: true,
       message: '! Los torneos fueron obtenidos correctamente 👍',
-      tournaments,
+      tournaments: tournaments.map(tournament => ({
+        ...tournament,
+        categories: tournament.categories.map(tc => tc.category),
+      })),
     };
   } catch (error) {
     if (error instanceof Error) {

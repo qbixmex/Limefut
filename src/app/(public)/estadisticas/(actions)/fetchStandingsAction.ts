@@ -3,19 +3,15 @@
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type TournamentType = {
+export type TOURNAMENT_TYPE = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
-  format: string;
   country: string | null;
-  state: string | null;
-  city: string | null;
+  cities: string[] | null;
   season: string | null;
   startDate: Date;
   endDate: Date;
-  currentWeek: number | null;
   teams: {
     id: string;
     name: string;
@@ -30,7 +26,7 @@ export type StandingType = {
     permalink: string;
   };
   matchesPlayed: number;
-  wings: number;
+  wins: number;
   draws: number;
   losses: number;
   goalsFor: number;
@@ -38,12 +34,17 @@ export type StandingType = {
   goalsDifference: number;
   additionalPoints: number;
   points: number;
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
 };
 
 export type StandingPromise = Promise<{
   ok: boolean;
   message: string;
-  tournament: TournamentType | null;
+  tournament: TOURNAMENT_TYPE | null;
   standings: StandingType[];
 }>;
 
@@ -69,15 +70,11 @@ export const fetchStandingsAction = async ({
         id: true,
         name: true,
         permalink: true,
-        category: true,
-        format: true,
         country: true,
-        state: true,
-        city: true,
+        cities: true,
         season: true,
         startDate: true,
         endDate: true,
-        currentWeek: true,
         teams: {
           select: {
             id: true,
@@ -126,31 +123,21 @@ export const fetchStandingsAction = async ({
             permalink: true,
           },
         },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
       },
     });
-
-    const standingsOutput = standings.map((standing) => ({
-      team: {
-        id: standing.team.id,
-        name: standing.team.name,
-        permalink: standing.team.permalink,
-      },
-      matchesPlayed: standing.matchesPlayed,
-      wings: standing.wins,
-      draws: standing.draws,
-      losses: standing.losses,
-      goalsFor: standing.goalsFor,
-      goalsAgainst: standing.goalsAgainst,
-      goalsDifference: standing.goalsDifference,
-      additionalPoints: standing.additionalPoints,
-      points: standing.points,
-    }));
 
     return {
       ok: true,
       message: '! Las estadísticas fueron obtenidas correctamente 👍',
       tournament,
-      standings: standingsOutput,
+      standings,
     };
   } catch (error) {
     if (error instanceof Error) {

@@ -2,7 +2,7 @@ import type { FC } from 'react';
 
 import { CreateStandings } from './create-standings';
 import { TournamentData } from '@/shared/components/TournamentData';
-import { fetchStandingsAction, type TournamentType } from '../(actions)/fetchStandingsAction';
+import { fetchStandingsAction, type TOURNAMENT_TYPE } from '../(actions)/fetchStandingsAction';
 import { StandingsTable } from './standings-table';
 import { UpdateStandings } from './update-standings';
 import { DeleteStandings } from './delete-standings';
@@ -20,7 +20,7 @@ export const StandingsContent: FC<Props> = async ({ tournamentId }) => {
   return (
     <>
       <TournamentData
-        tournament={tournament as TournamentType}
+        tournament={tournament as TOURNAMENT_TYPE}
         standings={standings!.length > 0}
         admin
       />
@@ -33,7 +33,7 @@ export const StandingsContent: FC<Props> = async ({ tournamentId }) => {
               <p className="text-blue-500 text-xl italic font-semibold text-center">
                 ¡ El torneo aún no tiene tabla de Posiciones !
               </p>
-              <CreateStandings tournament={tournament as TournamentType} />
+              <CreateStandings tournament={tournament as TOURNAMENT_TYPE} />
             </div>
           </>
         )}

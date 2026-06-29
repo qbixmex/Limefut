@@ -1,21 +1,19 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import type { STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type TournamentType = {
+export type TOURNAMENT_TYPE = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
-  format: string;
   country: string | null;
-  state: string | null;
-  city: string | null;
+  cities: string[];
   season: string | null;
   startDate: Date;
   endDate: Date;
-  currentWeek: number | null;
+  stage: STAGE_TYPE;
   teams: {
     id: string;
     name: string;
@@ -23,7 +21,7 @@ export type TournamentType = {
   }[];
 };
 
-export type StandingType = {
+export type STANDING_TYPE = {
   matchesPlayed: number;
   wins: number;
   draws: number;
@@ -34,12 +32,15 @@ export type StandingType = {
   additionalPoints: number;
   points: number;
   tournament: {
-    name: string;
     id: string;
-    category: string;
+    name: string;
     permalink: string;
-    format: string;
   };
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
   team: {
     name: string;
     id: string;
@@ -50,8 +51,8 @@ export type StandingType = {
 export type StandingPromise = Promise<{
   ok: boolean;
   message: string;
-  tournament: TournamentType | null;
-  standings: StandingType[] | null;
+  tournament: TOURNAMENT_TYPE | null;
+  standings: STANDING_TYPE[] | null;
 }>;
 
 export const fetchStandingsAction = async (tournamentId: string): StandingPromise => {
@@ -61,29 +62,25 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
   cacheTag('admin-standings');
 
   try {
-    const tournament = await prisma.tournament.findUnique({
+    const tournament = await prisma.tournament.findFirst({
       where: { id: tournamentId },
       select: {
         id: true,
         name: true,
         permalink: true,
-        category: true,
-        format: true,
         country: true,
-        state: true,
-        city: true,
+        cities: true,
         season: true,
         startDate: true,
         endDate: true,
-        currentWeek: true,
+        stage: true,
         teams: {
           where: { active: true },
           select: {
             id: true,
             name: true,
             permalink: true,
-            category: true,
-            format: true,
+            stage: true,
           },
         },
       },
@@ -122,8 +119,13 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
             id: true,
             name: true,
             permalink: true,
-            category: true,
-            format: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
           },
         },
       },

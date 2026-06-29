@@ -59,10 +59,11 @@ export const LatestResults = async () => {
                     <p className="text-pretty">{result.localTeamName}</p>
                   </TableCell>
                   <TableCell className="text-center">
-                    {result.category}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {result.format} vs {result.format}
+                    {
+                      result.category
+                        ? result.category.name
+                        : <Badge variant="outline-secondary">No asignada aún</Badge>
+                    }
                   </TableCell>
                   <TableCell>
                     <LinkDetails url={`/admin/encuentros/detalles/${result.id}`} />
@@ -76,5 +77,3 @@ export const LatestResults = async () => {
     </div>
   );
 };
-
-export default LatestResults;

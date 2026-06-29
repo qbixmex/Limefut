@@ -27,6 +27,8 @@ const badgeVariants = cva(
           'border border-primary py-1 px-2 text-primary [a_&]:hover:bg-primary/80 [a_&]:hover:text-white',
         'outline-primary':
           'border border-blue-500 py-1 px-2 text-blue-500 [a_&]:hover:bg-blue-500/80 [a_&]:hover:text-white',
+        'outline-special':
+          'border border-purple-500 py-1 px-2 text-purple-500 [a_&]:hover:bg-purple-500/80 [a_&]:hover:text-purple-100',
         'outline-disabled':
           'border border-gray-500 py-1 px-2 text-gray-500 [a_&]:hover:bg-gray-500/80 [a_&]:hover:text-white',
         'outline-secondary':

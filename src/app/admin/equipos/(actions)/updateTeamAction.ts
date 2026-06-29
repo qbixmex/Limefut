@@ -15,15 +15,19 @@ type Options = {
 type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  updatedTeam: Team & {
+  updatedTeam: TEAM_TYPE & {
     tournament: {
       permalink: string;
-      category: string;
+    } | null;
+    category: {
+      id: string;
+      name: string;
+      permalink: string;
     } | null;
   } | null;
 }>;
 
-type Team = {
+type TEAM_TYPE = {
   id: string;
   name: string;
   permalink: string;
@@ -134,6 +138,13 @@ export const updateTeamAction = async ({
               select: {
                 permalink: true,
                 category: true,
+              },
+            },
+            category: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
               },
             },
           },

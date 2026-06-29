@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_STATUS_TYPE, STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
@@ -25,8 +25,8 @@ export type MatchResponse = {
     imageUrl: string | null;
   };
   visitorTeam: {
-    name: string;
     id: string;
+    name: string;
     permalink: string;
     imageUrl: string | null;
   };
@@ -35,7 +35,13 @@ export type MatchResponse = {
   status: MATCH_STATUS_TYPE;
   week: number | null;
   place: string | null;
+  stage: STAGE_TYPE;
   matchDate: Date | null;
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
   penaltyShoots: {
     localGoals: number;
     visitorGoals: number;
@@ -98,6 +104,14 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         week: true,
         place: true,
         matchDate: true,
+        stage: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
         tournament: {
           select: {
             name: true,
@@ -155,6 +169,8 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         status: match.status as MATCH_STATUS_TYPE,
         week: match.week,
         place: match.place,
+        stage: match.stage,
+        category: match.category,
         matchDate: match.matchDate,
         penaltyShoots: match.penaltyShootout,
       })),
