@@ -37,10 +37,7 @@ type FetchTournamentResponse = Promise<{
   tournament: TournamentType | null;
 }>;
 
-export const fetchTournamentAction = async (
-  permalink: string,
-  category: string,
-): FetchTournamentResponse => {
+export const fetchTournamentAction = async (permalink: string): FetchTournamentResponse => {
   'use cache';
 
   cacheLife('days');
@@ -48,10 +45,7 @@ export const fetchTournamentAction = async (
 
   try {
     const tournament = await prisma.tournament.findFirst({
-      where: {
-        permalink,
-        category,
-      },
+      where: { permalink },
       select: {
         id: true,
         name: true,

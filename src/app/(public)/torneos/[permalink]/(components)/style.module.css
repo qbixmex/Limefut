@@ -1,0 +1,121 @@
+@reference "tailwindcss";
+
+.description {
+  margin-bottom: calc(var(--spacing) * 5);
+
+  p {
+    font-style: italic;
+    color: var(--color-gray-400);
+    @apply text-xl;
+  }
+}
+
+.imagePlaceholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: calc(var(--spacing) * 2);
+  border-width: 2px;
+  background-color: var(--color-gray-200);
+  width: 512px;
+  height: 512px;
+  @apply rounded-xl;
+}
+
+.imagePlaceholderIcon {
+  color: var(--color-gray-400);
+}
+
+.table {
+  & th,
+  & td {
+    color: var(--color-gray-500);
+  }
+  & th {
+    font-weight: bold;
+  }
+  & td {
+    font-style: italic;
+  }
+}
+
+.teamsSubheading {
+  color: var(--color-sky-600);
+  font-weight: 600;
+  margin-bottom: calc(var(--spacing) * 2);
+  @apply text-2xl;
+}
+
+.teams {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: calc(var(--spacing) * 5);
+  @apply
+    md:grid-cols-2
+    lg:grid-cols-4
+    xl:grid-cols-4;
+}
+
+.teamCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-style: solid;
+  border-width: 2px;
+  gap: calc(var(--spacing) * 2);
+  padding: calc(var(--spacing) * 5);
+  @apply rounded-lg;
+  img {
+    @apply rounded;
+  }
+}
+
+.teamsQty {
+  color: var(--color-gray-500);
+  font-size: 14px;
+}
+
+.emptyCitiesMessage {
+  font-weight: 600;
+  font-style: italic;
+  color: var(--color-gray-500);
+}
+
+.emptyMessage {
+  border-width: 2px;
+  border-color: var(--color-sky-600);
+  padding: calc(var(--spacing) * 5);
+  @apply rounded-lg;
+  p {
+    font-weight: 500;
+    text-align: center;
+    color: var(--color-sky-600);
+    @apply text-2xl;
+  }
+}
+
+:global(.dark) {
+  .teamCard {
+    border-width: 1px;
+    border-style: solid;
+    @apply bg-gray-800/80;
+  }
+  .imagePlaceholder {
+    background-color: var(--color-gray-800);
+  }
+  .teamsSubheading {
+    color: var(--color-sky-500);
+  }
+  .description {
+    p {
+      color: var(--color-text-gray-600);
+    }
+  }
+  .emptyMessage {
+    border-color: var(--color-sky-500);
+    p {
+      color: var(--color-sky-500);
+    }
+  }
+}

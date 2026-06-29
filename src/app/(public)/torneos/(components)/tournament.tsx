@@ -5,34 +5,13 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Trophy } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
-import { Badge } from '@/components/ui/badge';
 import { es } from 'date-fns/locale';
-import { formatInTimeZone } from 'date-fns-tz';
-import type { STAGE_TYPE } from '@/shared/enums';
-
-const TIME_ZONE = 'America/Mexico_City';
+import { format } from 'date-fns-tz';
+import type { TOURNAMENT_TYPE } from '../(actions)/fetchTournamentsAction';
 
 type Props = Readonly<{
   tournament: TOURNAMENT_TYPE;
 }>;
-
-type TOURNAMENT_TYPE = {
-  id: string;
-  name: string;
-  permalink: string;
-  imageUrl: string | null;
-  country: string | null;
-  cities: string[];
-  season: string | null;
-  stage: STAGE_TYPE;
-  startDate: Date;
-  endDate: Date;
-  categories: {
-    id: string;
-    name: string;
-    permalink: string;
-  }[];
-};
 
 export const Tournament: FC<Props> = ({ tournament }) => {
   const router = useRouter();
@@ -73,27 +52,13 @@ export const Tournament: FC<Props> = ({ tournament }) => {
 
       <div className="tournamentData">
         <p><b>País:</b> {tournament.country}</p>
-        <p><b>Ciudades:</b> {tournament.cities}</p>
-        <p><b>Temporada:</b> {tournament.season}</p>
-        <p><b>Etapa:</b> {tournament.stage}</p>
         <p><b>Fecha Inicial:</b> {
-          formatInTimeZone(tournament.startDate, "dd 'de' MM, yyyy", TIME_ZONE, { locale: es })
+          format(tournament.startDate, "dd 'de' MMMM, yyyy", { locale: es })
         }</p>
         <p><b>Fecha Final:</b> {
-          formatInTimeZone(tournament.endDate, "dd 'de' MM, yyyy", TIME_ZONE, { locale: es })
+          format(tournament.endDate, "dd 'de' MMMM, yyyy", { locale: es })
         }</p>
-      </div>
-
-      <h3>Categorías</h3>
-
-      <div className="flex flex-wrap gap-2">
-        {
-          tournament.categories.map(({ id, name }) => (
-            <Badge key={id} variant="outline-info">
-              {name}
-            </Badge>
-          ))
-        }
+        <p><b>Temporada:</b> {tournament.season}</p>
       </div>
     </section>
   );
