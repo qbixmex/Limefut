@@ -16,7 +16,7 @@ export type Team = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
+  category: string | null;
 };
 
 export const fetchCoachDetailsAction = async (

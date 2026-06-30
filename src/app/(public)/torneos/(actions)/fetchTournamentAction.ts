@@ -24,7 +24,7 @@ export type TournamentType = {
     id: string;
     name: string;
     permalink: string;
-    category: string;
+    category: string | null;
     format: string;
     imageUrl: string | null;
   }[];

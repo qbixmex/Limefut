@@ -16,17 +16,10 @@ export type TEAM_TYPE = Team & {
     name: string;
     permalink: string;
   } | null;
-  categories: CATEGORY_TYPE[];
   coach: COACH_TYPE | null;
   players: PLAYER_TYPE[] | null;
   fields: FIELD_TYPE[];
 } | null;
-
-type CATEGORY_TYPE = {
-  id: string;
-  name: string;
-  permalink: string;
-};
 
 type COACH_TYPE = {
   id: string;
@@ -71,17 +64,6 @@ export const fetchTeamAction = async (
             permalink: true,
           },
         },
-        categories: {
-          select: {
-            category: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
-            },
-          },
-        },
         coach: {
           select: {
             id: true,
@@ -120,7 +102,6 @@ export const fetchTeamAction = async (
       message: '¡ Equipo obtenido correctamente 👍 !',
       team: {
         ...team,
-        categories: team.categories.map(tc => tc.category),
         fields: team.fields.map(tf => tf.field),
       },
     };

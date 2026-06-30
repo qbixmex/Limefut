@@ -7,7 +7,7 @@ export type TeamType = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
+  category: string | null;
   imageUrl: string | null;
 };
 

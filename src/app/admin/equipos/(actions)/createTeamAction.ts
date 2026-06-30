@@ -15,11 +15,6 @@ type ResponseAction = Promise<{
     tournament: {
       permalink: string;
     } | null;
-    categories: {
-      id: string;
-      name: string;
-      permalink: string;
-    }[];
   } | null;
 }>;
 
@@ -31,7 +26,7 @@ type Team = {
   address: string | null;
   permalink: string;
   imagePublicID: string | null;
-  category: string;
+  category: string | null;
   format: string;
   gender: string;
   country: string | null;
@@ -109,17 +104,6 @@ export const createTeamAction = async (
         tournament: {
           select: { permalink: true },
         },
-        categories: {
-          select: {
-            category: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
-            },
-          },
-        },
       } satisfies Prisma.TeamInclude;
 
       const createdTeam = await transaction.team.create({
@@ -156,10 +140,7 @@ export const createTeamAction = async (
       return {
         ok: true,
         message: '¡ Equipo creado satisfactoriamente 👍 !',
-        team: {
-          ...createdTeam,
-          categories: createdTeam.categories.map(tc => tc.category),
-        },
+        team: createdTeam,
       };
     });
 
