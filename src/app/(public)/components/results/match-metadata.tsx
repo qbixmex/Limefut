@@ -3,7 +3,6 @@ import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
 import { getPlayoffGroup, getPlayoffRound, getStageTranslation, getStatusTranslation } from '@/lib/utils';
 import type { MATCH_STATUS_TYPE, ROUND_TYPE, STAGE_TYPE } from '@/shared/enums';
-import { Badge } from '@/components/ui/badge';
 
 const TIME_ZONE = 'America/Mexico_City';
 
