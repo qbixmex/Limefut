@@ -8,7 +8,7 @@ import {
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import type { Session } from '@/lib/auth-client';
-import { fetchTeamAction, fetchTournamentsForTeam, type TournamentType } from '../../(actions)';
+import { fetchCategoriesAction, fetchTeamAction, fetchTournamentsForTeam, type TournamentType } from '../../(actions)';
 import { TeamForm } from '../../(components)/teamForm';
 import type { Coach } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from '../../(actions)/fetchCoachesForTeam';
@@ -56,8 +56,15 @@ const EditTeamPageContent: FC<Props> = async ({ params }) => {
 
   const responseFields = await fetchFieldsForTeam();
 
+  const responseCategories = await fetchCategoriesAction();
+
+  if (responseCategories.ok && responseCategories.categories.length === 0) {
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseCategories.message)}`);
+  }
+
   const tournaments = responseTournaments.tournaments;
   const coaches = responseCoaches.coaches;
+  const categories = responseCategories.categories;
 
   return (
     <div className="admin-page">
@@ -74,6 +81,7 @@ const EditTeamPageContent: FC<Props> = async ({ params }) => {
               fields={responseFields.fields}
               tournaments={tournaments as TournamentType[]}
               coaches={coaches as Coach[]}
+              categories={categories}
             />
           </CardContent>
         </Card>
