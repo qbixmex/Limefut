@@ -22,7 +22,7 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
   return (
     <div className="wrapper">
       <Heading level="h1" className="text-emerald-500">
-        Equipos
+        Equipos CARITA FELIZ 😆
       </Heading>
 
       <Suspense fallback={<TournamentsSelectorSkeleton />}>

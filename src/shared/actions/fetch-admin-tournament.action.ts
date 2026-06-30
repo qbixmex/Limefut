@@ -9,7 +9,7 @@ type FetchTeamResponse = Promise<{
   tournamentId: string | null;
 }>;
 
-export const fetchTournamentByPermalinkAndCategory = async ({
+export const fetchAdminTournamentAction = async ({
   tournamentPermalink,
   categoryPermalink,
 }: {
@@ -25,7 +25,13 @@ export const fetchTournamentByPermalinkAndCategory = async ({
     const tournament = await prisma.tournament.findFirst({
       where: {
         permalink: tournamentPermalink,
-        category: categoryPermalink,
+        categories: {
+          some: {
+            category: {
+              permalink: categoryPermalink,
+            },
+          },
+        },
       },
       select: { id: true },
     });
