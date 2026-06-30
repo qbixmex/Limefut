@@ -1,24 +1,23 @@
 'use client';
 
 import type { FC } from 'react';
-import type { TournamentType } from '../(actions)/fetchTournamentsAction';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Trophy } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
+import { es } from 'date-fns/locale';
+import { format } from 'date-fns-tz';
+import type { TOURNAMENT_TYPE } from '../(actions)/fetchTournamentsAction';
 
 type Props = Readonly<{
-  tournament: TournamentType;
+  tournament: TOURNAMENT_TYPE;
 }>;
 
 export const Tournament: FC<Props> = ({ tournament }) => {
   const router = useRouter();
 
   const onTournamentSelected = () => {
-    router.push(
-      `${ROUTES.PUBLIC_TOURNAMENTS}/${tournament.permalink}` +
-      `?category=${tournament.category}`,
-    );
+    router.push(`${ROUTES.PUBLIC_TOURNAMENTS}/${tournament.permalink}`);
   };
 
   return (
@@ -50,9 +49,15 @@ export const Tournament: FC<Props> = ({ tournament }) => {
       <h2 className="tournamentName">
         {tournament.name}
       </h2>
+
       <div className="tournamentData">
-        <p><b>Categoría:</b> {tournament.category}</p>
-        <p><b>Formato:</b> {tournament.format} vs {tournament.format}</p>
+        <p><b>País:</b> {tournament.country}</p>
+        <p><b>Fecha Inicial:</b> {
+          format(tournament.startDate, "dd 'de' MMMM, yyyy", { locale: es })
+        }</p>
+        <p><b>Fecha Final:</b> {
+          format(tournament.endDate, "dd 'de' MMMM, yyyy", { locale: es })
+        }</p>
         <p><b>Temporada:</b> {tournament.season}</p>
       </div>
     </section>

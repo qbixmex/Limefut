@@ -1,4 +1,4 @@
-export { fetchTeamsAction } from './fetchTeamsAction';
+export { fetchAdminTeamsAction } from './fetch-admin-teams.action';
 export { fetchTeamAction } from './fetchTeamAction';
 export { fetchTournamentsForTeam, type TournamentType } from './fetchTournamentsForTeam';
 export { fetchCategoriesAction, type CategoryType } from '@/shared/actions/fetch-categories.action';

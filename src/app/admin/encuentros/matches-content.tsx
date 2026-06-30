@@ -4,7 +4,7 @@ import { MatchesWrapper } from './(components)/matches.wrapper';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
-import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
+import { fetchAdminTournamentAction } from '@/shared/actions/fetch-admin-tournament.action';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -33,7 +33,7 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
     return null;
   }
 
-  const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
+  const { ok, message, tournamentId } = await fetchAdminTournamentAction({
     tournamentPermalink,
     categoryPermalink,
   });

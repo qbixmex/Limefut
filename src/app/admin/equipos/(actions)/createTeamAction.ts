@@ -6,6 +6,7 @@ import { updateTag } from 'next/cache';
 import { uploadImage } from '@/shared/actions';
 import type { CloudinaryResponse } from '@/shared/interfaces';
 import type { GENDER_TYPE } from '@/shared/enums';
+import type { Prisma } from '@/generated/prisma/client';
 
 type ResponseAction = Promise<{
   ok: boolean;
@@ -13,8 +14,12 @@ type ResponseAction = Promise<{
   team: Team & {
     tournament: {
       permalink: string;
-      category: string;
     } | null;
+    categories: {
+      id: string;
+      name: string;
+      permalink: string;
+    }[];
   } | null;
 }>;
 
@@ -100,6 +105,23 @@ export const createTeamAction = async (
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
+      const teamInclude = {
+        tournament: {
+          select: { permalink: true },
+        },
+        categories: {
+          select: {
+            category: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+          },
+        },
+      } satisfies Prisma.TeamInclude;
+
       const createdTeam = await transaction.team.create({
         data: {
           name: teamToSave.name,
@@ -118,14 +140,7 @@ export const createTeamAction = async (
           tournamentId: teamToSave.tournamentId ?? null,
           coachId: teamToSave.coachId ?? null,
         },
-        include: {
-          tournament: {
-            select: {
-              permalink: true,
-              category: true,
-            },
-          },
-        },
+        include: teamInclude,
       });
 
       // Create TeamField records for the many-to-many relationship
@@ -141,7 +156,10 @@ export const createTeamAction = async (
       return {
         ok: true,
         message: '¡ Equipo creado satisfactoriamente 👍 !',
-        team: createdTeam,
+        team: {
+          ...createdTeam,
+          categories: createdTeam.categories.map(tc => tc.category),
+        },
       };
     });
 

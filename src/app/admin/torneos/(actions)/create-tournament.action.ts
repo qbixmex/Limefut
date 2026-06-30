@@ -1,11 +1,12 @@
 'use server';
 
+import { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { uploadImage } from '@/shared/actions';
+import type { STAGE_TYPE } from '@/shared/enums';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { createTournamentSchema } from '@/shared/schemas';
 import { revalidatePath, updateTag } from 'next/cache';
-import { Prisma } from '@/generated/prisma/client';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -13,11 +14,27 @@ type ResponseCreateAction = Promise<{
   tournament: Tournament | null;
 }>;
 
-export const createTournamentAction = async (
-  formData: FormData,
-  userRole: string[] | null,
-): ResponseCreateAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+export const createTournamentAction = async ({
+  formData,
+  authenticatedUserId,
+  authenticatedUserRoles,
+}: {
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+  formData: FormData;
+}): ResponseCreateAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Usuario no autenticado !',
+      tournament: null,
+    };
+  }
+
+  if (
+    (authenticatedUserRoles && authenticatedUserRoles.length > 0) &&
+    (!authenticatedUserRoles.includes('admin'))
+  ) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -25,27 +42,22 @@ export const createTournamentAction = async (
     };
   }
 
-  const startDate = new Date(formData.get('startDate') as string);
-  const endDate = new Date(formData.get('endDate') as string);
-  const currentWeek = Number(formData.get('currentWeek') ?? '');
-
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
     image: formData.get('image') as File,
     categoriesIds: formData.has('categoriesIds')
-      ? JSON.parse(formData.get('categoriesIds') as string ?? 'undefined')
+      ? JSON.parse(formData.get('categoriesIds') as string)
       : undefined,
-    format: formData.get('format') ?? '',
-    gender: formData.get('gender') ?? 'unknown',
     country: formData.get('country') ?? undefined,
-    state: formData.get('state') ?? undefined,
-    city: formData.get('city') ?? undefined,
+    cities: formData.has('cities')
+      ? JSON.parse(formData.get('cities') as string)
+      : undefined,
     description: formData.get('description') ?? undefined,
     season: formData.get('season') ?? undefined,
-    startDate,
-    endDate,
-    currentWeek,
+    startDate: new Date(formData.get('startDate') as string),
+    endDate: new Date(formData.get('endDate') as string),
+    stage: formData.get('stage') as string,
     active: formData.get('active') === 'true',
   };
 
@@ -75,13 +87,18 @@ export const createTournamentAction = async (
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const createdTournament = await transaction.tournament.create({
         data: {
-          ...tournamentToSave,
-          format: '9',
-          gender: 'male',
-          category: 'unknown',
-          stage: 'regular',
+          name: tournamentToSave.name,
+          permalink: tournamentToSave.permalink,
+          country: tournamentToSave.country,
+          cities: tournamentToSave.cities,
+          season: tournamentToSave.season,
+          description: tournamentToSave.description,
+          startDate: tournamentToSave.startDate,
+          endDate: tournamentToSave.endDate,
+          stage: tournamentToSave.stage as STAGE_TYPE,
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
+          active: tournamentToSave.active,
         },
       });
 

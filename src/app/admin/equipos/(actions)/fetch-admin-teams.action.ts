@@ -11,13 +11,11 @@ type Options = Readonly<{
   searchTerm?: string;
 }>;
 
-export type TeamType = {
+export type TEAM_TYPE = {
   id: string;
   name: string;
   permalink: string;
   imageUrl: string | null,
-  category: string | null;
-  format: string | null;
   gender: string | null;
   active: boolean;
   coach: Pick<Coach, 'id' | 'name'> | null;
@@ -27,11 +25,11 @@ export type TeamType = {
 export type ResponseFetchTeams = Promise<{
   ok: boolean;
   message: string;
-  teams: TeamType[];
+  teams: TEAM_TYPE[];
   pagination: Pagination;
 }>;
 
-export const fetchTeamsAction = async (
+export const fetchAdminTeamsAction = async (
   tournamentId: string,
   options?: Options,
 ): ResponseFetchTeams => {
@@ -70,7 +68,6 @@ export const fetchTeamsAction = async (
         name: true,
         permalink: true,
         imageUrl: true,
-        category: true,
         format: true,
         gender: true,
         active: true,

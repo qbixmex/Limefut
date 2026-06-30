@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
+import type { Prisma } from '@/generated/prisma/client';
 
 type Options = Readonly<{
   nextMatches?: number;
@@ -14,7 +15,6 @@ export type MatchResponse = {
   tournament: {
     name: string;
     permalink: string;
-    currentWeek: number | null;
   },
   localTeam: {
     name: string;
@@ -25,8 +25,8 @@ export type MatchResponse = {
     imageUrl: string | null;
   };
   visitorTeam: {
-    name: string;
     id: string;
+    name: string;
     permalink: string;
     imageUrl: string | null;
   };
@@ -36,6 +36,11 @@ export type MatchResponse = {
   week: number | null;
   place: string | null;
   matchDate: Date | null;
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
   penaltyShoots: {
     localGoals: number;
     visitorGoals: number;
@@ -76,6 +81,53 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
     endDate.setDate(now.getDate());
     endDate.setHours(23, 59, 59, 999);
 
+    const matchSelect = {
+      id: true,
+      localScore: true,
+      visitorScore: true,
+      status: true,
+      week: true,
+      place: true,
+      matchDate: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+      tournament: {
+        select: {
+          name: true,
+          permalink: true,
+        },
+      },
+      local: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+          category: true,
+          format: true,
+          imageUrl: true,
+        },
+      },
+      visitor: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+          imageUrl: true,
+        },
+      },
+      penaltyShootout: {
+        select: {
+          localGoals: true,
+          visitorGoals: true,
+        },
+      },
+    } satisfies Prisma.MatchSelect;
+
     const matches = await prisma.match.findMany({
       where: {
         OR: [
@@ -90,46 +142,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
       orderBy: { matchDate: 'desc' },
       take,
       skip: (nextMatches - 1) * take,
-      select: {
-        id: true,
-        localScore: true,
-        visitorScore: true,
-        status: true,
-        week: true,
-        place: true,
-        matchDate: true,
-        tournament: {
-          select: {
-            name: true,
-            permalink: true,
-            currentWeek: true,
-          },
-        },
-        local: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-            category: true,
-            format: true,
-            imageUrl: true,
-          },
-        },
-        visitor: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-            imageUrl: true,
-          },
-        },
-        penaltyShootout: {
-          select: {
-            localGoals: true,
-            visitorGoals: true,
-          },
-        },
-      },
+      select: matchSelect,
     });
 
     const totalCount = await prisma.match.count({
@@ -155,6 +168,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         status: match.status as MATCH_STATUS_TYPE,
         week: match.week,
         place: match.place,
+        category: match.category,
         matchDate: match.matchDate,
         penaltyShoots: match.penaltyShootout,
       })),

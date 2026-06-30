@@ -13,16 +13,13 @@ type Props = Readonly<{
   params: Promise<{
     permalink: string;
   }>;
-  searchParams: Promise<{
-    category?: string;
-  }>;
 }>;
 
-export const TournamentPage: FC<Props> = ({ params, searchParams }) => {
+export const TournamentPage: FC<Props> = ({ params }) => {
   return (
     <div className="wrapper dark:bg-gray-600/20!">
       <Suspense fallback={<TournamentSkeleton />}>
-        <Tournament params={params} searchParams={searchParams} />
+        <Tournament params={params} />
       </Suspense>
     </div>
   );

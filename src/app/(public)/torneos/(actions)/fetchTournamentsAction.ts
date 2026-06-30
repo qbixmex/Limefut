@@ -3,21 +3,21 @@
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type TournamentType = {
+export type TOURNAMENT_TYPE = {
   id: string;
   name: string;
   permalink: string;
-  category: string | null;
-  gender: string;
-  format: string | null;
-  season: string | null;
   imageUrl: string | null;
+  country: string | null;
+  season: string | null;
+  startDate: Date;
+  endDate: Date;
 };
 
 export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  tournaments: TournamentType[];
+  tournaments: TOURNAMENT_TYPE[];
 }>;
 
 export const fetchTournamentsAction = async (): ResponseAction => {
@@ -31,19 +31,17 @@ export const fetchTournamentsAction = async (): ResponseAction => {
       orderBy: [
         { name: 'asc' },
         { season: 'asc' },
-        { category: 'asc' },
-        { format: 'asc' },
       ],
       where: { active: true },
       select: {
         id: true,
         name: true,
         permalink: true,
-        category: true,
-        gender: true,
-        format: true,
-        season: true,
         imageUrl: true,
+        country: true,
+        season: true,
+        startDate: true,
+        endDate: true,
       },
     });
 

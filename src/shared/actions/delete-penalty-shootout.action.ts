@@ -19,6 +19,9 @@ export const deletePenaltyShootoutAction = async ({
 }): Promise<ResponseDeleteAction> => {
   const shootout = await prisma.penaltyShootout.findUnique({
     where: { id },
+    include: {
+      match: { select: { tournamentId: true, categoryId: true } },
+    },
   });
 
   if (!shootout) {
@@ -31,11 +34,16 @@ export const deletePenaltyShootoutAction = async ({
   await prisma.penaltyShootout.delete({ where: { id: shootout.id } });
 
   // Remove Additional Points is there is a winner on Penalty Shootouts
-  if (phase === 'regular' && winnerTeamId) {
+  if (phase === 'regular' && winnerTeamId && shootout.match) {
     await prisma.$transaction(async (transaction) => {
-      const standings = await transaction.standings.findUnique({
-        where: { teamId: winnerTeamId },
+      const standings = await transaction.standings.findFirst({
+        where: {
+          teamId: winnerTeamId,
+          tournamentId: shootout.match!.tournamentId,
+          categoryId: shootout.match!.categoryId,
+        },
         select: {
+          id: true,
           additionalPoints: true,
           totalPoints: true,
         },
@@ -47,7 +55,7 @@ export const deletePenaltyShootoutAction = async ({
         (standings.totalPoints > 0)
       ) {
         await transaction.standings.update({
-          where: { teamId: winnerTeamId },
+          where: { id: standings.id },
           data: {
             additionalPoints: {
               decrement: 1,

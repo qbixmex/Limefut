@@ -21,11 +21,14 @@ export type MatchResponse = {
   round: string;
   group: string;
   playoffId: string;
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
   tournament: {
     name: string;
     permalink: string;
-    category: string;
-    format: string;
   },
   localTeam: {
     id: string;
@@ -97,12 +100,17 @@ export const fetchPublicPlayoffMatchesAction = async (options?: Options): Respon
         playoff: {
           select: {
             id: true,
+            category: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
             tournament: {
               select: {
                 name: true,
                 permalink: true,
-                category: true,
-                format: true,
               },
             },
           },
@@ -150,6 +158,7 @@ export const fetchPublicPlayoffMatchesAction = async (options?: Options): Respon
         round: match.round,
         group: match.group,
         playoffId: match.playoff.id,
+        category: match.playoff.category,
         tournament: match.playoff.tournament,
         localTeam: match.local,
         visitorTeam: match.visitor,

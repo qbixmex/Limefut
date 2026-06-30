@@ -9,17 +9,17 @@ export type TournamentType = {
   permalink: string;
   imageUrl: string | null;
   description: string | null;
-  category: string | null;
-  format: string;
-  gender: string;
   country: string | null;
-  state: string | null;
-  city: string | null;
+  cities: string[] | null;
   season: string | null;
   startDate: Date;
   endDate: Date;
-  currentWeek: number | null;
   stage: string;
+  categories: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
   teams: {
     id: string;
     name: string;
@@ -37,10 +37,7 @@ type FetchTournamentResponse = Promise<{
   tournament: TournamentType | null;
 }>;
 
-export const fetchTournamentAction = async (
-  permalink: string,
-  category: string,
-): FetchTournamentResponse => {
+export const fetchTournamentAction = async (permalink: string): FetchTournamentResponse => {
   'use cache';
 
   cacheLife('days');
@@ -48,26 +45,29 @@ export const fetchTournamentAction = async (
 
   try {
     const tournament = await prisma.tournament.findFirst({
-      where: {
-        permalink,
-        category,
-      },
+      where: { permalink },
       select: {
         id: true,
         name: true,
         permalink: true,
         imageUrl: true,
         description: true,
-        category: true,
-        format: true,
-        gender: true,
+        categories: {
+          include: {
+            category: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
+          },
+        },
         country: true,
-        state: true,
-        city: true,
+        cities: true,
         season: true,
         startDate: true,
         endDate: true,
-        currentWeek: true,
         stage: true,
         teams: {
           where: {
@@ -103,6 +103,7 @@ export const fetchTournamentAction = async (
       message: '¡ Torneo obtenido correctamente 👍 !',
       tournament: {
         ...tournament,
+        categories: tournament.categories.map(c => c.category),
         teamsQuantity: tournament._count.teams ?? 0,
       },
     };

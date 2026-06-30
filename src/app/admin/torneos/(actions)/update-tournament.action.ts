@@ -5,14 +5,14 @@ import { updateTag } from 'next/cache';
 import { editTournamentSchema } from '@/shared/schemas';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
-import type { GENDER_TYPE } from '@/shared/enums';
 import { Prisma } from '@/generated/prisma/client';
+import type { STAGE_TYPE } from '@/shared/enums';
 
 type Options = {
   formData: FormData;
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
   tournamentId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
 };
 
 type EditResponseAction = Promise<{
@@ -24,18 +24,18 @@ type EditResponseAction = Promise<{
 export const updateTournamentAction = async ({
   formData,
   tournamentId,
-  userRoles,
   authenticatedUserId,
+  authenticatedUserRoles,
 }: Options): EditResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
-      message: '¡ Usuario no autenticado !',
+      message: '¡ Debes estar autentificado para realizar esta acción !',
       tournament: null,
     };
   }
 
-  if (!userRoles.includes('admin')) {
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -43,27 +43,22 @@ export const updateTournamentAction = async ({
     };
   }
 
-  const startDate = new Date(formData.get('startDate') as string);
-  const endDate = new Date(formData.get('endDate') as string);
-  const currentWeek = Number(formData.get('currentWeek') ?? '0');
-
   const rawData = {
     name: formData.get('name') ?? undefined,
     permalink: formData.get('permalink') ?? undefined,
     image: formData.get('image'),
     categoriesIds: formData.has('categoriesIds')
-      ? JSON.parse(formData.get('categoriesIds') as string ?? 'undefined')
+      ? JSON.parse(formData.get('categoriesIds') as string)
       : undefined,
     description: formData.get('description') ?? undefined,
-    format: formData.get('format') as string,
-    gender: formData.get('gender') as string,
     country: formData.get('country') ?? undefined,
-    state: formData.get('state') ?? undefined,
-    city: formData.get('city') ?? undefined,
+    cities: formData.has('cities')
+      ? JSON.parse(formData.get('cities') as string)
+      : undefined,
     season: formData.get('season') ?? undefined,
-    startDate,
-    endDate,
-    currentWeek,
+    startDate: new Date(formData.get('startDate') as string),
+    endDate: new Date(formData.get('endDate') as string),
+    stage: formData.get('stage') ?? undefined,
     active: formData.get('active') === 'true',
   };
 
@@ -107,10 +102,18 @@ export const updateTournamentAction = async ({
         const updatedTournament = await transaction.tournament.update({
           where: { id: tournamentId },
           data: {
-            ...tournamentToSave,
-            gender: tournamentToSave.gender as GENDER_TYPE ?? undefined,
+            name: tournamentToSave.name,
+            permalink: tournamentToSave.permalink,
+            country: tournamentToSave.country,
+            cities: tournamentToSave.cities,
             imageUrl: cloudinaryResponse?.secureUrl ?? undefined,
             imagePublicID: cloudinaryResponse?.publicId ?? undefined,
+            season: tournamentToSave.season,
+            description: tournamentToSave.description,
+            startDate: tournamentToSave.startDate,
+            endDate: tournamentToSave.endDate,
+            stage: tournamentToSave.stage as STAGE_TYPE,
+            active: tournamentToSave.active,
           },
         });
 

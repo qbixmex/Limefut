@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, type FC, type ChangeEvent } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -50,34 +50,24 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { createTeamSchema, editTeamSchema } from '@/shared/schemas';
-import type { Coach, Team } from '@/shared/interfaces';
+import type { Coach } from '@/shared/interfaces';
 import type { TournamentType } from '../(actions)';
 import { createTeamAction, updateTeamAction } from '../(actions)';
 import type { Session } from '@/lib/auth-client';
 import { cn, slugify } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
 import { addTeamToStandingsAction } from '../(actions)/addTeamToStandingsAction';
+import type { TEAM_TYPE } from '../(actions)/fetchTeamAction';
 
 type Props = Readonly<{
   session: Session;
   tournaments: TournamentType[];
   coaches: Coach[];
   fields: FIELD_TYPE[];
-  team?: Team & {
-    tournament: Tournament | null;
-    coach: Pick<Coach, 'id' | 'name'> | null;
-    fields: FIELD_TYPE[];
-  };
+  team?: TEAM_TYPE;
 }>;
 
 type FIELD_TYPE = { id: string; name: string; };
-
-type Tournament = {
-  id: string;
-  name: string;
-  permalink: string;
-  category: string;
-};
 
 export const TeamForm: FC<Props> = ({
   session,
@@ -87,7 +77,7 @@ export const TeamForm: FC<Props> = ({
   team,
 }) => {
   const route = useRouter();
-  const params = useSearchParams();
+  // const params = useSearchParams();
   const formSchema = !team ? createTeamSchema : editTeamSchema;
   const isPermalinkEdited = useRef(false);
   const [coachesOpen, setCoachesOpen] = useState(false);
@@ -189,10 +179,11 @@ export const TeamForm: FC<Props> = ({
         toast.success(message);
 
         if (team && team.tournament) {
-          route.replace(ROUTES.ADMIN_TEAMS +
-            `?tournament=${team.tournament.permalink}` +
-            `&category=${team.tournament.category}`,
-          );
+          // route.replace(ROUTES.ADMIN_TEAMS +
+          //   `?tournament=${team.tournament.permalink}` +
+          //   `&category=${team.tournament.category}`,
+          // );
+          console.log('Se va a redireccionar pronto');
         } else {
           route.replace(ROUTES.ADMIN_TEAMS);
         }
@@ -216,28 +207,28 @@ export const TeamForm: FC<Props> = ({
 
       if (ok && updatedTeam && updatedTeam.tournament) {
         toast.success(message);
-        route.replace(ROUTES.ADMIN_TEAMS +
-          `?tournament=${updatedTeam.tournament.permalink}` +
-          `&category=${updatedTeam.tournament.category}`,
-        );
+        // route.replace(ROUTES.ADMIN_TEAMS +
+        //   `?tournament=${updatedTeam.tournament.permalink}` +
+        //   `&category=${updatedTeam.tournament.category}`,
+        // );
       }
     }
   };
 
   const handleNavigateBack = () => {
-    if (!team && (params.has('tournament') && params.has('category'))) {
-      route.replace(ROUTES.ADMIN_TEAMS +
-        `?tournament=${params.get('tournament')}` +
-        `&category=${params.get('category')}`,
-      );
-    } else if (team && team.tournament) {
-      route.replace(ROUTES.ADMIN_TEAMS +
-        `?tournament=${team.tournament.permalink}` +
-        `&category=${team.tournament.category}`,
-      );
-    } else {
-      route.replace(ROUTES.ADMIN_TEAMS);
-    }
+    // if (!team && (params.has('tournament') && params.has('category'))) {
+    //   route.replace(ROUTES.ADMIN_TEAMS +
+    //     `?tournament=${params.get('tournament')}` +
+    //     `&category=${params.get('category')}`,
+    //   );
+    // } else if (team && team.tournament) {
+    //   route.replace(ROUTES.ADMIN_TEAMS +
+    //     `?tournament=${team.tournament.permalink}` +
+    //     `&category=${team.tournament.category}`,
+    //   );
+    // } else {
+    //   route.replace(ROUTES.ADMIN_TEAMS);
+    // }
   };
 
   return (
@@ -434,7 +425,7 @@ export const TeamForm: FC<Props> = ({
                         <SelectGroup>
                           {tournaments.map((tournament) => (
                             <SelectItem key={tournament.id} value={tournament.id}>
-                              {tournament.name}, {tournament.category}
+                              {tournament.name}
                             </SelectItem>
                           ))}
                         </SelectGroup>

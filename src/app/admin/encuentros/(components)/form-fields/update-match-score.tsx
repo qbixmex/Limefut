@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
@@ -11,7 +11,6 @@ import { useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 import { updateMatchScoreAction } from '@/app/admin/encuentros/(actions)/update-match-score.action';
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
-import { ROUTES } from '@/shared/constants/routes';
 
 type Props = {
   match: MATCH_TYPE;
@@ -19,7 +18,7 @@ type Props = {
 };
 
 export const UpdateMatchScore: FC<Props> = ({ match, setHiddenScores }) => {
-  const router = useRouter();
+  // const router = useRouter();
   const { getValues } = useFormContext();
 
   const handleUpdateScore = async () => {
@@ -31,7 +30,7 @@ export const UpdateMatchScore: FC<Props> = ({ match, setHiddenScores }) => {
       visitorId: match.visitorTeam.id,
     };
 
-    const { ok, message, currentMatch } = await updateMatchScoreAction(data);
+    const { ok, message } = await updateMatchScoreAction(data);
 
     if (!ok) {
       toast.error(message);
@@ -41,12 +40,12 @@ export const UpdateMatchScore: FC<Props> = ({ match, setHiddenScores }) => {
     setHiddenScores(true);
 
     toast.success(message);
-    router.replace(
-      ROUTES.ADMIN_MATCHES +
-      `?tournament=${currentMatch?.tournament.permalink}` +
-      `&category=${currentMatch?.tournament.category}` +
-      `&sort-week=${match.week}`,
-    );
+    // router.replace(
+    //   ROUTES.ADMIN_MATCHES +
+    //   `?tournament=${currentMatch?.tournament.permalink}` +
+    //   `&category=${currentMatch?.tournament.category}` +
+    //   `&sort-week=${match.week}`,
+    // );
   };
 
   return (

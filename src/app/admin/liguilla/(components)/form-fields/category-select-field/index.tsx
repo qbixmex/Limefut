@@ -1,8 +1,8 @@
-import { CategoryFormSelect } from '@/app/(public)/resultados/guardar/category-select/category-form-select';
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
 import type { FC } from 'react';
 import { fetchCategoriesAction } from '../../../(actions)/fetch-categories.action';
+import { CategoriesFormSelect } from '@/app/(public)/resultados/guardar/category-select/categories-form-select';
 
 type Props = Readonly<{
   authenticatedUserId: string | undefined;
@@ -23,6 +23,6 @@ export const CategorySelectField: FC<Props> = async ({
   }
 
   return (
-    <CategoryFormSelect categories={categories} />
+    <CategoriesFormSelect categories={categories} />
   );
 };

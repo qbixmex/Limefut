@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import ActiveTournaments from './(components)/active-tournaments';
+import { ActiveTournaments } from './(components)/active-tournaments';
 import TournamentsSkeleton from './(components)/active-tournaments/TournamentsSkeleton';
 import { LatestResults } from './(components)/latest-results';
 import { LeadingTeams } from './(components)/leading-teams';

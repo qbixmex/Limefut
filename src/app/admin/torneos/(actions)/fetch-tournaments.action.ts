@@ -20,12 +20,9 @@ export type ResponseFetch = Promise<{
     permalink: string | null;
     imageUrl: string | null;
     season: string | null;
-    category: string;
-    format: string;
-    gender: string;
-    currentWeek: number | null;
     active: boolean;
     stage: string;
+    categoriesQuantity: number;
     teamsQuantity: number;
   }[] | null;
   pagination: Pagination | null;
@@ -63,21 +60,23 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
   try {
     const tournaments = await prisma.tournament.findMany({
       where: whereCondition,
-      orderBy: { name: 'asc' },
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         name: true,
         permalink: true,
         imageUrl: true,
         season: true,
-        category: true,
         format: true,
         gender: true,
         currentWeek: true,
         stage: true,
         active: true,
         _count: {
-          select: { teams: true },
+          select: {
+            teams: true,
+            categories: true,
+          },
         },
       },
       take,
@@ -95,13 +94,12 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
         permalink: tournament.permalink,
         imageUrl: tournament.imageUrl,
         season: tournament.season,
-        category: tournament.category,
         format: tournament.format,
         gender: tournament.gender,
-        currentWeek: tournament.currentWeek,
         active: tournament.active,
         stage: tournament.stage,
         teamsQuantity: tournament._count?.teams ?? 0,
+        categoriesQuantity: tournament._count?.categories ?? 0,
       })),
       pagination: {
         currentPage: page,

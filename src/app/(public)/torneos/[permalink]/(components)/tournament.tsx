@@ -13,30 +13,20 @@ import { ErrorHandler } from '~/src/shared/components/errorHandler';
 import { format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
-import { getGenderTranslation, getStageTranslation } from '@/lib/utils';
+import { getStageTranslation } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
-import './style.css';
+import styles from './style.module.css';
 
 type Props = Readonly<{
   params: Promise<{
     permalink: string;
-  }>
-  searchParams: Promise<{
-    category?: string;
   }>;
 }>;
 
-export const Tournament: FC<Props> = async ({ params, searchParams }) => {
+export const Tournament: FC<Props> = async ({ params }) => {
   const permalink = (await params).permalink;
-  const category = (await searchParams).category;
 
-  if (!category) {
-    redirect(`${ROUTES.PUBLIC_TOURNAMENTS}?error=${encodeURIComponent(
-      '¡ La categoría es obligatoria !',
-    )}`);
-  }
-
-  const response = await fetchTournamentAction(permalink, category);
+  const response = await fetchTournamentAction(permalink);
 
   if (!response.ok) {
     redirect(`${ROUTES.PUBLIC_TOURNAMENTS}?error=${encodeURIComponent(response.message)}`);
@@ -55,8 +45,8 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
         <div className="w-full xl:max-w-lg flex justify-center">
           {
             !tournament.imageUrl ? (
-              <div className="border-2 border-gray-200 dark:border-gray-700/80 size-[512px] rounded-xl flex items-center justify-center">
-                <Trophy size={480} strokeWidth={1} className="stroke-gray-400" />
+              <div className={styles.imagePlaceholder}>
+                <Trophy size={480} strokeWidth={1} className={styles.imagePlaceholderIcon} />
               </div>
             ) : (
               <Image
@@ -75,59 +65,28 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
               <Table>
                 <TableBody>
                   <TableRow>
-                    <TableHead className="w-auto md:w-28 font-semibold">Nombre</TableHead>
-                    <TableCell>
-                      <p className="text-pretty">{tournament.name}</p>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
                     <TableHead className="font-semibold">Temporada</TableHead>
                     <TableCell>{tournament.season}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Categoría</TableHead>
-                    <TableCell>{tournament.category}</TableCell>
+                    <TableHead className="w-auto md:w-28 font-semibold">País</TableHead>
+                    <TableCell>{tournament.country}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="font-semibold">Formato</TableHead>
+                    <TableHead className="font-semibold">
+                      Ciudad{tournament.cities && tournament.cities.length > 0 ? 'es' : ''}
+                    </TableHead>
                     <TableCell>
-                      {tournament.format} vs {tournament.format}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Rama</TableHead>
-                    <TableCell>
-                      <Badge variant={
-                        (tournament.gender === 'male')
-                          ? 'outline-info'
-                          : (tournament.gender === 'female')
-                            ? 'outline-danger'
-                            : 'outline-secondary'
-                      }>
-                        {getGenderTranslation(tournament.gender)}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Jornada</TableHead>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          (tournament.currentWeek as number > 0)
-                            ? 'outline-info'
-                            : 'outline-secondary'
-                        }
-                      >
-                        {tournament.currentWeek}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Fase</TableHead>
-                    <TableCell>
-                      <Badge variant={getStageTranslation(tournament.stage).variant}>
-                        {getStageTranslation(tournament.stage).label}
-                      </Badge>
+                      {tournament.cities && (tournament.cities.length > 0) && (
+                        <p className="text-wrap">
+                          {tournament.cities?.join(', ')}
+                        </p>
+                      )}
+                      {!tournament.cities && (
+                        <p className={styles.emptyCitiesMessage}>
+                          Aún no definidas
+                        </p>
+                      )}
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -137,27 +96,11 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
               <Table>
                 <TableBody>
                   <TableRow>
-                    <TableHead className="w-auto md:w-28 font-semibold">Equipos</TableHead>
+                    <TableHead className="font-semibold w-auto md:w-28">Fase</TableHead>
                     <TableCell>
-                      <Badge variant={(tournament.teamsQuantity > 0) ? 'outline-info' : 'outline-secondary'}>
-                        {tournament.teamsQuantity}
+                      <Badge variant={getStageTranslation(tournament.stage).variant}>
+                        {getStageTranslation(tournament.stage).label}
                       </Badge>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="w-auto md:w-28 font-semibold">País</TableHead>
-                    <TableCell>{tournament.country}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">Estado</TableHead>
-                    <TableCell>{tournament.state}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="font-semibold">
-                      Ciudad
-                    </TableHead>
-                    <TableCell>
-                      <p className="text-wrap">{tournament.city}</p>
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -182,24 +125,36 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
               </Table>
             </div>
           </div>
+          <section className={styles.description}>
+            <h2 className={styles.teamsSubheading}>Descripción</h2>
+            <p>{tournament.description}</p>
+          </section>
           <section>
-            <p className="font-semibold mb-2">Descripción</p>
-            <p className="text-pretty">{tournament.description}</p>
+            <h2 className={styles.teamsSubheading}>Categorías</h2>
+            <div className="flex flex-wrap gap-2">
+              {tournament.categories.map(({ id, name }) => (
+                <Badge key={id} variant="outline-info">
+                  {name}
+                </Badge>
+              ))}
+            </div>
           </section>
         </div>
       </section>
 
-      <h2 className="teamsSubheading">Equipos</h2>
+      <h2 className={styles.teamsSubheading}>
+        Equipos{' '}
+        <span className={styles.teamsQty}>({tournament.teamsQuantity})</span>
+      </h2>
 
       {(tournament.teams.length > 0) ? (
-        <section className="teams">
+        <section className={styles.teams}>
           {tournament.teams.map((team) => (
-            <section key={team.id} className="teamCard">
+            <section key={team.id} className={styles.teamCard}>
               <Link
                 href={
                   ROUTES.PUBLIC_TEAM_SHOW(team.permalink) +
-                  `?tournament=${tournament.permalink}` +
-                  `&category=${team.category}`
+                  `?tournament=${tournament.permalink}`
                 }
               >
                 {!team.imageUrl ? (
@@ -220,8 +175,7 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
               </Link>
               <Link href={
                 ROUTES.PUBLIC_TOURNAMENT_SHOW(team.permalink) +
-                `?tournament=${tournament.permalink}` +
-                `&category=${team.category}`
+                `?tournament=${tournament.permalink}`
               }>
                 {team.name}
               </Link>
@@ -229,14 +183,10 @@ export const Tournament: FC<Props> = async ({ params, searchParams }) => {
           ))}
         </section>
       ) : (
-        <div className="border-2 border-sky-600 dark:border-sky-500 py-6 rounded-lg mb-5">
-          <p className="text-2xl text-center text-sky-600 dark:text-sky-500">
-            ¡ El torneo aún no tiene equipos asignados !
-          </p>
+        <div className={styles.emptyMessage}>
+          <p>¡ El torneo aún no tiene equipos asignados !</p>
         </div>
       )}
     </>
   );
 };
-
-export default Tournament;

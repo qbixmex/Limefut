@@ -64,6 +64,7 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
           visitorId: true,
           localScore: true,
           visitorScore: true,
+          categoryId: true,
           penaltyShootout: {
             where: { status: 'completed' },
             select: {
@@ -109,12 +110,16 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
         // Update local team
         await tx.standings.upsert({
           where: {
-            teamId: match.localId,
-            tournamentId,
+            tournamentId_teamId_categoryId: {
+              tournamentId,
+              teamId: match.localId,
+              categoryId: match.categoryId!,
+            },
           },
           create: {
             teamId: match.localId,
             tournamentId,
+            categoryId: match.categoryId,
             matchesPlayed: 1,
             wins: localPoints === 3 ? 1 : 0,
             draws: localPoints === 1 ? 1 : 0,
@@ -143,12 +148,16 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
         // Update visitor team
         await tx.standings.upsert({
           where: {
-            teamId: match.visitorId,
-            tournamentId,
+            tournamentId_teamId_categoryId: {
+              tournamentId,
+              teamId: match.visitorId,
+              categoryId: match.categoryId!,
+            },
           },
           create: {
             teamId: match.visitorId,
             tournamentId,
+            categoryId: match.categoryId,
             matchesPlayed: 1,
             wins: visitorPoints === 3 ? 1 : 0,
             draws: visitorPoints === 1 ? 1 : 0,

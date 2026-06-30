@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "tournaments" ADD COLUMN     "cities" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ALTER COLUMN "category" DROP NOT NULL,
+ALTER COLUMN "gender" DROP NOT NULL,
+ALTER COLUMN "format" DROP NOT NULL;

@@ -1,4 +1,4 @@
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_STATUS, STAGE } from '@/shared/enums';
 
 export const latestMatches = [
   {
@@ -27,6 +27,12 @@ export const latestMatches = [
     status: MATCH_STATUS.COMPLETED,
     week: 1,
     place: 'Estadio Akron',
+    stage: STAGE.REGULAR,
+    category: {
+      id: 'b489d72a-e40e-40d6-8b18-26e611d10f28',
+      name: '2015',
+      permalink: '2015',
+    },
     matchDate: new Date('2024-04-27T16:00:00.000Z'),
     penaltyShoots: null,
   },
@@ -56,6 +62,12 @@ export const latestMatches = [
     status: MATCH_STATUS.COMPLETED,
     week: 1,
     place: 'Estadio Azteca',
+    stage: STAGE.REGULAR,
+    category: {
+      id: '3012b9ff-5820-441e-ae39-c63677791bc1',
+      name: '2015',
+      permalink: '2015',
+    },
     matchDate: new Date('2024-04-27T20:00:00.000Z'),
     penaltyShoots: null,
   },

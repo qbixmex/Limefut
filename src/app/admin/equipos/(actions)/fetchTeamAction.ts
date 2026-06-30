@@ -1,28 +1,47 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Team, Coach, Player } from '@/shared/interfaces';
+import type { Team } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
-
-type CoachType = Pick<Coach, 'id' | 'name'>;
-type PlayerType = Pick<Player, 'id' | 'name'>;
-type FieldType = { id: string; name: string; };
 
 type FetchTeamResponse = Promise<{
   ok: boolean;
   message: string;
-  team: Team & {
-    tournament: {
-      id: string;
-      name: string;
-      permalink: string;
-      category: string;
-    } | null;
-    coach: CoachType | null;
-    players: PlayerType[] | null;
-    fields: FieldType[];
-  } | null;
+  team: TEAM_TYPE;
 }>;
+
+export type TEAM_TYPE = Team & {
+  tournament: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
+  categories: CATEGORY_TYPE[];
+  coach: COACH_TYPE | null;
+  players: PLAYER_TYPE[] | null;
+  fields: FIELD_TYPE[];
+} | null;
+
+type CATEGORY_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+};
+
+type COACH_TYPE = {
+  id: string;
+  name: string;
+};
+
+type PLAYER_TYPE = {
+  id: string;
+  name: string;
+};
+
+type FIELD_TYPE = {
+  id: string;
+  name: string;
+};
 
 export const fetchTeamAction = async (
   teamId: string,
@@ -50,7 +69,17 @@ export const fetchTeamAction = async (
             id: true,
             name: true,
             permalink: true,
-            category: true,
+          },
+        },
+        categories: {
+          select: {
+            category: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
+              },
+            },
           },
         },
         coach: {
@@ -66,7 +95,7 @@ export const fetchTeamAction = async (
           },
         },
         fields: {
-          include: {
+          select: {
             field: {
               select: {
                 id: true,
@@ -91,7 +120,8 @@ export const fetchTeamAction = async (
       message: '¡ Equipo obtenido correctamente 👍 !',
       team: {
         ...team,
-        fields: team.fields.map((teamField) => teamField.field),
+        categories: team.categories.map(tc => tc.category),
+        fields: team.fields.map(tf => tf.field),
       },
     };
   } catch (error) {

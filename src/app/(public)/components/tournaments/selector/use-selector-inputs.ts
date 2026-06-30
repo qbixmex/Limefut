@@ -1,12 +1,12 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import type { TournamentType } from '@/app/(public)/(actions)';
+import type { TOURNAMENT_TYPE } from '@/app/(public)/(actions)';
 
-export const useSelectorInputs = (tournaments: TournamentType[], roles?: boolean) => {
+export const useSelectorInputs = (tournaments: TOURNAMENT_TYPE[], roles?: boolean) => {
   const searchParams = useSearchParams();
-  const tournamentPermalink = searchParams.get('torneo');
-  const categoryPermalink = searchParams.get('categoria');
+  const tournamentPermalink = searchParams.get('tournament');
+  const categoryPermalink = searchParams.get('category');
   const pathname = usePathname();
   const router = useRouter();
   const params = new URLSearchParams(searchParams);
@@ -18,7 +18,7 @@ export const useSelectorInputs = (tournaments: TournamentType[], roles?: boolean
   const setTournamentParam = (value: string) => {
     if (params.size > 0) {
       for (const key of params.keys()) {
-        if (key === 'torneo') continue;
+        if (key === 'tournament') continue;
         params.delete(key);
       }
     }
@@ -30,8 +30,8 @@ export const useSelectorInputs = (tournaments: TournamentType[], roles?: boolean
   };
 
   const setCategoryParam = (value: string) => {
-    if (categoryPermalink || !params.has('categoria')) {
-      params.set('categoria', value);
+    if (categoryPermalink || !params.has('category')) {
+      params.set('category', value);
       if (roles) params.set('roles', 'complete');
       router.push(`${pathname}?${params}`);
     }

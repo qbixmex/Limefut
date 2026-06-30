@@ -46,8 +46,11 @@ export type TournamentType = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
-  format: string;
+  categories: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
 };
 
 type FetchResponse = Promise<{
@@ -134,8 +137,17 @@ export const fetchMatchAction = async (
             id: true,
             name: true,
             permalink: true,
-            category: true,
-            format: true,
+            categories: {
+              include: {
+                category: {
+                  select: {
+                    id: true,
+                    name: true,
+                    permalink: true,
+                  },
+                },
+              },
+            },
           },
         },
         penaltyShootout: {
@@ -205,8 +217,7 @@ export const fetchMatchAction = async (
           id: match.tournament.id,
           name: match.tournament.name,
           permalink: match.tournament.permalink,
-          category: match.tournament.category,
-          format: match.tournament.format,
+          categories: match.tournament.categories.map(tc => tc.category),
         },
         penaltyShootout: match.penaltyShootout,
       },

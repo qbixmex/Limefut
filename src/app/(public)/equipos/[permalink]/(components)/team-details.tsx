@@ -80,11 +80,18 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
           <Table>
             <TableBody>
               <TableRow>
-                <TableHead className="font-semibold">Categoría</TableHead>
+                <TableHead className="font-semibold">Categorías</TableHead>
                 <TableCell>
                   {
-                    team?.category ??
-                    <span className="text-gray-500 italic">No especificado</span>
+                    team.categories
+                      ? team.categories.map(({ id, name }) => (
+                        <Badge key={id} variant="outline-info">
+                          {name}
+                        </Badge>
+                      ))
+                      : (
+                        <span className="text-gray-500 italic">Aun no asignadas</span>
+                      )
                   }
                 </TableCell>
               </TableRow>
@@ -149,8 +156,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                     <Link
                       href={
                         ROUTES.PUBLIC_TOURNAMENTS +
-                        `/${team?.tournament.permalink}` +
-                        `?category=${team.tournament.category}`
+                        `/${team?.tournament.permalink}`
                       }
                       className="text-wrap"
                     >
@@ -204,11 +210,12 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
           <Tooltip>
             <TooltipTrigger>
               <Link
-                href={
-                  ROUTES.PUBLIC_STANDINGS +
-                  `?tournament=${team?.tournament?.permalink}` +
-                  `&category=${team?.tournament?.category}`
-                }
+                // href={
+                //   ROUTES.PUBLIC_STANDINGS +
+                //   `?tournament=${team?.tournament?.permalink}` +
+                //   `&category=${team?.tournament?.category}`
+                // }
+                href="#"
                 target='_blank'
                 className={buttonVariants({
                   variant: 'outline-info',

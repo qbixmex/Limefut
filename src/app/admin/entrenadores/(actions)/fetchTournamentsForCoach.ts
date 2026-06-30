@@ -10,8 +10,6 @@ export type ResponseFetch = Promise<{
     id: string;
     name: string;
     permalink: string;
-    category: string;
-    format: string;
   }[] | null;
 }>;
 
@@ -32,8 +30,6 @@ export const fetchTournamentsForCoach = async (): ResponseFetch => {
         id: true,
         name: true,
         permalink: true,
-        category: true,
-        format: true,
       },
     });
 

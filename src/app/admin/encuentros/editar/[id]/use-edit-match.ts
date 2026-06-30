@@ -71,9 +71,9 @@ export const useEditMatch = (options: Options) => {
       tournament:
         match.tournament.permalink ??
         searchParams.get('tournament'),
-      category:
-        match.tournament.category ??
-        searchParams.get('category'),
+      // category:
+      //   match.tournament.category ??
+      //   searchParams.get('category'),
     },
   });
 
@@ -114,11 +114,11 @@ export const useEditMatch = (options: Options) => {
 
     toast.success(response.message);
 
-    router.replace(ROUTES.ADMIN_MATCHES +
-      `?tournament=${response.match?.tournament.permalink}` +
-      `&category=${response.match?.tournament.category}` +
-      `&sort-week=${response.match?.week ?? 'unassigned'}`,
-    );
+    // router.replace(ROUTES.ADMIN_MATCHES +
+    //   `?tournament=${response.match?.tournament.permalink}` +
+    //   `&category=${response.match?.tournament.category}` +
+    //   `&sort-week=${response.match?.week ?? 'unassigned'}`,
+    // );
   };
 
   const handleNavigateBack = () => {

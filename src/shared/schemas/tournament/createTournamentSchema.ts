@@ -38,36 +38,13 @@ export const createTournamentSchema = z.object({
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
   categoriesIds: z.array(z.uuid('¡ El valor debe ser un UUID válido !')).optional(),
-  format: z.union([
-    z.literal(''),
-    z.string('El formato debe ser una cadena de texto')
-      .min(1, { message: 'El formato debe ser mayor a 1 caracteres' })
-      .max(100, { message: 'El formato debe ser menor a 100 caracteres' }),
-  ]).optional(),
-  gender: z.union([
-    z.literal(''),
-    z.string('¡ El género debe ser una cadena de texto !')
-      .min(1, { message: '¡ El género debe es obligatorio !' })
-      .max(50, { message: '¡ El género debe ser menor a 50 caracteres !' }),
-  ]).optional(),
   country: z.union([
     z.literal(''),
     z.string('¡ El país debe ser una cadena de texto !')
       .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
       .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),
   ]).optional(),
-  state: z.union([
-    z.literal(''),
-    z.string('¡ El estado debe ser una cadena de texto !')
-      .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
-      .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' }),
-  ]).optional(),
-  city: z.union([
-    z.literal(''),
-    z.string('¡ La ciudad debe ser una cadena de texto !')
-      .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
-      .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' }),
-  ]).optional(),
+  cities: z.array(z.string('¡ La ciudad debe ser una cadena de texto válido !')).optional(),
   description: z.union([
     z.literal(''),
     z.string('¡ La descripción debe ser una cadena de texto !')
@@ -81,9 +58,8 @@ export const createTournamentSchema = z.object({
   ]).optional(),
   startDate: z.date({ message: 'La fecha de inicio debe ser una fecha válida' }),
   endDate: z.date({ message: 'La fecha final debe ser una fecha válida' }),
-  currentWeek: z
-    .int('¡ La semana actual debe ser un número válido !')
-    .min(0, { message: '¡ La semana actual debe ser un número positivo !' })
-    .optional(),
+  stage: z.string('¡ La fase debe ser una cadena de texto !')
+    .min(3, { message: '¡ La fase debe ser mayor a 3 caracteres !' })
+    .max(100, { message: '¡ La fase debe ser menor a 100 caracteres !' }),
   active: z.boolean().optional(),
 });
