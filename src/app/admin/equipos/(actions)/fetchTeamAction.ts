@@ -40,6 +40,7 @@ export type TEAM_TYPE = {
 } | null;
 
 type CATEGORY_TYPE = {
+  id: string;
   name: string;
   permalink: string;
 };
