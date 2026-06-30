@@ -1,7 +1,7 @@
 import { type FC, Suspense } from 'react';
 import { StandingsContent } from './standings-content';
 import { SkeletonTable } from './SkeletonTable';
-import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
+import { fetchAdminTournamentAction } from '@/shared/actions/fetch-admin-tournament.action';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 
@@ -20,7 +20,7 @@ export const StandingsContainer: FC<Props> = async ({ searchParams }) => {
     return null;
   }
 
-  const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
+  const { ok, message, tournamentId } = await fetchAdminTournamentAction({
     tournamentPermalink,
     categoryPermalink,
   });
