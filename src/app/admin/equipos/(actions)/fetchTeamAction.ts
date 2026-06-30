@@ -39,6 +39,11 @@ export type TEAM_TYPE = {
   fields: FIELD_TYPE[];
 } | null;
 
+type CATEGORY_TYPE = {
+  name: string;
+  permalink: string;
+};
+
 type COACH_TYPE = {
   id: string;
   name: string;
