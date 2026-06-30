@@ -80,15 +80,15 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
           <Table>
             <TableBody>
               <TableRow>
-                <TableHead className="font-semibold">Categorías</TableHead>
+                <TableHead className="font-semibold">Categoría</TableHead>
                 <TableCell>
                   {
-                    team.categories
-                      ? team.categories.map(({ id, name }) => (
-                        <Badge key={id} variant="outline-info">
-                          {name}
+                    team.category
+                      ? (
+                        <Badge variant="outline-info">
+                          {category}
                         </Badge>
-                      ))
+                      )
                       : (
                         <span className="text-gray-500 italic">Aun no asignadas</span>
                       )

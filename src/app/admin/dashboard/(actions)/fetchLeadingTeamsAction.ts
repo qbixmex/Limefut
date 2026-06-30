@@ -14,7 +14,7 @@ export type ResponseFetch = Promise<{
     team: {
       id: string;
       name: string;
-      category: string;
+      category: string | null;
       format: string;
     };
     points: number;

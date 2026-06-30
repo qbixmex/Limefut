@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from '@/shared/actions';
 import { editTeamSchema } from '@/shared/schemas';
+import type { Prisma } from '@/generated/prisma/client';
 
 type Options = {
   formData: FormData;
@@ -19,11 +20,6 @@ type ResponseAction = Promise<{
     tournament: {
       permalink: string;
     } | null;
-    categories: {
-      id: string;
-      name: string;
-      permalink: string;
-    }[];
   } | null;
 }>;
 
@@ -31,7 +27,7 @@ type TEAM_TYPE = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
+  category: string | null;
   format: string;
   gender: string;
   country: string | null;
@@ -116,6 +112,15 @@ export const updateTeamAction = async ({
           };
         }
 
+        const TeamInclude = {
+          tournament: {
+            select: {
+              permalink: true,
+              category: true,
+            },
+          },
+        } satisfies Prisma.TeamInclude;
+
         const updatedTeam = await transaction.team.update({
           where: { id: teamId },
           data: {
@@ -133,25 +138,7 @@ export const updateTeamAction = async ({
             tournamentId: teamToSave.tournamentId,
             coachId: teamToSave.coachId ?? undefined,
           },
-          include: {
-            tournament: {
-              select: {
-                permalink: true,
-                category: true,
-              },
-            },
-            categories: {
-              include: {
-                category: {
-                  select: {
-                    id: true,
-                    name: true,
-                    permalink: true,
-                  },
-                },
-              },
-            },
-          },
+          include: TeamInclude,
         });
 
         // Update TeamField records for the many-to-many relationship
@@ -217,10 +204,7 @@ export const updateTeamAction = async ({
         return {
           ok: true,
           message: '¡ El equipo fue actualizado correctamente 👍 !',
-          updatedTeam: {
-            ...updatedTeam,
-            categories: updatedTeam.categories.map(tc => tc.category),
-          },
+          updatedTeam,
         };
       } catch (error) {
         if (error instanceof Error && 'meta' in error && error.meta) {

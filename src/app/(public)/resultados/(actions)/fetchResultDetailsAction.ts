@@ -20,18 +20,8 @@ export type MatchType = {
     country: string | null;
     season: string | null;
   };
-  local: {
-    name: string;
-    permalink: string;
-    imageUrl: string | null;
-    category: string;
-  };
-  visitor: {
-    name: string;
-    permalink: string;
-    imageUrl: string | null;
-    category: string;
-  };
+  local: TEAM_TYPE;
+  visitor: TEAM_TYPE;
   penaltyShootout: {
     id: string;
     status: string;
@@ -58,6 +48,13 @@ export type MatchType = {
     }[];
   } | null | undefined;
 };
+
+type TEAM_TYPE = {
+  name: string;
+  permalink: string;
+  imageUrl: string | null;
+  category: string | null;
+}
 
 export type ResponseAction = Promise<{
   ok: boolean;
