@@ -1,6 +1,6 @@
 {
   "name": "limefut",
-  "version": "1.31.1",
+  "version": "1.31.2",
   "private": true,
   "scripts": {
     "dev": "next dev --port=3000",
@@ -11,8 +11,7 @@
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage",
-    "postinstall": "npx prisma migrate deploy && npx prisma generate"
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
