@@ -2,7 +2,7 @@
 
 import { useRef, useState, type FC, type ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { EmailInput } from './email-input';
@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Field, FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import type z from 'zod';
 import { Textarea } from '@/components/ui/textarea';
@@ -65,8 +66,10 @@ type Props = Readonly<{
   coaches: Coach[];
   fields: FIELD_TYPE[];
   team?: TEAM_TYPE;
+  categories: CATEGORY_TYPE[];
 }>;
 
+type CATEGORY_TYPE = { id: string; name: string; };
 type FIELD_TYPE = { id: string; name: string; };
 
 export const TeamForm: FC<Props> = ({
@@ -75,6 +78,7 @@ export const TeamForm: FC<Props> = ({
   coaches,
   fields = [],
   team,
+  categories,
 }) => {
   const route = useRouter();
   // const params = useSearchParams();
@@ -287,24 +291,34 @@ export const TeamForm: FC<Props> = ({
         {/* Category and Format */}
         <div className="flex flex-col gap-5 lg:flex-row">
           <div className="w-full lg:w-1/2">
-            <FormField
+            <Controller
               control={form.control}
               name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Categoría <span className="text-orange-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      value={field.value ?? ''}
-                      className="w-full"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={(({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <Select
+                    value={field.value ?? ''}
+                    onValueChange={field.onChange}
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Seleccione una categoría" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {categories.map(({ id, name }) => (
+                          <SelectItem key={id} value={id}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              ))}
             />
           </div>
           <div className="w-full lg:w-1/2">
