@@ -19,6 +19,12 @@ type ResponseAction = Promise<{
   updatedTeam: TEAM_TYPE & {
     tournament: {
       permalink: string;
+      category: string | null;
+    } | null;
+    category: {
+      id: string;
+      name: string;
+      permalink: string;
     } | null;
   } | null;
 }>;
@@ -27,7 +33,6 @@ type TEAM_TYPE = {
   id: string;
   name: string;
   permalink: string;
-  category: string | null;
   format: string;
   gender: string;
   country: string | null;
@@ -68,7 +73,7 @@ export const updateTeamAction = async ({
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
-    category: formData.get('category') ?? '',
+    categoryId: formData.get('categoryId') ?? null,
     format: formData.get('format') as string,
     gender: formData.get('gender') as string,
     tournamentId: formData.get('tournamentId') ?? null,
@@ -112,21 +117,43 @@ export const updateTeamAction = async ({
           };
         }
 
-        const TeamInclude = {
+        const teamSelect = {
+          id: true,
+          name: true,
+          permalink: true,
+          format: true,
+          gender: true,
+          country: true,
+          state: true,
+          city: true,
+          coachId: true,
+          emails: true,
+          address: true,
+          imageUrl: true,
+          imagePublicID: true,
+          active: true,
+          createdAt: true,
+          updatedAt: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+              permalink: true,
+            },
+          },
           tournament: {
             select: {
               permalink: true,
               category: true,
             },
           },
-        } satisfies Prisma.TeamInclude;
+        } satisfies Prisma.TeamSelect;
 
         const updatedTeam = await transaction.team.update({
           where: { id: teamId },
           data: {
             name: teamToSave.name,
             permalink: teamToSave.permalink,
-            category: teamToSave.category,
             format: teamToSave.format,
             gender: teamToSave.gender,
             country: teamToSave.country,
@@ -135,10 +162,11 @@ export const updateTeamAction = async ({
             emails: teamToSave.emails,
             address: teamToSave.address ?? undefined,
             active: teamToSave.active,
+            categoryId: teamToSave.categoryId,
             tournamentId: teamToSave.tournamentId,
             coachId: teamToSave.coachId ?? undefined,
           },
-          include: TeamInclude,
+          select: teamSelect,
         });
 
         // Update TeamField records for the many-to-many relationship

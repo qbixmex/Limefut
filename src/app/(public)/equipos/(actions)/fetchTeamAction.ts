@@ -19,6 +19,10 @@ export type TEAM_TYPE = {
   permalink: string;
   imageUrl: string | null;
   format: string | null;
+  category: {
+    name: string;
+    permalink: string;
+  } | null;
   gender: string | null;
   country: string | null;
   city: string | null;
@@ -30,7 +34,6 @@ export type TEAM_TYPE = {
     name: string;
     permalink: string;
   } | null;
-  category: string | null;
   coach: CoachType | null;
   players: PlayerType[] | null;
   fields: FieldType[],
@@ -86,7 +89,9 @@ export const fetchTeamAction = async ({
         tournament: {
           permalink: tournamentPermalink,
         },
-        category,
+        category: {
+          name: category,
+        },
       },
       select: {
         id: true,
