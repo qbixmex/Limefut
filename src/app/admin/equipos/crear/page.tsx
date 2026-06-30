@@ -10,11 +10,12 @@ import {
 import { TeamForm } from '../(components)/teamForm';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { fetchTournamentsForTeam } from '../(actions)';
+import { fetchCategoriesAction, fetchTournamentsForTeam } from '../(actions)';
 import type { Coach } from '@/shared/interfaces';
 import { fetchCoachesForTeam } from '../(actions)/fetchCoachesForTeam';
 import type { Session } from '@/lib/auth-client';
 import { fetchFieldsForTeam } from '../(actions)/fetchFieldsForTeam';
+import { ROUTES } from '@/shared/constants/routes';
 
 const CreateTeamPage = () => {
   return (
@@ -31,33 +32,40 @@ const CreateTeamPageContent: FC = async () => {
 
   if (session && !(session.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear equipos !';
-    redirect(`/admin/equipos?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(message)}`);
   }
 
   const responseTournaments = await fetchTournamentsForTeam();
 
   if (!responseTournaments.ok) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(responseTournaments.message)}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseTournaments.message)}`);
   }
 
   if (responseTournaments.ok && responseTournaments.tournaments?.length === 0) {
-    redirect(`/admin/equipos?error=${encodeURIComponent('¡ No puedes crear un equipo sin torneos activos !')}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent('¡ No puedes crear un equipo sin torneos activos !')}`);
   }
 
   const responseCoaches = await fetchCoachesForTeam();
 
   if (!responseCoaches.ok) {
-    redirect(`/admin/equipos?error=${encodeURIComponent(responseCoaches.message)}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseCoaches.message)}`);
   }
 
   if (responseCoaches.ok && responseCoaches.coaches?.length === 0) {
-    redirect(`/admin/equipos?error=${encodeURIComponent('¡ No puedes crear un equipo sin entrenadores activos !')}`);
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent('¡ No puedes crear un equipo sin entrenadores activos !')}`);
+  }
+
+  const responseCategories = await fetchCategoriesAction();
+
+  if (responseCategories.ok && responseCategories.categories.length === 0) {
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseCategories.message)}`);
   }
 
   const responseFields = await fetchFieldsForTeam();
 
   const tournaments = responseTournaments.tournaments;
   const coaches = responseCoaches.coaches;
+  const categories = responseCategories.categories;
 
   return (
     <div className="admin-page">
@@ -73,6 +81,7 @@ const CreateTeamPageContent: FC = async () => {
               tournaments={tournaments}
               coaches={coaches as Coach[]}
               fields={responseFields.fields}
+              categories={categories}
             />
           </CardContent>
         </Card>
