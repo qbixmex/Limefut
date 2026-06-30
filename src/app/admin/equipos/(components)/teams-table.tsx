@@ -28,11 +28,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { ActiveSwitch } from '@/shared/components/active-switch';
-import type { TeamType } from '../(actions)/fetchTeamsAction';
+import type { TEAM_TYPE } from '../(actions)/fetch-admin-teams.action';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
-  teams: TeamType[];
+  teams: TEAM_TYPE[];
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -52,8 +52,6 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                   <TableHead className="w-12 text-center">#</TableHead>
                   <TableHead className="w-25">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead className="w-25 text-center">Categoría</TableHead>
-                  <TableHead className="w-25 text-center">Formato</TableHead>
                   <TableHead className="w-25 text-center">Rama</TableHead>
                   <TableHead className="w-25">Entrenador</TableHead>
                   <TableHead className="w-25 text-center">Jugadores</TableHead>
@@ -85,10 +83,6 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                       </Link>
                     </TableCell>
                     <TableCell>{team.name}</TableCell>
-                    <TableCell className="text-center">{team.category}</TableCell>
-                    <TableCell className="text-center">
-                      {team.format} vs {team.format}
-                    </TableCell>
                     <TableCell className="text-center">
                       {
                         (team.gender === 'male')

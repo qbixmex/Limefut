@@ -138,18 +138,6 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableHead className="w-[180px] font-semibold">Categoría</TableHead>
-                    <TableCell>
-                      {match.tournament.category}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableHead className="w-[180px] font-semibold">Formato</TableHead>
-                    <TableCell>
-                      {match.tournament.format} vs {match.tournament.format}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
                     <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
                     <TableCell>
                       {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}

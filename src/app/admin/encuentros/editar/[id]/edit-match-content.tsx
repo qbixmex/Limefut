@@ -63,10 +63,7 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
     <>
       <section>
         <EditMatchForm
-          key={
-            `${responseMatch.match?.tournament.id ?? 'tournament'}-` +
-            `${responseMatch.match?.tournament.category ?? 'category'}`
-          }
+          key={`${responseMatch.match?.tournament.id ?? 'tournament'}`}
           tournaments={tournamentsResponse.tournaments}
           categories={categoriesResponse.categories}
           teams={responseTeams.teams}

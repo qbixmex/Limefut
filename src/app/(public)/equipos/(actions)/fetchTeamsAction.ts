@@ -37,6 +37,15 @@ export const fetchTeamsAction = async (
     },
   });
 
+  console.clear();
+  console.log(tournament);
+
+  return {
+    ok: false,
+    message: '⚡️ Revisa los logs del servidor ⚠️',
+    teams: [],
+  };
+
   if (!tournament) {
     return {
       ok: false,

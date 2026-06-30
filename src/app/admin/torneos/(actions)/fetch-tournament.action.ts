@@ -1,44 +1,41 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import type { STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type TournamentType = {
+export type TOURNAMENT_TYPE = {
   id: string;
   name: string;
   imageUrl: string | null;
   imagePublicID: string | null;
   permalink: string;
   description: string | null;
-  category: string | null;
-  format: string;
-  gender: string;
   country: string | null;
-  state: string | null;
-  city: string | null;
+  cities: string[];
   season: string | null;
   startDate: Date;
   endDate: Date;
-  currentWeek: number | null;
+  stage: STAGE_TYPE;
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
   categories: {
     id: string;
     name: string;
+    permalink: string;
   }[];
   teams: {
     id: string;
     name: string;
   }[];
-  stage: string;
   teamsQuantity: number;
 };
 
 type FetchTournamentResponse = Promise<{
   ok: boolean;
   message: string;
-  tournament: TournamentType | null;
+  tournament: TOURNAMENT_TYPE | null;
 }>;
 
 export const fetchTournamentAction = async (
@@ -59,9 +56,24 @@ export const fetchTournamentAction = async (
   }
 
   try {
-    const tournament = await prisma.tournament.findUnique({
+    const tournament = await prisma.tournament.findFirst({
       where: { id: tournamentId },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        permalink: true,
+        imageUrl: true,
+        imagePublicID: true,
+        description: true,
+        country: true,
+        cities: true,
+        season: true,
+        startDate: true,
+        endDate: true,
+        stage: true,
+        active: true,
+        createdAt: true,
+        updatedAt: true,
         teams: {
           select: {
             id: true,
@@ -74,6 +86,7 @@ export const fetchTournamentAction = async (
               select: {
                 id: true,
                 name: true,
+                permalink: true,
               },
             },
           },
@@ -98,9 +111,7 @@ export const fetchTournamentAction = async (
       tournament: {
         ...tournament,
         teamsQuantity: tournament._count.teams ?? 0,
-        categories: tournament.categories.map((tournamentCategory) => {
-          return tournamentCategory.category;
-        }),
+        categories: tournament.categories.map((tc) => tc.category),
       },
     };
   } catch (error) {

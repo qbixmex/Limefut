@@ -14,48 +14,49 @@ export type MATCH_TYPE = {
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
   createdAt: Date;
-  localTeam: {
-    name: string;
-    id: string;
-    permalink: string;
-    players: {
-      id: string;
-      name: string;
-    }[];
-    fields: {
-      id: string;
-      name: string;
-    }[];
-  }
-  visitorTeam: {
-    name: string;
-    id: string;
-    permalink: string;
-    players: {
-      name: string;
-      id: string;
-    }[];
-    fields: {
-      id: string;
-      name: string;
-    }[];
-  }
-  tournament: TournamentType;
+  localTeam: TEAM_TYPE
+    & { players: PLAYER_TYPE[]; }
+    & { fields: FIELD_TYPE[]; };
+  visitorTeam: TEAM_TYPE
+    & { players: PLAYER_TYPE[]; }
+    & { fields: FIELD_TYPE[]; };
+  tournament: TOURNAMENT_TYPE;
+  category: CATEGORY_TYPE | null;
   penaltyShootout: PENALTY_SHOOTOUT_TYPE | null;
+};
+
+type TEAM_TYPE = {
+  name: string;
+  id: string;
+  permalink: string;
+};
+
+type PLAYER_TYPE = {
+  id: string;
+  name: string;
+};
+
+type CATEGORY_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+};
+
+type FIELD_TYPE = {
+  id: string;
+  name: string;
+};
+
+export type TOURNAMENT_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
 };
 
 export type PENALTY_SHOOTOUT_TYPE = {
   id: string;
-  localTeam: {
-    id: string;
-    name: string;
-    permalink: string;
-  };
-  visitorTeam: {
-    id: string;
-    name: string;
-    permalink: string;
-  };
+  localTeam: TEAM_TYPE;
+  visitorTeam: TEAM_TYPE & PLAYER_TYPE;
   localGoals: number;
   visitorGoals: number;
   winnerTeamId: string | null;
@@ -68,14 +69,6 @@ export type PENALTY_SHOOTOUT_TYPE = {
     order: number;
     isGoal: boolean | null;
   }[];
-};
-
-export type TournamentType = {
-  id: string;
-  name: string;
-  permalink: string;
-  category: string;
-  format: string;
 };
 
 type FetchResponse = Promise<{
@@ -160,13 +153,18 @@ export const fetchMatchAction = async (
             },
           },
         },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
         tournament: {
           select: {
             id: true,
             name: true,
             permalink: true,
-            category: true,
-            format: true,
           },
         },
         penaltyShootout: {
@@ -219,14 +217,6 @@ export const fetchMatchAction = async (
       message: '¡ Encuentro obtenido correctamente 👍 !',
       match: {
         id: match.id,
-        localTeam: {
-          ...match.local,
-          fields: match.local.fields.map((teamField) => teamField.field),
-        },
-        visitorTeam: {
-          ...match.visitor,
-          fields: match.visitor.fields.map((teamField) => teamField.field),
-        },
         place: match.place,
         matchDate: match.matchDate,
         week: match.week,
@@ -235,13 +225,20 @@ export const fetchMatchAction = async (
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS_TYPE,
+        localTeam: {
+          ...match.local,
+          fields: match.local.fields.map((teamField) => teamField.field),
+        },
+        visitorTeam: {
+          ...match.visitor,
+          fields: match.visitor.fields.map((teamField) => teamField.field),
+        },
         tournament: {
           id: match.tournament.id,
           name: match.tournament.name,
           permalink: match.tournament.permalink,
-          category: match.tournament.category,
-          format: match.tournament.format,
         },
+        category: match.category,
         penaltyShootout: match.penaltyShootout,
       },
     };

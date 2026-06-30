@@ -88,7 +88,8 @@ export const getStageTranslation = (stage: string): {
     label: string;
     variant:
       | 'outline-info'
-      | 'outline-warning'
+      | 'outline-primary'
+      | 'outline-special'
       | 'outline-success'
       | 'outline-secondary';
   } => {
@@ -100,7 +101,7 @@ export const getStageTranslation = (stage: string): {
         };
       case 'playoffs':
         return {
-          variant: 'outline-warning',
+          variant: 'outline-special',
           label: 'liguilla',
         };
       case 'finals':

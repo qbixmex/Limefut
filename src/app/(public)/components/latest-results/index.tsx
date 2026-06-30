@@ -45,8 +45,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                   <div className="w-full lg:w-1/2 order-2 lg:order-1">
                     <MatchMetadata
                       tournamentName={match.tournament.name}
-                      category={match.localTeam.category}
-                      format={match.localTeam.format}
+                      category={match.category}
                       week={match.week}
                       place={match.place}
                       date={match.matchDate}

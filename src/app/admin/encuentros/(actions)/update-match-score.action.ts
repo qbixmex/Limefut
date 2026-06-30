@@ -10,8 +10,12 @@ export type ResponseAction = Promise<{
   currentMatch: {
     tournament: {
       permalink: string;
-      category: string;
     };
+    category: {
+      id: string;
+      name: string;
+      permalink: string;
+    } | null;
   } | null;
 }>;
 
@@ -33,10 +37,18 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       select: {
         localScore: true,
         visitorScore: true,
+        tournamentId: true,
+        categoryId: true,
         tournament: {
           select: {
             permalink: true,
-            category: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
           },
         },
       },
@@ -50,6 +62,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       };
     }
 
+    const { tournamentId, categoryId } = currentMatch;
     const oldLocalScore = currentMatch.localScore ?? 0;
     const oldVisitorScore = currentMatch.visitorScore ?? 0;
 
@@ -81,18 +94,20 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
 
     // Revert old standings for local team
     try {
-      await prisma.standings.update({
-        where: { teamId: localId },
+      await updateTeamStandings({
+        teamId: localId,
+        tournamentId,
+        categoryId,
         data: {
-          matchesPlayed: { increment: -1 },
-          wins: { increment: oldLocalPoints === 3 ? -1 : 0 },
-          losses: { increment: oldLocalPoints === 0 ? -1 : 0 },
-          draws: { increment: oldLocalPoints === 1 ? -1 : 0 },
-          goalsFor: { increment: -oldLocalScore },
-          goalsAgainst: { increment: -oldVisitorScore },
-          goalsDifference: { increment: -(oldLocalScore - oldVisitorScore) },
-          points: { increment: -oldLocalPoints },
-          totalPoints: { increment: -oldLocalPoints },
+          matchesPlayed: { decrement: 1 },
+          wins: { decrement: oldLocalPoints === 3 ? 1 : 0 },
+          losses: { decrement: oldLocalPoints === 0 ? 1 : 0 },
+          draws: { decrement: oldLocalPoints === 1 ? 1 : 0 },
+          goalsFor: { decrement: oldLocalScore },
+          goalsAgainst: { decrement: oldVisitorScore },
+          goalsDifference: { decrement: oldLocalScore - oldVisitorScore },
+          points: { decrement: oldLocalPoints },
+          totalPoints: { decrement: oldLocalPoints },
         },
       });
     } catch (error) {
@@ -106,18 +121,20 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
 
     // Revert old standings for visitor team
     try {
-      await prisma.standings.update({
-        where: { teamId: visitorId },
+      await updateTeamStandings({
+        teamId: visitorId,
+        tournamentId,
+        categoryId,
         data: {
-          matchesPlayed: { increment: -1 },
-          wins: { increment: oldVisitorPoints === 3 ? -1 : 0 },
-          losses: { increment: oldVisitorPoints === 0 ? -1 : 0 },
-          draws: { increment: oldVisitorPoints === 1 ? -1 : 0 },
-          goalsFor: { increment: -oldVisitorScore },
-          goalsAgainst: { increment: -oldLocalScore },
-          goalsDifference: { increment: -(oldVisitorScore - oldLocalScore) },
-          points: { increment: -oldVisitorPoints },
-          totalPoints: { increment: -oldVisitorPoints },
+          matchesPlayed: { decrement: 1 },
+          wins: { decrement: oldVisitorPoints === 3 ? 1 : 0 },
+          losses: { decrement: oldVisitorPoints === 0 ? 1 : 0 },
+          draws: { decrement: oldVisitorPoints === 1 ? 1 : 0 },
+          goalsFor: { decrement: oldVisitorScore },
+          goalsAgainst: { decrement: oldLocalScore },
+          goalsDifference: { decrement: oldVisitorScore - oldLocalScore },
+          points: { decrement: oldVisitorPoints },
+          totalPoints: { decrement: oldVisitorPoints },
         },
       });
     } catch (error) {
@@ -131,8 +148,10 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
 
     // Apply new standings for local team
     try {
-      await prisma.standings.update({
-        where: { teamId: localId },
+      await updateTeamStandings({
+        teamId: localId,
+        tournamentId,
+        categoryId,
         data: {
           matchesPlayed: { increment: 1 },
           wins: { increment: newLocalPoints === 3 ? 1 : 0 },
@@ -156,8 +175,10 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
 
     // Apply new standings for visitor team
     try {
-      await prisma.standings.update({
-        where: { teamId: visitorId },
+      await updateTeamStandings({
+        teamId: visitorId,
+        tournamentId,
+        categoryId,
         data: {
           matchesPlayed: { increment: 1 },
           wins: { increment: newVisitorPoints === 3 ? 1 : 0 },
@@ -192,7 +213,13 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
           select: {
             id: true,
             permalink: true,
-            category: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
           },
         },
       },
@@ -223,6 +250,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       message: '¡ El marcador del partido se actualizó correctamente ⚽️🎉 !',
       currentMatch: {
         tournament: updatedMatch.tournament,
+        category: updatedMatch.category,
       },
     };
   } catch (error) {
@@ -233,4 +261,42 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       currentMatch: null,
     };
   }
+};
+
+type StandingsFieldMutation = { increment: number } | { decrement: number };
+
+const updateTeamStandings = async ({
+  teamId,
+  tournamentId,
+  categoryId,
+  data,
+}: {
+  teamId: string,
+  tournamentId: string,
+  categoryId: string | null,
+  data: {
+    matchesPlayed: StandingsFieldMutation;
+    wins: StandingsFieldMutation;
+    losses: StandingsFieldMutation;
+    draws: StandingsFieldMutation;
+    goalsFor: StandingsFieldMutation;
+    goalsAgainst: StandingsFieldMutation;
+    goalsDifference: StandingsFieldMutation;
+    points: StandingsFieldMutation;
+    totalPoints: StandingsFieldMutation;
+  },
+}): Promise<void> => {
+  const standings = await prisma.standings.findFirst({
+    where: { teamId, tournamentId, categoryId },
+    select: { id: true },
+  });
+
+  if (!standings) {
+    throw new Error(`Standings record not found for team ${teamId} in tournament ${tournamentId}`);
+  }
+
+  await prisma.standings.update({
+    where: { id: standings.id },
+    data,
+  });
 };

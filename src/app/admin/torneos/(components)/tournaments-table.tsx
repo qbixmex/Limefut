@@ -14,7 +14,7 @@ import { fetchTournamentsAction, updateTournamentStateAction } from '../(actions
 import { auth } from '@/lib/auth';
 import { DeleteTournament } from './delete-tournament';
 import { Pagination } from '@/shared/components/pagination';
-import { cn, getGenderTranslation, getStageTranslation } from '@/lib/utils';
+import { cn, getStageTranslation } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '~/src/components/ui/badge';
 import { headers } from 'next/headers';
@@ -53,11 +53,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                 <TableRow>
                   <TableHead className="w-[100px] hidden lg:table-cell">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead className="w-25 text-center">Categoría</TableHead>
-                  <TableHead className="w-25 text-center">Formato</TableHead>
-                  <TableHead className="w-25 text-center">Rama</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Temporada</TableHead>
-                  <TableHead className="hidden lg:table-cell w-25 text-center">Jornada</TableHead>
+                  <TableHead className="hidden lg:table-cell w-25 text-center">Categorías</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Equipos</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Fase</TableHead>
                   <TableHead className="hidden lg:table-cell text-center">Activo</TableHead>
@@ -87,32 +84,17 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                       </Link>
                     </TableCell>
                     <TableCell>{tournament.name}</TableCell>
-                    <TableCell className="text-center">{tournament.category}</TableCell>
-                    <TableCell className="text-center">
-                      {`${tournament.format} vs ${tournament.format}`}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant={
-                        (tournament.gender === 'male')
-                          ? 'outline-info'
-                          : (tournament.gender === 'female')
-                            ? 'outline-danger'
-                            : 'outline-secondary'
-                      }>
-                        {getGenderTranslation(tournament.gender)}
-                      </Badge>
-                    </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">
                       {tournament.season}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">
                       <Badge
-                        variant={(tournament.currentWeek as number > 0)
+                        variant={(tournament.categoriesQuantity > 0)
                           ? 'outline-info'
                           : 'outline-secondary'
                         }
                       >
-                        {tournament.currentWeek}
+                        {tournament.categoriesQuantity}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">

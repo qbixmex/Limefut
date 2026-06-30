@@ -1,10 +1,10 @@
 import { fetchPublicCategoriesAction } from '../../(actions)/fetchPublicCategoriesAction';
-import { CategoryFormSelect } from './category-form-select';
+import { CategoriesFormSelect } from './categories-form-select';
 
 export const CategorySelect = async () => {
   const { categories } = await fetchPublicCategoriesAction();
 
   return (
-    <CategoryFormSelect categories={categories} />
+    <CategoriesFormSelect categories={categories} />
   );
 };

@@ -19,7 +19,7 @@ export const fetchCategoriesAction = async (): ResponseFetch => {
   'use cache';
 
   cacheLife('days');
-  cacheTag('admin-categories');
+  cacheTag('categories');
 
   try {
     const categories = await prisma.category.findMany({

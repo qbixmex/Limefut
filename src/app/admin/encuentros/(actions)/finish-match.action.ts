@@ -32,42 +32,76 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
     visitorPoints = 1;
   }
 
+  let match: { tournamentId: string; categoryId: string | null } | null = null;
   try {
-    // Update Local Team Standings
-    await prisma.standings.update({
-      where: { teamId: localId },
-      data: {
-        matchesPlayed: { increment: 1 },
-        wins: { increment: localPoints === 3 ? 1 : 0 },
-        losses: { increment: localPoints === 0 ? 1 : 0 },
-        draws: { increment: localPoints === 1 ? 1 : 0 },
-        goalsFor: { increment: localScore },
-        goalsAgainst: { increment: visitorScore },
-        goalsDifference: { increment: localScore - visitorScore },
-        points: { increment: localPoints },
-        totalPoints: { increment: localPoints },
-      },
+    match = await prisma.match.findUnique({
+      where: { id: matchId },
+      select: { tournamentId: true, categoryId: true },
     });
+  } catch {
+    // ignore
+  }
+
+  try {
+    const localStandings = match
+      ? await prisma.standings.findFirst({
+          where: {
+            teamId: localId,
+            tournamentId: match.tournamentId,
+            categoryId: match.categoryId,
+          },
+          select: { id: true },
+        })
+      : null;
+
+    if (localStandings) {
+      await prisma.standings.update({
+        where: { id: localStandings.id },
+        data: {
+          matchesPlayed: { increment: 1 },
+          wins: { increment: localPoints === 3 ? 1 : 0 },
+          losses: { increment: localPoints === 0 ? 1 : 0 },
+          draws: { increment: localPoints === 1 ? 1 : 0 },
+          goalsFor: { increment: localScore },
+          goalsAgainst: { increment: visitorScore },
+          goalsDifference: { increment: localScore - visitorScore },
+          points: { increment: localPoints },
+          totalPoints: { increment: localPoints },
+        },
+      });
+    }
   } catch (error) {
     console.error(`Error: ${(error as Error).message}`);
   }
 
   try {
-    // Update Visitor Team Standings
-    await prisma.standings.update({
-      where: { teamId: visitorId },
-      data: {
-        matchesPlayed: { increment: 1 },
-        wins: { increment: visitorPoints === 3 ? 1 : 0 },
-        losses: { increment: visitorPoints === 0 ? 1 : 0 },
-        draws: { increment: visitorPoints === 1 ? 1 : 0 },
-        goalsFor: { increment: visitorScore },
-        goalsAgainst: { increment: localScore },
-        goalsDifference: { increment: visitorScore - localScore },
-        points: { increment: visitorPoints },
-        totalPoints: { increment: visitorPoints },
-      },
-    });
+    const visitorStandings = match
+      ? await prisma.standings.findFirst({
+          where: {
+            teamId: visitorId,
+            tournamentId: match.tournamentId,
+            categoryId: match.categoryId,
+          },
+          select: { id: true },
+        })
+      : null;
+
+    if (visitorStandings) {
+      await prisma.standings.update({
+        where: { id: visitorStandings.id },
+        data: {
+          matchesPlayed: { increment: 1 },
+          wins: { increment: visitorPoints === 3 ? 1 : 0 },
+          losses: { increment: visitorPoints === 0 ? 1 : 0 },
+          draws: { increment: visitorPoints === 1 ? 1 : 0 },
+          goalsFor: { increment: visitorScore },
+          goalsAgainst: { increment: localScore },
+          goalsDifference: { increment: visitorScore - localScore },
+          points: { increment: visitorPoints },
+          totalPoints: { increment: visitorPoints },
+        },
+      });
+    }
   } catch (error) {
     console.error(`Error: ${(error as Error).message}`);
   }

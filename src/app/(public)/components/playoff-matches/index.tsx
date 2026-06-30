@@ -47,7 +47,7 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
                 href={
                   '/liguilla/encuentro' +
                   `?tournament=${match.tournament.permalink}` +
-                  `&category=${match.tournament.category}` +
+                  `&category=${match.category?.id}` +
                   `&local_team=${match.localTeam.permalink}` +
                   `&visitor_team=${match.visitorTeam.permalink}`
                 }
@@ -56,8 +56,7 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
                   <div className="w-full lg:w-1/2 order-2 lg:order-1">
                     <MatchMetadata
                       tournamentName={match.tournament.name}
-                      category={match.tournament.category}
-                      format={match.tournament.format}
+                      category={match.category}
                       place={match.place}
                       date={match.matchDate}
                       status={match.status}

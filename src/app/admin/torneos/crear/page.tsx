@@ -1,18 +1,11 @@
-import { randomUUID } from 'node:crypto';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { TournamentForm } from '../(components)/tournament-form';
-import { auth } from '@/lib/auth';
-import { redirect } from 'next/navigation';
-import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { Suspense } from 'react';
-import { ROUTES } from '@/shared/constants/routes';
-import { fetchCategoriesAction } from '../(actions)';
+import { CreateTournamentView } from './create-tournament-view';
 
 const CreateTournamentPage = async () => {
   return (
@@ -24,37 +17,12 @@ const CreateTournamentPage = async () => {
           </CardHeader>
           <CardContent>
             <Suspense>
-              <CreateTournamentContent />
+              <CreateTournamentView />
             </Suspense>
           </CardContent>
         </Card>
       </div>
     </div>
-  );
-};
-
-const CreateTournamentContent = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (session && !(session.user.roles as string[]).includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear torneos !';
-    redirect(`/admin/torneos?error=${encodeURIComponent(message)}`);
-  }
-
-  const responseCategories = await fetchCategoriesAction();
-
-  if (!responseCategories.ok) {
-    redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(responseCategories.message)}`);
-  }
-
-  return (
-    <TournamentForm
-      key={randomUUID()}
-      session={session as Session}
-      categories={responseCategories.categories}
-    />
   );
 };
 

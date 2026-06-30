@@ -21,8 +21,12 @@ type EditResponseAction = Promise<{
       id: string;
       name: string;
       permalink: string;
-      category: string;
     };
+    category: {
+      id: string;
+      name: string;
+      permalink: string;
+    } | null;
     local: {
       id: string;
       name: string;
@@ -165,7 +169,13 @@ export const updateMatchAction = async ({
                 id: true,
                 name: true,
                 permalink: true,
-                category: true,
+              },
+            },
+            category: {
+              select: {
+                id: true,
+                name: true,
+                permalink: true,
               },
             },
           },
@@ -199,8 +209,8 @@ export const updateMatchAction = async ({
               id: updatedMatch.tournament.id,
               name: updatedMatch.tournament.name,
               permalink: updatedMatch.tournament.permalink,
-              category: updatedMatch.tournament.category,
             },
+            category: updatedMatch.category,
           },
         };
       } catch (error) {

@@ -10,18 +10,26 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import type { TournamentType } from '../../../(actions)';
 import { useSelectorInputs } from './use-selector-inputs';
 import { FunnelX } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import style from './styles.module.css';
 
 type Props = Readonly<{
-  tournaments: TournamentType[];
+  tournaments: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
+  categories: {
+    id: string;
+    name: string;
+    permalink: string;
+  }[];
   roles?: boolean;
 }>;
 
-export const SelectorInputs: FC<Props> = ({ tournaments, roles }) => {
+export const SelectorInputs: FC<Props> = ({ tournaments, categories, roles }) => {
   const {
     uniqueTournaments,
     tournamentPermalink,
@@ -84,9 +92,9 @@ export const SelectorInputs: FC<Props> = ({ tournaments, roles }) => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {tournaments.map(({ id, category }) => (
-                  <SelectItem key={id} value={category}>
-                    {category}
+                {categories.map(({ id, name, permalink }) => (
+                  <SelectItem key={id} value={permalink}>
+                    {name}
                   </SelectItem>
                 ))}
               </SelectGroup>

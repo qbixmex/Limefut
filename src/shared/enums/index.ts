@@ -5,3 +5,4 @@ export { ROUND, type ROUND_TYPE } from './round.enum';
 export { ALIGNMENT, type ALIGNMENT_TYPE } from './alignment.enum';
 export { LANGUAGE, type LANGUAGE_TYPE } from './language.enum';
 export { PLAYOFF_ROUND, type PLAYOFF_ROUND_TYPE } from './playoff-round.enum';
+export { STAGE, type STAGE_TYPE } from './stage.enum';

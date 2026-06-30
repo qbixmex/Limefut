@@ -13,8 +13,6 @@ export type ResponseFetch = Promise<{
   tournaments: {
     id: string;
     name: string;
-    category: string;
-    format: string;
   }[];
 }>;
 
@@ -33,8 +31,6 @@ export const fetchLatestTournamentsAction = async (options?: Options): Promise<R
       select: {
         id: true,
         name: true,
-        category: true,
-        format: true,
       },
       take: limit,
     });

@@ -3,7 +3,7 @@ import { TeamsTableSkeleton } from './teams-table-skeleton';
 import { TeamsWrapper } from './teams-wrapper';
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
-import { fetchTournamentByPermalinkAndCategory } from '@/shared/actions/fetchTournamentByPermalinkAndCategory';
+import { fetchAdminTournamentAction } from '@/shared/actions/fetch-admin-tournament.action';
 
 type Props = Readonly<{
   searchParamsPromise: Promise<{
@@ -24,7 +24,7 @@ export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
 
   if (!tournamentPermalink || !categoryPermalink) return null;
 
-  const { ok, message, tournamentId } = await fetchTournamentByPermalinkAndCategory({
+  const { ok, message, tournamentId } = await fetchAdminTournamentAction({
     tournamentPermalink,
     categoryPermalink,
   });
@@ -40,7 +40,7 @@ export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
           `${tournamentPermalink ?? 'tournament'}-` +
           `${categoryPermalink ?? 'category'}-` +
           `${query ?? 'query'}-` +
-          `${currentPage}`
+          currentPage
         }
         fallback={<TeamsTableSkeleton colCount={9} rowCount={6} />}
       >

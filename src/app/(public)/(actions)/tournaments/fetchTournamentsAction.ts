@@ -3,18 +3,16 @@
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type TournamentType = {
+export type TOURNAMENT_TYPE = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
-  gender: string;
 };
 
 type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  tournaments: TournamentType[];
+  tournaments: TOURNAMENT_TYPE[];
 }>;
 
 export const fetchTournamentsAction = async (): ResponseAction => {
@@ -35,15 +33,17 @@ export const fetchTournamentsAction = async (): ResponseAction => {
         id: true,
         name: true,
         permalink: true,
-        category: true,
-        gender: true,
       },
     });
 
     return {
       ok: true,
       message: '! Los torneos fueron obtenidos correctamente 👍',
-      tournaments,
+      tournaments: tournaments.map((t) => ({
+        id: t.id,
+        name: t.name,
+        permalink: t.permalink,
+      })),
     };
   } catch (error) {
     if (error instanceof Error) {

@@ -8,10 +8,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
-import type { StandingType } from '../(actions)/fetchStandingsAction';
+import type { STANDING_TYPE } from '../(actions)/fetchStandingsAction';
 
 type Props = Readonly<{
-  standings: StandingType[];
+  standings: STANDING_TYPE[];
 }>;
 
 export const StandingsTable: FC<Props> = ({ standings }) => {

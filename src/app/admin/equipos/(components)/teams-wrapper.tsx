@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
-import { fetchTeamsAction } from '../../equipos/(actions)/fetchTeamsAction';
+import { fetchAdminTeamsAction } from '../../equipos/(actions)/fetch-admin-teams.action';
 import { TeamsTable } from '../../equipos/(components)/teams-table';
 
 type Props = Readonly<{
@@ -19,7 +19,7 @@ export const TeamsWrapper: FC<Props> = async ({
     headers: await headers(),
   });
 
-  const { teams, pagination } = await fetchTeamsAction(tournamentId, {
+  const { teams, pagination } = await fetchAdminTeamsAction(tournamentId, {
     page: currentPage,
     take: 12,
     searchTerm: query,

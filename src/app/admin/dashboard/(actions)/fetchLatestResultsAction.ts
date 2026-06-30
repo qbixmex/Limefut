@@ -16,8 +16,11 @@ export type ResponseFetch = Promise<{
     localTeamScore: number;
     visitorTeamName: string;
     visitorTeamScore: number;
-    category: string;
-    format: string;
+    category: {
+      id: string;
+      name: string;
+      permalink: string;
+    } | null;
   }[];
 }>;
 
@@ -44,13 +47,14 @@ export const fetchLatestResultsAction = async ({ quantity }: Options): Promise<R
         visitor: {
           select: { name: true },
         },
-        tournament: {
+        visitorScore: true,
+        category: {
           select: {
-            category: true,
-            format: true,
+            id: true,
+            name: true,
+            permalink: true,
           },
         },
-        visitorScore: true,
       },
       take: quantity,
     });
@@ -59,13 +63,11 @@ export const fetchLatestResultsAction = async ({ quantity }: Options): Promise<R
       ok: true,
       message: '! Los resultados fueron obtenidos correctamente 👍',
       latestResults: matches.map((match) => ({
-        id: match.id,
+        ...match,
         localTeamName: match.local.name,
         localTeamScore: match.localScore as number,
         visitorTeamName: match.visitor.name,
         visitorTeamScore: match.visitorScore as number,
-        category: match.tournament.category,
-        format: match.tournament.format,
       })),
     };
   } catch (error) {
