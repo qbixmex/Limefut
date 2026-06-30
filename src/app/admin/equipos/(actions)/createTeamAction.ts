@@ -15,11 +15,6 @@ type ResponseAction = Promise<{
     tournament: {
       permalink: string;
     } | null;
-    categories: {
-      id: string;
-      name: string;
-      permalink: string;
-    }[];
   } | null;
 }>;
 
@@ -31,17 +26,23 @@ type Team = {
   address: string | null;
   permalink: string;
   imagePublicID: string | null;
-  category: string;
   format: string;
   gender: string;
   country: string | null;
   city: string | null;
   active: boolean;
-  tournamentId: string | null;
   coachId: string | null;
   emails: string[];
   createdAt: Date;
   updatedAt: Date;
+  tournament: {
+    name: string;
+    permalink: string;
+  } | null;
+  category: {
+    name: string;
+    permalink: string;
+  } | null;
 };
 
 export const createTeamAction = async (
@@ -59,7 +60,7 @@ export const createTeamAction = async (
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
-    category: formData.get('category') ?? '',
+    categoryId: formData.get('categoryId') ?? null,
     format: formData.get('format') as string,
     gender: formData.get('gender') as string,
     tournamentId: formData.get('tournamentId') ?? null,
@@ -105,22 +106,36 @@ export const createTeamAction = async (
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const teamInclude = {
-        tournament: {
-          select: { permalink: true },
-        },
-        categories: {
+      const teamSelect = {
+        id: true,
+        name: true,
+        permalink: true,
+        format: true,
+        gender: true,
+        country: true,
+        state: true,
+        city: true,
+        coachId: true,
+        emails: true,
+        address: true,
+        active: true,
+        imageUrl: true,
+        imagePublicID: true,
+        createdAt: true,
+        updatedAt: true,
+        category: {
           select: {
-            category: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
-            },
+            name: true,
+            permalink: true,
           },
         },
-      } satisfies Prisma.TeamInclude;
+        tournament: {
+          select: {
+            name: true,
+            permalink: true,
+          },
+        },
+      } satisfies Prisma.TeamSelect;
 
       const createdTeam = await transaction.team.create({
         data: {
@@ -128,7 +143,7 @@ export const createTeamAction = async (
           permalink: teamToSave.permalink,
           imageUrl: cloudinaryResponse?.secureUrl ?? undefined,
           imagePublicID: cloudinaryResponse?.publicId ?? undefined,
-          category: teamToSave.category,
+          categoryId: teamToSave.categoryId,
           format: teamToSave.format,
           gender: teamToSave.gender as GENDER_TYPE,
           country: teamToSave.country,
@@ -140,7 +155,7 @@ export const createTeamAction = async (
           tournamentId: teamToSave.tournamentId ?? null,
           coachId: teamToSave.coachId ?? null,
         },
-        include: teamInclude,
+        select: teamSelect,
       });
 
       // Create TeamField records for the many-to-many relationship
@@ -156,10 +171,7 @@ export const createTeamAction = async (
       return {
         ok: true,
         message: '¡ Equipo creado satisfactoriamente 👍 !',
-        team: {
-          ...createdTeam,
-          categories: createdTeam.categories.map(tc => tc.category),
-        },
+        team: createdTeam,
       };
     });
 

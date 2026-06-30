@@ -24,13 +24,13 @@ export type MatchType = {
     name: string;
     permalink: string;
     imageUrl: string | null;
-    category: string;
+    category: CATEGORY_TYPE | null;
   };
   visitor: {
     name: string;
     permalink: string;
     imageUrl: string | null;
-    category: string;
+    category: CATEGORY_TYPE | null;
   };
   penaltyShootout: {
     id: string;
@@ -58,6 +58,11 @@ export type MatchType = {
     }[];
   } | null | undefined;
 };
+
+type CATEGORY_TYPE = {
+  name: string;
+  permalink: string;
+}
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -100,7 +105,12 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
             name: true,
             permalink: true,
             imageUrl: true,
-            category: true,
+            category: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
           },
         },
         visitor: {
@@ -108,7 +118,12 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
             name: true,
             permalink: true,
             imageUrl: true,
-            category: true,
+            category: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
           },
         },
         penaltyShootout: {

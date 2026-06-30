@@ -37,25 +37,11 @@ export const createTeamSchema = z.object({
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
-  category: z.string()
-    .min(3, { message: '¡ La categoría debe ser mayor a 3 caracteres !' })
-    .max(200, { message: '¡ La categoría debe ser menor a 200 caracteres !' })
-    .refine(
-      (value) => !/\s/.test(value),
-      { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
-    )
-    .refine(
-      (value) => !/[áéíóúÁÉÍÓÚ]/.test(value),
-      { message: '¡ El enlace permanente no debe contener acentos (á, é, í, ó, ú) !' },
-    )
-    .refine(
-      (value) => !/[ñÑ]/.test(value),
-      { message: '¡ El enlace permanente no debe contener la letra ñ !' },
-    )
-    .refine(
-      (value) => /^[a-zA-Z0-9_-]+$/.test(value),
-      { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
-    ),
+  categoryId: z.union([
+    z.uuid('El id de la categoría debe ser un UUID válido'),
+    z.literal(''),
+    z.null(),
+  ]).optional(),
   format: z.string()
     .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
     .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' }),

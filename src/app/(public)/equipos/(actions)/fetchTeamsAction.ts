@@ -7,7 +7,10 @@ export type TeamType = {
   id: string;
   name: string;
   permalink: string;
-  category: string;
+  category: {
+    name: string;
+    permalink: string;
+  } | null;
   imageUrl: string | null;
 };
 
@@ -57,7 +60,12 @@ export const fetchTeamsAction = async (
         name: true,
         permalink: true,
         imageUrl: true,
-        category: true,
+        category: {
+          select: {
+            name: true,
+            permalink: true,
+          },
+        },
         format: true,
       },
     });

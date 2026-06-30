@@ -4,7 +4,6 @@ export interface Team {
   permalink: string;
   imageUrl: string | null;
   imagePublicID: string | null;
-  category: string | null;
   format: string | null;
   gender: GENDER_TYPE;
   country: string | null;
