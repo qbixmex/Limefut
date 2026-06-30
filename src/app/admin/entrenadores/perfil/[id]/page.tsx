@@ -146,7 +146,7 @@ const CoachPageContent: FC<Props> = async ({ params }) => {
                     <Link key={team.id} href={`/admin/equipos/${team.id}`}>
                       <Badge variant="outline-info">
                         <span>{team.name},</span>
-                        <span>{team.category}</span>
+                        <span>{team.category?.name}</span>
                       </Badge>
                     </Link>
                   ))

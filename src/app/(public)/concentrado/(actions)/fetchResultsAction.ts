@@ -13,16 +13,19 @@ export type DataType = {
   tournament: {
     id: string;
     permalink: string;
-    teams: TeamType[];
+    teams: TEAM_TYPE[];
   } | null;
   results: ResultType[];
 };
 
-export type TeamType = {
+export type TEAM_TYPE = {
   id?: string;
   name: string;
   permalink: string;
-  category: string;
+  category: {
+    name: string;
+    permalink: string;
+  } | null;
   format: string;
 }
 
@@ -32,8 +35,8 @@ export type ResultType = {
   visitorScore: number | null;
   matchDate: Date | null;
   status: string;
-  localTeam: TeamType;
-  visitorTeam: TeamType;
+  localTeam: TEAM_TYPE;
+  visitorTeam: TEAM_TYPE;
   penaltyShootout: {
     localGoals: number;
     visitorGoals: number;
@@ -62,7 +65,12 @@ export const fetchResultsAction = async (
           id: true,
           name: true,
           permalink: true,
-          category: true,
+          category: {
+            select: {
+              name: true,
+              permalink: true,
+            },
+          },
           format: true,
         },
         orderBy: { name: 'asc' },

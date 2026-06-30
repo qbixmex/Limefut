@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import type { ResultType, TeamType } from '../(actions)/fetchResultsAction';
+import type { ResultType, TEAM_TYPE } from '../(actions)/fetchResultsAction';
 
-export const useConcentratedResults = (results: ResultType[], teams: TeamType[]) => {
+export const useConcentratedResults = (results: ResultType[], teams: TEAM_TYPE[]) => {
   const resultsMap = new Map();
 
   results.forEach((result) => {

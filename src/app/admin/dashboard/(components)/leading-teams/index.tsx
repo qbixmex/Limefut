@@ -41,7 +41,7 @@ export const LeadingTeams = async () => {
                       target="_blank"
                     >
                       <span>{leading.team.name},</span>
-                      <span>{leading.team.category},</span>
+                      <span>{leading.team.category?.permalink},</span>
                       <span className="space-x-1">
                         <span>{leading.team.format}</span>
                         <span>vs</span>

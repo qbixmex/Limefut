@@ -88,9 +88,9 @@ export const TeamForm: FC<Props> = ({
     defaultValues: {
       name: team?.name ?? '',
       permalink: team?.permalink ?? '',
-      category: team?.category ?? '',
+      categoryId: team?.category?.id ?? undefined,
       format: team?.format ?? '',
-      gender: team?.gender ?? '',
+      gender: team?.gender ?? undefined,
       tournamentId: team?.tournament?.id ?? '',
       country: team?.country ?? '',
       state: team?.state ?? '',
@@ -122,7 +122,7 @@ export const TeamForm: FC<Props> = ({
 
     formData.append('name', data.name as string);
     formData.append('permalink', data.permalink as string);
-    formData.append('category', data.category as string);
+    if (data.categoryId) formData.append('category', data.categoryId);
     formData.append('format', data.format as string);
     formData.append('gender', data.gender as string);
 
@@ -289,7 +289,7 @@ export const TeamForm: FC<Props> = ({
           <div className="w-full lg:w-1/2">
             <FormField
               control={form.control}
-              name="category"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>

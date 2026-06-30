@@ -24,7 +24,10 @@ export type TournamentType = {
     id: string;
     name: string;
     permalink: string;
-    category: string;
+    category: {
+      name: string;
+      permalink: string;
+    } | null;
     format: string;
     imageUrl: string | null;
   }[];
@@ -70,14 +73,17 @@ export const fetchTournamentAction = async (permalink: string): FetchTournamentR
         endDate: true,
         stage: true,
         teams: {
-          where: {
-            active: true,
-          },
+          where: { active: true },
           select: {
             id: true,
             name: true,
             permalink: true,
-            category: true,
+            category: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
             format: true,
             imageUrl: true,
           },
