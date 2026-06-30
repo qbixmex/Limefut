@@ -20,8 +20,18 @@ export type MatchType = {
     country: string | null;
     season: string | null;
   };
-  local: TEAM_TYPE;
-  visitor: TEAM_TYPE;
+  local: {
+    name: string;
+    permalink: string;
+    imageUrl: string | null;
+    category: CATEGORY_TYPE | null;
+  };
+  visitor: {
+    name: string;
+    permalink: string;
+    imageUrl: string | null;
+    category: CATEGORY_TYPE | null;
+  };
   penaltyShootout: {
     id: string;
     status: string;
@@ -49,11 +59,9 @@ export type MatchType = {
   } | null | undefined;
 };
 
-type TEAM_TYPE = {
+type CATEGORY_TYPE = {
   name: string;
   permalink: string;
-  imageUrl: string | null;
-  category: string | null;
 }
 
 export type ResponseAction = Promise<{
@@ -97,7 +105,12 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
             name: true,
             permalink: true,
             imageUrl: true,
-            category: true,
+            category: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
           },
         },
         visitor: {
@@ -105,7 +118,12 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
             name: true,
             permalink: true,
             imageUrl: true,
-            category: true,
+            category: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
           },
         },
         penaltyShootout: {

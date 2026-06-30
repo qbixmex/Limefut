@@ -93,7 +93,7 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Categoría</TableHead>
-                    <TableCell>{team.category}</TableCell>
+                    <TableCell>{team.category?.name ?? 'Aún no asignada'}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">Formato</TableHead>

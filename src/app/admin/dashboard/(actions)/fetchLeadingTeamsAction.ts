@@ -14,7 +14,10 @@ export type ResponseFetch = Promise<{
     team: {
       id: string;
       name: string;
-      category: string | null;
+      category: {
+        name: string;
+        permalink: string;
+      } | null;
       format: string;
     };
     points: number;
@@ -42,7 +45,12 @@ export const fetchLeadingTeamsAction = async ({ quantity }: Options): Promise<Re
           select: {
             id: true,
             name: true,
-            category: true,
+            category: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
             format: true,
           },
         },

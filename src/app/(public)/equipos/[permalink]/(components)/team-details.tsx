@@ -86,11 +86,11 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                     team.category
                       ? (
                         <Badge variant="outline-info">
-                          {category}
+                          {team.category.name}
                         </Badge>
                       )
                       : (
-                        <span className="text-gray-500 italic">Aun no asignadas</span>
+                        <span className="text-gray-500 italic">Aun no asignada</span>
                       )
                   }
                 </TableCell>

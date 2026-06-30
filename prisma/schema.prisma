@@ -178,6 +178,7 @@ model Category {
 
   // Relations
   tournaments TournamentCategory[]
+  teams       Team[]
   matches     Match[]
   playoffs    Playoff[]
   standings   Standings[]
@@ -205,7 +206,6 @@ model Team {
   permalink     String
   imageUrl      String?  @map("image_url")
   imagePublicID String?  @map("image_public_id")
-  category      String?
   categoryName  String?  @map("category_name")
   format        String
   gender        Gender   @default(male)
@@ -222,6 +222,8 @@ model Team {
   players               Player[]
   tournamentId          String?           @map("tournament_id")
   tournament            Tournament?       @relation(fields: [tournamentId], references: [id])
+  categoryId            String?           @map("category_id")
+  category              Category?         @relation(fields: [categoryId], references: [id])
   standings             Standings[]
   homeMatches           Match[]           @relation("HomeMatches")
   awayMatches           Match[]           @relation("AwayMatches")

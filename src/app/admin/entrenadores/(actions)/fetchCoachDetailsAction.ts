@@ -16,7 +16,12 @@ export type Team = {
   id: string;
   name: string;
   permalink: string;
-  category: string | null;
+  category: CATEGORY_TYPE | null;
+};
+
+type CATEGORY_TYPE = {
+  name: string;
+  permalink: string;
 };
 
 export const fetchCoachDetailsAction = async (
@@ -45,7 +50,12 @@ export const fetchCoachDetailsAction = async (
             id: true,
             name: true,
             permalink: true,
-            category: true,
+            category: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
           },
         },
       },

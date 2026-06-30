@@ -24,7 +24,6 @@ export type MatchResponse = {
     name: string;
     id: string;
     permalink: string;
-    category: string | null;
     format: string | null;
     imageUrl: string | null,
   };
@@ -109,7 +108,6 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
           id: true,
           name: true,
           permalink: true,
-          category: true,
           format: true,
           imageUrl: true,
         },
