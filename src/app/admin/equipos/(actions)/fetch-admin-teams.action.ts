@@ -5,23 +5,6 @@ import prisma from '@/lib/prisma';
 import type { Coach, Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
-type Options = Readonly<{
-  page?: number;
-  take?: number;
-  searchTerm?: string;
-}>;
-
-export type TEAM_TYPE = {
-  id: string;
-  name: string;
-  permalink: string;
-  imageUrl: string | null,
-  gender: string | null;
-  active: boolean;
-  coach: Pick<Coach, 'id' | 'name'> | null;
-  playersCount: number;
-};
-
 export type ResponseFetchTeams = Promise<{
   ok: boolean;
   message: string;
@@ -29,8 +12,27 @@ export type ResponseFetchTeams = Promise<{
   pagination: Pagination;
 }>;
 
+export type TEAM_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+  imageUrl: string | null,
+  format: string;
+  gender: string | null;
+  active: boolean;
+  coach: Pick<Coach, 'id' | 'name'> | null;
+  playersCount: number;
+};
+
+type Options = Readonly<{
+  page?: number;
+  take?: number;
+  searchTerm?: string;
+}>;
+
 export const fetchAdminTeamsAction = async (
   tournamentId: string,
+  categoryId: string,
   options?: Options,
 ): ResponseFetchTeams => {
   'use cache';
@@ -45,7 +47,12 @@ export const fetchAdminTeamsAction = async (
   if (isNaN(take)) take = 12;
 
   const whereCondition: Prisma.TeamWhereInput = {
-    tournamentId: tournamentId !== 'none' ? tournamentId : null,
+    AND: [
+      {
+        tournamentId: (tournamentId !== 'none') ? tournamentId : null,
+        categoryId,
+      },
+    ],
   };
 
   if (options?.searchTerm) {
@@ -60,27 +67,29 @@ export const fetchAdminTeamsAction = async (
   }
 
   try {
+    const teamSelect = {
+      id: true,
+      name: true,
+      permalink: true,
+      imageUrl: true,
+      format: true,
+      gender: true,
+      active: true,
+      coach: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      _count: {
+        select: { players: true },
+      },
+    } satisfies Prisma.TeamSelect;
+
     const teams = await prisma.team.findMany({
       where: whereCondition,
       orderBy: { name: 'asc' },
-      select: {
-        id: true,
-        name: true,
-        permalink: true,
-        imageUrl: true,
-        format: true,
-        gender: true,
-        active: true,
-        coach: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        _count: {
-          select: { players: true },
-        },
-      },
+      select: teamSelect,
       take,
       skip: (page - 1) * take,
     });

@@ -6,13 +6,6 @@ import { uploadImage, deleteImage } from '@/shared/actions';
 import { editTeamSchema } from '@/shared/schemas';
 import type { Prisma } from '@/generated/prisma/client';
 
-type Options = {
-  formData: FormData;
-  teamId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
-};
-
 type ResponseAction = Promise<{
   ok: boolean;
   message: string;
@@ -41,28 +34,33 @@ type TEAM_TYPE = {
   coachId: string | null;
   emails: string[];
   address: string | null;
-  active: boolean;
   imageUrl: string | null;
   imagePublicID: string | null;
+  active: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
 
 export const updateTeamAction = async ({
+  authenticatedUserId,
+  authenticatedUserRoles,
   formData,
   teamId,
-  userRoles,
-  authenticatedUserId,
-}: Options): ResponseAction => {
+}: {
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+  formData: FormData;
+  teamId: string;
+}): ResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
-      message: '¡ Usuario no autenticado !',
+      message: '¡ Debes estar autentificado para realizar esta acción !',
       updatedTeam: null,
     };
   }
 
-  if (!userRoles.includes('admin')) {
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -73,14 +71,11 @@ export const updateTeamAction = async ({
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
-    categoryId: formData.get('categoryId') ?? null,
     format: formData.get('format') as string,
     gender: formData.get('gender') as string,
-    tournamentId: formData.get('tournamentId') ?? null,
     country: formData.get('country') as string ?? null,
     state: formData.get('state') as string ?? null,
     city: formData.get('city') as string ?? null,
-    coachId: formData.get('coachId') ?? null,
     emails: JSON.parse(formData.get('emails') as string),
     address: formData.get('address') ?? null,
     image: formData.get('image'),
@@ -88,8 +83,10 @@ export const updateTeamAction = async ({
       ? JSON.parse(formData.get('fieldsIds') as string ?? 'undefined')
       : undefined,
     active: formData.get('active') === 'true',
+    categoryId: formData.get('categoryId') ?? null,
+    tournamentId: formData.get('tournamentId') ?? null,
+    coachId: formData.get('coachId') ?? null,
   };
-
   const teamVerified = editTeamSchema.safeParse(rawData);
 
   if (!teamVerified.success) {
@@ -164,7 +161,11 @@ export const updateTeamAction = async ({
             active: teamToSave.active,
             categoryId: teamToSave.categoryId,
             tournamentId: teamToSave.tournamentId,
-            coachId: teamToSave.coachId ?? undefined,
+            coachId: teamToSave.coachId
+              ? teamToSave.coachId === 'none'
+                ? null
+                : teamToSave.coachId
+              : undefined,
           },
           select: teamSelect,
         });

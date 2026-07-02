@@ -1,10 +1,7 @@
-import { fetchAdminTournamentAction } from '@/shared/actions/fetch-admin-tournament.action';
-import { ROUTES } from '@/shared/constants/routes';
-import { redirect } from 'next/navigation';
 import { Suspense, type FC } from 'react';
 import { TeamsSelectorSkeleton } from './teams-selector-skeleton';
+import { fetchTeamsForPlayer } from '../(actions)/fetchTeamsForPlayer';
 import { TeamsSelector } from './teams-selector';
-import { fetchAdminTeamsAction } from '../../equipos/(actions)';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -24,24 +21,26 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
     return null;
   }
 
-  const { ok, message, tournamentId } = await fetchAdminTournamentAction({
-    tournamentPermalink,
-    categoryPermalink,
-  });
-
-  if (!ok && !tournamentId) {
-    redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(message)}`);
-  }
-
   return (
     <Suspense fallback={<TeamsSelectorSkeleton />}>
-      <TeamsWrapper tournamentId={tournamentId as string} />
+      <TeamsWrapper
+        tournamentPermalink={tournamentPermalink}
+        categoryPermalink={categoryPermalink}
+      />
     </Suspense>
   );
 };
 
-const TeamsWrapper: FC<{ tournamentId: string }> = async ({ tournamentId }) => {
-  const { teams } = await fetchAdminTeamsAction(tournamentId as string);
+type TeamsProps = Readonly<{
+  tournamentPermalink: string;
+  categoryPermalink: string;
+}>;
+
+const TeamsWrapper: FC<TeamsProps> = async ({ tournamentPermalink, categoryPermalink }) => {
+  const { teams } = await fetchTeamsForPlayer({
+    tournamentPermalink,
+    categoryPermalink,
+  });
 
   return (
     <section className="w-full lg:w-1/2 2xl:w-full 2xl:max-w-[600px]">

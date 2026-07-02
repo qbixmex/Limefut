@@ -6,13 +6,13 @@ import { updateTag } from 'next/cache';
 export const addTeamToStandingsAction = async ({
   tournamentId,
   teamId,
-  userRole,
+  userRoles,
 }: {
   tournamentId: string,
   teamId: string,
-  userRole: string[] | null,
+  userRoles: string[] | null | undefined,
 }): Promise<{ ok: boolean; }> => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  if ((userRoles) && (!userRoles.includes('admin'))) {
     return { ok: false };
   }
 

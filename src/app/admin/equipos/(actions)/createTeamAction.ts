@@ -11,14 +11,10 @@ import type { Prisma } from '@/generated/prisma/client';
 type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  team: Team & {
-    tournament: {
-      permalink: string;
-    } | null;
-  } | null;
+  team: TEAM_TYPE | null;
 }>;
 
-type Team = {
+type TEAM_TYPE = {
   id: string;
   name: string;
   imageUrl: string | null;
@@ -45,11 +41,27 @@ type Team = {
   } | null;
 };
 
-export const createTeamAction = async (
-  formData: FormData,
-  userRole: string[] | null,
-): ResponseAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+export const createTeamAction = async ({
+  formData,
+  authenticatedUserId,
+  authenticatedUserRoles,
+}: {
+  formData: FormData;
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+}): ResponseAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Usuario no autenticado !',
+      team: null,
+    };
+  }
+
+  if (
+    (authenticatedUserRoles && authenticatedUserRoles.length > 0) &&
+    (!authenticatedUserRoles.includes('admin'))
+  ) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -60,14 +72,14 @@ export const createTeamAction = async (
   const rawData = {
     name: formData.get('name') as string,
     permalink: formData.get('permalink') ?? '',
-    categoryId: formData.get('categoryId') ?? null,
     format: formData.get('format') as string,
     gender: formData.get('gender') as string,
+    categoryId: formData.get('categoryId') ?? null,
     tournamentId: formData.get('tournamentId') ?? null,
     country: formData.get('country') as string,
     state: formData.get('state') as string,
     city: formData.get('city') as string,
-    coachId: formData.get('coachId') as string,
+    coachId: formData.get('coachId') ?? null,
     emails: JSON.parse(formData.get('emails') as string),
     address: formData.get('address') as string,
     image: formData.get('image') as File,
@@ -143,7 +155,6 @@ export const createTeamAction = async (
           permalink: teamToSave.permalink,
           imageUrl: cloudinaryResponse?.secureUrl ?? undefined,
           imagePublicID: cloudinaryResponse?.publicId ?? undefined,
-          categoryId: teamToSave.categoryId,
           format: teamToSave.format,
           gender: teamToSave.gender as GENDER_TYPE,
           country: teamToSave.country,
@@ -152,6 +163,7 @@ export const createTeamAction = async (
           emails: teamToSave.emails,
           address: teamToSave.address,
           active: teamToSave.active,
+          categoryId: teamToSave.categoryId,
           tournamentId: teamToSave.tournamentId ?? null,
           coachId: teamToSave.coachId ?? null,
         },

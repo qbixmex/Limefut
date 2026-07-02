@@ -37,22 +37,18 @@ export const createTeamSchema = z.object({
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')
     .refine((file) => { return file && ACCEPTED_FILE_TYPES.includes(file.type); }, 'El tipo de archivo debe ser uno de los siguientes: png, jpeg, jpg, gif, webp')
     .nullish(),
-  categoryId: z.union([
-    z.uuid('El id de la categoría debe ser un UUID válido'),
+  tournamentId: z.union([
+    z.uuid('El id del torneo debe ser un UUID válido'),
     z.literal(''),
     z.null(),
   ]).optional(),
+  categoryId: z.uuid('El id de la categoría debe ser un UUID válido'),
   format: z.string()
     .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
     .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' }),
   gender: z.enum(['male', 'female'], {
     error: '¡ Debes seleccionar al menos un género !',
   }),
-  tournamentId: z.union([
-    z.uuid('El id del torneo debe ser un UUID válido'),
-    z.literal(''),
-    z.null(),
-  ]).optional(),
   country: z.union([
     z.literal(''),
     z.string()
@@ -75,7 +71,8 @@ export const createTeamSchema = z.object({
     z.null(),
   ]).optional(),
   coachId: z.union([
-    z.uuid('El id del entrenador debe ser un UUID válido'),
+    z.string('¡ El entrenador debe ser una cadena de texto válida !')
+      .min(4, { message: '¡ El entrenador debe ser mayor a 4 caracteres !' }),
     z.literal(''),
     z.null(),
   ]).optional(),

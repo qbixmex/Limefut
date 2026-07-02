@@ -20,12 +20,11 @@ export const StandingsContainer: FC<Props> = async ({ searchParams }) => {
     return null;
   }
 
-  const { ok, message, tournamentId } = await fetchAdminTournamentAction({
+  const { ok, message, tournament } = await fetchAdminTournamentAction(
     tournamentPermalink,
-    categoryPermalink,
-  });
+  );
 
-  if (!ok && !tournamentId) {
+  if (!ok && !tournament) {
     redirect(`${ROUTES.ADMIN_STANDINGS}?error=${encodeURIComponent(message)}`);
   }
 
@@ -34,7 +33,7 @@ export const StandingsContainer: FC<Props> = async ({ searchParams }) => {
       key={`${tournamentPermalink ?? 'tournament'}-${categoryPermalink ?? 'category'}`}
       fallback={<SkeletonTable />}
     >
-      <StandingsContent tournamentId={tournamentId as string} />
+      <StandingsContent tournamentId={tournament?.id as string} />
     </Suspense>
   );
 };
