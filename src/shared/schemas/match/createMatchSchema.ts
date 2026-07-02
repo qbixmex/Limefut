@@ -42,6 +42,7 @@ export const createMatchSchema = z.object({
     .min(0, '¡ La sede debe ser mínimo 1 !'),
   tournament: z
     .string('¡ El torneo debe ser una cadena de texto !')
+    .trim()
     .min(1, '¡ Debe seleccionar un torneo de la lista !'),
   category: z
     .string('¡ La categoría debe ser una cadena de texto !')

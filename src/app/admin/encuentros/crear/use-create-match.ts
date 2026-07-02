@@ -5,10 +5,25 @@ import { createMatchSchema } from '@/shared/schemas';
 import { MATCH_STATUS } from '@/shared/enums';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
+import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/create-match.action';
 import { createMatchAction } from '@/app/admin/encuentros/(actions)/create-match.action';
 import { toast } from 'sonner';
 import { ROUTES } from '@/shared/constants/routes';
 import { useRouter, useSearchParams } from 'next/navigation';
+
+const FORM_DEFAULT_VALUES = {
+  localTeamId: '',
+  localScore: 0,
+  visitorTeamId: '',
+  visitorScore: 0,
+  place: '',
+  referee: undefined,
+  matchDate: undefined,
+  status: undefined,
+  week: 0,
+  tournament: undefined,
+  category: undefined,
+};
 
 export const useCreateMatch = ({
   authenticatedUserId,
@@ -23,15 +38,8 @@ export const useCreateMatch = ({
   const form = useForm<z.infer<typeof createMatchSchema>>({
     resolver: zodResolver(createMatchSchema),
     defaultValues: {
-      localTeamId: '',
-      localScore: 0,
-      visitorTeamId: '',
-      visitorScore: 0,
-      place: '',
-      referee: undefined,
-      matchDate: undefined,
+      ...FORM_DEFAULT_VALUES,
       status: MATCH_STATUS.SCHEDULED,
-      week: 0,
       tournament: searchParams.get('tournament') ?? undefined,
       category: searchParams.get('category') ?? undefined,
     },
@@ -64,17 +72,22 @@ export const useCreateMatch = ({
       return;
     }
 
+    form.reset(FORM_DEFAULT_VALUES);
     toast.success(response.message);
 
-    // router.replace(ROUTES.ADMIN_MATCHES +
-    //   `?tournament=${response.match?.tournament.permalink}` +
-    //   `&category=${response.match?.tournament.category}` +
-    //   `&sort-week=${response.match?.week ?? 'unassigned'}`,
-    // );
+    const match = response.match as MATCH_TYPE;
+
+    router.replace(ROUTES.ADMIN_MATCHES +
+      `?tournament=${match.tournament.permalink}` +
+      `&category=${match.category}` +
+      `&sort-week=${match.week ?? 'unassigned'}`,
+    );
   };
 
   const handleNavigateBack = () => {
     const params = new URLSearchParams(searchParams);
+
+    form.reset(FORM_DEFAULT_VALUES);
 
     if (params.has('selected-week')) params.delete('selected-week');
 

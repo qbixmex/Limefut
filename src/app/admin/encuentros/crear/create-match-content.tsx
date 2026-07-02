@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { CreateMatchForm } from '../(components)/create-match-form';
 import { headers } from 'next/headers';
@@ -26,12 +27,6 @@ export const MatchContent: FC<Props> = async ({ searchParams }) => {
     tournament: tournamentPermalink,
     category: categoryPermalink,
   } = await searchParams;
-
-  let tournament_category: string = 'tournament-category';
-
-  if (tournamentPermalink && categoryPermalink) {
-    tournament_category = `${tournamentPermalink}-${categoryPermalink}`;
-  }
 
   const tournamentsResponse = await fetchTournamentsForMatchAction();
 
@@ -62,7 +57,7 @@ export const MatchContent: FC<Props> = async ({ searchParams }) => {
 
   return (
     <CreateMatchForm
-      key={tournament_category}
+      key={randomUUID()}
       tournaments={tournamentsResponse.tournaments}
       categories={categoriesResponse.categories}
       teams={teams}

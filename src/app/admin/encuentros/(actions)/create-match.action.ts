@@ -4,47 +4,50 @@ import prisma from '@/lib/prisma';
 import { createMatchSchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { Prisma } from '@/generated/prisma/client';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
   message: string;
-  match: {
-    id: string;
-    week: number | null;
-    status: string;
-    place: string | null;
-    referee: string | null;
-    localScore: number | null;
-    visitorScore: number | null;
-    matchDate: Date | null;
-    localId: string;
-    visitorId: string;
-    category: {
-      id: string;
-      name: string;
-      permalink: string;
-    } | null,
-    tournament: {
-      id: string;
-      name: string;
-      permalink: string;
-    };
-    local: {
-      id: string;
-      name: string;
-    };
-    visitor: {
-      id: string;
-      name: string;
-    };
-  } | null;
+  match: MATCH_TYPE | null;
 }>;
+
+export type MATCH_TYPE = {
+  id: string;
+  week: number | null;
+  status: string;
+  place: string | null;
+  referee: string | null;
+  localScore: number | null;
+  visitorScore: number | null;
+  matchDate: Date | null;
+  localId: string;
+  visitorId: string;
+  tournament: {
+    id: string;
+    name: string;
+    permalink: string;
+  };
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null,
+  local: {
+    id: string;
+    name: string;
+  };
+  visitor: {
+    id: string;
+    name: string;
+  };
+};
 
 export const createMatchAction = async ({
   formData,
   authenticatedUserId,
   authenticatedUserRoles,
-} : {
+}: {
   authenticatedUserId: string | undefined;
   authenticatedUserRoles: string[] | null | undefined;
   formData: FormData;
@@ -105,7 +108,6 @@ export const createMatchAction = async ({
       const tournament = await transaction.tournament.findFirst({
         where: {
           permalink: tournamentPermalink,
-          category: categoryPermalink,
         },
         select: { id: true },
       });
@@ -113,10 +115,64 @@ export const createMatchAction = async ({
       if (!tournament) {
         return {
           ok: false,
-          message: `¡ El torneo: "${tournamentPermalink}" con la categoría: "${categoryPermalink}" no existe !`,
+          message: `¡ El torneo con el enlace permanente: "${tournamentPermalink}" no existe !`,
           match: null,
         };
       }
+
+      const category = await transaction.category.findFirst({
+        where: {
+          permalink: categoryPermalink,
+        },
+        select: { id: true },
+      });
+
+      if (!category) {
+        return {
+          ok: false,
+          message: `¡ La categoría con el enlace permanente: "${categoryPermalink}" no existe !`,
+          match: null,
+        };
+      }
+
+      const selectMatch = {
+        id: true,
+        localId: true,
+        visitorId: true,
+        place: true,
+        matchDate: true,
+        week: true,
+        referee: true,
+        localScore: true,
+        visitorScore: true,
+        status: true,
+        local: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        visitor: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        tournament: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
+      } satisfies Prisma.MatchSelect;
 
       const createdMatch = await transaction.match.create({
         data: {
@@ -129,48 +185,12 @@ export const createMatchAction = async ({
           matchDate: matchToSave.matchDate,
           status: matchToSave.status as MATCH_STATUS_TYPE,
           tournamentId: tournament.id,
+          categoryId: category.id,
           week: matchToSave.week !== 0
             ? matchToSave.week as number
             : null,
         },
-        select: {
-          id: true,
-          localId: true,
-          visitorId: true,
-          place: true,
-          matchDate: true,
-          week: true,
-          referee: true,
-          localScore: true,
-          visitorScore: true,
-          status: true,
-          local: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          visitor: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          tournament: {
-            select: {
-              id: true,
-              name: true,
-              permalink: true,
-            },
-          },
-          category: {
-            select: {
-              id: true,
-              name: true,
-              permalink: true,
-            },
-          },
-        },
+        select: selectMatch,
       });
 
       return {
@@ -204,8 +224,8 @@ export const createMatchAction = async ({
 
     return prismaTransaction;
   } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
@@ -213,18 +233,25 @@ export const createMatchAction = async ({
           match: null,
         };
       }
+
+      console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
       console.log('CAUSE:', error.cause);
       console.log('NAME:', error.name);
       console.log('META:', error.meta);
       console.log('MESSAGE:', error.message);
-      console.log(error.message);
+      console.log('='.repeat(54));
+
       return {
         ok: false,
         message: '¡ Error al crear el encuentro, revise los logs del servidor !',
         match: null,
       };
     }
-    console.log((error as Error).message);
+
+    console.log('='.repeat(20) + ' UNKNOWN ERROR ' + '='.repeat(20));
+    console.log(error);
+    console.log('='.repeat(55));
+
     return {
       ok: false,
       message: '¡ Error inesperado, revise los logs del servidor !',
