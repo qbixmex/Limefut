@@ -9,7 +9,7 @@ export type ResponseFetchAction = Promise<{
   coaches: {
     id: string;
     name: string;
-  }[] | null;
+  }[];
 }>;
 
 export const fetchCoachesForTeam = async (): ResponseFetchAction => {
@@ -39,14 +39,14 @@ export const fetchCoachesForTeam = async (): ResponseFetchAction => {
       return {
         ok: false,
         message: error.message,
-        coaches: null,
+        coaches: [],
       };
     }
     console.log(error);
     return {
       ok: false,
       message: '¡ Error inesperado al obtener los entrenadores ❌ !, revise los logs del servidor',
-      coaches: null,
+      coaches: [],
     };
   }
 };

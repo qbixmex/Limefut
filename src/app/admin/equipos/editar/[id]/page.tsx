@@ -1,20 +1,6 @@
 import { Suspense, type FC } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { auth } from '@/lib/auth';
-import { redirect } from 'next/navigation';
-import type { Session } from '@/lib/auth-client';
-import { fetchCategoriesAction, fetchTeamAction, fetchTournamentsForTeam, type TournamentType } from '../../(actions)';
-import { TeamForm } from '../../(components)/teamForm';
-import type { Coach } from '@/shared/interfaces';
-import { fetchCoachesForTeam } from '../../(actions)/fetchCoachesForTeam';
-import { headers } from 'next/headers';
-import { fetchFieldsForTeam } from '../../(actions)/fetchFieldsForTeam';
-import { ROUTES } from '@/shared/constants/routes';
+import { EditTeamView } from './edit-team-view';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Props = Readonly<{
   params: Promise<{
@@ -24,65 +10,16 @@ type Props = Readonly<{
 
 const EditTeamPage: FC<Props> = async ({ params }) => {
   return (
-    <Suspense>
-      <EditTeamPageContent params={params} />
-    </Suspense>
-  );
-};
-
-const EditTeamPageContent: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const teamId = (await params).id;
-
-  const responseTeam = await fetchTeamAction(teamId, session?.user.roles ?? null);
-
-  if (!responseTeam.team) {
-    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseTeam.message)}`);
-  }
-
-  const responseTournaments = await fetchTournamentsForTeam();
-
-  if (!responseTournaments.ok) {
-    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseTournaments.message)}`);
-  }
-
-  const responseCoaches = await fetchCoachesForTeam();
-
-  if (!responseCoaches.ok) {
-    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseCoaches.message)}`);
-  }
-
-  const responseFields = await fetchFieldsForTeam();
-
-  const responseCategories = await fetchCategoriesAction();
-
-  if (responseCategories.ok && responseCategories.categories.length === 0) {
-    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseCategories.message)}`);
-  }
-
-  const tournaments = responseTournaments.tournaments;
-  const coaches = responseCoaches.coaches;
-  const categories = responseCategories.categories;
-
-  return (
     <div className="admin-page">
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Editar Equipo</CardTitle>
+            <CardTitle className="admin-page-card-title">Crear Equipo</CardTitle>
           </CardHeader>
           <CardContent>
-            <TeamForm
-              key={teamId}
-              session={session as Session}
-              team={responseTeam.team}
-              fields={responseFields.fields}
-              tournaments={tournaments as TournamentType[]}
-              coaches={coaches as Coach[]}
-              categories={categories}
-            />
+            <Suspense>
+              <EditTeamView paramsPromise={params} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>

@@ -52,6 +52,7 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                   <TableHead className="w-12 text-center">#</TableHead>
                   <TableHead className="w-25">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
+                  <TableHead className="w-25 text-center">Formato</TableHead>
                   <TableHead className="w-25 text-center">Rama</TableHead>
                   <TableHead className="w-25">Entrenador</TableHead>
                   <TableHead className="w-25 text-center">Jugadores</TableHead>
@@ -84,21 +85,25 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                     </TableCell>
                     <TableCell>{team.name}</TableCell>
                     <TableCell className="text-center">
-                      {
-                        (team.gender === 'male')
-                          ? 'Varonil'
-                          : (team.gender === 'female')
-                            ? 'Femenil'
-                            : 'desconocida'
-                      }
+                      <Badge variant="outline-primary">
+                        {team.format} vs {team.format}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {(team.gender === 'male') && (
+                        <Badge variant="outline-primary">varonil</Badge>
+                      )}
+                      {(team.gender === 'female') && (
+                        <Badge variant="outline" className="border-pink-500 text-pink-500">femenil</Badge>
+                      )}
                     </TableCell>
                     <TableCell>
                       {team.coach ? (
-                        <Link href={`/admin/entrenadores/perfil/${team.coach.id}`}>
+                        <Link href={`${ROUTES.ADMIN_COACHES_SHOW(team.coach.id)}`}>
                           <Badge variant="outline-info"><p className="text-wrap">{team.coach.name}</p></Badge>
                         </Link>
                       ) : (
-                        <Badge variant="outline-secondary">No Asignado</Badge>
+                        <Badge variant="outline-secondary">no asignado</Badge>
                       )}
                     </TableCell>
                     <TableCell className="text-center">

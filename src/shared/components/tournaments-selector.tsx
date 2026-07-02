@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import {
   usePathname,
   useRouter,
@@ -30,10 +30,6 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   const router = useRouter();
   const params = new URLSearchParams(searchParams);
 
-  const uniqueTournaments = useMemo(() => [
-    ...new Map(tournaments.map(item => [item.name, item])).values(),
-  ], [tournaments]);
-
   const setTournamentParam = (permalink: string) => {
     if (!permalink) return;
 
@@ -42,12 +38,12 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
   };
 
   useEffect(() => {
-    if (!tournamentPermalink && uniqueTournaments.length > 0) {
-      params.set('tournament', uniqueTournaments[0].permalink);
+    if (!tournamentPermalink && tournaments.length > 0) {
+      params.set('tournament', tournaments[0].permalink);
       router.replace(`${pathname}?${params}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tournamentPermalink, uniqueTournaments, pathname, router, searchParams]);
+  }, [tournamentPermalink, tournaments, pathname, router, searchParams]);
 
   return (
     <div className="w-full">
@@ -59,12 +55,9 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
           <SelectValue placeholder="Seleccione torneo" />
         </SelectTrigger>
         <SelectContent>
-          {uniqueTournaments.map((tournament) => (
-            <SelectItem
-              key={tournament.id}
-              value={tournament.permalink}
-            >
-              {tournament.name}
+          {tournaments.map(({ id, name }) => (
+            <SelectItem key={id} value={tournamentPermalink as string}>
+              { name }
             </SelectItem>
           ))}
         </SelectContent>

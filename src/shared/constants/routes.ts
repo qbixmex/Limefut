@@ -16,6 +16,7 @@ export const ROUTES = {
   ADMIN_FIELD: (id: string) => `/admin/canchas/${id}`,
   ADMIN_FIELD_EDIT: (id: string) => `/admin/canchas/editar/${id}`,
   ADMIN_COACHES: '/admin/entrenadores',
+  ADMIN_COACHES_SHOW: (id: string) => `/admin/entrenadores/perfil/${id}`,
   ADMIN_PLAYERS: '/admin/jugadores',
   ADMIN_PLAYERS_CREATE: '/admin/jugadores/crear',
   ADMIN_PLAYERS_EDIT: (id: string) => `/admin/jugadores/editar/${id}`,

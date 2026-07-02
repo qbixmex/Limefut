@@ -6,37 +6,37 @@ import { cacheLife, cacheTag } from 'next/cache';
 type FetchResponse = Promise<{
   ok: boolean;
   message: string;
-  tournament: { id: string } | null;
+  category: { id: string } | null;
 }>;
 
-export const fetchAdminTournamentAction = async (
-  tournamentPermalink: string | undefined,
+export const fetchAdminCategoryAction = async (
+  categoryPermalink: string | undefined,
 ): FetchResponse => {
   'use cache';
 
   cacheLife('days');
-  cacheTag('tournamentId');
+  cacheTag('categoryId');
 
   try {
-    const tournament = await prisma.tournament.findFirst({
+    const category = await prisma.category.findFirst({
       where: {
-        permalink: tournamentPermalink,
+        permalink: categoryPermalink,
       },
       select: { id: true },
     });
 
-    if (!tournament) {
+    if (!category) {
       return {
         ok: false,
-        message: `¡ El torneo con el enlace permanente: "${tournamentPermalink}" no existe ❌ !`,
-        tournament: null,
+        message: `¡ La catego´ria con el enlace permanente: "${categoryPermalink}" no existe ❌ !`,
+        category: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Torneo obtenido correctamente 👍 !',
-      tournament: { id: tournament.id },
+      message: '¡ Categoría obtenida correctamente 👍 !',
+      category: { id: category.id },
     };
   } catch (error) {
     if (error instanceof Error) {
@@ -46,14 +46,14 @@ export const fetchAdminTournamentAction = async (
 
       return {
         ok: false,
-        message: 'No se pudo obtener el torneo,\n¡ Revise los logs del servidor !',
-        tournament: null,
+        message: 'No se pudo obtener la categoría,\n¡ Revise los logs del servidor !',
+        category: null,
       };
     }
     return {
       ok: false,
       message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
-      tournament: null,
+      category: null,
     };
   }
 };

@@ -33,22 +33,21 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
     return null;
   }
 
-  const { ok, message, tournamentId } = await fetchAdminTournamentAction({
+  const { ok, message, tournament } = await fetchAdminTournamentAction(
     tournamentPermalink,
-    categoryPermalink,
-  });
+  );
 
-  if (!ok && !tournamentId) {
+  if (!ok && !tournament) {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(message)}`);
   }
 
-  if (!tournamentId) return null;
+  if (!tournament) return null;
 
   return (
     <section className="mt-10">
       <Suspense
         key={
-          `${tournamentId ?? 'tournamentId'}` +
+          `${tournament.id ?? 'tournamentId'}` +
           `-${categoryPermalink ?? 'category'}` +
           `-${query ?? 'query'}` +
           `-${currentPage ?? 'page'}` +
@@ -57,7 +56,7 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
         fallback={<MatchesTableSkeleton colCount={6} rowCount={16} />}
       >
         <MatchesWrapper
-          tournamentId={tournamentId}
+          tournamentId={tournament.id}
           query={query as string}
           currentPage={Number(currentPage as string)}
           sortMatchDate={sortMatchDate}

@@ -6,12 +6,14 @@ import { TeamsTable } from '../../equipos/(components)/teams-table';
 
 type Props = Readonly<{
   tournamentId: string;
+  categoryId: string;
   currentPage: number;
   query: string;
 }>;
 
 export const TeamsWrapper: FC<Props> = async ({
   tournamentId,
+  categoryId,
   currentPage,
   query,
 }) => {
@@ -19,11 +21,15 @@ export const TeamsWrapper: FC<Props> = async ({
     headers: await headers(),
   });
 
-  const { teams, pagination } = await fetchAdminTeamsAction(tournamentId, {
-    page: currentPage,
-    take: 12,
-    searchTerm: query,
-  });
+  const { teams, pagination } = await fetchAdminTeamsAction(
+    tournamentId,
+    categoryId,
+    {
+      page: currentPage,
+      take: 12,
+      searchTerm: query,
+    },
+  );
 
   return (
     <TeamsTable
