@@ -24,7 +24,7 @@ export const StandingsTable: FC<Props> = async ({
 }) => {
   const response = await fetchStandingsAction({
     tournamentPermalink: tournament,
-    category,
+    categoryPermalink: category,
   });
 
   if (!response.ok) {
@@ -45,6 +45,7 @@ export const StandingsTable: FC<Props> = async ({
     <>
       <TournamentData
         tournament={response.tournament as TOURNAMENT_TYPE}
+        teams={response.tournament?.teams ?? []}
         standings={response.standings.length > 0}
       />
 

@@ -90,7 +90,7 @@ export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
               <TableCell>
                 {match.field ? (
                   <Link
-                    href={`${ROUTES.ADMIN_FIELD(match.field.id)}`}
+                    href={`${ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}`}
                     target="_blank"
                   >
                     {match.field.name}

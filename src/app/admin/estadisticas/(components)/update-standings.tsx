@@ -20,11 +20,15 @@ import { recalculateStandingsAction } from '../(actions)/recalculateStandingsAct
 
 type Props = Readonly<{
   tournamentId: string;
+  categoryId: string;
 }>;
 
-export const UpdateStandings: FC<Props> = ({ tournamentId }) => {
+export const UpdateStandings: FC<Props> = ({ tournamentId, categoryId }) => {
   const handleUpdateStandings = async () => {
-    const response = await recalculateStandingsAction(tournamentId);
+    const response = await recalculateStandingsAction({
+      tournamentId,
+      categoryId,
+    });
 
     try {
       if (!response.ok) {

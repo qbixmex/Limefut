@@ -3,11 +3,11 @@ import { auth } from '@/lib/auth';
 import { MatchesTable } from './matches-table';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { headers } from 'next/headers';
-import { fetchTournamentForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournament-for-match.action';
 import { fetchMatchesAction } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
 
 type Props = Readonly<{
   tournamentId: string;
+  categoryId: string;
   currentPage: number;
   query: string;
   sortMatchDate: 'asc' | 'desc';
@@ -17,6 +17,7 @@ type Props = Readonly<{
 
 export const MatchesWrapper: FC<Props> = async ({
   tournamentId,
+  categoryId,
   currentPage,
   query,
   sortMatchDate,
@@ -24,10 +25,9 @@ export const MatchesWrapper: FC<Props> = async ({
   status,
 }) => {
   const session = await auth.api.getSession({ headers: await headers() });
-  const { tournament } = await fetchTournamentForMatchAction(tournamentId);
-
   const { matches, pagination } = await fetchMatchesAction({
     tournamentId,
+    categoryId,
     page: currentPage,
     take: 12,
     searchTerm: query,
@@ -36,9 +36,13 @@ export const MatchesWrapper: FC<Props> = async ({
     status,
   });
 
+  const matchesWeeks = [...new Set(
+    matches.flatMap(match => (match.week !== null) ? [match.week] : []),
+  )];
+
   return (
     <MatchesTable
-      matchesWeeks={tournament?.weeks as number[] ?? 0}
+      matchesWeeks={matchesWeeks}
       matches={matches}
       pagination={pagination}
       roles={session?.user.roles as string[]}

@@ -27,7 +27,7 @@ import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import type { Match } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
+import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
 import { WeeksSelector } from './weeks-selector';
 import { DateSelector } from './date-selector';
 import { StatusSelector } from './status-selector';
@@ -36,7 +36,7 @@ import { EditMatch } from './edit-match';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
-  matches: Match[];
+  matches: MATCH_TYPE[];
   matchesWeeks: number[];
   pagination: {
     currentPage: number;
@@ -127,10 +127,15 @@ export const MatchesTable: FC<Props> = ({
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {match.place ? (
-                      <span className="font-semibold text-gray-600 dark:text-gray-500 text-balance">
-                        {match.place}
-                      </span>
+                    {match.field ? (
+                      <Link
+                        href={ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}
+                        target="_blank"
+                      >
+                        <span className="font-semibold text-gray-600 dark:text-gray-500 text-balance">
+                          {match.field.name}
+                        </span>
+                      </Link>
                     ) : (
                       <Badge variant="outline-secondary">no disponible</Badge>
                     )}

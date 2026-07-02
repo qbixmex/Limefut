@@ -143,7 +143,7 @@ export const MatchesTable: FC<Props> = ({
                   <TableCell className="hidden md:table-cell">
                     {match.field ? (
                       <Link
-                        href={ROUTES.ADMIN_FIELD(match.field.id)}
+                        href={ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}
                         target="_blank"
                         className="text-balance"
                       >

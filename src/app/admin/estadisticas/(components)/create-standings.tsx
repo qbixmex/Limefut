@@ -5,20 +5,21 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '~/src/lib/utils';
 import { LoaderCircle } from 'lucide-react';
+import type { TEAM_TYPE } from '@/app/admin/estadisticas/(actions)/fetchStandingsAction';
 import { createStandingsAction } from '../(actions)/createStandingsAction';
-import type { TOURNAMENT_TYPE } from '../(actions)/fetchStandingsAction';
 
 type Props = Readonly<{
-  tournament: TOURNAMENT_TYPE;
+  teams: TEAM_TYPE[];
 }>;
 
-export const CreateStandings: FC<Props> = ({ tournament }) => {
+export const CreateStandings: FC<Props> = ({ teams }) => {
   const [creatingStandings, setCreatingStandings] = useState(false);
 
   const handleOnCreateStandings = async () => {
-    const data = tournament.teams.map((team) => ({
-      tournamentId: tournament.id,
-      teamId: team.id,
+    const data = teams.map(({ id, tournamentId, categoryId }) => ({
+      tournamentId,
+      categoryId,
+      teamId: id,
     }));
 
     try {

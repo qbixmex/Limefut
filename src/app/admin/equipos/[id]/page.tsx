@@ -220,7 +220,7 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
                           {(team.fields.length > 0) ? team.fields.map((field) => (
                             <Link
                               key={field.id}
-                              href={ROUTES.ADMIN_FIELD(field.id)}
+                              href={ROUTES.ADMIN_FIELDS_SHOW(field.id)}
                               target="_blank"
                             >
                               <Badge variant="outline-info">
