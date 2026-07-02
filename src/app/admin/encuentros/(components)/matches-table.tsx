@@ -185,7 +185,7 @@ export const MatchesTable: FC<Props> = ({
                       <Tooltip>
                         <TooltipTrigger>
                           <Link
-                            href={`/admin/encuentros/detalles/${match.id}`}
+                            href={ROUTES.ADMIN_MATCHES_SHOW(match.id)}
                             className={buttonVariants({
                               variant: 'outline-info',
                               size: 'icon',

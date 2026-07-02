@@ -4,39 +4,42 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { editMatchSchema } from '@/shared/schemas';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { Prisma } from '@/generated/prisma/client';
 
 type EditResponseAction = Promise<{
   ok: boolean;
   message: string;
-  match: {
-    id: string;
-    localScore: number | null;
-    visitorScore: number | null;
-    place: string | null;
-    referee: string | null;
-    matchDate: Date | null;
-    week: number | null;
-    status: string;
-    tournament: {
-      id: string;
-      name: string;
-      permalink: string;
-    };
-    category: {
-      id: string;
-      name: string;
-      permalink: string;
-    } | null;
-    local: {
-      id: string;
-      name: string;
-    };
-    visitor: {
-      id: string;
-      name: string;
-    };
-  } | null;
+  match: MATCH_TYPE | null;
 }>;
+
+export type MATCH_TYPE = {
+  id: string;
+  localScore: number | null;
+  visitorScore: number | null;
+  place: string | null;
+  referee: string | null;
+  matchDate: Date | null;
+  week: number | null;
+  status: string;
+  tournament: {
+    id: string;
+    name: string;
+    permalink: string;
+  };
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
+  local: {
+    id: string;
+    name: string;
+  };
+  visitor: {
+    id: string;
+    name: string;
+  };
+};
 
 export const updateMatchAction = async ({
   formData,
@@ -100,11 +103,26 @@ export const updateMatchAction = async ({
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       try {
-        const isMatchExists = await transaction.match.count({
+        const match = await transaction.match.findFirst({
           where: { id: matchId },
+          select: {
+            id: true,
+            tournament: {
+              select: {
+                id: true,
+                permalink: true,
+              },
+            },
+            category: {
+              select: {
+                id: true,
+                permalink: true,
+              },
+            },
+          },
         });
 
-        if (!isMatchExists) {
+        if (!match) {
           return {
             ok: false,
             message: '¡ El encuentro no existe o ha sido eliminado !',
@@ -112,19 +130,42 @@ export const updateMatchAction = async ({
           };
         }
 
-        const tournament = await transaction.tournament.findFirst({
-          where: {
-            permalink: tournamentPermalink,
-            category: categoryPermalink,
-          },
-        });
+        let tournamentId: string | undefined;
 
-        if (!tournament) {
-          return {
-            ok: false,
-            message: `¡ El torneo: "${tournamentPermalink}" con la categoría: "${categoryPermalink}" no existe !`,
-            match: null,
-          };
+        if (match.tournament.permalink !== tournamentPermalink) {
+          const tournament = await transaction.tournament.findFirst({
+            where: { permalink: tournamentPermalink },
+            select: { id: true },
+          });
+
+          if (!tournament) {
+            return {
+              ok: false,
+              message: `¡ El torneo con el enlace permanente: [${tournamentPermalink}] no existe !`,
+              match: null,
+            };
+          }
+
+          tournamentId = tournament.id;
+        }
+
+        let categoryId: string | undefined;
+
+        if (match.category?.permalink !== categoryPermalink) {
+          const category = await transaction.category.findFirst({
+            where: { permalink: categoryPermalink },
+            select: { id: true },
+          });
+
+          if (!category) {
+            return {
+              ok: false,
+              message: `¡ La categoría con el enlace permanente: [${categoryPermalink}] no existe !`,
+              match: null,
+            };
+          }
+
+          categoryId = category.id;
         }
 
         const updatedMatch = await transaction.match.update({
@@ -138,7 +179,8 @@ export const updateMatchAction = async ({
             visitorScore: matchToSave.visitorScore,
             matchDate: matchToSave.matchDate,
             status: matchToSave.status as MATCH_STATUS_TYPE,
-            tournamentId: tournament.id,
+            tournamentId,
+            categoryId,
             week: matchToSave.week !== 0
               ? matchToSave.week
               : null,
@@ -214,8 +256,8 @@ export const updateMatchAction = async ({
           },
         };
       } catch (error) {
-        if (error instanceof Error && 'meta' in error && error.meta) {
-          if ('code' in error && error.code as string === 'P2002') {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2002') {
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
@@ -223,16 +265,28 @@ export const updateMatchAction = async ({
               match: null,
             };
           }
-          console.log(error.message);
+
+          console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
+          console.log('CAUSE:', error.cause);
+          console.log('NAME:', error.name);
+          console.log('META:', error.meta);
+          console.log('MESSAGE:', error.message);
+          console.log('='.repeat(54));
+
           return {
             ok: false,
-            message: '¡ Error al actualizar el encuentro, revise los logs del servidor !',
+            message: '¡ Error al crear el encuentro, revise los logs del servidor !',
             match: null,
           };
         }
+
+        console.log('='.repeat(20) + ' UNKNOWN ERROR ' + '='.repeat(20));
+        console.log(error);
+        console.log('='.repeat(55));
+
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: '¡ Error inesperado, revise los logs del servidor !',
           match: null,
         };
       }
