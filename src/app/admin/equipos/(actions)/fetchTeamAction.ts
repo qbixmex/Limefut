@@ -17,7 +17,6 @@ export type TEAM_TYPE = {
   permalink: string;
   imageUrl: string | null;
   imagePublicID: string | null;
-  categoryName: string | null;
   format: string;
   gender: GENDER_TYPE;
   country: string | null;
@@ -84,7 +83,6 @@ export const fetchTeamAction = async (
       permalink: true,
       imageUrl: true,
       imagePublicID: true,
-      categoryName: true,
       format: true,
       gender: true,
       country: true,
