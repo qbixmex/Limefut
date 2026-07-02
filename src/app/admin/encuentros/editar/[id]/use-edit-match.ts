@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import type { MATCH_TYPE as MATCH_UPDATED_TYPE } from '@/app/admin/encuentros/(actions)/update-match.action';
 import { updateMatchAction } from '@/app/admin/encuentros/(actions)/update-match.action';
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { useForm } from 'react-hook-form';
@@ -71,9 +72,10 @@ export const useEditMatch = (options: Options) => {
       tournament:
         match.tournament.permalink ??
         searchParams.get('tournament'),
-      // category:
-      //   match.tournament.category ??
-      //   searchParams.get('category'),
+      category:
+        match.category?.permalink ??
+        searchParams.get('category') ??
+        undefined,
     },
   });
 
@@ -100,7 +102,9 @@ export const useEditMatch = (options: Options) => {
       authenticatedUserRoles,
     });
 
-    if (match.status === MATCH_STATUS.COMPLETED) {
+    const updatedMatch = response.match as MATCH_UPDATED_TYPE;
+
+    if (updatedMatch.status === MATCH_STATUS.COMPLETED) {
       setHiddenScores(true);
       setIsModifyingScores(false);
     } else {
@@ -114,11 +118,11 @@ export const useEditMatch = (options: Options) => {
 
     toast.success(response.message);
 
-    // router.replace(ROUTES.ADMIN_MATCHES +
-    //   `?tournament=${response.match?.tournament.permalink}` +
-    //   `&category=${response.match?.tournament.category}` +
-    //   `&sort-week=${response.match?.week ?? 'unassigned'}`,
-    // );
+    router.replace(ROUTES.ADMIN_MATCHES +
+      `?tournament=${updatedMatch.tournament.permalink}` +
+      `&category=${updatedMatch.category?.permalink}` +
+      `&sort-week=${updatedMatch.week ?? 'unassigned'}`,
+    );
   };
 
   const handleNavigateBack = () => {

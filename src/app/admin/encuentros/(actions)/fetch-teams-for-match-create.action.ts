@@ -3,11 +3,6 @@
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
-type Options = Readonly<{
-  tournamentPermalink: string;
-  categoryPermalink: string;
-}>;
-
 export type ResponseFetchTeams = Promise<{
   ok: boolean;
   message: string;
@@ -26,32 +21,34 @@ export type TEAM_TYPE = {
 export const fetchTeamsForMatchCreateAction = async ({
   tournamentPermalink,
   categoryPermalink,
-}: Options): ResponseFetchTeams => {
+}: {
+  tournamentPermalink: string,
+  categoryPermalink: string,
+}): ResponseFetchTeams => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-teams-for-match');
 
   try {
-    const tournament = await prisma.tournament.findFirst({
+    const teams = await prisma.team.findMany({
       where: {
-        permalink: tournamentPermalink,
-        category: categoryPermalink,
+        tournament: {
+          permalink: tournamentPermalink,
+        },
+        category: {
+          permalink: categoryPermalink,
+        },
       },
-      orderBy: { name: 'asc' },
       select: {
-        teams: {
-          select: {
-            id: true,
-            name: true,
-            fields: {
-              include: {
-                field: {
-                  select: {
-                    id: true,
-                    name: true,
-                  },
-                },
+        id: true,
+        name: true,
+        fields: {
+          include: {
+            field: {
+              select: {
+                id: true,
+                name: true,
               },
             },
           },
@@ -59,27 +56,23 @@ export const fetchTeamsForMatchCreateAction = async ({
       },
     });
 
-    if (!tournament) {
-      return {
-        ok: false,
-        message: `¡ No se encontró el torneo con enlace permanente [${tournamentPermalink}] y categoría [${categoryPermalink}] !`,
-        teams: [],
-      };
-    }
-
-    const teams = tournament.teams.map((team) => ({
-      ...team,
-      fields: team.fields.map((teamField) => teamField.field),
-    }));
-
     return {
       ok: true,
       message: '! Los equipos fueron obtenidos correctamente 👍',
-      teams,
+      teams: teams.map((team) => ({
+        ...team,
+        fields: team.fields.map((teamField) => teamField.field),
+      })),
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('Error al intentar obtener los equipos');
+      console.log('='.repeat(20) + ' ERROR ' + '='.repeat(20));
+      console.log('NAME:', error.name);
+      console.log('CAUSE:', error.cause);
+      console.log('MESSAGE:', error.message);
+      console.log('STACK:', error.stack);
+      console.log('='.repeat(47));
+
       return {
         ok: false,
         message: error.message,
