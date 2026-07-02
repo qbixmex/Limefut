@@ -16,10 +16,12 @@ export type TOURNAMENT_TYPE = {
     id: string;
     name: string;
     permalink: string;
+    tournamentId: string | null;
+    categoryId: string | null;
   }[];
 };
 
-export type StandingType = {
+export type STANDING_TYPE = {
   team: {
     id: string;
     name: string;
@@ -45,15 +47,15 @@ export type StandingPromise = Promise<{
   ok: boolean;
   message: string;
   tournament: TOURNAMENT_TYPE | null;
-  standings: StandingType[];
+  standings: STANDING_TYPE[];
 }>;
 
 export const fetchStandingsAction = async ({
   tournamentPermalink,
-  category,
+  categoryPermalink,
 }: {
-  tournamentPermalink: string,
-  category: string,
+  tournamentPermalink: string;
+  categoryPermalink: string;
 }): StandingPromise => {
   'use cache';
 
@@ -64,7 +66,6 @@ export const fetchStandingsAction = async ({
     const tournament = await prisma.tournament.findFirst({
       where: {
         permalink: tournamentPermalink,
-        category,
       },
       select: {
         id: true,
@@ -76,10 +77,17 @@ export const fetchStandingsAction = async ({
         startDate: true,
         endDate: true,
         teams: {
+          where: {
+            category: {
+              permalink: categoryPermalink,
+            },
+          },
           select: {
             id: true,
             name: true,
             permalink: true,
+            tournamentId: true,
+            categoryId: true,
           },
         },
       },

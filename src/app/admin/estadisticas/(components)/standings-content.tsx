@@ -2,7 +2,8 @@ import type { FC } from 'react';
 
 import { CreateStandings } from './create-standings';
 import { TournamentData } from '@/shared/components/TournamentData';
-import { fetchStandingsAction, type TOURNAMENT_TYPE } from '../(actions)/fetchStandingsAction';
+import type { TEAM_TYPE, TOURNAMENT_TYPE } from '@/app/admin/estadisticas/(actions)/fetchStandingsAction';
+import { fetchStandingsAction } from '../(actions)/fetchStandingsAction';
 import { StandingsTable } from './standings-table';
 import { UpdateStandings } from './update-standings';
 import { DeleteStandings } from './delete-standings';
@@ -10,30 +11,35 @@ import './standingsTableStyles.css';
 
 type Props = Readonly<{
   tournamentId: string;
+  categoryId: string;
 }>;
 
-export const StandingsContent: FC<Props> = async ({ tournamentId }) => {
-  if (!tournamentId) return null;
+export const StandingsContent: FC<Props> = async ({ tournamentId, categoryId }) => {
+  if (!tournamentId && !categoryId) return null;
 
-  const { tournament, standings } = await fetchStandingsAction(tournamentId);
+  const { teams, tournament, standings } = await fetchStandingsAction({
+    tournamentId,
+    categoryId,
+  });
 
   return (
     <>
       <TournamentData
         tournament={tournament as TOURNAMENT_TYPE}
+        teams={teams as TEAM_TYPE[]}
         standings={standings!.length > 0}
         admin
       />
 
       <section className="relative">
-        {tournament && (tournament.teams.length > 0) && (standings!.length === 0) && (
+        {tournament && (teams.length > 0) && (standings!.length === 0) && (
           <>
             <div className="w-full h-0.5 my-10 bg-gray-800" />
             <div className="flex justify-center items-center gap-x-5 border-2 border-blue-500 py-5 rounded-lg">
               <p className="text-blue-500 text-xl italic font-semibold text-center">
                 ¡ El torneo aún no tiene tabla de Posiciones !
               </p>
-              <CreateStandings tournament={tournament as TOURNAMENT_TYPE} />
+              <CreateStandings teams={teams} />
             </div>
           </>
         )}
@@ -45,7 +51,10 @@ export const StandingsContent: FC<Props> = async ({ tournamentId }) => {
 
               {standings && (
                 <div className="flex items-center gap-5">
-                  <UpdateStandings tournamentId={tournamentId} />
+                  <UpdateStandings
+                    tournamentId={tournamentId}
+                    categoryId={categoryId}
+                  />
                   <DeleteStandings tournamentId={tournamentId} />
                 </div>
               )}

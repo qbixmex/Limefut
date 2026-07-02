@@ -5,6 +5,7 @@ import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
 import { fetchAdminTournamentAction } from '@/shared/actions/fetch-admin-tournament.action';
+import { fetchAdminCategoryAction } from '@/shared/actions/fetch-admin-category.action';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -33,22 +34,34 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
     return null;
   }
 
-  const { ok, message, tournament } = await fetchAdminTournamentAction(
+  const responseTournament = await fetchAdminTournamentAction(
     tournamentPermalink,
   );
 
-  if (!ok && !tournament) {
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(message)}`);
+  if (!responseTournament.ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseTournament.message)}`);
   }
 
-  if (!tournament) return null;
+  const responseCategory = await fetchAdminCategoryAction(
+    categoryPermalink,
+  );
+
+  if (!responseCategory.ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseCategory.message)}`);
+  }
+
+  if (!responseTournament.tournament) return null;
+  if (!responseCategory.category) return null;
+
+  const tournament = responseTournament.tournament;
+  const category = responseCategory.category;
 
   return (
     <section className="mt-10">
       <Suspense
         key={
           `${tournament.id ?? 'tournamentId'}` +
-          `-${categoryPermalink ?? 'category'}` +
+          `-${category.id ?? 'category'}` +
           `-${query ?? 'query'}` +
           `-${currentPage ?? 'page'}` +
           `-${sortWeek ?? 'sort-week'}`
@@ -57,6 +70,7 @@ export const MatchesContent: FC<Props> = async ({ searchParams }) => {
       >
         <MatchesWrapper
           tournamentId={tournament.id}
+          categoryId={category.id}
           query={query as string}
           currentPage={Number(currentPage as string)}
           sortMatchDate={sortMatchDate}

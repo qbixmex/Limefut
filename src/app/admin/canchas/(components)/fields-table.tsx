@@ -63,7 +63,7 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={ROUTES.ADMIN_FIELD(field.id as string)}>
+                            <Link href={ROUTES.ADMIN_FIELDS_SHOW(field.id as string)}>
                               <Button variant="outline-info" size="icon">
                                 <InfoIcon />
                               </Button>
