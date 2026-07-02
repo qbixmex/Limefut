@@ -26,21 +26,61 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
     };
   }
 
+  const teamsExists = await prisma.team.count({
+    where: { tournamentId },
+  });
+
+  if (teamsExists) {
+    return {
+      ok: false,
+      message: '¡ No se puede eliminar el torneo, por que contiene equipos !',
+    };
+  }
+
+  const playoffsExists = await prisma.playoff.count({
+    where: { tournamentId },
+  });
+
+  if (playoffsExists) {
+    return {
+      ok: false,
+      message: '¡ No se puede eliminar el torneo, por que contiene partidos de liguilla !',
+    };
+  }
+
+  const standingsExists = await prisma.standings.count({
+    where: { tournamentId },
+  });
+
+  if (standingsExists) {
+    return {
+      ok: false,
+      message: '¡ No se puede eliminar el torneo, por que contiene estadísticas !',
+    };
+  }
+
   try {
     await prisma.tournament.delete({
       where: { id: tournamentId },
     });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
+      console.log('META:', error.meta);
+      console.log('CODE:', error.code);
+      console.log('MESSAGE:', error.message);
+      console.log('='.repeat(54));
       return {
         ok: false,
         message: error.message,
       };
     }
     if (error instanceof Error) {
+      console.log('='.repeat(20) + ' ERROR ' + '='.repeat(20));
       console.log('Error name:', error.name);
       console.log('Error cause:', error.cause);
       console.log('Error message:', error.message);
+      console.log('='.repeat(47));
 
       return {
         ok: false,

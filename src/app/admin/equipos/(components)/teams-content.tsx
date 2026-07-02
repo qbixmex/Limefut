@@ -4,6 +4,7 @@ import { TeamsWrapper } from './teams-wrapper';
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
 import { fetchAdminTournamentAction } from '@/shared/actions/fetch-admin-tournament.action';
+import { fetchAdminCategoryAction } from '@/shared/actions/fetch-admin-category.action';
 
 type Props = Readonly<{
   searchParamsPromise: Promise<{
@@ -24,28 +25,39 @@ export const TeamsContent: FC<Props> = async ({ searchParamsPromise }) => {
 
   if (!tournamentPermalink || !categoryPermalink) return null;
 
-  const { ok, message, tournamentId } = await fetchAdminTournamentAction({
+  const responseTournament = await fetchAdminTournamentAction(
     tournamentPermalink,
-    categoryPermalink,
-  });
+  );
 
-  if (!ok && !tournamentId) {
-    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(message)}`);
+  if (!responseTournament.ok) {
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseTournament.message)}`);
   }
+
+  const responseCategory = await fetchAdminCategoryAction(
+    categoryPermalink,
+  );
+
+  if (!responseCategory.ok) {
+    redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(responseCategory.message)}`);
+  }
+
+  const tournament = responseTournament.tournament as { id: string };
+  const category = responseCategory.category as { id: string };
 
   return (
     <>
       <Suspense
         key={
-          `${tournamentPermalink ?? 'tournament'}-` +
-          `${categoryPermalink ?? 'category'}-` +
+          `${tournament?.id ?? 'tournament'}-` +
+          `${category.id ?? 'category'}-` +
           `${query ?? 'query'}-` +
           currentPage
         }
         fallback={<TeamsTableSkeleton colCount={9} rowCount={6} />}
       >
         <TeamsWrapper
-          tournamentId={tournamentId!}
+          tournamentId={tournament.id}
+          categoryId={category.id}
           currentPage={+currentPage}
           query={query}
         />

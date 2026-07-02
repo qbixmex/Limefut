@@ -9,7 +9,7 @@ export type ResponseFetchTeams = Promise<{
   teams: {
     id: string;
     name: string;
-  }[] | null;
+  }[];
 }>;
 
 export const fetchTeamsForPlayer = async ({
@@ -71,14 +71,14 @@ export const fetchTeamsForPlayer = async ({
       return {
         ok: false,
         message: error.message,
-        teams: null,
+        teams: [],
       };
     }
     console.log(error);
     return {
       ok: false,
       message: 'Error inesperado al obtener los equipos, revise los logs del servidor',
-      teams: null,
+      teams: [],
     };
   }
 };
