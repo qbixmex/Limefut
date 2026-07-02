@@ -9,12 +9,18 @@ export type ResponseRecalculateAction = Promise<{
   message: string;
 }>;
 
-export const recalculateStandingsAction = async (tournamentId: string): ResponseRecalculateAction => {
+export const recalculateStandingsAction = async ({
+  tournamentId,
+  categoryId,
+}: {
+  tournamentId: string;
+  categoryId: string;
+}): ResponseRecalculateAction => {
   try {
     await prisma.$transaction(async (tx) => {
       // Get all teams in the tournament
       const teams = await tx.team.findMany({
-        where: { tournamentId },
+        where: { tournamentId, categoryId },
         select: { id: true },
       });
 
@@ -24,7 +30,7 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
 
       // Delete existing standings
       const { count } = await tx.standings.deleteMany({
-        where: { tournamentId },
+        where: { tournamentId, categoryId },
       });
 
       if (count === 0) {
@@ -36,6 +42,7 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
         data: teams.map(team => ({
           teamId: team.id,
           tournamentId,
+          categoryId,
           matchesPlayed: 0,
           wins: 0,
           draws: 0,
@@ -57,6 +64,7 @@ export const recalculateStandingsAction = async (tournamentId: string): Response
       const completedMatches = await tx.match.findMany({
         where: {
           tournamentId,
+          categoryId,
           status: MATCH_STATUS.COMPLETED,
         },
         select: {

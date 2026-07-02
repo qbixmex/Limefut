@@ -10,7 +10,8 @@ type CreateResponseAction = Promise<{
 }>;
 
 type DataType = {
-  tournamentId: string;
+  tournamentId: string | null;
+  categoryId: string | null;
   teamId: string;
 }[];
 

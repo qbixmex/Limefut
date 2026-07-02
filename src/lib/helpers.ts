@@ -17,3 +17,23 @@ export const requiredUUID = (requiredMessage: string, invalidMessage: string) =>
     context.addIssue({ code: 'custom', message: invalidMessage });
   }
 });
+
+/**
+ * Get terminal ANSI COLOR
+ * @param color The terminal color
+ * @returns The ANSI color for node
+ */
+export const getTerminalColor = (color: 'red' | 'green' | 'yellow' | 'blue' | 'reset'): string => {
+  switch (color) {
+    case 'red':
+      return '\x1b[31m';
+    case 'green':
+      return '\x1b[32m';
+    case 'yellow':
+      return '\x1b[33m';
+    case 'blue':
+      return '\x1b[34m';
+    default:
+      return '\x1b[0m';
+  }
+};

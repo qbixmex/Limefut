@@ -8,6 +8,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
   tournamentId: string;
+  categoryId: string;
   searchTerm: string;
   page?: number;
   take?: number;
@@ -16,20 +17,26 @@ type Options = Readonly<{
   status?: MATCH_STATUS_TYPE;
 }>;
 
-export type Match = {
+export type MATCH_TYPE = {
   id: string;
-  localTeam: Team;
-  visitorTeam: Team;
+  localTeam: TEAM_TYPE;
+  visitorTeam: TEAM_TYPE;
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
   week: number | null;
-  place: string | null;
   matchDate: Date | null;
   penaltyShootout: PenaltyShootout | null;
+  field: FIELD_TYPE | null;
 };
 
-type Team = {
+type TEAM_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+};
+
+type FIELD_TYPE = {
   id: string;
   name: string;
   permalink: string;
@@ -38,7 +45,7 @@ type Team = {
 export type ResponseFetchAction = Promise<{
   ok: boolean;
   message: string;
-  matches: Match[];
+  matches: MATCH_TYPE[];
   pagination: Pagination;
 }>;
 
@@ -57,6 +64,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   cacheTag('admin-matches');
 
   const tournamentId = options?.tournamentId;
+  const categoryId = options?.categoryId;
   let { page = 1, take = 12 } = options ?? {};
   const sortMatchDate = options?.sortMatchDate;
   const sortWeek = options?.sortWeek;
@@ -76,6 +84,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
 
   const whereCondition: Prisma.MatchWhereInput = {
     tournamentId,
+    categoryId,
     week: sortWeek === 'unassigned'
       ? null
       : sortWeek !== undefined && !isNaN(Number(sortWeek))
@@ -132,6 +141,52 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   }
 
   try {
+    const selectMatch = {
+      id: true,
+      localScore: true,
+      visitorScore: true,
+      status: true,
+      week: true,
+      matchDate: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+      field: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+      local: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+      visitor: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+      penaltyShootout: {
+        select: {
+          id: true,
+          localGoals: true,
+          visitorGoals: true,
+          winnerTeamId: true,
+          status: true,
+        },
+      },
+    } satisfies Prisma.MatchSelect;
+
     const matches = await prisma.match.findMany({
       where: whereCondition,
       orderBy: [
@@ -140,38 +195,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       ],
       take,
       skip: (page - 1) * take,
-      select: {
-        id: true,
-        localScore: true,
-        visitorScore: true,
-        status: true,
-        week: true,
-        place: true,
-        matchDate: true,
-        local: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-        visitor: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-        penaltyShootout: {
-          select: {
-            id: true,
-            localGoals: true,
-            visitorGoals: true,
-            winnerTeamId: true,
-            status: true,
-          },
-        },
-      },
+      select: selectMatch,
     });
 
     const totalCount = await prisma.match.count({ where: whereCondition });
@@ -187,7 +211,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS_TYPE,
         week: match.week,
-        place: match.place,
+        field: match.field,
         matchDate: match.matchDate,
         penaltyShootout: match.penaltyShootout,
       })),

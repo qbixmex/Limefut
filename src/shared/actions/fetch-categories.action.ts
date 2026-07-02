@@ -33,7 +33,7 @@ export const fetchCategoriesAction = async (): ResponseFetch => {
 
     return {
       ok: true,
-      message: '! Las categorías fueron obtenidas correctamente 👍',
+      message: '¡ Las categorías fueron obtenidas correctamente 👍 !',
       categories,
     };
   } catch (error) {

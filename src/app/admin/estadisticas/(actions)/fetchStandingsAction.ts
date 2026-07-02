@@ -4,22 +4,13 @@ import prisma from '@/lib/prisma';
 import type { STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type TOURNAMENT_TYPE = {
-  id: string;
-  name: string;
-  permalink: string;
-  country: string | null;
-  cities: string[];
-  season: string | null;
-  startDate: Date;
-  endDate: Date;
-  stage: STAGE_TYPE;
-  teams: {
-    id: string;
-    name: string;
-    permalink: string;
-  }[];
-};
+export type StandingPromise = Promise<{
+  ok: boolean;
+  message: string;
+  teams: TEAM_TYPE[];
+  tournament: TOURNAMENT_TYPE | null;
+  standings: STANDING_TYPE[] | null;
+}>;
 
 export type STANDING_TYPE = {
   matchesPlayed: number;
@@ -42,20 +33,39 @@ export type STANDING_TYPE = {
     permalink: string;
   } | null;
   team: {
-    name: string;
     id: string;
+    name: string;
     permalink: string;
   };
 };
 
-export type StandingPromise = Promise<{
-  ok: boolean;
-  message: string;
-  tournament: TOURNAMENT_TYPE | null;
-  standings: STANDING_TYPE[] | null;
-}>;
+export type TOURNAMENT_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+  country: string | null;
+  cities: string[];
+  season: string | null;
+  startDate: Date;
+  endDate: Date;
+  stage: STAGE_TYPE;
+};
 
-export const fetchStandingsAction = async (tournamentId: string): StandingPromise => {
+export type TEAM_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+  tournamentId: string | null;
+  categoryId: string | null;
+};
+
+export const fetchStandingsAction = async ({
+  tournamentId,
+  categoryId,
+}: {
+  tournamentId: string,
+  categoryId: string,
+}): StandingPromise => {
   'use cache';
 
   cacheLife('days');
@@ -74,28 +84,49 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
         startDate: true,
         endDate: true,
         stage: true,
-        teams: {
-          where: { active: true },
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
       },
     });
 
     if (!tournament) {
       return {
         ok: false,
-        message: `¡ El torneo con el id <${tournamentId}> no existe !`,
+        message: `¡ El torneo con el id [${tournamentId}] no existe !`,
+        teams: [],
+        tournament: null,
+        standings: null,
+      };
+    }
+
+    const teams = await prisma.team.findMany({
+      where: {
+        tournamentId,
+        categoryId,
+        active: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        permalink: true,
+        tournamentId: true,
+        categoryId: true,
+      },
+    });
+
+    if (!teams) {
+      return {
+        ok: false,
+        message: `¡ No se pudieron obtener los equipos con el id del torneo [${tournamentId}] y categoría [${categoryId}] !`,
+        teams: [],
         tournament: null,
         standings: null,
       };
     }
 
     const standings = await prisma.standings.findMany({
-      where: { tournamentId },
+      where: {
+        tournamentId,
+        categoryId,
+      },
       select: {
         matchesPlayed: true,
         wins: true,
@@ -136,6 +167,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
     return {
       ok: true,
       message: '! Las estadísticas fueron obtenidas correctamente 👍',
+      teams,
       tournament,
       standings,
     };
@@ -145,6 +177,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
       return {
         ok: false,
         message: error.message,
+        teams: [],
         tournament: null,
         standings: null,
       };
@@ -153,6 +186,7 @@ export const fetchStandingsAction = async (tournamentId: string): StandingPromis
     return {
       ok: false,
       message: 'Error inesperado al obtener las estadísticas, revise los logs del servidor',
+      teams: [],
       tournament: null,
       standings: null,
     };

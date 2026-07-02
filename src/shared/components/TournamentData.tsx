@@ -11,21 +11,22 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { type Tournament } from '@/shared/interfaces';
+import type { TEAM_TYPE } from '@/app/admin/estadisticas/(actions)/fetchStandingsAction';
 import { ROUTES } from '../constants/routes';
 
 type Props = Readonly<{
-  tournament: Partial<Tournament> & {
-    teams: {
-      id: string;
-      name: string;
-      permalink: string;
-    }[];
-  };
+  tournament: Partial<Tournament>;
+  teams: TEAM_TYPE[];
   standings: boolean;
   admin?: boolean;
 }>;
 
-export const TournamentData: FC<Props> = ({ tournament, standings = false, admin = false }) => {
+export const TournamentData: FC<Props> = ({
+  tournament,
+  teams,
+  standings = false,
+  admin = false,
+}) => {
   return (
     <>
       <section className="flex flex-col lg:flex-row gap-5 mb-10">
@@ -101,7 +102,7 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
         </div>
       </section>
 
-      {tournament.teams.length === 0 && (
+      {teams.length === 0 && (
         <div className="border-2 w-full border-blue-500 py-4 text-center rounded-lg my-10">
           <p className="text-blue-500 text-xl font-semibold italic">
             Este torneo aún no tiene equipos asignados
@@ -109,11 +110,11 @@ export const TournamentData: FC<Props> = ({ tournament, standings = false, admin
         </div>
       )}
 
-      {!standings && (tournament.teams.length > 0) && (
+      {!standings && (teams.length > 0) && (
         <div className="mt-5 mb-10">
           <h2 className="text-lg mb-5">Equipos Asignados</h2>
           <div className="flex flex-wrap gap-3">
-            {tournament.teams.map(({ id, name, permalink }) => (
+            {teams.map(({ id, name, permalink }) => (
               <Link
                 key={id}
                 href={`${admin ? '/admin' : ''}/equipos/${permalink}`}

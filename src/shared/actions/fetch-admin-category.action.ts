@@ -28,7 +28,7 @@ export const fetchAdminCategoryAction = async (
     if (!category) {
       return {
         ok: false,
-        message: `¡ La catego´ria con el enlace permanente: "${categoryPermalink}" no existe ❌ !`,
+        message: `¡ La categoría con el enlace permanente: "${categoryPermalink}" no existe ❌ !`,
         category: null,
       };
     }
