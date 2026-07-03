@@ -55,8 +55,8 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
           <SelectValue placeholder="Seleccione torneo" />
         </SelectTrigger>
         <SelectContent>
-          {tournaments.map(({ id, name }) => (
-            <SelectItem key={id} value={tournamentPermalink as string}>
+          {tournaments.map(({ id, name, permalink }) => (
+            <SelectItem key={id} value={permalink}>
               { name }
             </SelectItem>
           ))}

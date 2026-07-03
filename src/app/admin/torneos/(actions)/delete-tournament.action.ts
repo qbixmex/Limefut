@@ -110,11 +110,14 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
   updateTag('admin-tournament-for-match');
   updateTag('admin-tournaments-for-gallery');
   updateTag('admin-tournament');
+  updateTag('admin-tournament-id');
   updateTag('public-tournaments-list');
   updateTag('tournaments-list');
+  updateTag('tournaments-selector-list');
   updateTag('public-tournaments');
   updateTag('public-tournament');
   updateTag('dashboard-tournaments');
+  updateTag('categories-selector-list');
 
   return {
     ok: true,

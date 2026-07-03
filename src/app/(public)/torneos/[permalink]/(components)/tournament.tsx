@@ -5,8 +5,7 @@ import {
 } from '../../(actions)/fetchTournamentAction';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
-import { Trophy, ShieldBan } from 'lucide-react';
-import Link from 'next/link';
+import { Trophy } from 'lucide-react';
 import { Heading } from '../../../components';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/components/ui/table';
 import { ErrorHandler } from '~/src/shared/components/errorHandler';
@@ -141,52 +140,6 @@ export const Tournament: FC<Props> = async ({ params }) => {
           </section>
         </div>
       </section>
-
-      <h2 className={styles.teamsSubheading}>
-        Equipos{' '}
-        <span className={styles.teamsQty}>({tournament.teamsQuantity})</span>
-      </h2>
-
-      {(tournament.teams.length > 0) ? (
-        <section className={styles.teams}>
-          {tournament.teams.map((team) => (
-            <section key={team.id} className={styles.teamCard}>
-              <Link
-                href={
-                  ROUTES.PUBLIC_TEAM_SHOW(team.permalink) +
-                  `?tournament=${tournament.permalink}`
-                }
-              >
-                {!team.imageUrl ? (
-                  <ShieldBan
-                    className="text-gray-400"
-                    size={200}
-                    strokeWidth={1}
-                  />
-                ) : (
-                  <Image
-                    src={team.imageUrl}
-                    width={200}
-                    height={200}
-                    className="object-contain"
-                    alt={`${team.name} equipo`}
-                  />
-                )}
-              </Link>
-              <Link href={
-                ROUTES.PUBLIC_TOURNAMENT_SHOW(team.permalink) +
-                `?tournament=${tournament.permalink}`
-              }>
-                {team.name}
-              </Link>
-            </section>
-          ))}
-        </section>
-      ) : (
-        <div className={styles.emptyMessage}>
-          <p>¡ El torneo aún no tiene equipos asignados !</p>
-        </div>
-      )}
     </>
   );
 };

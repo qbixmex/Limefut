@@ -25,8 +25,8 @@ export const Standings: FC<Props> = async ({ searchParams }) => {
       fallback={<StandingsSkeleton />}
     >
       <StandingsTable
-        tournament={tournament}
-        category={category}
+        tournamentPermalink={tournament}
+        categoryPermalink={category}
       />
     </Suspense>
   );

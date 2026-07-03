@@ -11,12 +11,17 @@ import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { getMatchStatus } from '@/app/(public)/resultados/(helpers)/status';
 import type { MatchType } from '@/app/(public)/resultados/(actions)/fetchResultsAction';
 import { ROUTES } from '@/shared/constants/routes';
+import { cn } from '@/lib/utils';
 
 const TIME_ZONE = 'America/Mexico_City';
 
-type Props = Readonly<{ match: MatchType }>;
+type Props = Readonly<{
+  match: MatchType;
+  roles: 'complete' | 'team' | 'field' | undefined;
+  teamPermalink: string | undefined;
+}>;
 
-export const MatchRow: FC<Props> = ({ match }) => (
+export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
   <TableRow>
     <TableCell className="hidden lg:table-cell">
       {match.matchDate ? (
@@ -94,11 +99,14 @@ export const MatchRow: FC<Props> = ({ match }) => (
               `?tournament=${match.tournament.permalink}` +
               `&category=${match.tournament.category}`
             }
+            className="text-blue-500 dark:text-blue-400"
           >
             {
               match.local.name.toLowerCase().includes('descanso')
                 ? <span className="text-gray-400 font-semibold italic">{match.local.name}</span>
-                : <span>{match.local.name}</span>
+                : <span className={cn({
+                  'text-lg font-semibold': roles === 'team' && teamPermalink === match.local.permalink,
+                })}>{match.local.name}</span>
             }
           </Link>
         </span>
@@ -147,11 +155,14 @@ export const MatchRow: FC<Props> = ({ match }) => (
               `?tournament=${match.tournament.permalink}` +
               `&category=${match.tournament.category}`
             }
+            className="text-blue-500 dark:text-blue-400"
           >
             {
               match.visitor.name.toLowerCase().includes('descanso')
                 ? (<span className="text-gray-400 font-semibold italic">{match.visitor.name}</span>)
-                : (<span>{match.visitor.name}</span>)
+                : (<span className={cn({
+                  'text-lg font-semibold': roles === 'team' && teamPermalink === match.visitor.permalink,
+                })}>{match.visitor.name}</span>)
             }
           </Link>
         </span>

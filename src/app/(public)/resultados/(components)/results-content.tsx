@@ -33,7 +33,7 @@ export const ResultsContent: FC<Props> = async ({ searchParams }) => {
     categoryPermalink: category as string,
   });
 
-  if (!ok && teams.length === 0) {
+  if (!ok) {
     redirect(`${ROUTES.PUBLIC_RESULTS}?error=${encodeURIComponent(message)}`);
   }
 

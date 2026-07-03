@@ -19,14 +19,16 @@ type Props = Readonly<{
 }>;
 
 const TeamsPage: FC<Props> = ({ searchParams }) => {
+  const tournamentPromise = searchParams.then(({ tournament }) => ({ tournament }));
+
   return (
     <div className="wrapper">
       <Heading level="h1" className="text-emerald-500">
-        Equipos CARITA FELIZ 😆
+        Equipos
       </Heading>
 
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <SearchParamsSelectors />
+        <SearchParamsSelectors tournamentPromise={tournamentPromise} />
       </Suspense>
 
       <Suspense>

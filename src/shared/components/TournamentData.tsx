@@ -10,12 +10,11 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { type Tournament } from '@/shared/interfaces';
-import type { TEAM_TYPE } from '@/app/admin/estadisticas/(actions)/fetchStandingsAction';
+import type { TEAM_TYPE, TOURNAMENT_TYPE } from '@/app/admin/estadisticas/(actions)/fetchStandingsAction';
 import { ROUTES } from '../constants/routes';
 
 type Props = Readonly<{
-  tournament: Partial<Tournament>;
+  tournament: TOURNAMENT_TYPE;
   teams: TEAM_TYPE[];
   standings: boolean;
   admin?: boolean;
@@ -34,7 +33,7 @@ export const TournamentData: FC<Props> = ({
           <Table className="w-full">
             <TableBody>
               <TableRow>
-                <TableHead className="text-gray-400">Torneo</TableHead>
+                <TableHead className="text-gray-400 w-25">Torneo</TableHead>
                 <TableCell>
                   <Link
                     href={`${ROUTES.ADMIN_TOURNAMENTS}/${tournament.id}`}
@@ -46,23 +45,15 @@ export const TournamentData: FC<Props> = ({
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableHead className="text-gray-400">Temporada</TableHead>
-                <TableCell className="text-gray-500">{tournament?.season}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableHead className="text-gray-400">Categoría</TableHead>
-                <TableCell className="text-gray-500">{tournament?.category}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableHead className="text-gray-400">Formato</TableHead>
+                <TableHead className="text-gray-400 w-25">Fecha de Inicio</TableHead>
                 <TableCell className="text-gray-500">
-                  {tournament?.format} vs {tournament?.format}
+                  {format(tournament?.startDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableHead className="text-gray-400">Fecha de Inicio</TableHead>
+                <TableHead className="text-gray-400 w-25">Fecha Final</TableHead>
                 <TableCell className="text-gray-500">
-                  {format(tournament?.startDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
+                  {format(tournament.endDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -72,30 +63,26 @@ export const TournamentData: FC<Props> = ({
           <Table className="w-full">
             <TableBody>
               <TableRow>
-                <TableHead className="text-gray-400">Fecha Final</TableHead>
-                <TableCell className="text-gray-500">
-                  {format(tournament?.endDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })}
-                </TableCell>
+                <TableHead className="text-gray-400 w-25">País</TableHead>
+                <TableCell className="text-gray-500">{tournament.country}</TableCell>
               </TableRow>
               <TableRow>
-                <TableHead className="text-gray-400">País</TableHead>
-                <TableCell className="text-gray-500">{tournament?.country}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableHead className="text-gray-400">Estado</TableHead>
-                <TableCell className="text-gray-500">{tournament?.state}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableHead className="text-gray-400">Ciudad</TableHead>
+                <TableHead className="text-gray-400 w-25">
+                  Ciudad{(tournament.cities.length > 1) ? 'es' : '' }
+                </TableHead>
                 <TableCell>
-                  <p className="text-gray-500 text-wrap">
-                    {tournament?.city}
-                  </p>
+                  <span className="text-gray-500 italic text-wrap">
+                    {
+                      (tournament.cities.length > 0)
+                        ? tournament.cities.join(', ')
+                        : 'no definida'
+                    }
+                  </span>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableHead className="text-gray-400">Jornada</TableHead>
-                <TableCell className="text-gray-500">{tournament?.currentWeek}</TableCell>
+                <TableHead className="text-gray-400 w-25">Temporada</TableHead>
+                <TableCell className="text-gray-500">{tournament?.season}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
