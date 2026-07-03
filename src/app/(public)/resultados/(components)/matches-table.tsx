@@ -5,9 +5,11 @@ import { MatchRow } from './match-row';
 
 type Props = Readonly<{
   matches: MatchType[];
+  roles: 'complete' | 'team' | 'field' | undefined;
+  teamPermalink: string | undefined;
 }>;
 
-export const MatchesTable: FC<Props> = ({ matches }) => (
+export const MatchesTable: FC<Props> = ({ matches, roles, teamPermalink }) => (
   <Table>
     <TableHeader>
       <TableRow>
@@ -27,7 +29,12 @@ export const MatchesTable: FC<Props> = ({ matches }) => (
     </TableHeader>
     <TableBody>
       {matches.map((match) => (
-        <MatchRow key={match.id} match={match} />
+        <MatchRow
+          key={match.id}
+          match={match}
+          roles={roles}
+          teamPermalink={teamPermalink}
+        />
       ))}
     </TableBody>
   </Table>

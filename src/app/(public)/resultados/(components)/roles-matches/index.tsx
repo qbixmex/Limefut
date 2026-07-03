@@ -51,7 +51,11 @@ export const RolesMatches: FC<Props> = async ({
           <h2 className="text-xl font-semibold text-blue-500 mb-4">
             Partidos sin jornada asignada
           </h2>
-          <MatchesTable matches={unAssignedMatches} />
+          <MatchesTable
+            matches={unAssignedMatches}
+            roles={roles}
+            teamPermalink={teamPermalink}
+          />
         </section>
       )}
 
@@ -60,7 +64,11 @@ export const RolesMatches: FC<Props> = async ({
       {matchesSortedWeeks.map((week) => (
         <div key={week} className="mb-8">
           <h3 className="text-lg font-semibold mb-4">Jornada {week}</h3>
-          <MatchesTable matches={matchesByWeek[week]} />
+          <MatchesTable
+            matches={matchesByWeek[week]}
+            roles={roles}
+            teamPermalink={teamPermalink}
+          />
         </div>
       ))}
     </>

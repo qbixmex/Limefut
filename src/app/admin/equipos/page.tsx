@@ -18,6 +18,8 @@ type Props = Readonly<{
 }>;
 
 const TeamsPage: FC<Props> = ({ searchParams }) => {
+  const tournamentPromise = searchParams.then((sp) => ({ tournament: sp.tournament }));
+
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -32,7 +34,7 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
           </CardHeader>
           <CardContent>
             <Suspense fallback={<TournamentsSelectorSkeleton />}>
-              <SearchParamsSelectors />
+              <SearchParamsSelectors tournamentPromise={tournamentPromise} />
             </Suspense>
             <Suspense>
               <ErrorHandler />

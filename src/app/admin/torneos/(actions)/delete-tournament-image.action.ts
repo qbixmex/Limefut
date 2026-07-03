@@ -44,6 +44,7 @@ export const deleteTournamentImageAction = async (tournamentId: string): Respons
   // Update Cache
   updateTag('admin-tournaments');
   updateTag('admin-tournament');
+  updateTag('admin-standings');
   updateTag('public-tournaments');
   updateTag('public-tournament');
 

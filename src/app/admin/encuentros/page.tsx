@@ -22,6 +22,8 @@ type Props = Readonly<{
 }>;
 
 export const MatchesPage: FC<Props> = ({ searchParams }) => {
+  const tournamentPromise = searchParams.then(sp => ({ tournament: sp.tournament }));
+
   return (
     <>
       <ErrorHandler />
@@ -38,7 +40,7 @@ export const MatchesPage: FC<Props> = ({ searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense fallback={<TournamentsSelectorSkeleton />}>
-                <SearchParamsSelectors />
+                <SearchParamsSelectors tournamentPromise={tournamentPromise} />
               </Suspense>
               <Suspense>
                 <MatchesContent searchParams={searchParams} />

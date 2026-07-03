@@ -123,15 +123,19 @@ export const createTournamentAction = async ({
     revalidatePath('/admin/torneos');
     updateTag('dashboard-tournaments');
     updateTag('admin-tournaments-selector');
+    updateTag('tournaments-selector-list');
     updateTag('admin-tournaments-for-coach');
     updateTag('admin-tournaments-for-match');
     updateTag('admin-tournament-for-match');
     updateTag('admin-tournaments-for-gallery');
-    updateTag('tournaments-list');
+    updateTag('admin-standings');
     updateTag('admin-tournaments-list');
+    updateTag('admin-tournament-id');
+    updateTag('tournaments-list');
     updateTag('public-tournaments-list');
     updateTag('public-tournaments');
     updateTag('public-tournament');
+    updateTag('categories-selector-list');
 
     return prismaTransaction;
   } catch (error) {

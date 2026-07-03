@@ -14,13 +14,15 @@ type Props = Readonly<{
 }>;
 
 export const ResultsPage: FC<Props> = ({ searchParams }) => {
+  const tournamentPromise = searchParams.then(({ tournament }) => ({ tournament }));
+
   return (
     <div className="wrapper">
       <Heading level="h1" className="text-emerald-600">
         Rol de Juegos y Resultados
       </Heading>
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <SearchParamsSelectors />
+        <SearchParamsSelectors tournamentPromise={tournamentPromise} />
       </Suspense>
       <Suspense>
         <ErrorHandler />

@@ -11,6 +11,7 @@ export interface Tournament {
   country: string | null;
   state: string | null;
   city: string | null;
+  cities: string[];
   season: string | null;
   startDate: Date;
   endDate: Date;
