@@ -59,9 +59,10 @@ export const useEditTournament = ({
     formData.append('name', (data.name as string).trim());
     formData.append('permalink', (data.permalink as string).trim());
 
-    if (data.cities && data.cities.length > 0) {
+    if (data.cities) {
       formData.append('cities', JSON.stringify(data.cities));
     }
+
     if (data.categoriesIds && data.categoriesIds.length > 0) {
       formData.append('categoriesIds', JSON.stringify(data.categoriesIds));
     }

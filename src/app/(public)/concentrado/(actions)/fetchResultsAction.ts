@@ -45,7 +45,7 @@ export type ResultType = {
 
 export const fetchResultsAction = async (
   tournamentPermalink: string,
-  category: string,
+  categoryPermalink: string,
 ): ResponseAction => {
   'use cache';
 
@@ -53,14 +53,16 @@ export const fetchResultsAction = async (
   cacheTag('public-matches');
 
   const tournament = await prisma.tournament.findFirst({
-    where: {
-      permalink: tournamentPermalink,
-      category,
-    },
+    where: { permalink: tournamentPermalink },
     select: {
       id: true,
       permalink: true,
       teams: {
+        where: {
+          category: {
+            permalink: categoryPermalink,
+          },
+        },
         select: {
           id: true,
           name: true,
@@ -81,7 +83,7 @@ export const fetchResultsAction = async (
   if (!tournament) {
     return {
       ok: false,
-      message: `! No se encontró el torneo con el enlace permamente "${tournamentPermalink}" y categoría "${category}" ❌ ¡`,
+      message: `! No se encontró el torneo con el enlace permanente "${tournamentPermalink}" ❌ ¡`,
       data: {
         tournament: null,
         results: [],

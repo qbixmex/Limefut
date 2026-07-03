@@ -14,17 +14,17 @@ import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = {
-  tournament: string;
-  category: string;
+  tournamentPermalink: string;
+  categoryPermalink: string;
 };
 
 export const StandingsTable: FC<Props> = async ({
-  tournament,
-  category,
+  tournamentPermalink,
+  categoryPermalink,
 }) => {
   const response = await fetchStandingsAction({
-    tournamentPermalink: tournament,
-    categoryPermalink: category,
+    tournamentPermalink,
+    categoryPermalink,
   });
 
   if (!response.ok) {

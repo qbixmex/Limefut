@@ -15,7 +15,7 @@ export const fetchAdminTournamentAction = async (
   'use cache';
 
   cacheLife('days');
-  cacheTag('tournamentId');
+  cacheTag('admin-tournament-id');
 
   try {
     const tournament = await prisma.tournament.findFirst({

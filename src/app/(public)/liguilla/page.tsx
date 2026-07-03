@@ -5,17 +5,22 @@ import { SearchParamsSelectors } from '@/shared/components/search-params-selecto
 import { ErrorHandler } from '@/shared/components/errorHandler';
 
 type Props = Readonly<{
-  searchParams: Promise<{ tournament?: string; category?: string }>;
+  searchParams: Promise<{
+    tournament?: string;
+    category?: string;
+  }>;
 }>;
 
 export const ResultsPage: FC<Props> = ({ searchParams }) => {
+  const tournamentPromise = searchParams.then(({ tournament }) => ({ tournament }));
+
   return (
     <div className="wrapper">
       <Heading level="h1" className="text-emerald-600">
         Encuentros de Liguilla
       </Heading>
       <Suspense fallback={<TournamentsSelectorSkeleton />}>
-        <SearchParamsSelectors />
+        <SearchParamsSelectors tournamentPromise={tournamentPromise} />
       </Suspense>
       <Suspense>
         <ErrorHandler />

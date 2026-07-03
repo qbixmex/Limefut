@@ -28,26 +28,22 @@ export const fetchTeamsByTournamentAndCategoryAction = async ({
   cacheTag('fetch-teams-by-tournament');
 
   try {
-    const tournament = await prisma.tournament.findFirst({
+    const teams = await prisma.team.findMany({
       where: {
-        permalink: tournamentPermalink,
-        category: categoryPermalink,
+        tournament: { permalink: tournamentPermalink },
+        category: { permalink: categoryPermalink },
       },
       select: {
-        teams: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
+        id: true,
+        name: true,
+        permalink: true,
       },
     });
 
-    if (!tournament) {
+    if (!teams) {
       return {
         ok: false,
-        message: '! No se encontró el torneo ❌ ¡',
+        message: `! No se encontraron equipos con la categoría [${categoryPermalink}] ❌ ¡`,
         teams: [],
       };
     }
@@ -55,7 +51,7 @@ export const fetchTeamsByTournamentAndCategoryAction = async ({
     return {
       ok: true,
       message: '! Los equipos fueron obtenidos correctamente 👍',
-      teams: tournament.teams.filter((team) => !team.name.toLowerCase().includes('descanso')),
+      teams: teams.filter((team) => !team.name.toLowerCase().includes('descanso')),
     };
   } catch (error) {
     if (error instanceof Error) {

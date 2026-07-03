@@ -20,18 +20,6 @@ export type TournamentType = {
     name: string;
     permalink: string;
   }[];
-  teams: {
-    id: string;
-    name: string;
-    permalink: string;
-    category: {
-      name: string;
-      permalink: string;
-    } | null;
-    format: string;
-    imageUrl: string | null;
-  }[];
-  teamsQuantity: number;
 };
 
 type FetchTournamentResponse = Promise<{
@@ -72,27 +60,6 @@ export const fetchTournamentAction = async (permalink: string): FetchTournamentR
         startDate: true,
         endDate: true,
         stage: true,
-        teams: {
-          where: { active: true },
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-            category: {
-              select: {
-                name: true,
-                permalink: true,
-              },
-            },
-            format: true,
-            imageUrl: true,
-          },
-        },
-        _count: {
-          select: {
-            teams: true,
-          },
-        },
       },
     });
 
@@ -110,7 +77,6 @@ export const fetchTournamentAction = async (permalink: string): FetchTournamentR
       tournament: {
         ...tournament,
         categories: tournament.categories.map(c => c.category),
-        teamsQuantity: tournament._count.teams ?? 0,
       },
     };
   } catch (error) {

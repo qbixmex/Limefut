@@ -12,7 +12,7 @@ type Props = Readonly<{
   }[];
 }>;
 
-export const CategoriesSelector: FC<Props> = ({ categories }) => {
+export const CategorySelect: FC<Props> = ({ categories }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();

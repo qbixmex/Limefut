@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import type { STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type TOURNAMENT_TYPE = {
@@ -8,10 +9,11 @@ export type TOURNAMENT_TYPE = {
   name: string;
   permalink: string;
   country: string | null;
-  cities: string[] | null;
+  cities: string[];
   season: string | null;
   startDate: Date;
   endDate: Date;
+  stage: STAGE_TYPE,
   teams: {
     id: string;
     name: string;
@@ -76,6 +78,7 @@ export const fetchStandingsAction = async ({
         season: true,
         startDate: true,
         endDate: true,
+        stage: true,
         teams: {
           where: {
             category: {
@@ -103,7 +106,12 @@ export const fetchStandingsAction = async ({
     }
 
     const standings = await prisma.standings.findMany({
-      where: { tournamentId: tournament.id },
+      where: {
+        tournamentId: tournament.id,
+        category: {
+          permalink: categoryPermalink,
+        },
+      },
       orderBy: {
         totalPoints: 'desc',
       },

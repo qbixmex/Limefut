@@ -27,5 +27,3 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
     </Suspense>
   );
 };
-
-export default TeamsContent;
