@@ -76,7 +76,11 @@ export const StandingsTable: FC<Props> = async ({
                 <TableCell className="text-center">{index + 1}</TableCell>
                 <TableCell>
                   <Link
-                    href="#"
+                    href={
+                      ROUTES.PUBLIC_TEAMS_SHOW(standing.team.permalink) +
+                      `?tournament=${tournamentPermalink}` +
+                      `&category=${categoryPermalink}`
+                    }
                     target="_blank"
                     className="font-semibold italic"
                   >

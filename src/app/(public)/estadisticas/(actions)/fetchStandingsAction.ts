@@ -24,11 +24,6 @@ export type TOURNAMENT_TYPE = {
 };
 
 export type STANDING_TYPE = {
-  team: {
-    id: string;
-    name: string;
-    permalink: string;
-  };
   matchesPlayed: number;
   wins: number;
   draws: number;
@@ -38,6 +33,11 @@ export type STANDING_TYPE = {
   goalsDifference: number;
   additionalPoints: number;
   points: number;
+  team: {
+    id: string;
+    name: string;
+    permalink: string;
+  };
   category: {
     id: string;
     name: string;
