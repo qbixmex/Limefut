@@ -1,10 +1,10 @@
 import type { FC } from 'react';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import type { MatchType } from '@/app/(public)/resultados/(actions)/fetchResultsAction';
+import type { MATCH_TYPE } from '@/app/(public)/resultados/(actions)/fetch-public-results.action';
 import { MatchRow } from './match-row';
 
 type Props = Readonly<{
-  matches: MatchType[];
+  matches: MATCH_TYPE[];
   roles: 'complete' | 'team' | 'field' | undefined;
   teamPermalink: string | undefined;
 }>;

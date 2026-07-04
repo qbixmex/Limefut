@@ -9,14 +9,14 @@ import { Info } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { getMatchStatus } from '@/app/(public)/resultados/(helpers)/status';
-import type { MatchType } from '@/app/(public)/resultados/(actions)/fetchResultsAction';
+import type { MATCH_TYPE } from '@/app/(public)/resultados/(actions)/fetch-public-results.action';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/lib/utils';
 
 const TIME_ZONE = 'America/Mexico_City';
 
 type Props = Readonly<{
-  match: MatchType;
+  match: MATCH_TYPE;
   roles: 'complete' | 'team' | 'field' | undefined;
   teamPermalink: string | undefined;
 }>;
@@ -94,12 +94,12 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           aria-label="Nombre equipo local"
         >
           <Link
-            href={ROUTES.PUBLIC_TEAMS +
-              `/${match.local.permalink}` +
+            href={ROUTES.PUBLIC_TEAMS_SHOW(match.local.permalink) +
               `?tournament=${match.tournament.permalink}` +
-              `&category=${match.tournament.category}`
+              `&category=${match.category?.permalink}`
             }
             className="text-blue-500 dark:text-blue-400"
+            target='_blank'
           >
             {
               match.local.name.toLowerCase().includes('descanso')
@@ -153,7 +153,7 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
             href={ROUTES.PUBLIC_TEAMS +
               `/${match.visitor.permalink}` +
               `?tournament=${match.tournament.permalink}` +
-              `&category=${match.tournament.category}`
+              `&category=${match.category?.permalink}`
             }
             className="text-blue-500 dark:text-blue-400"
           >
