@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 import { EmptyMatches } from '../empty-matches';
-import { fetchResultsAction } from '../../(actions)/fetchResultsAction';
+import { fetchPublicResultsAction } from '../../(actions)/fetch-public-results.action';
 import { getUniqueMatches } from '../utils/get-unique-matches';
 import { getMatchesSortedByWeeks } from '../utils/get-matches-sorted-by-weeks';
 import { MatchesTable } from '../matches-table';
@@ -26,7 +26,7 @@ export const RolesMatches: FC<Props> = async ({
 
   if (roles === 'team' && !teamPermalink) return null;
 
-  const { ok, message, matches } = await fetchResultsAction({
+  const { ok, message, matches } = await fetchPublicResultsAction({
     tournamentPermalink: tournamentPermalink as string,
     categoryPermalink: categoryPermalink as string,
     teamPermalink,
