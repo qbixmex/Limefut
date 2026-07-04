@@ -3,79 +3,14 @@
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
-type CoachType = { id: string; name: string; };
-type PlayerType = { id: string; name: string; };
-type FieldType = { id: string; name: string; };
-
-type FetchTeamResponse = Promise<{
-  ok: boolean;
-  message: string;
-  team: TEAM_TYPE | null;
-}>;
-
-export type TEAM_TYPE = {
-  id: string;
-  name: string;
-  permalink: string;
-  imageUrl: string | null;
-  format: string | null;
-  category: {
-    name: string;
-    permalink: string;
-  } | null;
-  gender: string | null;
-  country: string | null;
-  city: string | null;
-  state: string | null;
-  address: string | null;
-} & {
-  tournament: {
-    id: string;
-    name: string;
-    permalink: string;
-  } | null;
-  coach: CoachType | null;
-  players: PlayerType[] | null;
-  fields: FieldType[],
-  matches: MATCH_TYPE[],
-}
-
-export type MATCH_TYPE = {
-  id: string;
-  tournamentId: string;
-  localTeam: MATCH_TEAM;
-  visitorTeam: MATCH_TEAM;
-  localScore: number | null;
-  visitorScore: number | null;
-  place: string | null;
-  matchDate: Date | null;
-  week: number | null;
-  status: string;
-  categoryId: string | null;
-  fieldId: string | null;
-  penaltyShootout: PENALTY_SHOOTOUT | null;
-};
-
-type MATCH_TEAM = {
-  id: string;
-  name: string;
-  permalink: string;
-  imageUrl: string | null;
-};
-
-type PENALTY_SHOOTOUT = {
-  localGoals: number;
-  visitorGoals: number;
-};
-
 export const fetchTeamAction = async ({
   permalink,
   tournamentPermalink,
-  category,
+  categoryPermalink,
 }: {
   permalink: string;
   tournamentPermalink: string;
-  category: string;
+  categoryPermalink: string;
 }): FetchTeamResponse => {
   'use cache';
 
@@ -90,7 +25,7 @@ export const fetchTeamAction = async ({
           permalink: tournamentPermalink,
         },
         category: {
-          name: category,
+          permalink: categoryPermalink,
         },
       },
       select: {
@@ -290,4 +225,69 @@ export const fetchTeamAction = async ({
       team: null,
     };
   }
+};
+
+type FetchTeamResponse = Promise<{
+  ok: boolean;
+  message: string;
+  team: TEAM_TYPE | null;
+}>;
+
+export type TEAM_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+  imageUrl: string | null;
+  format: string | null;
+  category: {
+    name: string;
+    permalink: string;
+  } | null;
+  gender: string | null;
+  country: string | null;
+  city: string | null;
+  state: string | null;
+  address: string | null;
+} & {
+  tournament: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
+  coach: CoachType | null;
+  players: PlayerType[] | null;
+  fields: FieldType[],
+  matches: MATCH_TYPE[],
+}
+
+type CoachType = { id: string; name: string; };
+type PlayerType = { id: string; name: string; };
+type FieldType = { id: string; name: string; };
+
+export type MATCH_TYPE = {
+  id: string;
+  tournamentId: string;
+  localTeam: MATCH_TEAM;
+  visitorTeam: MATCH_TEAM;
+  localScore: number | null;
+  visitorScore: number | null;
+  place: string | null;
+  matchDate: Date | null;
+  week: number | null;
+  status: string;
+  categoryId: string | null;
+  fieldId: string | null;
+  penaltyShootout: PENALTY_SHOOTOUT | null;
+};
+
+type MATCH_TEAM = {
+  id: string;
+  name: string;
+  permalink: string;
+  imageUrl: string | null;
+};
+
+type PENALTY_SHOOTOUT = {
+  localGoals: number;
+  visitorGoals: number;
 };

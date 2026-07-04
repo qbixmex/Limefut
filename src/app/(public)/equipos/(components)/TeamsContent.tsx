@@ -1,6 +1,6 @@
 import { Suspense, type FC } from 'react';
 import { TeamsSkeleton } from './TeamsSkeleton';
-import { TeamsList } from './TeamsList';
+import { TeamsList } from './teams-list';
 
 type Props = Readonly<{
   searchParams: Promise<{

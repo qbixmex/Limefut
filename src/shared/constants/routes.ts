@@ -68,7 +68,7 @@ export const ROUTES = {
   PUBLIC_TOURNAMENTS: '/torneos',
   PUBLIC_TOURNAMENT_SHOW: (permalink: string) => `/torneos/${permalink}`,
   PUBLIC_TEAMS: '/equipos',
-  PUBLIC_TEAM_SHOW: (permalink: string) => `/equipos/${permalink}`,
+  PUBLIC_TEAMS_SHOW: (permalink: string) => `/equipos/${permalink}`,
   PUBLIC_RESULTS: '/resultados',
   PUBLIC_CONCENTRATED: '/concentrado',
   PUBLIC_STANDINGS: '/estadisticas',
