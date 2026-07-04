@@ -26,9 +26,11 @@ type FetchTeamResponse = Promise<{
 export const fetchTeamStandingsAction = async ({
   teamId,
   tournamentId,
+  categoryId,
 }: {
   teamId: string;
   tournamentId: string;
+  categoryId: string;
 }): FetchTeamResponse => {
   'use cache';
 
@@ -37,7 +39,7 @@ export const fetchTeamStandingsAction = async ({
 
   try {
     const teamStandings = await prisma.standings.findFirst({
-      where: { teamId },
+      where: { teamId, tournamentId, categoryId },
       select: {
         matchesPlayed: true,
         wins: true,
@@ -61,7 +63,7 @@ export const fetchTeamStandingsAction = async ({
     }
 
     const tournamentStandings = await prisma.standings.findMany({
-      where: { tournamentId },
+      where: { tournamentId, categoryId },
       orderBy: [
         { totalPoints: 'desc' },
         { points: 'desc' },

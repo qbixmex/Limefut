@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { type TEAM_TYPE, fetchTeamAction } from '../../(actions)/fetchTeamAction';
 import { redirect } from 'next/navigation';
 import { ShieldBan, Table2 } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '~/src/components/ui/table';
-import { Badge } from '~/src/components/ui/badge';
-import { Heading } from '../../../components';
+import { Badge } from '@/components/ui/badge';
+import { Heading } from '@/app/(public)/components';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { buttonVariants } from '@/components/ui/button';
 import { ROUTES } from '@/shared/constants/routes';
@@ -207,33 +207,35 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
       <section className="mb-10">
         <div className="flex justify-between">
           <h2 className="text-2xl font-semibold mb-3">Estadísticas</h2>
-          <Tooltip>
-            <TooltipTrigger>
-              <Link
-                // href={
-                //   ROUTES.PUBLIC_STANDINGS +
-                //   `?tournament=${team?.tournament?.permalink}` +
-                //   `&category=${team?.tournament?.category}`
-                // }
-                href="#"
-                target='_blank'
-                className={buttonVariants({
-                  variant: 'outline-info',
-                  size: 'icon',
-                })}
-              >
-                <Table2 />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              Ver tabla de posiciones
-            </TooltipContent>
-          </Tooltip>
+          {(team.tournament && team.category) && (
+            <Tooltip>
+              <TooltipTrigger>
+                <Link
+                  href={
+                    ROUTES.PUBLIC_STANDINGS +
+                    `?tournament=${team.tournament?.permalink}` +
+                    `&category=${team.category?.permalink}`
+                  }
+                  target='_blank'
+                  className={buttonVariants({
+                    variant: 'outline-info',
+                    size: 'icon',
+                  })}
+                >
+                  <Table2 />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                Ver tabla de posiciones
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
 
         <TeamStandings
-          tournamentId={responseTeam.team?.tournament?.id as string}
           teamId={team.id}
+          tournamentId={team.tournament?.id as string}
+          categoryId={team.category?.id as string}
         />
       </section>
 
