@@ -1,4 +1,4 @@
-type Match = {
+type MATCH_TYPE = {
   id: string;
   localScore: number;
   visitorScore: number;
@@ -9,9 +9,11 @@ type Match = {
   tournament: {
     name: string;
     permalink: string;
-    category: string;
-    format: string;
   };
+  category: {
+    name: string;
+    permalink: string;
+  } | null;
   local: {
     id: string;
     name: string;
@@ -27,7 +29,7 @@ type Match = {
   } | null;
 };
 
-export const matches: Match[] = [
+export const matches: MATCH_TYPE[] = [
   {
     id: '20e66524-d3fc-447f-ae18-2c64a27b5efe',
     localScore: 2,
@@ -39,8 +41,10 @@ export const matches: Match[] = [
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
-      category: 'secundaria-femenil',
-      format: '7',
+    },
+    category: {
+      name: 'secundaria-varonil',
+      permalink: 'secundaria-varonil',
     },
     local: {
       id: '08c95a94-67d1-4642-b05e-1e804189b849',
@@ -64,8 +68,10 @@ export const matches: Match[] = [
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
-      category: 'secundaria-femenil',
-      format: '7',
+    },
+    category: {
+      name: 'secundaria-varonil',
+      permalink: 'secundaria-varonil',
     },
     local: {
       id: 'cae6ca31-5cd2-4743-886c-a34845145758',
@@ -80,7 +86,7 @@ export const matches: Match[] = [
   },
 ];
 
-export const matchesWithoutPlaces: Match[] = [
+export const matchesWithoutPlaces: MATCH_TYPE[] = [
   {
     id: 'a09c5e09-526e-432c-8de8-edb384606f54',
     localScore: 0,
@@ -92,8 +98,10 @@ export const matchesWithoutPlaces: Match[] = [
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
-      category: 'secundaria-varonil',
-      format: '7',
+    },
+    category: {
+      name: 'secundaria-varonil',
+      permalink: 'secundaria-varonil',
     },
     local: {
       id: '08c95a94-67d1-4642-b05e-1e804189b849',
@@ -117,8 +125,10 @@ export const matchesWithoutPlaces: Match[] = [
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
-      category: 'secundaria-varonil',
-      format: '7',
+    },
+    category: {
+      name: 'secundaria-varonil',
+      permalink: 'secundaria-varonil',
     },
     local: {
       id: '77f580f3-480e-4d88-b6a5-4db19e37d080',
@@ -133,7 +143,7 @@ export const matchesWithoutPlaces: Match[] = [
   },
 ];
 
-export const matchesWithoutDates: Match[] = [
+export const matchesWithoutDates: MATCH_TYPE[] = [
   {
     id: 'b050feb8-3896-45ae-a023-684cc59d3a35',
     localScore: 0,
@@ -145,8 +155,10 @@ export const matchesWithoutDates: Match[] = [
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
-      category: 'secundaria-varonil',
-      format: '7',
+    },
+    category: {
+      name: 'secundaria-varonil',
+      permalink: 'secundaria-varonil',
     },
     local: {
       id: '8972728c-c686-4dac-9e24-4068869679c4',
@@ -170,8 +182,10 @@ export const matchesWithoutDates: Match[] = [
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
-      category: 'secundaria-varonil',
-      format: '7',
+    },
+    category: {
+      name: 'secundaria-varonil',
+      permalink: 'secundaria-varonil',
     },
     local: {
       id: '32ab8ce7-cb41-4265-8e21-b6efd4bb26ea',
@@ -186,7 +200,7 @@ export const matchesWithoutDates: Match[] = [
   },
 ];
 
-export const matchesWithPenalties: Match[] = [
+export const matchesWithPenalties: MATCH_TYPE[] = [
   {
     id: 'd77a93f6-fd02-4657-bcf1-defbbad60c5f',
     localScore: 2,
@@ -198,8 +212,10 @@ export const matchesWithPenalties: Match[] = [
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
-      category: '2015',
-      format: '7',
+    },
+    category: {
+      name: 'secundaria-varonil',
+      permalink: 'secundaria-varonil',
     },
     local: {
       id: 'e170e417-451f-4aa1-a926-932b00cfba1c',
@@ -226,8 +242,10 @@ export const matchesWithPenalties: Match[] = [
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
-      category: 'secundaria-femenil',
-      format: '7',
+    },
+    category: {
+      name: 'secundaria-varonil',
+      permalink: 'secundaria-varonil',
     },
     local: {
       id: '',

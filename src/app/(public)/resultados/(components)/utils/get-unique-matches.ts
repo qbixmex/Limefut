@@ -1,6 +1,6 @@
-import type { MatchType } from '../../(actions)/fetchResultsAction';
+import type { MATCH_TYPE } from '../../(actions)/fetch-public-results.action';
 
-export const getUniqueMatches = (matches: MatchType[]) => {
+export const getUniqueMatches = (matches: MATCH_TYPE[]) => {
   const matchesByWeek = matches.reduce((grouped, match) => {
     const week = match.week;
     if (week === null) return grouped;
