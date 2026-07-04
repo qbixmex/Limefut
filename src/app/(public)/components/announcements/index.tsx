@@ -5,34 +5,34 @@ import { Newspaper } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
 import { fetchPublicAnnouncementsAction } from '../../(actions)/home/fetchPublicAnnouncements';
 import Image from 'next/image';
-import './announcements.css';
+import styles from './announcements.module.css';
 
 export const Announcements = async () => {
   const { ok, announcements } = await fetchPublicAnnouncementsAction();
 
   return (
-    <section id="announcements">
+    <section className={styles.announcements}>
       <header>
-        <h2 className="heading">Noticias</h2>
+        <h2 className={styles.heading}>Noticias</h2>
       </header>
 
-      <div className="content">
+      <div className={styles.content}>
         {(!ok || announcements.length === 0) && (
-          <div className="empty-content">
-            <p>No hay noticias que mostrar por el momento</p>
-            <Newspaper className="icon" />
+          <div className={styles.emptyContent}>
+            <p>Por el momento<br />no hay noticias</p>
+            <Newspaper className={styles.icon} />
           </div>
         )}
 
         {(announcements.length > 0) && (
-          <div className="announcements">
+          <div className={styles.announcements}>
             {announcements.map((announcement) => (
               <article
                 key={announcement.id}
-                className="announcement"
+                className={styles.announcement}
                 aria-label={`Anuncio: ${announcement.title}`}
               >
-                <h3 className="subtitle">{announcement.title}</h3>
+                <h3 className={styles.subtitle}>{announcement.title}</h3>
 
                 {announcement?.imageUrl && (
                   <figure>
@@ -41,21 +41,21 @@ export const Announcements = async () => {
                       height={0}
                       src={announcement.imageUrl}
                       alt={`${announcement.title} imagen`}
-                      className="w-full max-w-[300px] h-auto my-5 rounded-md"
+                      className={styles.image}
                     />
                   </figure>
                 )}
 
-                <p className="date" role="contentinfo">
+                <p className={styles.date} role="contentinfo">
                   {formatInTimeZone(announcement.publishedDate, 'America/Mexico_City', "d 'de' MMMM 'del' yyyy", { locale: es })}
                 </p>
-                <p className="description" role="region">{announcement.description}</p>
+                <p className={styles.description} role="region">{announcement.description}</p>
                 <Link
                   href={ROUTES.PUBLIC_ANNOUNCEMENTS_SHOW(announcement.permalink)}
-                  className="more"
+                  className={styles.moreLink}
                   aria-label={`Ver más sobre el anuncio: ${announcement.title}`}
                 >
-                  Ver más
+                  ver más
                 </Link>
               </article>
             ))}

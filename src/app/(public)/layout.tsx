@@ -1,5 +1,6 @@
-import { Suspense, type FC, type ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Container, Footer, Header } from './components';
 import { fetchPublicGlobalSettingsAction } from '../admin/ajustes-globales/(actions)/fetchPublicGlobalSettingsAction';
 import '@/app/globals.css';
