@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
@@ -10,7 +10,8 @@ import { buttonVariants } from '@/components/ui/button';
 import { useFormContext } from 'react-hook-form';
 import { toast } from 'sonner';
 import { updateMatchScoreAction } from '@/app/admin/encuentros/(actions)/update-match-score.action';
-import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
+import { ROUTES } from '@/shared/constants/routes';
+import type { MATCH_TYPE } from '../../(actions)/fetch-match.action';
 
 type Props = {
   match: MATCH_TYPE;
@@ -18,7 +19,7 @@ type Props = {
 };
 
 export const UpdateMatchScore: FC<Props> = ({ match, setHiddenScores }) => {
-  // const router = useRouter();
+  const router = useRouter();
   const { getValues } = useFormContext();
 
   const handleUpdateScore = async () => {
@@ -30,22 +31,25 @@ export const UpdateMatchScore: FC<Props> = ({ match, setHiddenScores }) => {
       visitorId: match.visitorTeam.id,
     };
 
-    const { ok, message } = await updateMatchScoreAction(data);
+    const response = await updateMatchScoreAction(data);
 
-    if (!ok) {
-      toast.error(message);
+    if (!response.ok) {
+      toast.error(response.message);
       return;
     }
 
+    const currentMatch = response.currentMatch as MATCH_TYPE;
+
     setHiddenScores(true);
 
-    toast.success(message);
-    // router.replace(
-    //   ROUTES.ADMIN_MATCHES +
-    //   `?tournament=${currentMatch?.tournament.permalink}` +
-    //   `&category=${currentMatch?.tournament.category}` +
-    //   `&sort-week=${match.week}`,
-    // );
+    toast.success(response.message);
+
+    router.replace(
+      ROUTES.ADMIN_MATCHES +
+      `?tournament=${currentMatch.tournament.permalink}` +
+      `&category=${currentMatch.category?.permalink}` +
+      `&sort-week=${match.week}`,
+    );
   };
 
   return (

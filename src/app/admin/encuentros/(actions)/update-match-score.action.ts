@@ -4,21 +4,6 @@ import prisma from '@/lib/prisma';
 import { MATCH_STATUS } from '@/shared/enums';
 import { updateTag } from 'next/cache';
 
-export type ResponseAction = Promise<{
-  ok: boolean;
-  message: string;
-  currentMatch: {
-    tournament: {
-      permalink: string;
-    };
-    category: {
-      id: string;
-      name: string;
-      permalink: string;
-    } | null;
-  } | null;
-}>;
-
 type Props = {
   matchId: string;
   localScore: number;
@@ -299,4 +284,21 @@ const updateTeamStandings = async ({
     where: { id: standings.id },
     data,
   });
+};
+
+export type ResponseAction = Promise<{
+  ok: boolean;
+  message: string;
+  currentMatch: MATCH_TYPE | null;
+}>;
+
+type MATCH_TYPE = {
+  tournament: {
+    permalink: string;
+  };
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
 };
