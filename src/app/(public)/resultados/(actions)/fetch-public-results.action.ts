@@ -3,7 +3,7 @@
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export type MatchType = {
+export type MATCH_TYPE = {
   id: string;
   localScore: number | null;
   visitorScore: number | null;
@@ -14,9 +14,11 @@ export type MatchType = {
   tournament: {
     name: string;
     permalink: string;
-    category: string | null;
-    format: string | null;
   };
+  category: {
+    name: string;
+    permalink: string;
+  } | null;
   local: {
     name: string;
     permalink: string;
@@ -34,10 +36,10 @@ export type MatchType = {
 export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  matches: MatchType[];
+  matches: MATCH_TYPE[];
 }>;
 
-export const fetchResultsAction = async ({
+export const fetchPublicResultsAction = async ({
   tournamentPermalink,
   categoryPermalink,
   roles,
@@ -78,8 +80,12 @@ export const fetchResultsAction = async ({
           select: {
             name: true,
             permalink: true,
-            category: true,
-            format: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+            permalink: true,
           },
         },
         local: {
