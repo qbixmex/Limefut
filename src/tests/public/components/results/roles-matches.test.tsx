@@ -6,13 +6,13 @@ import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { getMatchStatus } from '@/app/(public)/resultados/(helpers)/status';
-import { fetchResultsAction } from '@/app/(public)/resultados/(actions)/fetchResultsAction';
+import { fetchPublicResultsAction } from '@/app/(public)/resultados/(actions)/fetch-public-results.action';
 
 vi.mock('@/app/(public)/resultados/(actions)/fetchResultsAction');
 
 describe('Test on <RolesMatches /> component', () => {
   test('Should render correctly', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches: [],
@@ -27,7 +27,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should show matches day date', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -49,7 +49,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should matches month date', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -71,7 +71,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should matches year date', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -93,7 +93,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should show not defined message if date is null', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches: matchesWithoutDates,
@@ -114,7 +114,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should matches hour date', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -137,7 +137,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should show not defined message if time is null', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches: matchesWithoutDates,
@@ -158,7 +158,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should show match place', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -179,7 +179,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should show not defined message if match place is null', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches: matchesWithoutPlaces,
@@ -200,7 +200,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should matches status', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -222,7 +222,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should show matches team names', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -249,7 +249,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should show the matches scores', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -276,7 +276,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should not show penalty kicks if no one was made', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
@@ -298,7 +298,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should show penalties shoots', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches: matchesWithPenalties,
@@ -329,7 +329,7 @@ describe('Test on <RolesMatches /> component', () => {
   });
 
   test('Should contains match link', async () => {
-    vi.mocked(fetchResultsAction).mockResolvedValue({
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
       message: '! Los encuentros fueron obtenidos correctamente 👍',
       matches,
