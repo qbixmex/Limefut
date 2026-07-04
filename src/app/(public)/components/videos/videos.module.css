@@ -1,6 +1,8 @@
 @reference 'tailwindcss';
 
 .videosContainer {
+  width: 100%;
+  max-width: 288px;
   border-width: 1px;
   border-color: var(--color-gray-400);
   border-style: solid;
@@ -13,12 +15,13 @@
   justify-content: space-between;
   font-weight: 700;
   text-shadow: none !important;
-  background-color: var(--color-gray-700);
+  background-color: var(--color-gray-500);
   padding-block: calc(var(--spacing) * 2);
   padding-inline: calc(var(--spacing) * 3);
 }
 
 .heading {
+  color: var(--color-gray-50);
   @apply text-xl;
 }
 
