@@ -8,12 +8,14 @@ import { ROUTES } from '@/shared/constants/routes';
 type Props = Readonly<{
   teamId: string;
   tournamentId: string;
+  categoryId: string;
 }>;
 
-export const TeamStandings: FC<Props> = async ({ teamId, tournamentId }) => {
+export const TeamStandings: FC<Props> = async ({ teamId, tournamentId, categoryId }) => {
   const response = await fetchTeamStandingsAction({
     teamId,
     tournamentId,
+    categoryId,
   });
 
   if (!response.ok && !response.standings) {

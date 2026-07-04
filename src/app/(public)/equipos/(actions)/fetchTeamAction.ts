@@ -33,7 +33,6 @@ export const fetchTeamAction = async ({
         name: true,
         permalink: true,
         imageUrl: true,
-        category: true,
         format: true,
         gender: true,
         country: true,
@@ -42,6 +41,13 @@ export const fetchTeamAction = async ({
         address: true,
         active: true,
         tournament: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
+        category: {
           select: {
             id: true,
             name: true,
@@ -240,6 +246,7 @@ export type TEAM_TYPE = {
   imageUrl: string | null;
   format: string | null;
   category: {
+    id: string;
     name: string;
     permalink: string;
   } | null;
