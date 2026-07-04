@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table';
 import Link from 'next/link';
 import { fetchStandingsAction, type TOURNAMENT_TYPE } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
-import { TournamentData } from '~/src/shared/components/TournamentData';
+import { TournamentData } from '@/shared/components/TournamentData';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 

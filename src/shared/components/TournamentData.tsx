@@ -36,7 +36,7 @@ export const TournamentData: FC<Props> = ({
                 <TableHead className="text-gray-400 w-25">Torneo</TableHead>
                 <TableCell>
                   <Link
-                    href={`${ROUTES.ADMIN_TOURNAMENTS}/${tournament.id}`}
+                    href={`${ROUTES.PUBLIC_TOURNAMENTS}/${tournament.id}`}
                     target="_blank"
                     className="font-semibold italic"
                   >
