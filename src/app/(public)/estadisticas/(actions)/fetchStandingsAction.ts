@@ -1,7 +1,7 @@
 'use server';
 
+import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type TOURNAMENT_TYPE = {
@@ -13,7 +13,6 @@ export type TOURNAMENT_TYPE = {
   season: string | null;
   startDate: Date;
   endDate: Date;
-  stage: STAGE_TYPE,
   teams: {
     id: string;
     name: string;
@@ -65,35 +64,36 @@ export const fetchStandingsAction = async ({
   cacheTag('public-standings');
 
   try {
+    const tournamentSelect = {
+      id: true,
+      name: true,
+      permalink: true,
+      country: true,
+      cities: true,
+      season: true,
+      startDate: true,
+      endDate: true,
+      teams: {
+        where: {
+          category: {
+            permalink: categoryPermalink,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+          tournamentId: true,
+          categoryId: true,
+        },
+      },
+    } satisfies Prisma.TournamentSelect;
+
     const tournament = await prisma.tournament.findFirst({
       where: {
         permalink: tournamentPermalink,
       },
-      select: {
-        id: true,
-        name: true,
-        permalink: true,
-        country: true,
-        cities: true,
-        season: true,
-        startDate: true,
-        endDate: true,
-        stage: true,
-        teams: {
-          where: {
-            category: {
-              permalink: categoryPermalink,
-            },
-          },
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-            tournamentId: true,
-            categoryId: true,
-          },
-        },
-      },
+      select: tournamentSelect,
     });
 
     if (!tournament) {
@@ -105,6 +105,39 @@ export const fetchStandingsAction = async ({
       };
     }
 
+    const standingsSelect = {
+      team: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+      matchesPlayed: true,
+      wins: true,
+      draws: true,
+      losses: true,
+      goalsFor: true,
+      goalsAgainst: true,
+      goalsDifference: true,
+      additionalPoints: true,
+      points: true,
+      tournament: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+    } satisfies Prisma.StandingsSelect;
+
     const standings = await prisma.standings.findMany({
       where: {
         tournamentId: tournament.id,
@@ -115,38 +148,7 @@ export const fetchStandingsAction = async ({
       orderBy: {
         totalPoints: 'desc',
       },
-      select: {
-        team: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-        matchesPlayed: true,
-        wins: true,
-        draws: true,
-        losses: true,
-        goalsFor: true,
-        goalsAgainst: true,
-        goalsDifference: true,
-        additionalPoints: true,
-        points: true,
-        tournament: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-      },
+      select: standingsSelect,
     });
 
     return {

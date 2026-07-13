@@ -14,7 +14,7 @@ import { fetchTournamentsAction, updateTournamentStateAction } from '../(actions
 import { auth } from '@/lib/auth';
 import { DeleteTournament } from './delete-tournament';
 import { Pagination } from '@/shared/components/pagination';
-import { cn, getStageTranslation } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '~/src/components/ui/badge';
 import { headers } from 'next/headers';
@@ -105,11 +105,6 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         }
                       >
                         {tournament.teamsQuantity}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden lg:table-cell text-center">
-                      <Badge variant={getStageTranslation(tournament.stage).variant}>
-                        {getStageTranslation(tournament.stage).label}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">

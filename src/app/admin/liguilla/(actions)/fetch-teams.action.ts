@@ -19,12 +19,10 @@ export const fetchTeamsAction = async ({
   authenticatedUserId,
   authenticatedUserRoles,
   tournamentPermalink,
-  categoryPermalink,
 }: {
   authenticatedUserId: string | undefined;
   authenticatedUserRoles: string[] | null | undefined;
   tournamentPermalink: string;
-  categoryPermalink: string;
 }): ResponseAction => {
   'use cache';
 
@@ -50,14 +48,9 @@ export const fetchTeamsAction = async ({
   try {
     const teams = await prisma.team.findMany({
       where: {
-        tournament: {
-          permalink: tournamentPermalink,
-          category: categoryPermalink,
-        },
+        tournament: { permalink: tournamentPermalink },
       },
-      orderBy: {
-        name: 'desc',
-      },
+      orderBy: { name: 'desc' },
       select: {
         id: true,
         name: true,

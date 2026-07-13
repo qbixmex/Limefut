@@ -28,7 +28,6 @@ export const TeamsSelectField: FC<Props> = async ({
       authenticatedUserId,
       authenticatedUserRoles,
       tournamentPermalink,
-      categoryPermalink,
     });
     if (response.ok) {
       teams = response.teams;
