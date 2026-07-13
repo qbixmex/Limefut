@@ -136,24 +136,17 @@ model Verification {
 
 model Tournament {
   id            String   @id @default(uuid())
-  name          String
-  permalink     String
+  name          String   @db.VarChar(255)
+  permalink     String   @unique @db.VarChar(255)
   imageUrl      String?  @map("image_url")
   imagePublicID String?  @map("image_public_id")
   description   String?
-  category      String?
-  gender        Gender?  @default(male)
-  format        String?
-  stage         Stage    @default(regular)
-  country       String?
-  state         String?
-  city          String?
+  country       String?  @db.VarChar(100)
   cities        String[] @default([])
-  season        String?
+  season        String?  @db.VarChar(100)
   startDate     DateTime @map("start_date")
   endDate       DateTime @map("end_date")
   active        Boolean  @default(false)
-  currentWeek   Int?     @default(0) @map("current_week")
 
   // Relations
   matches     Match[]
@@ -167,7 +160,6 @@ model Tournament {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@index([permalink, category, format, gender])
   @@map("tournaments")
 }
 
