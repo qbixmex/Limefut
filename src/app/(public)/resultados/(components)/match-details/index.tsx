@@ -124,10 +124,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 <TableHead>Torneo</TableHead>
                 <TableCell>
                   <Link
-                    href={
-                      ROUTES.PUBLIC_TOURNAMENT_SHOW(tournament.permalink) +
-                      `?category=${tournament.category}`
-                    }
+                    href={ROUTES.PUBLIC_TOURNAMENT_SHOW(tournament.permalink)}
                     target="_blank"
                   >
                     <p className='text-balance'>{tournament.name}</p>
@@ -136,12 +133,12 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               </TableRow>
               <TableRow>
                 <TableHead>Categoría</TableHead>
-                <TableCell>{tournament.category}</TableCell>
+                <TableCell>{match?.category?.name ?? 'No definida'}</TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>Formato</TableHead>
                 <TableCell>
-                  {tournament.format} vs {tournament.format}
+                  {match?.local.format} vs {match?.visitor.format}
                 </TableCell>
               </TableRow>
               <TableRow>

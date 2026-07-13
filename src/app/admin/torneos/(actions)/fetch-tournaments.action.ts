@@ -21,10 +21,9 @@ export type ResponseFetch = Promise<{
     imageUrl: string | null;
     season: string | null;
     active: boolean;
-    stage: string;
     categoriesQuantity: number;
     teamsQuantity: number;
-  }[] | null;
+  }[];
   pagination: Pagination | null;
 }>;
 
@@ -58,27 +57,25 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
   } : {};
 
   try {
+    const tournamentSelect = {
+      id: true,
+      name: true,
+      permalink: true,
+      imageUrl: true,
+      season: true,
+      active: true,
+      _count: {
+        select: {
+          teams: true,
+          categories: true,
+        },
+      },
+    } satisfies Prisma.TournamentSelect;
+
     const tournaments = await prisma.tournament.findMany({
       where: whereCondition,
       orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        name: true,
-        permalink: true,
-        imageUrl: true,
-        season: true,
-        format: true,
-        gender: true,
-        currentWeek: true,
-        stage: true,
-        active: true,
-        _count: {
-          select: {
-            teams: true,
-            categories: true,
-          },
-        },
-      },
+      select: tournamentSelect,
       take,
       skip: (page - 1) * take,
     });
@@ -89,15 +86,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
       ok: true,
       message: '! Los torneos fueron obtenidos correctamente 👍',
       tournaments: tournaments.map((tournament) => ({
-        id: tournament.id,
-        name: tournament.name,
-        permalink: tournament.permalink,
-        imageUrl: tournament.imageUrl,
-        season: tournament.season,
-        format: tournament.format,
-        gender: tournament.gender,
-        active: tournament.active,
-        stage: tournament.stage,
+        ...tournament,
         teamsQuantity: tournament._count?.teams ?? 0,
         categoriesQuantity: tournament._count?.categories ?? 0,
       })),
@@ -112,7 +101,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
       return {
         ok: false,
         message: error.message,
-        tournaments: null,
+        tournaments: [],
         pagination: null,
       };
     }
@@ -120,7 +109,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
     return {
       ok: false,
       message: 'Error inesperado al obtener los torneos, revise los logs del servidor',
-      tournaments: null,
+      tournaments: [],
       pagination: null,
     };
   }

@@ -47,7 +47,6 @@ export const useEditTournament = ({
       description: tournament.description ?? undefined,
       startDate: tournament.startDate,
       endDate: tournament.endDate,
-      stage: tournament.stage,
       active: tournament.active,
     },
   });
@@ -86,7 +85,6 @@ export const useEditTournament = ({
         ? (data.endDate as Date).toISOString()
         : new Date().toISOString(),
     );
-    formData.append('stage', (data.stage as string).trim());
     formData.append('active', String(data.active ?? false));
 
     const { ok, message } = await updateTournamentAction({

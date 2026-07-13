@@ -17,7 +17,6 @@ import { ROUTES } from '@/shared/constants/routes';
 type Props = Readonly<{
   searchParams: Promise<{
     tournament?: string;
-    category?: string;
   }>;
 }>;
 
@@ -30,7 +29,7 @@ const CreatePlayerPage: FC<Props> = ({ searchParams }) => {
 };
 
 const CreatePlayerContent: FC<Props> = async ({ searchParams }) => {
-  const { tournament, category } = await searchParams;
+  const { tournament } = await searchParams;
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -41,10 +40,7 @@ const CreatePlayerContent: FC<Props> = async ({ searchParams }) => {
     redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(message)}`);
   }
 
-  const responseTeams = await fetchTeamsForPlayer({
-    tournamentPermalink: tournament,
-    categoryPermalink: category,
-  });
+  const responseTeams = await fetchTeamsForPlayer(tournament as string);
 
   if (!responseTeams.ok) {
     redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(responseTeams.message)}`);

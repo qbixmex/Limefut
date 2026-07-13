@@ -18,7 +18,6 @@ export type MatchResponse = {
   tournament: {
     name: string;
     permalink: string;
-    currentWeek: number | null;
   },
   localTeam: {
     name: string;
@@ -99,8 +98,6 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         select: {
           name: true,
           permalink: true,
-          currentWeek: true,
-          state: true,
         },
       },
       local: {

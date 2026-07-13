@@ -10,7 +10,7 @@ export type ResponseFetch = Promise<{
     id: string;
     name: string;
     permalink: string;
-  }[] | null;
+  }[];
 }>;
 
 export const fetchTournamentsForCoach = async (): ResponseFetch => {
@@ -23,7 +23,6 @@ export const fetchTournamentsForCoach = async (): ResponseFetch => {
     const tournaments = await prisma.tournament.findMany({
       orderBy: [
         { name: 'asc' },
-        { category: 'desc' },
       ],
       where: { active: true },
       select: {
@@ -44,14 +43,14 @@ export const fetchTournamentsForCoach = async (): ResponseFetch => {
       return {
         ok: false,
         message: error.message,
-        tournaments: null,
+        tournaments: [],
       };
     }
     console.log(error);
     return {
       ok: false,
       message: 'Error inesperado al obtener los torneos, revise los logs del servidor',
-      tournaments: null,
+      tournaments: [],
     };
   }
 };

@@ -69,25 +69,20 @@ export const createPlayoffAction = async ({
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       const tournament = await transaction.tournament.findFirst({
-        where: {
-          permalink: tournamentPermalink,
-          category: categoryPermalink,
-        },
+        where: { permalink: tournamentPermalink },
         select: { id: true },
       });
 
       if (!tournament) {
         return {
           ok: false,
-          message: `¡ El torneo: "${tournamentPermalink}" con la categoría: "${categoryPermalink}" no existe !`,
+          message: `¡ El torneo: "${tournamentPermalink}" no existe !`,
           playoff: null,
         };
       }
 
       const category = await transaction.category.findFirst({
-        where: {
-          permalink: categoryPermalink,
-        },
+        where: { permalink: categoryPermalink },
         select: { id: true },
       });
 

@@ -26,28 +26,22 @@ export const fetchPublicTeamsAction = async ({
   cacheTag('public-teams');
 
   try {
-    const tournament = await prisma.tournament.findFirst({
+    const teams = await prisma.team.findMany({
       where: {
-        category: categoryPermalink,
-        active: true,
+        tournament: { active: true },
+        category: { permalink: categoryPermalink },
       },
       select: {
         id: true,
         name: true,
-        teams: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
+        permalink: true,
       },
     });
 
     return {
       ok: true,
       message: '! Los equipos fueron obtenidos correctamente 👍 !',
-      teams: tournament?.teams ?? [],
+      teams,
     };
   } catch (error) {
     if (error instanceof Error) {

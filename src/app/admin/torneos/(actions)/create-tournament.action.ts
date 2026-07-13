@@ -3,7 +3,6 @@
 import { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { uploadImage } from '@/shared/actions';
-import type { STAGE_TYPE } from '@/shared/enums';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { createTournamentSchema } from '@/shared/schemas';
 import { revalidatePath, updateTag } from 'next/cache';
@@ -95,7 +94,6 @@ export const createTournamentAction = async ({
           description: tournamentToSave.description,
           startDate: tournamentToSave.startDate,
           endDate: tournamentToSave.endDate,
-          stage: tournamentToSave.stage as STAGE_TYPE,
           imageUrl: cloudinaryResponse?.secureUrl,
           imagePublicID: cloudinaryResponse?.publicId,
           active: tournamentToSave.active,

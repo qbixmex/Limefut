@@ -48,7 +48,18 @@ export const savePublicMatchAction = async (formData: FormData): ResponseAction 
   } = matchVerified.data;
 
   const tournament = await prisma.tournament.findFirst({
-    where: { category: categoryPermalink },
+    where: {
+      active: true,
+      season: 'desc',
+      startDate: 'desc',
+      categories: {
+        some: {
+          category: {
+            permalink: categoryPermalink,
+          },
+        },
+      },
+    },
     select: { id: true },
   });
 

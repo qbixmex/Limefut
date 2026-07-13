@@ -12,7 +12,6 @@ import { ErrorHandler } from '~/src/shared/components/errorHandler';
 import { format as formatDate } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
-import { getStageTranslation } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
 import styles from './style.module.css';
 
@@ -94,14 +93,6 @@ export const Tournament: FC<Props> = async ({ params }) => {
             <div className="w-full lg:w-1/2">
               <Table>
                 <TableBody>
-                  <TableRow>
-                    <TableHead className="font-semibold w-auto md:w-28">Fase</TableHead>
-                    <TableCell>
-                      <Badge variant={getStageTranslation(tournament.stage).variant}>
-                        {getStageTranslation(tournament.stage).label}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
                   <TableRow>
                     <TableHead className="font-semibold">
                       <p className="text-wrap">Fecha Inicial</p>

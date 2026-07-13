@@ -1,7 +1,7 @@
 'use server';
 
+import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type TOURNAMENT_TYPE = {
@@ -16,7 +16,6 @@ export type TOURNAMENT_TYPE = {
   season: string | null;
   startDate: Date;
   endDate: Date;
-  stage: STAGE_TYPE;
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -56,45 +55,46 @@ export const fetchTournamentAction = async (
   }
 
   try {
-    const tournament = await prisma.tournament.findFirst({
-      where: { id: tournamentId },
-      select: {
-        id: true,
-        name: true,
-        permalink: true,
-        imageUrl: true,
-        imagePublicID: true,
-        description: true,
-        country: true,
-        cities: true,
-        season: true,
-        startDate: true,
-        endDate: true,
-        stage: true,
-        active: true,
-        createdAt: true,
-        updatedAt: true,
-        teams: {
-          select: {
-            id: true,
-            name: true,
-          },
+    const tournamentSelect = {
+      id: true,
+      name: true,
+      permalink: true,
+      imageUrl: true,
+      imagePublicID: true,
+      description: true,
+      country: true,
+      cities: true,
+      season: true,
+      startDate: true,
+      endDate: true,
+      active: true,
+      createdAt: true,
+      updatedAt: true,
+      teams: {
+        select: {
+          id: true,
+          name: true,
         },
-        categories: {
-          include: {
-            category: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
+      },
+      categories: {
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+              permalink: true,
             },
           },
         },
-        _count: {
-          select: { teams: true },
-        },
       },
+      _count: {
+        select: { teams: true },
+      },
+    } satisfies Prisma.TournamentSelect;
+
+    const tournament = await prisma.tournament.findFirst({
+      where: { id: tournamentId },
+      select: tournamentSelect,
     });
 
     if (!tournament) {
