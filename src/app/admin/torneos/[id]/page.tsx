@@ -11,7 +11,6 @@ import type { TournamentType } from '../(actions)';
 import { fetchTournamentAction } from '../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { getStageTranslation } from '@/lib/utils';
 import { headers } from 'next/headers';
 import { DeleteTournamentImage } from '../(components)/delete-tournament-image';
 import { EditTournament } from '../(components)/edit-tournament';
@@ -110,11 +109,6 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                         </TableRow>
                         <TableRow>
                           <TableHead className="font-semibold">Fase</TableHead>
-                          <TableCell>
-                            <Badge variant={getStageTranslation(tournament.stage).variant}>
-                              {getStageTranslation(tournament.stage).label}
-                            </Badge>
-                          </TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>

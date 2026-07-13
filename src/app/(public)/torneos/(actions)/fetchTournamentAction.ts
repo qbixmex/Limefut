@@ -1,5 +1,6 @@
 'use server';
 
+import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -14,7 +15,6 @@ export type TournamentType = {
   season: string | null;
   startDate: Date;
   endDate: Date;
-  stage: string;
   categories: {
     id: string;
     name: string;
@@ -35,32 +35,33 @@ export const fetchTournamentAction = async (permalink: string): FetchTournamentR
   cacheTag('public-tournament');
 
   try {
-    const tournament = await prisma.tournament.findFirst({
-      where: { permalink },
-      select: {
-        id: true,
-        name: true,
-        permalink: true,
-        imageUrl: true,
-        description: true,
-        categories: {
-          include: {
-            category: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
+    const tournamentSelect = {
+      id: true,
+      name: true,
+      permalink: true,
+      imageUrl: true,
+      description: true,
+      categories: {
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+              permalink: true,
             },
           },
         },
-        country: true,
-        cities: true,
-        season: true,
-        startDate: true,
-        endDate: true,
-        stage: true,
       },
+      country: true,
+      cities: true,
+      season: true,
+      startDate: true,
+      endDate: true,
+    } satisfies Prisma.TournamentSelect;
+
+    const tournament = await prisma.tournament.findFirst({
+      where: { permalink },
+      select: tournamentSelect,
     });
 
     if (!tournament) {

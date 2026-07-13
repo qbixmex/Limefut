@@ -1,5 +1,6 @@
 'use server';
 
+import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -15,23 +16,15 @@ export type MatchType = {
   tournament: {
     name: string;
     permalink: string;
-    category: string | null;
-    format: string | null;
     country: string | null;
     season: string | null;
   };
-  local: {
+  category: {
     name: string;
     permalink: string;
-    imageUrl: string | null;
-    category: CATEGORY_TYPE | null;
-  };
-  visitor: {
-    name: string;
-    permalink: string;
-    imageUrl: string | null;
-    category: CATEGORY_TYPE | null;
-  };
+  } | null;
+  local: TEAM_TYPE;
+  visitor: TEAM_TYPE;
   penaltyShootout: {
     id: string;
     status: string;
@@ -59,6 +52,14 @@ export type MatchType = {
   } | null | undefined;
 };
 
+type TEAM_TYPE = {
+  name: string;
+  permalink: string;
+  imageUrl: string | null;
+  format: string;
+  category: CATEGORY_TYPE | null;
+};
+
 type CATEGORY_TYPE = {
   name: string;
   permalink: string;
@@ -77,90 +78,98 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
   cacheTag('public-result-details');
 
   try {
+    const matchSelect = {
+      id: true,
+      localScore: true,
+      visitorScore: true,
+      matchDate: true,
+      week: true,
+      status: true,
+      place: true,
+      referee: true,
+      category: {
+        select: {
+          name: true,
+          permalink: true,
+        },
+      },
+      tournament: {
+        select: {
+          name: true,
+          permalink: true,
+          country: true,
+          season: true,
+        },
+      },
+      local: {
+        select: {
+          name: true,
+          permalink: true,
+          imageUrl: true,
+          format: true,
+          category: {
+            select: {
+              name: true,
+              permalink: true,
+            },
+          },
+        },
+      },
+      visitor: {
+        select: {
+          name: true,
+          permalink: true,
+          imageUrl: true,
+          format: true,
+          category: {
+            select: {
+              name: true,
+              permalink: true,
+            },
+          },
+        },
+      },
+      penaltyShootout: {
+        select: {
+          id: true,
+          localTeam: {
+            select: {
+              id: true,
+              name: true,
+              permalink: true,
+            },
+          },
+          visitorTeam: {
+            select: {
+              id: true,
+              name: true,
+              permalink: true,
+            },
+          },
+          localGoals: true,
+          visitorGoals: true,
+          winnerTeamId: true,
+          status: true,
+          kicks: {
+            select: {
+              id: true,
+              teamId: true,
+              playerId: true,
+              shooterName: true,
+              order: true,
+              isGoal: true,
+            },
+            orderBy: { order: 'asc' },
+          },
+        },
+      },
+    } satisfies Prisma.MatchSelect;
+
     const match = await prisma.match.findUnique({
       where: {
         id: matchId,
       },
-      select: {
-        id: true,
-        localScore: true,
-        visitorScore: true,
-        matchDate: true,
-        week: true,
-        status: true,
-        place: true,
-        referee: true,
-        tournament: {
-          select: {
-            name: true,
-            permalink: true,
-            category: true,
-            format: true,
-            country: true,
-            season: true,
-          },
-        },
-        local: {
-          select: {
-            name: true,
-            permalink: true,
-            imageUrl: true,
-            category: {
-              select: {
-                name: true,
-                permalink: true,
-              },
-            },
-          },
-        },
-        visitor: {
-          select: {
-            name: true,
-            permalink: true,
-            imageUrl: true,
-            category: {
-              select: {
-                name: true,
-                permalink: true,
-              },
-            },
-          },
-        },
-        penaltyShootout: {
-          select: {
-            id: true,
-            localTeam: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
-            },
-            visitorTeam: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
-            },
-            localGoals: true,
-            visitorGoals: true,
-            winnerTeamId: true,
-            status: true,
-            kicks: {
-              select: {
-                id: true,
-                teamId: true,
-                playerId: true,
-                shooterName: true,
-                order: true,
-                isGoal: true,
-              },
-              orderBy: { order: 'asc' },
-            },
-          },
-        },
-      },
+      select: matchSelect,
     });
 
     if (!match) {

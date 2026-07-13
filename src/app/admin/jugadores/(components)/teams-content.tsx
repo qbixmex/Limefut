@@ -25,7 +25,6 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
     <Suspense fallback={<TeamsSelectorSkeleton />}>
       <TeamsWrapper
         tournamentPermalink={tournamentPermalink}
-        categoryPermalink={categoryPermalink}
       />
     </Suspense>
   );
@@ -33,14 +32,10 @@ export const TeamsContent: FC<Props> = async ({ searchParams }) => {
 
 type TeamsProps = Readonly<{
   tournamentPermalink: string;
-  categoryPermalink: string;
 }>;
 
-const TeamsWrapper: FC<TeamsProps> = async ({ tournamentPermalink, categoryPermalink }) => {
-  const { teams } = await fetchTeamsForPlayer({
-    tournamentPermalink,
-    categoryPermalink,
-  });
+const TeamsWrapper: FC<TeamsProps> = async ({ tournamentPermalink }) => {
+  const { teams } = await fetchTeamsForPlayer(tournamentPermalink);
 
   return (
     <section className="w-full lg:w-1/2 2xl:w-full 2xl:max-w-[600px]">

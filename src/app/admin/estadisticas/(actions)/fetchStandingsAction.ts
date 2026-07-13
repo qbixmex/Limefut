@@ -1,7 +1,7 @@
 'use server';
 
+import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { STAGE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type StandingPromise = Promise<{
@@ -48,7 +48,6 @@ export type TOURNAMENT_TYPE = {
   season: string | null;
   startDate: Date;
   endDate: Date;
-  stage: STAGE_TYPE;
 };
 
 export type TEAM_TYPE = {
@@ -72,19 +71,20 @@ export const fetchStandingsAction = async ({
   cacheTag('admin-standings');
 
   try {
+    const tournamentSelect = {
+      id: true,
+      name: true,
+      permalink: true,
+      country: true,
+      cities: true,
+      season: true,
+      startDate: true,
+      endDate: true,
+    } satisfies Prisma.TournamentSelect;
+
     const tournament = await prisma.tournament.findFirst({
       where: { id: tournamentId },
-      select: {
-        id: true,
-        name: true,
-        permalink: true,
-        country: true,
-        cities: true,
-        season: true,
-        startDate: true,
-        endDate: true,
-        stage: true,
-      },
+      select: tournamentSelect,
     });
 
     if (!tournament) {

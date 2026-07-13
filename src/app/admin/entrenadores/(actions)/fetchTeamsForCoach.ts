@@ -9,17 +9,16 @@ export type ResponseFetchTeams = Promise<{
   teams: {
     id: string;
     name: string;
-  }[] | null;
+    permalink: string;
+  }[];
 }>;
 
 export const fetchTeamsForCoach = async ({
   tournamentPermalink,
-  category,
-  format,
+  categoryPermalink,
 }: {
   tournamentPermalink: string,
-  category: string,
-  format: string,
+  categoryPermalink: string,
 }): ResponseFetchTeams => {
   'use cache';
 
@@ -27,36 +26,26 @@ export const fetchTeamsForCoach = async ({
   cacheTag('admin-teams-for-coach');
 
   try {
-    const tournament = await prisma.tournament.findFirst({
+    const teams = await prisma.team.findMany({
       where: {
-        permalink: tournamentPermalink,
-        category,
-        format,
+        tournament: {
+          permalink: tournamentPermalink,
+        },
+        category: {
+          permalink: categoryPermalink,
+        },
       },
       select: {
         id: true,
-        teams: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
+        name: true,
+        permalink: true,
       },
     });
-
-    if (!tournament) {
-      return {
-        ok: true,
-        message: `¡ El torneo no existe con el enlace permanente: (${tournamentPermalink}) !`,
-        teams: [],
-      };
-    }
 
     return {
       ok: true,
       message: '¡ Los equipos fueron obtenidos correctamente 👍 !',
-      teams: tournament.teams,
+      teams,
     };
   } catch (error) {
     if (error instanceof Error) {
@@ -64,14 +53,14 @@ export const fetchTeamsForCoach = async ({
       return {
         ok: false,
         message: error.message,
-        teams: null,
+        teams: [],
       };
     }
     console.log(error);
     return {
       ok: false,
       message: '¡ Error inesperado al obtener los equipos, revise los logs del servidor !',
-      teams: null,
+      teams: [],
     };
   }
 };

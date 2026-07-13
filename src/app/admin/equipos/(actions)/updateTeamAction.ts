@@ -12,7 +12,6 @@ type ResponseAction = Promise<{
   updatedTeam: TEAM_TYPE & {
     tournament: {
       permalink: string;
-      category: string | null;
     } | null;
     category: {
       id: string;
@@ -141,7 +140,6 @@ export const updateTeamAction = async ({
           tournament: {
             select: {
               permalink: true,
-              category: true,
             },
           },
         } satisfies Prisma.TeamSelect;

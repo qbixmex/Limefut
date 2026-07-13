@@ -17,10 +17,7 @@ type Props = Readonly<{
   params: Promise<{
     id: string;
   }>;
-  searchParams: Promise<{
-    tournament?: string;
-    category?: string;
-  }>;
+  searchParams: Promise<{ tournament?: string; }>;
 }>;
 
 const EditPlayerPage: FC<Props> = ({ params, searchParams }) => {
@@ -37,7 +34,7 @@ const EditPlayerPage: FC<Props> = ({ params, searchParams }) => {
 export const EditPlayerContent: FC<Props> = async ({ params, searchParams }) => {
   const session = await auth.api.getSession({ headers: await headers() });
   const playerId = (await params).id;
-  const { tournament, category } = await searchParams;
+  const { tournament } = await searchParams;
 
   const responsePlayer = await fetchPlayerAction(playerId, session?.user.roles ?? null);
 
@@ -45,10 +42,7 @@ export const EditPlayerContent: FC<Props> = async ({ params, searchParams }) => 
     redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(responsePlayer.message)}`);
   }
 
-  const responseTeams = await fetchTeamsForPlayer({
-    tournamentPermalink: tournament,
-    categoryPermalink: category,
-  });
+  const responseTeams = await fetchTeamsForPlayer(tournament as string);
 
   if (!responseTeams.ok) {
     redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(responseTeams.message)}`);

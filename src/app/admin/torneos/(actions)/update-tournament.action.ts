@@ -6,7 +6,6 @@ import { editTournamentSchema } from '@/shared/schemas';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
 import { Prisma } from '@/generated/prisma/client';
-import type { STAGE_TYPE } from '@/shared/enums';
 
 type Options = {
   formData: FormData;
@@ -58,7 +57,6 @@ export const updateTournamentAction = async ({
     season: formData.get('season') ?? undefined,
     startDate: new Date(formData.get('startDate') as string),
     endDate: new Date(formData.get('endDate') as string),
-    stage: formData.get('stage') ?? undefined,
     active: formData.get('active') === 'true',
   };
 
@@ -112,7 +110,6 @@ export const updateTournamentAction = async ({
             description: tournamentToSave.description,
             startDate: tournamentToSave.startDate,
             endDate: tournamentToSave.endDate,
-            stage: tournamentToSave.stage as STAGE_TYPE,
             active: tournamentToSave.active,
           },
         });
