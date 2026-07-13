@@ -1,4 +1,4 @@
-<img src="public/limefut-logo.png" alt="Limefut" />
+# Sportex
 
 ## Install Dependencies
 
@@ -21,7 +21,7 @@ npm run build
 
 ## Pre View the Project
 
-***Nota: se debe crear el bundle antes de correr este comando***
+***Note: You must run bundle before running this command***
 
 ```bash
 # http://localhost:3000/
