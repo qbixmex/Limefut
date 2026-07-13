@@ -55,6 +55,7 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
             <CardTitle className="admin-page-card-title">Información del Torneo</CardTitle>
+            <EditTournament tournamentId={tournamentId} side="left" />
           </CardHeader>
           <CardContent>
             <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
@@ -195,34 +196,6 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
                 )}
               </div>
             </section>
-
-            <section>
-              <h2 className="text-lg font-semibold text-emerald-600 dark:text-emerald-500 mb-5">
-                Equipos Registrados{' '}
-                <span className="text-gray-500 text-base font-semibold">
-                  ({tournament.teams.length})
-                </span>
-              </h2>
-              {
-                tournament.teams.length === 0 ? (
-                  <div className="border-2 border-cyan-600 rounded-lg px-2 py-4">
-                    <p className="text-cyan-600 text-center font-bold">Aún no hay equipos registrados</p>
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap gap-3">
-                    {tournament.teams.map(({ id, name }) => (
-                      <Link key={id} href={`/admin/equipos/${id}`}>
-                        <Badge variant="outline-info">{name}</Badge>
-                      </Link>
-                    ))}
-                  </div>
-                )
-              }
-            </section>
-
-            <div className="absolute top-5 right-5">
-              <EditTournament tournamentId={tournamentId} side="left" />
-            </div>
           </CardContent>
         </Card>
       </div>
