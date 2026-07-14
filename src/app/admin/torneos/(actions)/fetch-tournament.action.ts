@@ -24,10 +24,6 @@ export type TOURNAMENT_TYPE = {
     name: string;
     permalink: string;
   }[];
-  teams: {
-    id: string;
-    name: string;
-  }[];
   teamsQuantity: number;
 };
 
@@ -70,12 +66,6 @@ export const fetchTournamentAction = async (
       active: true,
       createdAt: true,
       updatedAt: true,
-      teams: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
       categories: {
         include: {
           category: {

@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Controller, useFormContext } from 'react-hook-form';
+import styles from './styles.module.css';
 
 export const CitiesField: FC = () => {
   const { control } = useFormContext();
@@ -46,7 +47,7 @@ export const CitiesField: FC = () => {
             <FieldLabel>
               Ciudad(es) <span className="text-gray-500">(opcional)</span>
             </FieldLabel>
-            <div className="flex min-h-9 w-full flex-wrap items-center gap-1.5 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
+            <div className={styles.inputContainer}>
               {cities.map(city => (
                 <Badge key={city} variant="secondary" className="gap-1">
                   {city}
@@ -68,11 +69,11 @@ export const CitiesField: FC = () => {
                 onKeyDown={handleKeyDown}
                 onBlur={field.onBlur}
                 aria-invalid={fieldState.invalid}
-                className="flex-1 min-w-[120px] border-0 shadow-none p-0 h-7 focus-visible:ring-0"
+                className={styles.inputField}
                 placeholder={
                   cities.length === 0
-                    ? 'Escribe una ciudad y presiona Enter'
-                    : 'Agregar otra'
+                    ? 'escriba una ciudad y después presione enter'
+                    : 'agregar otra'
                 }
               />
             </div>

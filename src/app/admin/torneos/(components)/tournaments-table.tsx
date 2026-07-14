@@ -20,6 +20,8 @@ import { Badge } from '~/src/components/ui/badge';
 import { headers } from 'next/headers';
 import { ShowTournamentDetails } from './show-tournament-details';
 import { EditTournament } from './edit-tournament';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 type Props = Readonly<{
   query: string;
@@ -55,10 +57,10 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                   <TableHead>Nombre</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Temporada</TableHead>
                   <TableHead className="hidden lg:table-cell w-25 text-center">Categorías</TableHead>
-                  <TableHead className="hidden lg:table-cell w-25 text-center">Equipos</TableHead>
-                  <TableHead className="hidden lg:table-cell w-25 text-center">Fase</TableHead>
+                  <TableHead className="hidden lg:table-cell w-25">Fecha Inicial</TableHead>
+                  <TableHead className="hidden lg:table-cell w-25">Fecha Final</TableHead>
                   <TableHead className="hidden lg:table-cell text-center">Activo</TableHead>
-                  <TableHead>Acciones</TableHead>
+                  <TableHead>&nbsp;</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -97,15 +99,11 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         {tournament.categoriesQuantity}
                       </Badge>
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell text-center">
-                      <Badge
-                        variant={(tournament.teamsQuantity > 0)
-                          ? 'outline-info'
-                          : 'outline-secondary'
-                        }
-                      >
-                        {tournament.teamsQuantity}
-                      </Badge>
+                    <TableCell className="hidden lg:table-cell">
+                      {format(tournament.startDate, "EEE d MMM',' y", { locale: es })}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      {format(tournament.endDate, "EEE d MMM',' y", { locale: es })}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">
                       <ActiveSwitch

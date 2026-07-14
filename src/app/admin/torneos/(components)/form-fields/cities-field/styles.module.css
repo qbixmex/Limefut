@@ -1,0 +1,37 @@
+@reference '../../../../../globals.css';
+
+.inputContainer {
+  display: flex;
+  width: 100%;
+  min-height: calc(var(--spacing) * 9);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(var(--spacing) * 1.5);
+  border: 1px solid;
+  padding-inline: calc(var(--spacing) * 3);
+  padding-block: calc(var(--spacing) * 1);
+  font-weight: 500;
+  @apply rounded-md border-input text-base shadow-xs;
+  @apply transition-[color,box-shadow];
+  @apply focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50;
+}
+
+.inputField {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  padding: 0;
+  height: calc(var(--spacing) * 7);
+  background-color: transparent !important;
+  &::placeholder {
+    font-size: 14px;
+    font-style: italic;
+  }
+  @apply shadow-none focus-visible:ring-0;
+}
+
+:global(.dark) {
+  .inputContainer {
+    @apply bg-input/30;
+  }
+}

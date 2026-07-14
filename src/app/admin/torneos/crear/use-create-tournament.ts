@@ -19,7 +19,6 @@ const DEFAULT_FORM_VALUES = {
   description: undefined,
   startDate: undefined,
   endDate: undefined,
-  stage: undefined,
   active: false,
 };
 
@@ -70,7 +69,6 @@ export const useCreateTournament = ({
         ? (data.endDate as Date).toISOString()
         : new Date().toISOString(),
     );
-    formData.append('stage', (data.stage as string).trim());
     formData.append('active', String(data.active ?? false));
 
     const { ok, message } = await createTournamentAction({
