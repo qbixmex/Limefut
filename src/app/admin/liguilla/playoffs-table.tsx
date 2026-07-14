@@ -52,7 +52,7 @@ export const PlayoffsTable: FC<Props> = ({
                 <TableRow key={playoff.id}>
                   <TableCell>
                     <Link
-                      href={`${ROUTES.ADMIN_TOURNAMENT(playoff.tournament.id)}`}
+                      href={`${ROUTES.ADMIN_TOURNAMENTS_SHOW(playoff.tournament.id)}`}
                       target="_blank"
                     >
                       {playoff.tournament.name}
