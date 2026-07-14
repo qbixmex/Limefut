@@ -16,12 +16,13 @@ import { DeleteTournament } from './delete-tournament';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
-import { Badge } from '~/src/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { headers } from 'next/headers';
 import { ShowTournamentDetails } from './show-tournament-details';
 import { EditTournament } from './edit-tournament';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   query: string;
@@ -34,6 +35,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
   });
 
   const {
+    ok,
+    message,
     tournaments = [],
     pagination = {
       currentPage: 1,
@@ -45,12 +48,22 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
     searchTerm: query,
   });
 
+  if (!ok) {
+    return (
+      <div className="border border-red-500 p-5 rounded">
+        <p className="text-red-500 text-center text-xl font-semibold">
+          {message}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
       {tournaments && tournaments.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Tabla de datos">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[100px] hidden lg:table-cell">Imagen</TableHead>
@@ -67,7 +80,10 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                 {tournaments.map((tournament) => (
                   <TableRow key={tournament.id}>
                     <TableCell className="hidden lg:table-cell">
-                      <Link href={`/admin/torneos/${tournament.id}`}>
+                      <Link
+                        href={ROUTES.ADMIN_TOURNAMENTS_SHOW(tournament.id)}
+                        aria-label={`Enlace a ${tournament.name}`}
+                      >
                         {
                           !tournament.imageUrl ? (
                             <figure className="border border-gray-400 dark:border-0 dark:bg-gray-800 size-[60px] rounded-lg flex items-center justify-center">
@@ -95,6 +111,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                           ? 'outline-info'
                           : 'outline-secondary'
                         }
+                        role="status"
+                        aria-label={`${tournament.categoriesQuantity} categorías`}
                       >
                         {tournament.categoriesQuantity}
                       </Badge>
