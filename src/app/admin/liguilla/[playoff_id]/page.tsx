@@ -77,7 +77,7 @@ export const PlayoffPage: FC<Props> = async ({ params }) => {
                       <TableHead>Torneo</TableHead>
                       <TableCell>
                         <Link
-                          href={ROUTES.ADMIN_TOURNAMENT(playoff.tournament.id)}
+                          href={ROUTES.ADMIN_TOURNAMENTS_SHOW(playoff.tournament.id)}
                           target="_blank"
                           className="text-wrap"
                         >

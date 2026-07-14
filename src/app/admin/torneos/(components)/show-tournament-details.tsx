@@ -12,7 +12,7 @@ export const ShowTournamentDetails: FC<Props> = ({ tournamentId }) => {
     <Tooltip>
       <TooltipTrigger>
         <Link
-          href={ROUTES.ADMIN_TOURNAMENT(tournamentId)}
+          href={ROUTES.ADMIN_TOURNAMENTS_SHOW(tournamentId)}
           className={buttonVariants({
             variant: 'outline-info',
             size: 'icon',
