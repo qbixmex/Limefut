@@ -1,6 +1,5 @@
 export { fetchTournamentsAction } from './fetch-tournaments.action';
-export type { TOURNAMENT_TYPE as TournamentType } from './fetch-tournament.action';
-export { fetchTournamentAction } from './fetch-tournament.action';
+export { fetchTournamentAction, type TOURNAMENT_TYPE } from './fetch-tournament.action';
 export { createTournamentAction } from './create-tournament.action';
 export { updateTournamentAction } from './update-tournament.action';
 export { updateTournamentStateAction } from './update-tournament-state.action';

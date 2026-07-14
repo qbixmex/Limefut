@@ -1,14 +1,13 @@
-import { Suspense, type FC } from 'react';
+import type { FC } from 'react';
+import { Suspense } from 'react';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { Table, TableBody, TableHead, TableCell, TableRow } from '@/components/ui/table';
 import { Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import type { TournamentType } from '../(actions)';
-import { fetchTournamentAction } from '../(actions)';
+import { fetchTournamentAction, type TOURNAMENT_TYPE } from '../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { headers } from 'next/headers';
@@ -47,7 +46,7 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
     redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(response.message)}`);
   }
 
-  const tournament = response.tournament as TournamentType;
+  const tournament = response.tournament as TOURNAMENT_TYPE;
 
   return (
     <div className="admin-page">
@@ -87,79 +86,68 @@ const TournamentContent: FC<TournamentContentProps> = async ({ paramsPromise }) 
               </div>
               <div className="w-full">
                 <div className="w-full flex flex-col gap-0 lg:flex-row lg:gap-5 mb-5">
-                  <div className="w-full lg:w-1/2">
-                    <Table>
-                      <TableBody>
-                        <TableRow>
-                          <TableHead className="w-auto md:w-28 font-semibold">Nombre</TableHead>
-                          <TableCell>
-                            <p className="text-wrap">{tournament.name}</p>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">
-                            <p className="text-wrap">Enlace Permanente</p>
-                          </TableHead>
-                          <TableCell>
-                            <p className="whitespace-break-spaces">{tournament.permalink}</p>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">Temporada</TableHead>
-                          <TableCell>{tournament.season}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">Fase</TableHead>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-                  <div className="w-full lg:w-1/2">
-                    <Table>
-                      <TableBody>
-                        <TableRow>
-                          <TableHead className="w-auto md:w-28 font-semibold">País</TableHead>
-                          <TableCell>{tournament.country}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">
-                            Ciudades
-                          </TableHead>
-                          <TableCell>
-                            <p className="text-wrap">{tournament.cities.join(', ')}</p>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">
-                            <p className="text-wrap">Fecha Inicial</p>
-                          </TableHead>
-                          <TableCell>
-                            <p className="text-pretty">
-                              {format(new Date(tournament.startDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                            </p>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-semibold">Fecha Final</TableHead>
-                          <TableCell>
-                            <p className="text-pretty">
-                              {format(new Date(tournament.endDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                            </p>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableHead className="font-medium">Activo</TableHead>
-                          <TableCell>
-                            {
-                              tournament.active
-                                ? <Badge variant="outline-info">activo</Badge>
-                                : <Badge variant="outline-secondary">desactivado</Badge>
-                            }
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableHead className="w-auto md:w-28 font-semibold">Nombre</TableHead>
+                        <TableCell>
+                          <p className="text-wrap">{tournament.name}</p>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="font-semibold">
+                          <p className="text-wrap">Enlace Permanente</p>
+                        </TableHead>
+                        <TableCell>
+                          <p className="whitespace-break-spaces">{tournament.permalink}</p>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="w-auto md:w-28 font-semibold">País</TableHead>
+                        <TableCell>{tournament.country}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="font-semibold">Temporada</TableHead>
+                        <TableCell>{tournament.season}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="font-semibold">
+                          Ciudades
+                        </TableHead>
+                        <TableCell>
+                          <p className="text-wrap">{tournament.cities.join(', ')}</p>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="font-semibold">
+                          <p className="text-wrap">Fecha Inicial</p>
+                        </TableHead>
+                        <TableCell>
+                          <p className="text-pretty">
+                            {format(new Date(tournament.startDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                          </p>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="font-semibold">Fecha Final</TableHead>
+                        <TableCell>
+                          <p className="text-pretty">
+                            {format(new Date(tournament.endDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                          </p>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableHead className="font-medium">Activo</TableHead>
+                        <TableCell>
+                          {
+                            tournament.active
+                              ? <Badge variant="outline-info">activo</Badge>
+                              : <Badge variant="outline-secondary">desactivado</Badge>
+                          }
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
                 </div>
               </div>
             </section>
