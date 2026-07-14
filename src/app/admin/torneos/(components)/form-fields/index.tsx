@@ -9,7 +9,6 @@ import { SeasonField } from './season-field';
 import { DescriptionTextArea } from './description-textarea';
 import { InitialDateSelectField } from './initial-date-select-field';
 import { EndDateSelectField } from './end-date-select-field';
-import { StageSelect } from './stage-select';
 import { ActiveSwitch } from './active-switch';
 
 type Props = Readonly<{ categorySlot: ReactNode }>;
@@ -59,7 +58,6 @@ export const FormFields: FC<Props> = ({ categorySlot }) => {
         </div>
         <div className="w-full lg:w-1/2 flex items-end justify-end">
           <div className="flex items-center gap-5">
-            <StageSelect />
             <ActiveSwitch />
           </div>
         </div>

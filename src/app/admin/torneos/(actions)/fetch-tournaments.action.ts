@@ -20,9 +20,10 @@ export type ResponseFetch = Promise<{
     permalink: string | null;
     imageUrl: string | null;
     season: string | null;
+    startDate: Date;
+    endDate: Date;
     active: boolean;
     categoriesQuantity: number;
-    teamsQuantity: number;
   }[];
   pagination: Pagination | null;
 }>;
@@ -64,9 +65,10 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
       imageUrl: true,
       season: true,
       active: true,
+      startDate: true,
+      endDate: true,
       _count: {
         select: {
-          teams: true,
           categories: true,
         },
       },
@@ -87,7 +89,6 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
       message: '! Los torneos fueron obtenidos correctamente 👍',
       tournaments: tournaments.map((tournament) => ({
         ...tournament,
-        teamsQuantity: tournament._count?.teams ?? 0,
         categoriesQuantity: tournament._count?.categories ?? 0,
       })),
       pagination: {

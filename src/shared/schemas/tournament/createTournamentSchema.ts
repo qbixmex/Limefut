@@ -58,8 +58,5 @@ export const createTournamentSchema = z.object({
   ]).optional(),
   startDate: z.date({ message: 'La fecha de inicio debe ser una fecha válida' }),
   endDate: z.date({ message: 'La fecha final debe ser una fecha válida' }),
-  stage: z.string('¡ La fase debe ser una cadena de texto !')
-    .min(3, { message: '¡ La fase debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ La fase debe ser menor a 100 caracteres !' }),
   active: z.boolean().optional(),
 });

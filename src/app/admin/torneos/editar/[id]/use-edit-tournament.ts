@@ -20,7 +20,6 @@ const DEFAULT_FORM_VALUES = {
   description: undefined,
   startDate: undefined,
   endDate: undefined,
-  stage: undefined,
   active: false,
 };
 
