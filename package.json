@@ -1,6 +1,6 @@
 {
   "name": "Sportex",
-  "version": "1.35.2",
+  "version": "1.35.4",
   "private": true,
   "scripts": {
     "dev": "next dev --port=3000",
