@@ -1,5 +1,5 @@
-import { TournamentsView } from '@/app/admin/torneos/tournaments-view';
 import { render, screen } from '@testing-library/react';
+import { TournamentsView } from '@/app/admin/torneos/tournaments-view';
 
 vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams('page=1'),

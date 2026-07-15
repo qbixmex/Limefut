@@ -3,6 +3,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   tournamentId: string;
@@ -14,17 +15,18 @@ export const EditTournament: FC<Props> = ({ tournamentId, side = 'top' }) => {
     <Tooltip>
       <TooltipTrigger>
         <Link
-          href={`/admin/torneos/editar/${tournamentId}`}
+          href={ROUTES.ADMIN_TOURNAMENTS_EDIT(tournamentId)}
           className={buttonVariants({
             variant: 'outline-warning',
             size: 'icon',
           })}
+          aria-label="Editar torneo"
         >
-          <Pencil />
+          <Pencil role="img" aria-label='Icono de lápiz' />
         </Link>
       </TooltipTrigger>
       <TooltipContent side={side}>
-        <p>editar</p>
+        editar
       </TooltipContent>
     </Tooltip>
   );
