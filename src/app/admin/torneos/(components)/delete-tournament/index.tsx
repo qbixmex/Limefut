@@ -15,9 +15,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { toast } from 'sonner';
-import { deleteTournamentAction } from '../../(actions)';
+
 import styles from './styles.module.css';
+import { useDeleteTournament } from './use-delete-tournament';
 
 type Props = Readonly<{
   tournamentId: string;
@@ -25,31 +25,27 @@ type Props = Readonly<{
 }>;
 
 export const DeleteTournament: FC<Props> = ({ tournamentId, roles }) => {
-  const onDeleteTournament = async () => {
-    if (roles && !roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar torneos !');
-      return;
-    }
-    const { ok, message } = await deleteTournamentAction(tournamentId);
-    if (!ok) {
-      toast.error(message);
-      return;
-    }
-    toast.success(message);
-  };
+  const { onDeleteTournament } = useDeleteTournament(
+    tournamentId,
+    roles,
+  );
 
   return (
     <AlertDialog>
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
-            <Button variant="outline-danger" size="icon">
-              <Trash2 />
+            <Button
+              variant="outline-danger"
+              size="icon"
+              aria-label="Eliminar torneo"
+            >
+              <Trash2 role="img" aria-label="Icono de basurero" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="top">
-          <p>eliminar</p>
+          eliminar
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
@@ -60,7 +56,12 @@ export const DeleteTournament: FC<Props> = ({ tournamentId, roles }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className={styles.cancelBtn}>cancelar</AlertDialogCancel>
+          <AlertDialogCancel
+            className={styles.cancelBtn}
+            aria-label="Cancelar eliminación"
+          >
+            cancelar
+          </AlertDialogCancel>
           <AlertDialogAction
             className={styles.deleteBtn}
             onClick={onDeleteTournament}
@@ -73,5 +74,3 @@ export const DeleteTournament: FC<Props> = ({ tournamentId, roles }) => {
     </AlertDialog>
   );
 };
-
-export default DeleteTournament;
