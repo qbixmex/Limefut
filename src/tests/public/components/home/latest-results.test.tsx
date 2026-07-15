@@ -5,6 +5,10 @@ import { latestMatches } from '@/tests/mocks/latest_matches';
 
 vi.mock('@/app/(public)/(actions)/home/fetchPublicLatestMatchesAction');
 
+vi.mock('@/app/(public)/components/edit-match', () => ({
+  EditMatch: () => null,
+}));
+
 vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams('page=1'),
   usePathname: () => '/',
