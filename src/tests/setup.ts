@@ -9,6 +9,8 @@ import ResizeObserver from 'resize-observer-polyfill';
 // afterEach(() => server.resetHandlers());
 // afterAll(() => server.close());
 
+window.open = vi.fn();
+
 // Mocking the IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}
