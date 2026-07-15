@@ -5,6 +5,7 @@ vi.mock('@/shared/components/errorHandler', () => ({ ErrorHandler: () => null })
 vi.mock('@/app/(public)/components/hero', () => ({ Hero: () => null }));
 vi.mock('@/app/(public)/components/calendar-matches', () => ({ CalendarMatches: () => null }));
 vi.mock('@/app/(public)/components/latest-results', () => ({ LatestResults: () => null }));
+vi.mock('@/app/(public)/components/playoff-matches', () => ({ PlayoffMatches: () => null }));
 vi.mock('@/app/(public)/components/latest-images', () => ({ LatestImages: () => null }));
 vi.mock('@/app/(public)/components/sidebar', () => ({ Sidebar: () => null }));
 
