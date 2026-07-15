@@ -6,11 +6,15 @@ import Link from 'next/link';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
-  tournamentId: string;
+  paramsPromise: Promise<{
+    id: string;
+  }>;
   side?: 'top' | 'right' | 'bottom' | 'left'
 }>;
 
-export const EditTournament: FC<Props> = ({ tournamentId, side = 'top' }) => {
+export const EditTournament: FC<Props> = async ({ paramsPromise, side = 'top' }) => {
+  const tournamentId = (await paramsPromise).id;
+
   return (
     <Tooltip>
       <TooltipTrigger>
