@@ -4,6 +4,8 @@ import {
   getBadgeRobotsVariant,
   getGenderTranslation,
   getPageStatus,
+  getPlayoffGroup,
+  getPlayoffRound,
   getRobots,
   getSiteLanguage,
   getStageTranslation,
@@ -13,7 +15,7 @@ import {
   slugify,
 } from '@/lib/utils';
 import { PAGE_STATUS, ROBOTS } from '@/shared/interfaces';
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_STATUS, ROUND, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 import { LANGUAGE } from '../../shared/enums/language.enum';
 
@@ -43,7 +45,7 @@ describe('Test on Utils', () => {
     });
     expect(getStageTranslation('playoffs')).toEqual({
       label: 'liguilla',
-      variant: 'outline-warning',
+      variant: 'outline-special',
     });
     expect(getStageTranslation('finals')).toEqual({
       label: 'finales',
@@ -149,5 +151,19 @@ describe('Test on Utils', () => {
     expect(getSiteLanguage(LANGUAGE.ENGLISH)).toBe('inglés');
     expect(getSiteLanguage(LANGUAGE.SPANISH)).toBe('español');
     expect(getSiteLanguage('french')).toBe('ninguno');
+  });
+
+  test('Should get playoff round translation to spanish', () => {
+    expect(getPlayoffRound(ROUND.QUARTER_FINAL))
+      .toBe('Cuartos de final');
+    expect(getPlayoffRound(ROUND.SEMI_FINAL))
+      .toBe('Semifinal');
+    expect(getPlayoffRound(ROUND.FINAL))
+      .toBe('Final');
+  });
+
+  test('Should get playoff group translation to spanish.', () => {
+    expect(getPlayoffGroup('gold')).toBe('Oro');
+    expect(getPlayoffGroup('silver')).toBe('Plata');
   });
 });

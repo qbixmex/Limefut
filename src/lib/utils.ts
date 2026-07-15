@@ -341,7 +341,7 @@ export const shuffleArray = <T>(array: T[]): T[] => {
  * ```
  * @returns The sponsor alignment translated to Spanish.
  */
-export const getAlignment = (alignment: string) => {
+export const getAlignment = (alignment?: string) => {
   switch (alignment) {
     case SPONSOR_ALIGNMENT.TOP:
       return 'arriba';

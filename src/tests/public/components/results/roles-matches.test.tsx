@@ -8,7 +8,7 @@ import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { getMatchStatus } from '@/app/(public)/resultados/(helpers)/status';
 import { fetchPublicResultsAction } from '@/app/(public)/resultados/(actions)/fetch-public-results.action';
 
-vi.mock('@/app/(public)/resultados/(actions)/fetchResultsAction');
+vi.mock('@/app/(public)/resultados/(actions)/fetch-public-results.action');
 
 describe('Test on <RolesMatches /> component', () => {
   test('Should render correctly', async () => {

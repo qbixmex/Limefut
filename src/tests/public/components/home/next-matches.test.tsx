@@ -8,6 +8,9 @@ import { formatInTimeZone } from 'date-fns-tz';
 
 vi.mock('@/app/(public)/(actions)/home/fetchPublicMatchesAction');
 vi.mock('@/app/(public)/(actions)/home/fetchPublicMatchesCountAction');
+vi.mock('@/app/(public)/components/edit-match', () => ({
+  EditMatch: () => null,
+}));
 
 vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams('page=1'),
