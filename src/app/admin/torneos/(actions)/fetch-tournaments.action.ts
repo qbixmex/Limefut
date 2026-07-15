@@ -14,19 +14,21 @@ type Options = Readonly<{
 export type ResponseFetch = Promise<{
   ok: boolean;
   message: string;
-  tournaments: {
-    id: string;
-    name: string;
-    permalink: string | null;
-    imageUrl: string | null;
-    season: string | null;
-    startDate: Date;
-    endDate: Date;
-    active: boolean;
-    categoriesQuantity: number;
-  }[];
+  tournaments: TOURNAMENT_TYPE[];
   pagination: Pagination | null;
 }>;
+
+export type TOURNAMENT_TYPE = {
+  id: string;
+  name: string;
+  permalink: string | null;
+  imageUrl: string | null;
+  season: string | null;
+  startDate: Date;
+  endDate: Date;
+  active: boolean;
+  categoriesQuantity: number;
+};
 
 export const fetchTournamentsAction = async (options?: Options): ResponseFetch => {
   'use cache';
