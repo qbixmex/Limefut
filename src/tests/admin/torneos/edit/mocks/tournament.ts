@@ -1,0 +1,15 @@
+export const mockTournament = {
+  id: 'abc-123',
+  name: 'Test Tournament',
+  permalink: 'test-tournament',
+  imageUrl: null,
+  imagePublicID: null,
+  description: null,
+  categoriesIds: [],
+  country: null,
+  cities: [],
+  season: null,
+  startDate: new Date('2025-01-01T00:00:00.000Z'),
+  endDate: new Date('2025-12-31T00:00:00.000Z'),
+  active: true,
+};
