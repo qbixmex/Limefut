@@ -1,6 +1,6 @@
 import { TournamentView } from '@/app/admin/torneos/[id]/tournament-view';
 import { render, screen } from '@testing-library/react';
-import { tournamentMock } from './mocks/tournament.mock';
+import { tournamentMock } from '../mocks/tournament.mock';
 import { fetchTournamentAction } from '@/app/admin/torneos/(actions)/fetch-tournament.action';
 import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
