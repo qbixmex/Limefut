@@ -1,6 +1,6 @@
+import { render, screen, waitFor } from '@testing-library/react';
 import { ShowTournamentDetails } from '@/app/admin/torneos/(components)/show-tournament-details';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 
 describe('Test on <ShowTournamentDetails /> component', () => {

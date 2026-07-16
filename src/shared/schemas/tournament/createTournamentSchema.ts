@@ -10,7 +10,7 @@ const ACCEPTED_FILE_TYPES = [
 ];
 
 export const createTournamentSchema = z.object({
-  name: z.string('¡ El nombre debe ser una cadena de texto !')
+  name: z.string('¡ El nombre debe ser una cadena de texto válida !')
     .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
     .max(250, { message: '¡ El nombre debe ser menor a 250 caracteres !' }),
   permalink: z.string('¡ El enlace permanente debe ser una cadena de texto !')
@@ -48,7 +48,8 @@ export const createTournamentSchema = z.object({
   description: z.union([
     z.literal(''),
     z.string('¡ La descripción debe ser una cadena de texto !')
-      .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' }),
+      .min(3, { message: '¡ La descripción debe ser mayor a 3 caracteres !' })
+      .max(500, { message: '¡ La descripción no debe ser mayor a 500 caracteres !' }),
   ]).optional(),
   season: z.union([
     z.literal(''),
@@ -58,5 +59,5 @@ export const createTournamentSchema = z.object({
   ]).optional(),
   startDate: z.date({ message: 'La fecha de inicio debe ser una fecha válida' }),
   endDate: z.date({ message: 'La fecha final debe ser una fecha válida' }),
-  active: z.boolean().optional(),
+  active: z.boolean({ message: '¡ Activo solo debe ser falso o verdadero (boolean) !' }).optional(),
 });

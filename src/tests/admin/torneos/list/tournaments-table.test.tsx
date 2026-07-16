@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { TournamentsTable } from '@/app/admin/torneos/(components)/tournaments-table';
 import { fetchTournamentsAction } from '@/app/admin/torneos/(actions)/fetch-tournaments.action';
-import { tournaments } from './mocks/tournaments.mock';
+import { tournaments } from '../mocks/tournaments.mock';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
