@@ -50,10 +50,15 @@ export const EditTournamentForm: FC<Props> = ({
             variant="outline-primary"
             size="lg"
             disabled={form.formState.isSubmitting}
+            aria-label="Guardar torneo"
           >
             {form.formState.isSubmitting ? (
               <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                <span className="text-sm italic">Espere</span>
+                <span
+                  className="text-sm italic"
+                  role="status"
+                  aria-label="Enviando formulario"
+                >Espere</span>
                 <LoaderCircle className="size-4 animate-spin" />
               </span>
             ) : (
