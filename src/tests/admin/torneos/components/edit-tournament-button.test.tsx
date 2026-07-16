@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { EditTournament } from '@/app/admin/torneos/(components)/edit-tournament';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { userEvent } from '@testing-library/user-event';
@@ -23,10 +23,8 @@ describe('Test on <EditTournament /> component', () => {
     const user = userEvent.setup();
     await user.hover(link);
 
-    await waitFor(() => {
-      const toolTip = screen.getByRole('tooltip');
-      expect(toolTip).toHaveTextContent(/editar/i);
-    });
+    const toolTip = await screen.findByRole('tooltip');
+    expect(toolTip).toHaveTextContent(/editar/i);
   });
 
   test('Should have a link with provided url', async () => {

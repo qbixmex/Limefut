@@ -1,10 +1,10 @@
+import { Suspense } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Suspense } from 'react';
 import { CreateTournamentView } from './create-tournament-view';
 
 const CreateTournamentPage = async () => {
@@ -13,7 +13,11 @@ const CreateTournamentPage = async () => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Crear Torneo</CardTitle>
+            <CardTitle
+              className="admin-page-card-title"
+              role="heading"
+              aria-label="Título de la página"
+            >Crear Torneo</CardTitle>
           </CardHeader>
           <CardContent>
             <Suspense>
