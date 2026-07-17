@@ -271,7 +271,7 @@ describe('Test on <TournamentView />', () => {
     expect(badge).toBeInTheDocument();
   });
 
-   test('Should shows tournament description', async () => {
+  test('Should shows tournament description', async () => {
     vi.mocked(fetchTournamentAction).mockResolvedValue(defaultResponse);
     const ServerComponent = await TournamentView({
       paramsPromise: Promise.resolve({

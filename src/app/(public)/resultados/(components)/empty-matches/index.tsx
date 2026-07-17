@@ -14,7 +14,9 @@ export const EmptyMatches = () => {
         className={styles.message}
         role="alert"
         aria-label="No se encontraron encuentros"
-      >No se encontraron encuentros</p>
+      >
+        No se encontraron encuentros
+      </p>
     </div>
   );
 };

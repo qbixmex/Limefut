@@ -5,7 +5,7 @@ import { auth } from '@/lib/auth';
 type BetterAuthApiResponse = {
   code: string;
   message: string;
-}
+};
 
 export const signInAction = async (formData: FormData): Promise<{
   ok: boolean;

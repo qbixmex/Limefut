@@ -40,10 +40,12 @@ export const MatchCard: FC<Props> = ({ match, winner, isJustFinal = false }) => 
   return (
     <div className={cn(styles.cardContainer, { 'max-w-1/4': isJustFinal })}>
       <div className={styles.teamRow}>
-        <div className={cn({
-          [styles.teamDataColumns]: match.localTeam.imageUrl,
-          [styles.teamData]: !match.localTeam.imageUrl,
-        })}>
+        <div
+          className={cn({
+            [styles.teamDataColumns]: match.localTeam.imageUrl,
+            [styles.teamData]: !match.localTeam.imageUrl,
+          })}
+        >
           {match.localTeam.imageUrl && (
             <Image
               src={match.localTeam.imageUrl}
@@ -54,35 +56,45 @@ export const MatchCard: FC<Props> = ({ match, winner, isJustFinal = false }) => 
               style={{ width: 40, height: 40 }}
             />
           )}
-          <span className={cn(styles.teamName, {
-            [styles.winnerTeamName]: winner === 'local',
-          })}>
+          <span
+            className={cn(styles.teamName, {
+              [styles.winnerTeamName]: winner === 'local',
+            })}
+          >
             {match.localTeam.name}
           </span>
         </div>
         <div className={styles.matchScores}>
           {match.penaltyShoots && (
-            <span className={cn(styles.penaltyShoots, {
-              [styles.winnerTeamScore]: match.penaltyShoots && winner === 'local',
-            })}>
+            <span
+              className={cn(styles.penaltyShoots, {
+                [styles.winnerTeamScore]: match.penaltyShoots && winner === 'local',
+              })}
+            >
               ({match.penaltyShoots.localGoals})
             </span>
           )}
           <span className={styles.matchScore}>
             {isScheduled ? '-' : !hasScore ? '-' : (
-              <span className={cn({
-                [styles.winnerTeamScore]: winner === 'local' && !match.penaltyShoots,
-              })}>{match.localScore}</span>
+              <span
+                className={cn({
+                  [styles.winnerTeamScore]: winner === 'local' && !match.penaltyShoots,
+                })}
+              >
+                {match.localScore}
+              </span>
             )}
           </span>
         </div>
       </div>
 
       <div className={styles.teamRow}>
-        <div className={cn({
-          [styles.teamDataColumns]: match.visitorTeam.imageUrl,
-          [styles.teamData]: !match.visitorTeam.imageUrl,
-        })}>
+        <div
+          className={cn({
+            [styles.teamDataColumns]: match.visitorTeam.imageUrl,
+            [styles.teamData]: !match.visitorTeam.imageUrl,
+          })}
+        >
           {match.visitorTeam.imageUrl && (
             <Image
               src={match.visitorTeam.imageUrl}
@@ -93,23 +105,29 @@ export const MatchCard: FC<Props> = ({ match, winner, isJustFinal = false }) => 
               style={{ width: 40, height: 40 }}
             />
           )}
-          <span className={cn(styles.teamName, {
-            [styles.winnerTeamName]: winner === 'visitor',
-          })}>
+          <span
+            className={cn(styles.teamName, {
+              [styles.winnerTeamName]: winner === 'visitor',
+            })}
+          >
             {match.visitorTeam.name}
           </span>
         </div>
         <div className={styles.matchScores}>
           {match.penaltyShoots && (
-            <span className={cn(styles.penaltyShoots, {
-              [styles.winnerTeamScore]: match.penaltyShoots && winner === 'visitor',
-            })}>
+            <span
+              className={cn(styles.penaltyShoots, {
+                [styles.winnerTeamScore]: match.penaltyShoots && winner === 'visitor',
+              })}
+            >
               ({match.penaltyShoots.visitorGoals})
             </span>
           )}
-          <span className={cn(styles.matchScore, {
-            [styles.winnerTeamScore]: winner === 'visitor' && !match.penaltyShoots,
-          })}>
+          <span
+            className={cn(styles.matchScore, {
+              [styles.winnerTeamScore]: winner === 'visitor' && !match.penaltyShoots,
+            })}
+          >
             {isScheduled ? '-' : !hasScore ? '-' : match.visitorScore}
           </span>
         </div>

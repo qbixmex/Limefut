@@ -37,7 +37,9 @@ export const VisitorTeamSelectField: FC<Props> = ({ teams }) => {
                   key={id}
                   value={id}
                   disabled={id === localId}
-                >{name}</SelectItem>
+                >
+                  {name}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>

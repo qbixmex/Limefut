@@ -16,10 +16,10 @@ type ImageType = {
 };
 
 export type ResponseAction = Promise<{
-    ok: boolean;
-    message: string;
-    galleries: GalleryType[];
-  }>;
+  ok: boolean;
+  message: string;
+  galleries: GalleryType[];
+}>;
 
 export const fetchGalleriesAction = async (): ResponseAction => {
   'use cache';

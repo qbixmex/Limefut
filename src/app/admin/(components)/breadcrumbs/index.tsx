@@ -59,9 +59,11 @@ export const Breadcrumbs = () => {
         }
         {
           pathSegments.length > 3 && (
-            <Activity mode={
-              isUUID(pathSegments[3]) ? 'hidden' : 'visible'
-            }>
+            <Activity
+              mode={
+                isUUID(pathSegments[3]) ? 'hidden' : 'visible'
+              }
+            >
               <BreadcrumbSeparator className="hidden md:block">
                 <ChevronRight />
               </BreadcrumbSeparator>

@@ -42,7 +42,7 @@ export const RolesMatches: FC<Props> = async ({
 
   if (matches.length === 0) {
     return <EmptyMatches />;
-  };
+  }
 
   return (
     <>

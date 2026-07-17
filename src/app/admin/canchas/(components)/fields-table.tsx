@@ -93,9 +93,11 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn('flex justify-center mt-10', {
-            hidden: pagination!.totalPages === 1,
-          })}>
+          <div
+            className={cn('flex justify-center mt-10', {
+              hidden: pagination!.totalPages === 1,
+            })}
+          >
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
         </div>

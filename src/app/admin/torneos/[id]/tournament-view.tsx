@@ -157,14 +157,18 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
                             variant="outline-info"
                             role="status"
                             aria-label="Torneo activo"
-                          >activo</Badge>
+                          >
+                            activo
+                          </Badge>
                         )
                         : (
                           <Badge
                             variant="outline-secondary"
                             role="status"
                             aria-label="Torneo desactivado"
-                          >desactivado</Badge>
+                          >
+                            desactivado
+                          </Badge>
                         )
                     }
                   </TableCell>
@@ -181,13 +185,17 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
           <p
             className="text-pretty"
             aria-label="Descripción del torneo"
-          >{tournament.description}</p>
+          >
+            {tournament.description}
+          </p>
         ) : (
           <Badge
             variant="outline-secondary"
             role="status"
             aria-label="Descripción del torneo"
-          >No suministrada</Badge>
+          >
+            No suministrada
+          </Badge>
         )}
       </section>
 

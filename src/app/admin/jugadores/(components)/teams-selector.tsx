@@ -69,17 +69,17 @@ export const TeamsSelector: FC<Props> = ({ teams }) => {
               <CommandEmpty>No se encontró equipo.</CommandEmpty>
               <CommandGroup>
                 <CommandItem
-                    value="none"
-                    onSelect={() => setTeamIdParam('none')}
-                  >
-                    <span className="text-gray-400 italic">Jugadores sin equipo asignado</span>
-                    <Check
-                      className={cn('ml-auto size-4', {
+                  value="none"
+                  onSelect={() => setTeamIdParam('none')}
+                >
+                  <span className="text-gray-400 italic">Jugadores sin equipo asignado</span>
+                  <Check
+                    className={cn('ml-auto size-4', {
                         'opacity-100': teamId === 'none',
                         'opacity-0': teamId !== 'none',
                       })}
-                    />
-                  </CommandItem>
+                  />
+                </CommandItem>
                 {teams.map((team) => (
                   <CommandItem
                     key={team.id}

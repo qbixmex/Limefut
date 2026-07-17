@@ -7,13 +7,13 @@ export const NameAndPermalinkFields: FC = () => {
 
   return (
     <div className="flex flex-col gap-5 lg:flex-row">
-        <div className="w-full lg:w-1/2">
-          <NameField isPermalinkEdited={isPermalinkEdited} />
-        </div>
-
-        <div className="w-full lg:w-1/2">
-            <PermalinkField setPermalinkEdited={setIsPermalinkEdited} />
-        </div>
+      <div className="w-full lg:w-1/2">
+        <NameField isPermalinkEdited={isPermalinkEdited} />
       </div>
+
+      <div className="w-full lg:w-1/2">
+        <PermalinkField setPermalinkEdited={setIsPermalinkEdited} />
+      </div>
+    </div>
   );
 };

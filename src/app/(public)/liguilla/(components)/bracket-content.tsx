@@ -54,7 +54,7 @@ const PlayoffsBranches: FC<PlayoffsBranchesProps> = async ({
         <p className="text-sky-500 text-2xl font-bold text-center">{message}</p>
       </div>
     );
-  };
+  }
 
   return (
     <>

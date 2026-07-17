@@ -6,4 +6,4 @@ export const SOCIAL_PLATFORM = {
   YOUTUBE: 'youtube',
 } as const;
 
-export type SOCIAL_PLATFORM = typeof SOCIAL_PLATFORM[keyof typeof SOCIAL_PLATFORM];
+export type SOCIAL_PLATFORM_TYPE = typeof SOCIAL_PLATFORM[keyof typeof SOCIAL_PLATFORM];

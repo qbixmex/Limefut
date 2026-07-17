@@ -63,7 +63,7 @@ type TEAM_TYPE = {
 type CATEGORY_TYPE = {
   name: string;
   permalink: string;
-}
+};
 
 export type ResponseAction = Promise<{
   ok: boolean;

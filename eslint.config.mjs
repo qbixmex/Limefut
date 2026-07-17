@@ -1,24 +1,12 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
-import { FlatCompat } from '@eslint/eslintrc';
-import reactPlugin from 'eslint-plugin-react';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import neostandard from 'neostandard';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Override default ignores of eslint-config-next.
   globalIgnores([
-    // Default ignores of eslint-config-next:
     'node_modules/**',
     '.next/**',
     'out/**',
@@ -26,16 +14,17 @@ const eslintConfig = defineConfig([
     'next-env.d.ts',
     'src/generated',
   ]),
-  ...compat.extends(
-    'standard',
-  ),
+  ...neostandard({ semi: true }),
   {
-    plugins: {
-      react: reactPlugin,
-    },
     rules: {
-      quotes: 'warn',
-      semi: ['warn', 'always'],
+      '@stylistic/quotes': ['warn', 'single', { avoidEscape: true }],
+      '@stylistic/jsx-quotes': ['warn', 'prefer-double'],
+      '@stylistic/space-before-function-paren': 'off',
+      '@stylistic/comma-dangle': 'off',
+      '@stylistic/multiline-ternary': 'off',
+      '@stylistic/jsx-curly-spacing': 'off',
+      'react/jsx-handler-names': 'off',
+      '@stylistic/indent': 'off',
       indent: 'off',
       camelcase: 'off',
       'no-tabs': 'off',

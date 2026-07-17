@@ -15,7 +15,10 @@ export const MatchesTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) 
           style={{ gridTemplateColumns: `repeat(${colCount},1fr)` }}
         >
           {Array.from({ length: colCount }).map((_, column) => (
-            <div key={`row-${row}-column-${column}`} className={'w-full h-5 bg-gray-500 rounded'} />
+            <div
+              key={`row-${row}-column-${column}`}
+              className="w-full h-5 bg-gray-500 rounded"
+            />
           ))}
         </div>
       ))}

@@ -52,12 +52,12 @@ export const Tournament: FC<Props> = ({ tournament }) => {
 
       <div className="tournamentData">
         <p><b>País:</b> {tournament.country}</p>
-        <p><b>Fecha Inicial:</b> {
-          format(tournament.startDate, "dd 'de' MMMM, yyyy", { locale: es })
-        }</p>
-        <p><b>Fecha Final:</b> {
-          format(tournament.endDate, "dd 'de' MMMM, yyyy", { locale: es })
-        }</p>
+        <p><b>Fecha Inicial:</b>
+          {format(tournament.startDate, "dd 'de' MMMM, yyyy", { locale: es })}
+        </p>
+        <p><b>Fecha Final:</b>
+          {format(tournament.endDate, "dd 'de' MMMM, yyyy", { locale: es })}
+        </p>
         <p><b>Temporada:</b> {tournament.season}</p>
       </div>
     </section>

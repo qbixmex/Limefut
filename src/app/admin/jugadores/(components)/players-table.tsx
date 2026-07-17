@@ -129,9 +129,11 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
               className="absolute -top-5 right-0"
             />
           </div>
-          <div className={cn('flex justify-center mt-10', {
-            hidden: pagination!.totalPages === 1,
-          })}>
+          <div
+            className={cn('flex justify-center mt-10', {
+              hidden: pagination!.totalPages === 1,
+            })}
+          >
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
         </div>

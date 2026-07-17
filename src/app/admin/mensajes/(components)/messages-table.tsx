@@ -79,9 +79,10 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
                           resource={{ id: message.id as string, state: message.read }}
                           updateResourceStateAction={updateMessageStatusAction}
                         />
-                        {message.read
-                          ? <span className="text-emerald-500">Si</span>
-                          : <span className="text-amber-500">No</span>
+                        {
+                          message.read
+                            ? <span className="text-emerald-500">Si</span>
+                            : <span className="text-amber-500">No</span>
                         }
                       </div>
                     </TableCell>
@@ -110,9 +111,11 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn('flex justify-center mt-10', {
-            hidden: pagination!.totalPages === 1,
-          })}>
+          <div
+            className={cn('flex justify-center mt-10', {
+              hidden: pagination!.totalPages === 1,
+            })}
+          >
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
         </div>

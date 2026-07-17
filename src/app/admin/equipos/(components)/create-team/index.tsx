@@ -14,13 +14,14 @@ export const CreateTeam: FC = () => {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Link href={
-          (searchParams.has('tournament') && searchParams.has('category'))
-            ? (ROUTES.ADMIN_TEAM_CREATE +
-                `?tournament=${searchParams.get('tournament')}` +
-                `&category=${searchParams.get('category')}`
-              )
-            : ROUTES.ADMIN_TEAM_CREATE
+        <Link
+          href={
+            (searchParams.has('tournament') && searchParams.has('category'))
+              ? (ROUTES.ADMIN_TEAM_CREATE +
+                  `?tournament=${searchParams.get('tournament')}` +
+                  `&category=${searchParams.get('category')}`
+                )
+              : ROUTES.ADMIN_TEAM_CREATE
           }
           className={
             buttonVariants({

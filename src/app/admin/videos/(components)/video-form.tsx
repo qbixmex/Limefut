@@ -275,9 +275,10 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
                             })}
                             aria-invalid={form.formState.errors.publishedDate ? 'true' : 'false'}
                           >
-                            {selectedPublishedDate
-                              ? format(selectedPublishedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
-                              : 'Seleccione la fecha de publicación'
+                            {
+                              selectedPublishedDate
+                                ? format(selectedPublishedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
+                                : 'Seleccione la fecha de publicación'
                             }
                             <ChevronDownIcon />
                           </Button>
@@ -355,6 +356,6 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
           </Button>
         </div>
       </form>
-    </Form >
+    </Form>
   );
 };

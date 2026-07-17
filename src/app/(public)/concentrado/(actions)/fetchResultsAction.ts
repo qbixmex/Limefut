@@ -27,7 +27,7 @@ export type TEAM_TYPE = {
     permalink: string;
   } | null;
   format: string;
-}
+};
 
 export type ResultType = {
   id: string;

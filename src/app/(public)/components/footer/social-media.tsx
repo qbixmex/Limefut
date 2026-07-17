@@ -18,7 +18,7 @@ export const SocialMedia: FC<Props> = ({ socialMedia }) => {
           .filter((item) => item.url !== '#')
           .map((item) => (
             <div key={item.platform} className="social-link">
-              <a href={item.url} target="_blank">
+              <a href={item.url} target="_blank" rel="noreferrer">
                 <item.icon
                   className={cn(['social-icon', item.css])}
                   role="icon"
@@ -27,7 +27,7 @@ export const SocialMedia: FC<Props> = ({ socialMedia }) => {
               </a>
             </div>
           )) : (
-          <p role="alert">Aún no hay redes sociales disponibles.</p>
+            <p role="alert">Aún no hay redes sociales disponibles.</p>
         )
       }
     </nav>

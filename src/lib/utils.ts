@@ -85,37 +85,37 @@ export const sleep = (time: number = 1): Promise<void> => {
  * @returns An object containing the label and variant for the stage.
  */
 export const getStageTranslation = (stage: string): {
-    label: string;
-    variant:
+  label: string;
+  variant:
       | 'outline-info'
       | 'outline-primary'
       | 'outline-special'
       | 'outline-success'
       | 'outline-secondary';
-  } => {
-    switch (stage) {
-      case 'regular':
-        return {
-          variant: 'outline-info',
-          label: 'regular',
-        };
-      case 'playoffs':
-        return {
-          variant: 'outline-special',
-          label: 'liguilla',
-        };
-      case 'finals':
-        return {
-          variant: 'outline-success',
-          label: 'finales',
-        };
-      default:
-        return {
-          label: 'desconocida',
-          variant: 'outline-secondary',
-        };
-    }
-  };
+} => {
+  switch (stage) {
+    case 'regular':
+      return {
+        variant: 'outline-info',
+        label: 'regular',
+      };
+    case 'playoffs':
+      return {
+        variant: 'outline-special',
+        label: 'liguilla',
+      };
+    case 'finals':
+      return {
+        variant: 'outline-success',
+        label: 'finales',
+      };
+    default:
+      return {
+        label: 'desconocida',
+        variant: 'outline-secondary',
+      };
+  }
+};
 
 /**
  * Gets the variant for the SEO robots badge.

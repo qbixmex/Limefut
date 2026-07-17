@@ -64,12 +64,15 @@ export const DeleteGalleryImage: FC<{ imageId: string }> = ({ imageId }) => {
             className={cn(styles.deleteBtn, { 'animate-pulse': isDeleting })}
             onClick={() => onDeleteImage(imageId)}
           >
-            {isDeleting ? (
-              <>
-                <span>espere</span>
-                <Loader2 className="animate-spin" />
-              </>
-            ) : <span>eliminar</span>
+            {
+              isDeleting ? (
+                <>
+                  <span>espere</span>
+                  <Loader2 className="animate-spin" />
+                </>
+              ) : (
+                <span>eliminar</span>
+              )
             }
           </AlertDialogAction>
         </AlertDialogFooter>

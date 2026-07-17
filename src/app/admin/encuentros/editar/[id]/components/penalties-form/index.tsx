@@ -39,7 +39,7 @@ type Team = {
     id: string;
     name: string;
   }[];
-}
+};
 
 export const PenaltiesForm: FC<Props> = ({
   userRoles,

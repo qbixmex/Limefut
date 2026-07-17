@@ -10,7 +10,7 @@ type Image = {
   resourceId: string;
 };
 
-export type PageType = Page & { images: Image[] }
+export type PageType = Page & { images: Image[] };
 
 type FetchResponse = Promise<{
   ok: boolean;

@@ -52,7 +52,7 @@ export const MatchDateTimeFields = ({ match }: Props) => {
             checked={enabledDate}
             onCheckedChange={() => setEnabledDate(prev => !prev)}
           />
-          <Label htmlFor='set-date'>Programar Fecha y Hora</Label>
+          <Label htmlFor="set-date">Programar Fecha y Hora</Label>
         </div>
       )}
 
@@ -69,14 +69,15 @@ export const MatchDateTimeFields = ({ match }: Props) => {
                   variant="secondary"
                   className="w-[225px] justify-between font-normal"
                 >
-                  {selectedDate
-                    ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                    : (
-                      <span>
-                        Seleccione Fecha&nbsp;
-                        <span className="text-sm text-gray-500">(optional)</span>
-                      </span>
-                    )
+                  {
+                    selectedDate
+                      ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                      : (
+                        <span>
+                          Seleccione Fecha&nbsp;
+                          <span className="text-sm text-gray-500">(optional)</span>
+                        </span>
+                      )
                   }
                   <ChevronDownIcon />
                 </Button>

@@ -37,9 +37,10 @@ export const PublishedDateField = () => {
                   })}
                   aria-invalid={formState.errors.publishedDate ? 'true' : 'false'}
                 >
-                  {selectedPublishedDate
-                    ? format(selectedPublishedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
-                    : 'Seleccione la fecha de publicación'
+                  {
+                    selectedPublishedDate
+                      ? format(selectedPublishedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
+                      : 'Seleccione la fecha de publicación'
                   }
                   <ChevronDownIcon />
                 </Button>

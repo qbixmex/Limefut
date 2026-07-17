@@ -44,12 +44,14 @@ export const ConcentratedResults: FC<Props> = ({ data }) => {
             <tr key={rowTeam.id} data-row={rowIndex + 1} data-team={rowTeam.id}>
               <td data-row-label>
                 <Link
-                  href={ROUTES.PUBLIC_TEAMS +
+                  href={
+                    ROUTES.PUBLIC_TEAMS +
                     `/${rowTeam.permalink}` +
                     `?torneo=${tournament.permalink}` +
                     `&categoria=${rowTeam.category}`
                   }
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {rowTeam.name}
                 </Link>
@@ -77,6 +79,7 @@ export const ConcentratedResults: FC<Props> = ({ data }) => {
                           <Link
                             href={`${ROUTES.PUBLIC_RESULTS}/${cellData.matchId}`}
                             target="_blank"
+                            rel="noreferrer"
                           >
                             <span className="match-result">
                               {cellData.penaltyShoots && (

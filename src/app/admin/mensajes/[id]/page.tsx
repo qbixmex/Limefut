@@ -80,9 +80,10 @@ const MessageContent: FC<Props> = async ({ params }) => {
                             resource={{ id: message.id as string, state: message.read }}
                             updateResourceStateAction={updateMessageStatusAction}
                           />
-                          {message.read
-                            ? <span className="text-emerald-500">Si</span>
-                            : <span className="text-amber-500">No</span>
+                          {
+                            message.read
+                              ? <span className="text-emerald-500">Si</span>
+                              : <span className="text-amber-500">No</span>
                           }
                         </div>
                       </TableCell>
