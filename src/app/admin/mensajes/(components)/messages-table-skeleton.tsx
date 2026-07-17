@@ -8,10 +8,10 @@ export const MessagesTableSkeleton: FC = () => {
         className="grid gap-5"
         style={{ gridTemplateColumns: '200px repeat(2,1fr) 250px' }}
       >
-        {Array.from({ length: 4 }).map((_, col) => (
-          <div key={`header-${col}`} className="w-full h-5 bg-gray-500 rounded" />
-        ))
-
+        {
+          Array.from({ length: 4 }).map((_, col) => (
+            <div key={`header-${col}`} className="w-full h-5 bg-gray-500 rounded" />
+          ))
         }
       </div>
       {/* Skeleton Body Rows */}
@@ -22,7 +22,10 @@ export const MessagesTableSkeleton: FC = () => {
           style={{ gridTemplateColumns: '200px repeat(2,1fr) 250px' }}
         >
           {Array.from({ length: 4 }).map((_, column) => (
-            <div key={`row-${row}-column-${column}`} className={'w-full h-8 bg-gray-500 rounded'} />
+            <div
+              key={`row-${row}-column-${column}`}
+              className="w-full h-8 bg-gray-500 rounded"
+            />
           ))}
         </div>
       ))}

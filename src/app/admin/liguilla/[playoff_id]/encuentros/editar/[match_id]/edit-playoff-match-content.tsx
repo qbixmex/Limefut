@@ -94,7 +94,8 @@ export const EditPlayoffMatchContent: FC<Props> = async ({ params }) => {
               phase="playoffs"
             />
           </>
-        )}
+        )
+      }
     </>
   );
 };

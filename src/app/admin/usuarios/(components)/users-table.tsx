@@ -135,9 +135,11 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn('flex justify-center mt-10', {
-            hidden: pagination!.totalPages === 1,
-          })}>
+          <div
+            className={cn('flex justify-center mt-10', {
+              hidden: pagination!.totalPages === 1,
+            })}
+          >
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
         </div>

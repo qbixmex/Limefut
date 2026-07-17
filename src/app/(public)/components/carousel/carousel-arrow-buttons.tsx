@@ -7,7 +7,7 @@ type UsePrevNextButtonsType = {
   nextBtnDisabled: boolean
   onPrevButtonClick: () => void
   onNextButtonClick: () => void
-}
+};
 
 export const usePrevNextButtons = (
   emblaApi: EmblaCarouselType | undefined,
@@ -57,7 +57,7 @@ export const usePrevNextButtons = (
   };
 };
 
-type PropType = ComponentPropsWithRef<'button'>
+type PropType = ComponentPropsWithRef<'button'>;
 
 export const PrevButton = (props: PropType) => {
   const { children, disabled, ...restProps } = props;

@@ -51,6 +51,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   `&category=${localTeam.category}`
                 }
                 target="_blank"
+                rel="noreferrer"
               >
                 <Image
                   src={localTeam.imageUrl as string}
@@ -69,6 +70,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   }
                   className="text-gray-100"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {localTeam.name}
                 </Link>
@@ -83,6 +85,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   `&category=${visitorTeam.category}`
                 }
                 target="_blank"
+                rel="noreferrer"
               >
                 <Image
                   src={visitorTeam.imageUrl as string}
@@ -101,6 +104,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   }
                   className="text-gray-100"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {visitorTeam.name}
                 </Link>
@@ -126,8 +130,9 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   <Link
                     href={ROUTES.PUBLIC_TOURNAMENT_SHOW(tournament.permalink)}
                     target="_blank"
+                    rel="noreferrer"
                   >
-                    <p className='text-balance'>{tournament.name}</p>
+                    <p className="text-balance">{tournament.name}</p>
                   </Link>
                 </TableCell>
               </TableRow>
@@ -218,7 +223,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
             (match.localScore === match.visitorScore)
           ) && (
             <>
-              <div className="w-full h-0.25 bg-gray-600 my-5"></div>
+              <div className="w-full h-0.25 bg-gray-600 my-5" />
               <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
               <section className="flex flex-col lg:flex-row gap-5">
                 <div className="w-full lg:w-1/2">

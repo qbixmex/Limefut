@@ -17,13 +17,18 @@ export const SkeletonTable: FC = () => (
     </div>
 
     <div className="flex flex-col gap-5">
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((row) => (
-        <div key={row} className="flex gap-3">
-          {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map((item) => (
-            <div key={item} className={cn('h-5 bg-gray-500 rounded animate-pulse', {
-              'w-[250px]': item === 'a',
-              'flex-1': item !== 'a',
-            })} />
+      {Array.from({ length: 12 }).map((_, row) => (
+        <div key={`row-${row}`} className="flex gap-3">
+          {Array.from({ length: 8 }).map((_, col) => (
+            <div
+              key={`col-${col}`}
+              className={
+                cn('h-5 bg-gray-500 rounded animate-pulse', {
+                  'w-[250px]': col === 0,
+                  'flex-1': col > 0,
+                })
+              }
+            />
           ))}
         </div>
       ))}

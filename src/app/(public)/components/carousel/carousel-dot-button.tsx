@@ -51,7 +51,7 @@ export const useDotButton = (
   };
 };
 
-type PropType = ComponentPropsWithRef<'button'>
+type PropType = ComponentPropsWithRef<'button'>;
 
 export const DotButton = (props: PropType) => {
   const { children, ...restProps } = props;

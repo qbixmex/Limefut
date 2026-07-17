@@ -59,14 +59,16 @@ export const BracketRound: FC<Props> = ({
 
   return (
     <>
-      <h3 className={cn([
-        styles.heading,
-        {
-          [styles.goldColor]: championColor === 'gold',
-          [styles.silverColor]: championColor === 'silver',
-          [styles.generalColor]: isSingleGroup,
-        },
-      ])}>
+      <h3
+        className={cn([
+          styles.heading,
+          {
+            [styles.goldColor]: championColor === 'gold',
+            [styles.silverColor]: championColor === 'silver',
+            [styles.generalColor]: isSingleGroup,
+          },
+        ])}
+      >
         Finales {isSingleGroup ? categoryName : groupName}
       </h3>
 
@@ -96,19 +98,22 @@ export const BracketRound: FC<Props> = ({
                     `&visitor_team=${quarterFinalMatches[0]?.visitorTeam.permalink ?? 'none'}`
                   }
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <MatchCard
                     match={quarterFinalMatches[0]}
                     winner={getWinner(qf1)}
                   />
                 </Link>
-                <Link href={
-                  '/liguilla/encuentro' +
-                  `?tournament=${tournament}` +
-                  `&category=${category}` +
-                  `&local_team=${quarterFinalMatches[1]?.localTeam.permalink ?? 'none'}` +
-                  `&visitor_team=${quarterFinalMatches[1]?.visitorTeam.permalink ?? 'none'}`
-                }>
+                <Link
+                  href={
+                    '/liguilla/encuentro' +
+                    `?tournament=${tournament}` +
+                    `&category=${category}` +
+                    `&local_team=${quarterFinalMatches[1]?.localTeam.permalink ?? 'none'}` +
+                    `&visitor_team=${quarterFinalMatches[1]?.visitorTeam.permalink ?? 'none'}`
+                  }
+                >
                   <MatchCard
                     match={quarterFinalMatches[1]}
                     winner={getWinner(qf2)}
@@ -126,6 +131,7 @@ export const BracketRound: FC<Props> = ({
                     `&visitor_team=${sf1?.visitorTeam.permalink ?? 'none'}`
                   }
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <MatchCard match={sf1} winner={getWinner(sf1)} />
                 </Link>
@@ -141,6 +147,7 @@ export const BracketRound: FC<Props> = ({
                     `&visitor_team=${final.visitorTeam.permalink}`
                   }
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <MatchCard match={final} winner={finalWinner} />
                 </Link>
@@ -155,7 +162,7 @@ export const BracketRound: FC<Props> = ({
                     `&local_team=${sf2?.localTeam.permalink ?? 'none'}` +
                     `&visitor_team=${sf2?.visitorTeam.permalink ?? 'none'}`
                   }
-                  target="_blank"
+                  target="_blank" rel="noreferrer"
                 >
                   <MatchCard match={sf2} winner={getWinner(sf2)} />
                 </Link>
@@ -170,7 +177,7 @@ export const BracketRound: FC<Props> = ({
                     `&local_team=${quarterFinalMatches[2]?.localTeam.permalink ?? 'none'}` +
                     `&visitor_team=${quarterFinalMatches[2]?.visitorTeam.permalink ?? 'none'}`
                   }
-                  target="_blank"
+                  target="_blank" rel="noreferrer"
                 >
                   <MatchCard
                     match={quarterFinalMatches[2]}
@@ -185,7 +192,7 @@ export const BracketRound: FC<Props> = ({
                     `&local_team=${quarterFinalMatches[3]?.localTeam.permalink ?? 'none'}` +
                     `&visitor_team=${quarterFinalMatches[3]?.visitorTeam.permalink ?? 'none'}`
                   }
-                  target="_blank"
+                  target="_blank" rel="noreferrer"
                 >
                   <MatchCard
                     match={quarterFinalMatches[3]}
@@ -221,6 +228,7 @@ export const BracketRound: FC<Props> = ({
                   `&visitor_team=${sf1?.visitorTeam.permalink ?? 'none'}`
                 }
                 target="_blank"
+                rel="noreferrer"
               >
                 <MatchCard match={sf1} winner={getWinner(sf1)} />
               </Link>
@@ -234,6 +242,7 @@ export const BracketRound: FC<Props> = ({
                   `&visitor_team=${final.visitorTeam.permalink}`
                 }
                 target="_blank"
+                rel="noreferrer"
               >
                 <MatchCard match={final} winner={finalWinner} />
               </Link>
@@ -247,6 +256,7 @@ export const BracketRound: FC<Props> = ({
                   `&visitor_team=${sf2?.visitorTeam.permalink ?? 'none'}`
                 }
                 target="_blank"
+                rel="noreferrer"
               >
                 <MatchCard match={sf2} winner={getWinner(sf2)} />
               </Link>
@@ -261,13 +271,15 @@ export const BracketRound: FC<Props> = ({
           </section>
         ) : (
           <section className={styles.finals}>
-            <Link href={
-              '/liguilla/encuentro' +
-              `?tournament=${tournament}` +
-              `&category=${category}` +
-              `&local_team=${final.localTeam.permalink ?? 'none'}` +
-              `&visitor_team=${final.visitorTeam.permalink ?? 'none'}`
-            }>
+            <Link
+              href={
+                '/liguilla/encuentro' +
+                `?tournament=${tournament}` +
+                `&category=${category}` +
+                `&local_team=${final.localTeam.permalink ?? 'none'}` +
+                `&visitor_team=${final.visitorTeam.permalink ?? 'none'}`
+              }
+            >
               <MatchCard
                 match={final}
                 winner={finalWinner}
@@ -324,6 +336,7 @@ export const BracketRound: FC<Props> = ({
                     `&visitor_team=${match.visitorTeam.permalink}`
                   }
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <MatchCard match={match} winner={getWinner(match)} />
                 </Link>

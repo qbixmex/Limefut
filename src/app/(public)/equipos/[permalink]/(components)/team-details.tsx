@@ -35,7 +35,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
     redirect(`${ROUTES.PUBLIC_TEAMS}/?error=${encodeURIComponent(
       '¡ El torneo y categoría son obligatorios !',
     )}`);
-  };
+  }
 
   const responseTeam = await fetchTeamAction({
     permalink,
@@ -83,15 +83,13 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="font-semibold">Categoría</TableHead>
                 <TableCell>
                   {
-                    team.category
-                      ? (
-                        <Badge variant="outline-info">
-                          {team.category.name}
-                        </Badge>
-                      )
-                      : (
-                        <span className="text-gray-500 italic">Aun no asignada</span>
-                      )
+                    team.category ? (
+                      <Badge variant="outline-info">
+                        {team.category.name}
+                      </Badge>
+                    ) : (
+                      <span className="text-gray-500 italic">Aun no asignada</span>
+                    )
                   }
                 </TableCell>
               </TableRow>
@@ -112,8 +110,8 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                     (team?.gender === 'male')
                       ? 'Varonil'
                       : (team?.gender === 'female')
-                        ? 'Femenil'
-                        : 'No especificado'
+                          ? 'Femenil'
+                          : 'No especificado'
                   }
                 </TableCell>
               </TableRow>
@@ -121,8 +119,9 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="font-semibold">País</TableHead>
                 <TableCell>
                   {
-                    team?.country ??
-                    <span className="text-gray-500 italic">No especificado</span>
+                    team?.country ?? (
+                      <span className="text-gray-500 italic">No especificado</span>
+                    )
                   }
                 </TableCell>
               </TableRow>
@@ -130,8 +129,9 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="font-semibold">Estado</TableHead>
                 <TableCell>
                   {
-                    team?.state ??
-                    <span className="text-gray-500 italic">No especificado</span>
+                    team?.state ?? (
+                      <span className="text-gray-500 italic">No especificado</span>
+                    )
                   }
                 </TableCell>
               </TableRow>
@@ -144,8 +144,9 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                 <TableHead className="w-[120px] font-semibold">Ciudad</TableHead>
                 <TableCell>
                   {
-                    team?.city ??
-                    <span className="text-gray-500 italic">No especificada</span>
+                    team?.city ?? (
+                      <span className="text-gray-500 italic">No especificada</span>
+                    )
                   }
                 </TableCell>
               </TableRow>
@@ -216,11 +217,11 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                     `?tournament=${team.tournament?.permalink}` +
                     `&category=${team.category?.permalink}`
                   }
-                  target='_blank'
+                  target="_blank"
                   className={buttonVariants({
                     variant: 'outline-info',
                     size: 'icon',
-                  })}
+                  })} rel="noreferrer"
                 >
                   <Table2 />
                 </Link>

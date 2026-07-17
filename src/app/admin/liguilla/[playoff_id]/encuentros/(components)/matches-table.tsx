@@ -63,6 +63,7 @@ export const MatchesTable: FC<Props> = ({
                         <Link
                           href={ROUTES.ADMIN_TEAMS_SHOW(match.local.id)}
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <div className="space-x-2">
                             {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
@@ -99,6 +100,7 @@ export const MatchesTable: FC<Props> = ({
                         <Link
                           href={ROUTES.ADMIN_TEAMS_SHOW(match.visitor.id)}
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <div className="space-x-2">
                             <span>{match.visitor.name}</span>
@@ -119,7 +121,7 @@ export const MatchesTable: FC<Props> = ({
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     <Badge
-                      variant='outline-info'
+                      variant="outline-info"
                       className={cn({
                         'border-amber-500 text-amber-500': match.group === 'gold',
                         'border-gray-400 text-gray-400': match.group === 'silver',
@@ -144,8 +146,9 @@ export const MatchesTable: FC<Props> = ({
                     {match.field ? (
                       <Link
                         href={ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}
-                        target="_blank"
                         className="text-balance"
+                        target="_blank"
+                        rel="noreferrer"
                       >
                         {match.field.name}
                       </Link>

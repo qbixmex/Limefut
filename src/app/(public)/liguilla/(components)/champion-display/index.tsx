@@ -42,10 +42,12 @@ export const ChampionDisplay: FC<{
           className={styles.winnerTeamImage}
         />
       )}
-      <span className={cn(styles.winnerTeamName, {
-        [styles.goldColor]: championColor === 'gold',
-        [styles.silverColor]: championColor === 'silver',
-      })}>
+      <span
+        className={cn(styles.winnerTeamName, {
+          [styles.goldColor]: championColor === 'gold',
+          [styles.silverColor]: championColor === 'silver',
+        })}
+      >
         {winner === 'local' ? final.localTeam.name : final.visitorTeam.name}
       </span>
       <Trophy
@@ -56,12 +58,14 @@ export const ChampionDisplay: FC<{
         })}
         strokeWidth={1.5}
       />
-      <span className={cn(styles.championLabel, {
-        [styles.goldColor]: championColor === 'gold',
-        [styles.silverColor]: championColor === 'silver',
-      })}>
+      <span
+        className={cn(styles.championLabel, {
+          [styles.goldColor]: championColor === 'gold',
+          [styles.silverColor]: championColor === 'silver',
+        })}
+      >
         Campeón
       </span>
-    </div >
+    </div>
   ) : null;
 };

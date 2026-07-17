@@ -62,7 +62,7 @@ export const CategorySelectField: FC<Props> = ({ categories }) => {
                   </SelectItem>
                 ))
               ) : (
-                <SelectItem disabled value='none'>
+                <SelectItem disabled value="none">
                   Aún no hay torneos disponibles
                 </SelectItem>
               )}

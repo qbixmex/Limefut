@@ -15,7 +15,7 @@ export const LatestImages: FC = async () => {
           <Images size={50} strokeWidth={1.5} />
           <p className="font-bold text-2xl">Últimas Imágenes</p>
         </div>
-        <Link href="/imagenes" target='_blank'>
+        <Link href="/imagenes" target="_blank">
           ver todas
         </Link>
       </header>

@@ -70,6 +70,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
               className="flex items-center gap-3 w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors"
               onClick={() => setIsOpen(false)}
               target="_blank"
+              rel="noreferrer"
             >
               <LayoutDashboard />
               <span>Dashboard</span>
@@ -79,6 +80,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
               className="flex items-center gap-3 w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors"
               onClick={() => setIsOpen(false)}
               target="_blank"
+              rel="noreferrer"
             >
               <UserCircle />
               <span>Perfil</span>

@@ -42,6 +42,7 @@ export const StandingsTable: FC<Props> = ({ standings }) => {
                 <Link
                   href={`/admin/equipos/${standing.team.id}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {standing.team.name}
                 </Link>

@@ -37,7 +37,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
             {!team.imageUrl ? (
               <div className={styles.imagePlaceholder}>
                 <Link
-                  href={ROUTES.PUBLIC_TEAMS +
+                  href={
+                    ROUTES.PUBLIC_TEAMS +
                     `/${team.permalink}` +
                     `?tournament=${tournamentPermalink}` +
                     `&category=${team.category}`
@@ -48,7 +49,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
               </div>
             ) : (
               <Link
-                href={ROUTES.PUBLIC_TEAMS +
+                href={
+                  ROUTES.PUBLIC_TEAMS +
                   `/${team.permalink}` +
                   `?tournament=${tournamentPermalink}` +
                   `&category=${team.category?.permalink}`
@@ -68,7 +70,8 @@ export const TeamsList: FC<TeamsListProps> = async ({
           <div className={styles.teamCardContent}>
             <p className={styles.teamName}>{team.name}</p>
             <Link
-              href={ROUTES.PUBLIC_TEAMS +
+              href={
+                ROUTES.PUBLIC_TEAMS +
                 `/${team.permalink}` +
                 `?tournament=${tournamentPermalink}` +
                 `&category=${team.category?.permalink}`

@@ -3,7 +3,7 @@ import { openSans, arimo } from '@/app/(public)/fonts';
 import '@/app/globals.css';
 import { Providers } from './(public)/providers';
 
-type Props = Readonly<{ children: ReactNode; }>
+type Props = Readonly<{ children: ReactNode; }>;
 
 const RootLayout: FC<Props> = ({ children }) => {
   return (

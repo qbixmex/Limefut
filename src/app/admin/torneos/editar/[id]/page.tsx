@@ -23,7 +23,9 @@ const EditTournamentPage: FC<Props> = ({ params }) => {
               className="admin-page-card-title"
               role="heading"
               aria-label="Título de la página"
-            >Editar Torneo</CardTitle>
+            >
+              Editar Torneo
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Suspense>

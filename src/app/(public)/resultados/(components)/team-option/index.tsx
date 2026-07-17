@@ -30,6 +30,8 @@ export const TeamOption: FC<Props> = ({ name, permalink }) => {
       className={cn({
         'selected-team': params.has('team') && (params.get('team') === permalink),
       })}
-    >{name}</Button>
+    >
+      {name}
+    </Button>
   );
 };

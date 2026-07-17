@@ -73,6 +73,6 @@ export const EditTeamForm: FC<Props> = ({
           </Button>
         </div>
       </form>
-    </Form >
+    </Form>
   );
 };

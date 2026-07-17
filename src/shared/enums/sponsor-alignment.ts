@@ -5,4 +5,4 @@ export const SPONSOR_ALIGNMENT = {
   LEFT: 'left',
 } as const;
 
-export type SPONSOR_ALIGNMENT = typeof SPONSOR_ALIGNMENT[keyof typeof SPONSOR_ALIGNMENT];
+export type SPONSOR_ALIGNMENT_TYPE = typeof SPONSOR_ALIGNMENT[keyof typeof SPONSOR_ALIGNMENT];

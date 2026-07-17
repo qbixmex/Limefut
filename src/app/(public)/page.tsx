@@ -40,12 +40,14 @@ const HomePage: FC<Props> = ({ searchParams }) => {
             <Hero />
           </Suspense>
 
-          <Suspense fallback={
-            <>
-              <HorizontalCalendarSkeleton />
-              <MatchesSkeleton />
-            </>
-          }>
+          <Suspense
+            fallback={
+              <>
+                <HorizontalCalendarSkeleton />
+                <MatchesSkeleton />
+              </>
+            }
+          >
             <CalendarMatches
               matchesPromise={matchesPromise}
               selectedDayPromise={selectedDayPromise}

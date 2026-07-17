@@ -36,7 +36,7 @@ const options = {
     }),
     // 1. Ponemos customSession aquí arriba
     customSession(async ({ user, session }) => {
-       const extendedUser = user as typeof user & {
+      const extendedUser = user as typeof user & {
         username?: string;
         roles?: string[];
         imageUrl?: string;

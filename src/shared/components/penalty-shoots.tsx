@@ -97,26 +97,26 @@ export const PenaltyShoots: FC<Props> = ({
           penaltyShootout.kicks.length === 0
         )
       ) && (
-          <>
-            <h2 className="text-xl font-semibold text-sky-500 mb-5">
-              Crear tanda de penales
-            </h2>
+        <>
+          <h2 className="text-xl font-semibold text-sky-500 mb-5">
+            Crear tanda de penales
+          </h2>
 
-            <SimplePenaltyShootoutForm
-              userRoles={userRoles}
-              matchId={match.id}
-              localTeam={{
-                id: localTeam.id,
-                name: localTeam.name,
-              }}
-              visitorTeam={{
-                id: visitorTeam.id,
-                name: visitorTeam.name,
-              }}
-              phase={phase}
-            />
-          </>
-        )}
+          <SimplePenaltyShootoutForm
+            userRoles={userRoles}
+            matchId={match.id}
+            localTeam={{
+              id: localTeam.id,
+              name: localTeam.name,
+            }}
+            visitorTeam={{
+              id: visitorTeam.id,
+              name: visitorTeam.name,
+            }}
+            phase={phase}
+          />
+        </>
+      )}
 
       {/* DETAILED SHOOTOUT FORM */}
       {
@@ -146,7 +146,8 @@ export const PenaltyShoots: FC<Props> = ({
               phase="playoff"
             />
           </section>
-        )}
+        )
+      }
     </>
   );
 };

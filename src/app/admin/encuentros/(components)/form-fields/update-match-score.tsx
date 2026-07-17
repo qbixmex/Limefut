@@ -56,7 +56,8 @@ export const UpdateMatchScore: FC<Props> = ({ match, setHiddenScores }) => {
     <AlertDialog>
       <AlertDialogTrigger className={
         buttonVariants({ variant: 'outline-success' })
-      }>
+      }
+      >
         actualizar marcador
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -69,7 +70,8 @@ export const UpdateMatchScore: FC<Props> = ({ match, setHiddenScores }) => {
         <AlertDialogFooter>
           <AlertDialogCancel
             className={buttonVariants({ variant: 'outline-secondary' })}
-          >cancelar</AlertDialogCancel>
+          >cancelar
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleUpdateScore}
             className={buttonVariants({ variant: 'outline-warning' })}

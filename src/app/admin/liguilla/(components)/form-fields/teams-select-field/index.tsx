@@ -13,7 +13,7 @@ type TEAM_TYPE = {
   id: string;
   name: string;
   permalink: string;
-}
+};
 
 export const TeamsSelectField: FC<Props> = async ({
   authenticatedUserId,

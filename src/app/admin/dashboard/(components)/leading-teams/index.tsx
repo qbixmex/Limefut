@@ -39,6 +39,7 @@ export const LeadingTeams = async () => {
                       href={ROUTES.ADMIN_TEAMS_SHOW(leading.team.id)}
                       className="text-wrap space-x-1"
                       target="_blank"
+                      rel="noreferrer"
                     >
                       <span>{leading.team.name},</span>
                       <span>{leading.team.category?.permalink},</span>

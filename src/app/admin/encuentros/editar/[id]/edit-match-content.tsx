@@ -102,7 +102,8 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
               phase="regular"
             />
           </>
-        )}
+        )
+      }
     </>
   );
 };

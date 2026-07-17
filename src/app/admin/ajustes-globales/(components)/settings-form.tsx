@@ -148,12 +148,12 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
             <FormField
               control={form.control}
               name="siteName"
-              shouldUnregister={true}
+              shouldUnregister
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
                     Nombre del sitio
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -171,7 +171,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Nombre de la organización
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -193,7 +193,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Teléfono
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="333-555-2222" />
@@ -237,7 +237,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Url del mapa
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="https://maps.app.goo.gl/2wpMPfH9atK5idKn8" />
@@ -255,7 +255,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     País
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -277,7 +277,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Lenguaje por defecto
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Select
@@ -322,7 +322,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Zona Horaria
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Select
@@ -378,7 +378,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Logo principal
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -406,7 +406,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Logo administrativo
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -434,7 +434,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Favicon
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -464,7 +464,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Facebook url
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="https://facebook.com/nombre_perfil" />
@@ -482,7 +482,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Twitter X url
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="https://x.com/nombre_de_perfil" />
@@ -504,7 +504,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Instagram url
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="https://instagram.com/nombre_de_perfil" />
@@ -522,7 +522,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Youtube url
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="https://youtube.com/nombre_del_canal" />
@@ -544,7 +544,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     TikTok url
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="https://tiktok.com/nombre_de_perfil" />
@@ -562,7 +562,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     WhatsApp
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="333-555-4444" />
@@ -585,7 +585,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
               <FormItem>
                 <FormLabel>
                   Texto modo mantenimiento
-                  <span className='text-sm text-gray-600'>(opcional)</span>
+                  <span className="text-sm text-gray-600">(opcional)</span>
                 </FormLabel>
                 <FormControl>
                   <Textarea rows={2} {...field} className="resize-none" />
@@ -625,7 +625,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     ID de Google Analytics
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -643,7 +643,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Tag de Google Manager
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -661,7 +661,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     ID de Meta Pixel
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -684,7 +684,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Correo principal
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
@@ -702,7 +702,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Correo del remitente
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
@@ -720,7 +720,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Correo del destinatario
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} value={field.value ?? ''} />
@@ -743,7 +743,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Título SEO
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <div>
@@ -792,7 +792,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                   <FormItem>
                     <FormLabel>
                       Imagen para redes sociales
-                      <span className='text-sm text-gray-600'>(opcional)</span>
+                      <span className="text-sm text-gray-600">(opcional)</span>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -817,7 +817,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     Descripción SEO
-                    <span className='text-sm text-gray-600'>(opcional)</span>
+                    <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <div>
