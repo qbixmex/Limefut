@@ -74,10 +74,7 @@ describe('Test on <NextMatches /> component', () => {
       expect(screen.getByText(match.visitorTeam.name)).toBeInTheDocument();
 
       const gameDate = formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', "EEEE dd 'de' LLLL, yyyy", { locale: es });
-      const hour = match.matchDate.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-      });
+      const hour = formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es });
 
       expect(
         screen.getByLabelText('Fecha del partido'),
