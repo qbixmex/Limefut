@@ -30,5 +30,11 @@ jobs:
       env:
         DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
 
+    - name: Lint
+      run: bun run lint
+
+    - name: Type check
+      run: bun run type-check
+
     - name: Run unit tests
       run: bun run test
