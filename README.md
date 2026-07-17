@@ -1,5 +1,7 @@
 # Sportex
 
+An sports platform where you can manage your football tournaments, teams, players and matches.
+
 ## Install Dependencies
 
 ```bash
