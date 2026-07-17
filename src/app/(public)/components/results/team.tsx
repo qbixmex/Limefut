@@ -12,7 +12,7 @@ export const Team: FC<Props> = ({
   name,
 }) => {
   return (
-    <div className={'flex justify-center items-center gap-5'}>
+    <div className="flex justify-center items-center gap-5">
       <div className="flex flex-col items-center gap-2">
         <figure>
           {!imageUrl && (<ShieldQuestion className="text-gray-400" />)}

@@ -17,13 +17,18 @@ const STATUS_LABELS: Record<MATCH_STATUS_TYPE, string> = {
 
 export const MatchStatus: FC<Props> = ({ status }) => {
   return (
-    <div className={cn('italic font-semibold', {
-      'text-blue-500': status === MATCH_STATUS.SCHEDULED,
-      'text-orange-500': status === MATCH_STATUS.POST_POSED,
-      'text-emerald-500': status === MATCH_STATUS.COMPLETED,
-      'text-sky-500': status === MATCH_STATUS.IN_PROGRESS,
-      'text-pink-500': status === MATCH_STATUS.CANCELED,
-    })}>
+    <div
+      className={cn(
+        'italic font-semibold',
+        {
+          'text-blue-500': status === MATCH_STATUS.SCHEDULED,
+          'text-orange-500': status === MATCH_STATUS.POST_POSED,
+          'text-emerald-500': status === MATCH_STATUS.COMPLETED,
+          'text-sky-500': status === MATCH_STATUS.IN_PROGRESS,
+          'text-pink-500': status === MATCH_STATUS.CANCELED,
+        },
+      )}
+    >
       {STATUS_LABELS[status] ?? 'no definido'}
     </div>
   );

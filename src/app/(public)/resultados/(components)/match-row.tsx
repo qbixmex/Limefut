@@ -53,7 +53,9 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           role="date"
           aria-label="Fecha del partido no definida"
           className="text-gray-600"
-        >No definida</span>
+        >
+          No definida
+        </span>
       )}
     </TableCell>
     <TableCell className="hidden lg:table-cell">
@@ -68,7 +70,9 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           className="text-gray-600"
           role="time"
           aria-label="Hora del partido no definida"
-        >No definida</span>
+        >
+          No definida
+        </span>
       )}
     </TableCell>
     <TableCell className="hidden lg:table-cell">
@@ -77,13 +81,17 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           className="text-balance"
           role="location"
           aria-label="Sede del partido"
-        >{match.place}</p>
+        >
+          {match.place}
+        </p>
       ) : (
         <span
           className="text-gray-600"
           role="location"
           aria-label="Sede del partido no definida"
-        >No definida</span>
+        >
+          No definida
+        </span>
       )}
     </TableCell>
     <TableCell>
@@ -94,19 +102,33 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           aria-label="Nombre equipo local"
         >
           <Link
-            href={ROUTES.PUBLIC_TEAMS_SHOW(match.local.permalink) +
+            href={
+              ROUTES.PUBLIC_TEAMS_SHOW(match.local.permalink) +
               `?tournament=${match.tournament.permalink}` +
               `&category=${match.category?.permalink}`
             }
             className="text-blue-500 dark:text-blue-400"
-            target='_blank'
+            target="_blank"
+            rel="noreferrer"
           >
             {
               match.local.name.toLowerCase().includes('descanso')
-                ? <span className="text-gray-400 font-semibold italic">{match.local.name}</span>
-                : <span className={cn({
-                  'text-lg font-semibold': roles === 'team' && teamPermalink === match.local.permalink,
-                })}>{match.local.name}</span>
+                ? (
+                  <span className="text-gray-400 font-semibold italic">
+                    {match.local.name}
+                  </span>
+                )
+                : (
+                  <span
+                    className={
+                      cn({
+                        'text-lg font-semibold': roles === 'team' && teamPermalink === match.local.permalink,
+                      })
+                    }
+                  >
+                    {match.local.name}
+                  </span>
+                )
             }
           </Link>
         </span>
@@ -115,7 +137,7 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
             <span
               className="text-gray-500 text-sm font-[400]"
               role="score"
-              aria-label={'Penales equipo local'}
+              aria-label="Penales equipo local"
             >
               ({match.penaltyShootout!.localGoals})
             </span>
@@ -123,7 +145,7 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           <span
             className="text-xl text-sky-500 font-medium"
             role="score"
-            aria-label={'Goles equipo local'}
+            aria-label="Goles equipo local"
           >
             {match.localScore}
           </span>
@@ -131,7 +153,7 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           <span
             className="text-xl text-sky-500 font-medium"
             role="score"
-            aria-label={'Goles equipo visitante'}
+            aria-label="Goles equipo visitante"
           >
             {match.visitorScore}
           </span>
@@ -139,7 +161,7 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
             <span
               className="text-gray-500 text-sm font-[400]"
               role="score"
-              aria-label={'Penales equipo visitante'}
+              aria-label="Penales equipo visitante"
             >
               ({match.penaltyShootout!.visitorGoals})
             </span>
@@ -150,7 +172,8 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           aria-label="Nombre equipo visitante"
         >
           <Link
-            href={ROUTES.PUBLIC_TEAMS +
+            href={
+              ROUTES.PUBLIC_TEAMS +
               `/${match.visitor.permalink}` +
               `?tournament=${match.tournament.permalink}` +
               `&category=${match.category?.permalink}`
@@ -159,10 +182,19 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           >
             {
               match.visitor.name.toLowerCase().includes('descanso')
-                ? (<span className="text-gray-400 font-semibold italic">{match.visitor.name}</span>)
-                : (<span className={cn({
-                  'text-lg font-semibold': roles === 'team' && teamPermalink === match.visitor.permalink,
-                })}>{match.visitor.name}</span>)
+                ? (
+                  <span className="text-gray-400 font-semibold italic">
+                    {match.visitor.name}
+                  </span>
+                ) : (
+                  <span
+                    className={cn({
+                      'text-lg font-semibold': roles === 'team' && teamPermalink === match.visitor.permalink,
+                    })}
+                  >
+                    { match.visitor.name }
+                  </span>
+                )
             }
           </Link>
         </span>
@@ -182,10 +214,11 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
         <TooltipTrigger>
           <Link
             href={`${ROUTES.PUBLIC_RESULTS}/${match.id}`}
-            target="_blank"
             className={buttonVariants({ variant: 'outline-info', size: 'icon-sm' })}
             role="button"
             aria-label={`Detalles del partido entre ${match.local.name} y ${match.visitor.name}`}
+            target="_blank"
+            rel="noreferrer"
           >
             <Info />
           </Link>

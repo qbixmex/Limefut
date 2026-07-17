@@ -10,7 +10,7 @@ export type VideoType = {
   platform: string;
   description: string;
   publishedDate: Date;
-}
+};
 
 type FetchVideosResponse = Promise<{
   ok: boolean;

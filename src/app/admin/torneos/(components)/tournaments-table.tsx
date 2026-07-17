@@ -107,9 +107,10 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">
                       <Badge
-                        variant={(tournament.categoriesQuantity > 0)
-                          ? 'outline-info'
-                          : 'outline-secondary'
+                        variant={
+                          (tournament.categoriesQuantity > 0)
+                            ? 'outline-info'
+                            : 'outline-secondary'
                         }
                         role="status"
                         aria-label={`${tournament.categoriesQuantity} categorías`}
@@ -144,9 +145,11 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div className={cn('flex justify-center mt-10', {
-            hidden: pagination!.totalPages === 1,
-          })}>
+          <div
+            className={cn('flex justify-center mt-10', {
+              hidden: pagination!.totalPages === 1,
+            })}
+          >
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
         </div>

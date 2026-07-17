@@ -66,6 +66,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                         href={`/admin/equipos/${match.localTeam.id}`}
                         className="text-wrap"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         {match.localTeam.name}
                       </Link>
@@ -76,6 +77,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                         href={`${ROUTES.ADMIN_TEAMS}/${match.visitorTeam.id}`}
                         className="text-wrap"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         {match.visitorTeam.name}
                       </Link>
@@ -132,7 +134,11 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="w-[180px] font-semibold">Torneo</TableHead>
                     <TableCell>
-                      <Link href={`${ROUTES.ADMIN_TOURNAMENTS}/${match.tournament.id}`} target="_blank">
+                      <Link
+                        href={`${ROUTES.ADMIN_TOURNAMENTS}/${match.tournament.id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         {match.tournament.name}
                       </Link>
                     </TableCell>
@@ -151,16 +157,16 @@ export const MatchPage: FC<Props> = async ({ params }) => {
               (match.status === MATCH_STATUS.COMPLETED) &&
               (match.localScore === match.visitorScore)
             ) && (
-                <>
-                  <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
+              <>
+                <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
 
-                  <section className="flex flex-col lg:flex-row gap-5">
-                    <div className="w-full lg:w-1/2">
-                      <PenaltyShootout shootout={match.penaltyShootout} />
-                    </div>
-                  </section>
-                </>
-              )}
+                <section className="flex flex-col lg:flex-row gap-5">
+                  <div className="w-full lg:w-1/2">
+                    <PenaltyShootout shootout={match.penaltyShootout} />
+                  </div>
+                </section>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

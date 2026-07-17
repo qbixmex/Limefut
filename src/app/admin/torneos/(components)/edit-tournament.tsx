@@ -26,7 +26,7 @@ export const EditTournament: FC<Props> = async ({ paramsPromise, side = 'top' })
           })}
           aria-label="Editar torneo"
         >
-          <Pencil role="img" aria-label='Icono de lápiz' />
+          <Pencil role="img" aria-label="Icono de lápiz" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side={side}>

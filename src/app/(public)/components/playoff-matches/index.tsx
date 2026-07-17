@@ -166,6 +166,6 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
           </section>
         )
       }
-    </section >
+    </section>
   );
 };

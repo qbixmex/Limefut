@@ -265,7 +265,7 @@ export type TEAM_TYPE = {
   players: PlayerType[] | null;
   fields: FieldType[],
   matches: MATCH_TYPE[],
-}
+};
 
 type CoachType = { id: string; name: string; };
 type PlayerType = { id: string; name: string; };

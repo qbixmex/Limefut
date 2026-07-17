@@ -58,7 +58,9 @@ export const EditTournamentForm: FC<Props> = ({
                   className="text-sm italic"
                   role="status"
                   aria-label="Enviando formulario"
-                >Espere</span>
+                >
+                  Espere
+                </span>
                 <LoaderCircle className="size-4 animate-spin" />
               </span>
             ) : (

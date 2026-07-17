@@ -36,7 +36,7 @@ export const EditMatch: FC<Props> = async ({ matchId, phase, playoffId }) => {
         'absolute top-0 right-0',
         buttonVariants({ variant: 'outline-warning', size: 'icon' }),
       ])}
-      target="_blank"
+      target="_blank" rel="noreferrer"
     >
       <Pencil />
     </Link>

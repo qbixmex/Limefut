@@ -13,22 +13,22 @@ export const ImageField: FC = () => {
       name="image"
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>
-              Imagen <span className="text-gray-500">(opcional)</span>
-            </FieldLabel>
-            <Input
-              ref={fileInputRef}
-              type="file"
-              value={undefined}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                field.onChange(file);
-              }}
-              aria-invalid={fieldState.invalid}
-            />
-            {fieldState.invalid && (
-              <FieldError errors={[fieldState.error]} />
-            )}
+          <FieldLabel>
+            Imagen <span className="text-gray-500">(opcional)</span>
+          </FieldLabel>
+          <Input
+            ref={fileInputRef}
+            type="file"
+            value={undefined}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              field.onChange(file);
+            }}
+            aria-invalid={fieldState.invalid}
+          />
+          {fieldState.invalid && (
+            <FieldError errors={[fieldState.error]} />
+          )}
         </Field>
       )}
     />

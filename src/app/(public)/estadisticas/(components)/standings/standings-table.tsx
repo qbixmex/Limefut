@@ -82,6 +82,7 @@ export const StandingsTable: FC<Props> = async ({
                       `&category=${categoryPermalink}`
                     }
                     target="_blank"
+                    rel="noreferrer"
                     className="font-semibold italic"
                   >
                     {standing.team.name}

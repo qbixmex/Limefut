@@ -129,21 +129,20 @@ export const Match: FC<Props> = ({
           </p>
         </div>
       </div>
-      <div className={cn('match-data', {
-        'show-data': showData,
-      })}>
+      <div className={cn('match-data', { 'show-data': showData })}>
         <p className="match-date">
           <b>Fecha:</b>&nbsp;
           {matchDetails.matchDate ? (
-            <i>
+            <span className="italic">
               {
                 formatInTimeZone(
                   matchDetails.matchDate as Date,
                   'America/Mexico_City',
                   'd \'de\' LLLL \'del\' yyyy',
                   { locale: es },
-                )}
-            </i>
+                )
+              }
+            </span>
           ) : (
             <span className="text-gray-500">sin definir</span>
           )}

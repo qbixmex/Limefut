@@ -8,12 +8,12 @@ import {
 } from 'react-icons/fa6';
 import type { IconType } from 'react-icons/lib';
 import type { CustomIconType } from '@/shared/types/icon';
-import type { SOCIAL_PLATFORM } from '@/shared/enums/social-platform';
+import type { SOCIAL_PLATFORM_TYPE } from '@/shared/enums/social-platform';
 
 export type Social = {
   url: string;
   icon: IconType | LucideIcon | CustomIconType;
-  platform: SOCIAL_PLATFORM;
+  platform: SOCIAL_PLATFORM_TYPE;
   css: string;
 };
 

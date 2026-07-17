@@ -83,7 +83,7 @@ export const MobileMenu: FC<Props> = ({ navigation }) => {
           >
             <CloseIcon strokeWidth={3} className={styles.closeIcon} />
           </button>
-        </section >
+        </section>
       )}
     </>
   );

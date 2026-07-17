@@ -44,7 +44,8 @@ const CoachesPageContent: FC<Props> = async ({ searchParams }) => {
                 <Search placeholder="Buscar entrenador ..." />
                 <Tooltip>
                   <TooltipTrigger>
-                    <Link href="/admin/entrenadores/crear"
+                    <Link
+                      href="/admin/entrenadores/crear"
                       className={
                         buttonVariants({
                           variant: 'outline-primary',

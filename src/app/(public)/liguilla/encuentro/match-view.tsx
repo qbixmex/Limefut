@@ -15,6 +15,8 @@ import styles from './styles.module.css';
 import { cn, getPlayoffRound } from '@/lib/utils';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
 import { WinnerTeam } from './winner-team';
+import type { MATCH_GROUP_TYPE } from '@/shared/enums/match-group.enum';
+import { MATCH_GROUP } from '@/shared/enums/match-group.enum';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -61,6 +63,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
                   `&category=${category}`
                 }
                 target="_blank"
+                rel="noreferrer"
               >
                 {!match.local.imageUrl ? (
                   <div className={styles.shieldIconWrapper}>
@@ -89,6 +92,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
                   }
                   className="text-gray-100"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {match.local.name}
                 </Link>
@@ -103,6 +107,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
                   `&category=${visitor_team}`
                 }
                 target="_blank"
+                rel="noreferrer"
               >
                 {!match.visitor.imageUrl ? (
                   <div className={styles.shieldIconWrapper}>
@@ -131,6 +136,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
                   }
                   className="text-gray-100"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {match.visitor.name}
                 </Link>
@@ -159,8 +165,9 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
                       `?category=${category}`
                     }
                     target="_blank"
+                    rel="noreferrer"
                   >
-                    <p className='text-balance'>{match.tournament.name}</p>
+                    <p className="text-balance">{match.tournament.name}</p>
                   </Link>
                 </TableCell>
               </TableRow>
@@ -198,26 +205,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
               <TableRow>
                 <TableHead>Grupo</TableHead>
                 <TableCell>
-                  {(match.group === 'golder')
-                    ? (
-                      <Badge
-                        variant="outline-warning"
-                        className="text-amber-500 border-amber-500"
-                      >oro</Badge>
-                    )
-                    : (match.group === 'silvered')
-                      ? (
-                        <Badge
-                          variant="outline-warning"
-                          className="text-zinc-500 border-zinc-500 dark:text-zinc-400 dark:border-zinc-400"
-                        >plata</Badge>
-                      )
-                      : (
-                        <Badge
-                          variant="outline-info"
-                        >general</Badge>
-                      )
-                  }
+                  <MatchGroup group={match.group} />
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -297,9 +285,10 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
 
         <p>{
           match.remarks
-            ? <span>{ match.remarks }</span>
+            ? <span>{match.remarks}</span>
             : <span className="text-gray-500">Sin comentarios</span>
-        }</p>
+          }
+        </p>
       </section>
 
       <section>
@@ -309,7 +298,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
             (match.localScore === match.visitorScore)
           ) && (
             <>
-              <div className="w-full h-0.25 bg-gray-600 my-5"></div>
+              <div className="w-full h-0.25 bg-gray-600 my-5" />
               <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
               <section className="flex flex-col lg:flex-row gap-5">
                 <div className="w-full lg:w-1/2">
@@ -322,4 +311,33 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
       </section>
     </>
   );
+};
+
+const MatchGroup: FC<{ group: MATCH_GROUP_TYPE | string }> = ({ group }) => {
+  switch (group) {
+    case MATCH_GROUP.GOLDER:
+      return (
+        <Badge
+          variant="outline-warning"
+          className="text-amber-500 border-amber-500"
+        >
+          oro
+        </Badge>
+      );
+    case MATCH_GROUP.SILVERED:
+      return (
+        <Badge
+          variant="outline-warning"
+          className="text-zinc-500 border-zinc-500 dark:text-zinc-400 dark:border-zinc-400"
+        >
+          plata
+        </Badge>
+      );
+    default:
+      return (
+        <Badge variant="outline-info">
+          general
+        </Badge>
+      );
+  }
 };

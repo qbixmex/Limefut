@@ -84,7 +84,7 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                   </TableBody>
                 </Table>
               </div>
-              <div className='flex-1'>
+              <div className="flex-1">
                 <Table>
                   <TableBody>
                     <TableRow>

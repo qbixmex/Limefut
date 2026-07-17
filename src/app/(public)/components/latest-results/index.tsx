@@ -37,8 +37,9 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
           <div key={match.id} className="relative">
             <Link
               href={`/resultados/${match.id}/`}
-              target="_blank"
               data-testid={`match-${match.id}`}
+              target="_blank"
+              rel="noreferrer"
             >
               <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
                 <div className="flex flex-col gap-5 md:flex-row md:gap-5">
@@ -133,7 +134,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
           </section>
         )
       }
-    </section >
+    </section>
   );
 };
 

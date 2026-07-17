@@ -459,9 +459,10 @@ export const PageForm: FC<Props> = ({ page }) => {
                           })}
                           onClick={() => handleDeleteImage(customPageImage)}
                         >
-                          {isDeletingImage === customPageImage.imageUrl
-                            ? <LoaderCircle className="animate-spin" />
-                            : <X className="size-[25px]" />
+                          {
+                            isDeletingImage === customPageImage.imageUrl
+                              ? <LoaderCircle className="animate-spin" />
+                              : <X className="size-[25px]" />
                           }
                         </Button>
                       </div>

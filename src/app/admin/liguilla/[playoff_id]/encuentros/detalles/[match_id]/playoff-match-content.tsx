@@ -62,6 +62,7 @@ export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
                   href={ROUTES.ADMIN_TEAMS_SHOW(match.local.id)}
                   className="text-wrap"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {match.local.name}
                 </Link>
@@ -72,6 +73,7 @@ export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
                   href={ROUTES.ADMIN_TEAMS_SHOW(match.visitor.id)}
                   className="text-wrap"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {match.visitor.name}
                 </Link>
@@ -92,6 +94,7 @@ export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
                   <Link
                     href={`${ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}`}
                     target="_blank"
+                    rel="noreferrer"
                   >
                     {match.field.name}
                   </Link>

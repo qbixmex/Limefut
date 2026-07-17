@@ -79,7 +79,7 @@ export const PageDetails: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="font-medium w-[180px]">Estado</TableHead>
                       <TableCell>
-                        {<Badge variant={pageStatus.variant}>{pageStatus.label}</Badge>}
+                        <Badge variant={pageStatus.variant}>{pageStatus.label}</Badge>
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -112,7 +112,7 @@ export const PageDetails: FC<Props> = async ({ params }) => {
 
             <h2 className="text-xl font-semibold text-sky-500 mb-2">Contenido</h2>
 
-            <section className={'prose prose-lg dark:prose-invert max-w-none mb-10'}>
+            <section className="prose prose-lg dark:prose-invert max-w-none mb-10">
               {page.content ? (
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}

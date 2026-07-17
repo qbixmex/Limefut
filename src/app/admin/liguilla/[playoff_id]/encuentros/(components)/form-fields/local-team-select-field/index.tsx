@@ -31,14 +31,15 @@ export const LocalTeamSelectField: FC<Props> = ({ teams }) => {
             >
               <SelectValue placeholder="seleccione equipo local" />
             </SelectTrigger>
-            <SelectContent></SelectContent>
             <SelectContent>
               {teams.map(({ id, name }) => (
                 <SelectItem
                   key={id}
                   value={id}
                   disabled={id === visitorId}
-                >{name}</SelectItem>
+                >
+                  {name}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>

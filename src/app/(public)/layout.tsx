@@ -47,7 +47,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   };
 };
 
-type Props = Readonly<{ children: ReactNode; }>
+type Props = Readonly<{ children: ReactNode; }>;
 
 const PublicLayout: FC<Props> = ({ children }) => {
   return (

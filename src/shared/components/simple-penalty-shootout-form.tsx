@@ -106,7 +106,7 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
                     <FormLabel>Goles ({localTeam.name})</FormLabel>
                     <Input
                       {...field}
-                      type='number'
+                      type="number"
                       min={0}
                       value={field.value ?? ''}
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
@@ -126,7 +126,7 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
                     <FormLabel>Goles ({visitorTeam.name})</FormLabel>
                     <Input
                       {...field}
-                      type='number'
+                      type="number"
                       min={0}
                       value={field.value ?? ''}
                       onChange={(e) => field.onChange(parseInt(e.target.value))}

@@ -31,9 +31,10 @@ export const InitialDateSelectField: FC = () => {
                 variant="secondary"
                 className="w-full justify-between font-normal"
               >
-                {field.value
-                  ? format(field.value as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                  : 'Selecciona Fecha'
+                {
+                  field.value
+                    ? format(field.value as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                    : 'Selecciona Fecha'
                 }
                 <ChevronDownIcon />
               </Button>

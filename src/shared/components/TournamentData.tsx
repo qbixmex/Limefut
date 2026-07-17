@@ -38,7 +38,7 @@ export const TournamentData: FC<Props> = ({
                   <Link
                     href={`${ROUTES.PUBLIC_TOURNAMENTS}/${tournament.id}`}
                     target="_blank"
-                    className="font-semibold italic"
+                    className="font-semibold italic" rel="noreferrer"
                   >
                     {tournament?.name}
                   </Link>
@@ -105,7 +105,7 @@ export const TournamentData: FC<Props> = ({
               <Link
                 key={id}
                 href={`${admin ? '/admin' : ''}/equipos/${permalink}`}
-                target="_blank"
+                target="_blank" rel="noreferrer"
               >
                 <Badge variant="outline-info">{name}</Badge>
               </Link>

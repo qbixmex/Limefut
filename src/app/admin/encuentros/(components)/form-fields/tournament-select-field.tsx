@@ -60,7 +60,7 @@ export const TournamentSelectField: FC<Props> = ({ tournaments }) => {
                     <SelectItem key={id} value={permalink}>{name}</SelectItem>
                   ))
                 ) : (
-                  <SelectItem disabled value='none'>
+                  <SelectItem disabled value="none">
                     Aún no hay torneos disponibles
                   </SelectItem>
                 )}

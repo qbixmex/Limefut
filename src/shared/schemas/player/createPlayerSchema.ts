@@ -20,8 +20,8 @@ export const createPlayerSchema = z.object({
   phone: z.union([
     z.literal(''),
     z.string()
-    .min(5, { message: '¡ El teléfono debe ser mayor a 5 caracteres !' })
-    .max(100, { message: '¡ El teléfono debe ser menor a 100 caracteres !' }),
+      .min(5, { message: '¡ El teléfono debe ser mayor a 5 caracteres !' })
+      .max(100, { message: '¡ El teléfono debe ser menor a 100 caracteres !' }),
   ]).optional(),
   birthday: z
     .date({ message: 'La fecha de nacimiento debe ser una fecha válida' })

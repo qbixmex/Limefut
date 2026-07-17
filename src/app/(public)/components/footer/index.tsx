@@ -3,12 +3,12 @@ import { FooterLinks } from './footer-links';
 import { SocialMedia } from './social-media';
 import { FooterLinksSkeleton } from './footer-links-skeleton';
 import { socialMediaData } from './data/social-media';
-import type { SOCIAL_PLATFORM } from '@/shared/enums/social-platform';
+import type { SOCIAL_PLATFORM_TYPE } from '@/shared/enums/social-platform';
 import './styles.css';
 
 type Props = Readonly<{
   siteName?: string | null;
-  socialMedia?: Partial<Record<SOCIAL_PLATFORM, string>>[];
+  socialMedia?: Partial<Record<SOCIAL_PLATFORM_TYPE, string>>[];
 }>;
 
 export const Footer: FC<Props> = ({ siteName = '', socialMedia = [] }) => {

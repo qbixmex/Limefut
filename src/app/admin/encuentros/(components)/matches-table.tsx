@@ -64,10 +64,10 @@ export const MatchesTable: FC<Props> = ({
                   <WeeksSelector weeks={matchesWeeks} />
                 </TableHead>
                 <TableHead className="w-25 text-center">
-                  <DateSelector label='date' />
+                  <DateSelector label="date" />
                 </TableHead>
                 <TableHead className="w-25">
-                  <DateSelector label='hour' />
+                  <DateSelector label="hour" />
                 </TableHead>
                 <TableHead className="w-[120px]" colSpan={2}>
                   <StatusSelector />
@@ -131,6 +131,7 @@ export const MatchesTable: FC<Props> = ({
                       <Link
                         href={ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}
                         target="_blank"
+                        rel="noreferrer"
                       >
                         <span className="font-semibold text-gray-600 dark:text-gray-500 text-balance">
                           {match.field.name}
@@ -225,9 +226,11 @@ export const MatchesTable: FC<Props> = ({
             </TableBody>
           </Table>
         </div>
-        <div className={cn('flex justify-center mt-10', {
-          hidden: matches.length === 0 || pagination!.totalPages === 1,
-        })}>
+        <div
+          className={cn('flex justify-center mt-10', {
+            hidden: matches.length === 0 || pagination!.totalPages === 1,
+          })}
+        >
           <Pagination totalPages={pagination!.totalPages as number} />
         </div>
       </div>

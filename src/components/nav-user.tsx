@@ -31,13 +31,15 @@ import { toast } from 'sonner';
 import { signOutAction } from '../app/(auth)/signOutAction';
 import { useRouter } from 'next/navigation';
 
-type Props = { user: {
-  id: string;
-  name: string;
-  email: string;
-  username?: string | null;
-  image?: string | null;
-}};
+type Props = {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    username?: string | null;
+    image?: string | null;
+  };
+};
 
 export const NavUser: FC<Props> = ({ user }) => {
   const route = useRouter();
@@ -75,7 +77,7 @@ export const NavUser: FC<Props> = ({ user }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={'bottom'}
+            side="bottom"
             align="end"
             sideOffset={4}
           >
@@ -89,9 +91,6 @@ export const NavUser: FC<Props> = ({ user }) => {
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild className="cursor-pointer">

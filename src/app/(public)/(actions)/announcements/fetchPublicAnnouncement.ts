@@ -15,7 +15,7 @@ export type ANNOUNCEMENT_TYPE = {
   content: string;
   imageUrl: string | null;
   publishedDate: Date;
-}
+};
 
 export const fetchPublicAnnouncementAction = async (permalink: string): FetchAnnouncementResponse => {
   'use cache';
