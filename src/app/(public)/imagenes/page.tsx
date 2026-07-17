@@ -16,7 +16,9 @@ const GalleriesPage = async () => {
           <Heading
             level="h1"
             className="text-emerald-600 mb-10"
-          >Galeria de Imágenes</Heading>
+          >
+            Galeria de Imágenes
+          </Heading>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {galleries.map((gallery) => (

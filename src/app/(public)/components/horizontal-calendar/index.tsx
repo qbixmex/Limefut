@@ -92,9 +92,11 @@ export const HorizontalCalendar: FC<Props> = ({ matchesDates }) => {
                 <p className="calendar-day-num">{format(day, 'd')}</p>
                 <p className="calendar-month">{format(day, 'MMM', { locale: es }).toLowerCase()}</p>
               </div>
-              <p className={cn('calendar-games-count', {
-                'calendar-today-games-count': (matchesOnThisDay > 0) && selectedDay,
-              })}>
+              <p
+                className={cn('calendar-games-count', {
+                  'calendar-today-games-count': (matchesOnThisDay > 0) && selectedDay,
+                })}
+              >
                 {matchesOnThisDay}
               </p>
             </button>

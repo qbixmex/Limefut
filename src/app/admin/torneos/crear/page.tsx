@@ -17,7 +17,9 @@ const CreateTournamentPage = async () => {
               className="admin-page-card-title"
               role="heading"
               aria-label="Título de la página"
-            >Crear Torneo</CardTitle>
+            >
+              Crear Torneo
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Suspense>

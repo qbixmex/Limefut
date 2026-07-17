@@ -54,7 +54,7 @@ export const CategorySelectField: FC<Props> = ({ categories }) => {
                     <SelectItem key={id} value={permalink}>{name}</SelectItem>
                   ))
                 ) : (
-                  <SelectItem disabled value='none'>
+                  <SelectItem disabled value="none">
                     Aún no hay categorías disponibles
                   </SelectItem>
                 )}

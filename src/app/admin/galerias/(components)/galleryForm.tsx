@@ -104,9 +104,10 @@ export const GalleryForm: FC<Props> = ({ session, gallery }) => {
                   variant="secondary"
                   className="w-[220px] justify-between font-normal"
                 >
-                  {selectedDate
-                    ? format(selectedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
-                    : 'Selecciona Fecha'
+                  {
+                    selectedDate
+                      ? format(selectedDate, "d 'de' MMMM 'del' yyyy", { locale: es })
+                      : 'Selecciona Fecha'
                   }
                   <ChevronDownIcon />
                 </Button>
@@ -178,7 +179,7 @@ export const GalleryForm: FC<Props> = ({ session, gallery }) => {
           </Button>
         </div>
       </form>
-    </Form >
+    </Form>
   );
 };
 

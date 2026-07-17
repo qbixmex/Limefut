@@ -65,7 +65,7 @@ export const MatchDateTime: FC<Props> = ({ isMatchDate = false }) => {
                   checked={enabledDate}
                   onCheckedChange={() => setEnabledDate(prev => !prev)}
                 />
-                <Label htmlFor='set-date'>Programar Fecha y Hora</Label>
+                <Label htmlFor="set-date">Programar Fecha y Hora</Label>
               </div>
             )}
 

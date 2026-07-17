@@ -29,7 +29,7 @@ export const NavLinks: FC<Props> = ({ links }) => {
         {links.map((link) => (
           <SidebarMenuItem key={link.label}>
             <SidebarMenuButton asChild>
-              <a href={link.url} target={link.target ? '_blank' : '_self'}>
+              <a href={link.url} target="_blank" rel="noreferrer">
                 <link.icon />
                 <span>{link.label}</span>
               </a>

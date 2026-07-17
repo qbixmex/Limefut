@@ -176,9 +176,10 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
                     variant="secondary"
                     className="justify-between font-normal"
                   >
-                    {selectedStartDate
-                      ? format(selectedStartDate, "d 'de' MMMM 'del' yyyy", { locale: es })
-                      : 'Seleccione fecha inicial'
+                    {
+                      selectedStartDate
+                        ? format(selectedStartDate, "d 'de' MMMM 'del' yyyy", { locale: es })
+                        : 'Seleccione fecha inicial'
                     }
                     <ChevronDownIcon />
                   </Button>
@@ -206,9 +207,10 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
               <Popover open={openEndDateCalendar} onOpenChange={setOpenEndDateCalendar}>
                 <PopoverTrigger asChild>
                   <Button id="date-picker" variant="secondary" className="justify-between font-normal">
-                    {selectedEndDate
-                      ? format(selectedEndDate, "d 'de' MMMM 'del' yyyy", { locale: es })
-                      : 'Seleccione fecha final'
+                    {
+                      selectedEndDate
+                        ? format(selectedEndDate, "d 'de' MMMM 'del' yyyy", { locale: es })
+                        : 'Seleccione fecha final'
                     }
                     <ChevronDownIcon />
                   </Button>

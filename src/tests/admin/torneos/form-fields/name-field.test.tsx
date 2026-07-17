@@ -63,7 +63,7 @@ describe('Test on <NameField />', () => {
 
   test('Should NOT auto-generate permalink when isPermalinkEdited is true', async () => {
     const tournamentName = 'Jóvenes Promesas';
-    render(<NameField isPermalinkEdited={true} />, { wrapper: TestWrapper });
+    render(<NameField isPermalinkEdited />, { wrapper: TestWrapper });
 
     const user = userEvent.setup();
     await user.type(screen.getByRole('textbox'), tournamentName);

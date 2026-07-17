@@ -51,7 +51,9 @@ export const MatchForm: FC<Props> = ({ categorySlot, fieldSlot, teamsSlot }) => 
               type="button"
               variant="outline-primary"
               onClick={handleClearForm}
-            >borrar</Button>
+            >
+              borrar
+            </Button>
             <Button
               type="submit"
               variant="outline-primary"

@@ -9,14 +9,14 @@ import z from 'zod';
  */
 export const requiredUUID = (requiredMessage: string, invalidMessage: string) =>
   z.string().superRefine((value, context) => {
-  if (!value) {
-    context.addIssue({ code: 'custom', message: requiredMessage });
-    return;
-  }
-  if (!z.uuid().safeParse(value).success) {
-    context.addIssue({ code: 'custom', message: invalidMessage });
-  }
-});
+    if (!value) {
+      context.addIssue({ code: 'custom', message: requiredMessage });
+      return;
+    }
+    if (!z.uuid().safeParse(value).success) {
+      context.addIssue({ code: 'custom', message: invalidMessage });
+    }
+  });
 
 /**
  * Get terminal ANSI COLOR

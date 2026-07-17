@@ -63,7 +63,12 @@ export const PlayoffPage: FC<Props> = async ({ params }) => {
                 <div className="w-full flex flex-col gap-2">
                   {((playoff?.teams as PLAYOFF_TYPE['teams']).length > 0) && (
                     playoff.teams.map(({ id, name }, index) => (
-                      <Link key={id} href={ROUTES.ADMIN_TEAMS_SHOW(id)} target="_blank">
+                      <Link
+                        key={id}
+                        href={ROUTES.ADMIN_TEAMS_SHOW(id)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         {`${index + 1}: ${name}`}
                       </Link>
                     ))
@@ -78,8 +83,9 @@ export const PlayoffPage: FC<Props> = async ({ params }) => {
                       <TableCell>
                         <Link
                           href={ROUTES.ADMIN_TOURNAMENTS_SHOW(playoff.tournament.id)}
-                          target="_blank"
                           className="text-wrap"
+                          target="_blank"
+                          rel="noreferrer"
                         >
                           {playoff.tournament.name}
                         </Link>

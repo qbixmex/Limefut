@@ -97,7 +97,9 @@ export const PenaltyShootout: FC<Props> = ({ shootout }) => {
                         'order-1': kick.teamId === shootout.localTeam.id,
                         'order-2': kick.teamId === shootout.visitorTeam.id,
                       })}
-                    >{kick.shooterName}</span>
+                    >
+                      {kick.shooterName}
+                    </span>
                     <PenaltiIcon
                       isGoal={kick.isGoal}
                       className={cn({
@@ -148,19 +150,23 @@ const PenaltiIcon: FC<{
   className?: string;
 }> = ({ isGoal = undefined, className = '' }) => {
   return (
-    <div className={cn('size-[32px] flex justify-center items-center rounded-full',
-      className,
+    <div
+      className={cn(
+        'size-[32px] flex justify-center items-center rounded-full',
+        className,
+        {
+          'bg-emerald-600 text-emerald-50': isGoal,
+          'bg-rose-600 text-rose-50': !isGoal,
+          'bg-gray-600 text-gray-50': isGoal === null,
+        },
+      )}
+    >
       {
-        'bg-emerald-600 text-emerald-50': isGoal,
-        'bg-rose-600 text-rose-50': !isGoal,
-        'bg-gray-600 text-gray-50': isGoal === null,
-      },
-    )}>
-      {(isGoal === true)
-        ? <Check size={18} />
-        : (isGoal === false)
-          ? <XIcon size={18} />
-          : <MinusIcon size={18} strokeWidth={3} />
+        (isGoal === true)
+          ? <Check size={18} />
+          : (isGoal === false)
+              ? <XIcon size={18} />
+              : <MinusIcon size={18} strokeWidth={3} />
       }
     </div>
   );

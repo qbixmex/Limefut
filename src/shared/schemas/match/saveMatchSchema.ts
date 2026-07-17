@@ -40,8 +40,8 @@ export const SaveMatchSchema = z.object({
     .min(0, '¡ Los goles de penal del equipo visitante debe ser un número positivo !')
     .optional(),
   remarks: z.union([
-      z.literal(''),
-      z.string('¡ Los comentarios deben ser una cadena de texto !')
+    z.literal(''),
+    z.string('¡ Los comentarios deben ser una cadena de texto !')
       .trim()
       .min(6, '¡ Los comentarios deben ser por lo menos 6 caracteres !'),
   ]).optional(),

@@ -26,10 +26,10 @@ export const StandingsPage: FC<Props> = ({ searchParams }) => {
     <>
       <ErrorHandler />
       <div className="admin-page">
-      <div className="admin-page-container">
-        <Card className="admin-page-card">
-          <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Estadísticas</CardTitle>
+        <div className="admin-page-container">
+          <Card className="admin-page-card">
+            <CardHeader className="admin-page-card-header">
+              <CardTitle className="admin-page-card-title">Estadísticas</CardTitle>
             </CardHeader>
             <CardContent>
               <Suspense fallback={<TournamentsSelectorSkeleton />}>

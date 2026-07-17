@@ -28,7 +28,7 @@ export const ConcentratedMatchesSkeleton: FC = () => {
                 <div className="w-8 m-auto h-8 bg-gray-600 rounded" />
               </td>
               {Array.from({ length: 8 }).map((_, col) => (
-                <td key={`col-${col}`} className="empty"></td>
+                <td key={`col-${col}`} className="empty" />
               ))}
             </tr>
           ))}

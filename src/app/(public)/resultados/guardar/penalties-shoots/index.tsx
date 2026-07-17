@@ -23,9 +23,9 @@ export const PenaltiesShoots: FC = () => {
       <FieldLabel htmlFor="switch-penalty-shoots">
         <Field orientation="horizontal">
           <FieldContent>
-            <FieldTitle className={cn({
-              'text-emerald-500 font-bold': penaltyShoots,
-            })}>Tanda de penales</FieldTitle>
+            <FieldTitle className={cn({ 'text-emerald-500 font-bold': penaltyShoots })}>
+              Tanda de penales
+            </FieldTitle>
             <FieldDescription>
               {penaltyShoots ? (
                 <span className="text-emerald-600 dark:text-emerald-50 font-medium italic">

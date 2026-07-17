@@ -48,6 +48,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
             <Link
               href={`/resultados/${match.id}`}
               target="_blank"
+              rel="noreferrer"
             >
               <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
                 <div className="flex flex-col gap-5 md:flex-row md:gap-5">

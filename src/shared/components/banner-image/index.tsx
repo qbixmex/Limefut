@@ -40,7 +40,8 @@ export const BannerImage: FC<Props> = (props) => {
             'align-left': dataAlignment === 'left',
             'align-center': dataAlignment === 'center',
             'align-right': dataAlignment === 'right',
-          })}>
+          })}
+          >
             {title}
           </h2>
 
@@ -48,7 +49,8 @@ export const BannerImage: FC<Props> = (props) => {
             [styles.alignLeft]: dataAlignment === 'left',
             [styles.alignCenter]: dataAlignment === 'center',
             [styles.alignRight]: dataAlignment === 'right',
-          })}>
+          })}
+          >
             {description}
           </p>
         </section>

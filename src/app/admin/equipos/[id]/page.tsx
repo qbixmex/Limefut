@@ -222,6 +222,7 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
                               key={field.id}
                               href={ROUTES.ADMIN_FIELDS_SHOW(field.id)}
                               target="_blank"
+                              rel="noreferrer"
                             >
                               <Badge variant="outline-info">
                                 {field.name}

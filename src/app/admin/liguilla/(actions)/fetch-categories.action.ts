@@ -13,7 +13,7 @@ type CATEGORY_TYPE = {
   id: string;
   name: string;
   permalink: string;
-}
+};
 
 export const fetchCategoriesAction = async ({
   authenticatedUserId,

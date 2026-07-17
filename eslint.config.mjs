@@ -1,12 +1,7 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import neostandard from 'neostandard';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -22,7 +17,14 @@ const eslintConfig = defineConfig([
   ...neostandard({ semi: true }),
   {
     rules: {
-      quotes: 'warn',
+      '@stylistic/quotes': ['warn', 'single', { avoidEscape: true }],
+      '@stylistic/jsx-quotes': ['warn', 'prefer-double'],
+      '@stylistic/space-before-function-paren': 'off',
+      '@stylistic/comma-dangle': 'off',
+      '@stylistic/multiline-ternary': 'off',
+      '@stylistic/jsx-curly-spacing': 'off',
+      'react/jsx-handler-names': 'off',
+      '@stylistic/indent': 'off',
       indent: 'off',
       camelcase: 'off',
       'no-tabs': 'off',

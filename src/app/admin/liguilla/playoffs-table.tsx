@@ -54,6 +54,7 @@ export const PlayoffsTable: FC<Props> = ({
                     <Link
                       href={`${ROUTES.ADMIN_TOURNAMENTS_SHOW(playoff.tournament.id)}`}
                       target="_blank"
+                      rel="noreferrer"
                     >
                       {playoff.tournament.name}
                     </Link>
@@ -93,9 +94,11 @@ export const PlayoffsTable: FC<Props> = ({
             </TableBody>
           </Table>
         </div>
-        <div className={cn('flex justify-center mt-10', {
-          hidden: playoffs.length === 0 || pagination.totalPages === 1,
-        })}>
+        <div
+          className={cn('flex justify-center mt-10', {
+            hidden: playoffs.length === 0 || pagination.totalPages === 1,
+          })}
+        >
           <Pagination totalPages={pagination.totalPages} />
         </div>
       </div>

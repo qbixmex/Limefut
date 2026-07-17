@@ -69,6 +69,6 @@ export const CreateTeamForm: FC<Props> = ({
           </Button>
         </div>
       </form>
-    </Form >
+    </Form>
   );
 };

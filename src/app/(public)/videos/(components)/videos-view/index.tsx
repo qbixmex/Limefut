@@ -76,12 +76,16 @@ export const VideosView: FC<Props> = async ({ searchParams }) => {
                   )}
                 </span>
               </div>
-              <div className={cn(styles.videoPlatform, {
-                [styles.youtube]: video.platform === 'youtube',
-                [styles.facebook]: video.platform === 'facebook',
-                [styles.tiktok]: video.platform === 'tiktok',
-                [styles.instagram]: video.platform === 'instagram',
-              })}>
+              <div
+                className={
+                  cn(styles.videoPlatform, {
+                    [styles.youtube]: video.platform === 'youtube',
+                    [styles.facebook]: video.platform === 'facebook',
+                    [styles.tiktok]: video.platform === 'tiktok',
+                    [styles.instagram]: video.platform === 'instagram',
+                  })
+                }
+              >
                 {video.platform === 'youtube' && <FaYoutube size={28} />}
                 {video.platform === 'facebook' && <FaFacebook size={24} />}
                 {video.platform === 'instagram' && <FaInstagram size={24} />}
@@ -94,9 +98,11 @@ export const VideosView: FC<Props> = async ({ searchParams }) => {
           </div>
         ))}
       </div>
-      <div className={cn('flex justify-center mt-10', {
-        hidden: pagination!.totalPages === 1 || videos.length === 0,
-      })}>
+      <div
+        className={cn('flex justify-center mt-10', {
+          hidden: pagination!.totalPages === 1 || videos.length === 0,
+        })}
+      >
         <Pagination totalPages={pagination!.totalPages as number} />
       </div>
 
