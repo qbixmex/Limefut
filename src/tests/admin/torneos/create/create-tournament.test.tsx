@@ -1,5 +1,5 @@
-import CreateTournamentPage from '@/app/admin/torneos/crear/page';
 import { render, screen } from '@testing-library/react';
+import CreateTournamentPage from '@/app/admin/torneos/crear/page';
 
 vi.mock('@/app/admin/torneos/crear/create-tournament-view', () => ({
   CreateTournamentView: () => null,

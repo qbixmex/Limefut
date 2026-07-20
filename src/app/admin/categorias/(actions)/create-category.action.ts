@@ -12,11 +12,24 @@ type ResponseCreateAction = Promise<{
   category: Category | null;
 }>;
 
-export const createCategoryAction = async (
+export const createCategoryAction = async ({
+  authenticatedUserId,
+  authenticatedUserRoles,
+  formData,
+}: {
+  authenticatedUserId: string | undefined,
+  authenticatedUserRoles: string[] | undefined,
   formData: FormData,
-  userRole: string[] | null,
-): ResponseCreateAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+}): ResponseCreateAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Debes estar autentificado para realizar esta acción !',
+      category: null,
+    };
+  }
+
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
