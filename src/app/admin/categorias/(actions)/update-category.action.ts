@@ -2,15 +2,15 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
-import { editTournamentSchema } from '@/shared/schemas';
+import { editCategorySchema } from '@/shared/schemas';
 import type { Category } from '@/shared/interfaces';
 import { Prisma } from '@/generated/prisma/client';
 
 type Options = {
   formData: FormData;
   categoryId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
+  authenticatedUserRoles: string[] | undefined;
+  authenticatedUserId: string | undefined;
 };
 
 type EditResponseAction = Promise<{
@@ -22,18 +22,18 @@ type EditResponseAction = Promise<{
 export const updateCategoryAction = async ({
   formData,
   categoryId,
-  userRoles,
+  authenticatedUserRoles,
   authenticatedUserId,
 }: Options): EditResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
-      message: '¡ Usuario no autenticado !',
+      message: '¡ Debes estar autentificado para realizar esta acción !',
       category: null,
     };
   }
 
-  if (!userRoles.includes('admin')) {
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -46,7 +46,7 @@ export const updateCategoryAction = async ({
     permalink: formData.get('permalink') ?? undefined,
   };
 
-  const categoryVerified = editTournamentSchema.safeParse(rawData);
+  const categoryVerified = editCategorySchema.safeParse(rawData);
 
   if (!categoryVerified.success) {
     return {

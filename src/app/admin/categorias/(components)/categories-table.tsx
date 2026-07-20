@@ -26,6 +26,8 @@ export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
   });
 
   const {
+    ok,
+    message,
     categories = [],
     pagination = {
       currentPage: 1,
@@ -37,12 +39,22 @@ export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
     searchTerm: query,
   });
 
+  if (!ok) {
+    return (
+      <div className="border border-red-500 p-5 rounded">
+        <p className="text-red-500 text-center text-xl font-semibold">
+          {message}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
       {categories && categories.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Tabla de categorías">
               <TableHeader>
                 <TableRow>
                   <TableHead>#</TableHead>

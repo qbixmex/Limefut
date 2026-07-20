@@ -15,8 +15,9 @@ export const EditCategory: FC<{ categoryId: string }> = ({ categoryId }) => {
             variant: 'outline-warning',
             size: 'icon',
           })}
+          aria-label="Editar categoría"
         >
-          <Pencil />
+          <Pencil role="img" aria-label="Icono de lápiz" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">editar</TooltipContent>

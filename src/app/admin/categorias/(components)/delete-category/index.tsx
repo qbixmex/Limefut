@@ -42,7 +42,7 @@ export const DeleteCategory: FC<Props> = ({ categoryId, roles }) => {
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
             <Button variant="outline-danger" size="icon">
-              <Trash2 />
+              <Trash2 role="img" aria-label="Icono de basurero" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
