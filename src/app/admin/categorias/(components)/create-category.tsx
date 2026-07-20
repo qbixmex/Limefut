@@ -15,7 +15,11 @@ export const CreateCategory = () => {
             size: 'icon',
           })}
         >
-          <Plus strokeWidth={3} />
+          <Plus
+            strokeWidth={3}
+            role="img"
+            aria-label="Crear categoría"
+          />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">crear</TooltipContent>

@@ -8,7 +8,11 @@ vi.mock('next/headers', () => ({
 vi.mock('@/lib/auth', () => ({
   auth: {
     api: {
-      getSession: vi.fn().mockResolvedValue({ user: { roles: ['user', 'admin'] } }),
+      getSession: vi.fn().mockResolvedValue({
+        user: {
+          roles: ['user', 'admin'],
+        },
+      }),
     },
   },
 }));

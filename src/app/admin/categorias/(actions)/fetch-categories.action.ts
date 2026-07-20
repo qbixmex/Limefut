@@ -14,11 +14,11 @@ type Options = Readonly<{
 export type ResponseFetch = Promise<{
   ok: boolean;
   message: string;
-  categories: CategoryType[];
+  categories: CATEGORY_TYPE[];
   pagination: Pagination | null;
 }>;
 
-export type CategoryType = {
+export type CATEGORY_TYPE = {
   id: string;
   name: string;
   permalink: string | null;

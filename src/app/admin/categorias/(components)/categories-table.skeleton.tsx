@@ -1,6 +1,9 @@
 export const CategoriesTableSkeleton = () => {
   return (
-    <div className="flex flex-col gap-5 animate-pulse">
+    <div
+      className="flex flex-col gap-5 animate-pulse"
+      data-testid="categories-table-skeleton"
+    >
       {/* Skeleton Header */}
       <div
         className="grid gap-5"
