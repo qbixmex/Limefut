@@ -83,6 +83,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                       <Link
                         href={ROUTES.ADMIN_TOURNAMENTS_SHOW(tournament.id)}
                         aria-label={`Enlace a ${tournament.name}`}
+                        data-testid={tournament.id}
                       >
                         {
                           !tournament.imageUrl ? (
@@ -101,7 +102,9 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         }
                       </Link>
                     </TableCell>
-                    <TableCell>{tournament.name}</TableCell>
+                    <TableCell aria-label="Nombre del torneo">
+                      {tournament.name}
+                    </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">
                       {tournament.season}
                     </TableCell>

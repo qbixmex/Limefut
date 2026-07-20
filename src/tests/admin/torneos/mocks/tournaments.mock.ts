@@ -1,12 +1,12 @@
 import type { TOURNAMENT_TYPE } from '@/app/admin/torneos/(actions)/fetch-tournaments.action';
 
-export const tournaments: TOURNAMENT_TYPE[] = [
+export const tournamentsMock: TOURNAMENT_TYPE[] = [
   {
     id: '9dfc94ab-1171-492a-b059-f5baec39d256',
-    name: 'Torneo jóvenes promesas',
-    permalink: 'torneo-jovenes-promesas',
+    name: 'First Tournament',
+    permalink: 'first-tournament',
     imageUrl: null,
-    season: '2026-apertura',
+    season: '2026-opening',
     startDate: new Date('2026-01-01'),
     endDate: new Date('2026-06-01'),
     active: true,
@@ -14,13 +14,35 @@ export const tournaments: TOURNAMENT_TYPE[] = [
   },
   {
     id: 'dcebcd1b-d0ff-40ea-b3c2-3179a89e864d',
-    name: 'Jóvenes Cachorros',
-    permalink: 'jovenes-cachorros',
+    name: 'Second Tournament',
+    permalink: 'second-tournament',
     imageUrl: null,
-    season: '2026-clausura',
+    season: '2026-ending',
     startDate: new Date('2026-09-01'),
     endDate: new Date('2026-12-22'),
     active: false,
     categoriesQuantity: 8,
+  },
+  {
+    id: 'adf7ffce-25d5-48df-a347-772879e2fb18',
+    name: 'Winter Tournament',
+    permalink: 'winter-tournament',
+    imageUrl: null,
+    season: '2025-opening',
+    startDate: new Date('2024-01-01'),
+    endDate: new Date('2025-02-28'),
+    active: false,
+    categoriesQuantity: 6,
+  },
+  {
+    id: 'bbc30457-4f92-4d91-92e1-d688a5373690',
+    name: 'Winter Tournament',
+    permalink: 'winter-tournament',
+    imageUrl: null,
+    season: '2025-ending',
+    startDate: new Date('2023-12-01'),
+    endDate: new Date('2024-02-28'),
+    active: false,
+    categoriesQuantity: 6,
   },
 ];
