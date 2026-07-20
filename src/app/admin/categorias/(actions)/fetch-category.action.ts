@@ -10,16 +10,29 @@ type FetchResponse = Promise<{
   category: Category | null;
 }>;
 
-export const fetchCategoryAction = async (
-  categoryId: string,
-  userRole: string[] | null,
-): FetchResponse => {
+export const fetchCategoryAction = async ({
+  authenticatedUserId,
+  authenticatedUserRoles,
+  categoryId,
+}: {
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | undefined;
+  categoryId: string;
+}): FetchResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-category');
 
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Debes estar autentificado para realizar esta acción !',
+      category: null,
+    };
+  }
+
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos !',
