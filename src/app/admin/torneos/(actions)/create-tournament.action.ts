@@ -30,10 +30,7 @@ export const createTournamentAction = async ({
     };
   }
 
-  if (
-    (authenticatedUserRoles && authenticatedUserRoles.length > 0) &&
-    (!authenticatedUserRoles.includes('admin'))
-  ) {
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
@@ -143,12 +140,16 @@ export const createTournamentAction = async ({
           console.log('ERROR METADATA:', error.meta);
         }
 
+        console.log(error);
+
         return {
           ok: false,
           message: '¡ Hay campos duplicados, revise los logs del servidor !',
           tournament: null,
         };
       }
+
+      console.log(error);
 
       return {
         ok: false,

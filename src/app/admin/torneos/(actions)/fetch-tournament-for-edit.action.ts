@@ -45,7 +45,7 @@ export const fetchTournamentForEditAction = async ({
     };
   }
 
-  if ((!authenticatedUserRoles?.includes('admin'))) {
+  if (!authenticatedUserRoles || !authenticatedUserRoles.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
