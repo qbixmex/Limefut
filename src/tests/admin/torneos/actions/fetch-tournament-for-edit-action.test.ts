@@ -36,6 +36,11 @@ const prismaTournament = {
 describe('Tests on tournament for edit server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('Should return a tournament for edit', async () => {

@@ -130,7 +130,14 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell className="hidden lg:table-cell text-center">
                       <ActiveSwitch
                         resource={{ id: tournament.id, state: tournament.active }}
-                        updateResourceStateAction={updateTournamentStateAction}
+                        updateResourceStateAction={(id, state) =>
+                          updateTournamentStateAction({
+                            id,
+                            state,
+                            authenticatedUserId: session?.user?.id,
+                            authenticatedUserRoles: session?.user?.roles as string[] ?? null,
+                          })
+                        }
                       />
                     </TableCell>
                     <TableCell>
