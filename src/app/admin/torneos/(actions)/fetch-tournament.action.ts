@@ -35,14 +35,14 @@ type FetchTournamentResponse = Promise<{
 
 export const fetchTournamentAction = async (
   tournamentId: string,
-  userRole: string[] | null,
+  userRoles: string[] | null,
 ): FetchTournamentResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-tournament');
 
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  if (!userRoles || (!userRoles.includes('admin'))) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos !',
