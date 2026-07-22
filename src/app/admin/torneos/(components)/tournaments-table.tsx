@@ -130,7 +130,14 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell className="hidden lg:table-cell text-center">
                       <ActiveSwitch
                         resource={{ id: tournament.id, state: tournament.active }}
-                        updateResourceStateAction={updateTournamentStateAction}
+                        updateResourceStateAction={(id, state) => {
+                          return updateTournamentStateAction({
+                            id,
+                            state,
+                            authenticatedUserId: session?.user?.id,
+                            authenticatedUserRoles: session?.user?.roles as string[] ?? null,
+                          });
+                        }}
                       />
                     </TableCell>
                     <TableCell>
@@ -139,6 +146,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         <EditTournament paramsPromise={Promise.resolve({ id: tournament.id })} />
                         <DeleteTournament
                           tournamentId={tournament.id}
+                          userId={session?.user?.id}
                           roles={session?.user.roles as string[] ?? null}
                         />
                       </div>

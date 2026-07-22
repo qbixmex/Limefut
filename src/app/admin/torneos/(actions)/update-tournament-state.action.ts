@@ -8,7 +8,31 @@ export type ResponseAction = Promise<{
   message: string;
 }>;
 
-export const updateTournamentStateAction = async (id: string, state: boolean): ResponseAction => {
+export const updateTournamentStateAction = async ({
+  id,
+  state,
+  authenticatedUserId,
+  authenticatedUserRoles,
+}: {
+  id: string;
+  state: boolean;
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+}): ResponseAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Debes estar autentificado para realizar esta acción !',
+    };
+  }
+
+  if (!authenticatedUserRoles?.includes('admin')) {
+    return {
+      ok: false,
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+    };
+  }
+
   const tournamentExists = await prisma.tournament.count({
     where: { id },
   });

@@ -60,6 +60,7 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
                   />
                   <DeleteTournamentImage
                     teamId={tournament.id}
+                    userId={session?.user?.id}
                     roles={session?.user.roles as string[]}
                     className="absolute top-2 right-2"
                   />
