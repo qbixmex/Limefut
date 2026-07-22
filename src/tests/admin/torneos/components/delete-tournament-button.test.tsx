@@ -12,6 +12,7 @@ describe('Test on <DeleteTournament /> component', () => {
     render(
       <DeleteTournament
         tournamentId={tournamentId}
+        userId="user-1"
         roles={[]}
       />,
       { wrapper: TooltipProvider },
@@ -31,6 +32,7 @@ describe('Test on <DeleteTournament /> component', () => {
     render(
       <DeleteTournament
         tournamentId={tournamentId}
+        userId="user-1"
         roles={roles}
       />,
       { wrapper: TooltipProvider },
@@ -57,6 +59,7 @@ describe('Test on <DeleteTournament /> component', () => {
     render(
       <DeleteTournament
         tournamentId={tournamentId}
+        userId="user-1"
         roles={roles}
       />,
       { wrapper: TooltipProvider },

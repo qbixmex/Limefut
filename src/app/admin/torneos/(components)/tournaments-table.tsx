@@ -146,6 +146,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         <EditTournament paramsPromise={Promise.resolve({ id: tournament.id })} />
                         <DeleteTournament
                           tournamentId={tournament.id}
+                          userId={session?.user?.id}
                           roles={session?.user.roles as string[] ?? null}
                         />
                       </div>
