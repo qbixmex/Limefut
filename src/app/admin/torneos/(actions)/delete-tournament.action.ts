@@ -10,7 +10,29 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deleteTournamentAction = async (tournamentId: string): ResponseDeleteAction => {
+export const deleteTournamentAction = async ({
+  tournamentId,
+  authenticatedUserId,
+  authenticatedUserRoles,
+}: {
+  tournamentId: string;
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+}): ResponseDeleteAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Debes estar autentificado para realizar esta acción !',
+    };
+  }
+
+  if (!authenticatedUserRoles?.includes('admin')) {
+    return {
+      ok: false,
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+    };
+  }
+
   const tournament = await prisma.tournament.findFirst({
     where: { id: tournamentId },
     select: {
@@ -59,6 +81,14 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
     };
   }
 
+  // Delete image from cloudinary first (before DB delete).
+  if (tournament.imagePublicID) {
+    const response = await deleteImage(tournament.imagePublicID);
+    if (!response.ok) {
+      throw new Error('Error al eliminar la imagen de cloudinary');
+    }
+  }
+
   try {
     await prisma.tournament.delete({
       where: { id: tournamentId },
@@ -92,14 +122,6 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
       ok: false,
       message: 'Error del servidor no esperado, revise los logs del servidor',
     };
-  }
-
-  // Delete image from cloudinary.
-  if (tournament.imagePublicID) {
-    const response = await deleteImage(tournament.imagePublicID);
-    if (!response.ok) {
-      throw new Error('Error al eliminar la imagen de cloudinary');
-    }
   }
 
   // Update Cache
