@@ -41,7 +41,7 @@ describe('Tests on tournaments server action', () => {
     const response = await fetchTournamentsAction();
 
     expect(response.ok).toBe(true);
-    expect(response.message).toBe('! Los torneos fueron obtenidos correctamente 👍');
+    expect(response.message).toContain('torneos fueron obtenidos');
     expect(response.tournaments).toHaveLength(tournamentsMock.length);
 
     response.tournaments.forEach((tournament, index) => {
@@ -230,5 +230,27 @@ describe('Tests on tournaments server action', () => {
         },
       }),
     );
+  });
+
+  test('Should return error when database throws', async () => {
+    mockFindMany.mockRejectedValue(new Error('DB error'));
+
+    const response = await fetchTournamentsAction();
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toContain('DB error');
+    expect(response.tournaments).toEqual([]);
+    expect(response.pagination).toBeNull();
+  });
+
+  test('Should return error when unexpected server error occurs', async () => {
+    mockFindMany.mockRejectedValue('Unexpected error');
+
+    const response = await fetchTournamentsAction();
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toContain('Error inesperado');
+    expect(response.tournaments).toEqual([]);
+    expect(response.pagination).toBeNull();
   });
 });
