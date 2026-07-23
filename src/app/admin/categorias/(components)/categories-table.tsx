@@ -76,6 +76,7 @@ export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
                         <EditCategory categoryId={category.id as string} />
                         <DeleteCategory
                           categoryId={category.id}
+                          userId={session?.user.id}
                           roles={session?.user.roles as string[] ?? null}
                         />
                       </div>

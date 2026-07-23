@@ -9,8 +9,8 @@ import { Prisma } from '@/generated/prisma/client';
 type Options = {
   formData: FormData;
   categoryId: string;
-  authenticatedUserRoles: string[] | undefined;
-  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
+  authenticatedUserId: string | null | undefined;
 };
 
 type EditResponseAction = Promise<{
@@ -89,6 +89,11 @@ export const updateCategoryAction = async ({
         const updatedCategory = await transaction.category.update({
           where: { id: categoryId },
           data: categoryVerified.data,
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
         });
 
         // Update Cache
