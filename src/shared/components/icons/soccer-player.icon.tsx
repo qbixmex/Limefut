@@ -6,6 +6,7 @@ type Props = Readonly<{
   strokeWidth?: number;
   color?: string;
   size?: number | string;
+  ['aria-label']?: string;
 }>;
 
 export const SoccerPlayer: FC<Props> = ({
@@ -14,6 +15,7 @@ export const SoccerPlayer: FC<Props> = ({
   strokeWidth = 2,
   color = 'currentColor',
   size = 24,
+  'aria-label': ariaLabel,
 }) => {
   return (
     <svg
@@ -23,6 +25,8 @@ export const SoccerPlayer: FC<Props> = ({
       viewBox="0 0 48 48"
       className={className}
       style={{ color, ...style }}
+      role="img"
+      aria-label={ariaLabel}
     >
       <g fill="none">
         <path

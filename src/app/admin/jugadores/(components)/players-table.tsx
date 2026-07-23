@@ -53,7 +53,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
       {players && players.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1 relative">
-            <Table>
+            <Table aria-label="Lista de jugadores">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[100px]">Imagen</TableHead>
@@ -139,7 +139,10 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
         </div>
       ) : (
         <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
+          <p
+            className="text-sky-500 text-center text-xl font-semibold"
+            role="status"
+          >
             No hay jugadores asignados a este equipo
           </p>
         </div>

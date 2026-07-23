@@ -5,7 +5,7 @@ import { Search } from '@/shared/components/search';
 import { TournamentsSelectorSkeleton } from '../equipos/(components)/TournamentsSelectorSkeleton';
 import { CreatePlayerButton } from './(components)/create-player-button';
 import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
-import { PlayersContent } from './(components)/players-content';
+import { PlayersView } from './(components)/players-view';
 import { TeamsContent } from './(components)/teams-content';
 
 type Props = Readonly<{
@@ -44,7 +44,7 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
                 </Suspense>
               </div>
               <Suspense>
-                <PlayersContent searchParams={searchParams} />
+                <PlayersView searchParams={searchParams} />
               </Suspense>
             </CardContent>
           </Card>
