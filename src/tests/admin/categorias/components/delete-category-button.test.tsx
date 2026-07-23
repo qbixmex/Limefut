@@ -4,11 +4,19 @@ import { userEvent } from '@testing-library/user-event';
 import { DeleteCategory } from '@/app/admin/categorias/(components)/delete-category';
 
 const mockDeleteAction = vi.fn<
-  (categoryId: string) => Promise<{ ok: boolean; message: string }>
+  (params: {
+    categoryId: string;
+    authenticatedUserId: string | undefined;
+    authenticatedUserRoles: string[] | null | undefined;
+  }) => Promise<{ ok: boolean; message: string }>
 >();
 
 vi.mock('@/app/admin/categorias/(actions)/delete-category.action', () => ({
-  deleteCategoryAction: (categoryId: string) => mockDeleteAction(categoryId),
+  deleteCategoryAction: (params: {
+    categoryId: string;
+    authenticatedUserId: string | undefined;
+    authenticatedUserRoles: string[] | null | undefined;
+  }) => mockDeleteAction(params),
 }));
 
 vi.mock('sonner', () => ({
@@ -32,6 +40,7 @@ describe('Test on <DeleteCategory /> component', () => {
     render(
       <DeleteCategory
         categoryId={categoryId}
+        userId="user-123"
         roles={['admin']}
       />,
       { wrapper: TooltipProvider },
@@ -47,6 +56,7 @@ describe('Test on <DeleteCategory /> component', () => {
     render(
       <DeleteCategory
         categoryId={categoryId}
+        userId="user-123"
         roles={['admin']}
       />,
       { wrapper: TooltipProvider },
@@ -60,7 +70,11 @@ describe('Test on <DeleteCategory /> component', () => {
     await user.click(confirmButton);
 
     await waitFor(() => {
-      expect(mockDeleteAction).toHaveBeenCalledWith(categoryId);
+      expect(mockDeleteAction).toHaveBeenCalledWith({
+        categoryId,
+        authenticatedUserId: 'user-123',
+        authenticatedUserRoles: ['admin'],
+      });
     });
   });
 
@@ -69,6 +83,7 @@ describe('Test on <DeleteCategory /> component', () => {
     render(
       <DeleteCategory
         categoryId={categoryId}
+        userId="user-123"
         roles={['admin']}
       />,
       { wrapper: TooltipProvider },
@@ -90,6 +105,7 @@ describe('Test on <DeleteCategory /> component', () => {
     render(
       <DeleteCategory
         categoryId={categoryId}
+        userId="user-123"
         roles={['user']}
       />,
       { wrapper: TooltipProvider },

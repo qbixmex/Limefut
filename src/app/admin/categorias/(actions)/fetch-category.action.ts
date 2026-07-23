@@ -15,8 +15,8 @@ export const fetchCategoryAction = async ({
   authenticatedUserRoles,
   categoryId,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | undefined;
+  authenticatedUserId: string | null | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
   categoryId: string;
 }): FetchResponse => {
   'use cache';
@@ -41,14 +41,19 @@ export const fetchCategoryAction = async ({
   }
 
   try {
-    const category = await prisma.category.findUnique({
+    const category = await prisma.category.findFirst({
       where: { id: categoryId },
+      select: {
+        id: true,
+        name: true,
+        permalink: true,
+      },
     });
 
     if (!category) {
       return {
         ok: false,
-        message: '¡ Categoría no encontrada ❌ !',
+        message: '¡ La categoría no se encuentra en la base de datos ❌ !',
         category: null,
       };
     }
@@ -61,8 +66,8 @@ export const fetchCategoryAction = async ({
   } catch (error) {
     if (error instanceof Error) {
       console.log('ERROR NAME:', error.name);
-      console.log('ERROR CAUSE:', error.cause);
       console.log('ERROR MESSAGE:', error.message);
+
       return {
         ok: false,
         message: 'No se pudo obtener la categoría,\n¡ Revise los logs del servidor !',
