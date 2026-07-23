@@ -12,11 +12,24 @@ type CreateResponseAction = Promise<{
   player: Player | null;
 }>;
 
-export const createPlayerAction = async (
+export const createPlayerAction = async ({
+  formData,
+  authenticatedUserId,
+  authenticatedUserRoles,
+} : {
   formData: FormData,
-  userRole: string[] | null,
-): CreateResponseAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  authenticatedUserId: string | null | undefined,
+  authenticatedUserRoles: string[] | null | undefined,
+}): CreateResponseAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Usuario no autentificado !',
+      player: null,
+    };
+  }
+
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',

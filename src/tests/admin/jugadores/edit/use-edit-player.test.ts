@@ -1,7 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { useEditPlayer } from '@/app/admin/jugadores/(components)/use-edit-player';
 import { playerMock } from '../mocks/player.mock';
-import { ROUTES } from '@/shared/constants/routes';
 
 const { mockReplace, mockUpdateAction } = vi.hoisted(() => ({
   mockReplace: vi.fn(),
@@ -32,12 +31,8 @@ vi.mock('@/app/admin/jugadores/(actions)/updatePlayerAction', () => ({
 }));
 
 const defaultProps = {
-  session: {
-    user: {
-      id: '550e8400-e29b-41d4-a716-446655440000',
-      roles: ['admin'],
-    },
-  } as never,
+  authenticatedUserId: '550e8400-e29b-41d4-a716-446655440000',
+  authenticatedUserRoles: ['admin'],
   player: playerMock,
 };
 
@@ -90,8 +85,8 @@ describe('Tests on useEditPlayer hook', () => {
 
     expect(mockUpdateAction).toHaveBeenCalledWith(
       expect.objectContaining({
-        authenticatedUserId: defaultProps.session.user.id,
-        userRoles: defaultProps.session.user.roles,
+        authenticatedUserId: defaultProps.authenticatedUserId,
+        userRoles: defaultProps.authenticatedUserRoles,
         playerId: playerMock.id,
         formData: expect.any(FormData),
       }),

@@ -3,7 +3,6 @@ import type { FC } from 'react';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { fetchPlayerAction, fetchTeamsForPlayer } from '../../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditPlayerForm } from '../../(components)/edit-player-form';
@@ -43,7 +42,8 @@ export const EditPlayerView: FC<Props> = async ({ paramsPromise, searchParamsPro
   return (
     <EditPlayerForm
       key={randomUUID()}
-      session={session as Session}
+      authenticatedUserId={session?.user.id}
+      authenticatedUserRoles={session?.user.roles}
       player={player}
       teams={teams}
     />

@@ -8,7 +8,6 @@ import { updatePlayerAction } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { toast } from 'sonner';
 import type z from 'zod';
-import type { Session } from '@/lib/auth-client';
 
 type TeamType = {
   id: string;
@@ -27,11 +26,12 @@ type PlayerType = {
 };
 
 type Props = Readonly<{
-  session: Session;
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
   player: PlayerType;
 }>;
 
-export const useEditPlayer = ({ session, player }: Props) => {
+export const useEditPlayer = ({ authenticatedUserId, authenticatedUserRoles, player }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -65,8 +65,8 @@ export const useEditPlayer = ({ session, player }: Props) => {
     const { ok, message } = await updatePlayerAction({
       formData,
       playerId: player.id,
-      userRoles: session.user.roles as string[],
-      authenticatedUserId: session?.user.id,
+      userRoles: authenticatedUserRoles as string[],
+      authenticatedUserId,
     });
 
     if (!ok) {

@@ -4,7 +4,6 @@ import type { FC } from 'react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
-import type { Session } from '@/lib/auth-client';
 import { useEditPlayer } from './use-edit-player';
 import { FormFields } from './form-fields';
 
@@ -25,13 +24,14 @@ type PlayerType = {
 };
 
 type Props = Readonly<{
-  session: Session;
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
   player: PlayerType;
   teams: TeamType[];
 }>;
 
-export const EditPlayerForm: FC<Props> = ({ session, player, teams }) => {
-  const { form, onSubmit, handleNavigateBack } = useEditPlayer({ session, player });
+export const EditPlayerForm: FC<Props> = ({ authenticatedUserId, authenticatedUserRoles, player, teams }) => {
+  const { form, onSubmit, handleNavigateBack } = useEditPlayer({ authenticatedUserId, authenticatedUserRoles, player });
 
   return (
     <Form {...form}>

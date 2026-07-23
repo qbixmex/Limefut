@@ -13,9 +13,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-const CreatePlayerPage = async ({ searchParams }: Props) => {
-  const { tournament } = await searchParams;
-
+const CreatePlayerPage = ({ searchParams }: Props) => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -31,7 +29,7 @@ const CreatePlayerPage = async ({ searchParams }: Props) => {
           </CardHeader>
           <CardContent>
             <Suspense>
-              <CreatePlayerView tournament={tournament} />
+              <CreatePlayerView searchParamsPromise={searchParams} />
             </Suspense>
           </CardContent>
         </Card>

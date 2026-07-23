@@ -2,24 +2,27 @@ import { randomUUID } from 'node:crypto';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { fetchTeamsForPlayer } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { CreatePlayerForm } from '../(components)/create-player-form';
 
 type Props = Readonly<{
-  tournament: string | undefined;
+  searchParamsPromise: Promise<{
+    tournament?: string;
+  }>;
 }>;
 
-export const CreatePlayerView = async ({ tournament }: Props) => {
+export const CreatePlayerView = async ({ searchParamsPromise }: Props) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  if (session && !(session.user.roles as string[]).includes('admin')) {
+  if (!session || !(session.user.roles as string[]).includes('admin')) {
     const message = '¡ No tienes permisos administrativos para crear jugadores !';
     redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(message)}`);
   }
+
+  const { tournament } = await searchParamsPromise;
 
   const responseTeams = await fetchTeamsForPlayer(tournament as string);
 
@@ -32,7 +35,8 @@ export const CreatePlayerView = async ({ tournament }: Props) => {
   return (
     <CreatePlayerForm
       key={randomUUID()}
-      session={session as Session}
+      authenticatedUserId={session?.user.id}
+      authenticatedUserRoles={session?.user.roles}
       teams={teams}
     />
   );

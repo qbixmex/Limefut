@@ -8,10 +8,10 @@ import { createPlayerAction } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { toast } from 'sonner';
 import type z from 'zod';
-import type { Session } from '@/lib/auth-client';
 
 type Props = Readonly<{
-  session: Session;
+  authenticatedUserId: string | undefined;
+  authenticatedUserRoles: string[] | null | undefined;
 }>;
 
 const DEFAULT_FORM_VALUES = {
@@ -25,7 +25,7 @@ const DEFAULT_FORM_VALUES = {
   teamId: '',
 };
 
-export const useCreatePlayer = ({ session }: Props) => {
+export const useCreatePlayer = ({ authenticatedUserId, authenticatedUserRoles }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -48,10 +48,11 @@ export const useCreatePlayer = ({ session }: Props) => {
     formData.append('active', String(data.active ?? false));
     formData.append('teamId', data.teamId as string);
 
-    const { ok, message } = await createPlayerAction(
+    const { ok, message } = await createPlayerAction({
       formData,
-      session?.user.roles ?? null,
-    );
+      authenticatedUserId,
+      authenticatedUserRoles,
+    });
 
     if (!ok) {
       toast.error(message);
