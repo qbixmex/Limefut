@@ -1,18 +1,36 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Player, Team } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
-
-type TeamType = Pick<Team, 'id' | 'name' | 'permalink'>;
 
 type FetchPlayerResponse = Promise<{
   ok: boolean;
   message: string;
-  player: Player & {
-    team: TeamType | null,
+  player: PLAYER_TYPE & {
+    team: TEAM_TYPE | null,
   } | null;
 }>;
+
+type PLAYER_TYPE = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  email: string | null;
+  name: string;
+  imageUrl: string | null;
+  phone: string | null;
+  birthday: Date | null;
+  nationality: string | null;
+  active: boolean;
+  teamId: string | null;
+  imagePublicID: string | null;
+};
+
+type TEAM_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+};
 
 export const fetchPlayerAction = async (
   playerId: string,
