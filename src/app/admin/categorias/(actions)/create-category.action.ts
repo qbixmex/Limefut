@@ -17,8 +17,8 @@ export const createCategoryAction = async ({
   authenticatedUserRoles,
   formData,
 }: {
-  authenticatedUserId: string | undefined,
-  authenticatedUserRoles: string[] | undefined,
+  authenticatedUserId: string | null | undefined,
+  authenticatedUserRoles: string[] | null | undefined,
   formData: FormData,
 }): ResponseCreateAction => {
   if (!authenticatedUserId) {
@@ -88,9 +88,7 @@ export const createCategoryAction = async ({
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
-        if (error.meta) {
-          console.log('ERROR METADATA:', error.meta);
-        }
+        console.log(error.message);
 
         return {
           ok: false,
@@ -99,16 +97,20 @@ export const createCategoryAction = async ({
         };
       }
 
+      console.log(error.message);
+
       return {
         ok: false,
-        message: '¡ Error al crear la categoría, revise los logs del servidor !',
+        message: '¡ Error al crear la categoría, revise los logs del servidor ❌ !',
         category: null,
       };
     }
+
     console.log(error);
+
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: '¡ Error inesperado, revise los logs del servidor ❌ !',
       category: null,
     };
   }
