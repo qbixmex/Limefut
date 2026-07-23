@@ -73,7 +73,9 @@ describe('Tests on useEditPlayer hook', () => {
 
     act(() => result.current.handleNavigateBack());
 
-    expect(mockReplace).toHaveBeenCalledWith('/admin/jugadores?team=team-uuid');
+    expect(mockReplace).toHaveBeenCalledWith(
+      `/admin/jugadores?team=${playerMock.team.id}`,
+    );
   });
 
   test('onSubmit should call updatePlayerAction with correct params', async () => {
@@ -106,7 +108,9 @@ describe('Tests on useEditPlayer hook', () => {
     });
 
     expect(toast.success).toHaveBeenCalledWith('¡ El jugador fue actualizado correctamente 👍 !');
-    expect(mockReplace).toHaveBeenCalledWith('/admin/jugadores?team=team-uuid');
+    expect(mockReplace).toHaveBeenCalledWith(
+      `/admin/jugadores?team=${playerMock.team.id}`,
+    );
   });
 
   test('onSubmit should show error toast on failure', async () => {

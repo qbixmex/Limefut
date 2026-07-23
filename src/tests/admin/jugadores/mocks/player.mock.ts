@@ -10,5 +10,9 @@ export const playerMock = {
   active: true,
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-06-15'),
-  team: { id: 'team-uuid', name: 'Eagles', permalink: 'eagles' },
+  team: {
+    id: 'f784c643-c39f-4867-9d7c-9b5c571a84c4',
+    name: 'Eagles',
+    permalink: 'eagles',
+  },
 };
