@@ -122,6 +122,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                         <EditPlayer playerId={player.id} />
                         <DeletePlayer
                           playerId={player.id}
+                          userId={session?.user?.id}
                           roles={session?.user.roles as string[]}
                         />
                       </div>

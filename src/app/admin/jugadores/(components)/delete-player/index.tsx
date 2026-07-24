@@ -21,16 +21,21 @@ import './styles.css';
 
 type Props = Readonly<{
   playerId: string;
+  userId: string | undefined;
   roles: string[];
 }>;
 
-export const DeletePlayer: FC<Props> = ({ playerId, roles }) => {
+export const DeletePlayer: FC<Props> = ({ playerId, userId, roles }) => {
   const onDeletePlayer = async (playerId: string) => {
     if (!roles.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar jugadores !');
       return;
     }
-    const response = await deletePlayerAction(playerId);
+    const response = await deletePlayerAction({
+      playerId,
+      authenticatedUserId: userId,
+      authenticatedUserRoles: roles,
+    });
     if (!response.ok) {
       toast.error(response.message);
       return;
