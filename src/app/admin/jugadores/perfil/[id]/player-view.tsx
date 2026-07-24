@@ -72,6 +72,7 @@ export const PlayerView: FC<Props> = async ({ params }) => {
               />
               <DeletePlayerImage
                 teamId={player.id}
+                userId={session?.user?.id}
                 roles={session?.user.roles as string[]}
                 className="absolute top-2 right-2"
               />
