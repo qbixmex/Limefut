@@ -1,29 +1,58 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Player, Team } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
-
-type TeamType = Pick<Team, 'id' | 'name' | 'permalink'>;
 
 type FetchPlayerResponse = Promise<{
   ok: boolean;
   message: string;
-  player: Player & {
-    team: TeamType | null,
+  player: PLAYER_TYPE & {
+    team: TEAM_TYPE | null,
   } | null;
 }>;
 
-export const fetchPlayerAction = async (
+type PLAYER_TYPE = {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  birthday: Date | null;
+  nationality: string | null;
+  imageUrl: string | null;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type TEAM_TYPE = {
+  id: string;
+  name: string;
+  permalink: string;
+};
+
+export const fetchPlayerAction = async ({
+  playerId,
+  authenticatedUserId,
+  authenticatedUserRoles,
+}: {
   playerId: string,
-  userRole: string[] | null,
-): FetchPlayerResponse => {
+  authenticatedUserId: string | undefined | null,
+  authenticatedUserRoles: string[] | undefined | null,
+}): FetchPlayerResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-player');
 
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Debes estar autentificado para realizar esta acción !',
+      player: null,
+    };
+  }
+
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos !',
@@ -55,7 +84,7 @@ export const fetchPlayerAction = async (
 
     return {
       ok: true,
-      message: '¡ Jugador obtenido correctamente 👍 !',
+      message: '¡ Se obtuvo el jugador correctamente 👍 !',
       player: {
         ...player,
         team: player?.team ?? null,

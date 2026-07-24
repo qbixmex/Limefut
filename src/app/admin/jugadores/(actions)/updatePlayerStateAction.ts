@@ -8,7 +8,31 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const updatePlayerStateAction = async (id: string, state: boolean): ResponseDeleteAction => {
+export const updatePlayerStateAction = async ({
+  id,
+  state,
+  authenticatedUserId,
+  authenticatedUserRoles,
+}: {
+  id: string;
+  state: boolean;
+  authenticatedUserId: string | undefined | null;
+  authenticatedUserRoles: string[] | null | undefined;
+}): ResponseDeleteAction => {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Debes estar autentificado para realizar esta acción !',
+    };
+  }
+
+  if (!authenticatedUserRoles?.includes('admin')) {
+    return {
+      ok: false,
+      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+    };
+  }
+
   const playerExists = await prisma.player.count({
     where: { id },
   });
@@ -20,7 +44,7 @@ export const updatePlayerStateAction = async (id: string, state: boolean): Respo
     };
   }
 
-  const updatedTeam = await prisma.player.update({
+  const updatedPlayer = await prisma.player.update({
     where: { id },
     data: { active: state },
     select: {
@@ -29,13 +53,12 @@ export const updatePlayerStateAction = async (id: string, state: boolean): Respo
     },
   });
 
-  // Update Cache
   updateTag('admin-players');
   updateTag('admin-player');
   updateTag('admin-playoff-match');
 
   return {
     ok: true,
-    message: `¡ El jugador "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `¡ El jugador "${updatedPlayer.name}" fue ${updatedPlayer.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
   };
 };

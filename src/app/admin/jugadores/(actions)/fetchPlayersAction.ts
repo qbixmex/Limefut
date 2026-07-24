@@ -2,7 +2,7 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { Pagination, Team } from '@/shared/interfaces';
+import type { Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
@@ -10,8 +10,6 @@ type Options = Readonly<{
   take?: number;
   searchTerm?: string;
 }>;
-
-type TeamType = Pick<Team, 'name' | 'permalink'>;
 
 export type ResponseFetchAction = Promise<{
   ok: boolean;
@@ -22,10 +20,15 @@ export type ResponseFetchAction = Promise<{
     email: string | null;
     imageUrl: string | null;
     active: boolean;
-    team: TeamType | null;
+    team: TEAM_TYPE | null;
   }[] | null;
   pagination: Pagination | null;
 }>;
+
+type TEAM_TYPE = {
+  name: string;
+  permalink: string;
+};
 
 export const fetchPlayersAction = async (
   teamId: string,

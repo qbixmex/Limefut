@@ -40,7 +40,7 @@ export const EditPlayer: FC<Props> = ({ playerId }) => {
           variant="outline-warning" size="icon"
           onClick={handleNavigate}
         >
-          <Pencil />
+          <Pencil role="img" aria-label="Icono de lápiz" />
         </Button>
       </TooltipTrigger>
       <TooltipContent side="top">

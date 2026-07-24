@@ -53,7 +53,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
       {players && players.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1 relative">
-            <Table>
+            <Table aria-label="Lista de jugadores">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[100px]">Imagen</TableHead>
@@ -106,7 +106,14 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                     <TableCell className="text-center">
                       <ActiveSwitch
                         resource={{ id: player.id, state: player.active }}
-                        updateResourceStateAction={updatePlayerStateAction}
+                        updateResourceStateAction={(id, state) => {
+                          return updatePlayerStateAction({
+                            id,
+                            state,
+                            authenticatedUserId: session?.user?.id,
+                            authenticatedUserRoles: session?.user?.roles as string[] ?? null,
+                          });
+                        }}
                       />
                     </TableCell>
                     <TableCell>
@@ -115,6 +122,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                         <EditPlayer playerId={player.id} />
                         <DeletePlayer
                           playerId={player.id}
+                          userId={session?.user?.id}
                           roles={session?.user.roles as string[]}
                         />
                       </div>
@@ -139,7 +147,10 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
         </div>
       ) : (
         <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
+          <p
+            className="text-sky-500 text-center text-xl font-semibold"
+            role="status"
+          >
             No hay jugadores asignados a este equipo
           </p>
         </div>
