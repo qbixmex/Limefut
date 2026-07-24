@@ -6,22 +6,20 @@ import { ROUTES } from '@/shared/constants/routes';
 import { Plus } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export const CreatePlayerButton = () => {
+export const CreatePlayer = () => {
   const searchParams = useSearchParams();
   const tournament = searchParams.get('tournament');
   const category = searchParams.get('category');
   const route = useRouter();
 
-  if (!tournament || !category) return;
+  if (!tournament || !category) return null;
 
   const handleNavigate = () => {
     const params = new URLSearchParams();
 
-    // Set Tournament and Category params
     params.set('tournament', tournament);
     params.set('category', category);
 
-    // Redirect to create a player with params
     route.push(`${ROUTES.ADMIN_PLAYERS_CREATE}?${params}`);
   };
 
@@ -32,8 +30,9 @@ export const CreatePlayerButton = () => {
           onClick={handleNavigate}
           variant="outline-primary"
           size="icon"
+          aria-label="Crear jugador"
         >
-          <Plus strokeWidth={3} />
+          <Plus role="img" aria-label="Icono de crear" strokeWidth={3} />
         </Button>
       </TooltipTrigger>
       <TooltipContent side="left">
