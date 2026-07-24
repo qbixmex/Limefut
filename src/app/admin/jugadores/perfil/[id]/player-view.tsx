@@ -30,7 +30,11 @@ export const PlayerView: FC<Props> = async ({ params }) => {
   });
   const playerId = (await params).id;
 
-  const response = await fetchPlayerAction(playerId, session?.user.roles ?? null);
+  const response = await fetchPlayerAction({
+    playerId,
+    authenticatedUserId: session?.user.id,
+    authenticatedUserRoles: session?.user.roles,
+  });
 
   if (!response.ok) {
     redirect(`/admin/jugadores?error=${encodeURIComponent(response.message)}`);

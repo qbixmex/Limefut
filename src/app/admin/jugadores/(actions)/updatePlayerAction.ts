@@ -10,7 +10,7 @@ type Options = {
   formData: FormData;
   playerId: string;
   userRoles: string[];
-  authenticatedUserId: string;
+  authenticatedUserId: string | undefined;
 };
 
 type EditResponseAction = Promise<{

@@ -24,7 +24,11 @@ export const EditPlayerView: FC<Props> = async ({ paramsPromise, searchParamsPro
     redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(message)}`);
   }
 
-  const responsePlayer = await fetchPlayerAction(playerId, session?.user.roles ?? null);
+  const responsePlayer = await fetchPlayerAction({
+    playerId,
+    authenticatedUserId: session?.user.id,
+    authenticatedUserRoles: session?.user.roles,
+  });
 
   if (!responsePlayer.ok) {
     redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(responsePlayer.message)}`);

@@ -6,7 +6,6 @@ export const playerMock = {
   birthday: new Date('2000-01-15'),
   nationality: 'Mexicana',
   imageUrl: null,
-  imagePublicID: null,
   active: true,
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-06-15'),

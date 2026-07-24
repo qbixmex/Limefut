@@ -40,7 +40,7 @@ vi.mock('@/app/admin/jugadores/(components)/edit-player', () => ({
 describe('Tests on PlayerView', () => {
   const defaultResponse = {
     ok: true,
-    message: '¡ Jugador obtenido correctamente 👍 !',
+    message: '¡ Se obtuvo el jugador correctamente 👍 !',
     player: playerMock,
   };
 
@@ -247,7 +247,7 @@ describe('Tests on PlayerView', () => {
     const icon = screen.getByRole('img', { name: /icono/i });
     expect(icon).toBeInTheDocument();
     expect(
-      screen.queryByRole('img', { name: /imagen del jugador/i })
+      screen.queryByRole('img', { name: /imagen del jugador/i }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByTestId('delete-player-image'),

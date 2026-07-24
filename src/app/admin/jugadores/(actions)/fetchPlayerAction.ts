@@ -13,17 +13,15 @@ type FetchPlayerResponse = Promise<{
 
 type PLAYER_TYPE = {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  email: string | null;
   name: string;
-  imageUrl: string | null;
+  email: string | null;
   phone: string | null;
   birthday: Date | null;
   nationality: string | null;
+  imageUrl: string | null;
   active: boolean;
-  teamId: string | null;
-  imagePublicID: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 type TEAM_TYPE = {
@@ -32,16 +30,29 @@ type TEAM_TYPE = {
   permalink: string;
 };
 
-export const fetchPlayerAction = async (
+export const fetchPlayerAction = async ({
+  playerId,
+  authenticatedUserId,
+  authenticatedUserRoles,
+}: {
   playerId: string,
-  userRole: string[] | null,
-): FetchPlayerResponse => {
+  authenticatedUserId: string | undefined | null,
+  authenticatedUserRoles: string[] | undefined | null,
+}): FetchPlayerResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-player');
 
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  if (!authenticatedUserId) {
+    return {
+      ok: false,
+      message: '¡ Debes estar autentificado para realizar esta acción !',
+      player: null,
+    };
+  }
+
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos !',
@@ -73,7 +84,7 @@ export const fetchPlayerAction = async (
 
     return {
       ok: true,
-      message: '¡ Jugador obtenido correctamente 👍 !',
+      message: '¡ Se obtuvo el jugador correctamente 👍 !',
       player: {
         ...player,
         team: player?.team ?? null,

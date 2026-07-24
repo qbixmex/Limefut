@@ -8,6 +8,7 @@ import { createPlayerSchema } from '@/shared/schemas';
 
 function TestWrapper({ children }: { children: ReactNode }) {
   const form = useForm<{ active: boolean }>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(createPlayerSchema) as any,
     defaultValues: { active: false },
   });
