@@ -9,8 +9,8 @@ import type { Player } from '@/shared/interfaces';
 type Options = {
   formData: FormData;
   playerId: string;
-  userRoles: string[];
-  authenticatedUserId: string | undefined;
+  authenticatedUserId: string | undefined | null;
+  authenticatedUserRoles: string[] | undefined | null;
 };
 
 type EditResponseAction = Promise<{
@@ -22,18 +22,18 @@ type EditResponseAction = Promise<{
 export const updatePlayerAction = async ({
   formData,
   playerId,
-  userRoles,
   authenticatedUserId,
+  authenticatedUserRoles,
 }: Options): EditResponseAction => {
   if (!authenticatedUserId) {
     return {
       ok: false,
-      message: '¡ Usuario no autenticado !',
+      message: '¡ Usuario no autentificado !',
       player: null,
     };
   }
 
-  if (!userRoles.includes('admin')) {
+  if (!authenticatedUserRoles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',

@@ -65,7 +65,7 @@ export const useEditPlayer = ({ authenticatedUserId, authenticatedUserRoles, pla
     const { ok, message } = await updatePlayerAction({
       formData,
       playerId: player.id,
-      userRoles: authenticatedUserRoles as string[],
+      authenticatedUserRoles,
       authenticatedUserId,
     });
 

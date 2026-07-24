@@ -8,8 +8,8 @@ const { mockReplace, mockUpdateAction } = vi.hoisted(() => ({
     (params: {
       formData: FormData;
       playerId: string;
-      userRoles: string[];
-      authenticatedUserId: string | undefined;
+      authenticatedUserId: string | undefined | null;
+      authenticatedUserRoles: string[] | undefined | null;
     }) => Promise<{ ok: boolean; message: string }>
   >(),
 }));
@@ -88,7 +88,7 @@ describe('Tests on useEditPlayer hook', () => {
     expect(mockUpdateAction).toHaveBeenCalledWith(
       expect.objectContaining({
         authenticatedUserId: defaultProps.authenticatedUserId,
-        userRoles: defaultProps.authenticatedUserRoles,
+        authenticatedUserRoles: defaultProps.authenticatedUserRoles,
         playerId: playerMock.id,
         formData: expect.any(FormData),
       }),
