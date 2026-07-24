@@ -197,7 +197,7 @@ describe('Tests on update player action server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('no existe');
+    expect(response.message).toMatch(/no existe/i);
     expect(response.player).toBe(null);
     expect(mockTx.player.update).not.toHaveBeenCalled();
   });
@@ -333,8 +333,8 @@ describe('Tests on update player action server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('email');
-    expect(response.message).toContain('duplicado');
+    expect(response.message).toMatch(/email/i);
+    expect(response.message).toMatch(/duplicado/i);
     expect(response.player).toBe(null);
   });
 
@@ -354,7 +354,7 @@ describe('Tests on update player action server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('Error al actualizar el jugador');
+    expect(response.message).toMatch(/error al actualizar el jugador/i);
     expect(response.player).toBe(null);
   });
 

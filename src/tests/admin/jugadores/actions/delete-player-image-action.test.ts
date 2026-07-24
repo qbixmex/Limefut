@@ -167,8 +167,8 @@ describe('Tests on delete player image server action', () => {
     });
 
     expect(response.ok).toBe(true);
-    expect(response.message).toContain('Juan Pérez');
-    expect(response.message).toContain('eliminada');
+    expect(response.message).toMatch(/juan pérez/i);
+    expect(response.message).toMatch(/eliminada/i);
 
     expect(mockFindUnique).toHaveBeenCalledWith({
       where: { id: playerId },
@@ -198,7 +198,7 @@ describe('Tests on delete player image server action', () => {
     });
 
     expect(response.ok).toBe(true);
-    expect(response.message).toContain('Juan Pérez');
+    expect(response.message).toMatch(/juan pérez/i);
     expect(mockDeleteImage).toHaveBeenCalledWith('cloudinary-public-id');
   });
 

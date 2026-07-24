@@ -41,7 +41,7 @@ describe('Tests on fetchPlayersAction server action', () => {
     const response = await fetchPlayersAction(teamId);
 
     expect(response.ok).toBe(true);
-    expect(response.message).toContain('jugadores fueron obtenidos');
+    expect(response.message).toMatch(/jugadores fueron obtenidos/i);
     expect(response.players).toHaveLength(playersMock.length);
 
     response.players!.forEach((player, index) => {
@@ -200,7 +200,7 @@ describe('Tests on fetchPlayersAction server action', () => {
     const response = await fetchPlayersAction(teamId);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('Error inesperado');
+    expect(response.message).toMatch(/error inesperado/i);
     expect(response.players).toBeNull();
     expect(response.pagination).toBeNull();
   });

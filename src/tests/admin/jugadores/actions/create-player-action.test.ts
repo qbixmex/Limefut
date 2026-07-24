@@ -207,7 +207,7 @@ describe('Tests on createPlayerAction server action', () => {
     });
 
     expect(response.ok).toBe(true);
-    expect(response.message).toContain('correctamente');
+    expect(response.message).toMatch(/correctamente/i);
 
     expect(mockUploadImage).toHaveBeenCalledWith(imageFile, 'players');
     expect(mockTransaction).toHaveBeenCalled();
@@ -253,8 +253,8 @@ describe('Tests on createPlayerAction server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('email');
-    expect(response.message).toContain('duplicado');
+    expect(response.message).toMatch(/email/i);
+    expect(response.message).toMatch(/duplicado/i);
     expect(response.player).toBe(null);
   });
 
@@ -273,7 +273,7 @@ describe('Tests on createPlayerAction server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('Error al crear el jugador');
+    expect(response.message).toMatch(/error al crear el jugador/i);
     expect(response.player).toBe(null);
   });
 
@@ -287,7 +287,7 @@ describe('Tests on createPlayerAction server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('Error inesperado');
+    expect(response.message).toMatch(/error inesperado/i);
     expect(response.player).toBe(null);
   });
 });

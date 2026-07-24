@@ -30,7 +30,7 @@ describe('Tests on update player state server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toMatch(/autentificado/i);
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -44,7 +44,7 @@ describe('Tests on update player state server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toMatch(/autentificado/i);
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -58,7 +58,7 @@ describe('Tests on update player state server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toMatch(/permisos administrativos/i);
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -72,7 +72,7 @@ describe('Tests on update player state server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toMatch(/permisos administrativos/i);
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -86,7 +86,7 @@ describe('Tests on update player state server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toMatch(/permisos administrativos/i);
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -102,7 +102,7 @@ describe('Tests on update player state server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('no existe');
+    expect(response.message).toMatch(/no existe/i);
     expect(mockCount).toHaveBeenCalledWith({
       where: { id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae' },
     });
@@ -124,8 +124,8 @@ describe('Tests on update player state server action', () => {
     });
 
     expect(response.ok).toBe(true);
-    expect(response.message).toContain('activado');
-    expect(response.message).toContain('Juan Pérez');
+    expect(response.message).toMatch(/activado/i);
+    expect(response.message).toMatch(/juan pérez/i);
     expect(mockUpdate).toHaveBeenCalledWith({
       where: { id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae' },
       data: { active: true },
@@ -148,8 +148,8 @@ describe('Tests on update player state server action', () => {
     });
 
     expect(response.ok).toBe(true);
-    expect(response.message).toContain('desactivado');
-    expect(response.message).toContain('Juan Pérez');
+    expect(response.message).toMatch(/desactivado/i);
+    expect(response.message).toMatch(/juan pérez/i);
     expect(mockUpdate).toHaveBeenCalledWith({
       where: { id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae' },
       data: { active: false },

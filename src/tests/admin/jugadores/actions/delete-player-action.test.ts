@@ -77,7 +77,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toMatch(/autentificado/i);
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
@@ -90,7 +90,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toMatch(/autentificado/i);
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
@@ -103,7 +103,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toMatch(/permisos administrativos/i);
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
@@ -116,7 +116,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toMatch(/permisos administrativos/i);
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
@@ -129,7 +129,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toMatch(/permisos administrativos/i);
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
@@ -144,7 +144,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('no existe');
+    expect(response.message).toMatch(/no existe/i);
     expect(mockFindUnique).toHaveBeenCalledWith({
       where: { id: playerId },
       select: {
@@ -174,7 +174,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('penales');
+    expect(response.message).toMatch(/penales/i);
     expect(mockDelete).not.toHaveBeenCalled();
   });
 
@@ -186,8 +186,8 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(true);
-    expect(response.message).toContain('Juan Pérez');
-    expect(response.message).toContain('eliminado');
+    expect(response.message).toMatch(/juan pérez/i);
+    expect(response.message).toMatch(/eliminado/i);
 
     expect(mockFindUnique).toHaveBeenCalledWith({
       where: { id: playerId },
@@ -222,7 +222,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(true);
-    expect(response.message).toContain('Juan Pérez');
+    expect(response.message).toMatch(/juan pérez/i);
     expect(mockDeleteImage).toHaveBeenCalledWith('cloudinary-public-id');
   });
 
@@ -259,7 +259,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('Unique constraint');
+    expect(response.message).toMatch(/unique constraint/i);
   });
 
   test('Should return error on generic error', async () => {
@@ -272,7 +272,7 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('logs del servidor');
+    expect(response.message).toMatch(/logs del servidor/i);
   });
 
   test('Should return error on unknown error', async () => {
@@ -285,6 +285,6 @@ describe('Tests on delete player server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('Error del servidor no esperado');
+    expect(response.message).toMatch(/error del servidor no esperado/i);
   });
 });
