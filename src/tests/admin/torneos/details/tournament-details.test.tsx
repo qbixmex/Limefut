@@ -19,7 +19,6 @@ describe('Test on <TournamentPage />', () => {
     render(ServerComponent);
 
     const cardHeading = screen.getByRole('heading', { name: /título/i });
-
-    expect(cardHeading).toBeInTheDocument();
+    expect(cardHeading).toHaveTextContent(/información del torneo/i);
   });
 });
