@@ -106,7 +106,14 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                     <TableCell className="text-center">
                       <ActiveSwitch
                         resource={{ id: player.id, state: player.active }}
-                        updateResourceStateAction={updatePlayerStateAction}
+                        updateResourceStateAction={(id, state) => {
+                          return updatePlayerStateAction({
+                            id,
+                            state,
+                            authenticatedUserId: session?.user?.id,
+                            authenticatedUserRoles: session?.user?.roles as string[] ?? null,
+                          });
+                        }}
                       />
                     </TableCell>
                     <TableCell>
