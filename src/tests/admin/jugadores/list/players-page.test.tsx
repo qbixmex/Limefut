@@ -22,8 +22,8 @@ vi.mock('@/app/admin/equipos/(components)/TournamentsSelectorSkeleton', () => ({
   TournamentsSelectorSkeleton: () => null,
 }));
 
-vi.mock('@/app/admin/jugadores/(components)/create-player-button', () => ({
-  CreatePlayerButton: () => <div data-testid="create-player-button" />,
+vi.mock('@/app/admin/jugadores/(components)/create-player', () => ({
+  CreatePlayer: () => <div data-testid="create-player-button" />,
 }));
 
 vi.mock('@/shared/components/search-params-selectors', () => ({

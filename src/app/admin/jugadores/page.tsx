@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
 import { TournamentsSelectorSkeleton } from '../equipos/(components)/TournamentsSelectorSkeleton';
-import { CreatePlayerButton } from './(components)/create-player-button';
+import { CreatePlayer } from './(components)/create-player';
 import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
 import { PlayersView } from './(components)/players-view';
 import { TeamsContent } from './(components)/teams-content';
@@ -31,7 +31,7 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
               <CardTitle className="admin-page-card-title">Jugadores</CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar jugador" />
-                <CreatePlayerButton />
+                <CreatePlayer />
               </section>
             </CardHeader>
             <CardContent>
