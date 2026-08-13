@@ -37,9 +37,9 @@ export const BannerImage: FC<Props> = (props) => {
       {showData && (
         <section className={styles.dataWrapper}>
           <h2 className={cn(styles.heading, {
-            'align-left': dataAlignment === 'left',
-            'align-center': dataAlignment === 'center',
-            'align-right': dataAlignment === 'right',
+            [styles.alignLeft]: dataAlignment === 'left',
+            [styles.alignCenter]: dataAlignment === 'center',
+            [styles.alignRight]: dataAlignment === 'right',
           })}
           >
             {title}
