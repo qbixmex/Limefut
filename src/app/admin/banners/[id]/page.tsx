@@ -12,7 +12,7 @@ import type { ALIGNMENT_TYPE } from '@/shared/enums';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Pencil, CircleQuestionMarkIcon } from 'lucide-react';
+import { Pencil, CircleQuestionMarkIcon, Settings2 } from 'lucide-react';
 import { fetchHeroBannerAction, updateHeroBannerStateAction } from '../(actions)';
 import { BannerImage } from '@/shared/components/banner-image';
 import { ActiveSwitch } from '~/src/shared/components/active-switch';
@@ -50,7 +50,9 @@ const HeroBannerContent: FC<Props> = async ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Detalles del Banner</CardTitle>
+            <CardTitle className="admin-page-card-title inline-flex items-center gap-2">
+              Ajustes del Banner <Settings2 />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <BannerImage
