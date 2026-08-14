@@ -3,7 +3,9 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { Container, Footer, Header } from './components';
 import { fetchPublicGlobalSettingsAction } from '../admin/ajustes-globales/(actions)/fetchPublicGlobalSettingsAction';
+import { DynamicGoogleTagManagerHead } from '@/components/dynamic-google-tag-manager-head';
 import '@/app/globals.css';
+import { DynamicGoogleTagManagerBody } from '@/components/dynamic-google-tag-manager-body';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const { globalSettings } = await fetchPublicGlobalSettingsAction();
@@ -63,25 +65,35 @@ const PublicLayoutContent: FC<Props> = async ({ children }) => {
   const { globalSettings } = await fetchPublicGlobalSettingsAction();
 
   return (
-    <Container>
-      <Header
-        siteLogo={globalSettings?.logoUrl ?? null}
-        siteName={globalSettings?.siteName ?? null}
+    <>
+      <DynamicGoogleTagManagerHead
+        googleTagManagerId={globalSettings?.googleTagManager}
       />
-      <div className="flex-1 flex flex-col">
-        {children}
-      </div>
-      <Footer
-        siteName={globalSettings?.siteName ?? null}
-        socialMedia={[
-          { facebook: globalSettings?.facebookUrl ?? undefined },
-          { twitterX: globalSettings?.twitterXUrl ?? undefined },
-          { instagram: globalSettings?.instagramUrl ?? undefined },
-          { tikTok: globalSettings?.tiktokUrl ?? undefined },
-          { youtube: globalSettings?.youtubeUrl ?? undefined },
-        ]}
+
+      <Container>
+        <Header
+          siteLogo={globalSettings?.logoUrl ?? null}
+          siteName={globalSettings?.siteName ?? null}
+        />
+        <div className="flex-1 flex flex-col">
+          {children}
+        </div>
+        <Footer
+          siteName={globalSettings?.siteName ?? null}
+          socialMedia={[
+            { facebook: globalSettings?.facebookUrl ?? undefined },
+            { twitterX: globalSettings?.twitterXUrl ?? undefined },
+            { instagram: globalSettings?.instagramUrl ?? undefined },
+            { tikTok: globalSettings?.tiktokUrl ?? undefined },
+            { youtube: globalSettings?.youtubeUrl ?? undefined },
+          ]}
+        />
+      </Container>
+
+      <DynamicGoogleTagManagerBody
+        googleTagManagerId={globalSettings?.googleTagManager}
       />
-    </Container>
+    </>
   );
 };
 
