@@ -1,6 +1,7 @@
 'use client';
 
-import { type FC, useState, useEffect } from 'react';
+import type { FC } from 'react';
+import { useSyncExternalStore } from 'react';
 import { useTheme } from 'next-themes';
 import { cn } from '../../lib/utils';
 import { Moon, Sun } from 'lucide-react';
@@ -14,14 +15,16 @@ type Props = Readonly<{
   className?: string;
 }>;
 
+const subscribe = () => () => {};
+
 export const ThemeSwitcher: FC<Props> = ({ className }) => {
-  const [mounted, setMounted] = useState(false);
   const { setTheme, resolvedTheme } = useTheme();
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
 
   if (!mounted) {
     return <div className={cn('size-5', className)} />;
@@ -41,7 +44,7 @@ export const ThemeSwitcher: FC<Props> = ({ className }) => {
         )}
       </TooltipTrigger>
       <TooltipContent side="bottom">
-        { resolvedTheme === 'light' ? 'Modo Obscuro' : 'Modo Claro' }
+        {resolvedTheme === 'light' ? 'Modo Obscuro' : 'Modo Claro'}
       </TooltipContent>
     </Tooltip>
   );
