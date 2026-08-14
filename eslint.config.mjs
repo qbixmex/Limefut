@@ -24,6 +24,7 @@ const eslintConfig = defineConfig([
       '@stylistic/multiline-ternary': 'off',
       '@stylistic/jsx-curly-spacing': 'off',
       'react/jsx-handler-names': 'off',
+      '@stylistic/array-bracket-spacing': 'off',
       '@stylistic/indent': 'off',
       indent: 'off',
       camelcase: 'off',
