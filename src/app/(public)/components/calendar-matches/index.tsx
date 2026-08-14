@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Pagination } from '@/shared/components/pagination';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
-import { SoccerField } from '@/shared/components/icons';
+import { SoccerField, SoccerPlayer } from '@/shared/components/icons';
 import { HorizontalCalendar } from '../horizontal-calendar';
 import { fetchPublicMatchesAction } from '../../(actions)/home/fetchPublicMatchesAction';
 import { fetchPublicMatchesCountAction } from '../../(actions)/home/fetchPublicMatchesCountAction';
@@ -11,6 +11,7 @@ import { MATCH_STATUS } from '@/shared/enums';
 import { cn } from '@/lib/utils';
 import { Minus } from 'lucide-react';
 import { EditMatch } from '../edit-match';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   matchesPromise: Promise<{ matchesPage: string | undefined }>;
@@ -34,15 +35,12 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
     <section>
       <HorizontalCalendar matchesDates={matchesDates} />
 
-      <div className="bg-emerald-700 text-emerald-50 px-6 py-3 rounded-t-lg flex items-center gap-4">
+      <div className={styles.head}>
         <SoccerField size={50} strokeWidth={1.5} />
-        <p className="text-2xl font-semibold">
-          Encuentros{' '}
-          <span className="text-xs text-gray-300">(temporada regular)</span>
-        </p>
+        <p>Encuentros <span>(temporada regular)</span> </p>
       </div>
 
-      <div className="border border-green-900/90 rounded-b-lg p-5">
+      <div className={styles.content}>
         {(matches.length > 0) ? matches.map((match, index) => (
           <div key={match.id} className="relative">
             <Link
@@ -50,9 +48,9 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
               target="_blank"
               rel="noreferrer"
             >
-              <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
-                <div className="flex flex-col gap-5 md:flex-row md:gap-5">
-                  <div className="w-full lg:w-1/2 order-2 md:order-1">
+              <div className={styles.results}>
+                <div className={styles.resultsWrapper}>
+                  <div className={styles.metadata}>
                     <MatchMetadata
                       tournamentName={match.tournament.name}
                       category={match.category}
@@ -62,21 +60,21 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                       status={match.status}
                     />
                   </div>
-                  <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 md:order-2">
+                  <div className={styles.match}>
                     <Team
                       imageUrl={match.localTeam.imageUrl}
                       name={match.localTeam.name}
                     />
-                    <div className="flex justify-center items-center gap-2">
+                    <div className={styles.penaltyShoots}>
                       {match.penaltyShoots && (
-                        <span className="font-semibold text-gray-500">
+                        <span className={styles.shoot}>
                           ({match.penaltyShoots.localGoals})
                         </span>
                       )}
                       <span
-                        className={cn('font-bold text-2xl', {
-                          'text-gray-700 dark:text-gray-500': match.status !== MATCH_STATUS.COMPLETED,
-                          'text-blue-700 dark:text-blue-500': match.status === MATCH_STATUS.COMPLETED,
+                        className={cn(styles.matchGoals, {
+                          [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
+                          [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
                         })}
                         role="heading"
                         aria-level={3}
@@ -99,9 +97,9 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                           : <div className="w-3 h-1 bg-gray-500 rounded" />
                       }
                       <span
-                        className={cn('font-bold text-2xl', {
-                          'text-gray-700 dark:text-gray-500': match.status !== MATCH_STATUS.COMPLETED,
-                          'text-blue-700 dark:text-blue-500': match.status === MATCH_STATUS.COMPLETED,
+                        className={cn(styles.matchGoals, {
+                          [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
+                          [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
                         })}
                         role="heading"
                         aria-level={3}
@@ -116,7 +114,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                         {match.status === MATCH_STATUS.COMPLETED && match.visitorScore}
                       </span>
                       {match.penaltyShoots && (
-                        <span className="font-semibold text-gray-500">
+                        <span className={styles.shoot}>
                           ({match.penaltyShoots.visitorGoals})
                         </span>
                       )}
@@ -128,7 +126,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                   </div>
                 </div>
                 {((matches.length - 1) !== index) && (
-                  <div className="w-full h-0.5 bg-gray-300 my-3" />
+                  <div className="w-full h-0.5 bg-gray-500/40 mb-5" />
                 )}
               </div>
             </Link>
@@ -138,13 +136,21 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
             />
           </div>
         )) : (
-          <p className="text-2xl text-green-800 dark:text-green-500 font-semibold italic text-center">
-            No hay encuentros programados
-          </p>
+          <div className={styles.noMatchesContent}>
+            <SoccerPlayer
+              size={150}
+              strokeWidth={3}
+              className={styles.soccerPlayerIcon}
+            />
+
+            <p className={styles.message}>
+              Por el momento no hay encuentros programados
+            </p>
+          </div>
         )}
       </div>
       {(pagination.totalPages > 1) && (
-        <section className="flex justify-center mt-5">
+        <section className={styles.pagination}>
           <Pagination totalPages={pagination.totalPages} propName="next-matches" />
         </section>
       )}

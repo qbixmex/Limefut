@@ -35,7 +35,7 @@ describe('Test on <LatestResults /> component', () => {
     render(serverComponent);
 
     expect(screen.getByText(/resultados recientes/i)).toBeInTheDocument();
-    expect(screen.getByText(/no hay encuentros recientes/i)).toBeInTheDocument();
+    expect(screen.getByText(/no hay encuentros/i)).toBeInTheDocument();
   });
 
   test('Should show latest matches', async () => {

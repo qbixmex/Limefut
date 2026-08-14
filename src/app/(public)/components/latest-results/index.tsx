@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { fetchPublicLatestMatchesAction } from '../../(actions)/home/fetchPublicLatestMatchesAction';
 import { Pagination } from '@/shared/components/pagination';
-import { GameScore } from '@/shared/components/icons';
+import { GameScore, SoccerPlayer } from '@/shared/components/icons';
 import Link from 'next/link';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { Minus } from 'lucide-react';
 import { MATCH_STATUS } from '@/shared/enums';
 import { EditMatch } from '../edit-match';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   resultsPromise: Promise<{ latestResultsPage?: string }>;
@@ -24,15 +25,12 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
 
   return (
     <section>
-      <div className="bg-emerald-700 text-emerald-50 px-5 py-3 rounded-t-lg flex items-center gap-3">
+      <div className={styles.head}>
         <GameScore size={50} strokeWidth={1.5} />
-        <p className="font-bold text-2xl">
-          Resultados Recientes{' '}
-          <span className="text-xs text-gray-300">(temporada regular)</span>
-        </p>
+        <p> Resultados Recientes <span>(temporada regular)</span></p>
       </div>
 
-      <div className="border border-green-900/90 rounded-b-lg p-5">
+      <div className={styles.content}>
         {(matches.length > 0) && matches.map((match, index) => (
           <div key={match.id} className="relative">
             <Link
@@ -41,9 +39,9 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
               target="_blank"
               rel="noreferrer"
             >
-              <div className="flex flex-col gap-3 text-gray-800 dark:text-gray-200">
-                <div className="flex flex-col gap-5 md:flex-row md:gap-5">
-                  <div className="w-full lg:w-1/2 order-2 lg:order-1">
+              <div className={styles.results}>
+                <div className={styles.resultsWrapper}>
+                  <div className={styles.metadata}>
                     <MatchMetadata
                       tournamentName={match.tournament.name}
                       category={match.category}
@@ -53,21 +51,21 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                       status={match.status}
                     />
                   </div>
-                  <div className="w-full lg:w-1/2 grid grid-cols-3 order-1 lg:order-2">
+                  <div className={styles.match}>
                     <Team
                       imageUrl={match.localTeam.imageUrl}
                       name={match.localTeam.name}
                     />
-                    <div className="flex justify-center items-center gap-2">
+                    <div className={styles.penaltyShoots}>
                       {match.penaltyShoots && (
-                        <span className="font-semibold text-gray-500">
+                        <span className={styles.shoot}>
                           ({match.penaltyShoots.localGoals})
                         </span>
                       )}
                       <span
                         className={cn('font-bold text-2xl', {
-                          'text-gray-700 dark:text-gray-500': match.status !== MATCH_STATUS.COMPLETED,
-                          'text-blue-700 dark:text-blue-500': match.status === MATCH_STATUS.COMPLETED,
+                          [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
+                          [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
                         })}
                         role="heading"
                         aria-level={3}
@@ -85,9 +83,9 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                           : <div className="w-1 h-5 bg-gray-500 rounded" />
                       }
                       <span
-                        className={cn('font-bold text-2xl', {
-                          'text-gray-700 dark:text-gray-500': match.status !== MATCH_STATUS.COMPLETED,
-                          'text-blue-700 dark:text-blue-500': match.status === MATCH_STATUS.COMPLETED,
+                        className={cn(styles.matchGoals, {
+                          [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
+                          [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
                         })}
                         aria-label={`Goles del equipo visitante ${match.visitorTeam.name}`}
                       >
@@ -98,7 +96,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                         }
                       </span>
                       {match.penaltyShoots && (
-                        <span className="font-semibold text-gray-500">
+                        <span className={styles.shoot}>
                           ({match.penaltyShoots.visitorGoals})
                         </span>
                       )}
@@ -110,7 +108,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                   </div>
                 </div>
                 {((matches.length - 1) !== index) && (
-                  <div className="w-full h-0.5 bg-gray-300 my-3" />
+                  <div className="w-full h-0.5 bg-gray-500/40 mb-5" />
                 )}
               </div>
             </Link>
@@ -122,14 +120,22 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
         ))}
 
         {(matches.length === 0) && (
-          <div className="text-green-800 dark:text-green-500 text-center font-bold text-xl italic">
-            ¡ No hay encuentros recientes !
+          <div className={styles.noMatchesContent}>
+            <SoccerPlayer
+              size={150}
+              strokeWidth={3}
+              className={styles.soccerPlayerIcon}
+            />
+
+            <p className={styles.message}>
+              Por el momento no hay encuentros programados
+            </p>
           </div>
         )}
       </div>
       {
         (pagination.totalPages > 1) && (
-          <section className="flex justify-center mt-5">
+          <section className={styles.pagination}>
             <Pagination totalPages={pagination.totalPages} propName="latest-results" />
           </section>
         )

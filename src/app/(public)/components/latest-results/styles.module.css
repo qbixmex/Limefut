@@ -1,0 +1,150 @@
+@reference "tailwindcss";
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: --spacing(4);
+  background-color: var(--color-emerald-700);
+  color: var(--color-emerald-50);
+  padding-inline: --spacing(6);
+  padding-block: --spacing(3);
+  @apply rounded-t-lg;
+
+  p {
+    font-weight: 700;
+    @apply text-2xl;
+    span {
+      color: var(--color-gray-300);
+      @apply text-sm;
+    }
+  }
+}
+
+.content {
+  background-color: --alpha(var(--color-emerald-100) / 20%);
+  border: 1px solid var(--color-green-900);
+  padding: --spacing(5);
+
+  @apply rounded-b-lg;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(3);
+  color: var(--color-gray-800);
+}
+
+.resultsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(5);
+
+  @variant md {
+    flex-direction: row;
+  }
+}
+
+.metadata {
+  width: 100%;
+  order: 2;
+
+  @variant md {
+    order: 1;
+  }
+
+  @variant lg {
+    width: 50%;
+  }
+}
+
+.match {
+  width: 100%;
+  display: grid;
+  order: 1;
+  grid-template-columns: repeat(3, 1fr);
+
+  @variant md {
+    order: 2;
+  }
+
+  @variant lg {
+    width: 50%;
+  }
+}
+
+.penaltyShoots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: --spacing(2);
+
+  .shoot {
+    font-weight: 700;
+    color: var(--color-gray-500);
+  }
+}
+
+.matchGoals {
+  font-weight: bold;
+  @apply text-2xl;
+}
+
+.matchPending {
+  color: var(--color-gray-700);
+}
+
+.matchCompleted {
+  color: var(--color-blue-500);
+}
+
+.noMatchesContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: --spacing(5);
+
+  .message {
+    color: --alpha(var(--color-green-800) / 90%);
+    @apply text-2xl font-semibold italic text-center text-balance;
+  }
+}
+
+.soccerPlayerIcon {
+  color: color-mix(in oklab, var(--color-emerald-500) 70%, #000 30%) !important;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: --spacing(5);
+}
+
+:global(.dark) {
+  .content {
+    background-color: --alpha(var(--color-green-800) / 20%);
+  }
+
+  .results {
+    color: var(--color-gray-200);
+  }
+
+  .matchCompleted {
+    color: var(--color-blue-500);
+  }
+
+  .matchPending {
+    color: var(--color-gray-500);
+  }
+
+  .soccerPlayerIcon {
+    color: var(--color-green-500) !important;
+  }
+
+  .noMatchesContent {
+    .message {
+      color: var(--color-green-500);
+    }
+  }
+}
