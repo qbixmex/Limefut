@@ -1,32 +1,26 @@
 'use server';
 
+import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { revalidatePath, updateTag } from 'next/cache';
+import { headers } from 'next/headers';
 
 export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
 }>;
 
-export const updateTournamentStateAction = async ({
-  id,
-  state,
-  authenticatedUserId,
-  authenticatedUserRoles,
-}: {
-  id: string;
-  state: boolean;
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}): ResponseAction => {
-  if (!authenticatedUserId) {
+export const updateTournamentStateAction = async (id: string, state: boolean): ResponseAction => {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session?.user) {
     return {
       ok: false,
       message: '¡ Debes estar autentificado para realizar esta acción !',
     };
   }
 
-  if (!authenticatedUserRoles?.includes('admin')) {
+  if (!session?.user.roles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
