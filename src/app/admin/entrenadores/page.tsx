@@ -12,6 +12,7 @@ import { ErrorHandler } from '@/shared/components/errorHandler';
 import { CoachesTable } from './(components)/coaches-table';
 import { CoachesTableSkeleton } from './(components)/coaches-table-skeleton';
 import { Search } from '@/shared/components/search';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -45,7 +46,7 @@ const CoachesPageContent: FC<Props> = async ({ searchParams }) => {
                 <Tooltip>
                   <TooltipTrigger>
                     <Link
-                      href="/admin/entrenadores/crear"
+                      href={ROUTES.ADMIN_COACHES_CREATE}
                       className={
                         buttonVariants({
                           variant: 'outline-primary',

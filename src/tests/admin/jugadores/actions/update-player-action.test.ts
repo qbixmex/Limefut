@@ -373,7 +373,7 @@ describe('Tests on update player action server action', () => {
     expect(response.player).toBe(null);
   });
 
-  test.skip('Should return error when transaction itself rejects', async () => {
+  test('Should return error when transaction itself rejects', async () => {
     mockTransaction.mockRejectedValue(new Error('Infrastructure failure'));
 
     const response = await updatePlayerAction({

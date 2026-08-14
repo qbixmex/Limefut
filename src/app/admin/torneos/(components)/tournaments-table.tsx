@@ -11,13 +11,11 @@ import {
 } from '@/components/ui/table';
 import { Trophy } from 'lucide-react';
 import { fetchTournamentsAction, updateTournamentStateAction } from '../(actions)';
-import { auth } from '@/lib/auth';
 import { DeleteTournament } from './delete-tournament';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '@/components/ui/badge';
-import { headers } from 'next/headers';
 import { ShowTournamentDetails } from './show-tournament-details';
 import { EditTournament } from './edit-tournament';
 import { format } from 'date-fns';
@@ -30,10 +28,6 @@ type Props = Readonly<{
 }>;
 
 export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
   const {
     ok,
     message,
@@ -129,26 +123,18 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center">
                       <ActiveSwitch
-                        resource={{ id: tournament.id, state: tournament.active }}
-                        updateResourceStateAction={(id, state) => {
-                          return updateTournamentStateAction({
-                            id,
-                            state,
-                            authenticatedUserId: session?.user?.id,
-                            authenticatedUserRoles: session?.user?.roles as string[] ?? null,
-                          });
+                        resource={{
+                          id: tournament.id,
+                          state: tournament.active,
                         }}
+                        updateResourceStateAction={updateTournamentStateAction}
                       />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
                         <ShowTournamentDetails tournamentId={tournament.id} />
                         <EditTournament paramsPromise={Promise.resolve({ id: tournament.id })} />
-                        <DeleteTournament
-                          tournamentId={tournament.id}
-                          userId={session?.user?.id}
-                          roles={session?.user.roles as string[] ?? null}
-                        />
+                        <DeleteTournament tournamentId={tournament.id} />
                       </div>
                     </TableCell>
                   </TableRow>

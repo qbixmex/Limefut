@@ -21,6 +21,7 @@ import { ActiveSwitch } from '@/shared/components/active-switch';
 import { auth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 import { headers } from 'next/headers';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   query: string;
@@ -65,7 +66,7 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
                 {coaches.map((coach) => (
                   <TableRow key={coach.id}>
                     <TableCell>
-                      <Link href={`/admin/entrenadores/${coach.id}`}>
+                      <Link href={ROUTES.ADMIN_COACHES_SHOW(coach.id)}>
                         {
                           !coach.imageUrl ? (
                             <figure className="bg-gray-800 size-[60px] rounded-xl flex items-center justify-center">
