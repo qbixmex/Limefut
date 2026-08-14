@@ -32,7 +32,10 @@ type CATEGORY_TYPE = {
 
 export const CategoriesFormSelect: FC<Props> = ({ categories }) => {
   const { control, setValue } = useFormContext();
-  const categoriesIds: string[] = useWatch({ name: 'categoriesIds' });
+  const categoriesIds: string[] = useWatch({
+  name: 'categoriesIds',
+  defaultValue: [],
+});
   const anchorRef = useComboboxAnchor();
 
   const selectedCategories = useMemo(() => {
@@ -56,7 +59,7 @@ export const CategoriesFormSelect: FC<Props> = ({ categories }) => {
               value={selectedCategories}
               onValueChange={(selectedCategory) => {
                 const newIds = new Set<string>(selectedCategory.map(({ id }) => id));
-                const currentSet = new Set<string>(categoriesIds ?? []);
+                const currentSet = new Set<string>(categoriesIds);
                 const removedCategories = categoriesIds.filter(id => !newIds.has(id));
                 const addedCategories = selectedCategory
                   .filter(category => !currentSet.has(category.id))
