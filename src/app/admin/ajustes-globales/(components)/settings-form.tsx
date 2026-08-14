@@ -84,12 +84,12 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
   const onSubmit = async (data: z.infer<typeof GlobalSettingsSchema>) => {
     const formData = new FormData();
 
-    formData.append('siteName', data.siteName as string);
-    formData.append('organizationName', data.organizationName as string);
-    formData.append('phone', data.phone as string);
-    formData.append('address', data.address as string);
-    formData.append('mapsUrl', data.mapsUrl as string);
-    formData.append('country', data.country as string);
+    formData.append('siteName', (data.siteName as string).trim());
+    formData.append('organizationName', (data.organizationName as string).trim());
+    formData.append('phone', (data.phone as string).trim());
+    formData.append('address', (data.address as string).trim());
+    formData.append('mapsUrl', (data.mapsUrl as string).trim());
+    formData.append('country', (data.country as string).trim());
     if (data.logoImage && data.logoImage instanceof File) {
       formData.append('logoImage', data.logoImage);
     }
@@ -99,24 +99,24 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
     if (data.faviconImage && data.faviconImage instanceof File) {
       formData.append('faviconImage', data.faviconImage);
     }
-    formData.append('facebookUrl', data.facebookUrl as string);
-    formData.append('twitterXUrl', data.twitterXUrl as string);
-    formData.append('instagramUrl', data.instagramUrl as string);
-    formData.append('tiktokUrl', data.tiktokUrl as string);
-    formData.append('youtubeUrl', data.youtubeUrl as string);
-    formData.append('whatsAppUrl', data.whatsApp as string);
+    formData.append('facebookUrl', (data.facebookUrl as string).trim());
+    formData.append('twitterXUrl', (data.twitterXUrl as string).trim());
+    formData.append('instagramUrl', (data.instagramUrl as string).trim());
+    formData.append('tiktokUrl', (data.tiktokUrl as string).trim());
+    formData.append('youtubeUrl', (data.youtubeUrl as string).trim());
+    formData.append('whatsAppUrl', (data.whatsApp as string).trim());
     formData.append('maintenanceMode', String(data.maintenanceMode));
-    formData.append('maintenanceMessage', data.maintenanceMessage as string);
-    formData.append('googleAnalyticsId', data.googleAnalyticsId as string);
-    formData.append('googleTagManager', data.googleTagManager as string);
-    formData.append('metaPixelId', data.metaPixelId as string);
-    formData.append('defaultLanguage', data.defaultLanguage as string);
-    formData.append('timeZone', data.timeZone as string);
-    formData.append('contactEmail', data.contactEmail as string);
-    formData.append('fromEmail', data.fromEmail as string);
-    formData.append('replyToEmail', data.replyToEmail as string);
-    formData.append('seoTitle', data.seoTitle as string);
-    formData.append('seoDescription', data.seoDescription as string);
+    formData.append('maintenanceMessage', (data.maintenanceMessage as string).trim());
+    formData.append('googleAnalyticsId', (data.googleAnalyticsId as string).trim());
+    formData.append('googleTagManager', (data.googleTagManager as string).trim());
+    formData.append('metaPixelId', (data.metaPixelId as string).trim());
+    formData.append('defaultLanguage', (data.defaultLanguage as string).trim());
+    formData.append('timeZone', (data.timeZone as string).trim());
+    formData.append('contactEmail', (data.contactEmail as string).trim());
+    formData.append('fromEmail', (data.fromEmail as string).trim());
+    formData.append('replyToEmail', (data.replyToEmail as string).trim());
+    formData.append('seoTitle', (data.seoTitle as string).trim());
+    formData.append('seoDescription', (data.seoDescription as string).trim());
     if (data.ogImageUrl && data.ogImageUrl instanceof File) {
       formData.append('ogImageUrl', data.ogImageUrl);
     }
