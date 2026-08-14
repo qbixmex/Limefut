@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from 'react';
 import { openSans, arimo } from '@/app/(public)/fonts';
-import '@/app/globals.css';
 import { Providers } from './(public)/providers';
+import '@/app/globals.css';
 
 type Props = Readonly<{ children: ReactNode; }>;
 
