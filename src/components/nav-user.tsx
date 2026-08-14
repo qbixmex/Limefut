@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/sidebar';
 import { toast } from 'sonner';
 import { signOutAction } from '../app/(auth)/signOutAction';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 type Props = {
   user: {
@@ -96,8 +96,7 @@ export const NavUser: FC<Props> = ({ user }) => {
               <DropdownMenuItem asChild className="cursor-pointer">
                 <button
                   className="w-full"
-                  // eslint-disable-next-line no-return-assign
-                  onClick={() => window.location.href = `/admin/usuarios/perfil/${user.id}`}
+                  onClick={() => redirect(`/admin/usuarios/perfil/${user.id}`) }
                 >
                   <BadgeCheck />
                   <span>Perfil</span>
