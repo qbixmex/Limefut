@@ -12,8 +12,6 @@ describe('Test on <DeleteTournament /> component', () => {
     render(
       <DeleteTournament
         tournamentId={tournamentId}
-        userId="user-1"
-        roles={[]}
       />,
       { wrapper: TooltipProvider },
     );
@@ -27,13 +25,10 @@ describe('Test on <DeleteTournament /> component', () => {
     const mockOnDelete = vi.fn();
     vi.mocked(useDeleteTournament).mockReturnValue({ onDeleteTournament: mockOnDelete });
     const tournamentId = '347967f4-94a2-4f72-a180-96fd4b6ff09b';
-    const roles = ['user', 'admin'];
 
     render(
       <DeleteTournament
         tournamentId={tournamentId}
-        userId="user-1"
-        roles={roles}
       />,
       { wrapper: TooltipProvider },
     );
@@ -54,13 +49,10 @@ describe('Test on <DeleteTournament /> component', () => {
     const mockOnDelete = vi.fn();
     vi.mocked(useDeleteTournament).mockReturnValue({ onDeleteTournament: mockOnDelete });
     const tournamentId = '347967f4-94a2-4f72-a180-96fd4b6ff09b';
-    const roles = ['user', 'admin'];
 
     render(
       <DeleteTournament
         tournamentId={tournamentId}
-        userId="user-1"
-        roles={roles}
       />,
       { wrapper: TooltipProvider },
     );

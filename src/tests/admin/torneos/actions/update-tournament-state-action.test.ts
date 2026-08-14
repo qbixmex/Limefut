@@ -1,9 +1,22 @@
-const { mockCount, mockUpdate } = vi.hoisted(() => ({
+const { mockCount, mockUpdate, mockGetSession } = vi.hoisted(() => ({
   mockCount: vi.fn(),
   mockUpdate: vi.fn(),
+  mockGetSession: vi.fn(),
 }));
 
 vi.mock('next/cache');
+
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: mockGetSession,
+    },
+  },
+}));
 
 vi.mock('@/lib/prisma', () => ({
   default: {
@@ -19,60 +32,57 @@ import { updateTournamentStateAction } from '@/app/admin/torneos/(actions)';
 describe('Tests on update tournament state server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
-    const response = await updateTournamentStateAction({
-      id: 'some-id',
-      state: true,
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['admin'],
-    });
+  test('Should return error when there is no authenticated session', async () => {
+    mockGetSession.mockResolvedValue(null);
+
+    const response = await updateTournamentStateAction('some-id', true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
-    const response = await updateTournamentStateAction({
-      id: 'some-id',
-      state: true,
-      authenticatedUserId: 'user-1',
-      authenticatedUserRoles: ['user'],
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['user'] },
     });
 
+    const response = await updateTournamentStateAction('some-id', true);
+
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
   test('Should return error when userRoles is null', async () => {
-    const response = await updateTournamentStateAction({
-      id: 'some-id',
-      state: true,
-      authenticatedUserId: 'user-1',
-      authenticatedUserRoles: null,
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: null },
     });
 
+    const response = await updateTournamentStateAction('some-id', true);
+
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
   test('Should return error when userRoles are empty', async () => {
-    const response = await updateTournamentStateAction({
-      id: 'some-id',
-      state: true,
-      authenticatedUserId: 'user-1',
-      authenticatedUserRoles: [],
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: [] },
     });
 
+    const response = await updateTournamentStateAction('some-id', true);
+
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -80,12 +90,7 @@ describe('Tests on update tournament state server action', () => {
   test('Should return error when tournament does not exist', async () => {
     mockCount.mockResolvedValue(0);
 
-    const response = await updateTournamentStateAction({
-      id: 'dc233c07-9790-439f-9f50-88b86a13eb62',
-      state: true,
-      authenticatedUserId: 'user-1',
-      authenticatedUserRoles: ['admin'],
-    });
+    const response = await updateTournamentStateAction('dc233c07-9790-439f-9f50-88b86a13eb62', true);
 
     expect(response.ok).toBe(false);
     expect(response.message).toContain('no existe');
@@ -103,12 +108,7 @@ describe('Tests on update tournament state server action', () => {
       active: true,
     });
 
-    const response = await updateTournamentStateAction({
-      id: '17834fc4-afd8-490a-b07d-88d62e601521',
-      state: true,
-      authenticatedUserId: 'user-1',
-      authenticatedUserRoles: ['admin'],
-    });
+    const response = await updateTournamentStateAction('17834fc4-afd8-490a-b07d-88d62e601521', true);
 
     expect(response.ok).toBe(true);
     expect(response.message).toContain('activado');
@@ -128,12 +128,7 @@ describe('Tests on update tournament state server action', () => {
       active: false,
     });
 
-    const response = await updateTournamentStateAction({
-      id: '17834fc4-afd8-490a-b07d-88d62e601521',
-      state: false,
-      authenticatedUserId: 'user-1',
-      authenticatedUserRoles: ['admin'],
-    });
+    const response = await updateTournamentStateAction('17834fc4-afd8-490a-b07d-88d62e601521', false);
 
     expect(response.ok).toBe(true);
     expect(response.message).toContain('desactivado');

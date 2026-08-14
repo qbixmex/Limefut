@@ -11,7 +11,7 @@ type Props = Readonly<{
   };
   updateResourceStateAction: (
     id: string,
-    state: boolean
+    state: boolean,
   ) => Promise<{
     ok: boolean;
     message: string;
