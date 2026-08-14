@@ -3,12 +3,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { type TEAM_TYPE, fetchTeamAction } from '../../(actions)/fetchTeamAction';
 import { redirect } from 'next/navigation';
-import { ShieldBan, Table2 } from 'lucide-react';
+import { ShieldBan } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Heading } from '@/app/(public)/components';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { buttonVariants } from '@/components/ui/button';
 import { ROUTES } from '@/shared/constants/routes';
 import { TeamStandings } from './teams-standings';
 import { LastResults } from './last-results';
@@ -110,8 +108,8 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
                     (team?.gender === 'male')
                       ? 'Varonil'
                       : (team?.gender === 'female')
-                          ? 'Femenil'
-                          : 'No especificado'
+                        ? 'Femenil'
+                        : 'No especificado'
                   }
                 </TableCell>
               </TableRow>
@@ -205,40 +203,13 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
         </section>
       </section>
 
-      <section className="mb-10">
-        <div className="flex justify-between">
-          <h2 className="text-2xl font-semibold mb-3">Estadísticas</h2>
-          {(team.tournament && team.category) && (
-            <Tooltip>
-              <TooltipTrigger>
-                <Link
-                  href={
-                    ROUTES.PUBLIC_STANDINGS +
-                    `?tournament=${team.tournament?.permalink}` +
-                    `&category=${team.category?.permalink}`
-                  }
-                  target="_blank"
-                  className={buttonVariants({
-                    variant: 'outline-info',
-                    size: 'icon',
-                  })} rel="noreferrer"
-                >
-                  <Table2 />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="left">
-                Ver tabla de posiciones
-              </TooltipContent>
-            </Tooltip>
-          )}
-        </div>
-
-        <TeamStandings
-          teamId={team.id}
-          tournamentId={team.tournament?.id as string}
-          categoryId={team.category?.id as string}
-        />
-      </section>
+      <TeamStandings
+        teamId={team.id}
+        tournamentId={team.tournament?.id as string}
+        categoryId={team.category?.id as string}
+        tournamentPermalink={team.tournament!.permalink}
+        categoryPermalink={team.category!.permalink}
+      />
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <LastResults matches={team.matches} />
