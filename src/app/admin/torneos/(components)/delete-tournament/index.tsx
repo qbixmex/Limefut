@@ -21,16 +21,10 @@ import { useDeleteTournament } from './use-delete-tournament';
 
 type Props = Readonly<{
   tournamentId: string;
-  userId: string | undefined;
-  roles: string[];
 }>;
 
-export const DeleteTournament: FC<Props> = ({ tournamentId, userId, roles }) => {
-  const { onDeleteTournament } = useDeleteTournament(
-    tournamentId,
-    userId,
-    roles,
-  );
+export const DeleteTournament: FC<Props> = ({ tournamentId }) => {
+  const { onDeleteTournament } = useDeleteTournament(tournamentId);
 
   return (
     <AlertDialog>

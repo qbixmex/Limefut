@@ -4,6 +4,14 @@ const { mockFindFirst } = vi.hoisted(() => ({
 
 vi.mock('next/cache');
 
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: vi.fn(),
+    },
+  },
+}));
+
 vi.mock('@/lib/prisma', () => ({
   default: {
     tournament: {

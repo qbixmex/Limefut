@@ -4,29 +4,25 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { deleteImage } from '@/shared/actions';
 import { Prisma } from '@/generated/prisma/client';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
   message: string;
 }>;
 
-export const deleteTournamentAction = async ({
-  tournamentId,
-  authenticatedUserId,
-  authenticatedUserRoles,
-}: {
-  tournamentId: string;
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}): ResponseDeleteAction => {
-  if (!authenticatedUserId) {
+export const deleteTournamentAction = async (tournamentId: string): ResponseDeleteAction => {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session?.user) {
     return {
       ok: false,
       message: '¡ Debes estar autentificado para realizar esta acción !',
     };
   }
 
-  if (!authenticatedUserRoles?.includes('admin')) {
+  if (!session.user.roles?.includes('admin')) {
     return {
       ok: false,
       message: '¡ No tienes permisos administrativos para realizar esta acción !',
