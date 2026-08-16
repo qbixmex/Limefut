@@ -124,16 +124,6 @@ export const GlobalSettingsSchema = z.object({
     z.string({ error: 'El id de Google Analytics debe ser una cadena de texto' })
       .max(255, { error: 'El id de Google Analytics debe ser menor a 255 caracteres' }),
   ]).optional(),
-  googleTagManager: z.union([
-    z.literal(''),
-    z.string({ error: 'El id de Google Tag Manager debe ser una cadena de texto' })
-      .max(255, { error: 'El id de Google Tag Manager debe ser menor a 255 caracteres' }),
-  ]).optional(),
-  metaPixelId: z.union([
-    z.literal(''),
-    z.string({ error: 'El id de Meta Pixel debe ser una cadena de texto' })
-      .max(255, { error: 'El id de Meta Pixel debe ser menor a 255 caracteres' }),
-  ]).optional(),
 
   // LOCATION
   defaultLanguage: z.union([
