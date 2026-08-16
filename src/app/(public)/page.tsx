@@ -28,7 +28,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-5">
-      <main className="w-full">
+      <main className="flex-1">
         <h1 className="visually-hidden">Limefut - Liga menor de fútbol</h1>
 
         <Suspense>
@@ -68,7 +68,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
         </div>
       </main>
 
-      <aside>
+      <aside className="w-full md:w-[400px]">
         <Sidebar />
       </aside>
     </div>

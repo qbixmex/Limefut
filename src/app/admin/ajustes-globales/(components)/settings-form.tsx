@@ -57,8 +57,6 @@ export const SettingsForm: FC<Props> = ({ globalSettings }) => {
       maintenanceMode: globalSettings?.maintenanceMode ?? false,
       maintenanceMessage: globalSettings?.maintenanceMessage ?? '',
       googleAnalyticsId: globalSettings?.googleAnalyticsId ?? '',
-      googleTagManager: globalSettings?.googleTagManager ?? '',
-      metaPixelId: globalSettings?.metaPixelId ?? '',
       defaultLanguage: globalSettings?.defaultLanguage ?? '',
       timeZone: globalSettings?.timeZone ?? '',
       contactEmail: globalSettings?.contactEmail ?? '',
@@ -106,8 +104,6 @@ export const SettingsForm: FC<Props> = ({ globalSettings }) => {
     formData.append('maintenanceMode', String(data.maintenanceMode));
     formData.append('maintenanceMessage', (data.maintenanceMessage as string).trim());
     formData.append('googleAnalyticsId', (data.googleAnalyticsId as string).trim());
-    formData.append('googleTagManager', (data.googleTagManager as string).trim());
-    formData.append('metaPixelId', (data.metaPixelId as string).trim());
     formData.append('defaultLanguage', (data.defaultLanguage as string).trim());
     formData.append('timeZone', (data.timeZone as string).trim());
     formData.append('contactEmail', (data.contactEmail as string).trim());
@@ -609,10 +605,10 @@ export const SettingsForm: FC<Props> = ({ globalSettings }) => {
           />
         </section>
 
-        <h2 className="text-2xl font-semibold text-sky-500">Analíticas</h2>
+        <section>
+          <h2 className="text-2xl font-semibold text-sky-500">Analíticas</h2>
 
-        <section className="flex flex-col lg:flex-row gap-5">
-          <div className="w-full md:w-1/3">
+          <div className="w-full md:w-1/2 lg:w-1/3">
             <FormField
               control={form.control}
               name="googleAnalyticsId"
@@ -620,42 +616,6 @@ export const SettingsForm: FC<Props> = ({ globalSettings }) => {
                 <FormItem>
                   <FormLabel>
                     ID de Google Analytics
-                    <span className="text-sm text-gray-600">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full md:w-1/3">
-            <FormField
-              control={form.control}
-              name="googleTagManager"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Tag de Google Manager
-                    <span className="text-sm text-gray-600">(opcional)</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full md:w-1/3">
-            <FormField
-              control={form.control}
-              name="metaPixelId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    ID de Meta Pixel
                     <span className="text-sm text-gray-600">(opcional)</span>
                   </FormLabel>
                   <FormControl>

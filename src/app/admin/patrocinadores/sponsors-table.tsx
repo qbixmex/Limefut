@@ -85,7 +85,17 @@ export const SponsorsTable: FC<Props> = async ({
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
-                      {sponsor.url ?? <Badge variant="outline-secondary" />}
+                      {sponsor.url ? (
+                        <Badge variant="outline-info">
+                          <span className="text-wrap">
+                            <i>{sponsor.url}</i>
+                          </span>
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline-secondary">
+                          <i>no asignada</i>
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell className="hidden md:table-cell text-center">
                       <Badge variant="outline-info">

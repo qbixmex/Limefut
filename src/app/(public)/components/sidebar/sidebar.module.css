@@ -1,17 +1,22 @@
-@reference 'tailwindcss';
+@reference '../../../globals.css';
 
 .sidebar {
+  width: 100%;
   display: flex;
-  flex: 0 0 340px;
   flex-direction: column;
   background-color: var(--color-gray-50);
   padding: calc(var(--spacing) * 5);
   row-gap: calc(var(--spacing) * 5);
-  @apply md:rounded-lg lg:gap-y-10;
-}
 
-:global(.dark) {
-  .sidebar {
+  @variant dark {
     background-color: var(--color-gray-900);
+  }
+
+  @variant md {
+    @apply rounded-lg;
+  }
+
+  @variant lg {
+    @apply gap-y-10;
   }
 }
