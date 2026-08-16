@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { deleteImage } from '~/src/shared/actions';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -10,6 +11,11 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteGalleryImageAction = async (galleryImageId: string): ResponseDeleteAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
+  }
+
   const galleryImageExists = await prisma.galleryImage.count({
     where: { id: galleryImageId },
   });

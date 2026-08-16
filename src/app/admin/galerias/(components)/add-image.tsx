@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, type FC } from 'react';
-import type { Session } from '@/lib/auth-client';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -36,12 +35,11 @@ import { LoaderCircle, Plus } from 'lucide-react';
 import type z from 'zod';
 
 type Props = Readonly<{
-  session: Session;
   galleryId: string;
   imagesQuantity: number;
 }>;
 
-export const AddImage: FC<Props> = ({ session, galleryId, imagesQuantity }) => {
+export const AddImage: FC<Props> = ({ galleryId, imagesQuantity }) => {
   const { galleryImage, clearGalleryImage } = useImageGallery();
   const [isOpen, setIsOpen] = useState(false);
   const formSchema = !galleryImage
@@ -90,7 +88,6 @@ export const AddImage: FC<Props> = ({ session, galleryId, imagesQuantity }) => {
     // Create Gallery Image
     if (!galleryImage) {
       const response = await createGalleryImageAction({
-        userRoles: session?.user.roles ?? null,
         galleryId,
         formData,
       });
@@ -112,8 +109,6 @@ export const AddImage: FC<Props> = ({ session, galleryId, imagesQuantity }) => {
     if (galleryImage) {
       const response = await updateGalleryImageAction({
         formData,
-        authenticatedUserId: session?.user.id,
-        userRoles: session.user.roles!,
         galleryImageId: galleryImage.id,
       });
 

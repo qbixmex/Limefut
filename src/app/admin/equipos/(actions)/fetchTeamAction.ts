@@ -61,20 +61,11 @@ type FIELD_TYPE = {
 
 export const fetchTeamAction = async (
   teamId: string,
-  userRole: string[] | null,
 ): FetchTeamResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-team');
-
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      team: null,
-    };
-  }
 
   try {
     const teamSelect = {

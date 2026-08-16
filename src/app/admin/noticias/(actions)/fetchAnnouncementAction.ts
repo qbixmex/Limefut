@@ -23,21 +23,12 @@ export type ANNOUNCEMENT_TYPE = {
 };
 
 export const fetchAnnouncementAction = async (
-  userRoles: string[] | null,
   announcementId: string,
 ): FetchAnnouncementResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-announcement');
-
-  if ((userRoles !== null) && (!userRoles.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      announcement: null,
-    };
-  }
 
   try {
     const announcement = await prisma.announcement.findFirst({

@@ -9,14 +9,10 @@ import { useEditAnnouncement } from './use-edit-announcement';
 import type { ANNOUNCEMENT_TYPE } from '../../(actions)/fetchAnnouncementAction';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   announcement: ANNOUNCEMENT_TYPE;
 }>;
 
 export const EditAnnouncementForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   announcement,
 }) => {
   const {
@@ -25,8 +21,6 @@ export const EditAnnouncementForm: FC<Props> = ({
     handleRedirectBack,
   } = useEditAnnouncement({
     announcement,
-    authenticatedUserId,
-    authenticatedUserRoles,
   });
 
   return (

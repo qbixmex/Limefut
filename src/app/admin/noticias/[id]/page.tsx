@@ -1,8 +1,6 @@
 import type { FC } from 'react';
 import { Suspense } from 'react';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -36,9 +34,8 @@ const AnnouncementPage: FC<Props> = ({ params }) => {
 
 const AnnouncementContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, message, announcement } = await fetchAnnouncementAction(session?.user?.roles ?? [], sponsorId);
+  const { ok, message, announcement } = await fetchAnnouncementAction(sponsorId);
 
   if (!ok && !announcement) {
     redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(message)}`);

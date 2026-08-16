@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -9,6 +10,11 @@ export type ResponseAction = Promise<{
 }>;
 
 export const updateVideoStateAction = async (id: string, state: boolean): ResponseAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
+  }
+
   const videoExists = await prisma.video.count({
     where: { id },
   });

@@ -32,33 +32,13 @@ type TEAM_TYPE = {
 
 export const fetchPlayerAction = async ({
   playerId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
   playerId: string,
-  authenticatedUserId: string | undefined | null,
-  authenticatedUserRoles: string[] | undefined | null,
 }): FetchPlayerResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-player');
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      player: null,
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      player: null,
-    };
-  }
 
   try {
     const player = await prisma.player.findUnique({

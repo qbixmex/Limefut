@@ -1,18 +1,18 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 
 export const addTeamToStandingsAction = async ({
   tournamentId,
   teamId,
-  userRoles,
 }: {
   tournamentId: string,
   teamId: string,
-  userRoles: string[] | null | undefined,
 }): Promise<{ ok: boolean; }> => {
-  if ((userRoles) && (!userRoles.includes('admin'))) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return { ok: false };
   }
 

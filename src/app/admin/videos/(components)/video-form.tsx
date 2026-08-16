@@ -18,7 +18,6 @@ import { Button } from '@/components/ui/button';
 import { createVideoSchema, editVideoSchema } from '@/shared/schemas';
 import { createVideoAction, updateVideoAction } from '../(actions)';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { Video } from '@/shared/interfaces';
 import { ChevronDownIcon, LoaderCircle } from 'lucide-react';
@@ -35,11 +34,10 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { PLATFORM } from '@/shared/constants/platforms';
 
 type Props = Readonly<{
-  session: Session;
   video?: Video;
 }>;
 
-export const VideoForm: FC<Props> = ({ session, video }) => {
+export const VideoForm: FC<Props> = ({ video }) => {
   const route = useRouter();
   const formSchema = !video ? createVideoSchema : editVideoSchema;
   const [openPublishedDateCalendar, setOpenPublishedDateCalendar] = useState(false);
@@ -88,7 +86,6 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
     if (!video) {
       const response = await createVideoAction(
         formData,
-        session?.user.roles ?? null,
       );
 
       if (!response.ok) {
@@ -109,8 +106,6 @@ export const VideoForm: FC<Props> = ({ session, video }) => {
       const response = await updateVideoAction({
         formData,
         videoId: video?.id as string,
-        userRoles: session.user.roles!,
-        authenticatedUserId: session?.user.id,
       });
 
       if (!response.ok) {

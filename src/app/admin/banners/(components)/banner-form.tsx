@@ -17,7 +17,6 @@ import { Button } from '@/components/ui/button';
 import { createHeroBannerSchema, editHeroBannerSchema } from '@/shared/schemas';
 import { createHeroBannerAction, updateHeroBannerAction } from '../(actions)';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { HeroBanner } from '@/shared/interfaces';
 import { LoaderCircle } from 'lucide-react';
@@ -29,7 +28,6 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
-  session: Session;
   heroBanner?: HeroBanner;
 }>;
 
@@ -38,7 +36,7 @@ type CountCharacters = {
   focused: boolean;
 };
 
-export const BannerForm: FC<Props> = ({ session, heroBanner }) => {
+export const BannerForm: FC<Props> = ({ heroBanner }) => {
   const route = useRouter();
   const formSchema = !heroBanner ? createHeroBannerSchema : editHeroBannerSchema;
   const [descriptionChars, setDescriptionChars] = useState<CountCharacters>({
@@ -72,10 +70,7 @@ export const BannerForm: FC<Props> = ({ session, heroBanner }) => {
 
     // Create Hero Banner
     if (!heroBanner) {
-      const response = await createHeroBannerAction(
-        formData,
-        session?.user.roles ?? null,
-      );
+      const response = await createHeroBannerAction(formData);
 
       if (!response.ok) {
         toast.error(response.message);
@@ -94,8 +89,6 @@ export const BannerForm: FC<Props> = ({ session, heroBanner }) => {
       const response = await updateHeroBannerAction({
         formData,
         heroBannerId: heroBanner?.id as string,
-        userRoles: session.user.roles!,
-        authenticatedUserId: session?.user.id,
       });
 
       if (!response.ok) {

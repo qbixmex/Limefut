@@ -15,8 +15,6 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
 import { type User } from '@/shared/interfaces';
 import { ROUTES } from '@/shared/constants/routes';
 
@@ -35,12 +33,8 @@ const UserProfilePage: FC<Props> = ({ params }) => {
 };
 
 const UserProfileContent: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const userId = (await params).id;
-  const response = await fetchUserAction(
-    userId,
-    session?.user.roles as string[],
-  );
+  const response = await fetchUserAction(userId);
 
   if (!response.ok) {
     redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(response.message)}`);

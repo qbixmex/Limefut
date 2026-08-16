@@ -79,20 +79,11 @@ type FetchResponse = Promise<{
 
 export const fetchMatchAction = async (
   id: string,
-  userRole: string[] | null,
 ): FetchResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-match');
-
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      match: null,
-    };
-  }
 
   try {
     const match = await prisma.match.findUnique({

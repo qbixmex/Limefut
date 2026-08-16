@@ -12,12 +12,8 @@ import type { ANNOUNCEMENT_TYPE } from '../../(actions)/fetchAnnouncementAction'
 
 export const useEditAnnouncement = ({
   announcement,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
   announcement: ANNOUNCEMENT_TYPE;
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
 }) => {
   const route = useRouter();
 
@@ -53,8 +49,6 @@ export const useEditAnnouncement = ({
     const response = await updateAnnouncementAction({
       formData,
       announcementId: announcement.id as string,
-      authenticatedUserId,
-      authenticatedUserRoles,
     });
 
     if (!response.ok) {

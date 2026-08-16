@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
@@ -11,25 +12,16 @@ export type ResponseDeleteAction = Promise<{
 export const updatePlayerStateAction = async ({
   id,
   state,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
   id: string;
   state: boolean;
-  authenticatedUserId: string | undefined | null;
-  authenticatedUserRoles: string[] | null | undefined;
 }): ResponseDeleteAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (!authenticatedUserRoles?.includes('admin')) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
     };
   }
 

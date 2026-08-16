@@ -11,13 +11,9 @@ import type { MATCH_TYPE } from '../../(actions)/fetch-match-for-edit.action';
 import { updatePlayoffMatchAction } from '../../(actions)/update-playoff-match.action';
 
 export const useEditPlayoffsMatch = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   playoffId,
   match,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   playoffId: string;
   match: MATCH_TYPE;
 }) => {
@@ -56,8 +52,6 @@ export const useEditPlayoffsMatch = ({
     if (data.status) formData.append('status', data.status);
 
     const { ok, message } = await updatePlayoffMatchAction({
-      authenticatedUserId,
-      authenticatedUserRoles,
       matchId: match.id,
       formData,
     });

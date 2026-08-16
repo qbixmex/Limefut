@@ -21,24 +21,12 @@ import './styles.css';
 
 type Props = Readonly<{
   id: string;
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
 }>;
 
 export const DeletePlayoff: FC<Props> = ({
   id,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }) => {
   const onDeleteMatch = async (id: string) => {
-    if (!authenticatedUserId) {
-      toast.error('¡ Tienes que estar autentificado para eliminar liguillas !');
-      return;
-    }
-    if (!authenticatedUserRoles?.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar liguillas !');
-      return;
-    }
     const response = await deletePlayoffAction(id);
     if (!response.ok) {
       toast.error(response.message);

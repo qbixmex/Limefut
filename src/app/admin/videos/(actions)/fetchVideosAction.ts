@@ -6,7 +6,6 @@ import prisma from '@/lib/prisma';
 import type { Pagination } from '@/shared/interfaces';
 
 type Options = Readonly<{
-  userRoles: string[];
   page?: number;
   take?: number;
   searchTerm?: string;
@@ -33,15 +32,6 @@ export const fetchVideosAction = async (options: Options): ResponseFetch => {
 
   cacheLife('days');
   cacheTag('admin-videos');
-
-  if (!options.userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      videos: [],
-      pagination: null,
-    };
-  }
 
   let { page = 1, take = 12 } = options ?? {};
 

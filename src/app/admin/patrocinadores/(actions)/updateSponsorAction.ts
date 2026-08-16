@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 import { editSponsorSchema } from '@/shared/schemas';
 import type { Sponsor } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
@@ -9,8 +10,6 @@ import { deleteImage, uploadImage } from '@/shared/actions';
 type Options = {
   formData: FormData;
   sponsorId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
 };
 
 type EditResponseAction = Promise<{
@@ -22,23 +21,10 @@ type EditResponseAction = Promise<{
 export const updateSponsorAction = async ({
   formData,
   sponsorId,
-  userRoles,
-  authenticatedUserId,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      sponsor: null,
-    };
-  }
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      sponsor: null,
-    };
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, sponsor: null };
   }
 
   const rawData = {

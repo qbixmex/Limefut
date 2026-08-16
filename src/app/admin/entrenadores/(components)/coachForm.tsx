@@ -17,7 +17,6 @@ import type z from 'zod';
 import { Button } from '@/components/ui/button';
 import { createCoachSchema, editCoachSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { Coach } from '@/shared/interfaces';
 import { createCoachAction, updateCoachAction } from '../(actions)';
@@ -26,11 +25,10 @@ import { Label } from '@/components/ui/label';
 import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
-  session: Session;
   coach?: Coach;
 }>;
 
-export const CoachForm: FC<Props> = ({ session, coach }) => {
+export const CoachForm: FC<Props> = ({ coach }) => {
   const route = useRouter();
   const formSchema = !coach ? createCoachSchema : editCoachSchema;
 
@@ -65,10 +63,7 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
 
     // Create team
     if (!coach) {
-      const response = await createCoachAction(
-        formData,
-        session?.user.roles ?? null,
-      );
+      const response = await createCoachAction(formData);
 
       if (!response.ok) {
         toast.error(response.message);
@@ -88,8 +83,6 @@ export const CoachForm: FC<Props> = ({ session, coach }) => {
       const response = await updateCoachAction({
         formData,
         coachId: coach.id,
-        userRoles: session.user.roles!,
-        authenticatedUserId: session?.user.id,
       });
 
       if (!response.ok) {

@@ -7,8 +7,6 @@ const { mockReplace, mockCreateAction } = vi.hoisted(() => ({
   mockCreateAction: vi.fn<
     (params: {
       formData: FormData;
-      authenticatedUserId: string | null | undefined;
-      authenticatedUserRoles: string[] | null | undefined;
     }) => Promise<{ ok: boolean; message: string; player: null }>
   >(),
 }));
@@ -28,11 +26,6 @@ vi.mock('sonner', () => ({
 vi.mock('@/app/admin/jugadores/(actions)', () => ({
   createPlayerAction: mockCreateAction,
 }));
-
-const defaultProps = {
-  authenticatedUserId: '550e8400-e29b-41d4-a716-446655440000',
-  authenticatedUserRoles: ['admin'],
-};
 
 const validData = {
   name: 'Test Player',
@@ -55,7 +48,7 @@ describe('Tests on useCreatePlayer hook', () => {
   });
 
   test('Should initialize form with default values', () => {
-    const { result } = renderHook(() => useCreatePlayer(defaultProps));
+    const { result } = renderHook(() => useCreatePlayer());
 
     const values = result.current.form.getValues();
 
@@ -69,7 +62,7 @@ describe('Tests on useCreatePlayer hook', () => {
   });
 
   test('handleNavigateBack should reset form and navigate to admin players', () => {
-    const { result } = renderHook(() => useCreatePlayer(defaultProps));
+    const { result } = renderHook(() => useCreatePlayer());
 
     act(() => result.current.handleNavigateBack());
 
@@ -81,7 +74,7 @@ describe('Tests on useCreatePlayer hook', () => {
   });
 
   test('onSubmit should call createPlayerAction with correct params', async () => {
-    const { result } = renderHook(() => useCreatePlayer(defaultProps));
+    const { result } = renderHook(() => useCreatePlayer());
 
     await act(async () => {
       await result.current.onSubmit(validData);
@@ -89,8 +82,6 @@ describe('Tests on useCreatePlayer hook', () => {
 
     expect(mockCreateAction).toHaveBeenCalledWith(
       expect.objectContaining({
-        authenticatedUserId: defaultProps.authenticatedUserId,
-        authenticatedUserRoles: defaultProps.authenticatedUserRoles,
         formData: expect.any(FormData),
       }),
     );
@@ -104,7 +95,7 @@ describe('Tests on useCreatePlayer hook', () => {
 
   test('onSubmit should show success toast and navigate on success', async () => {
     const { toast } = await import('sonner');
-    const { result } = renderHook(() => useCreatePlayer(defaultProps));
+    const { result } = renderHook(() => useCreatePlayer());
 
     await act(async () => {
       await result.current.onSubmit(validData);
@@ -121,7 +112,7 @@ describe('Tests on useCreatePlayer hook', () => {
       player: null,
     });
     const { toast } = await import('sonner');
-    const { result } = renderHook(() => useCreatePlayer(defaultProps));
+    const { result } = renderHook(() => useCreatePlayer());
 
     await act(async () => {
       await result.current.onSubmit(validData);

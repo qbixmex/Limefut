@@ -11,12 +11,10 @@ import { updateCategoryAction } from '../(actions)/update-category.action';
 import type z from 'zod';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | undefined;
   category: Category;
 }>;
 
-export const useEditCategory = ({ authenticatedUserId, authenticatedUserRoles, category }: Props) => {
+export const useEditCategory = ({ category }: Props) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof editCategorySchema>>({
@@ -36,8 +34,6 @@ export const useEditCategory = ({ authenticatedUserId, authenticatedUserRoles, c
     const { ok, message } = await updateCategoryAction({
       formData,
       categoryId: category.id,
-      authenticatedUserRoles,
-      authenticatedUserId,
     });
 
     if (!ok) {

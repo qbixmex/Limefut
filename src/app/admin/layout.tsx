@@ -1,9 +1,6 @@
 import type { FC, ReactNode } from 'react';
 import { Suspense } from 'react';
-import { redirect } from 'next/navigation';
-import { headers } from 'next/headers';
 import type { Metadata } from 'next';
-import { auth } from '@/lib/auth';
 import { fetchAdminGlobalSettingsAction } from '@/app/admin/ajustes-globales/(actions)/fetchAdminGlobalSettingsAction';
 import { MainLayout } from './(components)/main-layout';
 import DashboardSkeleton from './(components)/dashboard-skeleton';
@@ -28,17 +25,7 @@ const AdminLayout: FC<Props> = ({ children }) => {
 };
 
 const AdminLayoutContent: FC<Props> = async ({ children }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    redirect('/login');
-  }
-
-  const { globalSettings } = await fetchAdminGlobalSettingsAction(
-    session.user.roles ?? [],
-  );
+  const { globalSettings } = await fetchAdminGlobalSettingsAction();
 
   return (
     <MainLayout settings={globalSettings}>

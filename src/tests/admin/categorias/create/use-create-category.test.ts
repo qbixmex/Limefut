@@ -7,8 +7,6 @@ const { mockReplace, mockCreateAction } = vi.hoisted(() => ({
   mockReplace: vi.fn(),
   mockCreateAction: vi.fn<
     (params: {
-      authenticatedUserId: string | undefined;
-      authenticatedUserRoles: string[] | undefined;
       formData: FormData;
     }) => Promise<{ ok: boolean; message: string }>
   >(),
@@ -29,10 +27,7 @@ vi.mock('@/app/admin/categorias/(actions)/create-category.action', () => ({
   createCategoryAction: mockCreateAction,
 }));
 
-const defaultProps = {
-  authenticatedUserId: '881bf0f0-b4d4-4de1-b19e-eb9927d04d99',
-  authenticatedUserRoles: ['admin'],
-};
+const defaultProps = {};
 
 const validData = {
   name: 'Nueva Categoría',
@@ -99,8 +94,7 @@ describe('Tests on useCreateCategory hook', () => {
 
     expect(mockCreateAction).toHaveBeenCalledWith(
       expect.objectContaining({
-        authenticatedUserId: defaultProps.authenticatedUserId,
-        authenticatedUserRoles: defaultProps.authenticatedUserRoles,
+        formData: expect.any(FormData),
       }),
     );
 

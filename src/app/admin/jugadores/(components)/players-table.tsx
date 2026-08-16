@@ -110,8 +110,6 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                           return updatePlayerStateAction({
                             id,
                             state,
-                            authenticatedUserId: session?.user?.id,
-                            authenticatedUserRoles: session?.user?.roles as string[] ?? null,
                           });
                         }}
                       />
@@ -122,8 +120,6 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                         <EditPlayer playerId={player.id} />
                         <DeletePlayer
                           playerId={player.id}
-                          userId={session?.user?.id}
-                          roles={session?.user.roles as string[]}
                         />
                       </div>
                     </TableCell>

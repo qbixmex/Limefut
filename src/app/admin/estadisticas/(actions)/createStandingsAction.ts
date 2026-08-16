@@ -2,6 +2,7 @@
 
 import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { createStandingsSchema } from '@/shared/schemas';
 
 type CreateResponseAction = Promise<{
@@ -16,6 +17,14 @@ type DataType = {
 }[];
 
 export const createStandingsAction = async (data: DataType): CreateResponseAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+    };
+  }
+
   const standingsVerified = createStandingsSchema.safeParse(data);
 
   if (!standingsVerified.success) {

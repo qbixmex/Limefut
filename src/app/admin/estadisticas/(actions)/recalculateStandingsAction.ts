@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 import { MATCH_STATUS } from '@/shared/enums';
 
@@ -16,6 +17,14 @@ export const recalculateStandingsAction = async ({
   tournamentId: string;
   categoryId: string;
 }): ResponseRecalculateAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+    };
+  }
+
   try {
     await prisma.$transaction(async (tx) => {
       // Get all teams in the tournament

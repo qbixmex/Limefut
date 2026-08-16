@@ -9,9 +9,8 @@ import {
 import { Breadcrumbs } from '../(components)/breadcrumbs';
 import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
 import { NavUser } from '@/components/nav-user';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
 import type { GlobalSettings } from '@/shared/interfaces';
+import { getSession } from '@/lib/get-session';
 
 type Props = Readonly<{
   children: ReactNode;
@@ -19,9 +18,7 @@ type Props = Readonly<{
 }>;
 
 export const MainLayout: FC<Props> = async ({ children, settings }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   return (
     <SidebarProvider>

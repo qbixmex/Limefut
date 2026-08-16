@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -9,6 +10,11 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteVideoAction = async (videoId: string): ResponseDeleteAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
+  }
+
   const video = await prisma.video.findFirst({
     where: { id: videoId },
     select: { title: true },

@@ -1,4 +1,4 @@
-const { MockPrismaClientKnownRequestError, mockCount, mockDelete } = vi.hoisted(() => {
+const { MockPrismaClientKnownRequestError, mockCount, mockDelete, mockGetSession } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
     meta?: Record<string, unknown>;
@@ -16,8 +16,21 @@ const { MockPrismaClientKnownRequestError, mockCount, mockDelete } = vi.hoisted(
     MockPrismaClientKnownRequestError,
     mockCount: vi.fn(),
     mockDelete: vi.fn(),
+    mockGetSession: vi.fn(),
   };
 });
+
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: mockGetSession,
+    },
+  },
+}));
 
 vi.mock('next/cache');
 
@@ -44,6 +57,9 @@ describe('Tests on delete category server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
     mockCount.mockResolvedValue(1);
     mockDelete.mockResolvedValue({ id: categoryId });
   });
@@ -52,54 +68,30 @@ describe('Tests on delete category server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
+  test('Should return error when user is not authenticated', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await deleteCategoryAction({
       categoryId,
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['admin'],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['user'] },
+    });
+
     const response = await deleteCategoryAction({
       categoryId,
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: ['user'],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(mockCount).not.toHaveBeenCalled();
-    expect(mockDelete).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when roles is null', async () => {
-    const response = await deleteCategoryAction({
-      categoryId,
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: null,
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(mockCount).not.toHaveBeenCalled();
-    expect(mockDelete).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when roles are empty', async () => {
-    const response = await deleteCategoryAction({
-      categoryId,
-      authenticatedUserId: '19fafe1d-6847-450c-a5a7-80f61c80ed4f',
-      authenticatedUserRoles: [],
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
@@ -109,8 +101,6 @@ describe('Tests on delete category server action', () => {
 
     const response = await deleteCategoryAction({
       categoryId,
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -121,8 +111,6 @@ describe('Tests on delete category server action', () => {
   test('Should delete a category successfully', async () => {
     const response = await deleteCategoryAction({
       categoryId,
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(true);
@@ -146,8 +134,6 @@ describe('Tests on delete category server action', () => {
 
     const response = await deleteCategoryAction({
       categoryId,
-      authenticatedUserId: '987df461-89c3-4050-bf44-4d4dc4a3e9a1',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -159,8 +145,6 @@ describe('Tests on delete category server action', () => {
 
     const response = await deleteCategoryAction({
       categoryId,
-      authenticatedUserId: '14b74b98-bba8-4798-be65-a002fb1912d9',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -172,8 +156,6 @@ describe('Tests on delete category server action', () => {
 
     const response = await deleteCategoryAction({
       categoryId,
-      authenticatedUserId: 'a452830b-d97e-4100-b4ae-3da6bb3b758c',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);

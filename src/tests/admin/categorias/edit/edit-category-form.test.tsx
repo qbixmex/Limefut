@@ -11,8 +11,6 @@ vi.mock('@/app/admin/categorias/(components)/form-fields', () => ({
 }));
 
 const defaultProps = {
-  authenticatedUserId: '881bf0f0-b4d4-4de1-b19e-eb9927d04d99',
-  authenticatedUserRoles: ['admin'],
   category: mockCategory,
 };
 

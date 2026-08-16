@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import { MATCH_STATUS } from '@/shared/enums';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -18,6 +19,15 @@ type Props = {
 };
 
 export const finishPlayoffMatchAction = async (props: Props): ResponseAction => {
+  const guard = await requireAdmin();
+
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+    };
+  }
+
   const { matchId, localScore, visitorScore, localId, visitorId } = props;
 
   const winnerId = setWinnerTeamId({ localScore, visitorScore, localId, visitorId });

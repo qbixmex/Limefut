@@ -1,4 +1,4 @@
-const { MockPrismaClientKnownRequestError, mockTransaction } = vi.hoisted(() => {
+const { MockPrismaClientKnownRequestError, mockTransaction, mockGetSession } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
     meta?: Record<string, unknown>;
@@ -15,8 +15,21 @@ const { MockPrismaClientKnownRequestError, mockTransaction } = vi.hoisted(() => 
   return {
     MockPrismaClientKnownRequestError,
     mockTransaction: vi.fn(),
+    mockGetSession: vi.fn(),
   };
 });
+
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: mockGetSession,
+    },
+  },
+}));
 
 vi.mock('next/cache');
 
@@ -58,6 +71,9 @@ describe('Tests on create category server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
     mockTx.field.count.mockResolvedValue(0);
     mockTx.category.create.mockResolvedValue(mockCreatedCategory);
     mockTransaction.mockImplementation(
@@ -69,54 +85,30 @@ describe('Tests on create category server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
+  test('Should return error when user is not authenticated', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await createCategoryAction({
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(response.category).toBeNull();
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['user'] },
+    });
+
     const response = await createCategoryAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: ['user'],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(response.category).toBeNull();
-    expect(mockTransaction).not.toHaveBeenCalled();
-  });
-
-  test('Should not allow to create a category if roles is null', async () => {
-    const response = await createCategoryAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: null,
-      formData: validFormData(),
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(response.category).toBeNull();
-    expect(mockTransaction).not.toHaveBeenCalled();
-  });
-
-  test('Should not allow to create a category if roles are empty', async () => {
-    const response = await createCategoryAction({
-      authenticatedUserId: '19fafe1d-6847-450c-a5a7-80f61c80ed4f',
-      authenticatedUserRoles: [],
-      formData: validFormData(),
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.category).toBeNull();
     expect(mockTransaction).not.toHaveBeenCalled();
   });
@@ -126,8 +118,6 @@ describe('Tests on create category server action', () => {
     formData.set('name', 'ab');
 
     const response = await createCategoryAction({
-      authenticatedUserId: '7ab083c7-9389-4842-8735-1dd283eaf3c4',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -142,8 +132,6 @@ describe('Tests on create category server action', () => {
     formData.set('permalink', 'mi permalink');
 
     const response = await createCategoryAction({
-      authenticatedUserId: '7ab083c7-9389-4842-8735-1dd283eaf3c4',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -157,8 +145,6 @@ describe('Tests on create category server action', () => {
     mockTx.field.count.mockResolvedValue(1);
 
     const response = await createCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -170,8 +156,6 @@ describe('Tests on create category server action', () => {
 
   test('Should create a category successfully', async () => {
     const response = await createCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -199,8 +183,6 @@ describe('Tests on create category server action', () => {
     );
 
     const response = await createCategoryAction({
-      authenticatedUserId: '987df461-89c3-4050-bf44-4d4dc4a3e9a1',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -217,8 +199,6 @@ describe('Tests on create category server action', () => {
     );
 
     const response = await createCategoryAction({
-      authenticatedUserId: 'fdbd8d2f-ece3-4cb7-9417-b3e4b4086399',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -231,8 +211,6 @@ describe('Tests on create category server action', () => {
     mockTransaction.mockRejectedValue(new Error('Something went wrong'));
 
     const response = await createCategoryAction({
-      authenticatedUserId: '14b74b98-bba8-4798-be65-a002fb1912d9',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 

@@ -40,7 +40,6 @@ type AVAILABLE_PLAYER_TYPE = {
 };
 
 export const PenaltyShoots: FC<Props> = ({
-  userRoles,
   match,
   localTeam,
   visitorTeam,
@@ -103,7 +102,6 @@ export const PenaltyShoots: FC<Props> = ({
           </h2>
 
           <SimplePenaltyShootoutForm
-            userRoles={userRoles}
             matchId={match.id}
             localTeam={{
               id: localTeam.id,
@@ -131,7 +129,6 @@ export const PenaltyShoots: FC<Props> = ({
             </h2>
 
             <PenaltiesForm
-              userRoles={userRoles}
               currentMatchId={match.id}
               localTeam={{
                 id: localTeam.id,

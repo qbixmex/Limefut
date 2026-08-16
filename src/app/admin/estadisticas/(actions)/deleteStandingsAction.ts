@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
@@ -9,6 +10,14 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteStandingsAction = async (tournamentId: string): ResponseDeleteAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+    };
+  }
+
   // Delete Standings from database
   await prisma.standings.deleteMany({ where: { tournamentId } });
 

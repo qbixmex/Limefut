@@ -2,6 +2,7 @@
 
 import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import type { Video } from '@/shared/interfaces';
 import { createVideoSchema } from '@/shared/schemas';
 
@@ -13,14 +14,10 @@ type ResponseCreateAction = Promise<{
 
 export const createVideoAction = async (
   formData: FormData,
-  userRole: string[] | null,
 ): ResponseCreateAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      video: null,
-    };
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, video: null };
   }
 
   const rawData = {

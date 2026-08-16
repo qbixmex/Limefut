@@ -14,7 +14,6 @@ import { createPlayoffSimplePenaltyShootoutAction } from '@/app/admin/liguilla/(
 import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
-  userRoles: string[] | null | undefined;
   matchId: string;
   localTeam: Team;
   visitorTeam: Team;
@@ -27,7 +26,6 @@ type Team = {
 };
 
 export const SimplePenaltyShootoutForm: FC<Props> = ({
-  userRoles,
   matchId,
   localTeam,
   visitorTeam,
@@ -59,7 +57,6 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
     if (phase === 'regular') {
       const response = await createRegularSimplePenaltyShootoutAction(
         formData,
-        userRoles,
       );
 
       ok = response.ok;
@@ -69,7 +66,6 @@ export const SimplePenaltyShootoutForm: FC<Props> = ({
     if (phase === 'playoffs') {
       const response = await createPlayoffSimplePenaltyShootoutAction(
         formData,
-        userRoles,
       );
 
       ok = response.ok;

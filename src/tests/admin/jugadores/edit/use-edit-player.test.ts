@@ -8,8 +8,6 @@ const { mockReplace, mockUpdateAction } = vi.hoisted(() => ({
     (params: {
       formData: FormData;
       playerId: string;
-      authenticatedUserId: string | undefined | null;
-      authenticatedUserRoles: string[] | undefined | null;
     }) => Promise<{ ok: boolean; message: string }>
   >(),
 }));
@@ -31,8 +29,6 @@ vi.mock('@/app/admin/jugadores/(actions)/updatePlayerAction', () => ({
 }));
 
 const defaultProps = {
-  authenticatedUserId: '550e8400-e29b-41d4-a716-446655440000',
-  authenticatedUserRoles: ['admin'],
   player: playerMock,
 };
 
@@ -87,8 +83,6 @@ describe('Tests on useEditPlayer hook', () => {
 
     expect(mockUpdateAction).toHaveBeenCalledWith(
       expect.objectContaining({
-        authenticatedUserId: defaultProps.authenticatedUserId,
-        authenticatedUserRoles: defaultProps.authenticatedUserRoles,
         playerId: playerMock.id,
         formData: expect.any(FormData),
       }),

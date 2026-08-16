@@ -9,23 +9,6 @@ vi.mock('@/app/admin/categorias/(components)/form-fields', () => ({
   FormFields: () => <div data-testid="form-fields" />,
 }));
 
-const mockSession = {
-  user: {
-    id: '881bf0f0-b4d4-4de1-b19e-eb9927d04d99',
-    name: 'John Doe',
-    username: 'johnny',
-    email: 'johnny@gmail.com',
-    emailVerified: true,
-    image: 'johnny.webp',
-    roles: ['admin'],
-  },
-  session: {
-    token: 'a41d9b460c1379bd205b1',
-    createdAt: new Date('2025-01-02T00:00:00.000Z'),
-    expiresAt: new Date('2025-01-02T01:00:00.000Z'),
-  },
-};
-
 const defaultMockReturn = {
   form: {
     handleSubmit: vi.fn((onSubmit: () => void) => onSubmit),
@@ -42,10 +25,7 @@ describe('Test on <CreateCategoryForm />', () => {
 
   test('Should render correctly', () => {
     render(
-      <CreateCategoryForm
-        authenticatedUserId={mockSession.user.id}
-        authenticatedUserRoles={mockSession.user.roles}
-      />,
+      <CreateCategoryForm />,
     );
 
     expect(screen.getByTestId('form-fields')).toBeInTheDocument();
@@ -66,10 +46,7 @@ describe('Test on <CreateCategoryForm />', () => {
     } as never);
 
     render(
-      <CreateCategoryForm
-        authenticatedUserId={mockSession.user.id}
-        authenticatedUserRoles={mockSession.user.roles}
-      />,
+      <CreateCategoryForm />,
     );
 
     const user = userEvent.setup();
@@ -94,10 +71,7 @@ describe('Test on <CreateCategoryForm />', () => {
     } as never);
 
     render(
-      <CreateCategoryForm
-        authenticatedUserId={mockSession.user.id}
-        authenticatedUserRoles={mockSession.user.roles}
-      />,
+      <CreateCategoryForm />,
     );
 
     const user = userEvent.setup();
@@ -123,10 +97,7 @@ describe('Test on <CreateCategoryForm />', () => {
     } as never);
 
     const { rerender } = render(
-      <CreateCategoryForm
-        authenticatedUserId={mockSession.user.id}
-        authenticatedUserRoles={mockSession.user.roles}
-      />,
+      <CreateCategoryForm />,
     );
 
     const user = userEvent.setup();
@@ -147,10 +118,7 @@ describe('Test on <CreateCategoryForm />', () => {
       handleNavigateBack: vi.fn(),
     } as never);
     rerender(
-      <CreateCategoryForm
-        authenticatedUserId={mockSession.user.id}
-        authenticatedUserRoles={mockSession.user.roles}
-      />,
+      <CreateCategoryForm />,
     );
 
     await waitFor(() => {

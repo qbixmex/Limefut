@@ -7,8 +7,6 @@ const { mockReplace, mockUpdateAction } = vi.hoisted(() => ({
   mockReplace: vi.fn(),
   mockUpdateAction: vi.fn<
     (params: {
-      authenticatedUserId: string | undefined;
-      authenticatedUserRoles: string[] | null | undefined;
       tournamentId: string;
       formData: FormData;
     }) => Promise<{ ok: boolean; message: string }>
@@ -31,8 +29,6 @@ vi.mock('@/app/admin/torneos/(actions)', () => ({
 }));
 
 const defaultProps = {
-  authenticatedUserId: '7589cfc5-2f26-4a5f-91b3-91fac387ae16',
-  authenticatedUserRoles: ['user', 'admin'],
   tournament: mockTournament,
 };
 
@@ -88,8 +84,6 @@ describe('Tests on useEditTournament hook', () => {
 
     expect(mockUpdateAction).toHaveBeenCalledWith(
       expect.objectContaining({
-        authenticatedUserId: defaultProps.authenticatedUserId,
-        authenticatedUserRoles: defaultProps.authenticatedUserRoles,
         tournamentId: mockTournament.id,
         formData: expect.any(FormData),
       }),

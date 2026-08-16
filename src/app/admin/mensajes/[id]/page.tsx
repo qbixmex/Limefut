@@ -1,7 +1,6 @@
 import { Suspense, type FC } from 'react';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
@@ -15,7 +14,6 @@ import { es } from 'date-fns/locale';
 import { fetchMessageAction } from '../(actions)/fetchMessageAction';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { updateMessageStatusAction } from '../(actions)/updateMessageStatusAction';
-import { headers } from 'next/headers';
 
 type Props = Readonly<{
   params: Promise<{
@@ -33,9 +31,8 @@ const MessagePage: FC<Props> = ({ params }) => {
 
 const MessageContent: FC<Props> = async ({ params }) => {
   const id = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
-  const response = await fetchMessageAction(id, session?.user.roles ?? null);
+  const response = await fetchMessageAction(id);
 
   if (!response.ok) {
     redirect(`/admin/mensajes?error=${encodeURIComponent(response.message)}`);

@@ -32,7 +32,6 @@ import { Button } from '@/components/ui/button';
 import { createUserSchema, editUserSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createUserAction } from '../(actions)';
-import type { Session } from '@/lib/auth-client';
 import type { User, ROLE_TYPE } from '@/shared/interfaces';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -47,11 +46,10 @@ const roles = [
 ];
 
 type Props = Readonly<{
-  session: Session;
   user?: User;
 }>;
 
-export const UsersForm: FC<Props> = ({ session, user }) => {
+export const UsersForm: FC<Props> = ({ user }) => {
   const route = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
@@ -89,10 +87,7 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
 
     // Create user
     if (!user) {
-      const response = await createUserAction(
-        formData,
-        session?.user.roles ?? null,
-      );
+      const response = await createUserAction(formData);
 
       if (!response.ok) {
         toast.error(response.message);
@@ -112,8 +107,6 @@ export const UsersForm: FC<Props> = ({ session, user }) => {
       const response = await updateUserAction({
         formData,
         userId: user.id,
-        userRoles: session.user.roles!,
-        authenticatedUserId: session?.user.id,
       });
 
       if (!response.ok) {

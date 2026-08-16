@@ -28,30 +28,10 @@ type FetchResponse = Promise<{
 
 export const fetchTournamentForEditAction = async ({
   tournamentId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
   tournamentId: string,
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
 }): FetchResponse => {
   'use cache';
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      tournament: null,
-    };
-  }
-
-  if (!authenticatedUserRoles || !authenticatedUserRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      tournament: null,
-    };
-  }
 
   cacheLife('days');
   cacheTag('admin-tournament');

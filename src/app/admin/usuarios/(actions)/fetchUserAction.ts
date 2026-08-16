@@ -12,20 +12,11 @@ type FetchUserResponse = Promise<{
 
 export const fetchUserAction = async (
   userId: string,
-  userRole: string[] | null,
 ): FetchUserResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-user');
-
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para editar usuarios !',
-      user: null,
-    };
-  }
 
   try {
     const user = await prisma.user.findUnique({

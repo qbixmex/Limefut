@@ -10,12 +10,8 @@ import type z from 'zod';
 import { createPlayoffMatchAction } from '../../../[playoff_id]/encuentros/(actions)/create-playoff-match.action';
 
 export const useCreatePlayoffsMatch = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   playoffId,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   playoffId: string;
 }) => {
   const router = useRouter();
@@ -41,8 +37,6 @@ export const useCreatePlayoffsMatch = ({
     formData.append('status', data.status);
 
     const { ok, message } = await createPlayoffMatchAction({
-      authenticatedUserId,
-      authenticatedUserRoles,
       playoffId,
       formData,
     });

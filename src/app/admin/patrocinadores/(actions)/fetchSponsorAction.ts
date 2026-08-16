@@ -11,21 +11,12 @@ type FetchSponsorResponse = Promise<{
 }>;
 
 export const fetchSponsorAction = async (
-  userRoles: string[] | null,
   sponsorId: string,
 ): FetchSponsorResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-sponsor');
-
-  if ((userRoles !== null) && (!userRoles.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      sponsor: null,
-    };
-  }
 
   try {
     const sponsor = await prisma.sponsor.findFirst({

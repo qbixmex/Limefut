@@ -22,7 +22,7 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
   const matchId = (await params).id;
   const session = await auth.api.getSession({ headers: await headers() });
 
-  const responseMatch = await fetchMatchAction(matchId, session?.user.roles ?? null);
+  const responseMatch = await fetchMatchAction(matchId);
 
   if (!responseMatch.ok) {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseMatch.message)}`);
@@ -67,8 +67,6 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
           tournaments={tournamentsResponse.tournaments}
           categories={categoriesResponse.categories}
           teams={responseTeams.teams}
-          authenticatedUserId={session?.user.id}
-          authenticatedUserRoles={session?.user.roles}
           match={responseMatch.match as MATCH_TYPE}
         />
       </section>

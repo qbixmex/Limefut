@@ -22,13 +22,7 @@ const DEFAULT_FORM_VALUES = {
   active: false,
 };
 
-export const useCreateTournament = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-}: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}) => {
+export const useCreateTournament = () => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof createTournamentSchema>>({
@@ -73,8 +67,6 @@ export const useCreateTournament = ({
 
     const { ok, message } = await createTournamentAction({
       formData,
-      authenticatedUserId,
-      authenticatedUserRoles,
     });
 
     if (!ok) {

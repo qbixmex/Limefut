@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
@@ -7,10 +6,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { UsersForm } from '../../(components)/usersForm';
-import { auth } from '@/lib/auth';
 import { fetchUserAction } from '../../(actions)/fetchUserAction';
 import { redirect } from 'next/navigation';
-import type { Session } from '@/lib/auth-client';
 import type { User } from '@/shared/interfaces';
 import { ROUTES } from '@/shared/constants/routes';
 
@@ -21,9 +18,8 @@ type Props = Readonly<{
 }>;
 
 export const EditUser: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const userId = (await params).id;
-  const response = await fetchUserAction(userId, session?.user.roles ?? null);
+  const response = await fetchUserAction(userId);
 
   if (!response.ok) {
     redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(response.message)}`);
@@ -38,7 +34,6 @@ export const EditUser: FC<Props> = async ({ params }) => {
           </CardHeader>
           <CardContent>
             <UsersForm
-              session={session as Session}
               user={response.user as User}
             />
           </CardContent>

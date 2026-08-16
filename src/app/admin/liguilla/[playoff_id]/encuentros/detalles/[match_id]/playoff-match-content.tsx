@@ -1,7 +1,5 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
@@ -31,12 +29,9 @@ type Props = Readonly<{
 }>;
 
 export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const { playoff_id: playoffId, match_id: matchId } = await params;
 
   const response = await fetchPlayoffMatchAction({
-    authenticatedUserId: session?.user.id,
-    authenticatedUserRoles: session?.user.roles,
     playoffId,
     matchId,
   });

@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { revalidatePath } from 'next/cache';
 import { editCredentialSchema } from '@/shared/schemas';
 import { type Credential } from '@/shared/interfaces';
@@ -15,6 +16,11 @@ export const updateCredentialAction = async (
   credentialId: string,
   formData: FormData,
 ): EditResponseAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, credential: null };
+  }
+
   const rawData = {
     fullName: formData.get('fullName') ?? '',
     playerId: formData.get('playerId') ?? '',

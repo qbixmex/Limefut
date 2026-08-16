@@ -9,8 +9,6 @@ import type { TEAM_TYPE } from '../../(actions)/fetch-team-for-edit.action';
 import { useEditTeam } from './use-edit-team';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   team: TEAM_TYPE;
   tournamentSlot: ReactNode;
   categorySlot: ReactNode;
@@ -19,19 +17,13 @@ type Props = Readonly<{
 }>;
 
 export const EditTeamForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   team,
   tournamentSlot,
   categorySlot,
   coachesSlot,
   fieldsSlot,
 }) => {
-  const { form, onSubmit, handleNavigateBack } = useEditTeam({
-    authenticatedUserId,
-    authenticatedUserRoles,
-    team,
-  });
+  const { form, onSubmit, handleNavigateBack } = useEditTeam({ team });
 
   return (
     <Form {...form}>

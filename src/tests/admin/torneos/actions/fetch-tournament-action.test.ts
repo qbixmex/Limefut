@@ -55,7 +55,6 @@ describe('Tests on tournament server action', () => {
 
     const response = await fetchTournamentAction(
       tournamentMock.id,
-      ['user', 'admin'],
     );
 
     expect(response.ok).toBe(true);
@@ -112,33 +111,11 @@ describe('Tests on tournament server action', () => {
     });
   });
 
-  test('Should not return a tournament when userRoles is null', async () => {
-    const response = await fetchTournamentAction(tournamentMock.id, null);
-
-    expect(response.ok).toBe(false);
-    expect(response.tournament).toBe(null);
-    expect(response.message).toContain('permisos administrativos');
-    expect(mockFindFirst).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when user does not have admin role', async () => {
-    const response = await fetchTournamentAction(
-      tournamentMock.id,
-      ['user'],
-    );
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(response.tournament).toBe(null);
-    expect(mockFindFirst).not.toHaveBeenCalled();
-  });
-
   test('Should return error when tournament is not found', async () => {
     mockFindFirst.mockResolvedValue(null);
 
     const response = await fetchTournamentAction(
       'dc233c07-9790-439f-9f50-88b86a13eb62',
-      ['user', 'admin'],
     );
 
     expect(response.ok).toBe(false);
@@ -151,7 +128,6 @@ describe('Tests on tournament server action', () => {
 
     const response = await fetchTournamentAction(
       tournamentMock.id,
-      ['user', 'admin'],
     );
 
     expect(response.ok).toBe(false);
@@ -164,7 +140,6 @@ describe('Tests on tournament server action', () => {
 
     const response = await fetchTournamentAction(
       tournamentMock.id,
-      ['user', 'admin'],
     );
 
     expect(response.ok).toBe(false);

@@ -6,6 +6,7 @@ import { uploadImage } from '@/shared/actions';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { createTournamentSchema } from '@/shared/schemas';
 import { revalidatePath, updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -15,25 +16,14 @@ type ResponseCreateAction = Promise<{
 
 export const createTournamentAction = async ({
   formData,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   formData: FormData;
 }): ResponseCreateAction => {
-  if (!authenticatedUserId) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ Usuario no autenticado !',
-      tournament: null,
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       tournament: null,
     };
   }

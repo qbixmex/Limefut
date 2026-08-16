@@ -3,8 +3,6 @@ import { TeamsFormSelect } from './teams-form-select';
 import { fetchTeamsAction } from '../../../(actions)/fetch-teams.action';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournamentPermalink: string | undefined;
   categoryPermalink: string | undefined;
 }>;
@@ -16,8 +14,6 @@ type TEAM_TYPE = {
 };
 
 export const TeamsSelectField: FC<Props> = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   tournamentPermalink,
   categoryPermalink,
 }) => {
@@ -25,8 +21,6 @@ export const TeamsSelectField: FC<Props> = async ({
 
   if (tournamentPermalink && categoryPermalink) {
     const response = await fetchTeamsAction({
-      authenticatedUserId,
-      authenticatedUserRoles,
       tournamentPermalink,
     });
     if (response.ok) {

@@ -36,7 +36,6 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
       totalPages: 1,
     },
   } = await fetchMessagesAction({
-    userRoles: session?.user.roles as string[],
     page: Number(currentPage),
     take: 12,
     searchTerm: query,

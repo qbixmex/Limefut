@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from '@/shared/actions';
 import { editTeamSchema } from '@/shared/schemas';
@@ -41,30 +42,15 @@ type TEAM_TYPE = {
 };
 
 export const updateTeamAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   formData,
   teamId,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   formData: FormData;
   teamId: string;
 }): ResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      updatedTeam: null,
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      updatedTeam: null,
-    };
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, updatedTeam: null };
   }
 
   const rawData = {

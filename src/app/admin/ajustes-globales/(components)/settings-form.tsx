@@ -19,7 +19,6 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
-import type { Session } from '@/lib/auth-client';
 import { getSiteLanguage } from '@/lib/utils';
 import { LANGUAGE } from '@/shared/enums';
 import type { GlobalSettings } from '@/shared/interfaces';
@@ -31,7 +30,6 @@ import { FormImage } from './form-image';
 import CharactersCounter from '@/shared/components/characters-counter';
 
 type Props = Readonly<{
-  session: Session;
   globalSettings: GlobalSettings | null;
 }>;
 
@@ -40,7 +38,7 @@ type CountCharacters = {
   focused: boolean;
 };
 
-export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
+export const SettingsForm: FC<Props> = ({ globalSettings }) => {
   const form = useForm<z.infer<typeof GlobalSettingsSchema>>({
     resolver: zodResolver(GlobalSettingsSchema),
     defaultValues: {
@@ -122,10 +120,7 @@ export const SettingsForm: FC<Props> = ({ session, globalSettings }) => {
     }
 
     // Upsert video
-    const response = await upsertGlobalSettingsAction(
-      formData,
-      session?.user.roles ?? null,
-    );
+    const response = await upsertGlobalSettingsAction(formData);
 
     if (!response.ok) {
       toast.error(response.message);
