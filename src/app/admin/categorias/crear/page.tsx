@@ -1,11 +1,10 @@
-import { Suspense } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CreateCategoryView } from './create-category-view';
+import { CreateCategoryForm } from '../(components)/create-category-form';
 
 const CreateCategoryPage = async () => {
   return (
@@ -22,9 +21,7 @@ const CreateCategoryPage = async () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="h-full">
-            <Suspense>
-              <CreateCategoryView />
-            </Suspense>
+            <CreateCategoryForm />
           </CardContent>
         </Card>
       </div>

@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { fetchCategoryAction } from '../../(actions)/fetch-category.action';
 import { EditCategoryForm } from '../../(components)/edit-category-form';
@@ -14,18 +13,13 @@ type Props = Readonly<{
 export const EditCategoryView: FC<Props> = async ({ params }) => {
   const categoryId = (await params).id;
 
-  const { ok, message, category } = await fetchCategoryAction({
-    categoryId,
-  });
+  const { ok, message, category } = await fetchCategoryAction(categoryId);
 
   if (!ok) {
     redirect(`${ROUTES.ADMIN_CATEGORIES}?error=${encodeURIComponent(message)}`);
   }
 
   return (
-    <EditCategoryForm
-      key={randomUUID()}
-      category={category!}
-    />
+    <EditCategoryForm category={category!} />
   );
 };

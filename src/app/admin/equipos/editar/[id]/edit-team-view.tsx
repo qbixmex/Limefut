@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { CategorySelectField } from '../../(components)/form-fields/category-select-field';
 import { TournamentSelectField } from '../../(components)/form-fields/tournament-select-field';
@@ -26,7 +25,6 @@ export const EditTeamView: FC<Props> = async ({ paramsPromise }) => {
 
   return (
     <EditTeamForm
-      key={randomUUID()}
       team={team}
       tournamentSlot={<TournamentSelectField />}
       categorySlot={<CategorySelectField />}

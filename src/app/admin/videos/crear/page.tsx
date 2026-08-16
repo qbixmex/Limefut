@@ -1,9 +1,7 @@
-import { randomUUID } from 'node:crypto';
-import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { VideoForm } from '../(components)/video-form';
 
-const CreateVideoPage: FC = async () => {
+const CreateVideoPage = () => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -12,9 +10,7 @@ const CreateVideoPage: FC = async () => {
             <CardTitle className="admin-page-card-title">Crear Video</CardTitle>
           </CardHeader>
           <CardContent>
-            <VideoForm
-              key={randomUUID()}
-            />
+            <VideoForm />
           </CardContent>
         </Card>
       </div>

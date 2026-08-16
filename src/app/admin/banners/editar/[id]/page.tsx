@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { redirect } from 'next/navigation';
@@ -36,7 +35,6 @@ const EditHeroBannerContent: FC<Props> = async ({ params }) => {
           </CardHeader>
           <CardContent>
             <BannerForm
-              key={randomUUID()}
               heroBanner={response.heroBanner}
             />
           </CardContent>

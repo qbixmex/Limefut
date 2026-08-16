@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { redirect } from 'next/navigation';
@@ -38,7 +37,6 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
           </CardHeader>
           <CardContent>
             <EditAnnouncementForm
-              key={randomUUID()}
               announcement={announcement as ANNOUNCEMENT_TYPE}
             />
           </CardContent>
