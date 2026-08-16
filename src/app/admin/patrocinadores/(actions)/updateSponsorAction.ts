@@ -30,8 +30,12 @@ export const updateSponsorAction = async ({
   const rawData = {
     name: formData.get('name') as string,
     url: formData.get('url') ?? undefined,
-    startDate: new Date(formData.get('startDate') as string) ?? new Date(),
-    endDate: new Date(formData.get('endDate') as string) ?? new Date(),
+    startDate: formData.get('startDate')
+      ? new Date(formData.get('startDate') as string)
+      : null,
+    endDate: formData.get('endDate')
+      ? new Date(formData.get('endDate') as string)
+      : null,
     image: formData.get('image') as File,
     clicks: parseInt(formData.get('clicks') as string ?? '0'),
     alignment: formData.get('alignment') ?? '',

@@ -2,7 +2,6 @@
 
 .announcements {
   width: 100%;
-  max-width: 288px;
   border: 1px var(--color-gray-400) solid;
   overflow: hidden;
 
