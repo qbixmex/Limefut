@@ -58,8 +58,6 @@ export const upsertGlobalSettingsAction = async (formData: FormData): ResponseCr
 
     // Analytics
     googleAnalyticsId: formData.get('googleAnalyticsId') ?? undefined,
-    googleTagManager: formData.get('googleTagManager') ?? undefined,
-    metaPixelId: formData.get('metaPixelId') ?? undefined,
 
     // Emails
     contactEmail: formData.get('contactEmail') ?? undefined,
@@ -219,7 +217,7 @@ export const upsertGlobalSettingsAction = async (formData: FormData): ResponseCr
   }
 };
 
-const handleUploadImage = async ({
+export const handleUploadImage = async ({
   publicId,
   imageFile,
   folder,

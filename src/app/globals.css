@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where([class~="dark"], [class~="dark"] *));
 
 :root {
   --radius: 0.65rem;
