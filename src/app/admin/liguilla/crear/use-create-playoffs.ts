@@ -16,13 +16,7 @@ const DEFAULT_FORM_VALUES = {
   startingRound: '',
 };
 
-export const useCreatePlayoffs = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-}: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}) => {
+export const useCreatePlayoffs = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -46,8 +40,6 @@ export const useCreatePlayoffs = ({
 
     const { ok, message } = await createPlayoffAction({
       formData,
-      authenticatedUserId,
-      authenticatedUserRoles,
     });
 
     if (!ok) {

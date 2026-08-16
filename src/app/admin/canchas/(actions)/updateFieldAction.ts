@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 import { editFieldSchema } from '@/shared/schemas';
 import type { Field } from '@/shared/interfaces';
@@ -9,8 +10,6 @@ import { Prisma } from '@/generated/prisma/client';
 type Options = {
   formData: FormData;
   fieldId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
 };
 
 type EditResponseAction = Promise<{
@@ -22,21 +21,13 @@ type EditResponseAction = Promise<{
 export const updateFieldAction = async ({
   formData,
   fieldId,
-  userRoles,
-  authenticatedUserId,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      field: null,
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (!userRoles.includes('admin')) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       field: null,
     };
   }

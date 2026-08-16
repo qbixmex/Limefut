@@ -2,6 +2,7 @@
 
 import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { uploadImage } from '@/shared/actions';
 import type { CloudinaryResponse } from '@/shared/interfaces/Cloudinary';
 
@@ -14,6 +15,11 @@ export const uploadPageContentImageAction = async (
   file: File,
   pageId?: string,
 ): UploadArticleImageResponse => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { message: guard.message, cloudinaryResponse: null };
+  }
+
   const imageUploaded = await uploadImage(file, 'pages');
 
   if (!imageUploaded) {

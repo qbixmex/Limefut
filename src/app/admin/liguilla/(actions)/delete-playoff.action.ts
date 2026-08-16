@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -9,6 +10,15 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deletePlayoffAction = async (id: string): ResponseDeleteAction => {
+  const guard = await requireAdmin();
+
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+    };
+  }
+
   try {
     const playoff = await prisma.playoff.findFirst({
       where: { id },

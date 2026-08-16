@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -10,6 +11,15 @@ export type ResponseAction = Promise<{
 }>;
 
 export const updatePlayoffMatchStatusAction = async (matchId: string, status: MATCH_STATUS_TYPE): ResponseAction => {
+  const guard = await requireAdmin();
+
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+    };
+  }
+
   const updatedMatch = await prisma.playoffMatch.update({
     where: { id: matchId },
     data: { status },

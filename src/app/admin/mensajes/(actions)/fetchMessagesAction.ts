@@ -6,7 +6,6 @@ import type { ContactMessage, Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
-  userRoles: string[] | null,
   searchTerm?: string;
   page?: number;
   take?: number;
@@ -24,15 +23,6 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
 
   cacheLife('weeks');
   cacheTag('admin-messages');
-
-  if ((options?.userRoles !== null) && (!options?.userRoles.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      messages: null,
-      pagination: null,
-    };
-  }
 
   let { page = 1, take = 12 } = options ?? {};
 

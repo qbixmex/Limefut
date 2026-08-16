@@ -1,9 +1,22 @@
-const { mockCount, mockUpdate } = vi.hoisted(() => ({
+const { mockCount, mockUpdate, mockGetSession } = vi.hoisted(() => ({
   mockCount: vi.fn(),
   mockUpdate: vi.fn(),
+  mockGetSession: vi.fn(),
 }));
 
 vi.mock('next/cache');
+
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: mockGetSession,
+    },
+  },
+}));
 
 vi.mock('@/lib/prisma', () => ({
   default: {
@@ -19,74 +32,69 @@ import { updatePlayerStateAction } from '@/app/admin/jugadores/(actions)/updateP
 describe('Tests on update player state server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
   });
 
-  test('Should return error when authenticated user id is undefined', async () => {
+  test('Should return error when user is not authenticated', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await updatePlayerStateAction({
       id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
       state: true,
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['admin'],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/autentificado/i);
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
-  test('Should return error when authenticated user id is null', async () => {
+  test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['user'] },
+    });
+
     const response = await updatePlayerStateAction({
       id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
       state: true,
-      authenticatedUserId: null,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/autentificado/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
   test('Should return error when authenticated user roles is null', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: null },
+    });
+
     const response = await updatePlayerStateAction({
       id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
       state: true,
-      authenticatedUserId: '4c20f4f2-21f5-47ca-9b4a-dafe2335a993',
-      authenticatedUserRoles: null,
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
-    expect(mockCount).not.toHaveBeenCalled();
-    expect(mockUpdate).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when authenticated user roles does not include admin', async () => {
-    const response = await updatePlayerStateAction({
-      id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
-      state: true,
-      authenticatedUserId: '4c20f4f2-21f5-47ca-9b4a-dafe2335a993',
-      authenticatedUserRoles: ['user'],
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
   test('Should return error when authenticated user roles is empty', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: [] },
+    });
+
     const response = await updatePlayerStateAction({
       id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
       state: true,
-      authenticatedUserId: '4c20f4f2-21f5-47ca-9b4a-dafe2335a993',
-      authenticatedUserRoles: [],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -97,8 +105,6 @@ describe('Tests on update player state server action', () => {
     const response = await updatePlayerStateAction({
       id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
       state: true,
-      authenticatedUserId: '4c20f4f2-21f5-47ca-9b4a-dafe2335a993',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -119,8 +125,6 @@ describe('Tests on update player state server action', () => {
     const response = await updatePlayerStateAction({
       id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
       state: true,
-      authenticatedUserId: '4c20f4f2-21f5-47ca-9b4a-dafe2335a993',
-      authenticatedUserRoles: ['admin'],
     });
 
     expect(response.ok).toBe(true);
@@ -143,8 +147,6 @@ describe('Tests on update player state server action', () => {
     const response = await updatePlayerStateAction({
       id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
       state: false,
-      authenticatedUserId: '4c20f4f2-21f5-47ca-9b4a-dafe2335a993',
-      authenticatedUserRoles: ['admin'],
     });
 
     expect(response.ok).toBe(true);

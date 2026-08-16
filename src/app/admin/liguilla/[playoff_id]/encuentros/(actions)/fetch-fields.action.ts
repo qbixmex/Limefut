@@ -14,30 +14,8 @@ export type FIELD_TYPE = {
   name: string;
 };
 
-export const fetchFieldsAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-}: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}): ResponseFetchAction => {
+export const fetchFieldsAction = async (): ResponseFetchAction => {
   'use cache';
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción  ❌ !',
-      fields: [],
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción  ❌ !',
-      fields: [],
-    };
-  }
 
   cacheLife('days');
   cacheTag('admin-fields');

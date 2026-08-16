@@ -16,8 +16,6 @@ vi.mock('@/app/admin/torneos/(components)/form-fields', () => ({
 }));
 
 const defaultProps = {
-  authenticatedUserId: '7589cfc5-2f26-4a5f-91b3-91fac387ae16',
-  authenticatedUserRoles: ['user', 'admin'],
   tournament: mockTournament,
   categorySlot: null,
 };

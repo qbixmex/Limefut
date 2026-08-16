@@ -2,6 +2,7 @@
 
 import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { deleteImage } from '@/shared/actions';
 
 type DeleteContentImageResponse = {
@@ -17,6 +18,11 @@ export const deleteContentImageAction = async (
   pageId: string,
   publicId: string,
 ): Promise<DeleteContentImageResponse> => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, customPageImages: null };
+  }
+
   const customPageImage = await prisma.customPage.findFirst({
     where: { id: pageId },
     select: {

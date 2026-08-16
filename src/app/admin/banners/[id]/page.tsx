@@ -1,7 +1,5 @@
 import { Suspense, type FC } from 'react';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -35,9 +33,8 @@ const HeroBannerPage: FC<Props> = ({ params }) => {
 
 const HeroBannerContent: FC<Props> = async ({ params }) => {
   const pageId = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
-  const response = await fetchHeroBannerAction(session?.user?.roles ?? [], pageId);
+  const response = await fetchHeroBannerAction(pageId);
 
   if (!response.ok) {
     redirect(`/admin/banners?error=${encodeURIComponent(response.message)}`);

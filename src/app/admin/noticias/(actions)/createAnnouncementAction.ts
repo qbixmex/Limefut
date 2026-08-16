@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma';
 import type { Announcement, CloudinaryResponse } from '@/shared/interfaces';
 import { CreateAnnouncementSchema } from '@/shared/schemas';
 import { uploadImage } from '@/shared/actions';
+import { requireAdmin } from '@/lib/get-session';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -14,25 +15,14 @@ type ResponseCreateAction = Promise<{
 
 export const createAnnouncementAction = async ({
   formData,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
   formData: FormData,
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
 }): ResponseCreateAction => {
-  if ((!authenticatedUserId)) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ Tienes que estar autentificado para realizar esta acción !',
-      announcement: null,
-    };
-  }
-
-  if ((!authenticatedUserRoles?.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       announcement: null,
     };
   }

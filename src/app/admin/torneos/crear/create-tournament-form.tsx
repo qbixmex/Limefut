@@ -9,21 +9,14 @@ import { useCreateTournament } from './use-create-tournament';
 import { FormFields } from '../(components)/form-fields';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournament?: TOURNAMENT_TYPE;
   categorySlot: ReactNode;
 }>;
 
 export const CreateTournamentForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   categorySlot,
 }) => {
-  const { form, onSubmit, handleNavigateBack } = useCreateTournament({
-    authenticatedUserId,
-    authenticatedUserRoles,
-  });
+  const { form, onSubmit, handleNavigateBack } = useCreateTournament();
 
   return (
     <Form {...form}>

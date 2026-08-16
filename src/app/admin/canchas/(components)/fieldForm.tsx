@@ -21,16 +21,14 @@ import { Button } from '@/components/ui/button';
 import { createFieldSchema, editFieldSchema } from '@/shared/schemas';
 import type { Field } from '@/shared/interfaces';
 import { createFieldAction, updateFieldAction } from '../(actions)';
-import type { Session } from '@/lib/auth-client';
 import { slugify } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
-  session: Session;
   field?: Field;
 }>;
 
-export const FieldForm: FC<Props> = ({ session, field }) => {
+export const FieldForm: FC<Props> = ({ field }) => {
   const route = useRouter();
   const formSchema = !field ? createFieldSchema : editFieldSchema;
   const isPermalinkEdited = useRef(false);
@@ -73,10 +71,7 @@ export const FieldForm: FC<Props> = ({ session, field }) => {
 
     // Create Field
     if (!field) {
-      const response = await createFieldAction(
-        formData,
-        session?.user.roles ?? null,
-      );
+      const response = await createFieldAction(formData);
 
       if (!response.ok) {
         if (response.message.includes('enlace permanente')) {
@@ -98,8 +93,6 @@ export const FieldForm: FC<Props> = ({ session, field }) => {
       const response = await updateFieldAction({
         formData,
         fieldId: field.id as string,
-        userRoles: session.user.roles as string[],
-        authenticatedUserId: session?.user.id,
       });
 
       if (!response.ok) {

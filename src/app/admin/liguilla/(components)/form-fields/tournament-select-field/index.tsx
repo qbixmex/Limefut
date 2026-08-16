@@ -4,19 +4,8 @@ import { fetchTournamentsAction } from '../../../(actions)/fetch-tournaments.act
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
 
-type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}>;
-
-export const TournamentSelectField: FC<Props> = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-}) => {
-  const { ok, message, tournaments } = await fetchTournamentsAction({
-    authenticatedUserId,
-    authenticatedUserRoles,
-  });
+export const TournamentSelectField: FC = async () => {
+  const { ok, message, tournaments } = await fetchTournamentsAction();
 
   if (!ok) {
     redirect(`${ROUTES.ADMIN_PLAYOFFS}?error=${encodeURIComponent(message)}`);

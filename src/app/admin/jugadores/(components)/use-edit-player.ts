@@ -26,12 +26,10 @@ type PlayerType = {
 };
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   player: PlayerType;
 }>;
 
-export const useEditPlayer = ({ authenticatedUserId, authenticatedUserRoles, player }: Props) => {
+export const useEditPlayer = ({ player }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -65,8 +63,6 @@ export const useEditPlayer = ({ authenticatedUserId, authenticatedUserRoles, pla
     const { ok, message } = await updatePlayerAction({
       formData,
       playerId: player.id,
-      authenticatedUserRoles,
-      authenticatedUserId,
     });
 
     if (!ok) {

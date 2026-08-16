@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { Container, Footer, Header } from './components';
 import { fetchPublicGlobalSettingsAction } from '../admin/ajustes-globales/(actions)/fetchPublicGlobalSettingsAction';
-import { GoogleTagManager } from '@next/third-parties/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import '@/app/globals.css';
 

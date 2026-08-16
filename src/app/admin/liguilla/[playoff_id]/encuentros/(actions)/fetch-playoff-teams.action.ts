@@ -15,31 +15,11 @@ export type TEAM_TYPE = {
 };
 
 export const fetchPlayoffTeamsAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   playoffId,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   playoffId: string;
 }): ResponseFetchAction => {
   'use cache';
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción  ❌ !',
-      teams: [],
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción  ❌ !',
-      teams: [],
-    };
-  }
 
   cacheLife('days');
   cacheTag('admin-playoff-teams');

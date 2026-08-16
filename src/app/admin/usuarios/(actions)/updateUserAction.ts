@@ -7,12 +7,11 @@ import bcrypt from 'bcryptjs';
 import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from '@/shared/actions';
 import { isPasswordInsecure } from '@/lib/passwords_check';
+import { requireAdmin } from '@/lib/get-session';
 
 type Options = {
   formData: FormData;
   userId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
 };
 
 type EditResponseAction = Promise<{
@@ -24,21 +23,12 @@ type EditResponseAction = Promise<{
 export const updateUserAction = async ({
   formData,
   userId,
-  userRoles,
-  authenticatedUserId,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ Usuario no autenticado !',
-      user: null,
-    };
-  }
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       user: null,
     };
   }

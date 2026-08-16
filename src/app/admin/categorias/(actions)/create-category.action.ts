@@ -2,6 +2,7 @@
 
 import { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import type { Category } from '@/shared/interfaces';
 import { createCategorySchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
@@ -13,26 +14,16 @@ type ResponseCreateAction = Promise<{
 }>;
 
 export const createCategoryAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   formData,
 }: {
-  authenticatedUserId: string | null | undefined,
-  authenticatedUserRoles: string[] | null | undefined,
   formData: FormData,
 }): ResponseCreateAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      category: null,
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (!authenticatedUserRoles?.includes('admin')) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       category: null,
     };
   }

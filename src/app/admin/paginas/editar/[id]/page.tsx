@@ -1,12 +1,10 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchPageAction, type PageType } from '../../(actions)/fetchPageAction';
 import { PageForm } from '../../(components)/page-form';
@@ -19,16 +17,8 @@ type Props = Readonly<{
 
 export const EditCustomPage: FC<Props> = async ({ params }) => {
   const pageId = (await params).id;
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
 
-  if (session && !(session.user.roles as string[]).includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para actualizar páginas !';
-    redirect(`/admin/paginas?error=${encodeURIComponent(message)}`);
-  }
-
-  const response = await fetchPageAction(session?.user.roles ?? [], pageId);
+  const response = await fetchPageAction(pageId);
 
   if (!response.page) {
     const message = `¡ La página con el id: "${pageId}", no existe ❌ !`;

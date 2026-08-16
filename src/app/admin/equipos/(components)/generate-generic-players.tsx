@@ -8,19 +8,17 @@ import { cn } from '~/src/lib/utils';
 import { Loader } from 'lucide-react';
 
 type Props = {
-  userRoles: string[] | undefined;
   teamId: string;
   gender: 'male' | 'female',
 };
 
-export const GenerateGenericPlayers: FC<Props> = ({ userRoles, teamId, gender }) => {
+export const GenerateGenericPlayers: FC<Props> = ({ teamId, gender }) => {
   const [generatingPlayers, setGeneratingPlayers] = useState(false);
 
   const handleGeneratePlayers = async () => {
     setGeneratingPlayers(true);
 
     const { ok, message } = await generatePlayersAction({
-      userRoles,
       teamId,
       gender,
     });

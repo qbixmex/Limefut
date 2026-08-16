@@ -3,6 +3,7 @@ const {
   mockTransaction,
   mockUploadImage,
   mockDeleteImage,
+  mockGetSession,
 } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
@@ -22,10 +23,23 @@ const {
     mockTransaction: vi.fn(),
     mockUploadImage: vi.fn(),
     mockDeleteImage: vi.fn(),
+    mockGetSession: vi.fn(),
   };
 });
 
 vi.mock('next/cache');
+
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: mockGetSession,
+    },
+  },
+}));
 
 vi.mock('@/lib/prisma', () => ({
   default: {
@@ -88,6 +102,9 @@ describe('Tests on update player action server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
     mockTx.player.count.mockResolvedValue(1);
     mockTx.player.update.mockResolvedValue(mockUpdatedPlayer);
     mockTransaction.mockImplementation(
@@ -99,72 +116,64 @@ describe('Tests on update player action server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticated user id is undefined', async () => {
+  test('Should return error when user is not authenticated', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/autentificado/i);
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
-  test('Should return error when authenticated user id is null', async () => {
+  test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['user'] },
+    });
+
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: null,
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/autentificado/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should return error when authenticated user roles is null', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: null },
+    });
+
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: null,
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
-    expect(response.player).toBe(null);
-    expect(mockTransaction).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when authenticated user roles does not include admin', async () => {
-    const response = await updatePlayerAction({
-      playerId,
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: ['user'],
-      formData: validFormData(),
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should return error when authenticated user roles is empty', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: [] },
+    });
+
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: '19fafe1d-6847-450c-a5a7-80f61c80ed4f',
-      authenticatedUserRoles: [],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
@@ -175,8 +184,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: '7ab083c7-9389-4842-8735-1dd283eaf3c4',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -191,8 +198,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -205,8 +210,6 @@ describe('Tests on update player action server action', () => {
   test('Should update a player without image', async () => {
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -253,8 +256,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: '9e16e6ff-d20b-408c-b316-7d3edaeb66f9',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -279,8 +280,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: '9e16e6ff-d20b-408c-b316-7d3edaeb66f9',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -306,8 +305,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: 'fb5b126d-31fd-477a-b190-09c5d266be69',
-      authenticatedUserRoles: ['admin'],
       formData,
     });
 
@@ -327,8 +324,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: '987df461-89c3-4050-bf44-4d4dc4a3e9a1',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -348,8 +343,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: 'fdbd8d2f-ece3-4cb7-9417-b3e4b4086399',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -363,8 +356,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: '14b74b98-bba8-4798-be65-a002fb1912d9',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -378,8 +369,6 @@ describe('Tests on update player action server action', () => {
 
     const response = await updatePlayerAction({
       playerId,
-      authenticatedUserId: 'b08bbbc1-0191-4561-932f-eaeef6a6b4ba',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 

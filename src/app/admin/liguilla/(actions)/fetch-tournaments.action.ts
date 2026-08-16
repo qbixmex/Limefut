@@ -15,33 +15,11 @@ export type ResponseAction = Promise<{
   tournaments: TOURNAMENT_TYPE[];
 }>;
 
-export const fetchTournamentsAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-} : {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}): ResponseAction => {
+export const fetchTournamentsAction = async (): ResponseAction => {
   'use cache';
 
   cacheLife('max');
   cacheTag('admin-tournaments');
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      tournaments: [],
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos para realizar esta acción !',
-      tournaments: [],
-    };
-  }
 
   try {
     const tournaments = await prisma.tournament.findMany({

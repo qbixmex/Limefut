@@ -34,7 +34,6 @@ export const SponsorsTable: FC<Props> = async ({
     sponsors = [],
     pagination,
   } = await fetchSponsorsAction({
-    userRoles: session?.user.roles ?? [],
     page: currentPage as number,
     take: 12,
     searchTerm: query,

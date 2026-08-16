@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { createCredentialSchema } from '@/shared/schemas';
 import { revalidatePath } from 'next/cache';
 import type { Credential } from '@/shared/interfaces';
@@ -12,6 +13,11 @@ type CreateResponseAction = Promise<{
 }>;
 
 export const createCredentialAction = async (formData: FormData): CreateResponseAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, credential: null };
+  }
+
   const rawData = {
     fullName: formData.get('fullName') ?? '',
     playerId: formData.get('playerId') ?? '',

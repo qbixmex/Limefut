@@ -27,65 +27,11 @@ describe('Tests on fetchPlayerAction server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should not allow to return a player if user is not authenticated', async () => {
-    const response = await fetchPlayerAction({
-      playerId,
-      authenticatedUserId: null,
-      authenticatedUserRoles: ['user', 'admin'],
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/autentificado/i);
-    expect(response.player).toBe(null);
-    expect(mockFindUnique).not.toHaveBeenCalled();
-  });
-
-  test('Should not allow to return a player when userRoles is null', async () => {
-    const response = await fetchPlayerAction({
-      playerId,
-      authenticatedUserId: '2a734ef5-f019-4fb4-85a8-1ebc032f440d',
-      authenticatedUserRoles: null,
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.player).toBe(null);
-    expect(response.message).toMatch(/permisos administrativos/i);
-    expect(mockFindUnique).not.toHaveBeenCalled();
-  });
-
-  test('Should reject when userRole does not include admin', async () => {
-    const response = await fetchPlayerAction({
-      playerId,
-      authenticatedUserId: '2a734ef5-f019-4fb4-85a8-1ebc032f440d',
-      authenticatedUserRoles: ['user'],
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
-    expect(response.player).toBe(null);
-    expect(mockFindUnique).not.toHaveBeenCalled();
-  });
-
-  test('Should reject when userRole is empty array', async () => {
-    const response = await fetchPlayerAction({
-      playerId,
-      authenticatedUserId: '2a734ef5-f019-4fb4-85a8-1ebc032f440d',
-      authenticatedUserRoles: [],
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
-    expect(response.player).toBeNull();
-    expect(mockFindUnique).not.toHaveBeenCalled();
-  });
-
-  test('Should return player when user roles includes admin', async () => {
+  test('Should return player', async () => {
     mockFindUnique.mockResolvedValue(playerMock);
 
     const response = await fetchPlayerAction({
       playerId,
-      authenticatedUserId: '2a734ef5-f019-4fb4-85a8-1ebc032f440d',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(true);
@@ -99,8 +45,6 @@ describe('Tests on fetchPlayerAction server action', () => {
 
     const response = await fetchPlayerAction({
       playerId,
-      authenticatedUserId: '2a734ef5-f019-4fb4-85a8-1ebc032f440d',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -113,8 +57,6 @@ describe('Tests on fetchPlayerAction server action', () => {
 
     const response = await fetchPlayerAction({
       playerId,
-      authenticatedUserId: '2a734ef5-f019-4fb4-85a8-1ebc032f440d',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -127,8 +69,6 @@ describe('Tests on fetchPlayerAction server action', () => {
 
     const response = await fetchPlayerAction({
       playerId,
-      authenticatedUserId: '2a734ef5-f019-4fb4-85a8-1ebc032f440d',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);

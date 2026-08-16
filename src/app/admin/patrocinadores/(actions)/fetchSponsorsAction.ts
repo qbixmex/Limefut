@@ -6,7 +6,6 @@ import prisma from '@/lib/prisma';
 import type { Pagination } from '@/shared/interfaces';
 
 type Options = Readonly<{
-  userRoles: string[];
   page?: number;
   take?: number;
   searchTerm?: string;
@@ -37,15 +36,6 @@ export const fetchSponsorsAction = async (options: Options): ResponseFetch => {
 
   cacheLife('days');
   cacheTag('admin-sponsors');
-
-  if (!options.userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      sponsors: [],
-      pagination: null,
-    };
-  }
 
   let { page = 1, take = 12 } = options ?? {};
 

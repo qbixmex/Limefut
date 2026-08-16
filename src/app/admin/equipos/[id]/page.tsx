@@ -44,7 +44,7 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
   });
   const teamId = (await params).id;
 
-  const response = await fetchTeamAction(teamId, session?.user.roles ?? null);
+  const response = await fetchTeamAction(teamId);
 
   if (!response.ok) {
     redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(response.message)}`);
@@ -181,7 +181,6 @@ const TeamPageContent: FC<Props> = async ({ params }) => {
                         </div>
                         <GenerateGenericPlayers
                           teamId={team.id}
-                          userRoles={session?.user.roles as string[]}
                           gender={team.gender}
                         />
                       </section>

@@ -41,30 +41,10 @@ type CATEGORY_TYPE = {
 
 export const fetchTeamForEditAction = async ({
   teamId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
   teamId: string,
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
 }): FetchResponse => {
   'use cache';
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      team: null,
-    };
-  }
-
-  if ((!authenticatedUserRoles?.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      team: null,
-    };
-  }
 
   cacheLife('days');
   cacheTag('admin-team');

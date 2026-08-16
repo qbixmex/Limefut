@@ -11,8 +11,6 @@ import { FormFields } from '../(components)/form-fields';
 import { useCreateMatch } from '../crear/use-create-match';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournaments: TOURNAMENT_TYPE[];
   categories: CATEGORY_TYPE[];
   teams: TEAM_TYPE[];
@@ -22,13 +20,8 @@ export const CreateMatchForm: FC<Props> = ({
   tournaments,
   categories,
   teams,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }) => {
-  const { form, onSubmit, handleNavigateBack } = useCreateMatch({
-    authenticatedUserId,
-    authenticatedUserRoles,
-  });
+  const { form, onSubmit, handleNavigateBack } = useCreateMatch();
 
   return (
     <section className="mt-10">

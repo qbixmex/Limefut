@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import type { PenaltyShootout } from '@/shared/interfaces';
 import { SimplePenaltyShootoutsSchema } from '~/src/shared/schemas';
+import { requireAdmin } from '@/lib/get-session';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -13,12 +14,13 @@ type CreateResponseAction = Promise<{
 
 export const createPlayoffSimplePenaltyShootoutAction = async (
   formData: FormData,
-  userRoles: string[] | null | undefined,
 ): CreateResponseAction => {
-  if ((userRoles) && (!userRoles.includes('admin'))) {
+  const guard = await requireAdmin();
+
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       penaltyShootout: null,
     };
   }

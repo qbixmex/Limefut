@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 
 export type ResponseDeleteAction = Promise<{
@@ -9,6 +10,11 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const updateTeamStateAction = async (id: string, state: boolean): ResponseDeleteAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
+  }
+
   const teamExists = await prisma.team.count({
     where: { id },
   });

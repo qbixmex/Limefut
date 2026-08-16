@@ -1,12 +1,10 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchCredentialAction, fetchPlayersForCredentialForm } from '../../(actions)';
 import { CredentialForm } from '../../(components)/CredentialForm';
@@ -19,9 +17,8 @@ type Props = Readonly<{
 }>;
 
 export const EditCredential: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const id = (await params).id;
-  const responseCredentialAction = await fetchCredentialAction(id, session?.user.roles ?? null);
+  const responseCredentialAction = await fetchCredentialAction(id);
 
   if (!responseCredentialAction.ok) {
     redirect(`/admin/credenciales?error=${encodeURIComponent(responseCredentialAction.message)}`);

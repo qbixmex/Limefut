@@ -19,21 +19,12 @@ type FetchResponse = Promise<{
 }>;
 
 export const fetchPageAction = async (
-  userRoles: string[],
   pageId: string,
 ): FetchResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-page');
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      page: null,
-    };
-  }
 
   try {
     const page = await prisma.customPage.findFirst({

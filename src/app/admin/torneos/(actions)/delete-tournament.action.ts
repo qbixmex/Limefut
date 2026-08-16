@@ -4,8 +4,7 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { deleteImage } from '@/shared/actions';
 import { Prisma } from '@/generated/prisma/client';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -13,19 +12,11 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteTournamentAction = async (tournamentId: string): ResponseDeleteAction => {
-  const session = await auth.api.getSession({ headers: await headers() });
-
-  if (!session?.user) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-    };
-  }
-
-  if (!session.user.roles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
     };
   }
 

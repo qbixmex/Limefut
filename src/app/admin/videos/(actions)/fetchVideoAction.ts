@@ -11,21 +11,12 @@ type FetchVideoResponse = Promise<{
 }>;
 
 export const fetchVideoAction = async (
-  userRoles: string[] | null,
   videoId: string,
 ): FetchVideoResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-video');
-
-  if ((userRoles !== null) && (!userRoles.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      video: null,
-    };
-  }
 
   try {
     const video = await prisma.video.findFirst({

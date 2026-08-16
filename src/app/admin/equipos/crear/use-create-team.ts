@@ -27,13 +27,7 @@ const FORM_DEFAULT_VALUES = {
   tournamentId: '',
 };
 
-export const useCreateTeam = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-}: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}) => {
+export const useCreateTeam = () => {
   const searchParams = useSearchParams();
   const route = useRouter();
   const form = useForm<z.infer<typeof createTeamSchema>>({
@@ -81,8 +75,6 @@ export const useCreateTeam = ({
     // Create team
     const { ok, message, team } = await createTeamAction({
       formData,
-      authenticatedUserId,
-      authenticatedUserRoles,
     });
 
     if (!ok && !team) {
@@ -94,7 +86,6 @@ export const useCreateTeam = ({
       await addTeamToStandingsAction({
         tournamentId: data.tournamentId,
         teamId: team.id,
-        userRoles: authenticatedUserRoles,
       });
     }
 

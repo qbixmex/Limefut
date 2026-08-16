@@ -1,8 +1,6 @@
 import type { FC } from 'react';
 import { Suspense } from 'react';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -31,9 +29,8 @@ const SponsorPage: FC<Props> = ({ params }) => {
 
 const SponsorContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, message, sponsor } = await fetchSponsorAction(session?.user?.roles ?? [], sponsorId);
+  const { ok, message, sponsor } = await fetchSponsorAction(sponsorId);
 
   if (!ok) {
     redirect(`${ROUTES.ADMIN_SPONSORS}?error=${encodeURIComponent(message)}`);

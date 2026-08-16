@@ -21,8 +21,6 @@ import { ShowPlayoffMatches } from './(components)/show-playoff-matches';
 
 type Props = Readonly<{
   playoffs: PLAYOFFS_TYPE[];
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -31,8 +29,6 @@ type Props = Readonly<{
 
 export const PlayoffsTable: FC<Props> = ({
   playoffs,
-  authenticatedUserId,
-  authenticatedUserRoles,
   pagination,
 }) => {
   return (
@@ -75,8 +71,6 @@ export const PlayoffsTable: FC<Props> = ({
                       <ShowPlayoffMatches playoffId={playoff.id} />
                       <DeletePlayoff
                         id={playoff.id}
-                        authenticatedUserId={authenticatedUserId}
-                        authenticatedUserRoles={authenticatedUserRoles}
                       />
                     </div>
                   </TableCell>

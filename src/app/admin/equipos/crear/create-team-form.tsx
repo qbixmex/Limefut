@@ -8,8 +8,6 @@ import { useCreateTeam } from '../crear/use-create-team';
 import { FormFields } from '../(components)/form-fields';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournamentSlot: ReactNode;
   categorySlot: ReactNode;
   coachesSlot: ReactNode;
@@ -17,17 +15,12 @@ type Props = Readonly<{
 }>;
 
 export const CreateTeamForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   tournamentSlot,
   categorySlot,
   coachesSlot,
   fieldsSlot,
 }) => {
-  const { form, onSubmit, handleNavigateBack } = useCreateTeam({
-    authenticatedUserId,
-    authenticatedUserRoles,
-  });
+  const { form, onSubmit, handleNavigateBack } = useCreateTeam();
 
   return (
     <Form {...form}>

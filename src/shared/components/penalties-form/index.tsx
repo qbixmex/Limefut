@@ -27,7 +27,6 @@ import { createPlayoffPenaltyShootoutAction } from '@/app/admin/liguilla/(action
 import { createRegularPenaltyShootoutAction } from '@/app/admin/encuentros/(actions)/create-regular-penalty-shootouts.action';
 
 type Props = Readonly<{
-  userRoles: string[] | null | undefined;
   currentMatchId: string;
   localTeam: Team;
   visitorTeam: Team;
@@ -44,7 +43,6 @@ type Team = {
 };
 
 export const PenaltiesForm: FC<Props> = ({
-  userRoles,
   currentMatchId,
   localTeam,
   visitorTeam,
@@ -92,7 +90,6 @@ export const PenaltiesForm: FC<Props> = ({
     if (phase === 'regular') {
       const response = await createRegularPenaltyShootoutAction(
         formData,
-        userRoles,
       );
 
       ok = response.ok;
@@ -102,7 +99,6 @@ export const PenaltiesForm: FC<Props> = ({
     if (phase === 'playoff') {
       const response = await createPlayoffPenaltyShootoutAction(
         formData,
-        userRoles,
       );
 
       ok = response.ok;

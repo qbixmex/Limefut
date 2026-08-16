@@ -9,8 +9,6 @@ import { useEditCategory } from './use-edit-category';
 import { FormFields } from './form-fields';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | undefined;
   category: Category;
 }>;
 

@@ -12,20 +12,11 @@ type FetchResponse = Promise<{
 
 export const fetchMessageAction = async (
   id: string,
-  userRole: string[] | null,
 ): FetchResponse => {
   'use cache';
 
   cacheLife('weeks');
   cacheTag('admin-message');
-
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para este recurso !',
-      contactMessage: null,
-    };
-  }
 
   try {
     const contactMessage = await prisma.contactMessage.findUnique({

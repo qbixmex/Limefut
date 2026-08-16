@@ -1,8 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
-import { headers } from 'next/headers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchAnnouncementAction } from '../../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
@@ -23,9 +21,8 @@ const EditAnnouncementPage: FC<Props> = ({ params }) => {
 
 const EditAnnouncementContent: FC<Props> = async ({ params }) => {
   const announcementId = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, announcement } = await fetchAnnouncementAction(session?.user.roles ?? [], announcementId);
+  const { ok, announcement } = await fetchAnnouncementAction(announcementId);
 
   if (!ok) {
     const message = `¡ La noticia con el id: "${announcementId}", no existe ❌ !`;
@@ -43,8 +40,6 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
             <EditAnnouncementForm
               key={randomUUID()}
               announcement={announcement as ANNOUNCEMENT_TYPE}
-              authenticatedUserId={session?.user.id}
-              authenticatedUserRoles={session?.user.roles}
             />
           </CardContent>
         </Card>

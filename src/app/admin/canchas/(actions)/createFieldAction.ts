@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { createFieldSchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
 import type { Field } from '@/shared/interfaces';
@@ -14,12 +15,13 @@ type CreateResponseAction = Promise<{
 
 export const createFieldAction = async (
   formData: FormData,
-  userRole: string[] | null,
 ): CreateResponseAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  const guard = await requireAdmin();
+
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       field: null,
     };
   }

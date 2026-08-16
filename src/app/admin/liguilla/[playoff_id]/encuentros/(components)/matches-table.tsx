@@ -29,13 +29,11 @@ import { MatchScoreInput } from './match-score-input';
 type Props = Readonly<{
   playoffId: string;
   matches: PLAYOFF_MATCH[];
-  authenticatedUserRoles: string[] | null | undefined;
 }>;
 
 export const MatchesTable: FC<Props> = ({
   playoffId,
   matches,
-  authenticatedUserRoles,
 }) => {
   return (
     <>
@@ -196,10 +194,7 @@ export const MatchesTable: FC<Props> = ({
                     <div className="flex gap-3">
                       <ShowInfo playoffId={playoffId} matchId={match.id} />
                       <EditMatch playoffId={playoffId} matchId={match.id} />
-                      <DeleteMatch
-                        id={match.id}
-                        authenticatedUserRoles={authenticatedUserRoles}
-                      />
+                      <DeleteMatch id={match.id} />
                     </div>
                   </TableCell>
                 </TableRow>

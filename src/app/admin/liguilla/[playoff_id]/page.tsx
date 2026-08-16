@@ -1,8 +1,6 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
@@ -23,14 +21,9 @@ type Props = Readonly<{
 }>;
 
 export const PlayoffPage: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const playoffId = (await params).playoff_id;
 
-  const response = await fetchPlayoffAction(
-    playoffId, {
-    authenticatedUserId: session?.user.id,
-    authenticatedUserRoles: session?.user.roles,
-  });
+  const response = await fetchPlayoffAction(playoffId);
 
   if (!response.ok) {
     redirect(`${ROUTES.ADMIN_PLAYOFFS}?error=${encodeURIComponent(response.message)}`);

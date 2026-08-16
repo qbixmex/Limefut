@@ -32,7 +32,6 @@ export const AnnouncementsTable: FC<Props> = async ({
     announcements = [],
     pagination,
   } = await fetchAnnouncementsAction({
-    userRoles: session?.user.roles ?? [],
     page: currentPage as number,
     take: 12,
     searchTerm: query,

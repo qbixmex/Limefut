@@ -3,19 +3,12 @@ import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { SettingsForm } from './(components)/settings-form';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { fetchAdminGlobalSettingsAction } from './(actions)/fetchAdminGlobalSettingsAction';
 
 const GlobalSettings: FC = () => <GlobalSettingsContent />;
 
 const GlobalSettingsContent = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  const { globalSettings } = await fetchAdminGlobalSettingsAction(session?.user.roles ?? []);
+  const { globalSettings } = await fetchAdminGlobalSettingsAction();
 
   return (
     <div className="admin-page">
@@ -27,10 +20,7 @@ const GlobalSettingsContent = async () => {
           <CardContent>
             <Suspense>
               <ErrorHandler />
-              <SettingsForm
-                session={session as Session}
-                globalSettings={globalSettings}
-              />
+              <SettingsForm globalSettings={globalSettings} />
             </Suspense>
           </CardContent>
         </Card>
