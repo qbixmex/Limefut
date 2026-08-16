@@ -30,10 +30,7 @@ export const useCreateCategory = ({
 
   const handleNavigateBack = () => {
     if (!category) {
-      form.reset({
-        name: '',
-        permalink: '',
-      });
+      form.reset({ name: '', permalink: '' });
     }
     route.replace(ROUTES.ADMIN_CATEGORIES);
   };
@@ -55,6 +52,7 @@ export const useCreateCategory = ({
 
     if (response.ok) {
       toast.success(response.message);
+      form.reset({ name: '', permalink: '' });
       route.replace(ROUTES.ADMIN_CATEGORIES);
     }
   };

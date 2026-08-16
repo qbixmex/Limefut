@@ -86,6 +86,7 @@ export const SponsorForm: FC<Props> = ({ sponsor }) => {
 
       if (response.ok) {
         toast.success(response.message);
+        form.reset();
         route.replace(ROUTES.ADMIN_SPONSORS);
       }
       return;
@@ -367,6 +368,7 @@ export const SponsorForm: FC<Props> = ({ sponsor }) => {
             variant="outline-secondary"
             size="lg"
             onClick={() => {
+              if (!sponsor) form.reset();
               route.replace(ROUTES.ADMIN_SPONSORS);
             }}
           >

@@ -1,9 +1,7 @@
-import { randomUUID } from 'node:crypto';
-import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CreateAnnouncementForm } from './create-announcement.form';
 
-const CreateAnnouncementPage: FC = async () => {
+const CreateAnnouncementPage = () => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -12,9 +10,7 @@ const CreateAnnouncementPage: FC = async () => {
             <CardTitle className="admin-page-card-title">Crear Noticia</CardTitle>
           </CardHeader>
           <CardContent>
-            <CreateAnnouncementForm
-              key={randomUUID()}
-            />
+            <CreateAnnouncementForm />
           </CardContent>
         </Card>
       </div>

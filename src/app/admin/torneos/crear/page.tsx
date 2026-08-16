@@ -5,9 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CreateTournamentView } from './create-tournament-view';
+import { CreateTournamentForm } from './create-tournament-form';
+import { CategorySelectField } from '../(components)/form-fields/categories-select-field';
 
-const CreateTournamentPage = async () => {
+const CreateTournamentPage = () => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -23,7 +24,7 @@ const CreateTournamentPage = async () => {
           </CardHeader>
           <CardContent>
             <Suspense>
-              <CreateTournamentView />
+              <CreateTournamentForm categorySlot={<CategorySelectField />} />
             </Suspense>
           </CardContent>
         </Card>

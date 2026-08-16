@@ -25,6 +25,7 @@ export const useCreateAnnouncement = () => {
   });
 
   const handleRedirectBack = () => {
+    form.reset();
     route.replace(ROUTES.ADMIN_ANNOUNCEMENTS);
   };
 
@@ -50,6 +51,7 @@ export const useCreateAnnouncement = () => {
     }
 
     toast.success(response.message);
+    form.reset();
     route.replace(ROUTES.ADMIN_ANNOUNCEMENTS);
   };
 

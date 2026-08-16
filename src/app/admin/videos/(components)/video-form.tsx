@@ -95,6 +95,7 @@ export const VideoForm: FC<Props> = ({ video }) => {
 
       if (response.ok) {
         toast.success(response.message);
+        form.reset();
         route.replace(ROUTES.ADMIN_VIDEOS);
       }
 
@@ -328,6 +329,7 @@ export const VideoForm: FC<Props> = ({ video }) => {
             variant="outline-secondary"
             size="lg"
             onClick={() => {
+              if (!video) form.reset();
               route.replace(ROUTES.ADMIN_VIDEOS);
             }}
           >

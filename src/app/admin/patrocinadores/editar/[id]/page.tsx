@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { redirect } from 'next/navigation';
@@ -37,7 +36,6 @@ const EditSponsorContent: FC<Props> = async ({ params }) => {
           </CardHeader>
           <CardContent>
             <SponsorForm
-              key={randomUUID()}
               sponsor={sponsor!}
             />
           </CardContent>

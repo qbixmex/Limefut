@@ -38,9 +38,7 @@ describe('Tests on fetch category server action', () => {
   test('Should return error when category is not found', async () => {
     mockFindFirst.mockResolvedValue(null);
 
-    const response = await fetchCategoryAction({
-      categoryId,
-    });
+    const response = await fetchCategoryAction(categoryId);
 
     expect(response.ok).toBe(false);
     expect(response.message).toContain('no se encuentra');
@@ -56,9 +54,7 @@ describe('Tests on fetch category server action', () => {
 
     mockFindFirst.mockResolvedValue(mockCategory);
 
-    const response = await fetchCategoryAction({
-      categoryId,
-    });
+    const response = await fetchCategoryAction(categoryId);
 
     expect(response.ok).toBe(true);
     expect(response.message).toContain('obtenida correctamente');
@@ -80,9 +76,7 @@ describe('Tests on fetch category server action', () => {
   test('Should return error on db error', async () => {
     mockFindFirst.mockRejectedValue(new Error('DB connection failed'));
 
-    const response = await fetchCategoryAction({
-      categoryId,
-    });
+    const response = await fetchCategoryAction(categoryId);
 
     expect(response.ok).toBe(false);
     expect(response.message).toContain('No se pudo obtener la categoría');
@@ -92,9 +86,7 @@ describe('Tests on fetch category server action', () => {
   test('Should return error on unexpected server error', async () => {
     mockFindFirst.mockRejectedValue('Unexpected string error');
 
-    const response = await fetchCategoryAction({
-      categoryId,
-    });
+    const response = await fetchCategoryAction(categoryId);
 
     expect(response.ok).toBe(false);
     expect(response.message).toContain('Error inesperado');

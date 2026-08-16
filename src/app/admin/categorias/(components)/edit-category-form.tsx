@@ -8,9 +8,7 @@ import type { Category } from '@/shared/interfaces';
 import { useEditCategory } from './use-edit-category';
 import { FormFields } from './form-fields';
 
-type Props = Readonly<{
-  category: Category;
-}>;
+type Props = Readonly<{ category: Category; }>;
 
 export const EditCategoryForm: FC<Props> = (props) => {
   const { form, onSubmit, handleNavigateBack } = useEditCategory(props);
