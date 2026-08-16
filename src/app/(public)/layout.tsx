@@ -3,9 +3,9 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { Container, Footer, Header } from './components';
 import { fetchPublicGlobalSettingsAction } from '../admin/ajustes-globales/(actions)/fetchPublicGlobalSettingsAction';
-import { DynamicGoogleTagManagerHead } from '@/components/dynamic-google-tag-manager-head';
+import { GoogleTagManager } from '@next/third-parties/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import '@/app/globals.css';
-import { DynamicGoogleTagManagerBody } from '@/components/dynamic-google-tag-manager-body';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const { globalSettings } = await fetchPublicGlobalSettingsAction();
@@ -66,10 +66,6 @@ const PublicLayoutContent: FC<Props> = async ({ children }) => {
 
   return (
     <>
-      <DynamicGoogleTagManagerHead
-        googleTagManagerId={globalSettings?.googleTagManager}
-      />
-
       <Container>
         <Header
           siteLogo={globalSettings?.logoUrl ?? null}
@@ -89,10 +85,11 @@ const PublicLayoutContent: FC<Props> = async ({ children }) => {
           ]}
         />
       </Container>
-
-      <DynamicGoogleTagManagerBody
-        googleTagManagerId={globalSettings?.googleTagManager}
-      />
+      {
+        globalSettings?.googleAnalyticsId && (
+          <GoogleAnalytics gaId={globalSettings.googleAnalyticsId} />
+        )
+      }
     </>
   );
 };
