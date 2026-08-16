@@ -1,10 +1,6 @@
 import { Suspense } from 'react';
-import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BannerForm } from '../(components)/banner-form';
-import { auth } from '@/lib/auth';
-import { redirect } from 'next/navigation';
 
 const CreateBannerPage = () => {
   return (
@@ -15,13 +11,6 @@ const CreateBannerPage = () => {
 };
 
 const CreateBannerContent = async () => {
-  const session = await auth.api.getSession({ headers: await headers() });
-
-  if (session && !(session.user.roles as string[]).includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear banners !';
-    redirect(`/admin/banners?error=${encodeURIComponent(message)}`);
-  }
-
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -32,7 +21,7 @@ const CreateBannerContent = async () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <BannerForm session={session as Session} />
+            <BannerForm />
           </CardContent>
         </Card>
       </div>

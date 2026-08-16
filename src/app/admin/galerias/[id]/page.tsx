@@ -1,8 +1,5 @@
 import { Suspense, type FC } from 'react';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import type { Session } from '@/lib/auth-client';
-import { auth } from '@/lib/auth';
 import {
   Card,
   CardContent,
@@ -48,10 +45,9 @@ const GalleryDetailsPage: FC<Props> = ({ params }) => {
 };
 
 const GalleryDetailsContent: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const galleryId = (await params).id;
 
-  const response = await fetchGalleryAction(session?.user.roles ?? [], galleryId);
+  const response = await fetchGalleryAction(galleryId);
 
   if (!response.ok) {
     redirect(`${ROUTES.ADMIN_GALLERIES}?error=${
@@ -69,7 +65,6 @@ const GalleryDetailsContent: FC<Props> = async ({ params }) => {
             <CardTitle className="admin-page-card-title">Detalles de la Galería</CardTitle>
             <div className="space-x-2">
               <AddImage
-                session={session as Session}
                 galleryId={gallery.id as string}
                 imagesQuantity={gallery.images.length}
               />

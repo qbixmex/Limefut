@@ -17,23 +17,17 @@ import { FieldsSkeleton } from '@/app/admin/liguilla/(components)/fields-skeleto
 import { RoundSelectField } from '../(components)/form-fields/round-select-field';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   playoffId: string;
   teamsSlot: ReactNode;
   fieldsSlot: ReactNode;
 }>;
 
 export const CreatePlayoffsMatchForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   playoffId,
   teamsSlot,
   fieldsSlot,
 }) => {
   const { form, onSubmit, handleNavigateBack } = useCreatePlayoffsMatch({
-    authenticatedUserId,
-    authenticatedUserRoles,
     playoffId,
   });
 

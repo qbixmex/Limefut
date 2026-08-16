@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 import deleteImage from './deleteImageAction';
 
 export type ResponseDeleteAction = Promise<{
@@ -10,6 +11,11 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deletePageAction = async (pageId: string): ResponseDeleteAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
+  }
+
   try {
     const result = await prisma.$transaction(async (tx) => {
       const page = await tx.customPage.findUnique({

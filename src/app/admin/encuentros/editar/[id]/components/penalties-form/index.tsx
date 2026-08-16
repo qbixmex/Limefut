@@ -26,7 +26,6 @@ import { createPenaltyShootoutSchema } from './createPenaltyShootout.schema';
 import { toast } from 'sonner';
 
 type Props = Readonly<{
-  userRoles: string[] | null | undefined;
   currentMatchId: string;
   localTeam: Team;
   visitorTeam: Team;
@@ -42,7 +41,6 @@ type Team = {
 };
 
 export const PenaltiesForm: FC<Props> = ({
-  userRoles,
   currentMatchId,
   localTeam,
   visitorTeam,
@@ -85,7 +83,6 @@ export const PenaltiesForm: FC<Props> = ({
     // Create match
     const response = await createRegularPenaltyShootoutAction(
       formData,
-      userRoles,
     );
 
     if (!response.ok) {

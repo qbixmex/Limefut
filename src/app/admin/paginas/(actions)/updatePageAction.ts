@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath, updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 import { editPageSchema } from '@/shared/schemas';
 import type { Page, PAGE_STATUS } from '@/shared/interfaces';
 
@@ -20,6 +21,11 @@ export const updatePageAction = async ({
   formData,
   pageId,
 }: Options): EditResponseAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, page: null };
+  }
+
   const rawData = {
     title: formData.get('title') as string,
     permalink: formData.get('permalink') ?? '',

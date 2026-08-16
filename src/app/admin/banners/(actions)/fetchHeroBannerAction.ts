@@ -11,21 +11,12 @@ type FetchTournamentResponse = Promise<{
 }>;
 
 export const fetchHeroBannerAction = async (
-  userRoles: string[] | null,
   heroBannerId: string,
 ): FetchTournamentResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-banner');
-
-  if ((userRoles !== null) && (!userRoles.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      heroBanner: null,
-    };
-  }
 
   try {
     const heroBanner = await prisma.heroBanner.findFirst({

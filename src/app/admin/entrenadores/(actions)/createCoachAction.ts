@@ -5,6 +5,7 @@ import { createCoachSchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
 import { uploadImage } from '@/shared/actions';
 import type { CloudinaryResponse, Coach } from '@/shared/interfaces';
+import { requireAdmin } from '@/lib/get-session';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -16,12 +17,12 @@ type CreateResponseAction = Promise<{
 
 export const createCoachAction = async (
   formData: FormData,
-  userRole: string[] | null,
 ): CreateResponseAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       coach: null,
     };
   }

@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 import { editHeroBannerSchema } from '@/shared/schemas';
 import type { HeroBanner } from '@/shared/interfaces';
 import type { ALIGNMENT_TYPE } from '@/shared/enums';
@@ -10,8 +11,6 @@ import { deleteImage, uploadImage } from '@/shared/actions';
 type Options = {
   formData: FormData;
   heroBannerId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
 };
 
 type EditResponseAction = Promise<{
@@ -23,23 +22,10 @@ type EditResponseAction = Promise<{
 export const updateHeroBannerAction = async ({
   formData,
   heroBannerId,
-  userRoles,
-  authenticatedUserId,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      heroBanner: null,
-    };
-  }
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      heroBanner: null,
-    };
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, heroBanner: null };
   }
 
   const rawData = {

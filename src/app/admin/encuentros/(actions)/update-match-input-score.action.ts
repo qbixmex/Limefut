@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseAction = Promise<{
   ok: boolean;
@@ -16,6 +17,15 @@ type Params = Readonly<{
 }>;
 
 export const updateMatchInputScoreAction = async (params: Params): ResponseAction => {
+  const guard = await requireAdmin();
+
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+    };
+  }
+
   const { matchId, score, local, visitor } = params;
 
   const updatedMatch = await prisma.match.update({

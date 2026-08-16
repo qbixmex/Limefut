@@ -5,12 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import type { Session } from '@/lib/auth-client';
 import { fetchFieldAction } from '../../(actions)';
 import { FieldForm } from '../../(components)/fieldForm';
-import { headers } from 'next/headers';
 import { ROUTES } from '@/shared/constants/routes';
 import type { Field } from '@/shared/interfaces';
 
@@ -29,11 +26,8 @@ const EditFieldPage: FC<Props> = async ({ params }) => {
 };
 
 const EditFieldPageContent: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
   const teamId = (await params).id;
-  const { ok, message, field } = await fetchFieldAction(teamId, session?.user.roles ?? null);
+  const { ok, message, field } = await fetchFieldAction(teamId);
 
   if (!ok) {
     redirect(`${ROUTES.ADMIN_FIELDS}?error=${encodeURIComponent(message)}`);
@@ -49,7 +43,6 @@ const EditFieldPageContent: FC<Props> = async ({ params }) => {
           <CardContent>
             <FieldForm
               key={teamId}
-              session={session as Session}
               field={field as Field}
             />
           </CardContent>

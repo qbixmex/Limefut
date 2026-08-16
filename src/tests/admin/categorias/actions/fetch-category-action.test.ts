@@ -35,48 +35,10 @@ describe('Tests on fetch category server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
-    const response = await fetchCategoryAction({
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['user', 'admin'],
-      categoryId,
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
-    expect(response.category).toBe(null);
-  });
-
-  test('Should return error when user does not have admin role', async () => {
-    const response = await fetchCategoryAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: ['user'],
-      categoryId,
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(response.category).toBe(null);
-  });
-
-  test('Should not allow to fetch a category if roles is null', async () => {
-    const response = await fetchCategoryAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: null,
-      categoryId,
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(response.category).toBe(null);
-  });
-
   test('Should return error when category is not found', async () => {
     mockFindFirst.mockResolvedValue(null);
 
     const response = await fetchCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
     });
 
@@ -95,8 +57,6 @@ describe('Tests on fetch category server action', () => {
     mockFindFirst.mockResolvedValue(mockCategory);
 
     const response = await fetchCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
     });
 
@@ -121,8 +81,6 @@ describe('Tests on fetch category server action', () => {
     mockFindFirst.mockRejectedValue(new Error('DB connection failed'));
 
     const response = await fetchCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
     });
 
@@ -135,8 +93,6 @@ describe('Tests on fetch category server action', () => {
     mockFindFirst.mockRejectedValue('Unexpected string error');
 
     const response = await fetchCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
     });
 

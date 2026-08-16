@@ -21,15 +21,10 @@ import './styles.css';
 
 type Props = Readonly<{
   id: string;
-  authenticatedUserRoles: string[] | null | undefined;
 }>;
 
-export const DeleteMatch: FC<Props> = ({ id, authenticatedUserRoles }) => {
+export const DeleteMatch: FC<Props> = ({ id }) => {
   const onDeleteMatch = async (id: string) => {
-    if (!authenticatedUserRoles?.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar encuentros !');
-      return;
-    }
     const response = await deletePlayoffMatchAction(id);
     if (!response.ok) {
       toast.error(response.message);

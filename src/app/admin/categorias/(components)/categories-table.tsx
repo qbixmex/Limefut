@@ -7,9 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { auth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
-import { headers } from 'next/headers';
 import { Pagination } from '@/shared/components/pagination';
 import { EditCategory } from './edit-category';
 import { fetchCategoriesAction } from '../(actions)/fetch-categories.action';
@@ -21,10 +19,6 @@ type Props = Readonly<{
 }>;
 
 export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
   const {
     ok,
     message,
@@ -74,11 +68,7 @@ export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell>
                       <div className="flex gap-3">
                         <EditCategory categoryId={category.id as string} />
-                        <DeleteCategory
-                          categoryId={category.id}
-                          userId={session?.user.id}
-                          roles={session?.user.roles as string[] ?? null}
-                        />
+                        <DeleteCategory categoryId={category.id} />
                       </div>
                     </TableCell>
                   </TableRow>

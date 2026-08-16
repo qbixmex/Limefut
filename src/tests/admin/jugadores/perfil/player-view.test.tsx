@@ -8,18 +8,6 @@ import { es } from 'date-fns/locale';
 
 const mockRedirect = vi.hoisted(() => vi.fn());
 
-vi.mock('next/headers', () => ({
-  headers: vi.fn().mockResolvedValue(new Headers()),
-}));
-
-vi.mock('@/lib/auth', () => ({
-  auth: {
-    api: {
-      getSession: vi.fn().mockResolvedValue({ user: { roles: ['admin'] } }),
-    },
-  },
-}));
-
 vi.mock('@/app/admin/jugadores/(actions)', () => ({
   fetchPlayerAction: vi.fn(),
 }));

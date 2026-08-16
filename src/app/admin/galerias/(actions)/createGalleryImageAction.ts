@@ -6,6 +6,7 @@ import type { CloudinaryResponse, GalleryImage } from '@/shared/interfaces';
 import { createGalleryImageSchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
 import { uploadImage } from '~/src/shared/actions';
+import { requireAdmin } from '@/lib/get-session';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -14,18 +15,17 @@ type ResponseCreateAction = Promise<{
 }>;
 
 export const createGalleryImageAction = async ({
-  userRoles,
   galleryId,
   formData,
 }: {
-  userRoles: string[] | null,
   galleryId: string,
   formData: FormData,
 }): ResponseCreateAction => {
-  if ((userRoles !== null) && (!userRoles.includes('admin'))) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       galleryImage: null,
     };
   }

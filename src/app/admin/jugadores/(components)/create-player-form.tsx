@@ -13,13 +13,11 @@ type TeamType = {
 };
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   teams: TeamType[];
 }>;
 
-export const CreatePlayerForm: FC<Props> = ({ authenticatedUserId, authenticatedUserRoles, teams }) => {
-  const { form, onSubmit, handleNavigateBack } = useCreatePlayer({ authenticatedUserId, authenticatedUserRoles });
+export const CreatePlayerForm: FC<Props> = ({ teams }) => {
+  const { form, onSubmit, handleNavigateBack } = useCreatePlayer();
 
   return (
     <Form {...form}>

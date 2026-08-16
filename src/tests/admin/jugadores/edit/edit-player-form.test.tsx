@@ -11,8 +11,6 @@ vi.mock('@/app/admin/jugadores/(components)/form-fields', () => ({
 }));
 
 const defaultProps = {
-  authenticatedUserId: '2d5d6c9f-8a7b-4e3c-9f1d-6e8a7b4c3f2d',
-  authenticatedUserRoles: ['admin'],
   player: playerMock,
   teams: [
     {

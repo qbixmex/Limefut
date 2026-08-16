@@ -24,14 +24,12 @@ type PlayerType = {
 };
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   player: PlayerType;
   teams: TeamType[];
 }>;
 
-export const EditPlayerForm: FC<Props> = ({ authenticatedUserId, authenticatedUserRoles, player, teams }) => {
-  const { form, onSubmit, handleNavigateBack } = useEditPlayer({ authenticatedUserId, authenticatedUserRoles, player });
+export const EditPlayerForm: FC<Props> = ({ player, teams }) => {
+  const { form, onSubmit, handleNavigateBack } = useEditPlayer({ player });
 
   return (
     <Form {...form}>

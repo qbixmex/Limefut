@@ -4,25 +4,15 @@ import { cacheLife, cacheTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 import type { GlobalSettings } from '@/generated/prisma/client';
 
-type FetchVideoResponse = Promise<{
+export const fetchAdminGlobalSettingsAction = async (): Promise<{
   ok: boolean;
   message: string;
   globalSettings: GlobalSettings | null;
-}>;
-
-export const fetchAdminGlobalSettingsAction = async (userRoles: string[] | null): FetchVideoResponse => {
+}> => {
   'use cache';
 
   cacheLife('weeks');
   cacheTag('admin-global-settings');
-
-  if ((userRoles !== null) && (!userRoles.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      globalSettings: null,
-    };
-  }
 
   try {
     const globalSettings = await prisma.globalSettings.findFirst({

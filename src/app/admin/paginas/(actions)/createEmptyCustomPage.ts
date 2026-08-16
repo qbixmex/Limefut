@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -10,6 +11,11 @@ type CreateResponseAction = Promise<{
 }>;
 
 export const createEmptyCustomPage = async (): CreateResponseAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, pageId: null };
+  }
+
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
       // Find the maximum position

@@ -9,7 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import type { Session } from '@/lib/auth-client';
 import type { Gallery } from '@/shared/interfaces';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -23,20 +22,17 @@ import { es } from 'date-fns/locale';
 import { useGalleryForm } from './useGalleryForm';
 
 type Props = Readonly<{
-  session: Session;
   tournamentId?: string;
   gallery?: Gallery | null;
 }>;
 
-export const GalleryForm: FC<Props> = ({ session, gallery }) => {
+export const GalleryForm: FC<Props> = ({ gallery }) => {
   const {
     form, openCalendar, selectedDate,
     setSelectedDate, setOpenCalendar, handleTitleChange, handleCancel,
     handlePermalinkChange, onSubmit,
   } = useGalleryForm({
     gallery,
-    userId: session.user.id,
-    roles: session.user.roles ?? [],
   });
 
   return (

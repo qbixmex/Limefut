@@ -12,7 +12,7 @@ type Props = Readonly<{
   className?: string;
 }>;
 
-export const DeleteTournamentImage: FC<Props> = ({ roles, teamId, userId, className }) => {
+export const DeleteTournamentImage: FC<Props> = ({ roles, teamId, className }) => {
   const onDeleteImage = async () => {
     if (!roles?.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar la imagen !');
@@ -21,8 +21,6 @@ export const DeleteTournamentImage: FC<Props> = ({ roles, teamId, userId, classN
 
     const response = await deleteTournamentImageAction({
       tournamentId: teamId,
-      authenticatedUserId: userId,
-      authenticatedUserRoles: roles,
     });
 
     if (!response.ok) {

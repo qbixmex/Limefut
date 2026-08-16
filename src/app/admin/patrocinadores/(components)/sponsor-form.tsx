@@ -18,7 +18,6 @@ import { Button } from '@/components/ui/button';
 import { createSponsorSchema, editSponsorSchema } from '@/shared/schemas';
 import { createSponsorAction, updateSponsorAction } from '../(actions)';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Session } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import type { Sponsor } from '@/shared/interfaces';
 import { ChevronDownIcon, LoaderCircle } from 'lucide-react';
@@ -34,11 +33,10 @@ import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 import { getAlignment } from '@/lib/utils';
 
 type Props = Readonly<{
-  session: Session;
   sponsor?: Sponsor;
 }>;
 
-export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
+export const SponsorForm: FC<Props> = ({ sponsor }) => {
   const route = useRouter();
   const formSchema = !sponsor ? createSponsorSchema : editSponsorSchema;
   const [openStartDateCalendar, setOpenStartDateCalendar] = useState(false);
@@ -79,10 +77,7 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
 
     // Create Sponsor
     if (!sponsor) {
-      const response = await createSponsorAction(
-        formData,
-        session?.user.roles ?? null,
-      );
+      const response = await createSponsorAction(formData);
 
       if (!response.ok) {
         toast.error(response.message);
@@ -101,8 +96,6 @@ export const SponsorForm: FC<Props> = ({ session, sponsor }) => {
       const response = await updateSponsorAction({
         formData,
         sponsorId: sponsor?.id as string,
-        userRoles: session.user.roles!,
-        authenticatedUserId: session?.user.id,
       });
 
       if (!response.ok) {

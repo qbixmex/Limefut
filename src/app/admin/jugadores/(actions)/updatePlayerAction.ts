@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 import { uploadImage, deleteImage } from '@/shared/actions';
 import { editPlayerSchema } from '@/shared/schemas';
@@ -9,8 +10,6 @@ import type { Player } from '@/shared/interfaces';
 type Options = {
   formData: FormData;
   playerId: string;
-  authenticatedUserId: string | undefined | null;
-  authenticatedUserRoles: string[] | undefined | null;
 };
 
 type EditResponseAction = Promise<{
@@ -22,21 +21,13 @@ type EditResponseAction = Promise<{
 export const updatePlayerAction = async ({
   formData,
   playerId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autentificado !',
-      player: null,
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (!authenticatedUserRoles?.includes('admin')) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       player: null,
     };
   }

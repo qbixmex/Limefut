@@ -25,13 +25,7 @@ const FORM_DEFAULT_VALUES = {
   category: undefined,
 };
 
-export const useCreateMatch = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-}: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}) => {
+export const useCreateMatch = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -63,8 +57,6 @@ export const useCreateMatch = ({
 
     const response = await createMatchAction({
       formData,
-      authenticatedUserId,
-      authenticatedUserRoles,
     });
 
     if (!response.ok) {

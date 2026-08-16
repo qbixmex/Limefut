@@ -11,12 +11,8 @@ import type { TEAM_TYPE } from '../../(actions)/fetch-team-for-edit.action';
 import type z from 'zod';
 
 export const useEditTeam = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   team,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   team: TEAM_TYPE;
 }) => {
   const route = useRouter();
@@ -79,8 +75,6 @@ export const useEditTeam = ({
     formData.append('active', String(data.active));
 
     const { ok, message, updatedTeam } = await updateTeamAction({
-      authenticatedUserId,
-      authenticatedUserRoles,
       formData,
       teamId: team.id,
     });

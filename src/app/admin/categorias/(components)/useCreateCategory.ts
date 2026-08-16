@@ -11,14 +11,10 @@ import { ROUTES } from '@/shared/constants/routes';
 import type z from 'zod';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | undefined;
   category?: Category;
 }>;
 
 export const useCreateCategory = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   category,
 }: Props) => {
   const route = useRouter();
@@ -49,8 +45,6 @@ export const useCreateCategory = ({
     formData.append('permalink', data.permalink as string);
 
     const response = await createCategoryAction({
-      authenticatedUserId,
-      authenticatedUserRoles,
       formData,
     });
 

@@ -27,21 +27,12 @@ export type GALLERY_TYPE = {
 };
 
 export const fetchGalleryAction = async (
-  userRoles: string[],
   galleryId: string,
 ): FetchTeamResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-gallery');
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      gallery: null,
-    };
-  }
 
   try {
     const gallery = await prisma.gallery.findUnique({

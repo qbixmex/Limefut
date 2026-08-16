@@ -7,23 +7,12 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import { FormFields } from '../(components)/form-fields';
 
-type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}>;
-
-export const CreateAnnouncementForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-}) => {
+export const CreateAnnouncementForm: FC = () => {
   const {
     form,
     onSubmit,
     handleRedirectBack,
-  } = useCreateAnnouncement({
-    authenticatedUserId,
-    authenticatedUserRoles,
-  });
+  } = useCreateAnnouncement();
 
   return (
     <Form {...form}>

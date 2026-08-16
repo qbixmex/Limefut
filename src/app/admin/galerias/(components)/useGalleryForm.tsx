@@ -20,10 +20,8 @@ const FORM_DEFAULT = {
   active: false,
 };
 
-export const useGalleryForm = ({ gallery, userId, roles }: {
+export const useGalleryForm = ({ gallery }: {
   gallery?: Gallery | null;
-  userId: string | null;
-  roles: string[] | null;
 }) => {
   const route = useRouter();
   const formSchema = !gallery ? createGallerySchema : editGallerySchema;
@@ -77,10 +75,7 @@ export const useGalleryForm = ({ gallery, userId, roles }: {
 
     // Create gallery
     if (!gallery) {
-      const response = await createGalleryAction(
-        formData,
-        roles,
-      );
+      const response = await createGalleryAction(formData);
 
       if (!response.ok) {
         toast.error(response.message);
@@ -104,8 +99,6 @@ export const useGalleryForm = ({ gallery, userId, roles }: {
     if (gallery) {
       const response = await updateGalleryAction({
         formData,
-        userRoles: roles!,
-        authenticatedUserId: userId,
         galleryId: gallery.id as string,
       });
 

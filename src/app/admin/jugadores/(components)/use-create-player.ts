@@ -9,11 +9,6 @@ import { ROUTES } from '@/shared/constants/routes';
 import { toast } from 'sonner';
 import type z from 'zod';
 
-type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}>;
-
 const DEFAULT_FORM_VALUES = {
   name: '',
   email: undefined,
@@ -25,7 +20,7 @@ const DEFAULT_FORM_VALUES = {
   teamId: '',
 };
 
-export const useCreatePlayer = ({ authenticatedUserId, authenticatedUserRoles }: Props) => {
+export const useCreatePlayer = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -50,8 +45,6 @@ export const useCreatePlayer = ({ authenticatedUserId, authenticatedUserRoles }:
 
     const { ok, message } = await createPlayerAction({
       formData,
-      authenticatedUserId,
-      authenticatedUserRoles,
     });
 
     if (!ok) {

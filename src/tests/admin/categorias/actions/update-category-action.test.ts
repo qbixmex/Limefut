@@ -1,4 +1,4 @@
-const { MockPrismaClientKnownRequestError, mockTransaction } = vi.hoisted(() => {
+const { MockPrismaClientKnownRequestError, mockTransaction, mockGetSession } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
     meta?: Record<string, unknown>;
@@ -15,8 +15,21 @@ const { MockPrismaClientKnownRequestError, mockTransaction } = vi.hoisted(() => 
   return {
     MockPrismaClientKnownRequestError,
     mockTransaction: vi.fn(),
+    mockGetSession: vi.fn(),
   };
 });
+
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: mockGetSession,
+    },
+  },
+}));
 
 vi.mock('next/cache');
 
@@ -60,6 +73,9 @@ describe('Tests on update category server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
     mockTx.category.count.mockResolvedValue(1);
     mockTx.field.count.mockResolvedValue(0);
     mockTx.category.update.mockResolvedValue(mockUpdatedCategory);
@@ -72,58 +88,32 @@ describe('Tests on update category server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
+  test('Should return error when user is not authenticated', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await updateCategoryAction({
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['admin'],
       categoryId,
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(response.category).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['user'] },
+    });
+
     const response = await updateCategoryAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: ['user'],
       categoryId,
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(response.category).toBe(null);
-    expect(mockTransaction).not.toHaveBeenCalled();
-  });
-
-  test('Should not allow to update a category if roles is null', async () => {
-    const response = await updateCategoryAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: null,
-      categoryId,
-      formData: validFormData(),
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
-    expect(response.category).toBe(null);
-    expect(mockTransaction).not.toHaveBeenCalled();
-  });
-
-  test('Should not allow to update a category if roles are empty', async () => {
-    const response = await updateCategoryAction({
-      authenticatedUserId: '19fafe1d-6847-450c-a5a7-80f61c80ed4f',
-      authenticatedUserRoles: [],
-      categoryId,
-      formData: validFormData(),
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.category).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
@@ -133,8 +123,6 @@ describe('Tests on update category server action', () => {
     formData.set('name', 'ab');
 
     const response = await updateCategoryAction({
-      authenticatedUserId: '7ab083c7-9389-4842-8735-1dd283eaf3c4',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
       formData,
     });
@@ -149,8 +137,6 @@ describe('Tests on update category server action', () => {
     mockTx.category.count.mockResolvedValue(0);
 
     const response = await updateCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
       formData: validFormData(),
     });
@@ -166,8 +152,6 @@ describe('Tests on update category server action', () => {
     mockTx.field.count.mockResolvedValue(1);
 
     const response = await updateCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
       formData: validFormData(),
     });
@@ -184,8 +168,6 @@ describe('Tests on update category server action', () => {
     mockTx.category.update.mockResolvedValue(mockUpdatedCategory);
 
     const response = await updateCategoryAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
       formData: validFormData(),
     });
@@ -232,8 +214,6 @@ describe('Tests on update category server action', () => {
     );
 
     const response = await updateCategoryAction({
-      authenticatedUserId: '987df461-89c3-4050-bf44-4d4dc4a3e9a1',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
       formData: validFormData(),
     });
@@ -253,8 +233,6 @@ describe('Tests on update category server action', () => {
     );
 
     const response = await updateCategoryAction({
-      authenticatedUserId: 'fdbd8d2f-ece3-4cb7-9417-b3e4b4086399',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
       formData: validFormData(),
     });
@@ -270,8 +248,6 @@ describe('Tests on update category server action', () => {
     mockTx.category.update.mockRejectedValue(new Error('Something went wrong'));
 
     const response = await updateCategoryAction({
-      authenticatedUserId: '14b74b98-bba8-4798-be65-a002fb1912d9',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
       formData: validFormData(),
     });
@@ -285,8 +261,6 @@ describe('Tests on update category server action', () => {
     mockTransaction.mockRejectedValue(new Error('Transaction failed'));
 
     const response = await updateCategoryAction({
-      authenticatedUserId: '14b74b98-bba8-4798-be65-a002fb1912d9',
-      authenticatedUserRoles: ['user', 'admin'],
       categoryId,
       formData: validFormData(),
     });

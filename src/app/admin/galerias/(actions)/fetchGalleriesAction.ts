@@ -6,7 +6,6 @@ import type { Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
-  userRole: string[] | null;
   page?: number;
   take?: number;
   searchTerm?: string;
@@ -34,17 +33,6 @@ export const fetchGalleriesAction = async (options: Options): ResponseAction => 
   cacheLife('days');
   cacheTag('admin-galleries');
 
-  if ((options.userRole !== null) && (!options.userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      galleries: [],
-      pagination: {
-        currentPage: 0,
-        totalPages: 0,
-      },
-    };
-  }
   let { page = 1, take = 12 } = options;
 
   // In case is an invalid number like (lorem)

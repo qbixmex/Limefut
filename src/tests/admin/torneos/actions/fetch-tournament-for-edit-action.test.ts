@@ -48,8 +48,6 @@ describe('Tests on tournament for edit server action', () => {
 
     const response = await fetchTournamentForEditAction({
       tournamentId: tournamentMock.id,
-      authenticatedUserId: '4b0093588a486f510eac',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(true);
@@ -95,65 +93,11 @@ describe('Tests on tournament for edit server action', () => {
     });
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
-    const response = await fetchTournamentForEditAction({
-      tournamentId: tournamentMock.id,
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['user', 'admin'],
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.tournament).toBeNull();
-    expect(response.message).toContain('autentificado');
-    expect(mockFindFirst).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when authenticatedUserRoles is null', async () => {
-    const response = await fetchTournamentForEditAction({
-      tournamentId: tournamentMock.id,
-      authenticatedUserId: '4b0093588a486f510eac',
-      authenticatedUserRoles: null,
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.tournament).toBeNull();
-    expect(response.message).toContain('permisos administrativos');
-    expect(mockFindFirst).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when authenticatedUserRoles is undefined', async () => {
-    const response = await fetchTournamentForEditAction({
-      tournamentId: tournamentMock.id,
-      authenticatedUserId: '4b0093588a486f510eac',
-      authenticatedUserRoles: undefined,
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.tournament).toBeNull();
-    expect(response.message).toContain('permisos administrativos');
-    expect(mockFindFirst).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when user does not have admin role', async () => {
-    const response = await fetchTournamentForEditAction({
-      tournamentId: tournamentMock.id,
-      authenticatedUserId: '4b0093588a486f510eac',
-      authenticatedUserRoles: ['user'],
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.tournament).toBeNull();
-    expect(response.message).toContain('permisos administrativos');
-    expect(mockFindFirst).not.toHaveBeenCalled();
-  });
-
   test('Should return error when tournament is not found', async () => {
     mockFindFirst.mockResolvedValue(null);
 
     const response = await fetchTournamentForEditAction({
       tournamentId: 'dc233c07-9790-439f-9f50-88b86a13eb62',
-      authenticatedUserId: '4b0093588a486f510eac',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -166,8 +110,6 @@ describe('Tests on tournament for edit server action', () => {
 
     const response = await fetchTournamentForEditAction({
       tournamentId: tournamentMock.id,
-      authenticatedUserId: '4b0093588a486f510eac',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -180,8 +122,6 @@ describe('Tests on tournament for edit server action', () => {
 
     const response = await fetchTournamentForEditAction({
       tournamentId: tournamentMock.id,
-      authenticatedUserId: '4b0093588a486f510eac',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);

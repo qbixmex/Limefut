@@ -2,14 +2,13 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 import { editVideoSchema } from '@/shared/schemas';
 import type { Video } from '@/shared/interfaces';
 
 type Options = {
   formData: FormData;
   videoId: string;
-  userRoles: string[];
-  authenticatedUserId: string;
 };
 
 type EditResponseAction = Promise<{
@@ -21,23 +20,10 @@ type EditResponseAction = Promise<{
 export const updateVideoAction = async ({
   formData,
   videoId,
-  userRoles,
-  authenticatedUserId,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      video: null,
-    };
-  }
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      video: null,
-    };
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message, video: null };
   }
 
   const rawData = {

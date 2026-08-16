@@ -15,33 +15,11 @@ type CATEGORY_TYPE = {
   permalink: string;
 };
 
-export const fetchCategoriesAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-} : {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}): ResponseAction => {
+export const fetchCategoriesAction = async (): ResponseAction => {
   'use cache';
 
   cacheLife('max');
   cacheTag('admin-categories');
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      categories: [],
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos para realizar esta acción !',
-      categories: [],
-    };
-  }
 
   try {
     const categories = await prisma.category.findMany({

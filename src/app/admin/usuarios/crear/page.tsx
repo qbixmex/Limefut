@@ -5,12 +5,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { UsersForm } from '../(components)/usersForm';
-import type { Session } from '@/lib/auth-client';
-import { auth } from '@/lib/auth';
-import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { headers } from 'next/headers';
-import { ROUTES } from '@/shared/constants/routes';
 
 const CreateUserPage = () => {
   return (
@@ -21,13 +16,6 @@ const CreateUserPage = () => {
 };
 
 const CreateUserContent = async () => {
-  const session = await auth.api.getSession({ headers: await headers() });
-
-  if (session && !(session?.user.roles as string[]).includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear usuarios !';
-    redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(message)}`);
-  }
-
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -36,7 +24,7 @@ const CreateUserContent = async () => {
             <CardTitle className="admin-page-card-title">Crear Usuario</CardTitle>
           </CardHeader>
           <CardContent>
-            <UsersForm session={session as Session} />
+            <UsersForm />
           </CardContent>
         </Card>
       </div>

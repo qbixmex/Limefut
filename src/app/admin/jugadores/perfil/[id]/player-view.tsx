@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
@@ -14,7 +13,6 @@ import { fetchPlayerAction } from '../../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { SoccerPlayer } from '@/shared/components/icons';
-import { headers } from 'next/headers';
 import { DeletePlayerImage } from '../../(components)/delete-player-image';
 import { EditPlayer } from '../../(components)/edit-player';
 
@@ -25,15 +23,10 @@ type Props = Readonly<{
 }>;
 
 export const PlayerView: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
   const playerId = (await params).id;
 
   const response = await fetchPlayerAction({
     playerId,
-    authenticatedUserId: session?.user.id,
-    authenticatedUserRoles: session?.user.roles,
   });
 
   if (!response.ok) {
@@ -72,8 +65,6 @@ export const PlayerView: FC<Props> = async ({ params }) => {
               />
               <DeletePlayerImage
                 teamId={player.id}
-                userId={session?.user?.id}
-                roles={session?.user.roles as string[]}
                 className="absolute top-2 right-2"
               />
             </div>

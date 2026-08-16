@@ -1,9 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
-import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchVideoAction } from '../../(actions)';
 import { VideoForm } from '../../(components)/video-form';
@@ -23,9 +20,8 @@ const EditVideoPage: FC<Props> = ({ params }) => {
 
 const EditAnnouncementContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, video } = await fetchVideoAction(session?.user.roles ?? [], sponsorId);
+  const { ok, video } = await fetchVideoAction(sponsorId);
 
   if (!ok) {
     const message = `¡ El video con el id: "${sponsorId}", no existe ❌ !`;
@@ -42,7 +38,6 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
           <CardContent>
             <VideoForm
               key={randomUUID()}
-              session={session as Session}
               video={video!}
             />
           </CardContent>

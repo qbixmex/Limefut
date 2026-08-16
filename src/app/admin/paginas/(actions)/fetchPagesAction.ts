@@ -6,7 +6,6 @@ import type { Page, Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
-  userRole: string[] | null;
   page?: number;
   take?: number;
   searchTerm?: string;
@@ -25,17 +24,6 @@ export const fetchPagesAction = async (options: Options): ResponseAction => {
   cacheLife('days');
   cacheTag('admin-pages');
 
-  if ((options.userRole !== null) && (!options.userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      customPages: [],
-      pagination: {
-        currentPage: 0,
-        totalPages: 0,
-      },
-    };
-  }
   let { page = 1, take = 12 } = options;
 
   // In case is an invalid number like (lorem)

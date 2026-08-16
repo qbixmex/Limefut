@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 import { editCategorySchema } from '@/shared/schemas';
 import type { Category } from '@/shared/interfaces';
@@ -9,8 +10,6 @@ import { Prisma } from '@/generated/prisma/client';
 type Options = {
   formData: FormData;
   categoryId: string;
-  authenticatedUserRoles: string[] | null | undefined;
-  authenticatedUserId: string | null | undefined;
 };
 
 type EditResponseAction = Promise<{
@@ -22,21 +21,13 @@ type EditResponseAction = Promise<{
 export const updateCategoryAction = async ({
   formData,
   categoryId,
-  authenticatedUserRoles,
-  authenticatedUserId,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      category: null,
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (!authenticatedUserRoles?.includes('admin')) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       category: null,
     };
   }

@@ -1,13 +1,13 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 import { malePlayers } from '@/shared/data/male-players';
 import { femalePlayers } from '@/shared/data/female-players';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 type Options = {
-  userRoles: string[] | undefined;
   gender: 'male' | 'female';
   teamId: string;
 };
@@ -18,15 +18,12 @@ type CreateResponseAction = Promise<{
 }>;
 
 export const generatePlayersAction = async ({
-  userRoles,
   gender,
   teamId,
 }: Options): CreateResponseAction => {
-  if ((userRoles !== null) && (!userRoles?.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-    };
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
   }
 
   const team = await prisma.team.count({ where: { id: teamId } });

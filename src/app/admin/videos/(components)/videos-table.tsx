@@ -32,7 +32,6 @@ export const VideosTable: FC<Props> = async ({
     videos = [],
     pagination,
   } = await fetchVideosAction({
-    userRoles: session?.user.roles ?? [],
     page: currentPage as number,
     take: 12,
     searchTerm: query,

@@ -22,34 +22,12 @@ type CATEGORY_TYPE = { name: string; };
 type TEAM_TYPE = { id: string; name: string; };
 
 export const fetchPlayoffAction = async (
-  playoffId: string, {
-    authenticatedUserId,
-    authenticatedUserRoles,
-  }: {
-    authenticatedUserId: string | undefined;
-    authenticatedUserRoles: string[] | null | undefined;
-  },
+  playoffId: string,
 ): ResponseAction => {
   'use cache';
 
   cacheLife('max');
   cacheTag('admin-tournaments');
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      playoff: null,
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos para realizar esta acción !',
-      playoff: null,
-    };
-  }
 
   try {
     const playoff = await prisma.playoff.findFirst({

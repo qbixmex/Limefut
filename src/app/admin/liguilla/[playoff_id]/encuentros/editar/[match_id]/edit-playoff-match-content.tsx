@@ -23,8 +23,6 @@ export const EditPlayoffMatchContent: FC<Props> = async ({ params }) => {
   const matchId = (await params).match_id;
 
   const response = await fetchMatchForEditAction({
-    authenticatedUserId: session?.user.id,
-    authenticatedUserRoles: session?.user.roles,
     playoffId,
     matchId,
   });
@@ -52,21 +50,14 @@ export const EditPlayoffMatchContent: FC<Props> = async ({ params }) => {
   return (
     <>
       <EditPlayoffsMatchForm
-        authenticatedUserId={session?.user.id}
-        authenticatedUserRoles={session?.user.roles}
         playoffId={playoffId}
         teamsSlot={
           <TeamsSlot
-            authenticatedUserId={session?.user.id}
-            authenticatedUserRoles={session?.user.roles}
             playoffId={playoffId}
           />
         }
         fieldsSlot={
-          <FieldsSlot
-            authenticatedUserId={session?.user.id}
-            authenticatedUserRoles={session?.user.roles}
-          />
+          <FieldsSlot />
         }
         match={response.match as MATCH_TYPE}
       />

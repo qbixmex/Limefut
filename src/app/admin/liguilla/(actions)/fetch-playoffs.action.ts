@@ -27,14 +27,10 @@ export type PLAYOFFS_TYPE = {
 };
 
 export const fetchPlayoffsAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   page = 1,
   take = 12,
   query: searchTerm,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   page?: number;
   take?: number;
   query?: string;
@@ -43,30 +39,6 @@ export const fetchPlayoffsAction = async ({
 
   cacheLife('days');
   cacheTag('admin-playoffs');
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autentificado !',
-      playoffs: [],
-      pagination: {
-        currentPage: 0,
-        totalPages: 0,
-      },
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos para realizar esta acción !',
-      playoffs: [],
-      pagination: {
-        currentPage: 0,
-        totalPages: 0,
-      },
-    };
-  }
 
   // In case is an invalid number like (lorem)
   if (isNaN(page)) page = 1;

@@ -6,11 +6,10 @@ import { updateTag } from 'next/cache';
 import { editGalleryImageSchema } from '@/shared/schemas';
 import type { GalleryImage } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
+import { requireAdmin } from '@/lib/get-session';
 
 type Options = {
   formData: FormData;
-  userRoles: string[];
-  authenticatedUserId: string;
   galleryImageId: string;
 };
 
@@ -22,22 +21,13 @@ type UpdateResponseAction = Promise<{
 
 export const updateGalleryImageAction = async ({
   formData,
-  userRoles,
-  authenticatedUserId,
   galleryImageId,
 }: Options): UpdateResponseAction => {
-  if (!authenticatedUserId) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ Usuario no autenticado !',
-      galleryImage: null,
-    };
-  }
-
-  if (!userRoles.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       galleryImage: null,
     };
   }

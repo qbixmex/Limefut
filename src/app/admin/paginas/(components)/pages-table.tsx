@@ -32,7 +32,6 @@ export const PagesTable: FC<Props> = async ({
     customPages = [],
     pagination,
   } = await fetchPagesAction({
-    userRole: session?.user.roles ?? [],
     page: currentPage as number,
     take: 12,
     searchTerm: query,

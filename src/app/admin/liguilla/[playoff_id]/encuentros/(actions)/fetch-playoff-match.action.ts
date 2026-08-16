@@ -31,33 +31,13 @@ type TEAM_TYPE = { id: string; name: string; };
 type FIELD_TYPE = { id: string; name: string; };
 
 export const fetchPlayoffMatchAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   playoffId,
   matchId,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   playoffId: string;
   matchId: string;
 }): ResponseFetchAction => {
   'use cache';
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción  ❌ !',
-      match: null,
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción  ❌ !',
-      match: null,
-    };
-  }
 
   cacheLife('days');
   cacheTag('admin-playoff-match');
