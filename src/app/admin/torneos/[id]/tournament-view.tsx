@@ -24,7 +24,7 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
     headers: await headers(),
   });
 
-  const response = await fetchTournamentAction(tournamentId, session?.user.roles ?? null);
+  const response = await fetchTournamentAction(tournamentId);
 
   if (!response.ok) {
     redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(response.message)}`);

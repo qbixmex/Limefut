@@ -2,6 +2,7 @@ const {
   MockPrismaClientKnownRequestError,
   mockTransaction,
   mockUploadImage,
+  mockGetSession,
 } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
@@ -20,10 +21,23 @@ const {
     MockPrismaClientKnownRequestError,
     mockTransaction: vi.fn(),
     mockUploadImage: vi.fn(),
+    mockGetSession: vi.fn(),
   };
 });
 
 vi.mock('next/cache');
+
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: mockGetSession,
+    },
+  },
+}));
 
 vi.mock('@/lib/prisma', () => ({
   default: {
@@ -80,6 +94,9 @@ describe('Tests on createPlayerAction server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
     mockTx.player.create.mockResolvedValue(mockCreatedPlayer);
     mockTransaction.mockImplementation(
       (cb: (tx: typeof mockTx) => unknown) => cb(mockTx),
@@ -90,54 +107,60 @@ describe('Tests on createPlayerAction server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
+  test('Should return error when user is not authenticated', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await createPlayerAction({
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/autentificado/i);
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['user'] },
+    });
+
     const response = await createPlayerAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: ['user'],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should return error when roles is null', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: null },
+    });
+
     const response = await createPlayerAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: null,
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should return error when roles are empty', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: [] },
+    });
+
     const response = await createPlayerAction({
-      authenticatedUserId: '19fafe1d-6847-450c-a5a7-80f61c80ed4f',
-      authenticatedUserRoles: [],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
@@ -147,8 +170,6 @@ describe('Tests on createPlayerAction server action', () => {
     formData.set('name', 'ab');
 
     const response = await createPlayerAction({
-      authenticatedUserId: '7ab083c7-9389-4842-8735-1dd283eaf3c4',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -160,8 +181,6 @@ describe('Tests on createPlayerAction server action', () => {
 
   test('Should create a player without image', async () => {
     const response = await createPlayerAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -201,8 +220,6 @@ describe('Tests on createPlayerAction server action', () => {
     formData.append('image', imageFile);
 
     const response = await createPlayerAction({
-      authenticatedUserId: '9e16e6ff-d20b-408c-b316-7d3edaeb66f9',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -231,8 +248,6 @@ describe('Tests on createPlayerAction server action', () => {
 
     await expect(
       createPlayerAction({
-        authenticatedUserId: 'fb5b126d-31fd-477a-b190-09c5d266be69',
-        authenticatedUserRoles: ['admin'],
         formData,
       }),
     ).rejects.toThrow('cloudinary');
@@ -247,8 +262,6 @@ describe('Tests on createPlayerAction server action', () => {
     );
 
     const response = await createPlayerAction({
-      authenticatedUserId: '987df461-89c3-4050-bf44-4d4dc4a3e9a1',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -267,8 +280,6 @@ describe('Tests on createPlayerAction server action', () => {
     );
 
     const response = await createPlayerAction({
-      authenticatedUserId: 'fdbd8d2f-ece3-4cb7-9417-b3e4b4086399',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -281,8 +292,6 @@ describe('Tests on createPlayerAction server action', () => {
     mockTransaction.mockRejectedValue(new Error('Something went wrong'));
 
     const response = await createPlayerAction({
-      authenticatedUserId: '14b74b98-bba8-4798-be65-a002fb1912d9',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 

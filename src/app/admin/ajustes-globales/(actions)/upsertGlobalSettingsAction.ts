@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma';
 import type { GlobalSettings } from '@/shared/interfaces';
 import { GlobalSettingsSchema } from '@/shared/schemas';
 import { deleteImage, uploadImage } from '@/shared/actions';
+import { requireAdmin } from '@/lib/get-session';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -12,14 +13,12 @@ type ResponseCreateAction = Promise<{
   globalSettings: GlobalSettings | null;
 }>;
 
-export const upsertGlobalSettingsAction = async (
-  formData: FormData,
-  userRole: string[] | null,
-): ResponseCreateAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+export const upsertGlobalSettingsAction = async (formData: FormData): ResponseCreateAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       globalSettings: null,
     };
   }

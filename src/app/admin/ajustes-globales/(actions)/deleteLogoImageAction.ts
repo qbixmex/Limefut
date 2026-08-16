@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import deleteImage from '@/shared/actions/deleteImageAction';
 import { updateTag } from 'next/cache';
 
@@ -20,6 +21,14 @@ export const deleteLogoImageAction = async ({
   deleteOpenGraphImage: boolean;
   deleteFavIcon: boolean;
 }): ResponseDeleteAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+    };
+  }
+
   const settings = await prisma.globalSettings.findFirst({
     where: { id: 1 },
     select: {

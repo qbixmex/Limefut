@@ -1,9 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
-import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchHeroBannerAction } from '../../(actions)';
 import { BannerForm } from '../../(components)/banner-form';
@@ -22,9 +19,8 @@ const EditHeroBannerPage: FC<Props> = ({ params }) => {
 
 const EditHeroBannerContent: FC<Props> = async ({ params }) => {
   const heroBannerId = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
-  const response = await fetchHeroBannerAction(session?.user.roles ?? [], heroBannerId);
+  const response = await fetchHeroBannerAction(heroBannerId);
 
   if (!response.heroBanner) {
     const message = `¡ El banner con el id: "${heroBannerId}", no existe ❌ !`;
@@ -41,7 +37,6 @@ const EditHeroBannerContent: FC<Props> = async ({ params }) => {
           <CardContent>
             <BannerForm
               key={randomUUID()}
-              session={session as Session}
               heroBanner={response.heroBanner}
             />
           </CardContent>

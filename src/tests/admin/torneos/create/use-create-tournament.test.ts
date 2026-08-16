@@ -6,8 +6,6 @@ const { mockReplace, mockCreateAction } = vi.hoisted(() => ({
   mockReplace: vi.fn(),
   mockCreateAction: vi.fn<
     (params: {
-      authenticatedUserId: string | undefined;
-      authenticatedUserRoles: string[] | null | undefined;
       formData: FormData;
     }) => Promise<{ ok: boolean; message: string; tournament: null }>
   >(),
@@ -27,11 +25,6 @@ vi.mock('sonner', () => ({
 vi.mock('@/app/admin/torneos/(actions)', () => ({
   createTournamentAction: mockCreateAction,
 }));
-
-const defaultProps = {
-  authenticatedUserId: '7589cfc5-2f26-4a5f-91b3-91fac387ae16',
-  authenticatedUserRoles: ['user', 'admin'],
-};
 
 const validData = {
   name: 'Nuevo Torneo',
@@ -57,7 +50,7 @@ describe('Tests on useCreateTournament hook', () => {
   });
 
   test('Should initialize form with default values', () => {
-    const { result } = renderHook(() => useCreateTournament(defaultProps));
+    const { result } = renderHook(() => useCreateTournament());
 
     const values = result.current.form.getValues();
 
@@ -71,7 +64,7 @@ describe('Tests on useCreateTournament hook', () => {
   });
 
   test('handleNavigateBack should reset form and navigate to admin tournaments', () => {
-    const { result } = renderHook(() => useCreateTournament(defaultProps));
+    const { result } = renderHook(() => useCreateTournament());
 
     act(() => result.current.handleNavigateBack());
 
@@ -79,7 +72,7 @@ describe('Tests on useCreateTournament hook', () => {
   });
 
   test('onSubmit should call createTournamentAction with correct params', async () => {
-    const { result } = renderHook(() => useCreateTournament(defaultProps));
+    const { result } = renderHook(() => useCreateTournament());
 
     await act(async () => {
       await result.current.onSubmit(validData);
@@ -87,8 +80,6 @@ describe('Tests on useCreateTournament hook', () => {
 
     expect(mockCreateAction).toHaveBeenCalledWith(
       expect.objectContaining({
-        authenticatedUserId: defaultProps.authenticatedUserId,
-        authenticatedUserRoles: defaultProps.authenticatedUserRoles,
         formData: expect.any(FormData),
       }),
     );
@@ -101,7 +92,7 @@ describe('Tests on useCreateTournament hook', () => {
 
   test('onSubmit should show success toast and navigate on success', async () => {
     const { toast } = await import('sonner');
-    const { result } = renderHook(() => useCreateTournament(defaultProps));
+    const { result } = renderHook(() => useCreateTournament());
 
     await act(async () => {
       await result.current.onSubmit(validData);
@@ -118,7 +109,7 @@ describe('Tests on useCreateTournament hook', () => {
       tournament: null,
     });
     const { toast } = await import('sonner');
-    const { result } = renderHook(() => useCreateTournament(defaultProps));
+    const { result } = renderHook(() => useCreateTournament());
 
     await act(async () => {
       await result.current.onSubmit(validData);

@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 import type { ALIGNMENT_TYPE } from '@/shared/enums';
 
@@ -13,6 +14,11 @@ export const updateHeroBannerAlignmentAction = async (
   bannerId: string,
   newAlignment: ALIGNMENT_TYPE,
 ): ResponseAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
+  }
+
   const heroBannerExists = await prisma.heroBanner.count({
     where: { id: bannerId },
   });

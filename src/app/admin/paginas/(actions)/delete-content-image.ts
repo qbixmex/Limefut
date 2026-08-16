@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import deleteImage from './deleteImageAction';
 import type { CustomPageImage } from '@/shared/interfaces/Page';
 import { updateTag } from 'next/cache';
@@ -15,6 +16,11 @@ export const deleteContentImageAction = async (
   pageId: string,
   publicId: string,
 ): Promise<DeleteContentImageResponse> => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
+  }
+
   const page = await prisma.customPage.findUnique({
     where: { id: pageId },
     select: {

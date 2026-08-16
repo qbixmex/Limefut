@@ -31,7 +31,6 @@ export const GalleriesTable: FC<Props> = async ({
     galleries = [],
     pagination,
   } = await fetchGalleriesAction({
-    userRole: session?.user.roles ?? [],
     page: currentPage as number,
     take: 12,
     searchTerm: query,

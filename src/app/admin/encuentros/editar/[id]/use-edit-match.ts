@@ -14,8 +14,6 @@ import type z from 'zod';
 import { MATCH_STATUS } from '@/shared/enums';
 
 type Options = {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   match: MATCH_TYPE;
 };
 
@@ -24,8 +22,6 @@ export const useEditMatch = (options: Options) => {
   const searchParams = useSearchParams();
 
   const {
-    authenticatedUserId,
-    authenticatedUserRoles,
     match,
   } = options;
 
@@ -98,8 +94,6 @@ export const useEditMatch = (options: Options) => {
     const response = await updateMatchAction({
       formData,
       matchId: match.id,
-      authenticatedUserId,
-      authenticatedUserRoles,
     });
 
     const updatedMatch = response.match as MATCH_UPDATED_TYPE;

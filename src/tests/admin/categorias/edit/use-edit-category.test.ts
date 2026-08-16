@@ -7,8 +7,6 @@ const { mockReplace, mockUpdateAction } = vi.hoisted(() => ({
   mockReplace: vi.fn(),
   mockUpdateAction: vi.fn<
     (params: {
-      authenticatedUserId: string | undefined;
-      authenticatedUserRoles: string[] | undefined;
       categoryId: string;
       formData: FormData;
     }) => Promise<{ ok: boolean; message: string }>
@@ -31,8 +29,6 @@ vi.mock('@/app/admin/categorias/(actions)/update-category.action', () => ({
 }));
 
 const defaultProps = {
-  authenticatedUserId: '881bf0f0-b4d4-4de1-b19e-eb9927d04d99',
-  authenticatedUserRoles: ['admin'],
   category: mockCategory,
 };
 
@@ -76,8 +72,6 @@ describe('Tests on useEditCategory hook', () => {
 
     expect(mockUpdateAction).toHaveBeenCalledWith(
       expect.objectContaining({
-        authenticatedUserId: defaultProps.authenticatedUserId,
-        authenticatedUserRoles: defaultProps.authenticatedUserRoles,
         categoryId: mockCategory.id,
         formData: expect.any(FormData),
       }),

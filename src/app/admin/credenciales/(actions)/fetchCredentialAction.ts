@@ -30,16 +30,7 @@ type FetchCredentialResponse = Promise<{
 
 export const fetchCredentialAction = async (
   id: string,
-  userRole: string[] | null,
 ): FetchCredentialResponse => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      credential: null,
-    };
-  }
-
   try {
     const credential = await prisma.credential.findUnique({
       where: { id },

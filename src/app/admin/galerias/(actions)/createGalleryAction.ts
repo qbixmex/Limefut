@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import type { Gallery } from '@/shared/interfaces';
 import { createGallerySchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -13,12 +14,12 @@ type ResponseCreateAction = Promise<{
 
 export const createGalleryAction = async (
   formData: FormData,
-  userRole: string[] | null,
 ): ResponseCreateAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       gallery: null,
     };
   }

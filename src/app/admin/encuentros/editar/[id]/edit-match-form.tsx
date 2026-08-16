@@ -14,8 +14,6 @@ import { UpdateMatchScore } from '../../(components)/form-fields/update-match-sc
 import { LoaderCircle } from 'lucide-react';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournaments: TOURNAMENT_TYPE[];
   categories: CATEGORY_TYPE[];
   teams: TEAM_TYPE[];
@@ -27,8 +25,6 @@ export const EditMatchForm: FC<Props> = ({
   categories,
   teams,
   match,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }) => {
   const {
     form,
@@ -39,8 +35,6 @@ export const EditMatchForm: FC<Props> = ({
     isModifyingScores,
     setIsModifyingScores,
   } = useEditMatch({
-    authenticatedUserId,
-    authenticatedUserRoles,
     match,
   });
 

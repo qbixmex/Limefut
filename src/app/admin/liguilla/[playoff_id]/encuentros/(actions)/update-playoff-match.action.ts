@@ -5,6 +5,7 @@ import { updateTag } from 'next/cache';
 import { EditPlayoffsMatchSchema } from '@/shared/schemas';
 import type { ROUND_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+import { requireAdmin } from '@/lib/get-session';
 
 type EditResponseAction = Promise<{
   ok: boolean;
@@ -15,26 +16,16 @@ type EditResponseAction = Promise<{
 export const updatePlayoffMatchAction = async ({
   formData,
   matchId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   formData: FormData;
   matchId: string;
 }): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      match: null,
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (authenticatedUserRoles && !authenticatedUserRoles.includes('admin')) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       match: null,
     };
   }

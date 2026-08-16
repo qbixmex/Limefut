@@ -18,8 +18,6 @@ import { RoundSelectField } from '../../(components)/form-fields/round-select-fi
 import type { MATCH_TYPE } from '../../(actions)/fetch-match-for-edit.action';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   playoffId: string;
   teamsSlot: ReactNode;
   fieldsSlot: ReactNode;
@@ -27,16 +25,12 @@ type Props = Readonly<{
 }>;
 
 export const EditPlayoffsMatchForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   playoffId,
   teamsSlot,
   fieldsSlot,
   match,
 }) => {
   const { form, onSubmit, handleNavigateBack } = useEditPlayoffsMatch({
-    authenticatedUserId,
-    authenticatedUserRoles,
     playoffId,
     match,
   });

@@ -9,21 +9,15 @@ import type { TOURNAMENT_TYPE } from '../../(actions)/fetch-tournament-for-edit.
 import { FormFields } from '../../(components)/form-fields';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournament: TOURNAMENT_TYPE;
   categorySlot: ReactNode;
 }>;
 
 export const EditTournamentForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   tournament,
   categorySlot,
 }) => {
   const { form, onSubmit, handleNavigateBack } = useEditTournament({
-    authenticatedUserId,
-    authenticatedUserRoles,
     tournament,
   });
 

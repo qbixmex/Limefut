@@ -1,8 +1,6 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
@@ -33,10 +31,9 @@ type Props = Readonly<{
 }>;
 
 export const MatchPage: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const id = (await params).id;
 
-  const response = await fetchMatchAction(id, session?.user.roles ?? null);
+  const response = await fetchMatchAction(id);
 
   if (!response.ok) {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(response.message)}`);

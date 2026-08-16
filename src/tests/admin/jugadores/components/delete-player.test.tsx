@@ -6,16 +6,12 @@ import { DeletePlayer } from '@/app/admin/jugadores/(components)/delete-player';
 const mockDeleteAction = vi.fn<
   (params: {
     playerId: string;
-    authenticatedUserId: string | undefined;
-    authenticatedUserRoles: string[] | null | undefined;
   }) => Promise<{ ok: boolean; message: string }>
 >();
 
 vi.mock('@/app/admin/jugadores/(actions)', () => ({
   deletePlayerAction: (params: {
     playerId: string;
-    authenticatedUserId: string | undefined;
-    authenticatedUserRoles: string[] | null | undefined;
   }) => mockDeleteAction(params),
 }));
 
@@ -36,11 +32,7 @@ describe('Test on <DeletePlayer /> component', () => {
 
   test('Should render correctly', () => {
     render(
-      <DeletePlayer
-        playerId={playerId}
-        userId="d6443a5d-5c4d-464e-87da-83582ae121e1"
-        roles={['admin']}
-      />,
+      <DeletePlayer playerId={playerId} />,
       { wrapper: TooltipProvider },
     );
 
@@ -51,11 +43,7 @@ describe('Test on <DeletePlayer /> component', () => {
 
   test('Should call deletePlayerAction on confirm', async () => {
     render(
-      <DeletePlayer
-        playerId={playerId}
-        userId="d6443a5d-5c4d-464e-87da-83582ae121e1"
-        roles={['admin']}
-      />,
+      <DeletePlayer playerId={playerId} />,
       { wrapper: TooltipProvider },
     );
 
@@ -69,19 +57,13 @@ describe('Test on <DeletePlayer /> component', () => {
     await waitFor(() => {
       expect(mockDeleteAction).toHaveBeenCalledWith({
         playerId,
-        authenticatedUserId: 'd6443a5d-5c4d-464e-87da-83582ae121e1',
-        authenticatedUserRoles: ['admin'],
       });
     });
   });
 
   test('Should not call deletePlayerAction when cancel is clicked', async () => {
     render(
-      <DeletePlayer
-        playerId={playerId}
-        userId="d6443a5d-5c4d-464e-87da-83582ae121e1"
-        roles={['admin']}
-      />,
+      <DeletePlayer playerId={playerId} />,
       { wrapper: TooltipProvider },
     );
 
@@ -92,33 +74,6 @@ describe('Test on <DeletePlayer /> component', () => {
     const cancelButton = screen.getByRole('button', { name: /cancelar/i });
     await user.click(cancelButton);
 
-    expect(mockDeleteAction).not.toHaveBeenCalled();
-  });
-
-  test('Should show error toast when roles do not include admin', async () => {
-    const { toast } = await import('sonner');
-
-    render(
-      <DeletePlayer
-        playerId={playerId}
-        userId="d6443a5d-5c4d-464e-87da-83582ae121e1"
-        roles={['user']}
-      />,
-      { wrapper: TooltipProvider },
-    );
-
-    const deleteButton = screen.getByRole('button', { name: /icono de basurero/i });
-    const user = userEvent.setup();
-    await user.click(deleteButton);
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        '¡ No tienes permisos administrativos para eliminar jugadores !',
-      );
-    });
     expect(mockDeleteAction).not.toHaveBeenCalled();
   });
 });

@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
@@ -9,6 +10,11 @@ export type ResponseDeleteAction = Promise<{
 }>;
 
 export const deleteGalleryAction = async (galleryId: string): ResponseDeleteAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return { ok: false, message: guard.message };
+  }
+
   const imagesCount = await prisma.galleryImage.count({
     where: { galleryId },
   });

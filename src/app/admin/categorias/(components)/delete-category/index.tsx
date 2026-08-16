@@ -21,20 +21,12 @@ import styles from './styles.module.css';
 
 type Props = Readonly<{
   categoryId: string;
-  userId: string | undefined;
-  roles: string[];
 }>;
 
-export const DeleteCategory: FC<Props> = ({ categoryId, userId, roles }) => {
+export const DeleteCategory: FC<Props> = ({ categoryId }) => {
   const onDeleteCategory = async () => {
-    if (roles && !roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar categorías !');
-      return;
-    }
     const { ok, message } = await deleteCategoryAction({
       categoryId,
-      authenticatedUserId: userId,
-      authenticatedUserRoles: roles,
     });
 
     if (ok) toast.success(message);

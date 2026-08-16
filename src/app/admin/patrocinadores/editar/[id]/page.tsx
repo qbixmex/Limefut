@@ -1,9 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
-import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { fetchSponsorAction } from '../../(actions)';
 import { SponsorForm } from '../../(components)/sponsor-form';
@@ -23,9 +20,8 @@ const EditSponsorPage: FC<Props> = ({ params }) => {
 
 const EditSponsorContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
-  const { ok, sponsor } = await fetchSponsorAction(session?.user.roles ?? [], sponsorId);
+  const { ok, sponsor } = await fetchSponsorAction(sponsorId);
 
   if (!ok) {
     const message = `¡ El patrocinador con el id: "${sponsorId}", no existe ❌ !`;
@@ -42,7 +38,6 @@ const EditSponsorContent: FC<Props> = async ({ params }) => {
           <CardContent>
             <SponsorForm
               key={randomUUID()}
-              session={session as Session}
               sponsor={sponsor!}
             />
           </CardContent>

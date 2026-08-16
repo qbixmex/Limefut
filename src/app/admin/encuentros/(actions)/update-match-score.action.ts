@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import { MATCH_STATUS } from '@/shared/enums';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 type Props = {
   matchId: string;
@@ -13,6 +14,16 @@ type Props = {
 };
 
 export const updateMatchScoreAction = async (props: Props): ResponseAction => {
+  const guard = await requireAdmin();
+
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+      currentMatch: null,
+    };
+  }
+
   const { matchId, localScore, visitorScore, localId, visitorId } = props;
 
   try {

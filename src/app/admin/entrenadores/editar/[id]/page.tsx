@@ -6,12 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import type { Session } from '@/lib/auth-client';
 import { fetchCoachAction } from '../../(actions)';
 import { CoachForm } from '../../(components)/coachForm';
-import { headers } from 'next/headers';
 
 type Props = Readonly<{
   params: Promise<{
@@ -28,9 +25,8 @@ const EditCoachPage: FC<Props> = ({ params }) => {
 };
 
 const EditCoachPageContent: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const coachId = (await params).id;
-  const response = await fetchCoachAction(coachId, session?.user.roles ?? null);
+  const response = await fetchCoachAction(coachId);
 
   if (!response.ok) {
     redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);
@@ -47,7 +43,6 @@ const EditCoachPageContent: FC<Props> = async ({ params }) => {
           </CardHeader>
           <CardContent>
             <CoachForm
-              session={session as Session}
               coach={response.coach!}
             />
           </CardContent>

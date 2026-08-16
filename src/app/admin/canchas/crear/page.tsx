@@ -1,14 +1,10 @@
 import { Suspense, type FC } from 'react';
-import { headers } from 'next/headers';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
-import { redirect } from 'next/navigation';
-import type { Session } from '@/lib/auth-client';
 import { FieldForm } from '../(components)/fieldForm';
 
 const CreateFieldPage = () => {
@@ -20,15 +16,6 @@ const CreateFieldPage = () => {
 };
 
 const CreateFieldContent: FC = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (session && !(session.user.roles as string[]).includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para crear canchas !';
-    redirect(`/admin/equipos?error=${encodeURIComponent(message)}`);
-  }
-
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -37,10 +24,7 @@ const CreateFieldContent: FC = async () => {
             <CardTitle className="admin-page-card-title">Crear Cancha</CardTitle>
           </CardHeader>
           <CardContent>
-            <FieldForm
-              // key={crypto.randomUUID()}
-              session={session as Session}
-            />
+            <FieldForm />
           </CardContent>
         </Card>
       </div>

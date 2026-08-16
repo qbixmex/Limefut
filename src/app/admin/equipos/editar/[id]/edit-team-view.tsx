@@ -1,7 +1,5 @@
 import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
-import { headers } from 'next/headers';
-import { auth } from '@/lib/auth';
 import { CategorySelectField } from '../../(components)/form-fields/category-select-field';
 import { TournamentSelectField } from '../../(components)/form-fields/tournament-select-field';
 import { CoachSelectField } from '../../(components)/form-fields/coach-select-field';
@@ -18,16 +16,9 @@ type Props = Readonly<{
 }>;
 
 export const EditTeamView: FC<Props> = async ({ paramsPromise }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
   const teamId = (await paramsPromise).id;
 
-  const { ok, message, team } = await fetchTeamForEditAction({
-    authenticatedUserId: session?.user.id,
-    authenticatedUserRoles: session?.user.roles,
-    teamId,
-  });
+  const { ok, message, team } = await fetchTeamForEditAction({ teamId });
 
   if (!ok || !team) {
     redirect(`${ROUTES.ADMIN_TEAMS}?error=${encodeURIComponent(message)}`);
@@ -36,8 +27,6 @@ export const EditTeamView: FC<Props> = async ({ paramsPromise }) => {
   return (
     <EditTeamForm
       key={randomUUID()}
-      authenticatedUserId={session?.user.id}
-      authenticatedUserRoles={session?.user.roles}
       team={team}
       tournamentSlot={<TournamentSelectField />}
       categorySlot={<CategorySelectField />}

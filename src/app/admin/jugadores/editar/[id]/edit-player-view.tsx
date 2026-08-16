@@ -1,8 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { headers } from 'next/headers';
 import { fetchPlayerAction, fetchTeamsForPlayer } from '../../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditPlayerForm } from '../../(components)/edit-player-form';
@@ -15,19 +13,11 @@ type Props = Readonly<{
 }>;
 
 export const EditPlayerView: FC<Props> = async ({ paramsPromise, searchParamsPromise }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const playerId = (await paramsPromise).id;
   const { tournament } = await searchParamsPromise;
 
-  if (session && !(session.user.roles as string[]).includes('admin')) {
-    const message = '¡ No tienes permisos administrativos para editar jugadores !';
-    redirect(`${ROUTES.ADMIN_PLAYERS}?error=${encodeURIComponent(message)}`);
-  }
-
   const responsePlayer = await fetchPlayerAction({
     playerId,
-    authenticatedUserId: session?.user.id,
-    authenticatedUserRoles: session?.user.roles,
   });
 
   if (!responsePlayer.ok) {
@@ -46,8 +36,6 @@ export const EditPlayerView: FC<Props> = async ({ paramsPromise, searchParamsPro
   return (
     <EditPlayerForm
       key={randomUUID()}
-      authenticatedUserId={session?.user.id}
-      authenticatedUserRoles={session?.user.roles}
       player={player}
       teams={teams}
     />

@@ -3,6 +3,7 @@ const {
   mockFindFirst,
   mockUpdate,
   mockDeleteImage,
+  mockGetSession,
 } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
@@ -22,15 +23,20 @@ const {
     mockFindFirst: vi.fn(),
     mockUpdate: vi.fn(),
     mockDeleteImage: vi.fn(),
+    mockGetSession: vi.fn(),
   };
 });
 
 vi.mock('next/cache');
 
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
 vi.mock('@/lib/auth', () => ({
   auth: {
     api: {
-      getSession: vi.fn(),
+      getSession: mockGetSession,
     },
   },
 }));
@@ -65,6 +71,9 @@ describe('Tests on delete tournament image server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
     mockFindFirst.mockResolvedValue(mockTournament);
     mockUpdate.mockResolvedValue({});
   });
@@ -73,54 +82,60 @@ describe('Tests on delete tournament image server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
+  test('Should return error when there is no authenticated session', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await deleteTournamentImageAction({
       tournamentId: '6967dfb9-fd85-4247-9f13-c3654866d1ef',
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autentificado');
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(mockFindFirst).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'f8904d40-deee-46ed-b790-d9ce3e9df7b3', roles: ['user'] },
+    });
+
     const response = await deleteTournamentImageAction({
       tournamentId: '4b578010-cfc3-4a02-9b1b-95d182bbeefe',
-      authenticatedUserId: 'f8904d40-deee-46ed-b790-d9ce3e9df7b3',
-      authenticatedUserRoles: ['user'],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockFindFirst).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
   test('Should return error when userRoles is null', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'ade5b9b6-4ddd-4dbd-aea5-91670c9ae9b0', roles: null },
+    });
+
     const response = await deleteTournamentImageAction({
       tournamentId: '779d00f9-00fc-43eb-9769-5916960b32d7',
-      authenticatedUserId: 'ade5b9b6-4ddd-4dbd-aea5-91670c9ae9b0',
-      authenticatedUserRoles: null,
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockFindFirst).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
   test('Should return error when userRoles are empty', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'cb601b21-e3a4-48be-bf21-6c012683e3c5', roles: [] },
+    });
+
     const response = await deleteTournamentImageAction({
       tournamentId: '348487a8-cc84-4dad-8a95-c99d90d14b55',
-      authenticatedUserId: 'cb601b21-e3a4-48be-bf21-6c012683e3c5',
-      authenticatedUserRoles: [],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockFindFirst).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -130,8 +145,6 @@ describe('Tests on delete tournament image server action', () => {
 
     const response = await deleteTournamentImageAction({
       tournamentId: '5adcfd78-b364-4139-9169-9b5be135c535',
-      authenticatedUserId: '38cef513-9bd0-464b-b0dc-b1b758f77cab',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -152,8 +165,6 @@ describe('Tests on delete tournament image server action', () => {
 
     const response = await deleteTournamentImageAction({
       tournamentId: '87584100-2e05-46f0-8330-0c26c5ef9862',
-      authenticatedUserId: '630ecfb4-5ac9-4e8a-ad93-e877304a018a',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(true);
@@ -174,8 +185,6 @@ describe('Tests on delete tournament image server action', () => {
     await expect(
       deleteTournamentImageAction({
         tournamentId: 'b08bbbc1-0191-4561-932f-eaeef6a6b4ba',
-        authenticatedUserId: 'd108872a-3ed5-4ff9-b3f8-a28b859c443b',
-        authenticatedUserRoles: ['user', 'admin'],
       }),
     ).rejects.toThrow('cloudinary');
     expect(mockDeleteImage).toHaveBeenCalledWith('cloudinary-id-456');
@@ -191,8 +200,6 @@ describe('Tests on delete tournament image server action', () => {
 
     const response = await deleteTournamentImageAction({
       tournamentId: '0f708860-84e3-4a6a-8a18-6f6f5171a443',
-      authenticatedUserId: 'ae1dd592-3165-44a9-a819-8c41b8df519c',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -204,8 +211,6 @@ describe('Tests on delete tournament image server action', () => {
 
     const response = await deleteTournamentImageAction({
       tournamentId: '17726cb8-c31b-49d4-adcc-0ae9b80877f8',
-      authenticatedUserId: '24f5797d-686b-4a2b-be51-7725fe80c16a',
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);

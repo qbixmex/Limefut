@@ -7,6 +7,7 @@ import { uploadImage } from '@/shared/actions';
 import { updateTag } from 'next/cache';
 import type { CloudinaryResponse, ROLE_TYPE, User } from '@/shared/interfaces';
 import { isPasswordInsecure } from '@/lib/passwords_check';
+import { requireAdmin } from '@/lib/get-session';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -24,12 +25,12 @@ type UserToSave = {
 
 export const createUserAction = async (
   formData: FormData,
-  userRole: string[] | null,
 ): CreateResponseAction => {
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       user: null,
     };
   }

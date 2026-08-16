@@ -11,24 +11,17 @@ import { StartingRoundField } from '../(components)/form-fields/starting-round-f
 import styles from '../(components)/form-fields/form-fields.module.css';
 
 type Props = Readonly<{
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournamentSlot: ReactNode;
   categorySlot: ReactNode;
   teamsSlot: ReactNode;
 }>;
 
 export const CreatePlayoffsForm: FC<Props> = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   tournamentSlot,
   categorySlot,
   teamsSlot,
 }) => {
-  const { form, onSubmit, handleNavigateBack } = useCreatePlayoffs({
-    authenticatedUserId,
-    authenticatedUserRoles,
-  });
+  const { form, onSubmit, handleNavigateBack } = useCreatePlayoffs();
 
   return (
     <div className="mt-10">

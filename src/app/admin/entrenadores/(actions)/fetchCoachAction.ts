@@ -12,20 +12,11 @@ type FetchCoachResponse = Promise<{
 
 export const fetchCoachAction = async (
   coachId: string,
-  userRole: string[] | null,
 ): FetchCoachResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-coach');
-
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      coach: null,
-    };
-  }
 
   try {
     const coach = await prisma.coach.findUnique({ where: { id: coachId } });

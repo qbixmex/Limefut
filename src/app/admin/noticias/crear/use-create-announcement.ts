@@ -9,13 +9,7 @@ import { ROUTES } from '@/shared/constants/routes';
 import { toast } from 'sonner';
 import type z from 'zod';
 
-export const useCreateAnnouncement = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
-} : {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
-}) => {
+export const useCreateAnnouncement = () => {
   const route = useRouter();
 
   const form = useForm<z.infer<typeof CreateAnnouncementSchema>>({
@@ -48,8 +42,6 @@ export const useCreateAnnouncement = ({
 
     const response = await createAnnouncementAction({
       formData,
-      authenticatedUserId,
-      authenticatedUserRoles,
     });
 
     if (!response.ok) {

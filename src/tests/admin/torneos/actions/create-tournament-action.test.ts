@@ -2,6 +2,7 @@ const {
   MockPrismaClientKnownRequestError,
   mockTransaction,
   mockUploadImage,
+  mockGetSession,
 } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
@@ -20,15 +21,20 @@ const {
     MockPrismaClientKnownRequestError,
     mockTransaction: vi.fn(),
     mockUploadImage: vi.fn(),
+    mockGetSession: vi.fn(),
   };
 });
 
 vi.mock('next/cache');
 
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
 vi.mock('@/lib/auth', () => ({
   auth: {
     api: {
-      getSession: vi.fn(),
+      getSession: mockGetSession,
     },
   },
 }));
@@ -91,6 +97,9 @@ describe('Tests on create tournament server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
     mockTx.tournament.create.mockResolvedValue(mockCreatedTournament);
     mockTx.tournamentCategory.createMany.mockResolvedValue({ count: 2 });
     mockTransaction.mockImplementation(
@@ -102,54 +111,60 @@ describe('Tests on create tournament server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticatedUserId is undefined', async () => {
+  test('Should return error when there is no authenticated session', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await createTournamentAction({
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: ['admin'],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('autenticado');
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(response.tournament).toBeNull();
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'ecc10b39-fb57-49d6-856b-31c4098be95a', roles: ['user'] },
+    });
+
     const response = await createTournamentAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: ['user'],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.tournament).toBeNull();
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should not allow to create a tournament if roles is null', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'ecc10b39-fb57-49d6-856b-31c4098be95a', roles: null },
+    });
+
     const response = await createTournamentAction({
-      authenticatedUserId: 'ecc10b39-fb57-49d6-856b-31c4098be95a',
-      authenticatedUserRoles: null,
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.tournament).toBeNull();
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   test('Should not allow to create a tournament if roles are empty', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: '19fafe1d-6847-450c-a5a7-80f61c80ed4f', roles: [] },
+    });
+
     const response = await createTournamentAction({
-      authenticatedUserId: '19fafe1d-6847-450c-a5a7-80f61c80ed4f',
-      authenticatedUserRoles: [],
       formData: validFormData(),
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toContain('permisos administrativos');
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(response.tournament).toBeNull();
     expect(mockTransaction).not.toHaveBeenCalled();
   });
@@ -159,8 +174,6 @@ describe('Tests on create tournament server action', () => {
     formData.set('name', 'ab');
 
     const response = await createTournamentAction({
-      authenticatedUserId: '7ab083c7-9389-4842-8735-1dd283eaf3c4',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -179,8 +192,6 @@ describe('Tests on create tournament server action', () => {
 
     await expect(
       createTournamentAction({
-        authenticatedUserId: 'fb5b126d-31fd-477a-b190-09c5d266be69',
-        authenticatedUserRoles: ['admin'],
         formData,
       }),
     ).rejects.toThrow('cloudinary');
@@ -188,8 +199,6 @@ describe('Tests on create tournament server action', () => {
 
   test('Should create a tournament without image', async () => {
     const response = await createTournamentAction({
-      authenticatedUserId: 'dbcf3107-c2bb-4f9f-ba4d-152ac918d93c',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -217,8 +226,6 @@ describe('Tests on create tournament server action', () => {
     formData.append('image', imageFile);
 
     const response = await createTournamentAction({
-      authenticatedUserId: '9e16e6ff-d20b-408c-b316-7d3edaeb66f9',
-      authenticatedUserRoles: ['user', 'admin'],
       formData,
     });
 
@@ -247,8 +254,6 @@ describe('Tests on create tournament server action', () => {
     );
 
     const response = await createTournamentAction({
-      authenticatedUserId: '987df461-89c3-4050-bf44-4d4dc4a3e9a1',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -265,8 +270,6 @@ describe('Tests on create tournament server action', () => {
     );
 
     const response = await createTournamentAction({
-      authenticatedUserId: 'fdbd8d2f-ece3-4cb7-9417-b3e4b4086399',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 
@@ -279,8 +282,6 @@ describe('Tests on create tournament server action', () => {
     mockTransaction.mockRejectedValue(new Error('Something went wrong'));
 
     const response = await createTournamentAction({
-      authenticatedUserId: '14b74b98-bba8-4798-be65-a002fb1912d9',
-      authenticatedUserRoles: ['user', 'admin'],
       formData: validFormData(),
     });
 

@@ -6,11 +6,10 @@ import { editTournamentSchema } from '@/shared/schemas';
 import type { CloudinaryResponse, Tournament } from '@/shared/interfaces';
 import { deleteImage, uploadImage } from '@/shared/actions';
 import { Prisma } from '@/generated/prisma/client';
+import { requireAdmin } from '@/lib/get-session';
 
 type Options = {
   formData: FormData;
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournamentId: string;
 };
 
@@ -23,21 +22,12 @@ type EditResponseAction = Promise<{
 export const updateTournamentAction = async ({
   formData,
   tournamentId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      tournament: null,
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       tournament: null,
     };
   }

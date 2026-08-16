@@ -3,6 +3,7 @@ const {
   mockFindUnique,
   mockDelete,
   mockDeleteImage,
+  mockGetSession,
 } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
@@ -22,10 +23,23 @@ const {
     mockFindUnique: vi.fn(),
     mockDelete: vi.fn(),
     mockDeleteImage: vi.fn(),
+    mockGetSession: vi.fn(),
   };
 });
 
 vi.mock('next/cache');
+
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock('@/lib/auth', () => ({
+  auth: {
+    api: {
+      getSession: mockGetSession,
+    },
+  },
+}));
 
 vi.mock('@/lib/prisma', () => ({
   default: {
@@ -49,7 +63,6 @@ vi.mock('@/generated/prisma/client', () => ({
 import { deletePlayerAction } from '@/app/admin/jugadores/(actions)/deletePlayerAction';
 
 const playerId = 'c93a8c24-ca76-493c-b1e3-f533454bbdae';
-const authUserId = '4c20f4f2-21f5-47ca-9b4a-dafe2335a993';
 
 const mockPlayerNoImage = {
   name: 'Juan Pérez',
@@ -61,6 +74,9 @@ describe('Tests on delete player server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['admin'] },
+    });
     mockFindUnique.mockResolvedValue(mockPlayerNoImage);
     mockDelete.mockResolvedValue({ id: playerId });
   });
@@ -69,67 +85,60 @@ describe('Tests on delete player server action', () => {
     vi.restoreAllMocks();
   });
 
-  test('Should return error when authenticated user id is undefined', async () => {
+  test('Should return error when user is not authenticated', async () => {
+    mockGetSession.mockResolvedValue(null);
+
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: undefined,
-      authenticatedUserRoles: [],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/autentificado/i);
+    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
 
-  test('Should return error when authenticated user id is null', async () => {
+  test('Should return error when user does not have admin role', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: ['user'] },
+    });
+
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: null,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/autentificado/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
 
   test('Should return error when authenticated user roles is null', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: null },
+    });
+
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: null,
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
-    expect(mockFindUnique).not.toHaveBeenCalled();
-    expect(mockDelete).not.toHaveBeenCalled();
-  });
-
-  test('Should return error when authenticated user roles does not include admin', async () => {
-    const response = await deletePlayerAction({
-      playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: ['user'],
-    });
-
-    expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
 
   test('Should return error when authenticated user roles is empty', async () => {
+    mockGetSession.mockResolvedValue({
+      user: { id: 'user-1', roles: [] },
+    });
+
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: [],
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/permisos administrativos/i);
+    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
     expect(mockFindUnique).not.toHaveBeenCalled();
     expect(mockDelete).not.toHaveBeenCalled();
   });
@@ -139,8 +148,6 @@ describe('Tests on delete player server action', () => {
 
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -169,8 +176,6 @@ describe('Tests on delete player server action', () => {
 
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -181,8 +186,6 @@ describe('Tests on delete player server action', () => {
   test('Should delete a player without image', async () => {
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(true);
@@ -217,8 +220,6 @@ describe('Tests on delete player server action', () => {
 
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(true);
@@ -237,8 +238,6 @@ describe('Tests on delete player server action', () => {
     await expect(
       deletePlayerAction({
         playerId,
-        authenticatedUserId: authUserId,
-        authenticatedUserRoles: ['user', 'admin'],
       }),
     ).rejects.toThrow('cloudinary');
     expect(mockDeleteImage).toHaveBeenCalledWith('cloudinary-public-id');
@@ -254,8 +253,6 @@ describe('Tests on delete player server action', () => {
 
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -267,8 +264,6 @@ describe('Tests on delete player server action', () => {
 
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);
@@ -280,8 +275,6 @@ describe('Tests on delete player server action', () => {
 
     const response = await deletePlayerAction({
       playerId,
-      authenticatedUserId: authUserId,
-      authenticatedUserRoles: ['user', 'admin'],
     });
 
     expect(response.ok).toBe(false);

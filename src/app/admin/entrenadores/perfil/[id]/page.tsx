@@ -42,7 +42,7 @@ const CoachPageContent: FC<Props> = async ({ params }) => {
   });
   const coachId = (await params).id;
 
-  const response = await fetchCoachDetailsAction(coachId, session?.user.roles ?? null);
+  const response = await fetchCoachDetailsAction(coachId);
 
   if (!response.ok) {
     redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);

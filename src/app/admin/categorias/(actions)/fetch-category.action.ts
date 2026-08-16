@@ -11,34 +11,14 @@ type FetchResponse = Promise<{
 }>;
 
 export const fetchCategoryAction = async ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   categoryId,
 }: {
-  authenticatedUserId: string | null | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   categoryId: string;
 }): FetchResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-category');
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      category: null,
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      category: null,
-    };
-  }
 
   try {
     const category = await prisma.category.findFirst({

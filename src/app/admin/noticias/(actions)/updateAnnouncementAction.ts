@@ -4,12 +4,11 @@ import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { EditAnnouncementSchema } from '@/shared/schemas';
 import { deleteImage, uploadImage } from '@/shared/actions';
+import { requireAdmin } from '@/lib/get-session';
 
 type Options = {
   formData: FormData;
   announcementId: string;
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
 };
 
 type EditResponseAction = Promise<{
@@ -33,21 +32,12 @@ type ANNOUNCEMENT_TYPE = {
 export const updateAnnouncementAction = async ({
   formData,
   announcementId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: Options): EditResponseAction => {
-  if (!authenticatedUserId) {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ Tienes que estar autentificado para realizar esta acción !',
-      announcement: null,
-    };
-  }
-
-  if (!authenticatedUserRoles?.includes('admin')) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       announcement: null,
     };
   }

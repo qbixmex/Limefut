@@ -1,6 +1,4 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
-import { auth } from '@/lib/auth';
 import { CreatePlayoffsForm } from './create-playoffs-form';
 import { TournamentSelectField } from '../(components)/form-fields/tournament-select-field';
 import { CategorySelectField } from '../(components)/form-fields/category-select-field';
@@ -14,32 +12,19 @@ type Props = Readonly<{
 }>;
 
 export const CreatePlayoffContent: FC<Props> = async ({ searchParams }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
   const { tournament, category } = await searchParams;
 
   return (
     <CreatePlayoffsForm
-      authenticatedUserId={session?.user.id}
-      authenticatedUserRoles={session?.user.roles}
       tournamentSlot={
-        <TournamentSelectField
-          authenticatedUserId={session?.user.id}
-          authenticatedUserRoles={session?.user.roles}
-        />
+        <TournamentSelectField />
       }
       categorySlot={
-        <CategorySelectField
-          authenticatedUserId={session?.user.id}
-          authenticatedUserRoles={session?.user.roles}
-        />
+        <CategorySelectField />
       }
       teamsSlot={
         <TeamsSelectField
           key={`${tournament ?? 'tournament'}-${category ?? 'category'}`}
-          authenticatedUserId={session?.user.id}
-          authenticatedUserRoles={session?.user.roles}
           tournamentPermalink={tournament}
           categoryPermalink={category}
         />

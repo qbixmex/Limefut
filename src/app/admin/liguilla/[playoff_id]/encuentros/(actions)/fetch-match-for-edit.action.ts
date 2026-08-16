@@ -44,31 +44,11 @@ type FetchResponse = Promise<{
 export const fetchMatchForEditAction = async ({
   playoffId,
   matchId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
   playoffId: string,
   matchId: string,
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
 }): FetchResponse => {
   'use cache';
-
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
-      match: null,
-    };
-  }
-
-  if ((!authenticatedUserRoles?.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
-      match: null,
-    };
-  }
 
   cacheLife('days');
   cacheTag('admin-playoff-match');

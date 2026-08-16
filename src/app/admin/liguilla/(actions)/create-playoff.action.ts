@@ -5,6 +5,7 @@ import type { PLAYOFF_ROUND_TYPE } from '@/shared/enums';
 import { CreatePlayoffsSchema } from '@/shared/schemas';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { updateTag } from 'next/cache';
+import { requireAdmin } from '@/lib/get-session';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -16,28 +17,15 @@ type CreateResponseAction = Promise<{
 
 export const createPlayoffAction = async ({
   formData,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   formData: FormData;
 }): CreateResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      playoff: null,
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (
-    (authenticatedUserRoles && authenticatedUserRoles.length > 0) &&
-    (!authenticatedUserRoles.includes('admin'))
-  ) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       playoff: null,
     };
   }

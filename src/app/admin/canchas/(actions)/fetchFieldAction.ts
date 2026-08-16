@@ -12,20 +12,11 @@ type FetchFieldResponse = Promise<{
 
 export const fetchFieldAction = async (
   fieldId: string,
-  userRole: string[] | null,
 ): FetchFieldResponse => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-field');
-
-  if ((userRole !== null) && (!userRole.includes('admin'))) {
-    return {
-      ok: false,
-      message: '¡ No tienes permisos administrativos !',
-      field: null,
-    };
-  }
 
   try {
     const field = await prisma.field.findFirst({

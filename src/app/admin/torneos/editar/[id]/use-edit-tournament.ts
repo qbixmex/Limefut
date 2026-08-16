@@ -24,12 +24,8 @@ const DEFAULT_FORM_VALUES = {
 };
 
 export const useEditTournament = ({
-  authenticatedUserId,
-  authenticatedUserRoles,
   tournament,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   tournament: TOURNAMENT_TYPE;
 }) => {
   const router = useRouter();
@@ -88,8 +84,6 @@ export const useEditTournament = ({
 
     const { ok, message } = await updateTournamentAction({
       formData,
-      authenticatedUserId,
-      authenticatedUserRoles,
       tournamentId: tournament.id,
     });
 

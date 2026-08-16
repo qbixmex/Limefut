@@ -1,6 +1,5 @@
 import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import {
   Table,
   TableBody,
@@ -15,7 +14,6 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 import { fetchFieldAction } from '../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { headers } from 'next/headers';
 import { ROUTES } from '@/shared/constants/routes';
 import { SoccerFieldIcon } from '@/shared/components/icons/soccer-field.icon';
 import { redirect } from 'next/navigation';
@@ -35,12 +33,9 @@ const FieldPage: FC<Props> = ({ params }) => {
 };
 
 const FieldContent: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
   const fieldId = (await params).id;
 
-  const response = await fetchFieldAction(fieldId, session?.user.roles ?? null);
+  const response = await fetchFieldAction(fieldId);
 
   if (!response.ok) {
     redirect(`${ROUTES.ADMIN_FIELDS}?error=${encodeURIComponent(response.message)}`);

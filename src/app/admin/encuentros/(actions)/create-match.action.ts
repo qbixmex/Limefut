@@ -5,6 +5,7 @@ import { createMatchSchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { Prisma } from '@/generated/prisma/client';
+import { requireAdmin } from '@/lib/get-session';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -45,28 +46,15 @@ export type MATCH_TYPE = {
 
 export const createMatchAction = async ({
   formData,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   formData: FormData;
 }): CreateResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      match: null,
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (
-    (authenticatedUserRoles && authenticatedUserRoles.length > 0) &&
-    (!authenticatedUserRoles.includes('admin'))
-  ) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       match: null,
     };
   }

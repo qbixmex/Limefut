@@ -5,6 +5,7 @@ import { updateTag } from 'next/cache';
 import { editMatchSchema } from '@/shared/schemas';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { Prisma } from '@/generated/prisma/client';
+import { requireAdmin } from '@/lib/get-session';
 
 type EditResponseAction = Promise<{
   ok: boolean;
@@ -44,26 +45,16 @@ export type MATCH_TYPE = {
 export const updateMatchAction = async ({
   formData,
   matchId,
-  authenticatedUserId,
-  authenticatedUserRoles,
 }: {
-  authenticatedUserId: string | undefined;
-  authenticatedUserRoles: string[] | null | undefined;
   formData: FormData;
   matchId: string;
 }): EditResponseAction => {
-  if (!authenticatedUserId) {
-    return {
-      ok: false,
-      message: '¡ Usuario no autenticado !',
-      match: null,
-    };
-  }
+  const guard = await requireAdmin();
 
-  if (authenticatedUserRoles && !authenticatedUserRoles.includes('admin')) {
+  if (!guard.ok) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: guard.message,
       match: null,
     };
   }
