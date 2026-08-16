@@ -2,7 +2,6 @@
 
 .videosContainer {
   width: 100%;
-  max-width: 288px;
   border-width: 1px;
   border-color: var(--color-gray-400);
   border-style: solid;

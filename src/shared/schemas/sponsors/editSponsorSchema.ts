@@ -22,10 +22,10 @@ export const editSponsorSchema = z.object({
     .optional(),
   startDate: z
     .date({ message: 'La fecha inicial debe ser una fecha válida' })
-    .optional(),
+    .nullish(),
   endDate: z
     .date({ message: 'La fecha final debe ser una fecha válida' })
-    .optional(),
+    .nullish(),
   position: z
     .int('¡ La posición debe ser un número !')
     .min(0, { message: 'La posición debe ser un número positivo' })

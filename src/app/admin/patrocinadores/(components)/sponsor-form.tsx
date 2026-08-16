@@ -57,10 +57,11 @@ export const SponsorForm: FC<Props> = ({ sponsor }) => {
   });
 
   const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(
-    form.getValues('startDate'),
+    form.getValues('startDate') ?? undefined,
   );
+
   const [selectedEndDate, setSelectedEndDate] = useState<Date | undefined>(
-    form.getValues('endDate'),
+    form.getValues('endDate') ?? undefined,
   );
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
