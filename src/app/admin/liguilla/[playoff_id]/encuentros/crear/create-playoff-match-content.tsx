@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { CreatePlayoffsMatchForm } from './create-playoffs-match-form';
 import { TeamsSlot } from '../(components)/form-fields/teams-slot';
@@ -15,7 +14,6 @@ export const CreatePlayoffMatchContent: FC<Props> = async ({ params }) => {
 
   return (
     <CreatePlayoffsMatchForm
-      key={randomUUID()}
       playoffId={playoffId}
       teamsSlot={
         <TeamsSlot

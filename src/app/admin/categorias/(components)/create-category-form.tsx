@@ -8,9 +8,7 @@ import type { Category } from '@/shared/interfaces';
 import { useCreateCategory } from './useCreateCategory';
 import { FormFields } from './form-fields';
 
-type Props = Readonly<{
-  category?: Category;
-}>;
+type Props = Readonly<{ category?: Category; }>;
 
 export const CreateCategoryForm: FC<Props> = (props) => {
   const { form, onSubmit, handleNavigateBack } = useCreateCategory(props);
