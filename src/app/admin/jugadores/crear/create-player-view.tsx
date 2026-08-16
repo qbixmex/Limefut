@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { redirect } from 'next/navigation';
 import { fetchTeamsForPlayer } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
@@ -23,7 +22,6 @@ export const CreatePlayerView = async ({ searchParamsPromise }: Props) => {
 
   return (
     <CreatePlayerForm
-      key={randomUUID()}
       teams={teams}
     />
   );

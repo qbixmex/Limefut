@@ -10,11 +10,7 @@ type FetchResponse = Promise<{
   category: Category | null;
 }>;
 
-export const fetchCategoryAction = async ({
-  categoryId,
-}: {
-  categoryId: string;
-}): FetchResponse => {
+export const fetchCategoryAction = async (categoryId: string): FetchResponse => {
   'use cache';
 
   cacheLife('days');

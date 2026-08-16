@@ -5,7 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CreateTeamView } from './create-team-view';
+import { CreateTeamForm } from './create-team-form';
+import { CategorySelectField } from '../(components)/form-fields/category-select-field';
+import { TournamentSelectField } from '../(components)/form-fields/tournament-select-field';
+import { CoachSelectField } from '../(components)/form-fields/coach-select-field';
+import { FieldSelectField } from '../(components)/form-fields/field-select-field';
 
 const CreateTeamPage = () => {
   return (
@@ -17,7 +21,12 @@ const CreateTeamPage = () => {
           </CardHeader>
           <CardContent>
             <Suspense>
-              <CreateTeamView />
+              <CreateTeamForm
+                tournamentSlot={<TournamentSelectField />}
+                categorySlot={<CategorySelectField />}
+                coachesSlot={<CoachSelectField />}
+                fieldsSlot={<FieldSelectField />}
+              />
             </Suspense>
           </CardContent>
         </Card>

@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import CreateCategoryPage from '@/app/admin/categorias/crear/page';
 
-vi.mock('@/app/admin/categorias/crear/create-category-view', () => ({
-  CreateCategoryView: () => <div data-testid="create-category-view" />,
+vi.mock('@/app/admin/categorias/(components)/create-category-form', () => ({
+  CreateCategoryForm: () => <div data-testid="create-category-form" />,
 }));
 
 describe('Test on <CreateCategoryPage />', () => {
@@ -15,10 +15,10 @@ describe('Test on <CreateCategoryPage />', () => {
     expect(heading).toHaveTextContent(/crear/i);
   });
 
-  test('Should render <CreateCategoryView /> component', async () => {
+  test('Should render <CreateCategoryForm /> component', async () => {
     const ServerComponent = await CreateCategoryPage();
     render(ServerComponent);
 
-    expect(screen.getByTestId('create-category-view')).toBeInTheDocument();
+    expect(screen.getByTestId('create-category-form')).toBeInTheDocument();
   });
 });

@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import type { FC } from 'react';
 import { redirect } from 'next/navigation';
 import { fetchPlayerAction, fetchTeamsForPlayer } from '../../(actions)';
@@ -35,7 +34,6 @@ export const EditPlayerView: FC<Props> = async ({ paramsPromise, searchParamsPro
 
   return (
     <EditPlayerForm
-      key={randomUUID()}
       player={player}
       teams={teams}
     />
