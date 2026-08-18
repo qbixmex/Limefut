@@ -1,14 +1,10 @@
-import { headers } from 'next/headers';
-import type { Session } from '@/lib/auth-client';
 import { SignInOut } from './sign-in-out';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 
 export const AuthSession = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   return (
-    <SignInOut session={session as Session} />
+    <SignInOut authenticatedUser={session?.user} />
   );
 };

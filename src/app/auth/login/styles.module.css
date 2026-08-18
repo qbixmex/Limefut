@@ -1,0 +1,32 @@
+@reference "../../globals.css";
+
+.wrapper {
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--color-gray-50);
+  padding: --spacing(5);
+
+  @variant md {
+    @apply rounded;
+  }
+
+  @variant lg {
+    padding: --spacing(10);
+    @apply rounded;
+  }
+
+  @variant dark {
+    background-color: var(--color-gray-900);
+  }
+}
+
+.logo {
+  width: 300px;
+  height: 80px;
+  object-fit: cover;
+  object-position: center;
+  margin-bottom: --spacing(3);
+}
