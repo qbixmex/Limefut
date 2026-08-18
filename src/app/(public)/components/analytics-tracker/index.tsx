@@ -3,13 +3,14 @@
 import Script from 'next/script';
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = {
   gaId: string;
 };
 
 const EXCLUDED_PREFIXES = ['/admin'];
-const EXCLUDED_PATHS = new Set(['/login', '/register']);
+const EXCLUDED_PATHS = new Set([ROUTES.AUTH_LOGIN, '/register']);
 
 export const AnalyticsTracker: React.FC<Props> = ({ gaId }) => {
   const pathname = usePathname();

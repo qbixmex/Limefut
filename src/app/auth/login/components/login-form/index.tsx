@@ -2,16 +2,10 @@
 
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeClosed, LoaderCircle } from 'lucide-react';
@@ -19,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { signInAction } from '@/app/(auth)/signInAction';
 import { toast } from 'sonner';
 import './styles.css';
+import { ROUTES } from '@/shared/constants/routes';
 
 const loginSchema = z.object({
   email: z.string()
@@ -28,7 +23,7 @@ const loginSchema = z.object({
       { message: '¡ Formato incorrecto del correo electrónico !' },
     ),
   password: z.string().min(8, {
-    message: '¡ La contraseña debe ser por lo menos de 8 caracteres!',
+    message: '¡ La contraseña debe ser por lo menos de 8 caracteres !',
   }),
 });
 
@@ -60,7 +55,7 @@ export const LoginForm = () => {
     toast.success(message);
 
     // Redirect to dashboard using hard refresh
-    window.location.replace('/admin/dashboard');
+    window.location.replace(ROUTES.ADMIN_DASHBOARD);
   };
 
   return (
@@ -69,48 +64,57 @@ export const LoginForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
       >
-        <FormField
-          control={form.control}
+        <Controller
           name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="label">
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel className="label">
                 Correo Electrónico
-              </FormLabel>
-              <FormControl>
-                <Input {...field} className="input" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </FieldLabel>
+              <Input
+                {...field}
+                value={field.value ?? ''}
+                className="input"
+                aria-label="Correo electrónico"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
           )}
         />
 
-        <FormField
-          control={form.control}
+        <Controller
           name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="label">Contraseña</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    {...field}
-                    type={passwordVisible ? 'text' : 'password'}
-                    className="input"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setPasswordVisible(prev => !prev)}
-                    className={cn('showHidePassword', {
-                      hidden: field.value?.length === 0,
-                    })}
-                  >
-                    {passwordVisible ? <Eye /> : <EyeClosed />}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel className="label">Contraseña</FieldLabel>
+              <div className="relative">
+                <Input
+                  {...field}
+                  value={field.value ?? ''}
+                  type={passwordVisible ? 'text' : 'password'}
+                  className="input"
+                  aria-label="Contraseña"
+                  aria-invalid={fieldState.invalid}
+                />
+                <button
+                  type="button"
+                  onClick={() => setPasswordVisible(prev => !prev)}
+                  className={cn('showHidePassword', {
+                    hidden: field.value?.length === 0,
+                  })}
+                >
+                  {passwordVisible ? <Eye /> : <EyeClosed />}
+                </button>
+              </div>
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
           )}
         />
 
@@ -121,6 +125,7 @@ export const LoginForm = () => {
             size="lg"
             className="submitButton"
             disabled={form.formState.isSubmitting}
+            aria-label="Acceder"
           >
             {form.formState.isSubmitting ? (
               <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
@@ -136,5 +141,3 @@ export const LoginForm = () => {
     </Form>
   );
 };
-
-export default LoginForm;
