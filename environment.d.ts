@@ -22,6 +22,11 @@ declare global {
       MAILER_SECRET_KEY: string | null;
     }
   }
+
+  interface Window {
+    dataLayer?: unknown[][];
+    gtag?: (...args: unknown[]) => void;
+  }
 }
 
 export {};
