@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/sidebar';
 import { toast } from 'sonner';
 import { signOutAction } from '../app/(auth)/signOutAction';
-import { redirect, useRouter } from 'next/navigation';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = {
   user: {
@@ -42,13 +42,10 @@ type Props = {
 };
 
 export const NavUser: FC<Props> = ({ user }) => {
-  const route = useRouter();
-  // const { isMobile } = useSidebar();
-
   const handleLogout = async () => {
     const { message } = await signOutAction();
     toast.success(message);
-    route.replace('/login');
+    window.location.replace(ROUTES.AUTH_LOGIN);
   };
 
   return (
@@ -96,7 +93,9 @@ export const NavUser: FC<Props> = ({ user }) => {
               <DropdownMenuItem asChild className="cursor-pointer">
                 <button
                   className="w-full"
-                  onClick={() => redirect(`/admin/usuarios/perfil/${user.id}`) }
+                  onClick={() => {
+                    window.location.replace(`/admin/usuarios/perfil/${user.id}`);
+                  }}
                 >
                   <BadgeCheck />
                   <span>Perfil</span>

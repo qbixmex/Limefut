@@ -16,15 +16,17 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { signOutAction } from '@/app/(auth)/signOutAction';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   user: {
     id: string;
     name: string;
-    username?: string | null;
+    username: string | undefined;
     email: string;
-    image?: string | null;
-    roles?: string[] | null;
+    emailVerified: boolean;
+    roles: string[] | undefined;
+    image: string | undefined;
   }
 }>;
 
@@ -66,7 +68,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
         <div className="absolute right-0 mt-2 bg-radial w-[200px] from-emerald-600 to-emerald-800 border border-emerald-700 rounded-lg shadow-lg z-50">
           <div className="px-3">
             <Link
-              href="/admin/dashboard"
+              href={ROUTES.ADMIN_DASHBOARD}
               className="flex items-center gap-3 w-full font-bold py-3 text-emerald-50 hover:text-emerald-300 transition-colors"
               onClick={() => setIsOpen(false)}
               target="_blank"

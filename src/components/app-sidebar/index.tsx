@@ -18,6 +18,7 @@ import { NavMain } from '@/components/nav-main';
 import { NavLinks } from '@/components/nav-links';
 import { PiSoccerBall } from 'react-icons/pi';
 import './app-sidebar.css';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   siteName: string;
@@ -31,7 +32,7 @@ export const AppSidebar: FC<Props> = ({ siteName, siteLogo, ...props }) => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/admin/dashboard">
+              <Link href={ROUTES.ADMIN_DASHBOARD}>
                 <figure className="site-logo">
                   {
                     !siteLogo ? (
