@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
+import { ROUTES } from '@/shared/constants/routes';
 
 export async function proxy(request: NextRequest) {
   const session = await auth.api.getSession({
@@ -8,11 +9,11 @@ export async function proxy(request: NextRequest) {
   });
 
   if (!session) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL(ROUTES.AUTH_LOGIN, request.url));
   }
 
   if (!session.user.roles?.includes('admin')) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL(ROUTES.AUTH_LOGIN, request.url));
   }
 
   return NextResponse.next();
