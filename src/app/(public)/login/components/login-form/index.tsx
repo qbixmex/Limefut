@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -35,7 +34,6 @@ const loginSchema = z.object({
 
 export const LoginForm = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -60,7 +58,9 @@ export const LoginForm = () => {
 
     form.reset();
     toast.success(message);
-    router.replace('/admin/dashboard');
+
+    // Redirect to dashboard using hard refresh
+    window.location.replace('/admin/dashboard');
   };
 
   return (
