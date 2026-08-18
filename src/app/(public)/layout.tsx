@@ -1,9 +1,8 @@
 import type { FC, ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { Container, Footer, Header } from './components';
+import { PublicLayoutContent } from './layout-content';
 import { fetchPublicGlobalSettingsAction } from '../admin/ajustes-globales/(actions)/fetchPublicGlobalSettingsAction';
-import { GoogleAnalytics } from '@next/third-parties/google';
 import '@/app/globals.css';
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -57,39 +56,6 @@ const PublicLayout: FC<Props> = ({ children }) => {
         {children}
       </PublicLayoutContent>
     </Suspense>
-  );
-};
-
-const PublicLayoutContent: FC<Props> = async ({ children }) => {
-  const { globalSettings } = await fetchPublicGlobalSettingsAction();
-
-  return (
-    <>
-      <Container>
-        <Header
-          siteLogo={globalSettings?.logoUrl ?? null}
-          siteName={globalSettings?.siteName ?? null}
-        />
-        <div className="flex-1 flex flex-col">
-          {children}
-        </div>
-        <Footer
-          siteName={globalSettings?.siteName ?? null}
-          socialMedia={[
-            { facebook: globalSettings?.facebookUrl ?? undefined },
-            { twitterX: globalSettings?.twitterXUrl ?? undefined },
-            { instagram: globalSettings?.instagramUrl ?? undefined },
-            { tikTok: globalSettings?.tiktokUrl ?? undefined },
-            { youtube: globalSettings?.youtubeUrl ?? undefined },
-          ]}
-        />
-      </Container>
-      {
-        globalSettings?.googleAnalyticsId && (
-          <GoogleAnalytics gaId={globalSettings.googleAnalyticsId} />
-        )
-      }
-    </>
   );
 };
 
