@@ -1,129 +1,145 @@
-@reference 'tailwindcss';
+@reference '../../../globals.css';
+.wrapper {
+	width: 100%;
+	border-width: 1px;
+	border-color: var(--color-gray-400);
+	border-style: solid;
+  overflow: hidden;
+	background-color: var(--color-gray-100);
+	@apply rounded-md;
 
-.videosContainer {
-  width: 100%;
-  border-width: 1px;
-  border-color: var(--color-gray-400);
-  border-style: solid;
-  @apply rounded-md;
+  @variant dark {
+		background-color: var(--color-gray-800);
+	}
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 700;
-  text-shadow: none !important;
-  background-color: var(--color-gray-500);
-  padding-block: calc(var(--spacing) * 2);
-  padding-inline: calc(var(--spacing) * 3);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-weight: 700;
+	text-shadow: none !important;
+	background-color: var(--color-gray-500);
+	padding-block: calc(var(--spacing) * 2);
+	padding-inline: calc(var(--spacing) * 3);
+
+  @variant dark {
+		background-color: var(--color-gray-600);
+	}
 }
 
 .heading {
-  color: var(--color-gray-50);
-  @apply text-xl;
+	color: var(--color-gray-50);
+	@apply text-xl;
 }
 
 .videosLink {
-  color: var(--color-gray-50);
-  font-weight: 500;
-  transition: 300ms ease-in-out;
-
-  &:hover {
-    color: var(--color-sky-400);
-  }
+	color: var(--color-gray-50);
+	font-weight: 500;
+	transition: 300ms ease-in-out;
+	&:hover {
+		color: var(--color-sky-400);
+	}
 }
 
 .content {
-  padding: calc(var(--spacing) * 4);
-  height: auto;
-  min-height: 300px;
+	height: auto;
+	min-height: 300px;
+	padding: --spacing(5);
 }
 
 .emptyContent {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 300px;
-  gap: calc(var(--spacing) * 5);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 300px;
+	gap: calc(var(--spacing) * 5);
 
   p {
-    color: text-gray-600;
-    font-weight: 600;
-    text-align: center;
+		color: text-gray-600;
+		font-weight: 600;
+		text-align: center;
+
     @apply text-xl leading-tight;
-  }
+
+    @variant dark {
+      color: var(--color-gray-400);
+	  }
+	}
 
   .icon {
-    width: 100px;
-    height: 100px;
-    stroke-width: 1;
-    color: var(--color-gray-600);
-  }
+		width: 100px;
+		height: 100px;
+		stroke-width: 1;
+		color: var(--color-gray-600);
+
+    @variant dark {
+      color: var(--color-gray-400);
+		}
+	}
 }
 
 .videos {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing) * 5);
+	display: block;
+
+  @variant md {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @variant lg {
+    display: block;
+  }
 }
 
 .video {
-  width: 100%;
-  border-width: 0.5px;
-  border-color: var(--color-gray-400);
-  padding: calc(var(--spacing) * 3);
-  @apply bg-gray-100/80;
-  @apply rounded;
+	width: 100%;
+	@apply rounded;
+}
 
+.videoDivider {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-gray-500);
+  margin-block: --spacing(5);
+
+  @variant md {
+    display: none;
+  }
+
+  @variant lg {
+    display: block;
+  }
 }
 
 .videoSubtitle {
-  text-shadow: none;
-  color: var(--color-gray-700);
-  font-weight: 600;
-  margin-bottom: calc(var(--spacing) * 2);
-  @apply text-lg;
+	text-shadow: none;
+	color: var(--color-gray-700);
+	font-weight: 600;
+	margin-bottom: calc(var(--spacing) * 2);
+	@apply text-lg;
+
+  @variant dark {
+		color: var(--color-gray-200);
+	}
 }
 
 .videoThumbnail {
-  margin-bottom: calc(var(--spacing) * 2);
-  @apply rounded-md;
+	margin-bottom: calc(var(--spacing) * 2);
+	@apply rounded-md;
 }
 
 .videoDate {
-  text-shadow: none;
-  font-style: italic;
-  color: var(--color-gray-500);
+	text-shadow: none;
+	font-style: italic;
+	color: var(--color-gray-500);
+
   @apply text-sm;
-}
 
-:global(.dark) {
-  .videosContainer {
-    border-color: var(--color-gray-500);
-  }
-
-  .header {
-    background-color: var(--color-gray-600);
-  }
-  .emptyContent {
-    p {
-      color: var(--color-gray-400);
-    }
-    .icon {
-      color: var(--color-gray-400);
-    }
-  }
-  .video {
-    border-color: var(--color-gray-500);
-    background-color: var(--color-gray-800);
-  }
-  .videoSubtitle {
-    color: var(--color-gray-200);
-  }
-  .videoDate {
+  @variant dark {
     color: var(--color-gray-400);
   }
 }

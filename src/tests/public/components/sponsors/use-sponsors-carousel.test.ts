@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { useSponsorsCarousel } from '@/app/(public)/components/sponsors/use-sponsors-carousel';
+import { useSponsorsCarousel } from '@/app/(public)/components/sponsors/sponsor-carousel/use-sponsors-carousel';
 import { sponsors } from '@/tests/mocks/sponsors';
 
 describe('Test on useSponsorsCarousel hook', () => {

@@ -36,6 +36,7 @@ export const fetchPublicAnnouncementsAction = async (): ResponseAction => {
         publishedDate: true,
         description: true,
       },
+      take: 4,
     });
 
     return {
