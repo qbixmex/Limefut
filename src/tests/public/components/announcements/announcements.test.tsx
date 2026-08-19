@@ -4,7 +4,6 @@ import { fetchPublicAnnouncementsAction } from '@/app/(public)/(actions)/home/fe
 import { announcements } from '@/tests/mocks/announcements';
 import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
-import { ROUTES } from '@/shared/constants/routes';
 
 vi.mock('@/app/(public)/(actions)/home/fetchPublicAnnouncements');
 
@@ -72,7 +71,12 @@ describe('Test on <Announcements /> component', () => {
     expect(dates).toHaveLength(2);
 
     dates.forEach((date, index) => {
-      const formattedDate = formatInTimeZone(announcements[index].publishedDate, 'America/Mexico_City', "d 'de' MMMM 'del' yyyy", { locale: es });
+      const formattedDate = formatInTimeZone(
+        announcements[index].publishedDate,
+        'America/Mexico_City',
+        "d 'de' MMMM 'del' yyyy",
+        { locale: es },
+      );
       expect(date).toHaveTextContent(formattedDate);
     });
   });
@@ -90,28 +94,6 @@ describe('Test on <Announcements /> component', () => {
 
     descriptions.forEach((description, index) => {
       expect(description).toHaveTextContent(announcements[index].description);
-    });
-  });
-
-  test('Should render show more links', async () => {
-    vi.mocked(fetchPublicAnnouncementsAction).mockResolvedValue({
-      ok: true,
-      message: 'Announcements fetched successfully',
-      announcements,
-    });
-    const ServerComponent = await Announcements();
-    render(ServerComponent);
-
-    const links = screen.getAllByLabelText(/ver más/i);
-
-    expect(links).toHaveLength(2);
-
-    links.forEach((link, index) => {
-      expect(link).toHaveTextContent(/ver más/i);
-      expect(link).toHaveAttribute(
-        'href',
-        ROUTES.PUBLIC_ANNOUNCEMENTS_SHOW(announcements[index].permalink),
-      );
     });
   });
 

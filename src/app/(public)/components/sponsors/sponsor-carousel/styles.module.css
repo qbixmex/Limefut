@@ -1,0 +1,19 @@
+@reference "tailwindcss";
+
+.image {
+  width: 100%;
+  height: 720px;
+  object-fit: cover;
+  object-position: center;
+  @apply rounded;
+
+  @variant md {
+    max-width: 405px;
+    height: 720px;
+  }
+
+  @variant lg {
+    max-width: 1024px;
+    height: 512px;
+  }
+}

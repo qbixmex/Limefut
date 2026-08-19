@@ -1,11 +1,12 @@
 'use client';
 
 import type { FC } from 'react';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { useSponsorsCarousel } from './use-sponsors-carousel';
-import { incrementClickAction } from '../../(actions)/videos/incrementClickAction';
-import type { SponsorType } from '../../(actions)/home/fetchPublicSponsorsAction';
+import { incrementClickAction } from '../../../(actions)/videos/incrementClickAction';
+import type { SponsorType } from '../../../(actions)/home/fetchPublicSponsorsAction';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   sponsors: {
@@ -49,7 +50,7 @@ export const SponsorCarousel: FC<Props> = ({ sponsors = [], time = 10 }) => {
           height={0}
           src={sponsor.imageUrl ?? ''}
           alt={`Patrocinador ${sponsor.name.toLowerCase() ?? 'Sponsor Image'}`}
-          className="w-full max-w-[1024px] h-[512px] rounded object-cover object-center"
+          className={styles.image}
         />
       </motion.figure>
     </button>
