@@ -36,7 +36,7 @@ export const fetchPublicVideosAction = async (): ResponseAction => {
         url: true,
         platform: true,
       },
-      take: 5,
+      take: 4,
     });
 
     return {

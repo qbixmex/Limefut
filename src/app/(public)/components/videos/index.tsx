@@ -11,7 +11,7 @@ export const Videos = async () => {
   const { ok, videos } = await fetchPublicVideosAction();
 
   return (
-    <section className={styles.videosContainer}>
+    <section className={styles.wrapper}>
       <header className={styles.header}>
         <h2 className={styles.heading}>Videos</h2>
         <Link href="/videos" className={styles.videosLink}>ver todos</Link>
@@ -29,7 +29,7 @@ export const Videos = async () => {
 
         {(videos.length > 0) && (
           <div className={styles.videos}>
-            {videos.map((video) => (
+            {videos.map((video, index) => (
               <article
                 key={video.id}
                 className={styles.video}
@@ -57,6 +57,10 @@ export const Videos = async () => {
                     )
                   }
                 </p>
+
+                { index < (videos.length - 1) && (
+                  <div className={styles.videoDivider} />
+                )}
               </article>
             ))}
           </div>

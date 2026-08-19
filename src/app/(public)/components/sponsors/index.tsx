@@ -9,7 +9,7 @@ export const Sponsors = async () => {
   }
 
   return (
-    <div className="hidden lg:block">
+    <div className="md:mx-auto">
       <h2 className="visually-hidden">Patrocinadores</h2>
 
       <SponsorCarousel
