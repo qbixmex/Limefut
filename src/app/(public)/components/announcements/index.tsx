@@ -11,7 +11,7 @@ export const Announcements = async () => {
   const { ok, announcements } = await fetchPublicAnnouncementsAction();
 
   return (
-    <section className={styles.announcements}>
+    <section className={styles.wrapper}>
       <header>
         <h2 className={styles.heading}>Noticias</h2>
       </header>
@@ -26,38 +26,40 @@ export const Announcements = async () => {
 
         {(announcements.length > 0) && (
           <div className={styles.announcements}>
-            {announcements.map((announcement) => (
-              <article
+            {announcements.map((announcement, index) => (
+              <Link
                 key={announcement.id}
-                className={styles.announcement}
-                aria-label={`Anuncio: ${announcement.title}`}
+                href={ROUTES.PUBLIC_ANNOUNCEMENTS_SHOW(announcement.permalink)}
+                aria-label={`Ver más sobre el anuncio: ${announcement.title}`}
               >
-                <h3 className={styles.subtitle}>{announcement.title}</h3>
-
-                {announcement?.imageUrl && (
-                  <figure>
-                    <Image
-                      width={0}
-                      height={0}
-                      src={announcement.imageUrl}
-                      alt={`${announcement.title} imagen`}
-                      className={styles.image}
-                    />
-                  </figure>
-                )}
-
-                <p className={styles.date} role="contentinfo">
-                  {formatInTimeZone(announcement.publishedDate, 'America/Mexico_City', "d 'de' MMMM 'del' yyyy", { locale: es })}
-                </p>
-                <p className={styles.description} role="region">{announcement.description}</p>
-                <Link
-                  href={ROUTES.PUBLIC_ANNOUNCEMENTS_SHOW(announcement.permalink)}
-                  className={styles.moreLink}
-                  aria-label={`Ver más sobre el anuncio: ${announcement.title}`}
+                <article
+                  className={styles.announcement}
+                  aria-label={`Anuncio: ${announcement.title}`}
                 >
-                  ver más
-                </Link>
-              </article>
+                  <h3 className={styles.subtitle}>{announcement.title}</h3>
+
+                  {announcement?.imageUrl && (
+                    <figure>
+                      <Image
+                        width={0}
+                        height={0}
+                        src={announcement.imageUrl}
+                        alt={`${announcement.title} imagen`}
+                        className={styles.image}
+                      />
+                    </figure>
+                  )}
+                  <p className={styles.date} role="contentinfo">
+                    {formatInTimeZone(announcement.publishedDate, 'America/Mexico_City', "d 'de' MMMM 'del' yyyy", { locale: es })}
+                  </p>
+                  <p className={styles.description} role="region">{announcement.description}</p>
+                  {
+                    (index < (announcements.length - 1)) && (
+                      <div className={styles.announcementDivider} />
+                    )
+                  }
+                </article>
+              </Link>
             ))}
           </div>
         )}

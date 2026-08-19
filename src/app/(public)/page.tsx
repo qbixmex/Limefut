@@ -68,7 +68,7 @@ const HomePage: FC<Props> = ({ searchParams }) => {
         </div>
       </main>
 
-      <aside className="w-full md:w-[400px]">
+      <aside className="w-full lg:w-[400px]">
         <Sidebar />
       </aside>
     </div>

@@ -161,6 +161,7 @@ export const updateAnnouncementAction = async ({
         // Update Cache
         updateTag('admin-announcements');
         updateTag('admin-announcement');
+        updateTag('public-announcements');
         updateTag('public-announcement');
 
         return {
