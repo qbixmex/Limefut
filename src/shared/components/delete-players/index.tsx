@@ -20,17 +20,11 @@ import { deletePlayersAction } from '@/shared/actions/deletePlayersAction';
 
 type Props = Readonly<{
   teamId: string;
-  roles: string[];
   className?: string;
 }>;
 
-export const DeletePlayers: FC<Props> = ({ teamId, roles, className = '' }) => {
+export const DeletePlayers: FC<Props> = ({ teamId, className = '' }) => {
   const onDeletePlayers = async () => {
-    if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar jugadores !');
-      return;
-    }
-
     const response = await deletePlayersAction(teamId);
 
     if (!response.ok) {

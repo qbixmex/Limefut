@@ -6,18 +6,12 @@ import { toast } from 'sonner';
 import { deleteTeamImageAction } from '../../(actions)/deleteTeamImageAction';
 
 type Props = Readonly<{
-  roles: string[];
   teamId: string;
   className?: string;
 }>;
 
-export const DeleteTeamImage: FC<Props> = ({ roles, teamId, className }) => {
+export const DeleteTeamImage: FC<Props> = ({ teamId, className }) => {
   const onDeleteImage = async () => {
-    if (!roles?.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar la imagen !');
-      return;
-    }
-
     const response = await deleteTeamImageAction(teamId);
 
     if (!response.ok) {

@@ -40,10 +40,10 @@ describe('Tests on update player state server action', () => {
   test('Should return error when user is not authenticated', async () => {
     mockGetSession.mockResolvedValue(null);
 
-    const response = await updatePlayerStateAction({
-      id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
-      state: true,
-    });
+    const response = await updatePlayerStateAction(
+      'c93a8c24-ca76-493c-b1e3-f533454bbdae',
+      true,
+    );
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
@@ -56,10 +56,10 @@ describe('Tests on update player state server action', () => {
       user: { id: 'user-1', roles: ['user'] },
     });
 
-    const response = await updatePlayerStateAction({
-      id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
-      state: true,
-    });
+    const response = await updatePlayerStateAction(
+      'c93a8c24-ca76-493c-b1e3-f533454bbdae',
+      true,
+    );
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
@@ -72,10 +72,10 @@ describe('Tests on update player state server action', () => {
       user: { id: 'user-1', roles: null },
     });
 
-    const response = await updatePlayerStateAction({
-      id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
-      state: true,
-    });
+    const response = await updatePlayerStateAction(
+      'c93a8c24-ca76-493c-b1e3-f533454bbdae',
+      true,
+    );
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
@@ -88,10 +88,10 @@ describe('Tests on update player state server action', () => {
       user: { id: 'user-1', roles: [] },
     });
 
-    const response = await updatePlayerStateAction({
-      id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
-      state: true,
-    });
+    const response = await updatePlayerStateAction(
+      'c93a8c24-ca76-493c-b1e3-f533454bbdae',
+      true,
+    );
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
@@ -102,10 +102,10 @@ describe('Tests on update player state server action', () => {
   test('Should return error when player does not exist', async () => {
     mockCount.mockResolvedValue(0);
 
-    const response = await updatePlayerStateAction({
-      id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
-      state: true,
-    });
+    const response = await updatePlayerStateAction(
+      'c93a8c24-ca76-493c-b1e3-f533454bbdae',
+      true,
+    );
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe/i);
@@ -122,10 +122,10 @@ describe('Tests on update player state server action', () => {
       active: true,
     });
 
-    const response = await updatePlayerStateAction({
-      id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
-      state: true,
-    });
+    const response = await updatePlayerStateAction(
+      'c93a8c24-ca76-493c-b1e3-f533454bbdae',
+      true,
+    );
 
     expect(response.ok).toBe(true);
     expect(response.message).toMatch(/activado/i);
@@ -144,10 +144,10 @@ describe('Tests on update player state server action', () => {
       active: false,
     });
 
-    const response = await updatePlayerStateAction({
-      id: 'c93a8c24-ca76-493c-b1e3-f533454bbdae',
-      state: false,
-    });
+    const response = await updatePlayerStateAction(
+      'c93a8c24-ca76-493c-b1e3-f533454bbdae',
+      false,
+    );
 
     expect(response.ok).toBe(true);
     expect(response.message).toMatch(/desactivado/i);
