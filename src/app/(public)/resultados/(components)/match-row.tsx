@@ -76,13 +76,13 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
       )}
     </TableCell>
     <TableCell className="hidden lg:table-cell">
-      {match.place ? (
+      {match.field?.name ? (
         <p
           className="text-balance"
           role="location"
           aria-label="Sede del partido"
         >
-          {match.place}
+          {match.field.name}
         </p>
       ) : (
         <span

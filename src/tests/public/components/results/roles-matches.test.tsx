@@ -174,7 +174,7 @@ describe('Test on <RolesMatches /> component', () => {
     const matchLocations = screen.getAllByRole('location', { name: /sede del partido/i });
 
     matchLocations.forEach((element, index) => {
-      expect(element).toHaveTextContent(matches[index].place!);
+      expect(element).toHaveTextContent(matches[index].field!.name);
     });
   });
 

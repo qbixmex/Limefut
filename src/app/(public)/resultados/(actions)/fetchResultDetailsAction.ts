@@ -11,7 +11,10 @@ export type MatchType = {
   matchDate: Date | null;
   week: number | null;
   status: string;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   referee: string | null;
   tournament: {
     name: string;
@@ -85,7 +88,12 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
       matchDate: true,
       week: true,
       status: true,
-      place: true,
+      field: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       referee: true,
       category: {
         select: {

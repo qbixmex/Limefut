@@ -8,6 +8,7 @@ import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.ac
 import type { TOURNAMENT_TYPE } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
 import type { TEAM_TYPE } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-edit.action';
 import type { CATEGORY_TYPE } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
+import type { FIELD_TYPE } from '@/app/admin/encuentros/(actions)/fetch-fields.action';
 import { Button } from '@/components/ui/button';
 import { MATCH_STATUS } from '@/shared/enums';
 import { UpdateMatchScore } from '../../(components)/form-fields/update-match-score';
@@ -17,6 +18,7 @@ type Props = Readonly<{
   tournaments: TOURNAMENT_TYPE[];
   categories: CATEGORY_TYPE[];
   teams: TEAM_TYPE[];
+  fields: FIELD_TYPE[];
   match: MATCH_TYPE;
 }>;
 
@@ -24,6 +26,7 @@ export const EditMatchForm: FC<Props> = ({
   tournaments,
   categories,
   teams,
+  fields,
   match,
 }) => {
   const {
@@ -49,6 +52,7 @@ export const EditMatchForm: FC<Props> = ({
           tournaments={tournaments}
           categories={categories}
           teams={teams}
+          fields={fields}
           hiddenScores={hiddenScores}
         />
 

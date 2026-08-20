@@ -7,6 +7,7 @@ import { LoaderCircle } from 'lucide-react';
 import type { TOURNAMENT_TYPE } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
 import type { TEAM_TYPE } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
 import type { CATEGORY_TYPE } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
+import type { FIELD_TYPE } from '@/app/admin/encuentros/(actions)/fetch-fields.action';
 import { FormFields } from '../(components)/form-fields';
 import { useCreateMatch } from '../crear/use-create-match';
 
@@ -14,12 +15,14 @@ type Props = Readonly<{
   tournaments: TOURNAMENT_TYPE[];
   categories: CATEGORY_TYPE[];
   teams: TEAM_TYPE[];
+  fields: FIELD_TYPE[];
 }>;
 
 export const CreateMatchForm: FC<Props> = ({
   tournaments,
   categories,
   teams,
+  fields,
 }) => {
   const { form, onSubmit, handleNavigateBack } = useCreateMatch();
 
@@ -34,6 +37,7 @@ export const CreateMatchForm: FC<Props> = ({
             tournaments={tournaments}
             categories={categories}
             teams={teams}
+            fields={fields}
           />
 
           <section className="flex justify-end gap-3">

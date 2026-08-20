@@ -17,7 +17,6 @@ export type MATCH_TYPE = {
   id: string;
   week: number | null;
   status: string;
-  place: string | null;
   referee: string | null;
   localScore: number | null;
   visitorScore: number | null;
@@ -64,7 +63,7 @@ export const createMatchAction = async ({
     localScore: parseInt(formData.get('localScore') as string ?? '0'),
     visitorTeamId: formData.get('visitorTeamId') ?? '',
     visitorScore: parseInt(formData.get('visitorScore') as string ?? '0'),
-    place: formData.get('place') ?? undefined,
+    fieldId: formData.get('fieldId') ?? undefined,
     referee: formData.get('referee') ?? undefined,
     matchDate: formData.get('matchDate')
       ? new Date(formData.get('matchDate') as string)
@@ -123,11 +122,31 @@ export const createMatchAction = async ({
         };
       }
 
+      if (matchToSave.fieldId) {
+        const field = await transaction.field.findFirst({
+          where: { id: matchToSave.fieldId },
+          select: { id: true },
+        });
+
+        if (!field) {
+          return {
+            ok: false,
+            message: `¡ La cancha con el id: "${matchToSave.fieldId}" no existe !`,
+            match: null,
+          };
+        }
+      }
+
       const selectMatch = {
         id: true,
         localId: true,
         visitorId: true,
-        place: true,
+        field: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         matchDate: true,
         week: true,
         referee: true,
@@ -168,7 +187,7 @@ export const createMatchAction = async ({
           localScore: matchToSave.localScore,
           visitorId: matchToSave.visitorTeamId,
           visitorScore: matchToSave.visitorScore,
-          place: matchToSave.place ?? undefined,
+          fieldId: matchToSave.fieldId ?? undefined,
           referee: matchToSave.referee,
           matchDate: matchToSave.matchDate,
           status: matchToSave.status as MATCH_STATUS_TYPE,

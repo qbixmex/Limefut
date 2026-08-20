@@ -60,7 +60,7 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
                       <MatchMetadata
                         tournamentName={match.tournament.name}
                         category={match.category}
-                        place={match.place}
+                        field={match.field}
                         date={match.matchDate}
                         status={match.status}
                         round={match.round as ROUND_TYPE}

@@ -4,10 +4,16 @@ export type Props = Readonly<{
   tournaments: Tournament[];
   categories: Category[];
   teams: Team[];
+  fields?: Field[];
   match?: MatchType;
   week?: number;
   hiddenScores?: boolean;
 }>;
+
+export type Field = {
+  id: string;
+  name: string;
+};
 
 export type Team = {
   id: string;

@@ -1,6 +1,7 @@
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlayerView } from './player-view';
+import { FieldViewSkeleton } from './player-view-skeleton';
 
 type Props = Readonly<{
   params: Promise<{
@@ -23,7 +24,9 @@ const PlayerPage: FC<Props> = ({ params }) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <PlayerView params={params} />
+            <Suspense fallback={<FieldViewSkeleton />}>
+              <PlayerView params={params} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>

@@ -4,6 +4,7 @@ import { fetchTournamentsForMatchAction } from '@/app/admin/encuentros/(actions)
 import { fetchCategoriesForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
 import type { TEAM_TYPE } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
 import { fetchTeamsForMatchCreateAction } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
+import { fetchFieldsAction } from '@/app/admin/encuentros/(actions)/fetch-fields.action';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
 
@@ -48,11 +49,18 @@ export const MatchContent: FC<Props> = async ({ searchParams }) => {
     teams = responseTeams.teams;
   }
 
+  const fieldsResponse = await fetchFieldsAction();
+
+  if (!fieldsResponse.ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(fieldsResponse.message)}`);
+  }
+
   return (
     <CreateMatchForm
       tournaments={tournamentsResponse.tournaments}
       categories={categoriesResponse.categories}
       teams={teams}
+      fields={fieldsResponse.fields}
     />
   );
 };
