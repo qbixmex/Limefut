@@ -1,7 +1,6 @@
 'use client';
 
-import { type FC } from 'react';
-import { buttonVariants } from '@/components/ui/button';
+import type { FC } from 'react';
 import {
   Table,
   TableBody,
@@ -10,12 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { InfoIcon, Minus } from 'lucide-react';
+import { Minus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { DeleteMatch } from '../(components)/delete-match';
@@ -34,6 +28,7 @@ import { StatusSelector } from './status-selector';
 import { formatInTimeZone } from 'date-fns-tz';
 import { EditMatch } from './edit-match';
 import { ROUTES } from '@/shared/constants/routes';
+import { MatchDetails } from './match-details';
 
 type Props = Readonly<{
   matches: MATCH_TYPE[];
@@ -80,7 +75,11 @@ export const MatchesTable: FC<Props> = ({
                   <TableCell className="w-25">
                     <div className="grid grid-cols-[1fr_120px_1fr] gap-2 items-center font-semibold text-gray-500">
                       <div className="text-right">
-                        <Link href={ROUTES.ADMIN_TEAMS_SHOW(match.localTeam.id)}>
+                        <Link
+                          href={ROUTES.ADMIN_TEAMS_SHOW(match.localTeam.id)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           <div className="space-x-2">
                             {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
                               <Badge variant="outline-secondary">
@@ -113,7 +112,11 @@ export const MatchesTable: FC<Props> = ({
                         )}
                       </div>
                       <div className="text-left">
-                        <Link href={ROUTES.ADMIN_TEAMS + match.visitorTeam.id}>
+                        <Link
+                          href={ROUTES.ADMIN_TEAMS_SHOW(match.visitorTeam.id)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           <div className="space-x-2">
                             <span>{match.visitorTeam.name}</span>
                             {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
@@ -188,22 +191,7 @@ export const MatchesTable: FC<Props> = ({
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-3">
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Link
-                            href={ROUTES.ADMIN_MATCHES_SHOW(match.id)}
-                            className={buttonVariants({
-                              variant: 'outline-info',
-                              size: 'icon',
-                            })}
-                          >
-                            <InfoIcon />
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent side="left">
-                          detalles
-                        </TooltipContent>
-                      </Tooltip>
+                      <MatchDetails matchId={match.id} />
                       <EditMatch matchId={match.id} />
                       <DeleteMatch
                         id={match.id}
@@ -214,17 +202,15 @@ export const MatchesTable: FC<Props> = ({
                   </TableCell>
                 </TableRow>
               ))}
-              {matches.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    <div className="text-blue-500 text-semibold text-2xl text-center py-5">
-                      No hay encuentros
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
             </TableBody>
           </Table>
+          {
+            (matches.length === 0) && (
+              <div className="mt-10 border border-blue-500 text-blue-500 text-semibold text-2xl text-center py-5 rounded">
+                Aún no hay encuentros programados
+              </div>
+            )
+          }
         </div>
         <div
           className={cn('flex justify-center mt-10', {

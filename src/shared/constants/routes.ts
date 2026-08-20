@@ -27,7 +27,7 @@ export const ROUTES = {
   ADMIN_PLAYER: (id: string) => `/admin/jugadores/perfil/${id}`,
   ADMIN_MATCHES: '/admin/encuentros',
   ADMIN_MATCHES_CREATE: '/admin/encuentros/crear',
-  ADMIN_MATCHES_SHOW: (id: string) => `/admin/encuentros/${id}`,
+  ADMIN_MATCHES_SHOW: (id: string) => `/admin/encuentros/detalles/${id}`,
   ADMIN_MATCHES_EDIT: (id: string) => `/admin/encuentros/editar/${id}`,
   ADMIN_PLAYOFFS: '/admin/liguilla',
   ADMIN_PLAYOFFS_CREATE: '/admin/liguilla/crear',
