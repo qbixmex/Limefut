@@ -29,7 +29,7 @@ export const NextMatches: FC<Props> = async ({ matches }) => {
               matchDetails={{
                 matchDate: match.matchDate,
                 status: match.status,
-                place: match.place,
+                field: match.field,
                 week: match.week,
               }}
               localTeam={match.localTeam}

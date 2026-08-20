@@ -13,7 +13,10 @@ export interface Match {
   id: string;
   localTeam: TeamForMatch;
   visitorTeam: TeamForMatch;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   matchDate: Date | null;
   week: number | null;
   referee: string | null;

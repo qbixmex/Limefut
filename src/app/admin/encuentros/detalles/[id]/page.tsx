@@ -91,7 +91,7 @@ export const MatchPage: FC<Props> = async ({ params }) => {
                   <TableRow>
                     <TableHead className="font-semibold">Sede</TableHead>
                     <TableCell>
-                      {match.place ?? (
+                      {match.field?.name ?? (
                         <span className="text-gray-500 italic">No definida</span>
                       )}
                     </TableCell>

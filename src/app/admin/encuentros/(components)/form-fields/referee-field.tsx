@@ -1,28 +1,31 @@
 'use client';
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import type { FC } from 'react';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Controller, useFormContext } from 'react-hook-form';
 
-export const RefereeField = () => {
+export const RefereeField: FC = () => {
+  const { control } = useFormContext();
+
   return (
-    <FormField
+    <Controller
       name="referee"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>
+      control={control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid}>
+          <FieldLabel>
             Arbitro <span className="text-sm text-gray-500">(opcional)</span>
-          </FormLabel>
-          <FormControl>
-            <Input {...field} value={field.value ?? ''} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
+          </FieldLabel>
+          <Input
+            {...field}
+            value={field.value ?? ''}
+            aria-invalid={fieldState.invalid}
+          />
+          {fieldState.invalid && (
+            <FieldError errors={[fieldState.error]} />
+          )}
+        </Field>
       )}
     />
   );

@@ -36,7 +36,10 @@ export type MatchResponse = {
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
   week: number | null;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   matchDate: Date | null;
   category: {
     id: string;
@@ -127,7 +130,12 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
       visitorScore: true,
       status: true,
       week: true,
-      place: true,
+      field: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       matchDate: true,
       category: {
         select: {

@@ -60,7 +60,7 @@ export const useEditMatch = (options: Options) => {
       localScore: match.localScore,
       visitorTeamId: match.visitorTeam.id,
       visitorScore: match.visitorScore,
-      place: match.place ?? '',
+      fieldId: match.field?.id,
       referee: match.referee ?? '',
       matchDate: match.matchDate ?? undefined,
       status: match.status,
@@ -83,7 +83,7 @@ export const useEditMatch = (options: Options) => {
     formData.append('localScore', (data.localScore as number).toString());
     formData.append('visitorTeamId', data.visitorTeamId as string);
     formData.append('visitorScore', (data.visitorScore as number).toString());
-    if (data.place) formData.append('place', data.place as string);
+    if (data.fieldId) formData.append('fieldId', data.fieldId);
     if (data.referee) formData.append('referee', data.referee as string);
     if (data.matchDate) formData.append('matchDate', (data.matchDate as Date).toISOString());
     formData.append('status', data.status as string);
@@ -98,16 +98,16 @@ export const useEditMatch = (options: Options) => {
 
     const updatedMatch = response.match as MATCH_UPDATED_TYPE;
 
+    if (!response.ok) {
+      toast.error(response.message);
+      return;
+    }
+
     if (updatedMatch.status === MATCH_STATUS.COMPLETED) {
       setHiddenScores(true);
       setIsModifyingScores(false);
     } else {
       setHiddenScores(false);
-    }
-
-    if (!response.ok) {
-      toast.error(response.message);
-      return;
     }
 
     toast.success(response.message);

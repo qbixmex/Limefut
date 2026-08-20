@@ -4,18 +4,13 @@ import prisma from '@/lib/prisma';
 import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
 
-export type ResponseDeleteAction = Promise<{
+export const updatePlayerStateAction = async (
+  id: string,
+  state: boolean,
+): Promise<{
   ok: boolean;
   message: string;
-}>;
-
-export const updatePlayerStateAction = async ({
-  id,
-  state,
-}: {
-  id: string;
-  state: boolean;
-}): ResponseDeleteAction => {
+}> => {
   const guard = await requireAdmin();
 
   if (!guard.ok) {

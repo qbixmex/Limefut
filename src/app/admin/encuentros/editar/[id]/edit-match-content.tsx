@@ -1,12 +1,11 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { fetchMatchAction } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { fetchTournamentsForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
 import { fetchTeamsForMatchEditAction } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-edit.action';
+import { fetchFieldsAction } from '@/app/admin/encuentros/(actions)/fetch-fields.action';
 import { fetchCategoriesForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
-import { auth } from '@/lib/auth';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditMatchForm } from './edit-match-form';
 import { MATCH_STATUS } from '@/shared/enums';
@@ -20,7 +19,6 @@ type Props = Readonly<{
 
 export const EditMatchContent: FC<Props> = async ({ params }) => {
   const matchId = (await params).id;
-  const session = await auth.api.getSession({ headers: await headers() });
 
   const responseMatch = await fetchMatchAction(matchId);
 
@@ -59,6 +57,12 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseTeams.message)}`);
   }
 
+  const fieldsResponse = await fetchFieldsAction();
+
+  if (!fieldsResponse.ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(fieldsResponse.message)}`);
+  }
+
   return (
     <>
       <section>
@@ -67,6 +71,7 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
           tournaments={tournamentsResponse.tournaments}
           categories={categoriesResponse.categories}
           teams={responseTeams.teams}
+          fields={fieldsResponse.fields}
           match={responseMatch.match as MATCH_TYPE}
         />
       </section>
@@ -77,7 +82,6 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
           <>
             <div className="w-full h-0.25 bg-gray-300 dark:bg-gray-700 my-8" />
             <PenaltyShoots
-              userRoles={session?.user.roles}
               match={{
                 id: match.id,
                 status: match.status,

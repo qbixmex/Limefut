@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { auth } from '@/lib/auth';
 import { fetchPlayersAction, updatePlayerStateAction } from '../(actions)';
 import {
   Table,
@@ -17,7 +16,6 @@ import { DeletePlayer } from '../(components)/delete-player';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
-import { headers } from 'next/headers';
 import { DeletePlayers } from '@/shared/components/delete-players';
 import { EditPlayer } from './edit-player';
 import { PlayerDetails } from './player-details';
@@ -29,10 +27,6 @@ type Props = Readonly<{
 }>;
 
 export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
   const {
     players = [],
     pagination = {
@@ -106,12 +100,7 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
                     <TableCell className="text-center">
                       <ActiveSwitch
                         resource={{ id: player.id, state: player.active }}
-                        updateResourceStateAction={(id, state) => {
-                          return updatePlayerStateAction({
-                            id,
-                            state,
-                          });
-                        }}
+                        updateResourceStateAction={updatePlayerStateAction}
                       />
                     </TableCell>
                     <TableCell>
@@ -129,7 +118,6 @@ export const PlayersTable: FC<Props> = async ({ teamId, query, currentPage }) =>
             </Table>
             <DeletePlayers
               teamId={teamId}
-              roles={session?.user.roles as string[]}
               className="absolute -top-5 right-0"
             />
           </div>

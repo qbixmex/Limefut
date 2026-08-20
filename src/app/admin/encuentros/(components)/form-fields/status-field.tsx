@@ -1,12 +1,7 @@
 'use client';
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import type { FC } from 'react';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import {
   Select,
   SelectContent,
@@ -14,33 +9,50 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Controller, useFormContext } from 'react-hook-form';
 import { MATCH_STATUS } from '@/shared/enums';
+import { getStatusTranslation } from '@/lib/utils';
 
-export const StatusField = () => (
-  <FormField
-    name="status"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Estado</FormLabel>
-        <FormControl>
+export const StatusField: FC = () => {
+  const { control } = useFormContext();
+
+  return (
+    <Controller
+      name="status"
+      control={control}
+      render={({ field, fieldState }) => (
+        <Field className="w-50">
+          <FieldLabel>Estado</FieldLabel>
           <Select
-            value={field.value}
+            value={field.value ?? ''}
             onValueChange={field.onChange}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecciona un estado" />
+            <SelectTrigger aria-invalid={fieldState.invalid}>
+              <SelectValue placeholder="Seleccione estado" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={MATCH_STATUS.IN_REVIEW}>En revisión</SelectItem>
-              <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
-              <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
-              <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
-              <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
+              <SelectItem value={MATCH_STATUS.IN_REVIEW}>
+                {getStatusTranslation(MATCH_STATUS.IN_REVIEW)}
+              </SelectItem>
+              <SelectItem value={MATCH_STATUS.SCHEDULED}>
+                {getStatusTranslation(MATCH_STATUS.SCHEDULED)}
+              </SelectItem>
+              <SelectItem value={MATCH_STATUS.IN_PROGRESS}>
+                {getStatusTranslation(MATCH_STATUS.IN_PROGRESS)}
+              </SelectItem>
+              <SelectItem value={MATCH_STATUS.POST_POSED}>
+                {getStatusTranslation(MATCH_STATUS.POST_POSED)}
+              </SelectItem>
+              <SelectItem value={MATCH_STATUS.CANCELED}>
+                {getStatusTranslation(MATCH_STATUS.CANCELED)}
+              </SelectItem>
             </SelectContent>
           </Select>
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-);
+          {fieldState.invalid && (
+            <FieldError errors={[fieldState.error]} />
+          )}
+        </Field>
+      )}
+    />
+  );
+};

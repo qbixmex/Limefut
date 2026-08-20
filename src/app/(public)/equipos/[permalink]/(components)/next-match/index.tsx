@@ -16,7 +16,10 @@ type Props = Readonly<{
   matchDetails: {
     matchDate: Date | null;
     status: string;
-    place: string | null;
+    field: {
+      id: string;
+      name: string;
+    } | null;
     week: number | null;
   };
   localTeam: TEAM_TYPE;
@@ -169,7 +172,7 @@ export const Match: FC<Props> = ({
           <i>{getStatusTranslation(matchDetails.status as MATCH_STATUS_TYPE)}</i>
         </p>
         <p className="match-place">
-          <b>Sede:</b> <i>{matchDetails.place}</i>
+          <b>Sede:</b> <i>{matchDetails.field?.name}</i>
         </p>
         <p className="match-week">
           <b>Jornada:</b> <i>{matchDetails.week ?? 'no asignada'}</i>

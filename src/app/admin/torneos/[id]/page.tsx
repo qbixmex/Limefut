@@ -1,7 +1,9 @@
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { EditTournament } from '../(components)/edit-tournament';
 import { TournamentView } from './tournament-view';
+import { EditTournamentWrapper } from '../(components)/edit-tournament-wrapper';
+import { EditTournamentSkeleton } from '../(components)/edit-tournament-skeleton';
+import { TournamentViewSkeleton } from '../(components)/tournament-view-skeleton';
 
 type Props = Readonly<{
   params: Promise<{
@@ -22,10 +24,14 @@ const TournamentPage: FC<Props> = ({ params }) => {
             >
               Información del Torneo
             </CardTitle>
-            <EditTournament paramsPromise={params} side="left" />
+            <Suspense fallback={<EditTournamentSkeleton />}>
+              <EditTournamentWrapper params={params} />
+            </Suspense>
           </CardHeader>
           <CardContent>
-            <TournamentView paramsPromise={params} />
+            <Suspense fallback={<TournamentViewSkeleton />}>
+              <TournamentView paramsPromise={params} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>

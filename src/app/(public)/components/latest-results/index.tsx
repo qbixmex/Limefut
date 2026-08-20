@@ -46,7 +46,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                       tournamentName={match.tournament.name}
                       category={match.category}
                       week={match.week}
-                      place={match.place}
+                      field={match.field}
                       date={match.matchDate}
                       status={match.status}
                     />
