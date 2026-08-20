@@ -1,32 +1,28 @@
 import type { FC } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { ROUTES } from '@/shared/constants/routes';
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
-import { ROUTES } from '@/shared/constants/routes';
 
-type Props = Readonly<{
-  tournamentId: string;
-  side?: 'top' | 'right' | 'bottom' | 'left'
-}>;
+type Props = Readonly<{ teamId: string }>;
 
-export const EditTournament: FC<Props> = async ({ tournamentId, side = 'top' }) => {
+export const EditTeam: FC<Props> = ({ teamId }) => {
   return (
     <Tooltip>
       <TooltipTrigger>
         <Link
-          href={ROUTES.ADMIN_TOURNAMENTS_EDIT(tournamentId)}
+          href={ROUTES.ADMIN_TEAM_EDIT(teamId)}
           className={buttonVariants({
             variant: 'outline-warning',
             size: 'icon',
           })}
-          aria-label="Editar torneo"
         >
-          <Pencil role="img" aria-label="Icono de lápiz" />
+          <Pencil />
         </Link>
       </TooltipTrigger>
-      <TooltipContent side={side}>
-        editar
+      <TooltipContent side="left">
+        <p>editar</p>
       </TooltipContent>
     </Tooltip>
   );

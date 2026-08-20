@@ -1,14 +1,12 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import { Table, TableBody, TableHead, TableCell, TableRow } from '@/components/ui/table';
 import { Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { fetchTournamentAction, type TOURNAMENT_TYPE } from '../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { headers } from 'next/headers';
 import { DeleteTournamentImage } from '../(components)/delete-tournament-image';
 import { ROUTES } from '@/shared/constants/routes';
 
@@ -20,10 +18,6 @@ type Props = Readonly<{
 
 export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
   const tournamentId = (await paramsPromise).id;
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
   const response = await fetchTournamentAction(tournamentId);
 
   if (!response.ok) {
@@ -60,8 +54,6 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
                   />
                   <DeleteTournamentImage
                     teamId={tournament.id}
-                    userId={session?.user?.id}
-                    roles={session?.user.roles as string[]}
                     className="absolute top-2 right-2"
                   />
                 </div>

@@ -133,7 +133,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell>
                       <div className="flex gap-3">
                         <ShowTournamentDetails tournamentId={tournament.id} />
-                        <EditTournament paramsPromise={Promise.resolve({ id: tournament.id })} />
+                        <EditTournament tournamentId={tournament.id } />
                         <DeleteTournament tournamentId={tournament.id} />
                       </div>
                     </TableCell>
