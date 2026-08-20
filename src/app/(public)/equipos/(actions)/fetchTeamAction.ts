@@ -103,7 +103,12 @@ export const fetchTeamAction = async ({
             },
             localScore: true,
             visitorScore: true,
-            place: true,
+            field: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
             matchDate: true,
             week: true,
             status: true,
@@ -148,7 +153,12 @@ export const fetchTeamAction = async ({
             },
             localScore: true,
             visitorScore: true,
-            place: true,
+            field: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
             matchDate: true,
             week: true,
             status: true,
@@ -278,7 +288,10 @@ export type MATCH_TYPE = {
   visitorTeam: MATCH_TEAM;
   localScore: number | null;
   visitorScore: number | null;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   matchDate: Date | null;
   week: number | null;
   status: string;

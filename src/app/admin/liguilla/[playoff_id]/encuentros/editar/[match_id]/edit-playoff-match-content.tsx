@@ -1,6 +1,4 @@
 import type { FC } from 'react';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
 import { EditPlayoffsMatchForm } from './edit-playoff-match-form';
 import { TeamsSlot } from '../../(components)/form-fields/teams-slot';
 import { FieldsSlot } from '../../(components)/form-fields/fields-slot';
@@ -18,7 +16,6 @@ type Props = Readonly<{
 }>;
 
 export const EditPlayoffMatchContent: FC<Props> = async ({ params }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
   const playoffId = (await params).playoff_id;
   const matchId = (await params).match_id;
 
@@ -68,7 +65,6 @@ export const EditPlayoffMatchContent: FC<Props> = async ({ params }) => {
           <>
             <div className="w-full h-0.25 bg-gray-300 dark:bg-gray-700 my-8" />
             <PenaltyShoots
-              userRoles={session?.user.roles}
               match={{
                 id: playoffMatch.id,
                 status: playoffMatch.status,

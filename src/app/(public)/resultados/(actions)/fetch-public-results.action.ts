@@ -10,7 +10,10 @@ export type MATCH_TYPE = {
   matchDate: Date | null;
   week: number | null;
   status: string;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   tournament: {
     name: string;
     permalink: string;
@@ -75,7 +78,12 @@ export const fetchPublicResultsAction = async ({
         matchDate: true,
         week: true,
         status: true,
-        place: true,
+        field: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         tournament: {
           select: {
             name: true,

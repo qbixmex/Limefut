@@ -55,7 +55,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                       tournamentName={match.tournament.name}
                       category={match.category}
                       week={match.week}
-                      place={match.place}
+                      field={match.field}
                       date={match.matchDate}
                       status={match.status}
                     />

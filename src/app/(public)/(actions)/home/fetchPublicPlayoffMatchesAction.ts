@@ -16,7 +16,10 @@ export type MatchResponse = {
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   matchDate: Date | null;
   round: string;
   group: string;
@@ -92,11 +95,12 @@ export const fetchPublicPlayoffMatchesAction = async (options?: Options): Respon
         matchDate: true,
         round: true,
         group: true,
-        field: {
-          select: {
-            name: true,
+field: {
+            select: {
+              id: true,
+              name: true,
+            },
           },
-        },
         playoff: {
           select: {
             id: true,
@@ -153,7 +157,7 @@ export const fetchPublicPlayoffMatchesAction = async (options?: Options): Respon
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status,
-        place: match.field?.name ?? null,
+        field: match.field,
         matchDate: match.matchDate,
         round: match.round,
         group: match.group,

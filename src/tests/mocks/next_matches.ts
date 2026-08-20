@@ -26,7 +26,10 @@ export const nextMatches = [
     visitorScore: 0,
     status: MATCH_STATUS.SCHEDULED,
     week: 1,
-    place: 'Soccer Field',
+    field: {
+      id: 'field-soccer',
+      name: 'Soccer Field',
+    },
     matchDate: new Date('2022-06-02T18:00:00.000'),
     stage: STAGE.REGULAR,
     category: {
