@@ -21,6 +21,7 @@ export const FormFields: FC<Props> = ({
   categories,
   teams,
   match,
+  fields = [],
   hiddenScores = false,
 }) => {
   return (
@@ -62,10 +63,10 @@ export const FormFields: FC<Props> = ({
         </section>
       )}
 
-      {/* Place and Week and Referee */}
+      {/* Field and Week and Referee */}
       <section className="flex flex-col gap-5 lg:flex-row">
         <div className="w-full lg:w-1/2">
-          <PlaceField teams={teams} match={match} />
+          <PlaceField teams={teams} match={match} fields={fields} />
         </div>
         <div className="w-full lg:w-1/2">
           <RefereeField />

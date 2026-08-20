@@ -21,7 +21,10 @@ export type NEXT_MATCH_TYPE = {
   };
   matchDetails: {
     matchDate: Date | null;
-    place: string | null;
+    field: {
+      id: string;
+      name: string;
+    } | null;
     week: number | null;
     status: string;
   };
@@ -66,7 +69,12 @@ export const fetchNextMatchesAction = async ({
       select: {
         id: true,
         matchDate: true,
-        place: true,
+        field: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         status: true,
         week: true,
         local: {
@@ -103,7 +111,7 @@ export const fetchNextMatchesAction = async ({
         },
         matchDetails: {
           matchDate: match.matchDate,
-          place: match.place,
+          field: match.field,
           week: match.week,
           status: match.status,
         },

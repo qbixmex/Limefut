@@ -18,11 +18,13 @@ export const createMatchSchema = z.object({
   visitorScore: z
     .int()
     .min(0, '¡ El marcador visitante debe ser un número positivo !'),
-  place: z.union([
+  fieldId: z.union([
     z.literal(''),
-    z.string('¡ La sede debe ser una cadena de texto !')
-      .min(3, '¡ La sede debe ser mayor a 3 caracteres !')
-      .max(50, '¡ La sede debe ser menor a 50 caracteres !'),
+    z.uuid({
+      error: (issue) => (issue.input === '')
+        ? '! La sede es obligatoria !'
+        : '¡ El id de la sede debe ser un UUID válido !',
+    }),
   ]).optional(),
   referee: z.union([
     z.literal(''),

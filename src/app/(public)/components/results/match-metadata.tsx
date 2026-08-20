@@ -13,7 +13,10 @@ type Props = Readonly<{
     name: string;
     permalink: string;
   } | null;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   date: Date | null;
   status: string;
   stage?: STAGE_TYPE;
@@ -28,7 +31,7 @@ export const MatchMetadata: FC<Props> = ({
   week,
   round,
   group,
-  place,
+  field,
   date,
   status,
   stage,
@@ -39,7 +42,7 @@ export const MatchMetadata: FC<Props> = ({
       <section className="flex flex-col md:flex-row text-gray-500 dark:text-gray-300">
         <div className="w-full md:1/2">
           <p><b>Categoría:</b> {category ? category.name : <span>No especificada</span>}</p>
-          <p><b>Sede:</b> {place ?? <span>No especificado</span>}</p>
+          <p><b>Sede:</b> {field?.name ?? <span>No especificado</span>}</p>
           {!round && !group && <MatchStatus status={status} />}
           {stage && (
             <p>

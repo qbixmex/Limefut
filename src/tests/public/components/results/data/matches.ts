@@ -5,7 +5,10 @@ type MATCH_TYPE = {
   matchDate: Date | null;
   week: number;
   status: string;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   tournament: {
     name: string;
     permalink: string;
@@ -37,7 +40,10 @@ export const matches: MATCH_TYPE[] = [
     matchDate: new Date('2025-06-08T20:00:00.000Z'),
     week: 10,
     status: 'completed',
-    place: 'Unidad Deportiva Auditorio',
+    field: {
+      id: 'field-unidad-deportiva-auditorio',
+      name: 'Unidad Deportiva Auditorio',
+    },
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
@@ -64,7 +70,10 @@ export const matches: MATCH_TYPE[] = [
     matchDate: new Date('2025-06-08T21:00:00.000Z'),
     week: 10,
     status: 'scheduled',
-    place: 'Colegio Aleman',
+    field: {
+      id: 'field-colegio-aleman',
+      name: 'Colegio Aleman',
+    },
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
@@ -94,7 +103,7 @@ export const matchesWithoutPlaces: MATCH_TYPE[] = [
     matchDate: null,
     week: 0,
     status: 'scheduled',
-    place: null,
+    field: null,
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
@@ -121,7 +130,10 @@ export const matchesWithoutPlaces: MATCH_TYPE[] = [
     matchDate: null,
     week: 0,
     status: 'scheduled',
-    place: 'Cruz Azul',
+    field: {
+      id: 'field-cruz-azul',
+      name: 'Cruz Azul',
+    },
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
@@ -151,7 +163,10 @@ export const matchesWithoutDates: MATCH_TYPE[] = [
     matchDate: null,
     week: 0,
     status: 'scheduled',
-    place: 'Atlas Chapalita',
+    field: {
+      id: 'field-atlas-chapalita',
+      name: 'Atlas Chapalita',
+    },
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
@@ -178,7 +193,10 @@ export const matchesWithoutDates: MATCH_TYPE[] = [
     matchDate: null,
     week: 0,
     status: 'scheduled',
-    place: 'Colegio Tepeyac',
+    field: {
+      id: 'field-colegio-tepeyac',
+      name: 'Colegio Tepeyac',
+    },
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
@@ -208,7 +226,10 @@ export const matchesWithPenalties: MATCH_TYPE[] = [
     matchDate: new Date('2025-06-08T20:00:00.000Z'),
     week: 10,
     status: 'completed',
-    place: 'Colegio Altamira',
+    field: {
+      id: 'field-colegio-altamira',
+      name: 'Colegio Altamira',
+    },
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',
@@ -238,7 +259,10 @@ export const matchesWithPenalties: MATCH_TYPE[] = [
     matchDate: new Date('2025-06-08T20:00:00.000Z'),
     week: 10,
     status: 'scheduled',
-    place: 'Colegio Aleman',
+    field: {
+      id: 'field-colegio-aleman-2',
+      name: 'Colegio Aleman',
+    },
     tournament: {
       name: 'Copa jóvenes promesas',
       permalink: 'copa-jovenes-promesas',

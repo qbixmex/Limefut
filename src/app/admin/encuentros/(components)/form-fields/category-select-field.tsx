@@ -1,13 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import {
   Select,
   SelectContent,
@@ -17,10 +11,12 @@ import {
 } from '@/components/ui/select';
 import type { Category } from './form-types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Controller, useFormContext } from 'react-hook-form';
 
 type Props = Readonly<{ categories: Category[] }>;
 
 export const CategorySelectField: FC<Props> = ({ categories }) => {
+  const { control } = useFormContext();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const pathname = usePathname();
@@ -32,37 +28,38 @@ export const CategorySelectField: FC<Props> = ({ categories }) => {
   };
 
   return (
-    <FormField
+    <Controller
       name="category"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Categoría</FormLabel>
-          <FormControl>
-            <Select
-              value={field.value}
-              onValueChange={(permalink) => {
-                setCategorySearchParam(permalink);
-                field.onChange(permalink);
-              }}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Seleccione una categoría" />
-              </SelectTrigger>
-              <SelectContent>
-                {(categories.length > 0) ? (
-                  categories.map(({ id, name, permalink }) => (
-                    <SelectItem key={id} value={permalink}>{name}</SelectItem>
-                  ))
-                ) : (
-                  <SelectItem disabled value="none">
-                    Aún no hay categorías disponibles
-                  </SelectItem>
-                )}
-              </SelectContent>
-            </Select>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
+      control={control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid}>
+          <FieldLabel>Categoría</FieldLabel>
+          <Select
+            value={field.value}
+            onValueChange={(permalink) => {
+              setCategorySearchParam(permalink);
+              field.onChange(permalink);
+            }}
+          >
+            <SelectTrigger className="w-full" aria-invalid={fieldState.invalid}>
+              <SelectValue placeholder="Seleccione una categoría" />
+            </SelectTrigger>
+            <SelectContent>
+              {(categories.length > 0) ? (
+                categories.map(({ id, name, permalink }) => (
+                  <SelectItem key={id} value={permalink}>{name}</SelectItem>
+                ))
+              ) : (
+                <SelectItem disabled value="none">
+                  Aún no hay categorías disponibles
+                </SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+          {fieldState.invalid && (
+            <FieldError errors={[fieldState.error]} />
+          )}
+        </Field>
       )}
     />
   );

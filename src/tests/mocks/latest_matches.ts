@@ -26,7 +26,10 @@ export const latestMatches = [
     visitorScore: 3,
     status: MATCH_STATUS.COMPLETED,
     week: 1,
-    place: 'Estadio Akron',
+    field: {
+      id: 'field-estadio-akron',
+      name: 'Estadio Akron',
+    },
     stage: STAGE.REGULAR,
     category: {
       id: 'b489d72a-e40e-40d6-8b18-26e611d10f28',
@@ -61,7 +64,10 @@ export const latestMatches = [
     visitorScore: 1,
     status: MATCH_STATUS.COMPLETED,
     week: 1,
-    place: 'Estadio Azteca',
+    field: {
+      id: 'field-estadio-azteca',
+      name: 'Estadio Azteca',
+    },
     stage: STAGE.REGULAR,
     category: {
       id: '3012b9ff-5820-441e-ae39-c63677791bc1',

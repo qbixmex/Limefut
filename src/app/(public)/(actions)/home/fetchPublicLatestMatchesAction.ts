@@ -33,7 +33,10 @@ export type MatchResponse = {
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
   week: number | null;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   matchDate: Date | null;
   category: {
     id: string;
@@ -86,7 +89,12 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
       visitorScore: true,
       status: true,
       week: true,
-      place: true,
+      field: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       matchDate: true,
       category: {
         select: {
@@ -165,7 +173,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS_TYPE,
         week: match.week,
-        place: match.place,
+        field: match.field,
         category: match.category,
         matchDate: match.matchDate,
         penaltyShoots: match.penaltyShootout,

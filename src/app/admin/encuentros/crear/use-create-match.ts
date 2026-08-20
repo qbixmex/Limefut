@@ -2,7 +2,6 @@
 
 import { useForm } from 'react-hook-form';
 import { createMatchSchema } from '@/shared/schemas';
-import { MATCH_STATUS } from '@/shared/enums';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/create-match.action';
@@ -16,7 +15,7 @@ const FORM_DEFAULT_VALUES = {
   localScore: 0,
   visitorTeamId: '',
   visitorScore: 0,
-  place: '',
+  fieldId: '',
   referee: undefined,
   matchDate: undefined,
   status: undefined,
@@ -33,7 +32,6 @@ export const useCreateMatch = () => {
     resolver: zodResolver(createMatchSchema),
     defaultValues: {
       ...FORM_DEFAULT_VALUES,
-      status: MATCH_STATUS.SCHEDULED,
       tournament: searchParams.get('tournament') ?? undefined,
       category: searchParams.get('category') ?? undefined,
     },
@@ -47,7 +45,7 @@ export const useCreateMatch = () => {
     formData.append('localScore', data.localScore.toString());
     formData.append('visitorTeamId', data.visitorTeamId);
     formData.append('visitorScore', data.visitorScore.toString());
-    if (data.place) formData.append('place', data.place);
+    if (data.fieldId) formData.append('fieldId', data.fieldId);
     if (data.referee) formData.append('referee', data.referee);
     if (data.matchDate) formData.append('matchDate', data.matchDate.toISOString());
     formData.append('status', data.status);
@@ -71,7 +69,7 @@ export const useCreateMatch = () => {
 
     router.replace(ROUTES.ADMIN_MATCHES +
       `?tournament=${match.tournament.permalink}` +
-      `&category=${match.category}` +
+      `&category=${match.category?.permalink ?? 'unassigned'}` +
       `&sort-week=${match.week ?? 'unassigned'}`,
     );
   };

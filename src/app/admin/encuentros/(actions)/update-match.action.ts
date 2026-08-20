@@ -17,7 +17,6 @@ export type MATCH_TYPE = {
   id: string;
   localScore: number | null;
   visitorScore: number | null;
-  place: string | null;
   referee: string | null;
   matchDate: Date | null;
   week: number | null;
@@ -64,7 +63,7 @@ export const updateMatchAction = async ({
     visitorTeamId: formData.get('visitorTeamId') ?? undefined,
     localScore: parseInt(formData.get('localScore') as string ?? '0') ?? undefined,
     visitorScore: parseInt(formData.get('visitorScore') as string ?? '0') ?? undefined,
-    place: formData.get('place') ?? undefined,
+    fieldId: formData.get('fieldId') ?? undefined,
     referee: formData.get('referee') ?? undefined,
     matchDate: formData.get('matchDate')
       ? new Date(formData.get('matchDate') as string)
@@ -164,7 +163,7 @@ export const updateMatchAction = async ({
           data: {
             localId: matchToSave.localTeamId,
             visitorId: matchToSave.visitorTeamId,
-            place: matchToSave.place ?? null,
+            fieldId: matchToSave.fieldId ?? null,
             referee: matchToSave.referee,
             localScore: matchToSave.localScore,
             visitorScore: matchToSave.visitorScore,
@@ -180,7 +179,6 @@ export const updateMatchAction = async ({
             id: true,
             localScore: true,
             visitorScore: true,
-            place: true,
             matchDate: true,
             week: true,
             referee: true,

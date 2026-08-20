@@ -12,7 +12,6 @@ import { SimplePenaltyShootoutForm } from '@/shared/components/simple-penalty-sh
 import type { PENALTY_SHOOTOUT_TYPE } from '../types/penalty_shootout_type';
 
 type Props = Readonly<{
-  userRoles: string[] | null | undefined;
   match: {
     id: string;
     status: MATCH_STATUS_TYPE;

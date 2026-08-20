@@ -205,7 +205,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               </TableRow>
               <TableRow>
                 <TableHead>Sede</TableHead>
-                <TableCell>{match?.place ?? 'No especificado'}</TableCell>
+                <TableCell>{match?.field?.name ?? 'No especificado'}</TableCell>
               </TableRow>
               <TableRow>
                 <TableHead>Arbitro</TableHead>

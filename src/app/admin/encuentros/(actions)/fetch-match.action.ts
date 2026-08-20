@@ -2,11 +2,13 @@
 
 import prisma from '@/lib/prisma';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
-import { cacheLife, cacheTag } from 'next/cache';
 
 export type MATCH_TYPE = {
   id: string;
-  place: string | null;
+  field: {
+    id: string;
+    name: string;
+  } | null;
   matchDate: Date | null;
   week: number | null;
   referee: string | null;
@@ -80,17 +82,22 @@ type FetchResponse = Promise<{
 export const fetchMatchAction = async (
   id: string,
 ): FetchResponse => {
-  'use cache';
+  // 'use cache';
 
-  cacheLife('days');
-  cacheTag('admin-match');
+  // cacheLife('days');
+  // cacheTag('admin-match');
 
   try {
     const match = await prisma.match.findUnique({
       where: { id },
       select: {
         id: true,
-        place: true,
+        field: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         matchDate: true,
         week: true,
         referee: true,
@@ -208,7 +215,7 @@ export const fetchMatchAction = async (
       message: '¡ Encuentro obtenido correctamente 👍 !',
       match: {
         id: match.id,
-        place: match.place,
+        field: match.field,
         matchDate: match.matchDate,
         week: match.week,
         referee: match.referee,
