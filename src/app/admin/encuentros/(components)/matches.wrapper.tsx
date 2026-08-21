@@ -1,9 +1,9 @@
 import type { FC } from 'react';
-import { auth } from '@/lib/auth';
 import { MatchesTable } from './matches-table';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
-import { headers } from 'next/headers';
 import { fetchMatchesAction } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
+import { redirect } from 'next/navigation';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   tournamentId: string;
@@ -24,8 +24,7 @@ export const MatchesWrapper: FC<Props> = async ({
   sortWeek,
   status,
 }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
-  const { matches, pagination } = await fetchMatchesAction({
+  const { ok, message, matches, pagination } = await fetchMatchesAction({
     tournamentId,
     categoryId,
     page: currentPage,
@@ -36,6 +35,10 @@ export const MatchesWrapper: FC<Props> = async ({
     status,
   });
 
+  if (!ok) {
+    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(message)}`);
+  }
+
   const matchesWeeks = [...new Set(
     matches.flatMap(match => (match.week !== null) ? [match.week] : []),
   )];
@@ -45,7 +48,6 @@ export const MatchesWrapper: FC<Props> = async ({
       matchesWeeks={matchesWeeks}
       matches={matches}
       pagination={pagination}
-      roles={session?.user.roles as string[]}
     />
   );
 };

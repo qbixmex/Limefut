@@ -37,14 +37,12 @@ type Props = Readonly<{
     currentPage: number;
     totalPages: number;
   };
-  roles: string[];
 }>;
 
 export const MatchesTable: FC<Props> = ({
   matches,
   matchesWeeks,
   pagination,
-  roles,
 }) => {
   return (
     <>
@@ -195,7 +193,6 @@ export const MatchesTable: FC<Props> = ({
                       <EditMatch matchId={match.id} />
                       <DeleteMatch
                         id={match.id}
-                        roles={roles}
                         status={match.status}
                       />
                     </div>
