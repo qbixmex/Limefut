@@ -20,8 +20,9 @@ import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.ac
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ROUTES } from '@/shared/constants/routes';
-import { EditMatch } from '../../(components)/edit-match';
+import { EditMatch } from '../../../(components)/edit-match';
 const TIME_ZONE = 'America/Mexico_City';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   params: Promise<{
@@ -41,18 +42,19 @@ export const MatchView: FC<Props> = async ({ params }) => {
 
   return (
     <>
-      <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
-        <div className="bg-gray-200 dark:bg-green-900/40 size-[512px] rounded-xl flex items-center justify-center">
-          <TbSoccerField size={480} strokeWidth={1} className="text-gray-400" />
+      <section className={styles.wrapper}>
+        <div className={styles.imageContainer}>
+          <TbSoccerField size={480} strokeWidth={1} className={styles.imageIcon} />
         </div>
+
         <Table>
           <TableBody>
             <TableRow>
-              <TableHead className="font-semibold w-[180px]">Encuentro</TableHead>
-              <TableCell className="flex items-center gap-3 font-semibold text-gray-200">
+              <TableHead className={styles.tableHead}>Encuentro</TableHead>
+              <TableCell className={styles.tableCellResults}>
                 <Link
-                  href={`/admin/equipos/${match.localTeam.id}`}
-                  className="text-wrap"
+                  href={ROUTES.ADMIN_TEAMS_SHOW(match.localTeam.id)}
+                  className={styles.link}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -63,7 +65,7 @@ export const MatchView: FC<Props> = async ({ params }) => {
                 <Badge variant="outline-info">{match.visitorScore}</Badge>
                 <Link
                   href={`${ROUTES.ADMIN_TEAMS}/${match.visitorTeam.id}`}
-                  className="text-wrap"
+                  className={styles.link}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -72,38 +74,38 @@ export const MatchView: FC<Props> = async ({ params }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="font-semibold">Arbitro</TableHead>
+              <TableHead className={styles.tableHead}>Arbitro</TableHead>
               <TableCell>
                 {match.referee ?? (
-                  <span className="text-gray-500 italic">No definido</span>
+                  <span className={styles.undefinedText}>No definido</span>
                 )}
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="font-semibold">Sede</TableHead>
+              <TableHead className={styles.tableHead}>Sede</TableHead>
               <TableCell>
                 {match.field?.name ?? (
-                  <span className="text-gray-500 italic">No definida</span>
+                  <span className={styles.undefinedText}>No definida</span>
                 )}
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="font-semibold">Fecha del Encuentro</TableHead>
+              <TableHead className={styles.tableHead}>Fecha del Encuentro</TableHead>
               <TableCell>
                 {
                   match.matchDate
                     ? format(match.matchDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                    : <span className="text-gray-500 italic">No Proporcionada</span>
+                    : <span className={styles.undefinedText}>No asignada</span>
                 }
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="font-semibold">Hora</TableHead>
+              <TableHead className={styles.tableHead}>Hora</TableHead>
               <TableCell>
                 {
                   match.matchDate
                     ? formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm a', { locale: es })
-                    : <span className="text-gray-500 italic">No proporcionada</span>
+                    : <span className={styles.undefinedText}>No asignada</span>
                 }
               </TableCell>
             </TableRow>
@@ -112,7 +114,7 @@ export const MatchView: FC<Props> = async ({ params }) => {
               <TableCell>{match.week}</TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="font-semibold">Estado</TableHead>
+              <TableHead className={styles.tableHead}>Estado</TableHead>
               <TableCell>
                 <Badge variant={getMatchStatus(match.status).variant}>
                   {getMatchStatus(match.status).label}
@@ -120,7 +122,7 @@ export const MatchView: FC<Props> = async ({ params }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="w-[180px] font-semibold">Torneo</TableHead>
+              <TableHead className={styles.tableHead}>Torneo</TableHead>
               <TableCell>
                 <Link
                   href={`${ROUTES.ADMIN_TOURNAMENTS}/${match.tournament.id}`}
@@ -132,7 +134,7 @@ export const MatchView: FC<Props> = async ({ params }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
+              <TableHead className={styles.tableHead}>Fecha de creación</TableHead>
               <TableCell>
                 {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
               </TableCell>
@@ -146,17 +148,15 @@ export const MatchView: FC<Props> = async ({ params }) => {
         (match.localScore === match.visitorScore)
       ) && (
         <>
-          <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
+          <h2 className={styles.penaltyShootsHeading}>Tanda de Penales</h2>
 
-          <section className="flex flex-col lg:flex-row gap-5">
-            <div className="w-full lg:w-1/2">
-              <PenaltyShootout shootout={match.penaltyShootout} />
-            </div>
+          <section className={styles.penaltyShoots}>
+            <PenaltyShootout shootout={match.penaltyShootout} />
           </section>
         </>
       )}
 
-      <div className="absolute top-5 right-5">
+      <div className={styles.editMatch}>
         <EditMatch matchId={match.id} />
       </div>
     </>

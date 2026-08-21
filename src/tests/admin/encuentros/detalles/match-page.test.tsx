@@ -1,11 +1,24 @@
 import MatchPage from '@/app/admin/encuentros/detalles/[id]/page';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 
-const mockedMatchView = vi.hoisted(() => vi.fn());
+const state = vi.hoisted(() => {
+  let releaseSuspense: (() => void) | null = null;
 
-vi.mock('@/app/admin/encuentros/detalles/[id]/match-view.tsx', () => ({
+  return {
+    mockedMatchView: vi.fn(),
+    suspended: false,
+    suspenseGate: () =>
+      new Promise<void>((resolve) => {
+        releaseSuspense = () => resolve();
+      }),
+    releaseSuspense: () => releaseSuspense?.(),
+  };
+});
+
+vi.mock('@/app/admin/encuentros/detalles/[id]/match-view/index.tsx', () => ({
   MatchView: (props: unknown) => {
-    mockedMatchView(props);
+    state.mockedMatchView(props);
+    if (state.suspended) throw state.suspenseGate();
     return <div data-testid="match-view" />;
   },
 }));
@@ -14,7 +27,8 @@ const MATCH_ID = '550e8400-e29b-41d4-a716-446655440001';
 
 describe('Tests on <MatchPage />', () => {
   beforeEach(() => {
-    mockedMatchView.mockClear();
+    state.mockedMatchView.mockClear();
+    state.suspended = false;
   });
 
   test('Should render correctly', async () => {
@@ -26,6 +40,41 @@ describe('Tests on <MatchPage />', () => {
     const title = screen.getByText(/información del encuentro/i);
 
     expect(title).toBeInTheDocument();
+  });
+
+  test('Should show skeleton component', async () => {
+    state.suspended = true;
+    const ServerComponent = await MatchPage({
+      params: Promise.resolve({ id: MATCH_ID }),
+    });
+    render(ServerComponent);
+
+    const skeleton = screen.getByRole('status', { name: /cargando datos/i });
+
+    expect(skeleton).toBeInTheDocument();
+  });
+
+  test('Should not show skeleton component', async () => {
+    state.suspended = true;
+    const ServerComponent = await MatchPage({
+      params: Promise.resolve({ id: MATCH_ID }),
+    });
+    render(ServerComponent);
+
+    const removal = waitForElementToBeRemoved(() =>
+      screen.getByRole('status', { name: /cargando datos/i }),
+    );
+
+    act(() => {
+      state.suspended = false;
+      state.releaseSuspense();
+    });
+
+    await removal;
+
+    expect(
+      screen.queryByRole('status', { name: /cargando datos/i }),
+    ).not.toBeInTheDocument();
   });
 
   test('Should render <MatchView /> component', async () => {
@@ -42,9 +91,9 @@ describe('Tests on <MatchPage />', () => {
     const ServerComponent = await MatchPage({ params });
     render(ServerComponent);
 
-    expect(mockedMatchView).toHaveBeenCalledTimes(1);
+    expect(state.mockedMatchView).toHaveBeenCalledTimes(1);
 
-    const viewProps = mockedMatchView.mock.calls[0][0] as {
+    const viewProps = state.mockedMatchView.mock.calls[0][0] as {
       params: Promise<{ id: string }>;
     };
 
