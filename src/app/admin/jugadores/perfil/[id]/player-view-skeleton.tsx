@@ -1,4 +1,4 @@
-export const FieldViewSkeleton = () => {
+export const PlayerViewSkeleton = () => {
   return (
     <div className="animate-pulse">
       <div className="grid grid-cols-1 xl:grid-cols-[512px_1fr] gap-5 mb-10">
