@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type MATCH_TYPE = {
   id: string;
@@ -82,10 +83,10 @@ type FetchResponse = Promise<{
 export const fetchMatchAction = async (
   id: string,
 ): FetchResponse => {
-  // 'use cache';
+  'use cache';
 
-  // cacheLife('days');
-  // cacheTag('admin-match');
+  cacheLife('days');
+  cacheTag('admin-match');
 
   try {
     const match = await prisma.match.findUnique({

@@ -297,7 +297,7 @@
   }
 
   .admin-page {
-    @apply flex flex-1 flex-col gap-5 p-5 pt-0
+    @apply flex flex-1 flex-col gap-5 p-5 pt-0;
   }
 
   .admin-page-container {

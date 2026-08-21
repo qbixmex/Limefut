@@ -52,10 +52,10 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
 
   return (
     <>
-      <section className={styles.mainWrapper}>
-        <section className="w-full lg:w-1/2">
-          <div className="flex relative">
-            <div className={cn(styles.team, styles.teamLocal)}>
+      <section className={styles.mainWrapper} aria-label="Información del encuentro">
+        <section className="w-full lg:w-1/2" aria-label="Cancha del encuentro">
+          <div className="flex relative" role="group" aria-label="Equipos y marcador del encuentro">
+            <div className={cn(styles.team, styles.teamLocal)} role="group" aria-label="Equipo local">
               <Link
                 href={
                   `${ROUTES.PUBLIC_TEAMS}/${local_team}` +
@@ -99,7 +99,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
               </div>
             </div>
 
-            <div className={cn(styles.team, styles.teamVisitor)}>
+            <div className={cn(styles.team, styles.teamVisitor)} role="group" aria-label="Equipo visitante">
               <Link
                 href={
                   `${ROUTES.PUBLIC_TEAMS}/${visitor_team}` +
@@ -143,7 +143,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
               </div>
             </div>
             <div className={styles.matchResults}>
-              <p>
+              <p role="status" aria-label="Marcador del encuentro">
                 <span>{match.localScore}</span>
                 <span>{match.visitorScore}</span>
               </p>
@@ -153,7 +153,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
           </div>
         </section>
 
-        <section className="w-full lg:w-1/2">
+        <section className="w-full lg:w-1/2" aria-label="Detalles del encuentro">
           <Table>
             <TableBody>
               <TableRow>
@@ -213,7 +213,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
         </section>
       </section>
 
-      <section className="flex flex-col lg:flex-row gap-5">
+      <section className="flex flex-col lg:flex-row gap-5" aria-label="Fecha, hora y sede del encuentro">
         <div className="w-full lg:w-1/2">
           <Table>
             <TableBody>
@@ -252,7 +252,9 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
               <TableRow>
                 <TableHead>Estado</TableHead>
                 <TableCell>
-                  <MatchStatus status={match?.status as MATCH_STATUS_TYPE} />
+                  <span role="status" aria-label="Estado del encuentro">
+                    <MatchStatus status={match?.status as MATCH_STATUS_TYPE} />
+                  </span>
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -280,7 +282,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
         </div>
       </section>
 
-      <section>
+      <section aria-label="Comentarios adicionales">
         <h2 className="text-xl text-sky-500 mb-2">Comentarios Adicionales</h2>
 
         <p>{
@@ -291,7 +293,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
         </p>
       </section>
 
-      <section>
+      <section aria-label="Tanda de penales">
         {
           (
             (match?.status === MATCH_STATUS.COMPLETED) &&
