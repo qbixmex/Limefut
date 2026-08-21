@@ -60,11 +60,23 @@ export const MatchView: FC<Props> = async ({ params }) => {
                 >
                   {match.localTeam.name}
                 </Link>
-                <Badge variant="outline-info">{match.localScore}</Badge>
+                <Badge
+                  variant="outline-info"
+                  role="status"
+                  aria-label="Anotaciones del equipo local"
+                >
+                  {match.localScore}
+                </Badge>
                 <Minus strokeWidth={2} />
-                <Badge variant="outline-info">{match.visitorScore}</Badge>
+                <Badge
+                  variant="outline-info"
+                  role="status"
+                  aria-label="Anotaciones del equipo visitante"
+                >
+                  {match.visitorScore}
+                </Badge>
                 <Link
-                  href={`${ROUTES.ADMIN_TEAMS}/${match.visitorTeam.id}`}
+                  href={ROUTES.ADMIN_TEAMS_SHOW(match.visitorTeam.id)}
                   className={styles.link}
                   target="_blank"
                   rel="noreferrer"
@@ -76,47 +88,63 @@ export const MatchView: FC<Props> = async ({ params }) => {
             <TableRow>
               <TableHead className={styles.tableHead}>Arbitro</TableHead>
               <TableCell>
-                {match.referee ?? (
-                  <span className={styles.undefinedText}>No definido</span>
-                )}
+                <span role="text" aria-label="Arbitro del encuentro">
+                  {match.referee ?? (
+                    <span className={styles.undefinedText}>No definido</span>
+                  )}
+                </span>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className={styles.tableHead}>Sede</TableHead>
               <TableCell>
-                {match.field?.name ?? (
-                  <span className={styles.undefinedText}>No definida</span>
-                )}
+                <span role="text" aria-label="Sede del encuentro">
+                  {match.field?.name ?? (
+                    <span className={styles.undefinedText}>No definida</span>
+                  )}
+                </span>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className={styles.tableHead}>Fecha del Encuentro</TableHead>
               <TableCell>
-                {
-                  match.matchDate
-                    ? format(match.matchDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                    : <span className={styles.undefinedText}>No asignada</span>
-                }
+                <span role="text" aria-label="Fecha del encuentro">
+                  {
+                    match.matchDate
+                      ? format(match.matchDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                      : <span className={styles.undefinedText}>No asignada</span>
+                  }
+                </span>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className={styles.tableHead}>Hora</TableHead>
               <TableCell>
-                {
-                  match.matchDate
-                    ? formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm a', { locale: es })
-                    : <span className={styles.undefinedText}>No asignada</span>
-                }
+                <span role="text" aria-label="Hora del encuentro">
+                  {
+                    match.matchDate
+                      ? formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm a', { locale: es })
+                      : <span className={styles.undefinedText}>No asignada</span>
+                  }
+                </span>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead>Jornada</TableHead>
-              <TableCell>{match.week}</TableCell>
+              <TableCell>
+                <span role="text" aria-label="Jornada del encuentro">
+                  {match.week}
+                </span>
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className={styles.tableHead}>Estado</TableHead>
               <TableCell>
-                <Badge variant={getMatchStatus(match.status).variant}>
+                <Badge
+                  variant={getMatchStatus(match.status).variant}
+                  role="status"
+                  aria-label="Estado del encuentro"
+                >
                   {getMatchStatus(match.status).label}
                 </Badge>
               </TableCell>
@@ -125,7 +153,7 @@ export const MatchView: FC<Props> = async ({ params }) => {
               <TableHead className={styles.tableHead}>Torneo</TableHead>
               <TableCell>
                 <Link
-                  href={`${ROUTES.ADMIN_TOURNAMENTS}/${match.tournament.id}`}
+                  href={ROUTES.ADMIN_TOURNAMENTS_SHOW(match.tournament.id)}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -136,7 +164,9 @@ export const MatchView: FC<Props> = async ({ params }) => {
             <TableRow>
               <TableHead className={styles.tableHead}>Fecha de creación</TableHead>
               <TableCell>
-                {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                <span role="text" aria-label="Fecha de creación del encuentro">
+                  {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                </span>
               </TableCell>
             </TableRow>
           </TableBody>
