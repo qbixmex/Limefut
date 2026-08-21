@@ -98,8 +98,8 @@
     "baseline-browser-mapping": "^2.11.14",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.1",
-    "neostandard": "^0.13.0",
     "jsdom": "^29.1.1",
+    "neostandard": "^0.13.0",
     "postcss": "^8.5.26",
     "prisma": "^7.9.1",
     "tailwindcss": "^4.3.3",
@@ -108,5 +108,8 @@
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.10"
+  },
+  "imports": {
+    "#globals.css": "./src/app/globals.css"
   }
 }

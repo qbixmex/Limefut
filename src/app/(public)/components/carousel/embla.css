@@ -1,5 +1,4 @@
-@reference "../../../globals.css";
-
+@reference "#globals.css";
 .embla {
   --slide-height: 720;
   --slide-spacing: 2rem;

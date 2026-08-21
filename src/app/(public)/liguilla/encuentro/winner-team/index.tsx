@@ -18,19 +18,27 @@ export const WinnerTeam: FC<Props> = ({
   if (matchStatus === MATCH_STATUS.COMPLETED) {
     if (winnerTeamName && localScore !== visitorScore) {
       return (
-        <Badge variant="outline-success">
+        <Badge
+          variant="outline-success"
+          role="status"
+          aria-label="Equipo ganador"
+        >
           {winnerTeamName}
         </Badge>
       );
     }
     if (localScore === visitorScore) {
       return (
-        <Badge variant="outline-info">empate</Badge>
+        <Badge variant="outline-info" role="status" aria-label="Resultado del encuentro">
+          empate
+        </Badge>
       );
     }
   }
 
   return (
-    <Badge variant="outline-secondary">pendiente</Badge>
+    <Badge variant="outline-secondary" role="status" aria-label="Ganador pendiente">
+      pendiente
+    </Badge>
   );
 };

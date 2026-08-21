@@ -1,0 +1,82 @@
+@reference "#globals.css";
+
+.wrapper {
+	display: flex;
+	justify-content: center;
+	gap: --spacing(5);
+	margin-bottom: --spacing(5);
+
+  @variant lg {
+		gap: --spacing(10);
+		margin-bottom: --spacing(10);
+	}
+
+  @variant xl {
+		flex-direction: row;
+	}
+}
+
+.imageContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--color-gray-200);
+	width: 512px;
+	height: 512px;
+	border-radius: var(--radius-xl);
+
+  @variant dark {
+		background-color: --alpha(var(--color-green-900) / 40%);
+	}
+}
+
+.imageIcon {
+  color: var(--color-gray-400);
+}
+
+.tableHead {
+  width: 180px;
+  font-weight: 600;
+}
+
+.tableCellResults {
+  display: flex;
+	align-items: center;
+  gap: --spacing(3);
+  font-weight: 600;
+  color: var(--color-gray-200);
+}
+
+.link {
+  text-wrap: wrap;
+}
+
+.undefinedText {
+  font-style: italic;
+  color: var(--color-gray-500);
+}
+
+.penaltyShootsHeading {
+  font-weight: 700;
+  color: var(--color-sky-500);
+  margin-bottom: --spacing(5);
+  @apply text-lg;
+}
+
+.penaltyShoots {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(5);
+
+  @variant lg {
+    width: 50%;
+    flex-direction: row;
+  }
+}
+
+.editMatch {
+  position: absolute;
+  top: --spacing(5);
+  right: --spacing(5);
+}

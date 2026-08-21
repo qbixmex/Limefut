@@ -1,6 +1,6 @@
-export const PlayerViewSkeleton = () => {
+export const MatchViewSkeleton = () => {
   return (
-    <div className="animate-pulse">
+    <div className="animate-pulse" role="status" aria-label="Cargando datos">
       <div className="grid grid-cols-1 xl:grid-cols-[512px_1fr] gap-5 mb-10">
         <div className="w-full h-[512px] bg-gray-500 rounded" />
 

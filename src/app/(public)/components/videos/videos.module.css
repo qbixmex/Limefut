@@ -1,4 +1,4 @@
-@reference '../../../globals.css';
+@reference "#globals.css";
 .wrapper {
 	width: 100%;
 	border-width: 1px;
