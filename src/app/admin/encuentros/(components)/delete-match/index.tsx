@@ -18,23 +18,29 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { toast } from 'sonner';
 import { deleteMatchAction } from '@/app/admin/encuentros/(actions)/delete-match.action';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { requireAdmin } from '@/lib/get-session';
 import './styles.css';
 
 type Props = Readonly<{
   id: string;
-  roles: string[];
   status: MATCH_STATUS_TYPE;
 }>;
 
-export const DeleteMatch: FC<Props> = ({ id, roles, status }) => {
+export const DeleteMatch: FC<Props> = ({ id, status }) => {
   if (status === MATCH_STATUS.COMPLETED) return null;
 
   const onDeleteMatch = async (id: string) => {
-    if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar encuentros !');
-      return;
+    const guard = await requireAdmin();
+
+    if (!guard.ok) {
+      return {
+        ok: false,
+        message: guard.message,
+      };
     }
+
     const response = await deleteMatchAction(id);
+
     if (!response.ok) {
       toast.error(response.message);
       return;

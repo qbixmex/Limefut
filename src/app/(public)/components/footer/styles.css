@@ -1,4 +1,4 @@
-@reference "../../../globals.css";
+@reference "#globals.css";
 
 .footer {
   @apply lg:rounded-t text-center p-8;

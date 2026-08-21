@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
-import type { ChangeEvent, FC } from 'react';
+import type { ChangeEvent, ComponentProps, FC } from 'react';
 import { useEffect, useState } from 'react';
 import { updateMatchInputScoreAction } from '@/app/admin/encuentros/(actions)/update-match-input-score.action';
 import { toast } from 'sonner';
@@ -13,8 +13,13 @@ type Props = Readonly<{
   visitor?: boolean;
 }>;
 
-export const MatchScoreInput: FC<Props> = (props) => {
-  const { matchId, score, local = false, visitor = false } = props;
+export const MatchScoreInput: FC<ComponentProps<'input'> & Props> = ({
+  score,
+  matchId,
+  local = false,
+  visitor = false,
+  ...props
+}) => {
   const [scoreValue, setScoreValue] = useState<string>(String(score));
 
   // Synchronize the internal state if 'score' prop changes from outside.
@@ -53,6 +58,7 @@ export const MatchScoreInput: FC<Props> = (props) => {
       onChange={onInputChange}
       onBlur={handleBlur}
       className="w-[50px] border p-2 rounded-lg text-blue-500 border-blue-500"
+      { ...props }
     />
   );
 };
