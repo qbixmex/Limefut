@@ -16,7 +16,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const MatchContent: FC<Props> = async ({ searchParams }) => {
+export const MatchView: FC<Props> = async ({ searchParams }) => {
   const {
     tournament: tournamentPermalink,
     category: categoryPermalink,
