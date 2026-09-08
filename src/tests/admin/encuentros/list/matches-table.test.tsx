@@ -236,12 +236,12 @@ describe('Tests on <MatchesTable /> component', () => {
 
     localScores.forEach((input, index) => {
       expect(input).toHaveTextContent(
-        completedMatches[index].localScore.toString()
+        completedMatches[index].localScore.toString(),
       );
     });
     visitorScores.forEach((input, index) => {
       expect(input).toHaveTextContent(
-        completedMatches[index].visitorScore.toString()
+        completedMatches[index].visitorScore.toString(),
       );
     });
   });
