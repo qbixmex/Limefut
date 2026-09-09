@@ -1,6 +1,5 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 import { FieldsTable } from './fields-table';
 import { fetchFieldsAction } from '../(actions)';
 
@@ -13,9 +12,7 @@ export const FieldsWrapper: FC<Props> = async ({
   currentPage,
   query,
 }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   const { fields, pagination } = await fetchFieldsAction({
     page: currentPage,

@@ -21,12 +21,12 @@ import { ROUTES } from '@/shared/constants/routes';
 type Props = Readonly<{
   user: {
     id: string;
-    name: string;
-    username: string | undefined;
+    name: string | null;
+    username: string | null;
     email: string;
     emailVerified: boolean;
-    roles: string[] | undefined;
-    image: string | undefined;
+    roles: string[];
+    image: string | null;
   }
 }>;
 
@@ -36,7 +36,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
   const onLogout = async () => {
     await signOutAction();
     toast.success('¡ Has cerrado sesión correctamente 👍 !');
-    setIsOpen(false);
+    window.location.replace(ROUTES.AUTH_LOGIN);
   };
 
   return (
@@ -58,7 +58,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
             alt={user.name ? `${user.name} profile image` : ''}
           />
           <AvatarFallback className="rounded-lg bg-emerald-900 font-medium text-sm">
-            {(user.name as string).at(0)}
+            {user.name?.charAt(0) ?? user.email?.charAt(0)}
           </AvatarFallback>
         </Avatar>
         <ChevronsUpDown className="ml-auto size-4 stroke-green-50" />

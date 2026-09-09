@@ -1,6 +1,5 @@
 import type { FC } from 'react';
-import { headers } from 'next/headers';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 import { fetchAdminTeamsAction } from '../../equipos/(actions)/fetch-admin-teams.action';
 import { TeamsTable } from '../../equipos/(components)/teams-table';
 
@@ -17,9 +16,7 @@ export const TeamsWrapper: FC<Props> = async ({
   currentPage,
   query,
 }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   const { teams, pagination } = await fetchAdminTeamsAction(
     tournamentId,

@@ -33,9 +33,9 @@ import { ROUTES } from '@/shared/constants/routes';
 
 type Props = {
   user: {
-    id: string;
-    name: string;
-    email: string;
+    id: string | null;
+    name: string | null;
+    email: string | null;
     username?: string | null;
     image?: string | null;
   };
@@ -62,7 +62,9 @@ export const NavUser: FC<Props> = ({ user }) => {
                   src={user.image ?? undefined}
                   alt={user.name ? `${user.name} profile image` : ''}
                 />
-                <AvatarFallback className="rounded-lg">{(user.name as string).at(0)}</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {user.name?.charAt(0) ?? user.email?.charAt(0)}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
