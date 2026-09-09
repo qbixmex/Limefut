@@ -1,3 +1,4 @@
+export { USER_ROLES, type USER_ROLES_TYPE } from './user-roles.enum';
 export { MATCH_STATUS, type MATCH_STATUS_TYPE } from './match.enum';
 export { SHOOTOUT_STATUS } from './shoutout-status.enum';
 export { GENDER, type GENDER_TYPE } from './gender.enum';

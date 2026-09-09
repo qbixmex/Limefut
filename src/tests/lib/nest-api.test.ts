@@ -19,20 +19,17 @@ import {
 const loginBody = {
   statusCode: 200,
   message: 'Success',
-  data: {
-    message: 'Usuario autentificado satisfactoriamente 👍🎉',
-    user: {
-      id: 'e4eab2dc-7d09-4326-815c-c747ac5146d2',
-      name: 'John Doe',
-      username: 'johnny',
-      email: 'johnny@example.com',
-      imageUrl: 'https://example.com/image.webp',
-      createdAt: '2026-02-07T07:56:32.741Z',
-      updatedAt: '2026-02-07T10:48:43.856Z',
-      roles: ['user', 'admin'],
-    },
-    token: 'nest-jwt-token',
+  user: {
+    id: 'e4eab2dc-7d09-4326-815c-c747ac5146d2',
+    name: 'John Doe',
+    username: 'johnny',
+    email: 'johnny@example.com',
+    imageUrl: 'https://example.com/image.webp',
+    createdAt: '2026-02-07T07:56:32.741Z',
+    updatedAt: '2026-02-07T10:48:43.856Z',
+    roles: ['user', 'admin'],
   },
+  token: 'nest-jwt-token',
 };
 
 describe('Tests on nest-api lib', () => {
@@ -105,20 +102,17 @@ describe('Tests on nest-api lib', () => {
     const checkStatusBody = {
       statusCode: 200,
       message: 'Success',
-      data: {
-        message: 'Token válido',
-        user: {
-          id: 'e4eab2dc-7d09-4326-815c-c747ac5146d2',
-          name: 'John Doe',
-          email: 'johnny@example.com',
-          imageUrl: null,
-          isActive: true,
-          createdAt: '2026-02-07T07:56:32.741Z',
-          updatedAt: '2026-02-07T10:48:43.856Z',
-          roles: ['user', 'admin'],
-        },
-        token: 'new-jwt-token',
+      user: {
+        id: 'e4eab2dc-7d09-4326-815c-c747ac5146d2',
+        name: 'John Doe',
+        email: 'johnny@example.com',
+        imageUrl: null,
+        isActive: true,
+        createdAt: '2026-02-07T07:56:32.741Z',
+        updatedAt: '2026-02-07T10:48:43.856Z',
+        roles: ['user', 'admin'],
       },
+      token: 'new-jwt-token',
     };
 
     test('Should validate the token and return the refreshed token', async () => {
