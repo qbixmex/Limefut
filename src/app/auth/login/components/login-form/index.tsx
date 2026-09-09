@@ -143,7 +143,7 @@ export const LoginForm = () => {
                 <FieldLabel className="label mb-0">Recordarme</FieldLabel>
               </div>
               <p className="text-sm text-muted-foreground">
-                Mantener la sesión iniciada durante una hora
+                mantener la sesión activa
               </p>
             </Field>
           )}
