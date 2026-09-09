@@ -1,9 +1,8 @@
 'use server';
 
-import type { Prisma } from '@/generated/prisma/client';
-import prisma from '@/lib/prisma';
-import type { Pagination } from '@/shared/interfaces';
-import { cacheLife, cacheTag } from 'next/cache';
+import { getNestAccessToken } from '@/lib/nest-api';
+import { fetchUsersCached } from '../(services)';
+import type { User, ResponseFetchAction } from '../(services)';
 
 type Options = Readonly<{
   page?: number;
@@ -11,103 +10,11 @@ type Options = Readonly<{
   searchTerm?: string;
 }>;
 
-export type AdminUser = {
-  id: string;
-  name: string | null;
-  email: string;
-  roles: string[];
-  isActive: boolean;
-  username: string | null;
-  imageUrl: string | null;
-};
-
-export type ResponseFetchAction = Promise<{
-  ok: boolean;
-  message: string;
-  users: AdminUser[] | null;
-  pagination: Pagination | null;
-}>;
+export type { User, ResponseFetchAction };
 
 export const fetchUsersAction = async (options?: Options): ResponseFetchAction => {
-  'use cache';
+  const token = await getNestAccessToken();
+  const { page, take } = options ?? {};
 
-  cacheLife('days');
-  cacheTag('admin-users');
-
-  let { page = 1, take = 12 } = options ?? {};
-
-  // In case is an invalid number like (lorem)
-  if (isNaN(page)) page = 1;
-  if (isNaN(take)) take = 12;
-
-  const whereCondition: Prisma.UserWhereInput = options?.searchTerm ? {
-    OR: [
-      {
-        name: {
-          contains: options.searchTerm,
-          mode: 'insensitive' as const,
-        },
-      },
-      {
-        username: {
-          contains: options.searchTerm,
-          mode: 'insensitive' as const,
-        },
-      },
-      {
-        email: {
-          contains: options.searchTerm,
-          mode: 'insensitive' as const,
-        },
-      },
-    ],
-  } : {};
-
-  try {
-    const users = await prisma.user.findMany({
-      where: whereCondition,
-      orderBy: { name: 'asc' },
-      take,
-      skip: (page - 1) * take,
-    });
-
-    const totalCount = await prisma.user.count({ where: whereCondition });
-
-    const outputUsers = users.map((user) => ({
-      id: user.id,
-      name: user.name,
-      username: user.username,
-      email: user.email,
-      imageUrl: user.imageUrl,
-      roles: user.roles,
-      isActive: user.isActive,
-    }));
-
-    return {
-      ok: true,
-      message: '! Los usuarios fueron obtenidos satisfactoriamente 👍',
-      users: outputUsers,
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(totalCount / take),
-      },
-    };
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log('Error al intentar obtener los usuarios');
-      return {
-        ok: false,
-        message: error.message,
-        users: null,
-        pagination: null,
-      };
-    }
-    console.log(error);
-    return {
-      ok: false,
-      message: 'Error inesperado al obtener los usuarios, revise los logs del servidor',
-      users: null,
-      pagination: null,
-    };
-  }
+  return fetchUsersCached({ page, take, token });
 };

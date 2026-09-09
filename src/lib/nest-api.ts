@@ -25,14 +25,11 @@ export interface NestAuthUser {
   roles: string[];
 }
 
-interface NestLoginBody {
+interface NestAuthBody {
   statusCode?: number;
   message?: string;
-  data?: {
-    message?: string;
-    user?: NestAuthUser;
-    token?: string;
-  };
+  user?: NestAuthUser;
+  token?: string;
 }
 
 export type LoginWithNestApiResult =
@@ -53,18 +50,15 @@ export const loginWithNestApi = async (
       cache: 'no-store',
     });
 
-    const body = await response.json().catch(() => null) as NestLoginBody | null;
+    const body = await response.json().catch(() => null) as NestAuthBody | null;
 
     if (
       !response.ok ||
       body?.statusCode !== 200 ||
-      !body?.data?.user ||
-      !body?.data?.token
+      !body?.user ||
+      !body?.token
     ) {
-      const message =
-        body?.data?.message ??
-        body?.message ??
-        '¡ Credenciales Inválidas !';
+      const message = body?.message ?? '¡ Credenciales Inválidas !';
 
       return {
         ok: false,
@@ -74,9 +68,9 @@ export const loginWithNestApi = async (
 
     return {
       ok: true,
-      message: body.data.message ?? '¡ Has accedido correctamente 👍 !',
-      user: body.data.user,
-      token: body.data.token,
+      message: body.message ?? '¡ Has accedido correctamente 👍 !',
+      user: body.user,
+      token: body.token,
     };
   } catch (error) {
     console.error('NestJS login error:', error);
@@ -107,18 +101,17 @@ export const checkNestTokenStatus = async (
       },
     );
 
-    const body = await response.json().catch(() => null) as NestLoginBody | null;
+    const body = await response.json().catch(() => null) as NestAuthBody | null;
 
     if (
       !response.ok ||
       body?.statusCode !== 200 ||
-      !body?.data?.user ||
-      !body?.data?.token
+      !body?.user ||
+      !body?.token
     ) {
       return {
         ok: false,
         message:
-          body?.data?.message ??
           body?.message ??
           '¡ La sesión ha expirado, inicie sesión nuevamente !',
       };
@@ -126,8 +119,8 @@ export const checkNestTokenStatus = async (
 
     return {
       ok: true,
-      user: body.data.user,
-      token: body.data.token,
+      user: body.user,
+      token: body.token,
     };
   } catch (error) {
     console.error('NestJS check-status error:', error);
@@ -168,13 +161,14 @@ export type NestApiResult<T> = {
 export const callNestApi = async <T>(
   path: string,
   init?: RequestInit,
+  token?: string | null,
 ): Promise<NestApiResult<T>> => {
-  const token = await getNestAccessToken();
+  const accessToken = token ?? (await getNestAccessToken());
   const headers = new Headers(init?.headers);
   headers.set('Content-Type', 'application/json');
 
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
+  if (accessToken) {
+    headers.set('Authorization', `Bearer ${accessToken}`);
   }
 
   try {

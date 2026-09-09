@@ -25,20 +25,17 @@ const validFormData = (): FormData => {
 const loginBody = {
   statusCode: 200,
   message: 'Success',
-  data: {
-    message: 'Usuario autentificado satisfactoriamente 👍🎉',
-    user: {
-      id: 'e4eab2dc-7d09-4326-815c-c747ac5146d2',
-      name: 'John Doe',
-      username: 'johnny',
-      email: 'johnny@example.com',
-      imageUrl: 'https://example.com/image.webp',
-      createdAt: '2026-02-07T07:56:32.741Z',
-      updatedAt: '2026-02-07T10:48:43.856Z',
-      roles: ['user', 'admin'],
-    },
-    token: 'nest-jwt-token',
+  user: {
+    id: 'e4eab2dc-7d09-4326-815c-c747ac5146d2',
+    name: 'John Doe',
+    username: 'johnny',
+    email: 'johnny@example.com',
+    imageUrl: 'https://example.com/image.webp',
+    createdAt: '2026-02-07T07:56:32.741Z',
+    updatedAt: '2026-02-07T10:48:43.856Z',
+    roles: ['user', 'admin'],
   },
+  token: 'nest-jwt-token',
 };
 
 const cookieOptionsFor = (name: string): Record<string, unknown> | undefined => {
@@ -109,7 +106,7 @@ describe('Tests on signInAction server action', () => {
         new Response(
           JSON.stringify({
             statusCode: 400,
-            data: { message: 'Credenciales inválidas' },
+            message: 'Credenciales inválidas',
           }),
           { status: 400, headers: { 'Content-Type': 'application/json' } },
         ),
