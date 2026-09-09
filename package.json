@@ -1,6 +1,6 @@
 {
   "name": "Sportex",
-  "version": "1.42.1",
+  "version": "1.43.0",
   "private": true,
   "scripts": {
     "dev": "next dev --port=3000",
@@ -38,7 +38,6 @@
     "@tsparticles/confetti": "^4.3.2",
     "babel-plugin-react-compiler": "^1.0.0",
     "bcryptjs": "^3.0.3",
-    "better-auth": "^1.6.28",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",

@@ -1,40 +1,63 @@
 'use server';
 
-import { auth } from '@/lib/auth';
+import { cookies } from 'next/headers';
+import {
+  loginWithNestApi,
+  mapNestRoles,
+  NEST_ACCESS_TOKEN_COOKIE,
+  NEST_SESSION_MODE_COOKIE,
+} from '@/lib/nest-api';
+import type { ROLE_TYPE } from '@/shared/interfaces';
 
-type BetterAuthApiResponse = {
-  code: string;
-  message: string;
-};
-
-export const signInAction = async (formData: FormData): Promise<{
+export type SignInActionResult = {
   ok: boolean;
   message: string;
-}> => {
+  roles?: ROLE_TYPE[];
+};
+
+export const signInAction = async (
+  formData: FormData,
+): Promise<SignInActionResult> => {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const rememberMe = formData.get('rememberMe') !== 'false';
+
+  if (!email || !password) {
+    return {
+      ok: false,
+      message: '¡ El correo y la contraseña son obligatorios !',
+    };
+  }
 
   try {
-    const response = await auth.api.signInEmail({
-      body: {
-        email,
-        password,
-      },
-      asResponse: true,
-    });
+    const login = await loginWithNestApi(email, password);
 
-    const data = await response.json() as BetterAuthApiResponse;
-
-    if (data.code === 'INVALID_EMAIL_OR_PASSWORD') {
-      return {
-        ok: false,
-        message: '! Correo ó contraseña invalido !',
-      };
+    if (!login.ok) {
+      return { ok: false, message: login.message };
     }
+
+    const roles = mapNestRoles(login.user.roles);
+
+    const cookieStore = await cookies();
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax' as const,
+      path: '/',
+      maxAge: rememberMe ? 60 * 60 : undefined,
+    };
+
+    cookieStore.set(NEST_ACCESS_TOKEN_COOKIE, login.token, cookieOptions);
+    cookieStore.set(
+      NEST_SESSION_MODE_COOKIE,
+      rememberMe ? 'persistent' : 'session',
+      cookieOptions,
+    );
 
     return {
       ok: true,
-      message: '¡ Has accedido correctamente 👍 !',
+      message: login.message,
+      roles,
     };
   } catch (error) {
     console.error('Login error:', error);

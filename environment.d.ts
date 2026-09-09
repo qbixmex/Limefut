@@ -2,6 +2,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       DOMAIN: string | null;
+      AUTH_API_BASE_URL: string | null;
       BETTER_AUTH_SECRET: string | null;
       AUTH_TRUST_HOST: string | null;
       AUTH_GOOGLE_ID: string | null;

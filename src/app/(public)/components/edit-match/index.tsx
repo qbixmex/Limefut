@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { Pencil } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { ROUTES } from '@/shared/constants/routes';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+import { getSession } from '@/lib/get-session';
 import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
@@ -14,7 +13,7 @@ type Props = Readonly<{
 }>;
 
 export const EditMatch: FC<Props> = async ({ matchId, phase, playoffId }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
 
   let URL = '';
   switch (phase) {

@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 import { cn, getAlignment } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Pagination } from '@/shared/components/pagination';
@@ -11,7 +11,6 @@ import { ROUTES } from '@/shared/constants/routes';
 import { format } from 'date-fns/format';
 import { es } from 'date-fns/locale';
 import { InfoIcon, Pencil } from 'lucide-react';
-import { headers } from 'next/headers';
 import Link from 'next/link';
 import { fetchSponsorsAction, updateSponsorStateAction } from './(actions)';
 import { DeleteSponsor } from './(components)/delete-sponsor';
@@ -26,9 +25,7 @@ export const SponsorsTable: FC<Props> = async ({
   query = '',
   currentPage = 1,
 }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   const {
     sponsors = [],
