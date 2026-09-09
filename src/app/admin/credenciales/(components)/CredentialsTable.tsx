@@ -17,11 +17,10 @@ import { Pencil, InfoIcon } from 'lucide-react';
 import Link from 'next/link';
 import { DeleteCredential } from '../(components)/delete-credential';
 import { fetchCredentialsAction } from '../(actions)';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 import { Badge } from '@/components/ui/badge';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
-import { headers } from 'next/headers';
 
 type Props = Readonly<{
   query: string;
@@ -29,7 +28,7 @@ type Props = Readonly<{
 }>;
 
 export const CredentialsTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   const {
     credentials = [],
     pagination = {

@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from 'react';
+import { redirect } from 'next/navigation';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -11,6 +12,7 @@ import { ThemeSwitcher } from '@/shared/theme/ThemeSwitcher';
 import { NavUser } from '@/components/nav-user';
 import type { GlobalSettings } from '@/shared/interfaces';
 import { getSession } from '@/lib/get-session';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   children: ReactNode;
@@ -19,6 +21,10 @@ type Props = Readonly<{
 
 export const MainLayout: FC<Props> = async ({ children, settings }) => {
   const session = await getSession();
+
+  if (!session) {
+    redirect(ROUTES.AUTH_LOGIN);
+  }
 
   return (
     <SidebarProvider>

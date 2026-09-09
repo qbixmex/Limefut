@@ -21,6 +21,7 @@ describe('Tests on <LoginForm />', () => {
     vi.mocked(signInAction).mockResolvedValue({
       ok: true,
       message: '¡ Has accedido correctamente 👍 !',
+      roles: ['admin'],
     });
   });
 
@@ -84,6 +85,31 @@ describe('Tests on <LoginForm />', () => {
     const formData = vi.mocked(signInAction).mock.calls[0][0] as FormData;
     expect(formData.get('email')).toBe('juan@example.com');
     expect(formData.get('password')).toBe('password123');
+    expect(formData.get('rememberMe')).toBe('false');
+    expect(mockReplace).toHaveBeenCalledWith(ROUTES.ADMIN_DASHBOARD);
+  });
+
+  test('Should send rememberMe true when the switch is checked', async () => {
+    render(<LoginForm />);
+
+    const user = userEvent.setup();
+
+    const rememberMeSwitch = screen.getByRole('switch', { name: /recordarme/i });
+    expect(rememberMeSwitch).toHaveAttribute('data-state', 'unchecked');
+
+    await user.click(rememberMeSwitch);
+    expect(rememberMeSwitch).toHaveAttribute('data-state', 'checked');
+
+    await user.type(screen.getByLabelText(/correo electrónico/i), 'juan@example.com');
+    await user.type(screen.getByLabelText(/contraseña/i), 'password123');
+    await user.click(screen.getByRole('button', { name: /acceder/i }));
+
+    await waitFor(() => {
+      expect(signInAction).toHaveBeenCalledTimes(1);
+    });
+
+    const formData = vi.mocked(signInAction).mock.calls[0][0] as FormData;
+    expect(formData.get('rememberMe')).toBe('true');
     expect(mockReplace).toHaveBeenCalledWith(ROUTES.ADMIN_DASHBOARD);
   });
 });

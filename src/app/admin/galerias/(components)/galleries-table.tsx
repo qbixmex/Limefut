@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import Link from 'next/link';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 import { fetchGalleriesAction, updateGalleryStateAction } from '../(actions)';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ImagesIcon, Pencil } from 'lucide-react';
@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils';
 import { Pagination } from '@/shared/components/pagination';
 import { Badge } from '@/components/ui/badge';
 import { DeleteGallery } from './delete-gallery';
-import { headers } from 'next/headers';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
@@ -25,7 +24,7 @@ export const GalleriesTable: FC<Props> = async ({
   query = '',
   currentPage = 1,
 }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
 
   const {
     galleries = [],

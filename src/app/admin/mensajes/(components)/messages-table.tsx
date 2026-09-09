@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 import {
   Table,
   TableBody,
@@ -20,7 +20,6 @@ import { fetchMessagesAction } from '../(actions)/fetchMessagesAction';
 import { DeleteMessage } from './delete-message';
 import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { updateMessageStatusAction } from '../(actions)/updateMessageStatusAction';
-import { headers } from 'next/headers';
 
 type Props = Readonly<{
   query: string;
@@ -28,7 +27,7 @@ type Props = Readonly<{
 }>;
 
 export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   const {
     messages = [],
     pagination = {
