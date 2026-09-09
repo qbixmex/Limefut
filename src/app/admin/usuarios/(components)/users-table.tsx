@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { headers } from 'next/headers';
+import { getSession } from '@/lib/get-session';
 import { fetchUsersAction, updateUserStateAction } from '../(actions)';
 import {
   Table,
@@ -21,7 +21,6 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import Pagination from '@/shared/components/pagination';
 import { ActiveSwitch } from '@/shared/components/active-switch';
-import { auth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 
 type Props = Readonly<{
@@ -30,7 +29,7 @@ type Props = Readonly<{
 }>;
 
 export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getSession();
   const {
     users = [],
     pagination = {

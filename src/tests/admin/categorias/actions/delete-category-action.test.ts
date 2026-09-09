@@ -24,11 +24,26 @@ vi.mock('next/headers', () => ({
   headers: vi.fn().mockResolvedValue(new Headers()),
 }));
 
-vi.mock('@/lib/auth', () => ({
-  auth: {
-    api: {
-      getSession: mockGetSession,
-    },
+vi.mock('@/lib/get-session', () => ({
+  getSession: mockGetSession,
+  requireAdmin: async () => {
+    const session = await mockGetSession();
+
+    if (!session?.user) {
+      return {
+        ok: false,
+        message: '¡ Debes estar autentificado para realizar esta acción !',
+      };
+    }
+
+    if (!session.user.roles?.includes('admin')) {
+      return {
+        ok: false,
+        message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      };
+    }
+
+    return { ok: true, session };
   },
 }));
 

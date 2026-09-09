@@ -2,14 +2,13 @@ import { type FC } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 import { cn } from '@/lib/utils';
 import { Pagination } from '@/shared/components/pagination';
 import { ROUTES } from '@/shared/constants/routes';
 import { format } from 'date-fns/format';
 import { es } from 'date-fns/locale';
 import { InfoIcon, Pencil } from 'lucide-react';
-import { headers } from 'next/headers';
 import Link from 'next/link';
 import { fetchVideosAction, updateVideoStateAction } from '../(actions)';
 import { DeleteVideo } from '../(components)/delete-video';
@@ -24,9 +23,7 @@ export const VideosTable: FC<Props> = async ({
   query = '',
   currentPage = 1,
 }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   const {
     videos = [],

@@ -15,12 +15,12 @@ import { ROUTES } from '@/shared/constants/routes';
 type Props = {
   authenticatedUser: {
     id: string;
-    name: string;
-    username: string | undefined;
+    name: string | null;
+    username: string | null;
     email: string;
     emailVerified: boolean;
-    roles: string[] | undefined;
-    image: string | undefined;
+    roles: string[];
+    image: string | null;
   } | undefined;
 };
 

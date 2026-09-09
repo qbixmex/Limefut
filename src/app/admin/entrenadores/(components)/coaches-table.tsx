@@ -18,9 +18,8 @@ import { fetchCoachesAction, updateCoachStateAction } from '../(actions)';
 import { DeleteCoach } from '../(components)/delete-coach';
 import { Pagination } from '@/shared/components/pagination';
 import { ActiveSwitch } from '@/shared/components/active-switch';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/get-session';
 import { cn } from '@/lib/utils';
-import { headers } from 'next/headers';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
@@ -29,9 +28,7 @@ type Props = Readonly<{
 }>;
 
 export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   const {
     coaches = [],

@@ -9,12 +9,9 @@ vi.mock('next/headers', () => ({
   headers: vi.fn().mockResolvedValue(new Headers()),
 }));
 
-vi.mock('@/lib/auth', () => ({
-  auth: {
-    api: {
-      getSession: vi.fn().mockResolvedValue({ user: { roles: [] } }),
-    },
-  },
+vi.mock('@/lib/get-session', () => ({
+  getSession: vi.fn().mockResolvedValue({ user: { roles: [] } }),
+  requireAdmin: vi.fn(),
 }));
 
 vi.mock('@/app/admin/torneos/(actions)/fetch-tournament.action');

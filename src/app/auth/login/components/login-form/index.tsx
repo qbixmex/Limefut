@@ -8,9 +8,11 @@ import { Form } from '@/components/ui/form';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { Eye, EyeClosed, LoaderCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { signInAction } from '@/app/(auth)/signInAction';
+import { ROLE } from '@/shared/interfaces';
 import { toast } from 'sonner';
 import './styles.css';
 import { ROUTES } from '@/shared/constants/routes';
@@ -25,6 +27,7 @@ const loginSchema = z.object({
   password: z.string().min(8, {
     message: '¡ La contraseña debe ser por lo menos de 8 caracteres !',
   }),
+  rememberMe: z.boolean(),
 });
 
 export const LoginForm = () => {
@@ -35,16 +38,22 @@ export const LoginForm = () => {
     defaultValues: {
       email: '',
       password: '',
+      rememberMe: false,
     },
   });
 
-  const onSubmit = async ({ email, password }: z.infer<typeof loginSchema>) => {
+  const onSubmit = async ({
+    email,
+    password,
+    rememberMe,
+  }: z.infer<typeof loginSchema>) => {
     const formData = new FormData();
 
     formData.append('email', email);
     formData.append('password', password);
+    formData.append('rememberMe', rememberMe ? 'true' : 'false');
 
-    const { ok, message } = await signInAction(formData);
+    const { ok, message, roles } = await signInAction(formData);
 
     if (!ok) {
       toast.error(message);
@@ -54,8 +63,10 @@ export const LoginForm = () => {
     form.reset();
     toast.success(message);
 
+    const isAdmin = roles?.includes(ROLE.ADMIN) ?? false;
+
     // Redirect to dashboard using hard refresh
-    window.location.replace(ROUTES.ADMIN_DASHBOARD);
+    window.location.replace(isAdmin ? ROUTES.ADMIN_DASHBOARD : ROUTES.HOME);
   };
 
   return (
@@ -114,6 +125,26 @@ export const LoginForm = () => {
               {fieldState.invalid && (
                 <FieldError errors={[fieldState.error]} />
               )}
+            </Field>
+          )}
+        />
+
+        <Controller
+          name="rememberMe"
+          control={form.control}
+          render={({ field }) => (
+            <Field>
+              <div className="flex items-center gap-3">
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  aria-label="Recordarme"
+                />
+                <FieldLabel className="label mb-0">Recordarme</FieldLabel>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Mantener la sesión iniciada durante una hora
+              </p>
             </Field>
           )}
         />
