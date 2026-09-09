@@ -21,7 +21,7 @@ export const EditUser: FC<Props> = async ({ params }) => {
   const userId = (await params).id;
   const response = await fetchUserAction(userId);
 
-  if (!response.ok) {
+  if (!response.ok && response.message) {
     redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(response.message)}`);
   }
 

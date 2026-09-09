@@ -1,5 +1,4 @@
-import { use } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MatchesContent } from '@/app/admin/encuentros/matches-content';
 
 const shouldSuspend = vi.hoisted(() => ({ value: true }));
@@ -11,7 +10,7 @@ vi.mock('@/app/admin/encuentros/(components)/matches-table-skeleton', () => ({
 vi.mock('@/app/admin/encuentros/(components)/matches.wrapper', () => ({
   MatchesWrapper: () => {
     if (shouldSuspend.value) {
-      use(new Promise(() => { }));
+      throw new Promise(() => {});
     }
     return <div data-testid="matches-wrapper" />;
   },
@@ -139,18 +138,17 @@ describe('Tests on <MatchesContent />', () => {
   });
 
   test('Should render skeleton while suspended', async () => {
+    shouldSuspend.value = true;
+
     const ServerComponent = await MatchesContent({
       searchParams: Promise.resolve<SearchParams>({
         tournament: 'tournament-test',
         category: 'category-test',
       }),
     });
-
     render(ServerComponent);
 
-    await waitFor(() => {
-      const skeleton = screen.getByTestId('matches-table-skeleton');
-      expect(skeleton).toBeInTheDocument();
-    });
+    const skeleton = screen.getByTestId('matches-table-skeleton');
+    expect(skeleton).toBeInTheDocument();
   });
 });

@@ -22,6 +22,8 @@ import { Button } from '@/components/ui/button';
 import Pagination from '@/shared/components/pagination';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { cn } from '@/lib/utils';
+import { ROUTES } from '@/shared/constants/routes';
+import { Icon } from '@iconify/react';
 
 type Props = Readonly<{
   query: string;
@@ -30,17 +32,20 @@ type Props = Readonly<{
 
 export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
   const session = await getSession();
+  const pageNumber = Number(currentPage);
+  const options: { page?: number; searchTerm: string } = { searchTerm: query };
+
+  if (Number.isInteger(pageNumber) && pageNumber > 1) {
+    options.page = pageNumber;
+  }
+
   const {
     users = [],
     pagination = {
       currentPage: 1,
       totalPages: 1,
     },
-  } = await fetchUsersAction({
-    page: Number(currentPage),
-    take: 12,
-    searchTerm: query,
-  });
+  } = await fetchUsersAction(options);
 
   return (
     <>
@@ -51,9 +56,10 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[100px]">Imagen</TableHead>
-                  <TableHead className="w-[250px]">Nombre</TableHead>
-                  <TableHead className="w-[200px]">Nombre de Usuario</TableHead>
-                  <TableHead className="w-[250px]">Email</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead className="w-[150px]">Nombre de Usuario</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead className="w-[150px] text-center">Email Verificado</TableHead>
                   <TableHead className="w-[120px]">Roles</TableHead>
                   <TableHead className="w-[100px] text-center">Activo</TableHead>
                   <TableHead>Acciones</TableHead>
@@ -84,10 +90,25 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.username}</TableCell>
                     <TableCell>{user.email}</TableCell>
+                    <TableCell className="text-center">
+                      {
+                        user.emailVerified
+                          ? (
+                            <Badge variant="outline-success" asChild>
+                              <Icon icon="lucide:check" style={{ fontSize: 24 }} />
+                            </Badge>
+                          )
+                          : (
+                            <Badge variant="outline-secondary" asChild>
+                              <Icon icon="lucide:x" style={{ fontSize: 24 }} />
+                            </Badge>
+                          )
+                      }
+                    </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
                         {user.roles.map((role) => (
-                          <Badge key={role} variant="outline-secondary">{role}</Badge>
+                          <Badge key={role} variant="outline-info">{role}</Badge>
                         ))}
                       </div>
                     </TableCell>
@@ -97,11 +118,11 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                         updateResourceStateAction={updateUserStateAction}
                       />
                     </TableCell>
-                    <TableCell className="">
+                    <TableCell>
                       <div className="flex gap-3">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/usuarios/perfil/${user.id}`}>
+                            <Link href={ROUTES.ADMIN_USERS_SHOW(user.id)}>
                               <Button variant="outline-info" size="icon">
                                 <User />
                               </Button>
@@ -113,7 +134,7 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                         </Tooltip>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link href={`/admin/usuarios/editar/${user.id}`}>
+                            <Link href={ROUTES.ADMIN_USERS_EDIT(user.id)}>
                               <Button variant="outline-warning" size="icon">
                                 <Pencil />
                               </Button>
@@ -152,5 +173,3 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
     </>
   );
 };
-
-export default UsersTable;
