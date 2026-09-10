@@ -24,6 +24,8 @@ import { ActiveSwitch } from '@/shared/components/active-switch';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
 import { Icon } from '@iconify/react';
+import { EditUser } from './edit-user';
+import { ShowProfile } from './show-profile';
 
 type Props = Readonly<{
   query: string;
@@ -120,30 +122,8 @@ export const UsersTable: FC<Props> = async ({ query, currentPage }) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={ROUTES.ADMIN_USERS_SHOW(user.id)}>
-                              <Button variant="outline-info" size="icon">
-                                <User />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>perfil</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={ROUTES.ADMIN_USERS_EDIT(user.id)}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <ShowProfile userId={user.id} />
+                        <EditUser userId={user.id} />
                         <DeleteUser
                           userId={user.id}
                           roles={session?.user.roles as string[]}
