@@ -87,19 +87,27 @@ export const UsersForm: FC<Props> = ({ user }) => {
 
     // Create user
     if (!user) {
-      const response = await createUserAction(formData);
+      const result = await createUserAction(formData);
 
-      if (!response.ok) {
-        toast.error(response.message);
+      if (!result.ok) {
+        toast.error(result.message);
         return;
       }
 
-      if (response.ok) {
-        toast.success(response.message);
-        form.reset();
+      if (result.ok && result.statusCode === 201) {
+        toast.success(result.message);
+        form.reset({
+          name: '',
+          username: '',
+          email: '',
+          password: '',
+          passwordConfirmation: '',
+          roles: [],
+          isActive: false,
+        });
         route.replace(ROUTES.ADMIN_USERS);
-        return;
       }
+
       return;
     }
 

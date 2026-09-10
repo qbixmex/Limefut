@@ -1,13 +1,16 @@
 'use server';
 
-import prisma from '@/lib/prisma';
-import deleteImage from '@/shared/actions/deleteImageAction';
+import { redirect } from 'next/navigation';
 import { updateTag } from 'next/cache';
 import { requireAdmin } from '@/lib/get-session';
+import { getNestAccessToken } from '@/lib/nest-api';
+import { ROUTES } from '@/shared/constants/routes';
+import { deleteUserApi } from '../(services)';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
   message: string;
+  statusCode?: number;
 }>;
 
 export const deleteUserAction = async (userId: string): ResponseDeleteAction => {
@@ -19,39 +22,18 @@ export const deleteUserAction = async (userId: string): ResponseDeleteAction => 
     };
   }
 
-  const userDeleted = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      imagePublicID: true,
-      name: true,
-    },
-  });
+  const token = await getNestAccessToken();
 
-  if (!userDeleted) {
-    return {
-      ok: false,
-      message: '¡ No se puede eliminar por que el usuario no existe !',
-    };
+  const result = await deleteUserApi(userId, token);
+
+  if (result.statusCode === 401) {
+    redirect(ROUTES.AUTH_LOGIN);
   }
 
-  await prisma.user.delete({
-    where: { id: userId },
-  });
-
-  // Delete image from cloudinary.
-  if (userDeleted.imagePublicID) {
-    const response = await deleteImage(userDeleted.imagePublicID);
-    if (!response.ok) {
-      throw new Error('Error deleting image from cloudinary');
-    }
+  if (result.ok) {
+    updateTag('admin-users');
+    updateTag('admin-user');
   }
 
-  // Update Cache
-  updateTag('admin-users');
-  updateTag('admin-user');
-
-  return {
-    ok: true,
-    message: `¡ Usuario "${userDeleted.name}" eliminado correctamente 👍 !`,
-  };
+  return result;
 };
