@@ -186,7 +186,7 @@ export const callNestApi = async <T>(
       data,
     };
   } catch (error) {
-    console.error(`NestJS API call error (${path}):`, error);
+    console.error(`Backend API call error (${path}):`, error);
     return {
       ok: false,
       status: 0,
