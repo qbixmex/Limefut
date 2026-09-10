@@ -16,8 +16,8 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
-import './styles.css';
 import { deleteUserAction } from '../../(actions)';
+import './styles.css';
 
 type Props = Readonly<{
   userId: string;
@@ -31,6 +31,10 @@ export const DeleteUser: FC<Props> = ({ userId, roles }) => {
       return;
     }
     const response = await deleteUserAction(userId);
+    if (!response.ok) {
+      toast.error(response.message);
+      return;
+    }
     toast.success(response.message);
   };
 
