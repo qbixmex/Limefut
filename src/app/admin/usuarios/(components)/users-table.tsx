@@ -11,18 +11,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Pencil,
-  User,
-} from 'lucide-react';
+import { User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { DeleteUser } from './delete-user';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
 import Pagination from '@/shared/components/pagination';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { cn } from '@/lib/utils';
-import { ROUTES } from '@/shared/constants/routes';
 import { Icon } from '@iconify/react';
 import { EditUser } from './edit-user';
 import { ShowProfile } from './show-profile';
