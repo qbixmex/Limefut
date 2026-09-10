@@ -1,27 +1,20 @@
 'use server';
 
-import prisma from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
+import { redirect } from 'next/navigation';
 import { createUserSchema } from '@/shared/schemas';
-import { uploadImage } from '@/shared/actions';
 import { updateTag } from 'next/cache';
-import type { CloudinaryResponse, ROLE_TYPE, User } from '@/shared/interfaces';
-import { isPasswordInsecure } from '@/lib/passwords_check';
+import type { User } from '@/shared/interfaces';
 import { requireAdmin } from '@/lib/get-session';
+import { getNestAccessToken } from '@/lib/nest-api';
+import { ROUTES } from '@/shared/constants/routes';
+import { createUserApi, type CreateUserApiInput } from '../(services)';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
   message: string;
+  statusCode?: number;
   user: User | null;
 }>;
-
-type UserToSave = {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-  roles: string[];
-};
 
 export const createUserAction = async (
   formData: FormData,
@@ -35,13 +28,10 @@ export const createUserAction = async (
     };
   }
 
-  const imageFile = formData.get('image');
-
   const rawData = {
     name: formData.get('name') as string,
     username: formData.get('username') ?? '',
     email: formData.get('email') as string,
-    image: (imageFile instanceof File && imageFile.size > 0) ? imageFile : undefined,
     password: formData.get('password') as string,
     passwordConfirmation: formData.get('passwordConfirmation') as string,
     roles: JSON.parse(formData.get('roles') as string),
@@ -58,80 +48,27 @@ export const createUserAction = async (
     };
   }
 
-  if (isPasswordInsecure(userVerified.data.password)) {
-    return {
-      ok: false,
-      message: '¡ La contraseña es insegura, elija otra por favor !',
-      user: null,
-    };
+  const token = await getNestAccessToken();
+
+  const dataToApi = Object.fromEntries(
+    Object.entries(userVerified.data).filter(
+      ([key]) => key !== 'passwordConfirmation' && key !== 'image',
+    ),
+  );
+
+  const result = await createUserApi(
+    dataToApi as CreateUserApiInput,
+    token,
+  );
+
+  if (result.statusCode === 401) {
+    redirect(ROUTES.AUTH_LOGIN);
   }
 
-  const { image, ...dataParsed } = userVerified.data;
-
-  // Upload Image to third-party storage (cloudinary).
-  let cloudinaryResponse: CloudinaryResponse | null = null;
-
-  if (image) {
-    cloudinaryResponse = await uploadImage(image!, 'users');
-    if (!cloudinaryResponse) {
-      throw new Error('Error al subir la imagen a cloudinary');
-    }
-  }
-
-  const userToSave = Object.fromEntries(
-    Object
-      .entries(dataParsed)
-      .filter(([property]) => property !== 'passwordConfirmation'),
-  ) as UserToSave;
-
-  const hashedPassword = bcrypt.hashSync(userToSave.password, 10);
-
-  try {
-    const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const createdUser = await transaction.user.create({
-        data: {
-          ...userToSave,
-          password: hashedPassword,
-          roles: userToSave.roles as ROLE_TYPE[],
-          imageUrl: cloudinaryResponse?.secureUrl,
-          imagePublicID: cloudinaryResponse?.publicId,
-        },
-      });
-
-      return {
-        ok: true,
-        message: '¡ Usuario creado correctamente 👍 !',
-        user: createdUser,
-      };
-    });
-
-    // Update Cache
+  if (result.ok) {
     updateTag('admin-users');
     updateTag('admin-user');
-
-    return prismaTransaction;
-  } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
-        return {
-          ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
-          user: null,
-        };
-      }
-
-      return {
-        ok: false,
-        message: '¡ Error al crear el usuario, revise los logs del servidor !',
-        user: null,
-      };
-    }
-    console.log((error as Error).message);
-    return {
-      ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
-      user: null,
-    };
   }
+
+  return result;
 };
