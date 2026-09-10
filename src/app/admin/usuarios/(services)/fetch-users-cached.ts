@@ -4,6 +4,7 @@ import { fetchUsersApi } from './fetch-users.api';
 import type { User } from './fetch-users.api';
 
 export type CacheInput = Readonly<{
+  searchTerm?: string;
   page?: number;
   take?: number;
   token?: string | null;
@@ -17,6 +18,7 @@ export type ResponseFetchAction = Promise<{
 }>;
 
 export const fetchUsersCached = async ({
+  searchTerm,
   page,
   take,
   token,
@@ -26,7 +28,7 @@ export const fetchUsersCached = async ({
   cacheLife('max');
   cacheTag('admin-users');
 
-  const result = await fetchUsersApi({ page, take }, token);
+  const result = await fetchUsersApi({ searchTerm, page, take }, token);
 
   return {
     ok: result.ok,

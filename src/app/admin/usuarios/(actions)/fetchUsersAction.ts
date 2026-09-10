@@ -14,7 +14,7 @@ export type { User, ResponseFetchAction };
 
 export const fetchUsersAction = async (options?: Options): ResponseFetchAction => {
   const token = await getNestAccessToken();
-  const { page, take } = options ?? {};
+  const { searchTerm, page, take } = options ?? {};
 
-  return fetchUsersCached({ page, take, token });
+  return fetchUsersCached({ searchTerm, page, take, token });
 };

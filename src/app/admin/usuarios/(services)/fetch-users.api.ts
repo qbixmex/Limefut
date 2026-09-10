@@ -21,6 +21,7 @@ type UsersApiResponse = {
 };
 
 type Options = Readonly<{
+  searchTerm?: string;
   page?: number;
   take?: number;
 }>;
@@ -36,7 +37,7 @@ export const fetchUsersApi = async (
   options?: Options,
   token?: string | null,
 ): FetchUsersApiResult => {
-  const { page, take } = options ?? {};
+  const { searchTerm, page, take } = options ?? {};
 
   const isPositiveInteger = (value: number | undefined): boolean => {
     return value === undefined || (Number.isInteger(value) && value > 0);
@@ -54,6 +55,7 @@ export const fetchUsersApi = async (
   const params = new URLSearchParams();
   if (page !== undefined) params.set('page', String(page));
   if (take !== undefined) params.set('take', String(take));
+  if (searchTerm !== undefined) params.set('search_term', searchTerm);
   const query = params.toString();
 
   const result = await callNestApi<UsersApiResponse>(
