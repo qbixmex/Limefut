@@ -6,3 +6,5 @@ export { createUserApi } from './create-user.api';
 export type { CreateUserApiInput, CreateUserApiResult } from './create-user.api';
 export { deleteUserApi } from './delete-user.api';
 export type { DeleteUserApiResult } from './delete-user.api';
+export { updateUserApi } from './update-user.api';
+export type { UpdateUserApiInput, UpdateUserApiResult } from './update-user.api';

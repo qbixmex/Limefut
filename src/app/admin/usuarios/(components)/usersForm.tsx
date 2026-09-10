@@ -112,10 +112,7 @@ export const UsersForm: FC<Props> = ({ user }) => {
     }
 
     if (user) {
-      const response = await updateUserAction({
-        formData,
-        userId: user.id,
-      });
+      const response = await updateUserAction(formData, user.id);
 
       if (!response.ok) {
         toast.error(response.message);
@@ -400,5 +397,3 @@ export const UsersForm: FC<Props> = ({ user }) => {
     </Form>
   );
 };
-
-export default UsersForm;

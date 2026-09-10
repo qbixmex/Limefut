@@ -1,0 +1,195 @@
+'use server';
+
+import prisma from '@/lib/prisma';
+import type { User, ROLE_TYPE } from '@/shared/interfaces';
+import { editUserSchema } from '@/shared/schemas';
+import bcrypt from 'bcryptjs';
+import { updateTag } from 'next/cache';
+import { uploadImage, deleteImage } from '@/shared/actions';
+import { isPasswordInsecure } from '@/lib/passwords_check';
+import { requireAdmin } from '@/lib/get-session';
+
+type Options = {
+  formData: FormData;
+  userId: string;
+};
+
+type EditResponseAction = Promise<{
+  ok: boolean;
+  message: string;
+  user: User | null;
+}>;
+
+export const updateUserAction = async ({
+  formData,
+  userId,
+}: Options): EditResponseAction => {
+  const guard = await requireAdmin();
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+      user: null,
+    };
+  }
+
+  const imageFile = formData.get('image');
+
+  const rawData = {
+    name: formData.get('name') ?? '',
+    username: formData.get('username') ?? '',
+    email: formData.get('email') ?? '',
+    image: (imageFile instanceof File && imageFile.size > 0)
+      ? imageFile
+      : null,
+    password: formData.get('password') ?? '',
+    passwordConfirmation: formData.get('passwordConfirmation') ?? '',
+    roles: formData.get('roles')
+      ? JSON.parse(formData.get('roles') as string)
+      : [],
+    isActive: formData.get('isActive') === 'true',
+  };
+
+  const userVerified = editUserSchema.safeParse(rawData);
+
+  if (!userVerified.success) {
+    return {
+      ok: false,
+      message: userVerified.error.message,
+      user: null,
+    };
+  }
+
+  if (
+    userVerified.data.password && userVerified.data.password !== '' &&
+    isPasswordInsecure(userVerified.data.password)
+  ) {
+    return {
+      ok: false,
+      message: '¡ La contraseña es insegura, elija otra por favor !',
+      user: null,
+    };
+  }
+
+  const { image, ...userToSave } = userVerified.data;
+
+  try {
+    const prismaTransaction = await prisma.$transaction(async (transaction) => {
+      try {
+        const isUserExists = await transaction.user.count({
+          where: { id: userId },
+        });
+
+        if (!isUserExists) {
+          return {
+            ok: false,
+            message: '¡ El usuario no existe o ha sido eliminado !',
+            user: null,
+          };
+        }
+
+        let hashedPassword: string | undefined;
+
+        if (userToSave.password && userToSave.password.trim().length > 0) {
+          hashedPassword = userVerified.data.password
+            ? bcrypt.hashSync(userVerified.data.password, 10)
+            : undefined;
+        }
+
+        const updatedUser = await transaction.user.update({
+          where: { id: userId },
+          data: {
+            name: userToSave.name as string,
+            username: userToSave.username,
+            email: userToSave.email as string,
+            roles: userToSave.roles as ROLE_TYPE[],
+            isActive: userToSave.isActive as boolean,
+            password: hashedPassword,
+          },
+        });
+
+        if (image) {
+          // Delete previous image from cloudinary.
+          if (updatedUser.imagePublicID) {
+            const cloudinaryResponse = await deleteImage(updatedUser.imagePublicID);
+            if (!cloudinaryResponse.ok) {
+              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+            }
+          }
+
+          // Upload Image to third-party storage (cloudinary).
+          const imageUploaded = await uploadImage(image, 'users');
+
+          if (!imageUploaded) {
+            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+          }
+
+          // Update image data to database.
+          await transaction.user.update({
+            where: { id: userId },
+            data: {
+              imageUrl: imageUploaded.secureUrl,
+              imagePublicID: imageUploaded.publicId,
+            },
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              email: true,
+              imageUrl: true,
+              imagePublicID: true,
+              roles: true,
+              isActive: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          });
+
+          // Update event object to return.
+          updatedUser.imageUrl = imageUploaded.secureUrl;
+        }
+
+        // Update Cache
+        updateTag('admin-users');
+        updateTag('admin-user');
+
+        return {
+          ok: true,
+          message: '¡ Usuario actualizado satisfactoriamente 👍 !',
+          user: updatedUser,
+        };
+      } catch (error) {
+        if (error instanceof Error && 'meta' in error && error.meta) {
+          if ('code' in error && error.code as string === 'P2002') {
+            const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+            return {
+              ok: false,
+              message: `¡ El campo "${fieldError}", está duplicado !`,
+              user: null,
+            };
+          }
+
+          return {
+            ok: false,
+            message: '¡ Error al actualizar el usuario, revise los logs del servidor !',
+            user: null,
+          };
+        }
+        return {
+          ok: false,
+          message: '¡ Error inesperado, revise los logs !',
+          user: null,
+        };
+      }
+    });
+
+    return prismaTransaction;
+  } catch (error) {
+    console.log(error);
+    return {
+      ok: false,
+      message: '¡ Error inesperado, revise los logs del servidor !',
+      user: null,
+    };
+  }
+};

@@ -1,15 +1,11 @@
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { UsersForm } from '../../(components)/usersForm';
-import { fetchUserAction } from '../../(actions)/fetchUserAction';
-import { redirect } from 'next/navigation';
-import type { User } from '@/shared/interfaces';
-import { ROUTES } from '@/shared/constants/routes';
+import { EditUserView } from './edit-user-view';
 
 type Props = Readonly<{
   params: Promise<{
@@ -17,14 +13,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const EditUser: FC<Props> = async ({ params }) => {
-  const userId = (await params).id;
-  const response = await fetchUserAction(userId);
-
-  if (!response.ok && response.message) {
-    redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(response.message)}`);
-  }
-
+export const EditUser: FC<Props> = ({ params }) => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -33,9 +22,9 @@ export const EditUser: FC<Props> = async ({ params }) => {
             <CardTitle className="admin-page-card-title">Editar Usuario</CardTitle>
           </CardHeader>
           <CardContent>
-            <UsersForm
-              user={response.user as User}
-            />
+            <Suspense>
+              <EditUserView params={params} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>

@@ -1,12 +1,16 @@
 'use server';
 
-import prisma from '@/lib/prisma';
+import { redirect } from 'next/navigation';
 import { updateTag } from 'next/cache';
 import { requireAdmin } from '@/lib/get-session';
+import { getNestAccessToken } from '@/lib/nest-api';
+import { ROUTES } from '@/shared/constants/routes';
+import { updateUserApi } from '../(services)';
 
 export type ResponseDeleteAction = Promise<{
   ok: boolean;
   message: string;
+  statusCode?: number;
 }>;
 
 export const updateUserStateAction = async (id: string, state: boolean): ResponseDeleteAction => {
@@ -18,32 +22,18 @@ export const updateUserStateAction = async (id: string, state: boolean): Respons
     };
   }
 
-  const userExists = await prisma.user.count({
-    where: { id },
-  });
+  const token = await getNestAccessToken();
 
-  if (userExists === 0) {
-    return {
-      ok: false,
-      message: '¡ No se pudo actualizar el usuario, quizás fue eliminado ó no existe !',
-    };
+  const result = await updateUserApi(id, { isActive: state }, token);
+
+  if (result.statusCode === 401) {
+    redirect(ROUTES.AUTH_LOGIN);
   }
 
-  const updatedTeam = await prisma.user.update({
-    where: { id },
-    data: { isActive: state },
-    select: {
-      name: true,
-      isActive: true,
-    },
-  });
+  if (result.ok) {
+    updateTag('admin-users');
+    updateTag('admin-user');
+  }
 
-  // Update Cache
-  updateTag('admin-users');
-  updateTag('admin-user');
-
-  return {
-    ok: true,
-    message: `¡ El usuario "${updatedTeam.name}" fue ${updatedTeam.isActive ? 'activado' : 'desactivado'} correctamente 👍 !`,
-  };
+  return result;
 };
