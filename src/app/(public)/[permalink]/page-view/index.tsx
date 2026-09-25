@@ -1,19 +1,24 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
+import { redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
-import 'highlight.js/styles/tokyo-night-dark.min.css';
-import { fetchCustomPageAction } from './(actions)/fetchCustomPageAction';
-import { redirect } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { fetchCustomPageAction } from '../(actions)/fetchCustomPageAction';
 import { rehypeYoutube } from '@/lib/rehype-youtube';
+import 'highlight.js/styles/tokyo-night-dark.min.css';
+import { cn } from '@/lib/utils';
+import './styles.css';
 
 type Props = Readonly<{
-  permalink: string;
+  params: Promise<{
+    permalink: string;
+  }>;
 }>;
 
-export const PageContent: FC<Props> = async ({ permalink }) => {
+export const PageView: FC<Props> = async ({ params }) => {
+  const permalink = (await params).permalink;
+
   const { ok, message, customPage } = await fetchCustomPageAction(permalink);
 
   if (!ok || !customPage) {

@@ -69,7 +69,7 @@ npm start
 ## Docker
 
 ```bash
-docker compose -p sonusbeat_blog up -d
+docker compose -p limefut up -d
 
 # -p container name
 # -d detach mode

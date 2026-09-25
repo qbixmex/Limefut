@@ -1,0 +1,48 @@
+@reference "tailwindcss";
+
+.level-1 {
+  font-size: var(--text-5xl);
+  line-height: var(--text-5xl--line-height);
+  color: var(--color-emerald-600);
+  font-weight: bold;
+  margin-bottom: --spacing(5);
+}
+
+.text, .list, .sub-list {
+  font-size: var(--text-xl);
+  line-height: var(--text-xl--line-height);
+  text-wrap: pretty;
+  font-weight: 500;
+
+  @apply tracking-wide leading-relaxed;
+}
+
+.level-2 {
+  color: var(--color-sky-500);
+  font-size: var(--text-3xl);
+  line-height: var(--text-3xl--line-height);
+  font-weight: 600;
+}
+
+.level-3 {
+  color: var(--color-indigo-500);
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl--line-height);
+  font-weight: 600;
+}
+
+.list {
+  margin-left: --spacing(5);
+
+  li {
+    list-style-type: decimal;
+  }
+}
+
+.sub-list {
+  margin-left: --spacing(5);
+
+  li {
+    list-style-type: decimal;
+  }
+}
