@@ -1,8 +1,10 @@
 import { Suspense, type FC } from 'react';
-import { PageWrapper } from './page-wrapper';
+import { PageView } from './page-view';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { fetchCustomPageMetadataAction } from './(actions)/fetchCustomPageMetadata';
-import './styles.css';
+import styles from './styles.module.css';
+import { cn } from '@/lib/utils';
+import { PageSkeleton } from './page-view/page-skeleton';
 
 type Props = Readonly<{
   params: Promise<{
@@ -25,12 +27,10 @@ export const generateMetadata = async (
 };
 
 export const CustomPage: FC<Props> = ({ params }) => {
-  const permalinkPromise = params.then((p) => ({ permalink: p.permalink }));
-
   return (
-    <div className="wrapper justify-start dark:bg-gray-600/20!">
-      <Suspense>
-        <PageWrapper permalinkPromise={permalinkPromise} />
+    <div className={cn('wrapper', styles.customPage)}>
+      <Suspense fallback={<PageSkeleton />}>
+        <PageView params={params} />
       </Suspense>
     </div>
   );
