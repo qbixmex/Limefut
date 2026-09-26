@@ -50,28 +50,28 @@ export const loginWithNestApi = async (
       cache: 'no-store',
     });
 
-    const body = await response.json().catch(() => null) as NestAuthBody | null;
+    const data = await response.json() as NestAuthBody;
 
-    if (!response.ok || !body?.user || !body?.token) {
+    if (!response.ok || !data.user || !data.token) {
       return {
         ok: false,
         message:
-          body?.message ??
+          data?.message ??
           '¡ No se pudo autentificar con las credenciales proporcionadas !',
       };
     }
 
     return {
       ok: true,
-      message: body.message ?? '¡ Has accedido correctamente 👍 !',
-      user: body.user,
-      token: body.token,
+      message: data.message ?? '¡ Has accedido correctamente 👍 !',
+      user: data.user,
+      token: data.token,
     };
   } catch (error) {
-    console.error('NestJS login error:', error);
+    console.error('Login error:', error);
     return {
       ok: false,
-      message: '¡ No se pudo conectar con el servicio de autentificación ❌ !',
+      message: 'No se pudo conectar con el servicio de autentificación',
     };
   }
 };

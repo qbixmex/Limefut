@@ -64,7 +64,10 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   }
 
   const standingsCount = await prisma.standings.count({
-    where: { teamId },
+    where: {
+      teamId,
+      tournamentId: team.tournamentId ?? undefined,
+    },
   });
 
   if (standingsCount > 0) {
