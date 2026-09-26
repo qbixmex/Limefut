@@ -2,13 +2,13 @@
 
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from '@/components/ui/combobox';
 import type { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -24,6 +24,9 @@ type CATEGORY_TYPE = {
 export const CategoriesFormSelect: FC<Props> = ({ categories }) => {
   const { control } = useFormContext();
 
+  const filterCategories = (category: CATEGORY_TYPE, query: string) =>
+    category.name.trim().toLowerCase().includes(query.toLowerCase());
+
   return (
     <Controller
       control={control}
@@ -33,24 +36,30 @@ export const CategoriesFormSelect: FC<Props> = ({ categories }) => {
           <FieldLabel>
             Categoría <span className="text-orange-500">*</span>
           </FieldLabel>
-          <Select
-            value={field.value ?? ''}
-            onValueChange={field.onChange}
-            aria-invalid={fieldState.invalid}
+          <Combobox
+            items={categories}
+            filter={filterCategories}
+            value={categories.find(category => category.id === field.value) ?? null}
+            onValueChange={(category) => field.onChange(category?.id ?? '')}
+            itemToStringLabel={(category: CATEGORY_TYPE) => category.name}
+            itemToStringValue={(category: CATEGORY_TYPE) => category.id}
+            isItemEqualToValue={(itemValue, value) => itemValue.id === value.id}
           >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Seleccione una categoría" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {categories.map(({ id, name }) => (
-                  <SelectItem key={id} value={id}>
-                    {name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <ComboboxInput
+              placeholder="Buscar categoría"
+              aria-invalid={fieldState.invalid}
+            />
+            <ComboboxContent>
+              <ComboboxEmpty>No se encontró la categoría</ComboboxEmpty>
+              <ComboboxList>
+                {(category: CATEGORY_TYPE) => (
+                  <ComboboxItem key={category.id} value={category}>
+                    {category.name}
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxContent>
+          </Combobox>
           {fieldState.invalid && (
             <FieldError errors={[fieldState.error]} />
           )}
