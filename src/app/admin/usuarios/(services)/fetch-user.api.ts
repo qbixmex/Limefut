@@ -2,6 +2,7 @@
 
 import { callNestApi } from '@/lib/nest-api';
 import type { USER_ROLES_TYPE } from '@/shared/enums';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export type User = {
   id: string;
@@ -32,16 +33,21 @@ export const fetchUserApi = async (
   id: string,
   token: string | null,
 ): FetchUserApiResult => {
+  'use cache';
+
+  cacheLife('max');
+  cacheTag('admin-user');
+
   const response = await callNestApi<UserApiResponse>(
     `/users/${id}`,
     undefined,
     token,
   );
 
-  if (!response.ok || !response.data?.message) {
+  if (!response.ok) {
     const message =
       response.data?.message ??
-      '¡ No se pudieron obtener los usuarios !';
+      'No se pudo obtener el usuario';
 
     return {
       ok: false,
@@ -50,9 +56,9 @@ export const fetchUserApi = async (
     };
   }
 
-   return {
+  return {
     ok: true,
-    message: response.data.message,
-    user: response.data.user,
+    message: response.data!.message,
+    user: response.data!.user,
   };
 };

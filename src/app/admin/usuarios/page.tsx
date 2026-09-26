@@ -1,18 +1,11 @@
-import { Suspense, type FC } from 'react';
-import { Button } from '@/components/ui/button';
+import type { FC } from 'react';
+import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { UserPlusIcon } from 'lucide-react';
-import Link from 'next/link';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
 import { UsersTable } from './(components)/users-table';
 import { UsersTableSkeleton } from './(components)/users-table-skeleton';
-import { ROUTES } from '@/shared/constants/routes';
+import { CreateUser } from './(components)/create-user';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -43,18 +36,7 @@ const UsersContent: FC<Props> = async ({ searchParams }) => {
               <CardTitle className="admin-page-card-title">Usuarios</CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar usuario ..." />
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link href={ROUTES.ADMIN_USERS_CREATE}>
-                      <Button variant="outline-primary" size="icon">
-                        <UserPlusIcon />
-                      </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">
-                    <p>crear</p>
-                  </TooltipContent>
-                </Tooltip>
+                <CreateUser />
               </section>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col">
