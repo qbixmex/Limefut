@@ -1,9 +1,9 @@
 import type { FC } from 'react';
-import { UsersForm } from '../../(components)/usersForm';
 import { fetchUserAction } from '../../(actions)/fetchUserAction';
 import { redirect } from 'next/navigation';
 import type { User } from '@/shared/interfaces';
 import { ROUTES } from '@/shared/constants/routes';
+import { EditUserForm } from './edit-user-form';
 
 type Props = Readonly<{
   params: Promise<{
@@ -19,7 +19,9 @@ export const EditUserView: FC<Props> = async ({ params }) => {
     redirect(`${ROUTES.ADMIN_USERS}?error=${encodeURIComponent(response.message)}`);
   }
 
+  const user = response.user as User;
+
   return (
-    <UsersForm user={response.user as User} />
+    <EditUserForm user={user} />
   );
 };

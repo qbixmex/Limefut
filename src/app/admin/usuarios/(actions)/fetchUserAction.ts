@@ -6,5 +6,9 @@ import { fetchUserCached } from '../(services)/fetch-user-cached';
 
 export const fetchUserAction = async (id: string): ResponseFetchAction => {
   const token = await getNestAccessToken();
-  return fetchUserCached({ id, token });
+  const response = await fetchUserCached({ id, token });
+
+  // console.log('RESPONSE:', response); //? Debugging
+
+  return response;
 };

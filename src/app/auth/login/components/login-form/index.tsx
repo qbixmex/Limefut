@@ -14,8 +14,8 @@ import { cn } from '@/lib/utils';
 import { signInAction } from '@/app/(auth)/signInAction';
 import { ROLE } from '@/shared/interfaces';
 import { toast } from 'sonner';
-import './styles.css';
 import { ROUTES } from '@/shared/constants/routes';
+import './styles.css';
 
 const loginSchema = z.object({
   email: z.string()

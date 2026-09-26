@@ -1,11 +1,25 @@
-import { Suspense } from 'react';
-import { CreateUserView } from './create-user-view';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { UserCreateForm } from './user-create-form';
 
 const CreateUserPage = () => {
   return (
-    <Suspense>
-      <CreateUserView />
-    </Suspense>
+    <div className="admin-page">
+      <div className="admin-page-container">
+        <Card className="admin-page-card">
+          <CardHeader className="admin-page-card-header">
+            <CardTitle className="admin-page-card-title">Crear Usuario</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <UserCreateForm />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 

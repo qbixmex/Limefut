@@ -25,12 +25,12 @@ export interface NestAuthUser {
   roles: string[];
 }
 
-interface NestAuthBody {
+type NestAuthBody = {
   statusCode?: number;
   message?: string;
-  user?: NestAuthUser;
-  token?: string;
-}
+  user: NestAuthUser;
+  token: string;
+};
 
 export type LoginWithNestApiResult =
   | { ok: true; message: string; user: NestAuthUser; token: string }
@@ -52,17 +52,12 @@ export const loginWithNestApi = async (
 
     const body = await response.json().catch(() => null) as NestAuthBody | null;
 
-    if (
-      !response.ok ||
-      body?.statusCode !== 200 ||
-      !body?.user ||
-      !body?.token
-    ) {
-      const message = body?.message ?? '¡ Credenciales Inválidas !';
-
+    if (!response.ok || !body?.user || !body?.token) {
       return {
         ok: false,
-        message,
+        message:
+          body?.message ??
+          '¡ No se pudo autentificar con las credenciales proporcionadas !',
       };
     }
 
@@ -103,12 +98,7 @@ export const checkNestTokenStatus = async (
 
     const body = await response.json().catch(() => null) as NestAuthBody | null;
 
-    if (
-      !response.ok ||
-      body?.statusCode !== 200 ||
-      !body?.user ||
-      !body?.token
-    ) {
+    if (!response.ok || !body?.user || !body?.token) {
       return {
         ok: false,
         message:
