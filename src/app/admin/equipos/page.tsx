@@ -1,4 +1,5 @@
-import { type FC, Suspense } from 'react';
+import type { FC } from 'react';
+import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TeamsContent } from './(components)/teams-content';
 import { ClearFilters } from './(components)/clear-filters';
