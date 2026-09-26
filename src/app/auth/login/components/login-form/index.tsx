@@ -42,16 +42,12 @@ export const LoginForm = () => {
     },
   });
 
-  const onSubmit = async ({
-    email,
-    password,
-    rememberMe,
-  }: z.infer<typeof loginSchema>) => {
+  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     const formData = new FormData();
 
-    formData.append('email', email);
-    formData.append('password', password);
-    formData.append('rememberMe', rememberMe ? 'true' : 'false');
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    formData.append('rememberMe', data.rememberMe ? 'true' : 'false');
 
     const { ok, message, roles } = await signInAction(formData);
 

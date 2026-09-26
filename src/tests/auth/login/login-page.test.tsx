@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { LoginContent } from '@/app/auth/login/page';
+import { LoginView } from '@/app/auth/login/login-view';
 import type { GlobalSettings } from '@/generated/prisma/client';
 
 const mockGetSession = vi.hoisted(() => vi.fn());
@@ -45,7 +45,7 @@ describe('Tests on <LoginContent /> page', () => {
       globalSettings: mockGlobalSettings(),
     });
 
-    const serverComponent = await LoginContent();
+    const serverComponent = await LoginView();
     render(serverComponent);
 
     expect(screen.getByText(/accede/i)).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('Tests on <LoginContent /> page', () => {
       }),
     });
 
-    const serverComponent = await LoginContent();
+    const serverComponent = await LoginView();
     render(serverComponent);
 
     const logo = screen.getByRole('img', { name: /logotipo de limefut/i });
@@ -77,7 +77,7 @@ describe('Tests on <LoginContent /> page', () => {
       globalSettings: mockGlobalSettings({ logoUrl: null }),
     });
 
-    const serverComponent = await LoginContent();
+    const serverComponent = await LoginView();
     render(serverComponent);
 
     expect(screen.getByText(/accede/i)).toBeInTheDocument();
