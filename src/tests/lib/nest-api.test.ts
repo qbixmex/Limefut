@@ -100,8 +100,6 @@ describe('Tests on nest-api lib', () => {
 
   describe('checkNestTokenStatus', () => {
     const checkStatusBody = {
-      statusCode: 200,
-      message: 'Success',
       user: {
         id: 'e4eab2dc-7d09-4326-815c-c747ac5146d2',
         name: 'John Doe',
@@ -115,7 +113,7 @@ describe('Tests on nest-api lib', () => {
       token: 'new-jwt-token',
     };
 
-    test('Should validate the token and return the refreshed token', async () => {
+    test('Should validate the token and return the refreshed token when the body has no statusCode', async () => {
       const fetchMock = vi.fn().mockResolvedValue(
         new Response(JSON.stringify(checkStatusBody), {
           status: 200,

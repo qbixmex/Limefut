@@ -1,0 +1,9 @@
+@reference "#globals.css";
+
+.customPage {
+  justify-content: flex-start;
+
+  @variant dark {
+    background-color: --alpha(var(--color-gray-600) / 20%) !important;
+  }
+}
