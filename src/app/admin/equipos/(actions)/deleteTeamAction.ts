@@ -20,7 +20,6 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
     where: { id: teamId },
     select: {
       name: true,
-      tournamentId: true,
       imagePublicID: true,
       _count: {
         select: {
@@ -63,26 +62,72 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
     };
   }
 
-  const standingsCount = await prisma.standings.count({
-    where: {
-      teamId,
-      tournamentId: team.tournamentId ?? undefined,
+  // Fetch the team's standings rows to distinguish real statistics from
+  // enrollment placeholders (all-zero rows created when the team is registered
+  // in a tournament, before it has played any match).
+  const standingsRows = await prisma.standings.findMany({
+    where: { teamId },
+    select: {
+      id: true,
+      matchesPlayed: true,
+      wins: true,
+      draws: true,
+      losses: true,
+      goalsFor: true,
+      goalsAgainst: true,
+      goalsDifference: true,
+      points: true,
+      additionalPoints: true,
+      totalPoints: true,
     },
   });
 
-  if (standingsCount > 0) {
+  const rowsWithStats = standingsRows.filter((standing) => (
+    standing.matchesPlayed > 0 ||
+    standing.wins > 0 ||
+    standing.draws > 0 ||
+    standing.losses > 0 ||
+    standing.goalsFor > 0 ||
+    standing.goalsAgainst > 0 ||
+    standing.goalsDifference !== 0 ||
+    standing.points > 0 ||
+    standing.additionalPoints > 0 ||
+    standing.totalPoints > 0
+  ));
+
+  if (rowsWithStats.length > 0) {
+    const played = Math.max(...rowsWithStats.map((standing) => standing.matchesPlayed));
+
     return {
       ok: false,
       message: '¡ No se puede eliminar el equipo' +
-        ' porque aparece en la tabla de posiciones' +
-        ' y probablemente contenga estadísticas !',
+        ' porque tiene estadísticas en la tabla de posiciones' +
+        ` ( ${played} partido${played === 1 ? '' : 's'}` +
+        ` jugado${played === 1 ? '' : 's'} ) !`,
     };
   }
 
-  // Remove the team.
-  const teamDeleted = await prisma.team.delete({
-    where: { id: teamId },
-  });
+  // Remove the team and its all-zero standings rows atomically. The standings
+  // rows must be deleted first because of the ON DELETE RESTRICT foreign key.
+  const removedFromStandings = standingsRows.length > 0;
+
+  let teamDeleted: { imagePublicID: string | null } | null = null;
+
+  try {
+    teamDeleted = await prisma.$transaction(async (transaction) => {
+      if (removedFromStandings) {
+        await transaction.standings.deleteMany({ where: { teamId } });
+      }
+
+      return transaction.team.delete({ where: { id: teamId } });
+    });
+  } catch (error) {
+    console.error(`Error eliminando el equipo: ${(error as Error).message}`);
+    return {
+      ok: false,
+      message: '¡ No se pudo eliminar el equipo, revise los logs del servidor !',
+    };
+  }
 
   // Delete image from cloudinary.
   if (teamDeleted.imagePublicID) {
@@ -105,6 +150,8 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
 
   return {
     ok: true,
-    message: '¡ El equipo ha sido eliminado correctamente 👍 !',
+    message: removedFromStandings
+      ? '¡ El equipo ha sido eliminado y fue retirado de la tabla de posiciones 👍 !'
+      : '¡ El equipo ha sido eliminado correctamente 👍 !',
   };
 };
