@@ -21,9 +21,13 @@ type Props = Readonly<{
     name: string;
     permalink: string;
   }[];
+  includeNoTournament?: boolean;
 }>;
 
-export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
+export const TournamentsSelector: FC<Props> = ({
+  tournaments,
+  includeNoTournament = false,
+}) => {
   const searchParams = useSearchParams();
   const tournamentPermalink = searchParams.get('tournament');
   const pathname = usePathname();
@@ -32,6 +36,12 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
 
   const setTournamentParam = (permalink: string) => {
     if (!permalink) return;
+
+    // A team without a tournament has no category from the previous selection
+    if (permalink === 'none') {
+      params.delete('category');
+      params.delete('page');
+    }
 
     params.set('tournament', permalink);
     router.push(`${pathname}?${params}`);
@@ -55,6 +65,11 @@ export const TournamentsSelector: FC<Props> = ({ tournaments }) => {
           <SelectValue placeholder="Seleccione torneo" />
         </SelectTrigger>
         <SelectContent>
+          {includeNoTournament && (
+            <SelectItem value="none">
+              Sin torneo
+            </SelectItem>
+          )}
           {tournaments.map(({ id, name, permalink }) => (
             <SelectItem key={id} value={permalink}>
               { name }
