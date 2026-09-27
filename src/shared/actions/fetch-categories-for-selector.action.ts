@@ -26,15 +26,24 @@ export const fetchCategoriesForSelectorAction = async (tournamentPermalink: stri
       orderBy: [
         { name: 'desc' },
       ],
-      where: {
-        tournaments: {
-          some: {
-            tournament: {
-              permalink: tournamentPermalink,
+      where:
+        tournamentPermalink === 'none'
+          ? {
+              teams: {
+                some: {
+                  tournamentId: null,
+                },
+              },
+            }
+          : {
+              tournaments: {
+                some: {
+                  tournament: {
+                    permalink: tournamentPermalink,
+                  },
+                },
+              },
             },
-          },
-        },
-      },
       select: {
         id: true,
         name: true,

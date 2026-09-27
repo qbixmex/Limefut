@@ -18,7 +18,7 @@ export const GenderSelect: FC = () => {
             Rama <span className="text-orange-500">*</span>
           </FieldLabel>
           <Select
-            value={field.value ?? undefined}
+            value={field.value ?? ''}
             onValueChange={field.onChange}
           >
             <SelectTrigger>
@@ -29,10 +29,8 @@ export const GenderSelect: FC = () => {
                 <SelectLabel>
                   Género <span className="text-orange-500">*</span>
                 </SelectLabel>
-                <SelectContent>
-                  <SelectItem value="male">varonil</SelectItem>
-                  <SelectItem value="female">femenil</SelectItem>
-                </SelectContent>
+                <SelectItem value="male">varonil</SelectItem>
+                <SelectItem value="female">femenil</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
