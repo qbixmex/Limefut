@@ -2,7 +2,7 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { Coach, Pagination } from '@/shared/interfaces';
+import type { Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type ResponseFetchTeams = Promise<{
@@ -20,7 +20,7 @@ export type TEAM_TYPE = {
   format: string;
   gender: string | null;
   active: boolean;
-  coach: Pick<Coach, 'id' | 'name'> | null;
+  coach: { id: string; name: string; } | null;
   playersCount: number;
 };
 

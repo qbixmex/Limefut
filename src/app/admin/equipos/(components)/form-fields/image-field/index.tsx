@@ -1,11 +1,22 @@
+'use client';
+
+import type { FC } from 'react';
+import { useEffect, useRef } from 'react';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { useRef, type FC } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 export const ImageField: FC = () => {
   const { control } = useFormContext();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const image = useWatch({ control, name: 'image' });
+
+  useEffect(() => {
+    if (!image && fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }, [image]);
 
   return (
     <Controller

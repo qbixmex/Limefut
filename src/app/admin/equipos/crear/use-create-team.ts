@@ -10,7 +10,7 @@ import {
 } from '@/app/admin/equipos/(actions)';
 import type z from 'zod';
 
-const FORM_DEFAULT_VALUES = {
+const createTeamDefaultValues = () => ({
   name: '',
   permalink: '',
   format: '',
@@ -25,14 +25,14 @@ const FORM_DEFAULT_VALUES = {
   active: false,
   categoryId: '',
   tournamentId: '',
-};
+});
 
 export const useCreateTeam = () => {
   const searchParams = useSearchParams();
   const route = useRouter();
   const form = useForm<z.infer<typeof createTeamSchema>>({
     resolver: zodResolver(createTeamSchema),
-    defaultValues: FORM_DEFAULT_VALUES,
+    defaultValues: createTeamDefaultValues(),
   });
 
   const onSubmit = async (data: z.infer<typeof createTeamSchema>) => {
@@ -90,7 +90,7 @@ export const useCreateTeam = () => {
     }
 
     if (ok) {
-      form.reset(FORM_DEFAULT_VALUES);
+      form.reset(createTeamDefaultValues());
       toast.success(message);
 
       if (team && team.tournament && team.category) {
@@ -105,7 +105,7 @@ export const useCreateTeam = () => {
   };
 
   const handleNavigateBack = () => {
-    form.reset(FORM_DEFAULT_VALUES);
+    form.reset(createTeamDefaultValues());
     if (searchParams.has('tournament') && searchParams.has('category')) {
       route.replace(
         ROUTES.ADMIN_TEAMS +

@@ -85,29 +85,33 @@ export const TeamsTable: FC<Props> = ({ teams, pagination, roles }) => {
                     </TableCell>
                     <TableCell>{team.name}</TableCell>
                     <TableCell className="text-center">
-                      <Badge variant="outline-primary">
+                      <Badge variant="outline-info">
                         {team.format} vs {team.format}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center">
                       {(team.gender === 'male') && (
-                        <Badge variant="outline-primary">varonil</Badge>
+                        <Badge variant="outline-info">varonil</Badge>
                       )}
                       {(team.gender === 'female') && (
-                        <Badge variant="outline" className="border-pink-500 text-pink-500">femenil</Badge>
+                        <Badge variant="outline" className="border-pink-500 text-pink-500">
+                          femenil
+                        </Badge>
                       )}
                     </TableCell>
                     <TableCell>
                       {team.coach ? (
                         <Link href={`${ROUTES.ADMIN_COACHES_SHOW(team.coach.id)}`}>
-                          <Badge variant="outline-info"><p className="text-wrap">{team.coach.name}</p></Badge>
+                          <Badge variant="outline-info">
+                            <p className="text-wrap">{team.coach.name}</p>
+                          </Badge>
                         </Link>
                       ) : (
                         <Badge variant="outline-secondary">no asignado</Badge>
                       )}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant="outline-primary">{team.playersCount}</Badge>
+                      <Badge variant="outline-info">{team.playersCount}</Badge>
                     </TableCell>
                     <TableCell className="text-center">
                       <ActiveSwitch

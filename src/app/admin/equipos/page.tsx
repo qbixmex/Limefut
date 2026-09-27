@@ -35,7 +35,10 @@ const TeamsPage: FC<Props> = ({ searchParams }) => {
           </CardHeader>
           <CardContent>
             <Suspense fallback={<TournamentsSelectorSkeleton />}>
-              <SearchParamsSelectors tournamentPromise={tournamentPromise} />
+              <SearchParamsSelectors
+                tournamentPromise={tournamentPromise}
+                includeNoTournament
+              />
             </Suspense>
             <Suspense>
               <ErrorHandler />
