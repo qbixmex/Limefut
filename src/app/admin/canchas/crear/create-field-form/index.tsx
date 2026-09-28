@@ -18,7 +18,6 @@ export const CreateFieldForm: FC = () => {
       >
         <FormFields />
 
-        {/* Buttons */}
         <div className="flex justify-end gap-3">
           <Button
             type="button"

@@ -26,14 +26,14 @@ export const fetchFieldAction = async (
     if (!field) {
       return {
         ok: false,
-        message: `¡ La cancha con el ID: "${fieldId}" no existe ❌ !`,
+        message: 'La cancha no existe',
         field: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Cancha obtenida correctamente 👍 !',
+      message: 'Cancha obtenida correctamente',
       field,
     };
   } catch (error) {
@@ -41,7 +41,7 @@ export const fetchFieldAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener la cancha,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener la cancha,\n¡ Revise los logs del servidor',
         field: null,
       };
     }

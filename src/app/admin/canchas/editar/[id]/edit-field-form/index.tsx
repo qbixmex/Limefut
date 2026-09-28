@@ -21,7 +21,6 @@ export const EditFieldForm: FC<Props> = ({ field }) => {
       >
         <FormFields />
 
-        {/* Buttons */}
         <div className="flex justify-end gap-3">
           <Button
             type="button"
