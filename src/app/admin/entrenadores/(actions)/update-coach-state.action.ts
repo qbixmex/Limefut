@@ -18,14 +18,12 @@ export const updateCoachStateAction = async (id: string, state: boolean): Respon
     };
   }
 
-  const coachExists = await prisma.coach.count({
-    where: { id },
-  });
+  const coachExists = await prisma.coach.count({ where: { id } });
 
   if (coachExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el entrenador, quizás fue eliminado ó no existe !',
+      message: 'No se pudo actualizar el entrenador, quizás fue eliminado ó no existe',
     };
   }
 
@@ -45,6 +43,6 @@ export const updateCoachStateAction = async (id: string, state: boolean): Respon
 
   return {
     ok: true,
-    message: `¡ El entrenador "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `El entrenador fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente`,
   };
 };

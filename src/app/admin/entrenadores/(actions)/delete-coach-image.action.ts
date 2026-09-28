@@ -10,7 +10,7 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deleteCoachAction = async (coachId: string): ResponseDeleteAction => {
+export const deleteCoachImageAction = async (coachId: string): ResponseDeleteAction => {
   const guard = await requireAdmin();
   if (!guard.ok) {
     return {
@@ -19,42 +19,48 @@ export const deleteCoachAction = async (coachId: string): ResponseDeleteAction =
     };
   }
 
-  const coach = await prisma.coach.findUnique({
+  const coach = await prisma.coach.findFirst({
     where: { id: coachId },
     select: {
-      imagePublicID: true,
       name: true,
+      imagePublicID: true,
     },
   });
 
   if (!coach) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el entrenador, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar la imagen del entrenador, quizás fue eliminada ó no existe',
     };
   }
 
-  await prisma.coach.delete({
+  await prisma.coach.update({
     where: { id: coachId },
+    data: {
+      imageUrl: null,
+      imagePublicID: null,
+    },
   });
 
   // Delete image from cloudinary.
   if (coach.imagePublicID) {
-    if (coach.imagePublicID) {
-      const response = await deleteImage(coach.imagePublicID);
-      if (!response.ok) {
-        throw new Error('Error al eliminar la imagen de cloudinary');
-      }
+    const response = await deleteImage(coach.imagePublicID);
+    if (!response.ok) {
+      return {
+        ok: false,
+        message: 'Error al eliminar la imagen de cloudinary',
+      };
     }
   }
 
   // Update Cache
   updateTag('admin-coaches');
   updateTag('admin-coach');
-  updateTag('admin-coaches-for-team');
+  updateTag('public-coaches');
+  updateTag('public-coach');
 
   return {
     ok: true,
-    message: `¡ El entrenador "${coach.name}" ha sido eliminado correctamente 👍 !`,
+    message: 'La imagen ha sido eliminada correctamente',
   };
 };

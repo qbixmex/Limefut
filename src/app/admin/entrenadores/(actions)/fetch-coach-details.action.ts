@@ -7,10 +7,24 @@ import { cacheLife, cacheTag } from 'next/cache';
 type FetchCoachResponse = Promise<{
   ok: boolean;
   message: string;
-  coach: Coach | null;
+  coach: Coach & {
+    teams: Team[];
+  } | null;
 }>;
 
-export const fetchCoachAction = async (
+export type Team = {
+  id: string;
+  name: string;
+  permalink: string;
+  category: CATEGORY_TYPE | null;
+};
+
+type CATEGORY_TYPE = {
+  name: string;
+  permalink: string;
+};
+
+export const fetchCoachDetailsAction = async (
   coachId: string,
 ): FetchCoachResponse => {
   'use cache';
@@ -19,19 +33,36 @@ export const fetchCoachAction = async (
   cacheTag('admin-coach');
 
   try {
-    const coach = await prisma.coach.findUnique({ where: { id: coachId } });
+    const coach = await prisma.coach.findUnique({
+      where: { id: coachId },
+      include: {
+        teams: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+            category: {
+              select: {
+                name: true,
+                permalink: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
     if (!coach) {
       return {
         ok: false,
-        message: '¡ Entrenador no encontrado ❌ !',
+        message: 'Entrenador no encontrado',
         coach: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Entrenador obtenido correctamente 👍 !',
+      message: 'Entrenador encontrado correctamente',
       coach,
     };
   } catch (error) {

@@ -13,7 +13,7 @@ export type ResponseFetch = Promise<{
   }[];
 }>;
 
-export const fetchTournamentsForCoach = async (): ResponseFetch => {
+export const fetchTournamentsForCoachAction = async (): ResponseFetch => {
   'use cache';
 
   cacheLife('days');
@@ -34,7 +34,7 @@ export const fetchTournamentsForCoach = async (): ResponseFetch => {
 
     return {
       ok: true,
-      message: '! Los torneos fueron obtenidos correctamente 👍',
+      message: 'Los torneos fueron obtenidos correctamente',
       tournaments,
     };
   } catch (error) {

@@ -7,7 +7,7 @@ const mockDeleteCoachImageAction = vi.fn<
   (coachId: string) => Promise<{ ok: boolean; message: string }>
 >();
 
-vi.mock('@/app/admin/entrenadores/(actions)/deleteCoachImageAction', () => ({
+vi.mock('@/app/admin/entrenadores/(actions)', () => ({
   deleteCoachImageAction: (coachId: string) => mockDeleteCoachImageAction(coachId),
 }));
 

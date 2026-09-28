@@ -70,7 +70,7 @@ export const updateCoachAction = async ({
         if (!isCoachExists) {
           return {
             ok: false,
-            message: '¡ El entrenador no existe o ha sido eliminado !',
+            message: 'El entrenador no existe o ha sido eliminado',
             coach: null,
           };
         }
@@ -85,7 +85,7 @@ export const updateCoachAction = async ({
           if (updatedCoach.imagePublicID) {
             const cloudinaryResponse = await deleteImage(updatedCoach.imagePublicID);
             if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+              throw new Error('Error al intentar eliminar la imagen de cloudinary');
             }
           }
 
@@ -93,7 +93,7 @@ export const updateCoachAction = async ({
           const imageUploaded = await uploadImage(image as File, 'coaches');
 
           if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+            throw new Error('Error al intentar subir la imagen a cloudinary');
           }
 
           // Update image data to database.
@@ -131,7 +131,7 @@ export const updateCoachAction = async ({
 
             return {
               ok: false,
-              message: '¡ Hay campos duplicados, revise los logs del servidor !',
+              message: 'Hay campos duplicados, revise los logs del servidor',
               coach: null,
             };
           }
@@ -140,14 +140,14 @@ export const updateCoachAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el entrenador, revise los logs del servidor !',
+            message: 'Error al actualizar el entrenador, revise los logs del servidor',
             coach: null,
           };
         }
         console.log(error);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs del servidor !',
+          message: 'Error inesperado, revise los logs del servidor',
           coach: null,
         };
       }
@@ -158,7 +158,7 @@ export const updateCoachAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       coach: null,
     };
   }

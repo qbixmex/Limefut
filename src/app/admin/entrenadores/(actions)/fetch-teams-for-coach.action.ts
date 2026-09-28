@@ -13,7 +13,7 @@ export type ResponseFetchTeams = Promise<{
   }[];
 }>;
 
-export const fetchTeamsForCoach = async ({
+export const fetchTeamsForCoachAction = async ({
   tournamentPermalink,
   categoryPermalink,
 }: {
@@ -44,7 +44,7 @@ export const fetchTeamsForCoach = async ({
 
     return {
       ok: true,
-      message: '¡ Los equipos fueron obtenidos correctamente 👍 !',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams,
     };
   } catch (error) {
@@ -59,7 +59,7 @@ export const fetchTeamsForCoach = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado al obtener los equipos, revise los logs del servidor !',
+      message: 'Error inesperado al obtener los equipos, revise los logs del servidor !',
       teams: [],
     };
   }

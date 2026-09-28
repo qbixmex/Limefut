@@ -129,7 +129,7 @@ export const createCoachAction = async (
 
         return {
           ok: false,
-          message: '¡ Hay campos duplicados, revise los logs del servidor !',
+          message: 'Hay campos duplicados, revise los logs del servidor',
           coach: null,
         };
       }
@@ -138,14 +138,14 @@ export const createCoachAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear el entrenador, revise los logs del servidor !',
+        message: 'Error al crear el entrenador, revise los logs del servidor',
         coach: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       coach: null,
     };
   }
