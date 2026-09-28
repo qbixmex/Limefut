@@ -45,7 +45,7 @@ export const DeleteCoach: FC<Props> = ({ coachId, roles }) => {
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="top">
-          <p>eliminar</p>
+          <span>eliminar</span>
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
