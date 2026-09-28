@@ -13,6 +13,7 @@ export const EditCoach: FC<Props> = ({ coachId }) => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_COACHES_EDIT(coachId)}
+          aria-label="Editar entrenador"
           className={
             buttonVariants({
               variant: 'outline-warning',
@@ -20,7 +21,7 @@ export const EditCoach: FC<Props> = ({ coachId }) => {
             })
           }
         >
-          <Pencil />
+          <Pencil role="img" aria-label="Icono de lápiz" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

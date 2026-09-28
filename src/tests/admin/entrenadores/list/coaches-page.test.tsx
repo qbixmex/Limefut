@@ -5,8 +5,8 @@ vi.mock('@/shared/components/search', () => ({
   Search: () => <div data-testid="search-component" />,
 }));
 
-vi.mock('@/app/admin/entrenadores/(components)/create-page', () => ({
-  CreatePage: () => <div data-testid="create-page" />,
+vi.mock('@/app/admin/entrenadores/(components)/create-coach', () => ({
+  CreateCoach: () => <div data-testid="create-coach" />,
 }));
 
 vi.mock('@/shared/components/errorHandler', () => ({
@@ -34,7 +34,7 @@ describe('Tests on coaches page', () => {
     expect(heading).toHaveTextContent(/entrenadores/i);
   });
 
-  test('Should render <Search /> and <CreatePage /> components', async () => {
+  test('Should render <Search /> and <CreateCoach /> components', async () => {
     const ServerComponent = await CoachesPage({
       searchParams: Promise.resolve<SearchParams>({
         query: undefined,
@@ -44,7 +44,7 @@ describe('Tests on coaches page', () => {
     render(ServerComponent);
 
     expect(screen.getByTestId('search-component')).toBeInTheDocument();
-    expect(screen.getByTestId('create-page')).toBeInTheDocument();
+    expect(screen.getByTestId('create-coach')).toBeInTheDocument();
   });
 
   test('Should render <CoachesPageView /> component', async () => {

@@ -4,12 +4,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Plus } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
 
-export const CreatePage = () => {
+export const CreateCoach = () => {
   return (
     <Tooltip>
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_COACHES_CREATE}
+          aria-label="Crear entrenador"
           className={
             buttonVariants({
               variant: 'outline-primary',
@@ -17,11 +18,15 @@ export const CreatePage = () => {
             })
           }
         >
-          <Plus strokeWidth={3} />
+          <Plus
+            role="img"
+            aria-label="Icono de crear"
+            strokeWidth={3}
+          />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">
-        <p>crear</p>
+        <span>crear</span>
       </TooltipContent>
     </Tooltip>
   );

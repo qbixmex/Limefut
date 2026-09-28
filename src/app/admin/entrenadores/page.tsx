@@ -4,7 +4,7 @@ import { CoachesPageView } from './coaches-view';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
-import { CreatePage } from './(components)/create-page';
+import { CreateCoach } from './(components)/create-coach';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -30,7 +30,7 @@ const CoachesPage: FC<Props> = ({ searchParams }) => {
               </CardTitle>
               <section className="flex gap-5 items-center">
                 <Search placeholder="Buscar entrenador ..." />
-                <CreatePage />
+                <CreateCoach />
               </section>
             </CardHeader>
             <CardContent>
