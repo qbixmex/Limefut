@@ -8,17 +8,15 @@ import {
   TableCell,
   TableRow,
 } from '@/components/ui/table';
-import { Pencil } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { buttonVariants } from '@/components/ui/button';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchCoachDetailsAction } from '../../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { GiWhistle } from 'react-icons/gi';
 import { DeleteCoachImage } from '../../(components)/delete-coach-image';
 import { ROUTES } from '@/shared/constants/routes';
+import { EditCoach } from '../../(components)/edit-coach';
 
 type Props = Readonly<{
   params: Promise<{
@@ -123,7 +121,7 @@ export const CoachView: FC<Props> = async ({ params }) => {
         <div className="flex flex-wrap gap-2">
           {
             coach.teams.map((team) => (
-              <Link key={team.id} href={`/admin/equipos/${team.id}`}>
+              <Link key={team.id} href={ROUTES.ADMIN_TEAMS_SHOW(team.id)}>
                 <Badge variant="outline-info">
                   <span>{team.name},</span>
                   <span>{team.category?.name}</span>
@@ -135,24 +133,7 @@ export const CoachView: FC<Props> = async ({ params }) => {
       </section>
 
       <div className="absolute top-5 right-5">
-        <Tooltip>
-          <TooltipTrigger>
-            <Link
-              href={ROUTES.ADMIN_COACHES_EDIT(coach.id)}
-              className={
-                buttonVariants({
-                  variant: 'outline-warning',
-                  size: 'icon',
-                })
-              }
-            >
-              <Pencil />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="left">
-            <p>editar</p>
-          </TooltipContent>
-        </Tooltip>
+        <EditCoach coachId={coach.id} />
       </div>
     </>
   );

@@ -1,18 +1,6 @@
-import { Suspense, type FC } from 'react';
-import { buttonVariants } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Plus } from 'lucide-react';
-import Link from 'next/link';
-import { ErrorHandler } from '@/shared/components/errorHandler';
-import { CoachesTable } from './(components)/coaches-table';
-import { CoachesTableSkeleton } from './(components)/coaches-table-skeleton';
-import { Search } from '@/shared/components/search';
-import { ROUTES } from '@/shared/constants/routes';
+import type { FC } from 'react';
+import { Suspense } from 'react';
+import { CoachesPageView } from './coaches-view';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -24,60 +12,8 @@ type Props = Readonly<{
 const CoachesPage: FC<Props> = ({ searchParams }) => {
   return (
     <Suspense>
-      <CoachesPageContent searchParams={searchParams} />
+      <CoachesPageView searchParams={searchParams} />
     </Suspense>
-  );
-};
-
-const CoachesPageContent: FC<Props> = async ({ searchParams }) => {
-  const query = (await searchParams).query ?? '';
-  const currentPage = (await searchParams).page ?? '1';
-
-  return (
-    <>
-      <ErrorHandler />
-      <div className="admin-page">
-        <div className="admin-page-container">
-          <Card className="admin-page-card">
-            <CardHeader className="admin-page-card-header">
-              <CardTitle className="admin-page-card-title">Entrenadores</CardTitle>
-              <section className="flex gap-5 items-center">
-                <Search placeholder="Buscar entrenador ..." />
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Link
-                      href={ROUTES.ADMIN_COACHES_CREATE}
-                      className={
-                        buttonVariants({
-                          variant: 'outline-primary',
-                          size: 'icon',
-                        })
-                      }
-                    >
-                      <Plus strokeWidth={3} />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="left">
-                    <p>crear</p>
-                  </TooltipContent>
-                </Tooltip>
-              </section>
-            </CardHeader>
-            <CardContent>
-              <Suspense
-                key={`${query ?? 'query'}-${currentPage}`}
-                fallback={<CoachesTableSkeleton colCount={7} rowCount={6} />}
-              >
-                <CoachesTable
-                  query={query}
-                  currentPage={Number(currentPage)}
-                />
-              </Suspense>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </>
   );
 };
 
