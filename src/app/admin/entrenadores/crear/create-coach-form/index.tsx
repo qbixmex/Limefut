@@ -4,7 +4,7 @@ import type { FC } from 'react';
 import { Form } from '@/components/ui/form';
 import { LoaderCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useCreateCoach } from './use-create-coach';
+import { useCreateCoach } from '../use-create-coach';
 import { FormFields } from '../../(components)/form-fields';
 
 export const CreateCoachForm: FC = () => {

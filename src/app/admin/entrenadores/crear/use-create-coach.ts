@@ -4,7 +4,7 @@ import { createCoachSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { createCoachAction } from '../../(actions)';
+import { createCoachAction } from '../(actions)';
 import { toast } from 'sonner';
 import { ROUTES } from '@/shared/constants/routes';
 import type z from 'zod';
