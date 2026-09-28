@@ -10,9 +10,7 @@ import { updateFieldAction } from '../../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import type { Field } from '@/shared/interfaces';
 
-type Props = Readonly<{
-  field: Field;
-}>;
+type Props = Readonly<{ field: Field }>;
 
 export const useEditField = ({ field }: Props) => {
   const router = useRouter();
@@ -35,6 +33,7 @@ export const useEditField = ({ field }: Props) => {
 
     formData.append('name', (data.name as string).trim());
     formData.append('permalink', data.permalink as string);
+
     if (data.city) formData.append('city', data.city.trim());
     if (data.state) formData.append('state', data.state.trim());
     if (data.country) formData.append('country', data.country.trim());

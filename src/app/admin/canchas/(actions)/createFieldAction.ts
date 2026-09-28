@@ -56,7 +56,7 @@ export const createFieldAction = async (
       if (fieldPermalinkExists > 0) {
         return {
           ok: false,
-          message: '¡ El enlace permanente ya existe, elija otro !',
+          message: 'El enlace permanente ya existe, elija otro',
           field: null,
         };
       }
@@ -67,7 +67,7 @@ export const createFieldAction = async (
 
       return {
         ok: true,
-        message: '¡ La cancha has sido creada satisfactoriamente 👍 !',
+        message: 'La cancha has sido creada satisfactoriamente',
         field: createdField,
       };
     });
@@ -89,14 +89,14 @@ export const createFieldAction = async (
 
         return {
           ok: false,
-          message: '¡ Hay campos duplicados, revise los logs del servidor !',
+          message: 'Hay campos duplicados, revise los logs del servidor',
           field: null,
         };
       }
 
       return {
         ok: false,
-        message: '¡ Error al crear la cancha, revise los logs del servidor !',
+        message: 'Error al crear la cancha, revise los logs del servidor',
         field: null,
       };
     }
@@ -108,14 +108,14 @@ export const createFieldAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear la cancha, revise los logs del servidor !',
+        message: 'Error al crear la cancha, revise los logs del servidor',
         field: null,
       };
     }
 
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       field: null,
     };
   }

@@ -26,7 +26,7 @@ export const deleteFieldAction = async (fieldId: string): ResponseDeleteAction =
   if (fieldCount === 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la cancha, quizás fue eliminada ó no existe !',
+      message: 'No se puede eliminar la cancha, quizás fue eliminada ó no existe',
     };
   }
 

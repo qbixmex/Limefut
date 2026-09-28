@@ -15,7 +15,13 @@ const FieldPage: FC<Props> = ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Detalles de la Cancha</CardTitle>
+            <CardTitle
+              className="admin-page-card-title"
+              role="heading"
+              aria-label="Título de la página"
+            >
+              Detalles de la Cancha
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Suspense fallback={<FieldViewSkeleton />}>
