@@ -6,8 +6,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { redirect } from 'next/navigation';
-import { fetchCoachAction } from '../../../(actions)';
-import { EditCoachForm } from './edit-coach-form';
+import { fetchCoachForEdit } from '../../../(actions)';
+import { EditCoachForm } from '../edit-coach-form';
 import type { Coach } from '@/shared/interfaces';
 
 type Props = Readonly<{
@@ -18,7 +18,7 @@ type Props = Readonly<{
 
 export const EditCoachPageView: FC<Props> = async ({ params }) => {
   const coachId = (await params).id;
-  const response = await fetchCoachAction(coachId);
+  const response = await fetchCoachForEdit(coachId);
 
   if (!response.ok) {
     redirect(`/admin/entrenadores?error=${encodeURIComponent(response.message)}`);

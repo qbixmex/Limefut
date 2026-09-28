@@ -50,7 +50,7 @@ export const CoachView: FC<Props> = async ({ params }) => {
                   src={coach.imageUrl}
                   width={512}
                   height={512}
-                  alt={`imagen de perfil de ${coach.name}`}
+                  alt={`Imagen de perfil de ${coach.name}`}
                   className="rounded-lg size-[512px] object-cover"
                 />
                 <DeleteCoachImage
@@ -69,23 +69,75 @@ export const CoachView: FC<Props> = async ({ params }) => {
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Correo Electrónico</TableHead>
-              <TableCell>{coach.email ?? 'No Proporcionado'}</TableCell>
+              <TableCell>
+                {coach.email ?? (
+                  <Badge
+                    variant="outline-secondary"
+                    role="status"
+                    aria-label="Correo electrónico"
+                  >
+                    no proporcionado
+                  </Badge>
+                )}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Teléfono</TableHead>
-              <TableCell>{coach.phone ?? 'No Proporcionado'}</TableCell>
+              <TableCell>
+                {coach.phone ?? (
+                  <Badge
+                    variant="outline-secondary"
+                    role="status"
+                    aria-label="Teléfono"
+                  >
+                    no proporcionado
+                  </Badge>
+                )}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Edad</TableHead>
-              <TableCell>{coach.age ?? 'No Proporcionado'}</TableCell>
+              <TableCell>
+                {coach.age ?? (
+                  <Badge
+                    variant="outline-secondary"
+                    role="status"
+                    aria-label="Edad"
+                  >
+                    no proporcionada
+                  </Badge>
+                )}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Nacionalidad</TableHead>
-              <TableCell>{coach.nationality}</TableCell>
+              <TableCell>
+                {coach.nationality ?? (
+                  <Badge
+                    variant="outline-secondary"
+                    role="status"
+                    aria-label="Nacionalidad"
+                  >
+                    no proporcionada
+                  </Badge>
+                )}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Descripción</TableHead>
-              <TableCell className="whitespace-break-spaces">{coach.description ?? 'No proporcionada'}</TableCell>
+              <TableCell>
+                {coach.description ? (
+                  <p className="whitespace-break-spaces">{coach.description}</p>
+                ) : (
+                  <Badge
+                    variant="outline-secondary"
+                    role="status"
+                    aria-label="Descripción"
+                  >
+                    no proporcionada
+                  </Badge>
+                )}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="w-[180px] font-semibold">Fecha de creación</TableHead>
@@ -104,8 +156,8 @@ export const CoachView: FC<Props> = async ({ params }) => {
               <TableCell>
                 {
                   coach.active
-                    ? <Badge variant="outline-info">Activo</Badge>
-                    : <Badge variant="outline-warning">No Activo</Badge>
+                    ? <Badge variant="outline-info">activo</Badge>
+                    : <Badge variant="outline-warning">no activo</Badge>
                 }
               </TableCell>
             </TableRow>
@@ -118,18 +170,38 @@ export const CoachView: FC<Props> = async ({ params }) => {
           Equipo{coach.teams.length > 1 ? 's' : ''}
         </h2>
 
-        <div className="flex flex-wrap gap-2">
-          {
-            coach.teams.map((team) => (
-              <Link key={team.id} href={ROUTES.ADMIN_TEAMS_SHOW(team.id)}>
-                <Badge variant="outline-info">
-                  <span>{team.name},</span>
-                  <span>{team.category?.name}</span>
-                </Badge>
-              </Link>
-            ))
-          }
-        </div>
+        {
+          (coach.teams.length > 0) ? (
+            <div className="flex flex-wrap gap-2">
+              {
+                coach.teams.map((team) => (
+                  <Link
+                    key={team.id}
+                    href={ROUTES.ADMIN_TEAMS_SHOW(team.id)}
+                    title={`Ver detalles del equipo ${team.id}`}
+                  >
+                    <Badge
+                      variant="outline-info"
+                      role="status"
+                      aria-label="Nombre de equipo y categoría"
+                    >
+                      <span>{team.name},</span>
+                      <span>{team.category?.name}</span>
+                    </Badge>
+                  </Link>
+                ))
+              }
+            </div>
+          ) : (
+            <Badge
+              variant="outline-secondary"
+              role="status"
+              aria-label="Equipos"
+            >
+              Sin equipos asignados
+            </Badge>
+          )
+        }
       </section>
 
       <div className="absolute top-5 right-5">

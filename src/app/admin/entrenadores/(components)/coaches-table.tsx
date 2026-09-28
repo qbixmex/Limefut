@@ -47,7 +47,7 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
       {coaches && coaches.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de entrenadores">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-25">Imagen</TableHead>

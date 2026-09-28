@@ -15,7 +15,13 @@ const CoachPage: FC<Props> = async ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Detalles del Entrenador</CardTitle>
+            <CardTitle
+              className="admin-page-card-title"
+              role="heading"
+              aria-label="Título de la página"
+            >
+              Detalles del entrenador
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Suspense fallback={<CoachViewSkeleton />}>

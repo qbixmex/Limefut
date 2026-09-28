@@ -1,19 +1,16 @@
-import type { FC } from 'react';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Plus } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
-import { InfoIcon } from 'lucide-react';
 
-type Props = Readonly<{ coachId: string }>;
-
-export const ShowCoach: FC<Props> = ({ coachId }) => {
+export const CreateCoach = () => {
   return (
     <Tooltip>
       <TooltipTrigger>
         <Link
-          href={ROUTES.ADMIN_COACHES_SHOW(coachId)}
-          aria-label="Detalles del entrenador"
+          href={ROUTES.ADMIN_COACHES_CREATE}
+          aria-label="Crear entrenador"
           className={
             buttonVariants({
               variant: 'outline-primary',
@@ -21,14 +18,15 @@ export const ShowCoach: FC<Props> = ({ coachId }) => {
             })
           }
         >
-          <InfoIcon
+          <Plus
             role="img"
-            aria-label="Icono de detalles"
+            aria-label="Icono de crear"
+            strokeWidth={3}
           />
         </Link>
       </TooltipTrigger>
-      <TooltipContent side="top">
-        detalles
+      <TooltipContent side="left">
+        <span>crear</span>
       </TooltipContent>
     </Tooltip>
   );
