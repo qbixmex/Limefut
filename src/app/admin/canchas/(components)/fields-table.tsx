@@ -1,7 +1,6 @@
 'use client';
 
 import type { FC } from 'react';
-import Link from 'next/link';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import {
@@ -12,16 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Pencil, InfoIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import type { Field } from '@/shared/interfaces';
-import { ROUTES } from '@/shared/constants/routes';
 import { DeleteField } from './delete-field';
+import { EditField } from './edit-field';
+import { ShowField } from './show-field';
 
 type Props = Readonly<{
   fields: Field[];
@@ -61,30 +54,8 @@ export const FieldsTable: FC<Props> = ({ fields, pagination, roles }) => {
                     <TableCell className="hidden md:table-cell">{field.country}</TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={ROUTES.ADMIN_FIELDS_SHOW(field.id as string)}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            detalles
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={ROUTES.ADMIN_FIELD_EDIT(field.id as string)}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <ShowField fieldId={field.id as string} />
+                        <EditField fieldId={field.id as string} />
                         <DeleteField fieldId={field.id as string} roles={roles} />
                       </div>
                     </TableCell>

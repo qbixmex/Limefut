@@ -2,7 +2,7 @@ import { type FC, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { FieldsContent } from './(components)/fields-content';
+import { FieldsView } from './(components)/fields-view';
 import { CreateField } from './(components)/create-field';
 
 type Props = Readonly<{
@@ -27,7 +27,7 @@ const CanchasPage: FC<Props> = ({ searchParams }) => {
           <CardContent>
             <Suspense>
               <ErrorHandler />
-              <FieldsContent searchParamsPromise={searchParams} />
+              <FieldsView searchParamsPromise={searchParams} />
             </Suspense>
           </CardContent>
         </Card>

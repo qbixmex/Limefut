@@ -1,21 +1,12 @@
-import { Suspense, type FC } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { FieldForm } from '../(components)/fieldForm';
+import { CreateFieldForm } from './create-field-form';
 
 const CreateFieldPage = () => {
-  return (
-    <Suspense>
-      <CreateFieldContent />
-    </Suspense>
-  );
-};
-
-const CreateFieldContent: FC = async () => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -24,7 +15,7 @@ const CreateFieldContent: FC = async () => {
             <CardTitle className="admin-page-card-title">Crear Cancha</CardTitle>
           </CardHeader>
           <CardContent>
-            <FieldForm />
+            <CreateFieldForm />
           </CardContent>
         </Card>
       </div>
