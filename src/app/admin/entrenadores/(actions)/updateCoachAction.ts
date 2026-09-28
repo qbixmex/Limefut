@@ -6,6 +6,7 @@ import { uploadImage, deleteImage } from '@/shared/actions';
 import { editCoachSchema } from '@/shared/schemas';
 import type { Coach } from '@/shared/interfaces';
 import { requireAdmin } from '@/lib/get-session';
+import { Prisma } from '@/generated/prisma/client';
 
 type Options = {
   formData: FormData;
@@ -34,10 +35,10 @@ export const updateCoachAction = async ({
   const imageFile = formData.get('image');
 
   const rawData = {
-    name: formData.get('name') ?? '',
-    email: formData.get('email') ?? '',
+    name: formData.get('name') ?? undefined,
+    email: formData.get('email') ?? undefined,
     phone: formData.get('phone') as string ?? undefined,
-    age: parseInt(formData.get('age') as string) ?? 0,
+    age: formData.get('age') ? Number(formData.get('age')) : undefined,
     nationality: formData.get('nationality') ?? undefined,
     description: formData.get('description') ?? undefined,
     image: imageFile,
@@ -80,7 +81,7 @@ export const updateCoachAction = async ({
         });
 
         if (image) {
-          // Delete previous image from cloudinary.
+          // Delete previous image from cloudinary if exists.
           if (updatedCoach.imagePublicID) {
             const cloudinaryResponse = await deleteImage(updatedCoach.imagePublicID);
             if (!cloudinaryResponse.ok) {
@@ -116,29 +117,37 @@ export const updateCoachAction = async ({
 
         return {
           ok: true,
-          message: '¡ El entrenador fue actualizado correctamente 👍 !',
+          message: 'El entrenador fue actualizado correctamente',
           coach: updatedCoach,
         };
       } catch (error) {
-        if (error instanceof Error && 'meta' in error && error.meta) {
-          if ('code' in error && error.code as string === 'P2002') {
-            const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2002') {
+            if (error.meta) {
+              console.log('ERROR METADATA:', error.meta);
+            }
+
+            console.log(error);
+
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: '¡ Hay campos duplicados, revise los logs del servidor !',
               coach: null,
             };
           }
-          console.log(error.message);
+
+          console.log(error);
+
           return {
             ok: false,
             message: '¡ Error al actualizar el entrenador, revise los logs del servidor !',
             coach: null,
           };
         }
+        console.log(error);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: '¡ Error inesperado, revise los logs del servidor !',
           coach: null,
         };
       }
