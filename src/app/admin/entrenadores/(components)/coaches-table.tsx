@@ -9,11 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { buttonVariants } from '@/components/ui/button';
-import { Pencil, InfoIcon } from 'lucide-react';
 import { GiWhistle } from 'react-icons/gi';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { fetchCoachesAction, updateCoachStateAction } from '../(actions)';
 import { DeleteCoach } from '../(components)/delete-coach';
 import { Pagination } from '@/shared/components/pagination';
@@ -21,6 +18,9 @@ import { ActiveSwitch } from '@/shared/components/active-switch';
 import { getSession } from '@/lib/get-session';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/shared/constants/routes';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import { EditCoach } from './edit-coach';
+import { ShowCoach } from './show-coach';
 
 type Props = Readonly<{
   query: string;
@@ -47,10 +47,10 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
       {coaches && coaches.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de entrenadores">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px]">Imagen</TableHead>
+                  <TableHead className="w-25">Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
                   <TableHead>Correo Electrónico</TableHead>
                   <TableHead>Teléfono</TableHead>
@@ -95,42 +95,8 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Link
-                              href={`/admin/entrenadores/perfil/${coach.id}`}
-                              className={
-                                buttonVariants({
-                                  variant: 'outline-primary',
-                                  size: 'icon',
-                                })
-                              }
-                            >
-                              <InfoIcon />
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            detalles
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Link
-                              href={`/admin/entrenadores/editar/${coach.id}`}
-                              className={
-                                buttonVariants({
-                                  variant: 'outline-warning',
-                                  size: 'icon',
-                                })
-                              }
-                            >
-                              <Pencil />
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <ShowCoach coachId={coach.id} />
+                        <EditCoach coachId={coach.id} />
                         <DeleteCoach
                           coachId={coach.id}
                           roles={session?.user.roles as string[]}
@@ -151,11 +117,9 @@ export const CoachesTable: FC<Props> = async ({ query, currentPage }) => {
           </div>
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay entrenadores
-          </p>
-        </div>
+        <EmptyMessageResource>
+          Aún no hay entrenadores
+        </EmptyMessageResource>
       )}
     </>
   );

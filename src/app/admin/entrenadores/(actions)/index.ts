@@ -1,7 +1,10 @@
-export { fetchCoachesAction } from './fetchCoachesAction';
-export { fetchCoachAction } from './fetchCoachAction';
-export { fetchCoachDetailsAction } from './fetchCoachDetailsAction';
-export { createCoachAction } from './createCoachAction';
-export { updateCoachAction } from './updateCoachAction';
-export { deleteCoachAction } from './deleteCoachAction';
-export { updateCoachStateAction } from './updateCoachStateAction';
+export { fetchCoachesAction } from './fetch-coaches.action';
+export { fetchCoachForEdit } from './fetch-coach-for-edit.action';
+export { fetchCoachDetailsAction } from './fetch-coach-details.action';
+export { createCoachAction } from './create-coach.action';
+export { updateCoachAction } from './update-coach.action';
+export { deleteCoachAction } from './delete-coach.action';
+export { updateCoachStateAction } from './update-coach-state.action';
+export { deleteCoachImageAction } from './delete-coach-image.action';
+export { fetchTeamsForCoachAction } from './fetch-teams-for-coach.action';
+export { fetchTournamentsForCoachAction } from './fetch-tournaments-for-coach.action';

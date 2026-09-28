@@ -1,21 +1,7 @@
-import { Suspense } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { CoachForm } from '../(components)/coachForm';
+import { CreateCoachView } from './create-coach-view';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const CreateCoachPage = () => {
-  return (
-    <Suspense>
-      <CreateCoachPageContent />
-    </Suspense>
-  );
-};
-
-const CreateCoachPageContent = async () => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -24,7 +10,7 @@ const CreateCoachPageContent = async () => {
             <CardTitle className="admin-page-card-title">Crear Entrenador</CardTitle>
           </CardHeader>
           <CardContent>
-            <CoachForm />
+            <CreateCoachView />
           </CardContent>
         </Card>
       </div>

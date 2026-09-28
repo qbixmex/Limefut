@@ -1,0 +1,16 @@
+@reference "tailwindcss";
+
+.emptyResourceMessage {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-blue-600);
+  border-radius: var(--radius);
+  padding: --spacing(5);
+
+  .description {
+    border-color: var(--color-sky-500);
+    text-align: center;
+    font-size: var(--text-xl);
+    font-weight: 600;
+  }
+}
