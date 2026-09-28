@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/card';
 import { redirect } from 'next/navigation';
 import { fetchCoachAction } from '../../../(actions)';
-import { EditCoachForm } from './edit-coach-form';
+import { EditCoachForm } from '../edit-coach-form';
 import type { Coach } from '@/shared/interfaces';
 
 type Props = Readonly<{

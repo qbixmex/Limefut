@@ -5,7 +5,7 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import type { Coach } from '@/shared/interfaces';
 import { LoaderCircle } from 'lucide-react';
-import { useEditCoach } from './use-edit-coach';
+import { useEditCoach } from '../use-edit-coach';
 import { FormFields } from '../../../(components)/form-fields';
 
 type Props = Readonly<{ coach: Coach }>;
@@ -43,7 +43,7 @@ export const EditCoachForm: FC<Props> = ({ coach }) => {
                 <LoaderCircle className="size-4 animate-spin" />
               </span>
             ) : (
-              !coach ? 'crear' : 'actualizar'
+              <span>actualizar</span>
             )}
           </Button>
         </div>

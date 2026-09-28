@@ -7,7 +7,7 @@ import { editCoachSchema } from '@/shared/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import type { Coach } from '@/shared/interfaces';
-import { updateCoachAction } from '../../../(actions)';
+import { updateCoachAction } from '../../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 
 export const useEditCoach = (coach: Coach) => {
