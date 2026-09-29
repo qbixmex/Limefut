@@ -1,3 +1,5 @@
+'use client';
+
 import type { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,43 +11,35 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Pencil, InfoIcon } from 'lucide-react';
-import { fetchHeroBannersAction, updateHeroBannerStateAction } from '../(actions)';
-import { getSession } from '@/lib/get-session';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '@/components/ui/badge';
 import { PiFlagBannerFoldBold as BannerFlag } from 'react-icons/pi';
-import { DeleteHeroBanner } from './delete-hero-banner';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import { ROUTES } from '@/shared/constants/routes';
+import { updateHeroBannerStateAction } from '../(actions)';
+import type { HeroBannerListItem } from '../(actions)/fetch-hero-banners.action';
+import { DeleteBanner } from './delete-banner';
+import { EditBanner } from './edit-banner';
+import { ShowBanner } from './show-banner';
 
 type Props = Readonly<{
-  query: string;
-  currentPage: string;
+  banners: HeroBannerListItem[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
+  roles: string[];
 }>;
 
-export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
-  const session = await getSession();
-  const {
-    heroBanners = [],
-    pagination = {
-      currentPage: 1,
-      totalPages: 1,
-    },
-  } = await fetchHeroBannersAction({
-    page: Number(currentPage),
-    take: 12,
-    searchTerm: query,
-  });
-
+export const BannersTable: FC<Props> = ({ banners, pagination, roles }) => {
   return (
     <>
-      {heroBanners && heroBanners.length > 0 ? (
+      {banners.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de banners">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[200px] hidden lg:table-cell">Imagen</TableHead>
@@ -57,14 +51,17 @@ export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {heroBanners.map((banner) => (
+                {banners.map((banner) => (
                   <TableRow key={banner.id}>
                     <TableCell className="hidden lg:table-cell">
-                      <Link href={`/admin/banners/${banner.id}`}>
+                      <Link
+                        href={ROUTES.ADMIN_BANNERS_SHOW(banner.id)}
+                        aria-label={`Detalles del banner ${banner.title}`}
+                      >
                         {
                           !banner.imageUrl ? (
                             <figure className="w-50 h-25 border border-gray-400 dark:border-0 dark:bg-gray-800 size-[60px] rounded-lg flex items-center justify-center">
-                              <BannerFlag size={50} className="text-gray-400" />
+                              <BannerFlag size={50} className="text-gray-400" role="img" aria-label="Icono de banner" />
                             </figure>
                           ) : (
                             <Image
@@ -97,34 +94,9 @@ export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/banners/${banner.id}`}>
-                              <Button variant="outline-info" size="icon">
-                                <InfoIcon />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            detalles
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/banners/editar/${banner.id}`}>
-                              <Button variant="outline-warning" size="icon">
-                                <Pencil />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <DeleteHeroBanner
-                          heroBannerId={banner.id}
-                          roles={session?.user.roles as string[]}
-                        />
+                        <ShowBanner bannerId={banner.id} />
+                        <EditBanner bannerId={banner.id} />
+                        <DeleteBanner bannerId={banner.id} roles={roles} />
                       </div>
                     </TableCell>
                   </TableRow>
@@ -141,14 +113,10 @@ export const HeroBannersTable: FC<Props> = async ({ query, currentPage }) => {
           </div>
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay banners
-          </p>
-        </div>
+        <EmptyMessageResource>
+          Aún no hay banners creados
+        </EmptyMessageResource>
       )}
     </>
   );
 };
-
-export default HeroBannersTable;

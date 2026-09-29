@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { ALIGNMENT, type ALIGNMENT_TYPE } from '@/shared/enums';
-import { updateHeroBannerAlignmentAction } from '../../(actions)/updateHeroBannerAlignmentAction';
+import { updateHeroBannerAlignmentAction } from '../../(actions)';
 
 type Props = Readonly<{
   bannerId: string;
@@ -34,7 +34,7 @@ export const BannerAlignment: FC<Props> = ({ bannerId, alignment }) => {
       defaultValue={alignment}
       onValueChange={onUpdateAlignment}
     >
-      <SelectTrigger>
+      <SelectTrigger aria-label="Alineación del banner">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
