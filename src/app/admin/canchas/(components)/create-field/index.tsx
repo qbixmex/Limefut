@@ -13,15 +13,20 @@ export const CreateField: FC = () => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_FIELD_CREATE}
+          aria-label="Crear cancha"
           className={
             buttonVariants({ variant: 'outline-primary', size: 'icon' })
           }
         >
-          <Plus strokeWidth={3} />
+          <Plus
+            role="img"
+            aria-label="Icono de crear"
+            strokeWidth={3}
+          />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">
-        <p>crear</p>
+        <span>crear</span>
       </TooltipContent>
     </Tooltip>
   );

@@ -6,16 +6,14 @@ import {
   TableCell,
   TableRow,
 } from '@/components/ui/table';
-import { Pencil } from 'lucide-react';
-import Link from 'next/link';
-import { buttonVariants } from '@/components/ui/button';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { fetchFieldAction } from '../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ROUTES } from '@/shared/constants/routes';
 import { SoccerFieldIcon } from '@/shared/components/icons/soccer-field.icon';
 import { redirect } from 'next/navigation';
+import { EditField } from '../(components)/edit-field';
+import { Badge } from '@/components/ui/badge';
 
 type Props = Readonly<{
   params: Promise<{
@@ -43,11 +41,15 @@ export const FieldView: FC<Props> = async ({ params }) => {
           </div>
         </div>
 
-        <Table>
+        <Table aria-label="Detalles de la cancha">
           <TableBody>
             <TableRow>
               <TableHead className="font-semibold w-[180px]">Nombre</TableHead>
               <TableCell>{field.name}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableHead className="w-[180px] font-semibold">Enlace Permanente</TableHead>
+              <TableCell>{field.permalink}</TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Ciudad</TableHead>
@@ -62,15 +64,23 @@ export const FieldView: FC<Props> = async ({ params }) => {
               <TableCell>{field.country}</TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className="w-[180px] font-semibold">Enlace Permanente</TableHead>
-              <TableCell>{field.permalink}</TableCell>
-            </TableRow>
-            <TableRow>
               <TableHead className="w-[180px] font-semibold">Dirección</TableHead>
               <TableCell>
-                <span className="text-wrap">
-                  {field.address ?? 'No especificada'}
-                </span>
+                {
+                  field.address ? (
+                    <span className="text-wrap">
+                      {field.address}
+                    </span>
+                  ) : (
+                    <Badge
+                      variant="outline-secondary"
+                      role="status"
+                      aria-label="Dirección"
+                    >
+                      No especificada
+                    </Badge>
+                  )
+                }
               </TableCell>
             </TableRow>
             <TableRow>
@@ -90,21 +100,7 @@ export const FieldView: FC<Props> = async ({ params }) => {
       </section>
 
       <div className="absolute top-5 right-5">
-        <Tooltip>
-          <TooltipTrigger>
-            <Link
-              href={ROUTES.ADMIN_FIELD_EDIT(field.id as string)}
-              className={
-                buttonVariants({ variant: 'outline-warning', size: 'icon' })
-              }
-            >
-              <Pencil />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="left">
-            <p>editar</p>
-          </TooltipContent>
-        </Tooltip>
+        <EditField fieldId={field.id as string} />
       </div>
     </>
   );
