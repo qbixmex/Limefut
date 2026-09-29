@@ -16,22 +16,32 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
-import { deleteHeroBannerAction } from '../../(actions)/deleteHeroBannerAction';
+import { deleteHeroBannerAction } from '../../(actions)';
 import './styles.css';
 
 type Props = Readonly<{
-  heroBannerId: string;
+  bannerId: string;
   roles: string[];
 }>;
 
-export const DeleteHeroBanner: FC<Props> = ({ heroBannerId, roles }) => {
-  const onDeletePage = async () => {
+export const DeleteBanner: FC<Props> = ({ bannerId, roles }) => {
+  const onDeleteBanner = async (id: string) => {
     if (!roles.includes('admin')) {
       toast.error('¡ No tienes permisos administrativos para eliminar banners !');
       return;
     }
-    const response = await deleteHeroBannerAction(heroBannerId);
-    toast.success(response.message);
+
+    const { ok, message } = await deleteHeroBannerAction(id);
+
+    if (!ok) {
+      toast.error('Error', {
+        description: <p className="text-pretty">{message}</p>,
+        duration: 6000,
+      });
+      return;
+    }
+
+    toast.success(message);
   };
 
   return (
@@ -39,8 +49,12 @@ export const DeleteHeroBanner: FC<Props> = ({ heroBannerId, roles }) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
-            <Button variant="outline-danger" size="icon">
-              <Trash2 />
+            <Button
+              variant="outline-danger"
+              size="icon"
+              aria-label="Eliminar banner"
+            >
+              <Trash2 role="img" aria-label="Icono de basurero" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
@@ -59,7 +73,7 @@ export const DeleteHeroBanner: FC<Props> = ({ heroBannerId, roles }) => {
           <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
           <AlertDialogAction
             className="delete-btn"
-            onClick={onDeletePage}
+            onClick={() => onDeleteBanner(bannerId)}
             autoFocus
           >
             eliminar
@@ -69,5 +83,3 @@ export const DeleteHeroBanner: FC<Props> = ({ heroBannerId, roles }) => {
     </AlertDialog>
   );
 };
-
-export default DeleteHeroBanner;
