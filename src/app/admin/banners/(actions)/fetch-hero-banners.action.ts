@@ -11,16 +11,18 @@ type Options = Readonly<{
   searchTerm?: string;
 }>;
 
+export type HeroBannerListItem = Omit<HeroBanner,
+  | 'dataAlignment'
+  | 'description'
+  | 'imagePublicId'
+  | 'createdAt'
+  | 'updatedAt'
+>;
+
 export type ResponseFetch = Promise<{
   ok: boolean;
   message: string;
-  heroBanners: Omit<HeroBanner,
-    | 'dataAlignment'
-    | 'description'
-    | 'imagePublicId'
-    | 'createdAt'
-    | 'updatedAt'
-  >[];
+  heroBanners: HeroBannerListItem[];
   pagination: Pagination | null;
 }>;
 
