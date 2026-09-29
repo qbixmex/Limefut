@@ -10,7 +10,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const FieldsContent: FC<Props> = async ({ searchParamsPromise }) => {
+export const FieldsView: FC<Props> = async ({ searchParamsPromise }) => {
   const {
     query = '',
     page: currentPage = 1,

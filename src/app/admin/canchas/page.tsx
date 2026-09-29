@@ -2,7 +2,7 @@ import { type FC, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { FieldsContent } from './(components)/fields-content';
+import { FieldsView } from './(components)/fields-view';
 import { CreateField } from './(components)/create-field';
 
 type Props = Readonly<{
@@ -18,7 +18,13 @@ const CanchasPage: FC<Props> = ({ searchParams }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Canchas</CardTitle>
+            <CardTitle
+              className="admin-page-card-title"
+              role="heading"
+              aria-label="Título de la página"
+            >
+              Canchas
+            </CardTitle>
             <section className="flex gap-5 items-center">
               <Search placeholder="Buscar cancha" />
               <CreateField />
@@ -27,7 +33,7 @@ const CanchasPage: FC<Props> = ({ searchParams }) => {
           <CardContent>
             <Suspense>
               <ErrorHandler />
-              <FieldsContent searchParamsPromise={searchParams} />
+              <FieldsView searchParamsPromise={searchParams} />
             </Suspense>
           </CardContent>
         </Card>
