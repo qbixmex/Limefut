@@ -6,12 +6,12 @@ export const BannerViewSkeleton: FC = () => {
       <div className="w-full h-64 bg-gray-500 rounded-lg" />
 
       <div className="flex flex-col lg:flex-row gap-5 mt-10">
-        {[4, 3].map((rows, column) => (
+        {Array.from({ length: 2 }).map((_, column) => (
           <div
             key={`column-${column}`}
             className="w-full xl:w-1/2 flex flex-col gap-5"
           >
-            {Array.from({ length: rows }).map((_, row) => (
+            {Array.from({ length: 4 }).map((_, row) => (
               <div key={`column-${column}-row-${row}`} className="flex gap-5">
                 <div className="w-45">
                   <div className="w-full h-8 bg-gray-500 rounded" />

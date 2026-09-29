@@ -14,7 +14,7 @@ export const ShowDataField: FC = () => {
         <Field className="w-auto">
           <div className="inline-flex items-center gap-3">
             <FieldLabel htmlFor="showData">
-              {field.value ? 'Visible' : 'Oculta'}
+              Información {field.value ? 'Visible' : 'Oculta'}
             </FieldLabel>
             <Switch
               id="showData"
