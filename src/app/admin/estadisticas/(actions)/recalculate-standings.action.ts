@@ -18,6 +18,7 @@ export const recalculateStandingsAction = async ({
   categoryId: string;
 }): ResponseRecalculateAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return {
       ok: false,
@@ -26,25 +27,24 @@ export const recalculateStandingsAction = async ({
   }
 
   try {
+    // Get all teams by selected tournament and category
+    const teams = await prisma.team.findMany({
+      where: { tournamentId, categoryId },
+      select: { id: true },
+    });
+
+    if (teams.length === 0) {
+      return {
+        ok: false,
+        message: 'No hay equipos en este torneo',
+      };
+    }
+
     await prisma.$transaction(async (tx) => {
-      // Get all teams in the tournament
-      const teams = await tx.team.findMany({
-        where: { tournamentId, categoryId },
-        select: { id: true },
-      });
-
-      if (teams.length === 0) {
-        throw new Error('¡ No hay equipos en este torneo !');
-      }
-
-      // Delete existing standings
-      const { count } = await tx.standings.deleteMany({
+      // Delete existing standings (none is fine, they are recreated below)
+      await tx.standings.deleteMany({
         where: { tournamentId, categoryId },
       });
-
-      if (count === 0) {
-        throw new Error('¡ No se pudo limpiar la tabla de posiciones !');
-      }
 
       // Create standings for all teams (with default values)
       const newStandings = await tx.standings.createMany({
@@ -213,13 +213,14 @@ export const recalculateStandingsAction = async ({
 
     return {
       ok: true,
-      message: '¡ Las estadísticas se recalcularon correctamente 👍 !',
+      message: 'Las estadísticas se recalcularon correctamente',
     };
   } catch (error) {
-    console.error(`Error recalculando estadísticas: ${(error as Error).message}`);
+    console.error(`ERROR: ${(error as Error).message}`);
+
     return {
       ok: false,
-      message: `¡ Error al recalcular las estadísticas: ${(error as Error).message} !`,
+      message: 'Error al recalcular las estadísticas, revise los logs de producción',
     };
   }
 };

@@ -4,6 +4,7 @@ import { updateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { requireAdmin } from '@/lib/get-session';
 import { createStandingsSchema } from '@/shared/schemas';
+import { Prisma } from '@/generated/prisma/client';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -18,6 +19,7 @@ type DataType = {
 
 export const createStandingsAction = async (data: DataType): CreateResponseAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return {
       ok: false,
@@ -44,7 +46,7 @@ export const createStandingsAction = async (data: DataType): CreateResponseActio
 
       return {
         ok: true,
-        message: '¡ Las estadísticas fueron creadas correctamente 👍 !',
+        message: 'Las estadísticas fueron creadas correctamente',
       };
     });
 
@@ -55,28 +57,38 @@ export const createStandingsAction = async (data: DataType): CreateResponseActio
 
     return prismaTransaction;
   } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        if (error.meta) {
+          console.log('ERROR METADATA:', error.meta);
+        }
+
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: 'Hay campos duplicados, revise los logs del servidor',
         };
       }
 
+      return {
+        ok: false,
+        message: 'Error al crear las estadísticas, revise los logs del servidor',
+      };
+    }
+
+    if (error instanceof Error) {
       console.log('ERROR NAME:', error.name);
       console.log('ERROR CAUSE:', error.cause);
       console.log('ERROR MESSAGE:', error.message);
 
       return {
         ok: false,
-        message: '¡ Error al crear las estadísticas, revise los logs del servidor !',
+        message: 'Error al crear las estadísticas, revise los logs del servidor',
       };
     }
-    console.log(error);
+
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
     };
   }
 };
