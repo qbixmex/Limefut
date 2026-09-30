@@ -9,8 +9,15 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const deleteStandingsAction = async (tournamentId: string): ResponseDeleteAction => {
+export const deleteStandingsAction = async ({
+  tournamentId,
+  categoryId,
+}: {
+  tournamentId: string;
+  categoryId: string;
+}): ResponseDeleteAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return {
       ok: false,
@@ -18,16 +25,26 @@ export const deleteStandingsAction = async (tournamentId: string): ResponseDelet
     };
   }
 
-  // Delete Standings from database
-  await prisma.standings.deleteMany({ where: { tournamentId } });
+  try {
+    // Delete Standings from database (only the given tournament and category)
+    await prisma.standings.deleteMany({
+      where: { tournamentId, categoryId },
+    });
 
-  // Update Cache
-  updateTag('admin-standings');
-  updateTag('admin-tournaments-for-standings');
-  updateTag('public-standings');
+    // Update Cache
+    updateTag('admin-standings');
+    updateTag('admin-tournaments-for-standings');
+    updateTag('public-standings');
 
-  return {
-    ok: true,
-    message: '¡ Las estadísticas han sido eliminadas correctamente 👍 !',
-  };
+    return {
+      ok: true,
+      message: 'Las estadísticas han sido eliminadas correctamente',
+    };
+  } catch (error) {
+    console.log('ERROR AL ELIMINAR LAS ESTADÍSTICAS:', error);
+    return {
+      ok: false,
+      message: 'Error al eliminar las estadísticas, revise los logs del servidor',
+    };
+  }
 };

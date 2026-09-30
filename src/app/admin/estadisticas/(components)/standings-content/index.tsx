@@ -45,7 +45,10 @@ export const StandingsContent: FC<Props> = async ({ tournamentId, categoryId }) 
                     tournamentId={tournamentId}
                     categoryId={categoryId}
                   />
-                  <DeleteStandings tournamentId={tournamentId} />
+                  <DeleteStandings
+                    tournamentId={tournamentId}
+                    categoryId={categoryId}
+                  />
                 </div>
               )}
             </div>

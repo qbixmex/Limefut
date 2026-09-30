@@ -26,17 +26,18 @@ type Props = Readonly<{
 
 export const UpdateStandings: FC<Props> = ({ tournamentId, categoryId }) => {
   const handleUpdateStandings = async () => {
-    const response = await recalculateStandingsAction({
-      tournamentId,
-      categoryId,
-    });
-
     try {
+      const response = await recalculateStandingsAction({
+        tournamentId,
+        categoryId,
+      });
+
       if (!response.ok) {
         toast.error(response.message);
-      } else {
-        toast.success(response.message);
+        return;
       }
+
+      toast.success(response.message);
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -53,7 +54,7 @@ export const UpdateStandings: FC<Props> = ({ tournamentId, categoryId }) => {
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="left">
-          <span>recalcular</span>
+          recalcular
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>

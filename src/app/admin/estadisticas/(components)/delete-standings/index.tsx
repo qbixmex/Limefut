@@ -21,17 +21,23 @@ import styles from './styles.module.css';
 
 type Props = Readonly<{
   tournamentId: string;
+  categoryId: string;
 }>;
 
-export const DeleteStandings: FC<Props> = ({ tournamentId }) => {
+export const DeleteStandings: FC<Props> = ({ tournamentId, categoryId }) => {
   const handleDeleteStandings = async () => {
     try {
-      const response = await deleteStandingsAction(tournamentId);
+      const response = await deleteStandingsAction({
+        tournamentId,
+        categoryId,
+      });
+
       if (!response.ok) {
         toast.error(response.message);
-      } else {
-        toast.success(response.message);
+        return;
       }
+
+      toast.success(response.message);
     } catch (error) {
       toast.error((error as Error).message);
     }

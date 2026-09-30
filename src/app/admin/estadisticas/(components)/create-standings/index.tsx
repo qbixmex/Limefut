@@ -25,8 +25,11 @@ export const CreateStandings: FC<Props> = ({ teams }) => {
     try {
       setCreatingStandings(true);
       const { ok, message } = await createStandingsAction(data);
-      if (ok) toast.success(message);
-      if (!ok) toast.error(message);
+      if (!ok) {
+        toast.error(message);
+        return;
+      }
+      toast.success(message);
     } catch (error) {
       toast.error((error as Error).message);
     } finally {
