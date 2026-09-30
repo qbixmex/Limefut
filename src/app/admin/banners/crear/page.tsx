@@ -1,27 +1,27 @@
-import { Suspense } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BannerForm } from '../(components)/banner-form';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { CreateBannerForm } from './create-banner-form';
 
 const CreateBannerPage = () => {
-  return (
-    <Suspense>
-      <CreateBannerContent />
-    </Suspense>
-  );
-};
-
-const CreateBannerContent = async () => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">
-              Crear Hero Banner
+            <CardTitle
+              className="admin-page-card-title"
+              role="heading"
+              aria-label="Título de la página"
+            >
+              Crear Banner
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <BannerForm />
+            <CreateBannerForm />
           </CardContent>
         </Card>
       </div>
