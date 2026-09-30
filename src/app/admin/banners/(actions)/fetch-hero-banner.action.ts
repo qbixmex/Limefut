@@ -26,14 +26,14 @@ export const fetchHeroBannerAction = async (
     if (!heroBanner) {
       return {
         ok: false,
-        message: '¡ Hero Banner no encontrado ❌ !',
+        message: 'Hero Banner no encontrado',
         heroBanner: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Banner obtenido correctamente 👍 !',
+      message: 'Banner obtenido correctamente',
       heroBanner,
     };
   } catch (error) {
@@ -41,13 +41,13 @@ export const fetchHeroBannerAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el Banner,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el Banner,\n¡ Revise los logs del servidor',
         heroBanner: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor',
       heroBanner: null,
     };
   }

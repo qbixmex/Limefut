@@ -43,6 +43,8 @@ export const updateHeroBannerShowDataAction = async (id: string, showData: boole
 
   return {
     ok: true,
-    message: `¡ La información se ha ${updatedHeroBanner.showData ? 'mostrado' : 'ocultado'} correctamente 👍 !`,
+    message: `La información se ha ${
+      updatedHeroBanner.showData ? 'mostrado' : 'ocultado'
+    } correctamente`,
   };
 };

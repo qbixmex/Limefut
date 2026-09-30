@@ -24,6 +24,7 @@ export const updateHeroBannerAction = async ({
   heroBannerId,
 }: Options): EditResponseAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return { ok: false, message: guard.message, heroBanner: null };
   }
@@ -204,7 +205,7 @@ export const updateHeroBannerAction = async ({
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               heroBanner: null,
             };
           }
@@ -215,14 +216,14 @@ export const updateHeroBannerAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el banner, revise los logs del servidor !',
+            message: 'Error al actualizar el banner, revise los logs del servidor',
             heroBanner: null,
           };
         }
         console.log((error as Error).message);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs del servidor',
           heroBanner: null,
         };
       }
@@ -236,7 +237,7 @@ export const updateHeroBannerAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       heroBanner: null,
     };
   }
@@ -247,7 +248,7 @@ const updateBannerImage = async (image: File, imagePublicId: string) => {
   if (imagePublicId) {
     const cloudinaryResponse = await deleteImage(imagePublicId);
     if (!cloudinaryResponse.ok) {
-      throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+      throw new Error('Error al intentar eliminar la imagen de cloudinary');
     }
   }
 
@@ -255,7 +256,7 @@ const updateBannerImage = async (image: File, imagePublicId: string) => {
   const imageUploaded = await uploadImage(image as File, 'hero-banners');
 
   if (!imageUploaded) {
-    throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+    throw new Error('Error al intentar subir la imagen a cloudinary');
   }
 
   return {

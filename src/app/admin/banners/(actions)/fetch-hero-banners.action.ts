@@ -69,7 +69,7 @@ export const fetchHeroBannersAction = async (options?: Options): ResponseFetch =
 
     return {
       ok: true,
-      message: '! Los banners fueron obtenidos correctamente 👍',
+      message: 'Los banners fueron obtenidos correctamente',
       heroBanners,
       pagination: {
         currentPage: page,

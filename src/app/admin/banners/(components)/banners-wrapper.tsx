@@ -14,16 +14,22 @@ export const BannersWrapper: FC<Props> = async ({
 }) => {
   const session = await getSession();
 
-  const { heroBanners, pagination } = await fetchHeroBannersAction({
+  const response = await fetchHeroBannersAction({
     page: currentPage,
     take: 12,
     searchTerm: query,
   });
 
+  const heroBanners = response.heroBanners;
+  const pagination = response.pagination ?? {
+    currentPage: 1,
+    totalPages: 1,
+  };
+
   return (
     <BannersTable
-      banners={heroBanners ?? []}
-      pagination={pagination ?? { currentPage: 1, totalPages: 1 }}
+      banners={heroBanners}
+      pagination={pagination}
       roles={session?.user.roles as string[]}
     />
   );

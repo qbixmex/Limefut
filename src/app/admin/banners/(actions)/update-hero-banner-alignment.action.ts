@@ -15,6 +15,7 @@ export const updateHeroBannerAlignmentAction = async (
   newAlignment: ALIGNMENT_TYPE,
 ): ResponseAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return { ok: false, message: guard.message };
   }
@@ -26,7 +27,7 @@ export const updateHeroBannerAlignmentAction = async (
   if (heroBannerExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el banner, quizás fue eliminado ó no existe !',
+      message: 'No se pudo actualizar el banner, quizás fue eliminado ó no existe',
     };
   }
 
@@ -44,6 +45,6 @@ export const updateHeroBannerAlignmentAction = async (
 
   return {
     ok: true,
-    message: '¡ Se actualizó la alineación correctamente 👍 !',
+    message: 'Se actualizó la alineación correctamente',
   };
 };

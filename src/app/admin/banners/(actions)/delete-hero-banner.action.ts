@@ -12,6 +12,7 @@ export type ResponseDeleteAction = Promise<{
 
 export const deleteHeroBannerAction = async (heroBannerId: string): ResponseDeleteAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return { ok: false, message: guard.message };
   }
@@ -27,7 +28,7 @@ export const deleteHeroBannerAction = async (heroBannerId: string): ResponseDele
   if (!heroBanner) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el banner, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar el banner, quizás fue eliminado ó no existe',
     };
   }
 

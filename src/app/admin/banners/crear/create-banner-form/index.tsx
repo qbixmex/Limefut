@@ -15,6 +15,7 @@ export const CreateBannerForm: FC = () => {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
+        aria-label="Formulario para crear banners"
       >
         <FormFields />
 

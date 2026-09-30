@@ -38,6 +38,7 @@ const eslintConfig = defineConfig([
       'comma-dangle': ['warn', 'always-multiline'],
       '@next/next/no-html-link-for-pages': 'off',
       'multiline-ternary': 'off',
+      'react/jsx-fragments': 'off',
     },
     ignores: [
       'node_modules/**',

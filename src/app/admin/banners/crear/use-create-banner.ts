@@ -49,7 +49,7 @@ export const useCreateBanner = () => {
 
     toast.success(response.message);
     form.reset(createDefaultFormValues());
-    router.replace(ROUTES.ADMIN_BANNERS_SHOW(response.heroBanner?.id as string));
+    router.replace(ROUTES.ADMIN_BANNERS);
   };
 
   const handleNavigateBack = () => {
