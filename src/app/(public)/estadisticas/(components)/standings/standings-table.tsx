@@ -1,4 +1,5 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
+import { redirect } from 'next/navigation';
 import {
   Table,
   TableBody,
@@ -8,9 +9,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
-import { fetchStandingsAction, type TOURNAMENT_TYPE } from '~/src/app/(public)/estadisticas/(actions)/fetchStandingsAction';
-import { TournamentData } from '@/shared/components/TournamentData';
-import { redirect } from 'next/navigation';
+import {
+  fetchStandingsAction,
+  type TOURNAMENT_TYPE,
+} from '@/app/(public)/estadisticas/(actions)/fetchStandingsAction';
+import { TournamentData } from '@/shared/components/tournament-data';
 import { ROUTES } from '@/shared/constants/routes';
 
 type Props = {

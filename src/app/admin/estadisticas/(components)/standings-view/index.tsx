@@ -1,6 +1,7 @@
-import { type FC, Suspense } from 'react';
-import { StandingsContent } from './standings-content';
-import { SkeletonTable } from './SkeletonTable';
+import type { FC } from 'react';
+import { Suspense } from 'react';
+import { StandingsContent } from '../standings-content';
+import { SkeletonTable } from '../standings-table/skeleton-table';
 import { fetchAdminTournamentAction } from '@/shared/actions/fetch-admin-tournament.action';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';

@@ -1,0 +1,37 @@
+@reference '#globals.css';
+
+.tournamentData {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(5);
+  margin-bottom: --spacing(5);
+
+  @variant lg {
+    flex-direction: row;
+  }
+}
+
+.column {
+  width: 100%;
+
+  @variant lg {
+    width: 50%;
+  }
+}
+
+.table {
+  width: 100%;
+
+  .tableHead {
+    color: var(--color-gray-400);
+  }
+
+  .tableCell {
+    color: var(--color-gray-500);
+  }
+
+  .cities {
+    font-style: italic;
+    text-wrap: wrap;
+  }
+}

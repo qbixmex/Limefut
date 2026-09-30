@@ -16,7 +16,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import { GrUpdate as UpdateIcon } from 'react-icons/gr';
 import { toast } from 'sonner';
-import { recalculateStandingsAction } from '../(actions)/recalculateStandingsAction';
+import { recalculateStandingsAction } from '../../(actions)/recalculate-standings.action';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   tournamentId: string;
@@ -25,17 +26,18 @@ type Props = Readonly<{
 
 export const UpdateStandings: FC<Props> = ({ tournamentId, categoryId }) => {
   const handleUpdateStandings = async () => {
-    const response = await recalculateStandingsAction({
-      tournamentId,
-      categoryId,
-    });
-
     try {
+      const response = await recalculateStandingsAction({
+        tournamentId,
+        categoryId,
+      });
+
       if (!response.ok) {
         toast.error(response.message);
-      } else {
-        toast.success(response.message);
+        return;
       }
+
+      toast.success(response.message);
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -52,7 +54,7 @@ export const UpdateStandings: FC<Props> = ({ tournamentId, categoryId }) => {
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="left">
-          <span>recalcular</span>
+          recalcular
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
@@ -66,9 +68,11 @@ export const UpdateStandings: FC<Props> = ({ tournamentId, categoryId }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+          <AlertDialogCancel className={styles.cancel}>
+            cancelar
+          </AlertDialogCancel>
           <AlertDialogAction
-            className="delete-btn"
+            className={styles.update}
             onClick={handleUpdateStandings}
           >
             actualizar

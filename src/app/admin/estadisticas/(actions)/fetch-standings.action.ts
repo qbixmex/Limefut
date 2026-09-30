@@ -2,6 +2,7 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/get-session';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type StandingPromise = Promise<{
@@ -58,7 +59,7 @@ export type TEAM_TYPE = {
   categoryId: string | null;
 };
 
-export const fetchStandingsAction = async ({
+const fetchStandingsCached = async ({
   tournamentId,
   categoryId,
 }: {
@@ -115,7 +116,7 @@ export const fetchStandingsAction = async ({
     if (!teams) {
       return {
         ok: false,
-        message: `¡ No se pudieron obtener los equipos con el id del torneo [${tournamentId}] y categoría [${categoryId}] !`,
+        message: `No se pudieron obtener los equipos con el id del torneo [${tournamentId}] y categoría [${categoryId}]`,
         teams: [],
         tournament: null,
         standings: null,
@@ -166,7 +167,7 @@ export const fetchStandingsAction = async ({
 
     return {
       ok: true,
-      message: '! Las estadísticas fueron obtenidas correctamente 👍',
+      message: 'Las estadísticas fueron obtenidas correctamente',
       teams,
       tournament,
       standings,
@@ -191,4 +192,23 @@ export const fetchStandingsAction = async ({
       standings: null,
     };
   }
+};
+
+export const fetchStandingsAction = async (params: {
+  tournamentId: string,
+  categoryId: string,
+}): StandingPromise => {
+  const guard = await requireAdmin();
+
+  if (!guard.ok) {
+    return {
+      ok: false,
+      message: guard.message,
+      teams: [],
+      tournament: null,
+      standings: null,
+    };
+  }
+
+  return fetchStandingsCached(params);
 };
