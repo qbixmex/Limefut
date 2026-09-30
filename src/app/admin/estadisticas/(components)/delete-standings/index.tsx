@@ -16,7 +16,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { deleteStandingsAction } from '../(actions)/deleteStandingsAction';
+import { deleteStandingsAction } from '../../(actions)/delete-standings.action';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   tournamentId: string;
@@ -58,9 +59,11 @@ export const DeleteStandings: FC<Props> = ({ tournamentId }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+          <AlertDialogCancel className={styles.cancel}>
+            cancelar
+          </AlertDialogCancel>
           <AlertDialogAction
-            className="delete-btn"
+            className={styles.delete}
             onClick={handleDeleteStandings}
             autoFocus
           >

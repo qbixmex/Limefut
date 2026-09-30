@@ -16,7 +16,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Button } from '@/components/ui/button';
 import { GrUpdate as UpdateIcon } from 'react-icons/gr';
 import { toast } from 'sonner';
-import { recalculateStandingsAction } from '../(actions)/recalculateStandingsAction';
+import { recalculateStandingsAction } from '../../(actions)/recalculate-standings.action';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   tournamentId: string;
@@ -66,9 +67,11 @@ export const UpdateStandings: FC<Props> = ({ tournamentId, categoryId }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+          <AlertDialogCancel className={styles.cancel}>
+            cancelar
+          </AlertDialogCancel>
           <AlertDialogAction
-            className="delete-btn"
+            className={styles.update}
             onClick={handleUpdateStandings}
           >
             actualizar

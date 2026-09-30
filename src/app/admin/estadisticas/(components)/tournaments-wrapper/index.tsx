@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
 
 type Props = Readonly<{
