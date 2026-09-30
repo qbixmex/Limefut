@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '~/src/lib/utils';
 import { LoaderCircle } from 'lucide-react';
-import type { TEAM_TYPE } from '@/app/admin/estadisticas/(actions)/fetchStandingsAction';
-import { createStandingsAction } from '../(actions)/createStandingsAction';
+import type { TEAM_TYPE } from '@/app/admin/estadisticas/(actions)/fetch-standings.action';
+import { createStandingsAction } from '../../(actions)/create-standings.action';
 
 type Props = Readonly<{
   teams: TEAM_TYPE[];
@@ -25,8 +25,11 @@ export const CreateStandings: FC<Props> = ({ teams }) => {
     try {
       setCreatingStandings(true);
       const { ok, message } = await createStandingsAction(data);
-      if (ok) toast.success(message);
-      if (!ok) toast.error(message);
+      if (!ok) {
+        toast.error(message);
+        return;
+      }
+      toast.success(message);
     } catch (error) {
       toast.error((error as Error).message);
     } finally {

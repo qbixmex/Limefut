@@ -1,0 +1,42 @@
+@reference '#globals.css';
+
+.standingsAbbreviations {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr);
+  gap: --spacing(5);
+  margin-top: --spacing(10);
+  
+  @variant md {
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    place-items: center;
+  }
+  @variant lg {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+    
+  @variant xl {
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+  }
+
+  @variant 2xl {
+    grid-template-columns: repeat(5, minmax(200px, 1fr));
+  }
+}
+
+.data {
+  display: flex;
+  gap: --spacing(5);
+
+}
+
+.dataHead {
+  font-weight: 700;
+  color: var(--color-gray-400);
+}
+
+.dataCell {
+  color: var(--color-gray-500);
+  font-style: italic;
+}
+

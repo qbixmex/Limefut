@@ -1,0 +1,17 @@
+@reference '#globals.css';
+
+.standingsTeams {
+  margin-top: --spacing(5);
+  margin-bottom: --spacing(10);
+}
+
+.title {
+  font-size: var(--text-lg);
+  margin-bottom: --spacing(5);
+}
+
+.teamsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: --spacing(3);
+}
