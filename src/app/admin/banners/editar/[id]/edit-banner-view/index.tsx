@@ -40,7 +40,9 @@ export const EditBannerPageView: FC<Props> = async ({ params }) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <EditBannerForm heroBanner={heroBanner as HeroBanner} />
+            <EditBannerForm
+              heroBanner={heroBanner as HeroBanner}
+            />
           </CardContent>
         </Card>
       </div>

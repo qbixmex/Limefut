@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { Field, FieldLabel } from '@/components/ui/field';
+import { Field, FieldLabel, FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Minus, Plus } from 'lucide-react';
@@ -14,7 +14,7 @@ export const PositionField: FC = () => {
     <Controller
       name="position"
       control={control}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         const value = Number(field.value);
         const currentPosition = Number.isFinite(value) ? value : 1;
 
@@ -40,7 +40,7 @@ export const PositionField: FC = () => {
                 type="number"
                 min={1}
                 value={field.value ?? '0'}
-                onChange={(e) => field.onChange(parseInt(e.target.value))}
+                onChange={(e) => field.onChange(Number(e.target.value))}
                 className="w-16"
               />
               <PositionButtonModifier
@@ -48,6 +48,9 @@ export const PositionField: FC = () => {
                 modifyPosition={incrementPosition}
               />
             </div>
+            {fieldState.error && (
+              <FieldError errors={[fieldState.error]} />
+            )}
           </Field>
         );
       }}

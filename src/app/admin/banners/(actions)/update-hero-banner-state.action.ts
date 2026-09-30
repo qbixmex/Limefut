@@ -11,6 +11,7 @@ export type ResponseAction = Promise<{
 
 export const updateHeroBannerStateAction = async (id: string, state: boolean): ResponseAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return { ok: false, message: guard.message };
   }
@@ -43,6 +44,8 @@ export const updateHeroBannerStateAction = async (id: string, state: boolean): R
 
   return {
     ok: true,
-    message: `¡ El banner "${updatedHeroBanner.title}" fue ${updatedHeroBanner.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `El banner fue ${
+      updatedHeroBanner.active ? 'activado' : 'desactivado'
+    } correctamente`,
   };
 };

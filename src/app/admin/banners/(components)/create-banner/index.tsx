@@ -1,5 +1,3 @@
-'use client';
-
 import type { FC } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
@@ -26,7 +24,7 @@ export const CreateBanner: FC = () => {
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">
-        <span>crear</span>
+        crear
       </TooltipContent>
     </Tooltip>
   );

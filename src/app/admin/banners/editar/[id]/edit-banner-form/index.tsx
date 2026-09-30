@@ -1,6 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
+import { Fragment } from 'react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
@@ -18,6 +19,7 @@ export const EditBannerForm: FC<Props> = ({ heroBanner }) => {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
+        aria-label="Formulario para editar banners"
       >
         <FormFields showMetaFields />
 
@@ -37,14 +39,16 @@ export const EditBannerForm: FC<Props> = ({ heroBanner }) => {
             disabled={form.formState.isSubmitting}
             aria-label="Guardar banner"
           >
-            {form.formState.isSubmitting ? (
-              <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                <span className="text-sm italic">Espere</span>
-                <LoaderCircle className="size-4 animate-spin" />
-              </span>
-            ) : (
-              <span>actualizar</span>
-            )}
+            {
+              form.formState.isSubmitting ? (
+                <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
+                  <span className="text-sm italic">Espere</span>
+                  <LoaderCircle className="size-4 animate-spin" />
+                </span>
+              ) : (
+                <Fragment>actualizar</Fragment>
+              )
+            }
           </Button>
         </div>
       </form>

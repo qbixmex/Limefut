@@ -59,7 +59,7 @@ export const DeleteBanner: FC<Props> = ({ bannerId, roles }) => {
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="top">
-          <p>eliminar</p>
+          eliminar
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>

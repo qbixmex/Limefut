@@ -79,7 +79,7 @@ export const createHeroBannerAction = async (
 
       return {
         ok: true,
-        message: '¡ Hero banner creado satisfactoriamente 👍 !',
+        message: 'Hero banner creado satisfactoriamente',
         heroBanner: createdHeroBanner,
       };
     });

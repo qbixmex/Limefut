@@ -21,10 +21,7 @@ export const ShowBanner: FC<Props> = ({ bannerId }) => {
             })
           }
         >
-          <InfoIcon
-            role="img"
-            aria-label="Icono de detalles"
-          />
+          <InfoIcon role="img" aria-label="Icono de detalles" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">
