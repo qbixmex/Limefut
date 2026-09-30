@@ -2,7 +2,7 @@ import { type FC, Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { TournamentsSelectorSkeleton } from './(components)/tournaments-selector-skeleton';
+import { TournamentsSelectorSkeleton } from './(components)/tournaments-wrapper/tournaments-selector-skeleton';
 import { TournamentsWrapper } from './(components)/tournaments-wrapper';
 import { StandingsView } from './(components)/standings-view';
 
