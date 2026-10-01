@@ -27,14 +27,17 @@ type Props = Readonly<{
 export const DeleteMessage: FC<Props> = ({ id, roles }) => {
   const onDeleteMessage = async (id: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar mensajes !');
+      toast.error('No tienes permisos administrativos para eliminar mensajes');
       return;
     }
+
     const response = await deleteMessageAction(id);
+
     if (!response.ok) {
       toast.error(response.message);
       return;
     }
+
     toast.success(response.message);
   };
 
@@ -44,7 +47,7 @@ export const DeleteMessage: FC<Props> = ({ id, roles }) => {
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
             <Button variant="outline-danger" size="icon">
-              <Trash2 />
+              <Trash2 role="status" aria-label="Icono para borrar mensaje" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>

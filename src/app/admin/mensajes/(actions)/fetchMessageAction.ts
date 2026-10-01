@@ -26,25 +26,31 @@ export const fetchMessageAction = async (
     if (!contactMessage) {
       return {
         ok: false,
-        message: '¡ Mensaje no encontrado ❌ !',
+        message: 'Mensaje no encontrado',
         contactMessage: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Mensaje obtenido correctamente 👍 !',
+      message: 'Mensaje obtenido correctamente',
       contactMessage,
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message);
+      console.log('Name:', error.name);
+      console.log('Message:', error.message);
+      console.log('Cause', error.cause);
+
       return {
         ok: false,
         message: 'No se pudo obtener el mensaje,\n¡ Revise los logs del servidor',
         contactMessage: null,
       };
     }
+
+    console.log(error);
+
     return {
       ok: false,
       message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor',

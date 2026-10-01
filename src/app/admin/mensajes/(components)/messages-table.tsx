@@ -43,7 +43,7 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
       {messages && messages.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de mensajes">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[250px]">Nombre</TableHead>
