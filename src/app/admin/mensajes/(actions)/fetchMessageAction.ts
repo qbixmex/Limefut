@@ -41,13 +41,13 @@ export const fetchMessageAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el mensaje,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el mensaje,\n¡ Revise los logs del servidor',
         contactMessage: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor',
       contactMessage: null,
     };
   }
