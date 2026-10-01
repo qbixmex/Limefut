@@ -20,7 +20,7 @@ export const updateMessageStatusAction = async (id: string, state: boolean): Res
   if (messageExists === 0) {
     return {
       ok: false,
-      message: '¡ Mensaje no encontrado ❌ !',
+      message: 'Mensaje no encontrado',
     };
   }
 
@@ -35,6 +35,6 @@ export const updateMessageStatusAction = async (id: string, state: boolean): Res
 
   return {
     ok: true,
-    message: '¡ El mensaje fue actualizado correctamente 👍 !',
+    message: 'El mensaje fue actualizado correctamente',
   };
 };

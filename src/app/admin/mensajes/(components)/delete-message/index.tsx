@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
-import './styles.css';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   id: string;
@@ -27,14 +27,17 @@ type Props = Readonly<{
 export const DeleteMessage: FC<Props> = ({ id, roles }) => {
   const onDeleteMessage = async (id: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar mensajes !');
+      toast.error('No tienes permisos administrativos para eliminar mensajes');
       return;
     }
+
     const response = await deleteMessageAction(id);
+
     if (!response.ok) {
       toast.error(response.message);
       return;
     }
+
     toast.success(response.message);
   };
 
@@ -44,12 +47,12 @@ export const DeleteMessage: FC<Props> = ({ id, roles }) => {
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
             <Button variant="outline-danger" size="icon">
-              <Trash2 />
+              <Trash2 role="status" aria-label="Icono para borrar mensaje" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="top">
-          <p>eliminar</p>
+          eliminar
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
@@ -60,9 +63,9 @@ export const DeleteMessage: FC<Props> = ({ id, roles }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+          <AlertDialogCancel className={styles.cancel}>cancelar</AlertDialogCancel>
           <AlertDialogAction
-            className="delete-btn"
+            className={styles.delete}
             onClick={() => onDeleteMessage(id)}
             autoFocus
           >

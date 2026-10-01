@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { getSession } from '@/lib/get-session';
 import {
@@ -10,16 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Info } from 'lucide-react';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
 import Pagination from '@/shared/components/pagination';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { fetchMessagesAction } from '../(actions)/fetchMessagesAction';
 import { DeleteMessage } from './delete-message';
-import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { updateMessageStatusAction } from '../(actions)/updateMessageStatusAction';
+import { ActiveSwitch } from '@/shared/components/active-switch';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import { MessageDetails } from './message-details';
 
 type Props = Readonly<{
   query: string;
@@ -45,7 +43,7 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
       {messages && messages.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de mensajes">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[250px]">Nombre</TableHead>
@@ -86,18 +84,7 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link href={`/admin/mensajes/${message.id}`}>
-                              <Button variant="outline-info" size="icon">
-                                <Info />
-                              </Button>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>detalles</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <MessageDetails messageId={message.id as string} />
                         <DeleteMessage
                           id={message.id as string}
                           roles={session?.user?.roles ?? []}
@@ -118,11 +105,9 @@ export const MessagesTable: FC<Props> = async ({ query, currentPage }) => {
           </div>
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay mensajes
-          </p>
-        </div>
+        <EmptyMessageResource>
+          No hay mensajes en la bandeja
+        </EmptyMessageResource>
       )}
     </>
   );

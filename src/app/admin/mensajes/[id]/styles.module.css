@@ -1,0 +1,42 @@
+@reference "#globals.css";
+
+.contactMessageView {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(5);
+  margin-bottom: --spacing(5);
+
+  @variant xl {
+    flex-direction: row;
+  }
+
+  @variant lg {
+    gap: --spacing(10);
+    margin-bottom: --spacing(10);
+  }
+}
+
+.figure {
+  display: flex;
+  width: 250px;
+  height: 250px;
+  border-radius: var(--radius-xl);
+  background-color: var(--color-gray-200);
+  justify-content: center;
+  align-items: center;
+
+  @variant dark {
+    background-color: var(--color-gray-800);
+  }
+}
+
+.messageTitle {
+  font-size: var(--text-2xl);
+  color: var(--color-sky-600);
+  font-weight: 700;
+}
+
+.messageText {
+  font-style: italic;
+  font-size: var(--text-lg);
+}

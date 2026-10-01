@@ -22,7 +22,7 @@ export const deleteMessageAction = async (id: string): ResponseDeleteAction => {
   if (!message) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el mensaje, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar el mensaje, quizás fue eliminado ó no existe',
     };
   }
 
@@ -36,6 +36,6 @@ export const deleteMessageAction = async (id: string): ResponseDeleteAction => {
 
   return {
     ok: true,
-    message: '¡ El mensaje de ha sido eliminado correctamente 👍 !',
+    message: 'El mensaje de ha sido eliminado correctamente',
   };
 };
