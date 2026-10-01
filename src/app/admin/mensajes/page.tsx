@@ -1,9 +1,6 @@
-import { Suspense, type FC } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ErrorHandler } from '@/shared/components/errorHandler';
-import { Search } from '@/shared/components/search';
-import { MessagesTableSkeleton } from './(components)/messages-table-skeleton';
-import { MessagesTable } from './(components)/messages-table';
+import type { FC } from 'react';
+import { Suspense } from 'react';
+import { MessagesView } from './messages-view';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -15,42 +12,8 @@ type Props = Readonly<{
 const MessagesPage: FC<Props> = ({ searchParams }) => {
   return (
     <Suspense>
-      <MessagesContent searchParams={searchParams} />
+      <MessagesView searchParams={searchParams} />
     </Suspense>
-  );
-};
-
-const MessagesContent: FC<Props> = async ({ searchParams }) => {
-  const query = (await searchParams).query ?? '';
-  const currentPage = (await searchParams).page ?? '1';
-
-  return (
-    <>
-      <ErrorHandler />
-      <div className="admin-page">
-        <div className="admin-page-container">
-          <Card className="admin-page-card">
-            <CardHeader className="admin-page-card-header">
-              <CardTitle className="admin-page-card-title">Mensajes</CardTitle>
-              <section className="flex gap-5 items-center">
-                <Search placeholder="Buscar Mensaje ..." />
-              </section>
-            </CardHeader>
-            <CardContent className="flex-1 flex flex-col">
-              <Suspense
-                key={`${query}-${currentPage}`}
-                fallback={<MessagesTableSkeleton />}
-              >
-                <MessagesTable
-                  query={query}
-                  currentPage={currentPage}
-                />
-              </Suspense>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </>
   );
 };
 

@@ -13,6 +13,7 @@ import { es } from 'date-fns/locale';
 import { fetchMessageAction } from '../(actions)/fetchMessageAction';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { updateMessageStatusAction } from '../(actions)/updateMessageStatusAction';
+import { ROUTES } from '@/shared/constants/routes';
 import styles from './styles.module.css';
 
 type Props = Readonly<{
@@ -25,7 +26,7 @@ export const ContactMessageView: FC<Props> = async ({ params }) => {
   const response = await fetchMessageAction(id);
 
   if (!response.ok) {
-    redirect(`/admin/mensajes?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.ADMIN_MESSAGES}?error=${encodeURIComponent(response.message)}`);
   }
 
   const message = response.contactMessage!;
@@ -37,7 +38,7 @@ export const ContactMessageView: FC<Props> = async ({ params }) => {
           <Mail size={200} strokeWidth={1} className="stroke-gray-400" />
         </figure>
         <div>
-          <Table>
+          <Table aria-label="Detalles del mensaje">
             <TableBody>
               <TableRow>
                 <TableHead className="font-semibold w-[180px]">Nombre</TableHead>
