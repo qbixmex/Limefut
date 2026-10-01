@@ -56,6 +56,7 @@ export const ROUTES = {
   ADMIN_USERS_CREATE: '/admin/usuarios/crear',
   ADMIN_USERS_EDIT: (id: string) => `/admin/usuarios/editar/${id}`,
   ADMIN_MESSAGES: '/admin/mensajes',
+  ADMIN_MESSAGES_SHOW: (id: string) => `/admin/mensajes/${id}`,
   ADMIN_SPONSORS: '/admin/patrocinadores',
   ADMIN_SPONSORS_CREATE: '/admin/patrocinadores/crear',
   ADMIN_SPONSORS_SHOW: (id: string) => `/admin/patrocinadores/${id}`,

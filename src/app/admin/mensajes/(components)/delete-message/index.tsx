@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
-import './styles.css';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   id: string;
@@ -49,7 +49,7 @@ export const DeleteMessage: FC<Props> = ({ id, roles }) => {
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="top">
-          <p>eliminar</p>
+          eliminar
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
@@ -60,9 +60,9 @@ export const DeleteMessage: FC<Props> = ({ id, roles }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cancel-btn">cancelar</AlertDialogCancel>
+          <AlertDialogCancel className={styles.cancel}>cancelar</AlertDialogCancel>
           <AlertDialogAction
-            className="delete-btn"
+            className={styles.delete}
             onClick={() => onDeleteMessage(id)}
             autoFocus
           >

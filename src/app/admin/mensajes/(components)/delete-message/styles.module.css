@@ -1,0 +1,46 @@
+@reference "#globals.css";
+
+.cancel {
+  background-color: var(--color-gray-100);
+  border-color: var(--color-gray-600);
+  color: var(--color-gray-600);
+
+
+  @variant hover {
+    background-color: var(--color-gray-600);
+    color: var(--color-gray-50);
+  }
+
+  @variant dark {
+    background-color: var(--color-gray-800);
+    color: var(--color-gray-400);
+
+    @variant hover {
+      background-color: var(--color-gray-900);
+      color: var(--color-gray-100);
+    }
+  }
+}
+
+.delete {
+  background-color: var(--color-pink-600);
+  border-color: var(--color-pink-600);
+  color: var(--color-pink-50);
+
+
+  @variant hover {
+    background-color: var(--color-pink-700);
+    color: var(--color-pink-200);
+  }
+
+  @variant dark {
+    background-color: var(--color-pink-600);
+    color: var(--color-pink-100);
+
+    @variant hover {
+      background-color: var(--color-pink-800);
+      border-color: var(--color-pink-500);
+      color: var(--color-gray-100);
+    }
+  }
+}
