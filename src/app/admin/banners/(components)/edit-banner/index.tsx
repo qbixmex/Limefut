@@ -13,15 +13,15 @@ export const EditBanner: FC<Props> = ({ bannerId }) => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_BANNERS_EDIT(bannerId)}
-          aria-label="Editar banner"
           className={
             buttonVariants({
               variant: 'outline-warning',
               size: 'icon',
             })
           }
+          aria-label="Editar banner"
         >
-          <Pencil role="img" aria-label="Icono de lápiz" />
+          <Pencil aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

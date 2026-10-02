@@ -34,17 +34,24 @@ describe('Test on <EditPlayerForm />', () => {
     vi.mocked(useEditPlayer).mockReturnValue(defaultMockReturn as never);
   });
 
+  const renderComponent = (props = defaultProps) => {
+    render(<EditPlayerForm {...props} />);
+
+    const user = userEvent.setup();
+    const formFields = screen.getByTestId('form-fields');
+    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const submitButton = screen.getByRole('button', { name: /actualizar/i });
+
+    return { user, formFields, cancelButton, submitButton };
+  };
+
   test('Should render correctly', () => {
-    render(<EditPlayerForm {...defaultProps} />);
+    const { formFields, cancelButton, submitButton } = renderComponent();
 
-    expect(screen.getByTestId('form-fields')).toBeInTheDocument();
-
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-    const submitBtn = screen.getByRole('button', { name: /actualizar/i });
-
-    expect(cancelBtn).toBeInTheDocument();
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).not.toBeDisabled();
+    expect(formFields).toBeInTheDocument();
+    expect(cancelButton).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton).not.toBeDisabled();
   });
 
   test('Should call handleNavigateBack when cancel is clicked', async () => {
@@ -54,11 +61,8 @@ describe('Test on <EditPlayerForm />', () => {
       handleNavigateBack: mockHandleNavigateBack,
     } as never);
 
-    render(<EditPlayerForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelBtn);
+    const { user, cancelButton } = renderComponent();
+    await user.click(cancelButton);
 
     expect(mockHandleNavigateBack).toHaveBeenCalled();
   });
@@ -77,11 +81,8 @@ describe('Test on <EditPlayerForm />', () => {
       handleNavigateBack: vi.fn(),
     } as never);
 
-    render(<EditPlayerForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const submitBtn = screen.getByRole('button', { name: /actualizar/i });
-    await user.click(submitBtn);
+    const { user, submitButton } = renderComponent();
+    await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalled();
   });

@@ -49,14 +49,24 @@ function SetValidRound() {
 }
 
 describe('Test on <StartingRoundField />', () => {
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode) => {
     render(
       <TestWrapper>
         <StartingRoundField />
+        {extra}
       </TestWrapper>,
     );
 
+    const user = userEvent.setup();
     const combobox = screen.getByRole('combobox');
+    const getOption = (name: string) => screen.findByRole('option', { name });
+
+    return { user, combobox, getOption };
+  };
+
+  test('Should render correctly', () => {
+    const { combobox } = renderComponent();
+
     const label = screen.getByText(/ronda inicial/i);
 
     expect(combobox).toBeInTheDocument();
@@ -65,42 +75,26 @@ describe('Test on <StartingRoundField />', () => {
   });
 
   test('Should update the value when selecting a round', async () => {
-    render(
-      <TestWrapper>
-        <StartingRoundField />
-        <FormValueDisplay />
-      </TestWrapper>,
-    );
+    const { user, combobox, getOption } = renderComponent(<FormValueDisplay />);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('combobox'));
-    await user.click(await screen.findByRole('option', { name: 'Final' }));
+    await user.click(combobox);
+    await user.click(await getOption('Final'));
 
     expect(screen.getByTestId('field-value')).toHaveTextContent('final');
   });
 
   test('Should show error when no round is selected', async () => {
-    render(
-      <TestWrapper>
-        <StartingRoundField />
-        <TriggerValidation />
-      </TestWrapper>,
-    );
+    renderComponent(<TriggerValidation />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/ronda inicial es obligatoria/i);
   });
 
   test('Should not show error when a valid round is selected', async () => {
-    render(
-      <TestWrapper>
-        <StartingRoundField />
-        <SetValidRound />
-      </TestWrapper>,
-    );
+    const { combobox } = renderComponent(<SetValidRound />);
 
     await waitFor(() => {
-      expect(screen.getByRole('combobox')).toHaveTextContent('Final');
+      expect(combobox).toHaveTextContent('Final');
     });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });

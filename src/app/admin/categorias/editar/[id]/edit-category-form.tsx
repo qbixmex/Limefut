@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import type { Category } from '@/shared/interfaces';
 import { useEditCategory } from './use-edit-category';
-import { FormFields } from './form-fields';
+import { FormFields } from '../../(components)/form-fields';
 
 type Props = Readonly<{ category: Category; }>;
 

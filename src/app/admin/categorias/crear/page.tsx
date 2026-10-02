@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CreateCategoryForm } from '../(components)/create-category-form';
+import { CreateCategoryForm } from './create-category-form';
 
 const CreateCategoryPage = async () => {
   return (

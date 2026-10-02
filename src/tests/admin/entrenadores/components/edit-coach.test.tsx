@@ -6,29 +6,34 @@ import { EditCoach } from '@/app/admin/entrenadores/(components)/edit-coach';
 const coachId = '87554630-ca8c-4bab-826c-458ffbd02414';
 
 describe('Test on <EditCoach /> component', () => {
-  test('Should render correctly', () => {
+  const renderComponent = () => {
     render(<EditCoach coachId={coachId} />, { wrapper: TooltipProvider });
 
-    const icon = screen.getByRole('img', { name: /icono de lápiz/i });
-
-    expect(icon).toBeInTheDocument();
-  });
-
-  test('Should show tooltip on mouse over', async () => {
-    render(<EditCoach coachId={coachId} />, { wrapper: TooltipProvider });
-
-    const link = screen.getByRole('link', { name: /editar entrenador/i });
     const user = userEvent.setup();
-    await user.hover(link);
+    const link = screen.getByRole('link', { name: /editar entrenador/i });
+    const toolTip = () => screen.getByRole('tooltip');
 
-    const toolTip = await screen.findByRole('tooltip');
-    expect(toolTip).toHaveTextContent(/editar/i);
+    return { user, link, toolTip };
+  };
+
+  test('Should render correctly', () => {
+    const { link } = renderComponent();
+
+    expect(link).toBeInTheDocument();
+    expect(link.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should have a link with provided url', () => {
-    render(<EditCoach coachId={coachId} />, { wrapper: TooltipProvider });
+    const { link } = renderComponent();
 
-    const link = screen.getByRole('link', { name: /editar entrenador/i });
     expect(link).toHaveAttribute('href', `/admin/entrenadores/editar/${coachId}`);
+  });
+
+  test('Should show tooltip on mouse over', async () => {
+    const { user, link, toolTip } = renderComponent();
+
+    await user.hover(link);
+
+    expect(toolTip()).toHaveTextContent(/editar/i);
   });
 });

@@ -13,6 +13,19 @@ const playerId = '550e8400-e29b-41d4-a716-446655440001';
 const testParams = 'tournament=tournament-test&category=category-test';
 
 describe('Test on <EditPlayer /> component', () => {
+  const renderComponent = () => {
+    vi.mocked(useSearchParams).mockReturnValue(
+      new URLSearchParams(testParams) as unknown as ReturnType<typeof useSearchParams>,
+    );
+
+    render(<EditPlayer playerId={playerId} />, { wrapper: TooltipProvider });
+
+    const user = userEvent.setup();
+    const button = screen.getByRole('button', { name: /editar jugador/i });
+
+    return { user, button };
+  };
+
   test('Should render null when tournament and category are not present', () => {
     vi.mocked(useSearchParams).mockReturnValue(
       new URLSearchParams() as unknown as ReturnType<typeof useSearchParams>,
@@ -26,44 +39,27 @@ describe('Test on <EditPlayer /> component', () => {
   });
 
   test('Should render correctly when tournament and category are present', () => {
-    vi.mocked(useSearchParams).mockReturnValue(
-      new URLSearchParams(testParams) as unknown as ReturnType<typeof useSearchParams>,
-    );
+    const { button } = renderComponent();
 
-    render(<EditPlayer playerId={playerId} />, { wrapper: TooltipProvider });
-
-    const icon = screen.getByRole('img', { name: /icono de lápiz/i });
-
-    expect(icon).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
+    expect(button.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should show tooltip on mouse over', async () => {
-    vi.mocked(useSearchParams).mockReturnValue(
-      new URLSearchParams(testParams) as unknown as ReturnType<typeof useSearchParams>,
-    );
+    const { user, button } = renderComponent();
 
-    render(<EditPlayer playerId={playerId} />, { wrapper: TooltipProvider });
+    await user.hover(button);
 
-    const img = screen.getByRole('img', { name: /icono de lápiz/i });
-    const user = userEvent.setup();
-    await user.hover(img);
-
-    const toolTip = await screen.findByRole('tooltip');
-    expect(toolTip).toHaveTextContent(/editar/i);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(/editar/i);
   });
 
   test('Should navigate to edit player page on click', async () => {
     const mockPush = vi.fn();
     vi.mocked(useRouter).mockReturnValue({ push: mockPush } as never);
-    vi.mocked(useSearchParams).mockReturnValue(
-      new URLSearchParams(testParams) as unknown as ReturnType<typeof useSearchParams>,
-    );
 
-    render(<EditPlayer playerId={playerId} />, { wrapper: TooltipProvider });
+    const { user, button } = renderComponent();
 
-    const img = screen.getByRole('img', { name: /icono de lápiz/i });
-    const user = userEvent.setup();
-    await user.click(img);
+    await user.click(button);
 
     expect(mockPush).toHaveBeenCalledWith(
       expect.stringContaining(`/admin/jugadores/editar/${playerId}`),

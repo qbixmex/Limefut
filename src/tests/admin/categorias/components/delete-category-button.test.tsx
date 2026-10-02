@@ -27,35 +27,43 @@ describe('Test on <DeleteCategory /> component', () => {
     vi.clearAllMocks();
     mockDeleteAction.mockResolvedValue({
       ok: true,
-      message: '¡ La categoría ha sido eliminada correctamente 👍 !',
+      message: 'La categoría ha sido eliminada correctamente',
     });
   });
 
-  test('Should render correctly', () => {
-    const categoryId = '01aa10d4-aeab-4fe5-b5c3-dd46d1ac58fb';
+  const renderComponent = (categoryId: string) => {
     render(
       <DeleteCategory categoryId={categoryId} />,
       { wrapper: TooltipProvider },
     );
 
-    const icon = screen.getByRole('img', { name: /icono de basurero/i });
+    const user = userEvent.setup();
+    const deleteButton = screen.getByRole('button', { name: /eliminar categoría/i });
+    const cancelButton = () => screen.getByRole('button', { name: /cancelar/i });
+    const confirmButton = () => screen.getByRole('button', { name: /^eliminar$/ });
 
-    expect(icon).toBeInTheDocument();
+    return {
+      user,
+      deleteButton,
+      cancelButton,
+      confirmButton,
+    };
+  };
+
+  test('Should render correctly', () => {
+    const categoryId = '01aa10d4-aeab-4fe5-b5c3-dd46d1ac58fb';
+    const { deleteButton } = renderComponent(categoryId);
+
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should call deleteCategoryAction on confirm', async () => {
     const categoryId = '347967f4-94a2-4f72-a180-96fd4b6ff09b';
-    render(
-      <DeleteCategory categoryId={categoryId} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, confirmButton } = renderComponent(categoryId);
 
-    const deleteButton = screen.getByRole('button', { name: /icono de basurero/i });
-    const user = userEvent.setup();
     await user.click(deleteButton);
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(mockDeleteAction).toHaveBeenCalledWith({
@@ -66,17 +74,10 @@ describe('Test on <DeleteCategory /> component', () => {
 
   test('Should not call deleteCategoryAction when cancel is clicked', async () => {
     const categoryId = '347967f4-94a2-4f72-a180-96fd4b6ff09b';
-    render(
-      <DeleteCategory categoryId={categoryId} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, cancelButton } = renderComponent(categoryId);
 
-    const deleteButton = screen.getByRole('button', { name: /icono de basurero/i });
-    const user = userEvent.setup();
     await user.click(deleteButton);
-
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelButton);
+    await user.click(cancelButton());
 
     expect(mockDeleteAction).not.toHaveBeenCalled();
   });

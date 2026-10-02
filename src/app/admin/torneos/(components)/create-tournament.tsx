@@ -14,12 +14,9 @@ export const CreateTournament = () => {
             variant: 'outline-primary',
             size: 'icon',
           })}
+          aria-label="Crear torneo"
         >
-          <Plus
-            strokeWidth={3}
-            role="img"
-            aria-label="Crear torneo"
-          />
+          <Plus strokeWidth={3} aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">

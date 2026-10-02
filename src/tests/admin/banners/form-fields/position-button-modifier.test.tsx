@@ -4,28 +4,33 @@ import { Plus } from 'lucide-react';
 import { PositionButtonModifier } from '@/app/admin/banners/(components)/form-fields/position-field/position-button-modifier';
 
 describe('Test on <PositionButtonModifier />', () => {
-  test('Should render correctly', () => {
-    render(<PositionButtonModifier icon={Plus} modifyPosition={vi.fn()} />);
+  const renderComponent = (modifyPosition = vi.fn(), disabled = false) => {
+    render(<PositionButtonModifier icon={Plus} modifyPosition={modifyPosition} disabled={disabled} />);
 
+    const user = userEvent.setup();
     const button = screen.getByRole('button');
+
+    return { user, button, modifyPosition };
+  };
+
+  test('Should render correctly', () => {
+    const { button } = renderComponent();
 
     expect(button).toBeInTheDocument();
     expect(button).not.toBeDisabled();
   });
 
   test('Should call modifyPosition when clicked', async () => {
-    const mockModifyPosition = vi.fn();
-    render(<PositionButtonModifier icon={Plus} modifyPosition={mockModifyPosition} />);
+    const { user, button, modifyPosition } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
+    await user.click(button);
 
-    expect(mockModifyPosition).toHaveBeenCalledOnce();
+    expect(modifyPosition).toHaveBeenCalledOnce();
   });
 
   test('Should be disabled when the disabled prop is true', () => {
-    render(<PositionButtonModifier icon={Plus} modifyPosition={vi.fn()} disabled />);
+    const { button } = renderComponent(vi.fn(), true);
 
-    expect(screen.getByRole('button')).toBeDisabled();
+    expect(button).toBeDisabled();
   });
 });

@@ -17,7 +17,7 @@ export const EditCategory: FC<{ categoryId: string }> = ({ categoryId }) => {
           })}
           aria-label="Editar categoría"
         >
-          <Pencil role="img" aria-label="Icono de lápiz" />
+          <Pencil aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">editar</TooltipContent>

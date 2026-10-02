@@ -13,15 +13,15 @@ export const ShowBanner: FC<Props> = ({ bannerId }) => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_BANNERS_SHOW(bannerId)}
-          aria-label="Detalles del banner"
           className={
             buttonVariants({
               variant: 'outline-info',
               size: 'icon',
             })
           }
+          aria-label="Detalles del banner"
         >
-          <InfoIcon role="img" aria-label="Icono de detalles" />
+          <InfoIcon aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

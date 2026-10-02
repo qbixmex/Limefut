@@ -37,10 +37,12 @@ export const EditPlayer: FC<Props> = ({ playerId }) => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          variant="outline-warning" size="icon"
+          variant="outline-warning"
+          size="icon"
           onClick={handleNavigate}
+          aria-label="Editar jugador"
         >
-          <Pencil role="img" aria-label="Icono de lápiz" />
+          <Pencil aria-hidden="true" />
         </Button>
       </TooltipTrigger>
       <TooltipContent side="top">

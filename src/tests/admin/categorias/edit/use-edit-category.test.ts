@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
-import { useEditCategory } from '@/app/admin/categorias/(components)/use-edit-category';
 import { mockCategory } from './mocks/category.mock';
+import { useEditCategory } from '@/app/admin/categorias/editar/[id]/use-edit-category';
 import { ROUTES } from '@/shared/constants/routes';
 
 const { mockReplace, mockUpdateAction } = vi.hoisted(() => ({

@@ -20,32 +20,36 @@ describe('Test on <DeleteField /> component', () => {
     vi.clearAllMocks();
     mockDeleteFieldAction.mockResolvedValue({
       ok: true,
-      message: '¡ La cancha ha sido eliminada correctamente 👍 !',
+      message: 'La cancha ha sido eliminada correctamente',
     });
   });
 
-  test('Should render correctly', () => {
+  const renderComponent = (roles: ('user' | 'admin')[]) => {
     render(
-      <DeleteField fieldId={fieldId} roles={['admin']} />,
-      { wrapper: TooltipProvider },
-    );
-
-    const trigger = screen.getByRole('button');
-
-    expect(trigger).toBeInTheDocument();
-  });
-
-  test('Should call deleteFieldAction on confirm when user is admin', async () => {
-    render(
-      <DeleteField fieldId={fieldId} roles={['admin']} />,
+      <DeleteField fieldId={fieldId} roles={roles} />,
       { wrapper: TooltipProvider },
     );
 
     const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
+    const deleteButton = screen.getByRole('button', { name: /eliminar cancha/i });
+    const confirmButton = () => screen.getByRole('button', { name: /^eliminar$/ });
+    const cancelButton = () => screen.getByRole('button', { name: /cancelar/i });
 
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    return { user, deleteButton, confirmButton, cancelButton };
+  };
+
+  test('Should render correctly', () => {
+    const { deleteButton } = renderComponent(['admin']);
+
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton.querySelector('svg')).toBeInTheDocument();
+  });
+
+  test('Should call deleteFieldAction on confirm when user is admin', async () => {
+    const { user, deleteButton, confirmButton } = renderComponent(['admin']);
+
+    await user.click(deleteButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(mockDeleteFieldAction).toHaveBeenCalledWith(fieldId);
@@ -53,16 +57,10 @@ describe('Test on <DeleteField /> component', () => {
   });
 
   test('Should not call deleteFieldAction when cancel is clicked', async () => {
-    render(
-      <DeleteField fieldId={fieldId} roles={['admin']} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, cancelButton } = renderComponent(['admin']);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
-
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelButton);
+    await user.click(deleteButton);
+    await user.click(cancelButton());
 
     expect(mockDeleteFieldAction).not.toHaveBeenCalled();
   });
@@ -70,16 +68,10 @@ describe('Test on <DeleteField /> component', () => {
   test('Should show error toast and not call action when user is not admin', async () => {
     const { toast } = await import('sonner');
 
-    render(
-      <DeleteField fieldId={fieldId} roles={['user']} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, confirmButton } = renderComponent(['user']);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    await user.click(deleteButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(

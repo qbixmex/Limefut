@@ -5,10 +5,10 @@ import { DeleteTournament } from '@/app/admin/torneos/(components)/delete-tourna
 import { useDeleteTournament } from '@/app/admin/torneos/(components)/delete-tournament/use-delete-tournament';
 vi.mock('@/app/admin/torneos/(components)/delete-tournament/use-delete-tournament');
 
+const tournamentId = '347967f4-94a2-4f72-a180-96fd4b6ff09b';
+
 describe('Test on <DeleteTournament /> component', () => {
-  test('Should render correctly', () => {
-    vi.mocked(useDeleteTournament).mockReturnValue({ onDeleteTournament: vi.fn() });
-    const tournamentId = '01aa10d4-aeab-4fe5-b5c3-dd46d1ac58fb';
+  const renderComponent = () => {
     render(
       <DeleteTournament
         tournamentId={tournamentId}
@@ -16,29 +16,30 @@ describe('Test on <DeleteTournament /> component', () => {
       { wrapper: TooltipProvider },
     );
 
-    const icon = screen.getByRole('img', { name: /basurero/i });
+    const user = userEvent.setup();
+    const deleteButton = screen.getByRole('button', { name: /eliminar torneo/i });
+    const confirmButton = () => screen.getByRole('button', { name: /^eliminar$/ });
+    const cancelButton = () => screen.getByRole('button', { name: /cancelar/i });
 
-    expect(icon).toBeInTheDocument();
+    return { user, deleteButton, confirmButton, cancelButton };
+  };
+
+  test('Should render correctly', () => {
+    vi.mocked(useDeleteTournament).mockReturnValue({ onDeleteTournament: vi.fn() });
+    const { deleteButton } = renderComponent();
+
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should call onDeleteTournament function', async () => {
     const mockOnDelete = vi.fn();
     vi.mocked(useDeleteTournament).mockReturnValue({ onDeleteTournament: mockOnDelete });
-    const tournamentId = '347967f4-94a2-4f72-a180-96fd4b6ff09b';
 
-    render(
-      <DeleteTournament
-        tournamentId={tournamentId}
-      />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, confirmButton } = renderComponent();
 
-    const deleteButton = screen.getByRole('button', { name: /eliminar/i });
-    const user = userEvent.setup();
     await user.click(deleteButton);
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(mockOnDelete).toHaveBeenCalled();
@@ -48,21 +49,11 @@ describe('Test on <DeleteTournament /> component', () => {
   test('Should not call onDeleteTournament when cancel is clicked', async () => {
     const mockOnDelete = vi.fn();
     vi.mocked(useDeleteTournament).mockReturnValue({ onDeleteTournament: mockOnDelete });
-    const tournamentId = '347967f4-94a2-4f72-a180-96fd4b6ff09b';
 
-    render(
-      <DeleteTournament
-        tournamentId={tournamentId}
-      />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, cancelButton } = renderComponent();
 
-    const deleteButton = screen.getByRole('button', { name: /eliminar/i });
-    const user = userEvent.setup();
     await user.click(deleteButton);
-
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelButton);
+    await user.click(cancelButton());
 
     expect(mockOnDelete).not.toHaveBeenCalled();
   });

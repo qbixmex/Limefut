@@ -36,75 +36,61 @@ describe('Test on <PermalinkField />', () => {
     vi.clearAllMocks();
   });
 
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode) => {
     render(
       <TestWrapper>
         <PermalinkField setPermalinkEdited={setPermalinkEdited} />
+        {extra}
       </TestWrapper>,
     );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    const user = userEvent.setup();
+    const textbox = screen.getByRole('textbox');
+
+    return { user, textbox };
+  };
+
+  test('Should render correctly', () => {
+    const { textbox } = renderComponent();
+
+    expect(textbox).toBeInTheDocument();
   });
 
   test('Should call setPermalinkEdited when typing', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'little-champions');
+    const { user, textbox } = renderComponent();
+
+    await user.type(textbox, 'little-champions');
 
     expect(setPermalinkEdited).toHaveBeenCalledWith(true);
   });
 
   test('Should show error when value is not a string', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-        <SetNonStringValue />
-      </TestWrapper>,
-    );
+    renderComponent(<SetNonStringValue />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/cadena de texto/i);
   });
 
   test('Should show error when permalink is less than 3 characters', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'ab');
+    await user.type(textbox, 'ab');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/mayor a 3 caracteres/i);
   });
 
   test('Should not show error when permalink has 3 or more valid characters', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'little-champions');
+    await user.type(textbox, 'little-champions');
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   test('Should show error when permalink exceeds 250 characters', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'x'.repeat(251));
+    await user.type(textbox, 'x'.repeat(251));
 
     expect(screen.getByRole('alert')).toHaveTextContent(/menor a 250 caracteres/i);
   });

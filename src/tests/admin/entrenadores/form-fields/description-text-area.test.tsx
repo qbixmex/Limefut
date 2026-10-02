@@ -54,49 +54,48 @@ function SetLongDescription() {
 }
 
 describe('Test on <DescriptionTextArea />', () => {
-  test('Should render correctly', () => {
-    render(<DescriptionTextArea />, { wrapper: TestWrapper });
+  const renderComponent = (extra?: ReactNode) => {
+    render(
+      <TestWrapper>
+        <DescriptionTextArea />
+        {extra}
+      </TestWrapper>,
+    );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    const user = userEvent.setup();
+    const textbox = screen.getByRole('textbox');
+
+    return { user, textbox };
+  };
+
+  test('Should render correctly', () => {
+    const { textbox } = renderComponent();
+
+    expect(textbox).toBeInTheDocument();
   });
 
   test('Should not show error when description is untouched', () => {
-    render(<DescriptionTextArea />, { wrapper: TestWrapper });
+    renderComponent();
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   test('Should show error when value is not a string', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-        <SetNonStringValue />
-      </TestWrapper>,
-    );
+    renderComponent(<SetNonStringValue />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/invalid input/i);
   });
 
   test('Should show error when description is less than 8 characters', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-        <SetShortDescription />
-      </TestWrapper>,
-    );
+    renderComponent(<SetShortDescription />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/mayor a 3 caracteres/i);
   });
 
   test('Should not show error when description is valid', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-        <SetValidDescription />
-      </TestWrapper>,
-    );
+    renderComponent(<SetValidDescription />);
 
     await waitFor(() => {
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -104,26 +103,16 @@ describe('Test on <DescriptionTextArea />', () => {
   });
 
   test('Should show error when description exceeds 250 characters', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-        <SetLongDescription />
-      </TestWrapper>,
-    );
+    renderComponent(<SetLongDescription />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/menor a 250 caracteres/i);
   });
 
   test('Should allow typing a valid description', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'Descripción válida');
+    await user.type(textbox, 'Descripción válida');
 
     expect(screen.getByRole('textbox')).toHaveValue('Descripción válida');
   });

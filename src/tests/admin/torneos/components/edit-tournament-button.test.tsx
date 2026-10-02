@@ -3,37 +3,38 @@ import { EditTournament } from '@/app/admin/torneos/(components)/edit-tournament
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { userEvent } from '@testing-library/user-event';
 
+const tournamentId = '221c1229-5925-4419-8a9d-8ddd9d63b2c7';
+
 describe('Test on <EditTournament /> component', () => {
-  test('Should render correctly', async () => {
-    const tournamentId = '221c1229-5925-4419-8a9d-8ddd9d63b2c7';
-    const element = await EditTournament({ tournamentId });
+  const renderComponent = async (id: string = tournamentId) => {
+    const element = await EditTournament({ tournamentId: id });
     render(element, { wrapper: TooltipProvider });
 
-    const icon = screen.getByRole('img', { name: /lápiz/i });
+    const user = userEvent.setup();
+    const link = screen.getByRole('link', { name: /editar torneo/i });
+    const toolTip = () => screen.getByRole('tooltip');
 
-    expect(icon).toBeInTheDocument();
+    return { user, link, toolTip };
+  };
+
+  test('Should render correctly', async () => {
+    const { link } = await renderComponent();
+
+    expect(link).toBeInTheDocument();
+    expect(link.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should show tooltip on mouse over', async () => {
-    const tournamentId = '347967f4-94a2-4f72-a180-96fd4b6ff09b';
-    const element = await EditTournament({ tournamentId });
-    render(element, { wrapper: TooltipProvider });
+    const { user, link, toolTip } = await renderComponent();
 
-    const link = screen.getByRole('link', { name: /editar/i });
-    const user = userEvent.setup();
     await user.hover(link);
 
-    const toolTip = await screen.findByRole('tooltip');
-    expect(toolTip).toHaveTextContent(/editar/i);
+    expect(toolTip()).toHaveTextContent(/editar/i);
   });
 
   test('Should have a link with provided url', async () => {
-    const tournamentId = '2792cf38-fa85-4c0c-b533-76a5e29bd046';
+    const { link } = await renderComponent();
 
-    const element = await EditTournament({ tournamentId });
-    render(element, { wrapper: TooltipProvider });
-
-    const link = screen.getByRole('link', { name: /editar/i });
     expect(link).toHaveAttribute('href', `/admin/torneos/editar/${tournamentId}`);
   });
 });
