@@ -1,7 +1,7 @@
 import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { CreatePlayoffContent } from './create-playoff-content';
+import { CreatePlayoffView } from './create-playoff-view';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -22,7 +22,7 @@ export const CreatePlayoffPage: FC<Props> = ({ searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense>
-                <CreatePlayoffContent searchParams={searchParams} />
+                <CreatePlayoffView searchParams={searchParams} />
               </Suspense>
             </CardContent>
           </Card>

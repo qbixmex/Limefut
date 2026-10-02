@@ -35,22 +35,24 @@ export const fetchTournamentsAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Los torneos fueron obtenidos correctamente 👍 !',
+      message: 'Los torneos fueron obtenidos correctamente',
       tournaments,
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('¡ Error al intentar obtener los torneos !');
+      console.log('Error al intentar obtener los torneos');
       return {
         ok: false,
         message: error.message,
         tournaments: [],
       };
     }
+
     console.log(error);
+
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       tournaments: [],
     };
   }

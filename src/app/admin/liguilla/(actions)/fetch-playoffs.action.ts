@@ -98,7 +98,7 @@ export const fetchPlayoffsAction = async ({
     if (!playoffs) {
       return {
         ok: false,
-        message: '¡ No se pudo obtener las post temporadas ❌ !',
+        message: 'No se pudo obtener las post temporadas',
         playoffs: [],
         pagination: {
           currentPage: 0,
@@ -111,7 +111,7 @@ export const fetchPlayoffsAction = async ({
 
     return {
       ok: true,
-      message: 'Las post temporadas fueron obtenidas correctamente 👍',
+      message: 'Los encuentros de liguilla fueron obtenidos correctamente',
       playoffs: playoffs.map((playoff) => ({
         id: playoff.id,
         startingRound: playoff.startingRound,
@@ -126,7 +126,7 @@ export const fetchPlayoffsAction = async ({
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('¡ Error al intentar obtener las post temporadas ❌ !');
+      console.log('Error al intentar obtener Los encuentros de liguilla');
       return {
         ok: false,
         message: error.message,
@@ -137,10 +137,12 @@ export const fetchPlayoffsAction = async ({
         },
       };
     }
+
     console.log(error);
+
     return {
       ok: false,
-      message: '¡ Error inesperado al obtener los encuentros, revise los logs del servidor ❌ !',
+      message: 'Error inesperado al obtener los encuentros de liguilla, revise los logs del servidor',
       playoffs: [],
       pagination: {
         currentPage: 0,

@@ -1,6 +1,6 @@
 'use client';
 
-import { type FC } from 'react';
+import type { FC } from 'react';
 import {
   Table,
   TableBody,
@@ -18,6 +18,7 @@ import type { PLAYOFFS_TYPE } from './(actions)/fetch-playoffs.action';
 import { ShowDetails } from './(components)/show-details';
 import { DeletePlayoff } from './(components)/delete-playoff';
 import { ShowPlayoffMatches } from './(components)/show-playoff-matches';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
 
 type Props = Readonly<{
   playoffs: PLAYOFFS_TYPE[];
@@ -35,7 +36,7 @@ export const PlayoffsTable: FC<Props> = ({
     <>
       <div className="flex-1 flex flex-col">
         <div className="flex-1">
-          <Table>
+          <Table aria-label="Lista de encuentros de liguilla">
             <TableHeader>
               <TableRow className="h-16">
                 <TableHead>Torneo</TableHead>
@@ -59,7 +60,7 @@ export const PlayoffsTable: FC<Props> = ({
                     {playoff.category ? (
                       <Badge variant="outline-info">{playoff.category.name}</Badge>
                     ) : (
-                      <Badge variant="outline-secondary">No disponible</Badge>
+                      <Badge variant="outline-secondary">no disponible</Badge>
                     )}
                   </TableCell>
                   <TableCell>
@@ -69,9 +70,7 @@ export const PlayoffsTable: FC<Props> = ({
                     <div className="flex gap-3">
                       <ShowDetails playoffId={playoff.id} />
                       <ShowPlayoffMatches playoffId={playoff.id} />
-                      <DeletePlayoff
-                        id={playoff.id}
-                      />
+                      <DeletePlayoff id={playoff.id} />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -79,9 +78,9 @@ export const PlayoffsTable: FC<Props> = ({
               {playoffs.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={5}>
-                    <div className="text-blue-500 text-semibold text-2xl text-center py-5">
+                    <EmptyMessageResource>
                       No hay liguillas disponibles
-                    </div>
+                    </EmptyMessageResource>
                   </TableCell>
                 </TableRow>
               )}

@@ -33,14 +33,14 @@ export const deletePlayoffAction = async (id: string): ResponseDeleteAction => {
     if (!playoff) {
       return {
         ok: false,
-        message: '¡ No se puede eliminar la liguilla, quizás fue eliminada ó no existe !',
+        message: 'No se puede eliminar la liguilla, quizás fue eliminada ó no existe',
       };
     }
 
     if (playoff._count.matches > 0) {
       return {
         ok: false,
-        message: '¡ No se puede eliminar la liguilla por que contiene encuentros !',
+        message: 'No se puede eliminar la liguilla por que contiene encuentros',
       };
     }
 
@@ -53,7 +53,7 @@ export const deletePlayoffAction = async (id: string): ResponseDeleteAction => {
 
     return {
       ok: true,
-      message: '¡ La liguilla ha sido eliminada correctamente 👍 !',
+      message: 'La liguilla ha sido eliminada correctamente',
     };
   } catch (error) {
     if (error instanceof Error) {
@@ -63,7 +63,7 @@ export const deletePlayoffAction = async (id: string): ResponseDeleteAction => {
 
       return {
         ok: false,
-        message: '¡ No se pudo eliminar la liguilla ❌ !',
+        message: 'No se pudo eliminar la liguilla',
       };
     }
 
@@ -71,7 +71,7 @@ export const deletePlayoffAction = async (id: string): ResponseDeleteAction => {
 
     return {
       ok: false,
-      message: '¡ Error inesperado del sistema, revise los logs ❌ !',
+      message: 'Error inesperado del sistema, revise los logs',
     };
   }
 };

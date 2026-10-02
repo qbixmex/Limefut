@@ -11,7 +11,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const PlayoffsContent: FC<Props> = async ({ searchParams }) => {
+export const PlayoffsView: FC<Props> = async ({ searchParams }) => {
   const { query, page } = await searchParams;
   const currentPage = parseInt(page ?? '1') ?? 1;
 
