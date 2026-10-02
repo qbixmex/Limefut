@@ -17,8 +17,9 @@ export const ShowDetails: FC<Props> = ({ playoffId }) => {
             variant: 'outline-info',
             size: 'icon',
           })}
+          aria-label="Mostrar más información del encuentro"
         >
-          <InfoIcon />
+          <InfoIcon aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">

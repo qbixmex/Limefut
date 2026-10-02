@@ -11,17 +11,13 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const CreatePlayoffContent: FC<Props> = async ({ searchParams }) => {
+export const CreatePlayoffView: FC<Props> = async ({ searchParams }) => {
   const { tournament, category } = await searchParams;
 
   return (
     <CreatePlayoffsForm
-      tournamentSlot={
-        <TournamentSelectField />
-      }
-      categorySlot={
-        <CategorySelectField />
-      }
+      tournamentSlot={<TournamentSelectField />}
+      categorySlot={<CategorySelectField />}
       teamsSlot={
         <TeamsSelectField
           key={`${tournament ?? 'tournament'}-${category ?? 'category'}`}

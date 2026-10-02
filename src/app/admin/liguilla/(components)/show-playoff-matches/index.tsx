@@ -19,8 +19,9 @@ export const ShowPlayoffMatches: FC<Props> = ({ playoffId }) => {
             variant: 'outline-primary',
             size: 'icon',
           })}
+          aria-label="Mostrar encuentros"
         >
-          <PiSoccerBallFill />
+          <PiSoccerBallFill aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

@@ -187,7 +187,7 @@ export const createPlayoffPenaltyShootoutAction = async (
 
       return {
         ok: true,
-        message: '¡ Tanda de penales creada correctamente 👍 !',
+        message: 'Tanda de penales creada correctamente',
         penaltyShootout: updatedShootout,
       };
     });
@@ -216,7 +216,7 @@ export const createPlayoffPenaltyShootoutAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: '¡ Error al crear la tanda de penales, revise los logs del servidor !',
+        message: 'Error al crear la tanda de penales, revise los logs del servidor',
         penaltyShootout: null,
       };
     }
@@ -224,7 +224,7 @@ export const createPlayoffPenaltyShootoutAction = async (
     console.log('ERROR MESSAGE:', (error as Error).message);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       penaltyShootout: null,
     };
   }
