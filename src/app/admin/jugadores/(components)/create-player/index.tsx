@@ -32,7 +32,7 @@ export const CreatePlayer = () => {
           size="icon"
           aria-label="Crear jugador"
         >
-          <Plus role="img" aria-label="Icono de crear" strokeWidth={3} />
+          <Plus aria-hidden="true" strokeWidth={3} />
         </Button>
       </TooltipTrigger>
       <TooltipContent side="left">

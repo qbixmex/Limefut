@@ -28,16 +28,21 @@ describe('Test on <EditFieldForm />', () => {
     vi.mocked(useEditField).mockReturnValue(defaultMockReturn as never);
   });
 
-  test('Should render correctly', () => {
-    render(<EditFieldForm {...defaultProps} />);
+  const renderComponent = (props = defaultProps) => {
+    render(<EditFieldForm {...props} />);
 
+    const user = userEvent.setup();
     const formFields = screen.getByTestId('form-fields');
-
-    expect(formFields).toBeInTheDocument();
-
     const cancelButton = screen.getByRole('button', { name: /cancelar/i });
     const submitButton = screen.getByRole('button', { name: /guardar cancha/i });
 
+    return { user, formFields, cancelButton, submitButton };
+  };
+
+  test('Should render correctly', () => {
+    const { formFields, cancelButton, submitButton } = renderComponent();
+
+    expect(formFields).toBeInTheDocument();
     expect(cancelButton).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).not.toBeDisabled();
@@ -50,10 +55,7 @@ describe('Test on <EditFieldForm />', () => {
       handleNavigateBack: mockHandleNavigateBack,
     } as never);
 
-    render(<EditFieldForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const { user, cancelButton } = renderComponent();
     await user.click(cancelButton);
 
     expect(mockHandleNavigateBack).toHaveBeenCalled();
@@ -73,10 +75,7 @@ describe('Test on <EditFieldForm />', () => {
       onSubmit: mockOnSubmit,
     } as never);
 
-    render(<EditFieldForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const submitButton = screen.getByRole('button', { name: /guardar cancha/i });
+    const { user, submitButton } = renderComponent();
     await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalled();

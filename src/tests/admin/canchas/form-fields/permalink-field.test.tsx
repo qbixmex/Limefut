@@ -36,127 +36,93 @@ describe('Test on <PermalinkField />', () => {
     vi.clearAllMocks();
   });
 
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode) => {
     render(
       <TestWrapper>
         <PermalinkField setPermalinkEdited={setPermalinkEdited} />
+        {extra}
       </TestWrapper>,
     );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    const user = userEvent.setup();
+    const textbox = screen.getByRole('textbox');
+
+    return { user, textbox };
+  };
+
+  test('Should render correctly', () => {
+    const { textbox } = renderComponent();
+
+    expect(textbox).toBeInTheDocument();
   });
 
   test('Should call setPermalinkEdited when typing', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'soccer-stars');
+    const { user, textbox } = renderComponent();
+
+    await user.type(textbox, 'soccer-stars');
 
     expect(setPermalinkEdited).toHaveBeenCalledWith(true);
   });
 
   test('Should show error when value is not a string', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-        <SetNonStringValue />
-      </TestWrapper>,
-    );
+    renderComponent(<SetNonStringValue />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/el enlace permanente debe ser una cadena de texto/i);
   });
 
   test('Should show error when permalink is less than 3 characters', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'ab');
+    await user.type(textbox, 'ab');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/mayor a 3 caracteres/i);
   });
 
   test('Should not show error when permalink has 3 or more valid characters', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'soccer-stars');
+    await user.type(textbox, 'soccer-stars');
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   test('Should show error when permalink exceeds 250 characters', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'x'.repeat(251));
+    await user.type(textbox, 'x'.repeat(251));
 
     expect(screen.getByRole('alert')).toHaveTextContent(/menor a 250 caracteres/i);
   });
 
   test('Should show error when permalink contains spaces', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'soccer stars');
+    await user.type(textbox, 'soccer stars');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/no debe contener espacios/i);
   });
 
   test('Should show error when permalink contains accents', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'canción');
+    await user.type(textbox, 'canción');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/no debe contener acentos/i);
   });
 
   test('Should show error when permalink contains the letter ñ', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'cancha-niña');
+    await user.type(textbox, 'cancha-niña');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/no debe contener la letra ñ/i);
   });
 
   test('Should show error when permalink contains invalid characters', async () => {
-    render(
-      <TestWrapper>
-        <PermalinkField setPermalinkEdited={setPermalinkEdited} />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'field@one');
+    await user.type(textbox, 'field@one');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/solo puede contener letras/i);
   });

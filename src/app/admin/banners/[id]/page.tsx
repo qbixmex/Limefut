@@ -22,7 +22,7 @@ const BannerPage: FC<Props> = ({ params }) => {
               aria-label="Título de la página"
             >
               Ajustes del Banner
-              <Settings2 role="img" aria-label="Icono de ajustes" />
+              <Settings2 aria-hidden="true" />
             </CardTitle>
           </CardHeader>
           <CardContent>

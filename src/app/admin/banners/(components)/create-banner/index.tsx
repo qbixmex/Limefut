@@ -16,11 +16,7 @@ export const CreateBanner: FC = () => {
             buttonVariants({ variant: 'outline-primary', size: 'icon' })
           }
         >
-          <Plus
-            role="img"
-            aria-label="Icono de crear"
-            strokeWidth={3}
-          />
+          <Plus strokeWidth={3} aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">

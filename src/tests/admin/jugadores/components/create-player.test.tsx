@@ -9,8 +9,21 @@ vi.mock('next/navigation', () => ({
   useSearchParams: vi.fn(),
 }));
 
+const testParams = 'tournament=tournament-test&category=category-test';
+
 describe('Test on <CreatePlayer /> component', () => {
-  const testParams = 'tournament=tournament-test&category=category-test';
+  const renderComponent = () => {
+    vi.mocked(useSearchParams).mockReturnValue(
+      new URLSearchParams(testParams) as unknown as ReturnType<typeof useSearchParams>,
+    );
+
+    render(<CreatePlayer />, { wrapper: TooltipProvider });
+
+    const user = userEvent.setup();
+    const button = screen.getByRole('button', { name: /crear jugador/i });
+
+    return { user, button };
+  };
 
   test('Should render null when tournament and category are not present', () => {
     vi.mocked(useSearchParams).mockReturnValue(
@@ -23,43 +36,26 @@ describe('Test on <CreatePlayer /> component', () => {
   });
 
   test('Should render correctly when tournament and category are present', () => {
-    vi.mocked(useSearchParams).mockReturnValue(
-      new URLSearchParams(testParams) as unknown as ReturnType<typeof useSearchParams>,
-    );
+    const { button } = renderComponent();
 
-    render(<CreatePlayer />, { wrapper: TooltipProvider });
-
-    const icon = screen.getByRole('img', { name: /icono de crear/i });
-
-    expect(icon).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
+    expect(button.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should show tooltip on mouse over', async () => {
-    vi.mocked(useSearchParams).mockReturnValue(
-      new URLSearchParams(testParams) as unknown as ReturnType<typeof useSearchParams>,
-    );
+    const { user, button } = renderComponent();
 
-    render(<CreatePlayer />, { wrapper: TooltipProvider });
-
-    const button = screen.getByRole('button', { name: /crear jugador/i });
-    const user = userEvent.setup();
     await user.hover(button);
 
-    const toolTip = await screen.findByRole('tooltip');
-    expect(toolTip).toHaveTextContent(/crear jugador/i);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(/crear jugador/i);
   });
 
   test('Should navigate to create player page on click', async () => {
     const mockPush = vi.fn();
     vi.mocked(useRouter).mockReturnValue({ push: mockPush } as never);
-    vi.mocked(useSearchParams).mockReturnValue(
-      new URLSearchParams(testParams) as unknown as ReturnType<typeof useSearchParams>,
-    );
 
-    render(<CreatePlayer />, { wrapper: TooltipProvider });
+    const { user, button } = renderComponent();
 
-    const button = screen.getByRole('button', { name: /crear jugador/i });
-    const user = userEvent.setup();
     await user.click(button);
 
     expect(mockPush).toHaveBeenCalledWith(

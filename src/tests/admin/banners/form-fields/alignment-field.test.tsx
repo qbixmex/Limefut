@@ -51,29 +51,32 @@ function SetInvalidAlignment() {
 }
 
 describe('Test on <AlignmentField />', () => {
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode) => {
     render(
       <TestWrapper>
         <AlignmentField />
+        {extra}
       </TestWrapper>,
     );
 
+    const user = userEvent.setup();
     const select = screen.getByRole('combobox', { name: /alineación/i });
+    const selectOption = (name: RegExp) => screen.findByRole('option', { name });
+
+    return { user, select, selectOption };
+  };
+
+  test('Should render correctly', () => {
+    const { select } = renderComponent();
+
     expect(select).toBeInTheDocument();
   });
 
   test('Should update the alignment value to left when selecting an option', async () => {
-    render(
-      <TestWrapper>
-        <AlignmentField />
-        <FormValueDisplay />
-      </TestWrapper>,
-    );
+    const { user, select, selectOption } = renderComponent(<FormValueDisplay />);
 
-    const selectField = screen.getByRole('combobox', { name: /alineación/i });
-    const user = userEvent.setup();
-    await user.click(selectField);
-    const selectItem = await screen.findByRole('option', { name: /alineada a la izquierda/i });
+    await user.click(select);
+    const selectItem = await selectOption(/alineada a la izquierda/i);
     await user.click(selectItem);
 
     const fieldValue = screen.getByTestId('field-value');
@@ -81,17 +84,10 @@ describe('Test on <AlignmentField />', () => {
   });
 
   test('Should update the alignment value to center when selecting an option', async () => {
-    render(
-      <TestWrapper>
-        <AlignmentField />
-        <FormValueDisplay />
-      </TestWrapper>,
-    );
+    const { user, select, selectOption } = renderComponent(<FormValueDisplay />);
 
-    const selectField = screen.getByRole('combobox', { name: /alineación/i });
-    const user = userEvent.setup();
-    await user.click(selectField);
-    const selectItem = await screen.findByRole('option', { name: /alineada al centro/i });
+    await user.click(select);
+    const selectItem = await selectOption(/alineada al centro/i);
     await user.click(selectItem);
 
     const fieldValue = screen.getByTestId('field-value');
@@ -99,17 +95,10 @@ describe('Test on <AlignmentField />', () => {
   });
 
   test('Should update the alignment value to right when selecting an option', async () => {
-    render(
-      <TestWrapper>
-        <AlignmentField />
-        <FormValueDisplay />
-      </TestWrapper>,
-    );
+    const { user, select, selectOption } = renderComponent(<FormValueDisplay />);
 
-    const selectField = screen.getByRole('combobox', { name: /alineación/i });
-    const user = userEvent.setup();
-    await user.click(selectField);
-    const selectItem = await screen.findByRole('option', { name: /alineada a la derecha/i });
+    await user.click(select);
+    const selectItem = await selectOption(/alineada a la derecha/i);
     await user.click(selectItem);
 
     const fieldValue = screen.getByTestId('field-value');
@@ -117,24 +106,14 @@ describe('Test on <AlignmentField />', () => {
   });
 
   test('Should show error when alignment value is invalid', async () => {
-    render(
-      <TestWrapper>
-        <AlignmentField />
-        <SetInvalidAlignment />
-      </TestWrapper>,
-    );
+    renderComponent(<SetInvalidAlignment />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/seleccione una opción/i);
   });
 
   test('Should not show error when alignment value is valid', async () => {
-    render(
-      <TestWrapper>
-        <AlignmentField />
-        <SetValidAlignment />
-      </TestWrapper>,
-    );
+    renderComponent(<SetValidAlignment />);
 
     await waitFor(() => {
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();

@@ -2,13 +2,13 @@ import { render, screen } from '@testing-library/react';
 import { mockCategory } from './mocks/category.mock';
 import { EditCategoryView } from '@/app/admin/categorias/editar/[id]/edit-category-view';
 
-vi.mock('@/app/admin/categorias/(components)/edit-category-form', () => ({
+vi.mock('@/app/admin/categorias/editar/[id]/edit-category-form.tsx', () => ({
   EditCategoryForm: () => <span data-testid="edit-category-form" />,
 }));
 
 const mockFetchSuccess = vi.fn().mockResolvedValue({
   ok: true,
-  message: '¡ Categoría obtenida correctamente 👍 !',
+  message: 'Categoría obtenida correctamente',
   category: mockCategory,
 });
 
@@ -28,7 +28,7 @@ describe('Test on <EditCategoryView />', () => {
 
     mockFetchSuccess.mockResolvedValue({
       ok: true,
-      message: '¡ Categoría obtenida correctamente 👍 !',
+      message: 'Categoría obtenida correctamente',
       category: mockCategory,
     });
   });
@@ -47,7 +47,7 @@ describe('Test on <EditCategoryView />', () => {
   test('Should redirect when fetch fails', async () => {
     mockFetchSuccess.mockResolvedValue({
       ok: false,
-      message: '¡ La categoría no existe !',
+      message: 'La categoría no existe',
       category: null,
     });
 

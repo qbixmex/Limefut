@@ -27,12 +27,19 @@ describe('Test on <CreateTournamentForm />', () => {
     vi.mocked(useCreateTournament).mockReturnValue(defaultMockReturn as any);
   });
 
-  test('Should render correctly', () => {
-    render(<CreateTournamentForm {...defaultProps} />);
+  const renderComponent = (props = defaultProps) => {
+    render(<CreateTournamentForm {...props} />);
 
+    const user = userEvent.setup();
     const cancelButton = screen.getByRole('button', { name: /cancelar/i });
     const submitButton = screen.getByRole('button', { name: /crear/i });
     const formFields = screen.getByTestId('form-fields');
+
+    return { user, cancelButton, submitButton, formFields };
+  };
+
+  test('Should render correctly', () => {
+    const { cancelButton, submitButton, formFields } = renderComponent();
 
     expect(cancelButton).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
@@ -47,11 +54,8 @@ describe('Test on <CreateTournamentForm />', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
 
-    render(<CreateTournamentForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelBtn);
+    const { user, cancelButton } = renderComponent();
+    await user.click(cancelButton);
 
     expect(mockHandleNavigateBack).toHaveBeenCalled();
   });

@@ -23,41 +23,38 @@ describe('Test on <CreateBannerForm />', () => {
     vi.mocked(useCreateBanner).mockReturnValue(defaultMockReturn as never);
   });
 
-  test('Should render correctly', () => {
+  const renderComponent = () => {
     render(<CreateBannerForm />);
 
+    const user = userEvent.setup();
     const formFields = screen.getByTestId('form-fields');
+    const form = screen.getByRole('form', { name: /formulario/i });
+    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const submitButton = screen.getByRole('button', { name: /crear banner/i });
+
+    return { user, formFields, form, cancelButton, submitButton };
+  };
+
+  test('Should render correctly', () => {
+    const { formFields, form } = renderComponent();
 
     expect(formFields).toBeInTheDocument();
-
-    const form = screen.getByRole('form', { name: /formulario/i });
-
     expect(form).toBeInTheDocument();
   });
 
   test('Should render cancel button', () => {
-    render(<CreateBannerForm />);
-
-    const formFields = screen.getByTestId('form-fields');
+    const { formFields, cancelButton } = renderComponent();
 
     expect(formFields).toBeInTheDocument();
-
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-
-    expect(cancelBtn).toBeInTheDocument();
+    expect(cancelButton).toBeInTheDocument();
   });
 
   test('Should render submit button', () => {
-    render(<CreateBannerForm />);
-
-    const formFields = screen.getByTestId('form-fields');
+    const { formFields, submitButton } = renderComponent();
 
     expect(formFields).toBeInTheDocument();
-
-    const submitBtn = screen.getByRole('button', { name: /crear banner/i });
-
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).not.toBeDisabled();
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton).not.toBeDisabled();
   });
 
   test('Should call handleNavigateBack when cancel is clicked', async () => {
@@ -67,10 +64,7 @@ describe('Test on <CreateBannerForm />', () => {
       handleNavigateBack: mockHandleNavigateBack,
     } as never);
 
-    render(<CreateBannerForm />);
-
-    const user = userEvent.setup();
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const { user, cancelButton } = renderComponent();
     await user.click(cancelButton);
 
     expect(mockHandleNavigateBack).toHaveBeenCalled();
@@ -90,10 +84,7 @@ describe('Test on <CreateBannerForm />', () => {
       onSubmit: mockOnSubmit,
     } as never);
 
-    render(<CreateBannerForm />);
-
-    const user = userEvent.setup();
-    const submitButton = screen.getByRole('button', { name: /crear banner/i });
+    const { user, submitButton } = renderComponent();
     await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalled();

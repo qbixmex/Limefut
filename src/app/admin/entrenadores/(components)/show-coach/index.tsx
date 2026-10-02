@@ -13,18 +13,15 @@ export const ShowCoach: FC<Props> = ({ coachId }) => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_COACHES_SHOW(coachId)}
-          aria-label="Detalles del entrenador"
           className={
             buttonVariants({
               variant: 'outline-primary',
               size: 'icon',
             })
           }
+          aria-label="Ir a detalles del entrenador"
         >
-          <InfoIcon
-            role="img"
-            aria-label="Icono de detalles"
-          />
+          <InfoIcon aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

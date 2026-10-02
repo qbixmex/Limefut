@@ -30,9 +30,8 @@ describe('Test on <DeleteMessage /> component', () => {
       { wrapper: TooltipProvider },
     );
 
-    const icon = screen.getByRole('status', { name: /icono/i });
     const user = userEvent.setup();
-    const triggerButton = screen.getByRole('button');
+    const triggerButton = screen.getByRole('button', { name: /borrar mensaje/i });
     const cancelButton = () => {
       return screen.getByRole('button', { name: /cancelar/i });
     };
@@ -41,7 +40,6 @@ describe('Test on <DeleteMessage /> component', () => {
     };
 
     return {
-      icon,
       user,
       triggerButton,
       cancelButton,
@@ -50,9 +48,10 @@ describe('Test on <DeleteMessage /> component', () => {
   };
 
   test('Should render correctly', () => {
-    const { icon } = renderComponent(['admin']);
+    const { triggerButton } = renderComponent(['admin']);
 
-    expect(icon).toBeInTheDocument();
+    expect(triggerButton).toBeInTheDocument();
+    expect(triggerButton.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should call deleteMessageAction on confirm when user is admin', async () => {

@@ -232,10 +232,11 @@ describe('Tests on PlayerView', () => {
     });
     render(<TooltipProvider>{ServerComponent}</TooltipProvider>);
 
-    const icon = screen.getByRole('img', { name: /icono/i });
-    expect(icon).toBeInTheDocument();
+    const placeholder = screen.getByTestId('player-image-placeholder');
+    expect(placeholder).toBeInTheDocument();
+    expect(placeholder.querySelector('svg')).toBeInTheDocument();
     expect(
-      screen.queryByRole('img', { name: /imagen del jugador/i }),
+      screen.queryByRole('img', { name: /imagen de perfil/i }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByTestId('delete-player-image'),

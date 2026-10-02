@@ -22,7 +22,7 @@ export const EditTournament: FC<Props> = async ({ tournamentId, side = 'top' }) 
           })}
           aria-label="Editar torneo"
         >
-          <Pencil role="img" aria-label="Icono de lápiz" />
+          <Pencil aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side={side}>

@@ -48,8 +48,12 @@ export const DeleteField: FC<Props> = ({ fieldId, roles }) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
-            <Button variant="outline-danger" size="icon">
-              <Trash2 />
+            <Button
+              variant="outline-danger"
+              size="icon"
+              aria-label="Ir a eliminar cancha"
+            >
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>

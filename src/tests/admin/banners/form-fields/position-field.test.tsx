@@ -35,19 +35,29 @@ function FormValueDisplay() {
 }
 
 describe('Test on <PositionField />', () => {
-  test('Should render correctly', () => {
-    render(<PositionField />, { wrapper: TestWrapper });
+  const renderComponent = (position = 1, extra?: ReactNode) => {
+    render(
+      <TestWrapper position={position}>
+        <PositionField />
+        {extra}
+      </TestWrapper>,
+    );
 
-    expect(screen.getByLabelText(/posición/i)).toBeInTheDocument();
+    const user = userEvent.setup();
+    const input = screen.getByLabelText(/posición/i);
+    const [decrement, increment] = screen.getAllByRole('button');
+
+    return { user, input, decrement, increment };
+  };
+
+  test('Should render correctly', () => {
+    const { input } = renderComponent();
+
+    expect(input).toBeInTheDocument();
   });
 
   test('Should show error when position type is invalid', async () => {
-    render(
-      <TestWrapper>
-        <PositionField />
-        <SetNonNumberValue />
-      </TestWrapper>,
-    );
+    renderComponent(1, <SetNonNumberValue />);
 
     await waitFor(() => {
       const alert = screen.getByRole('alert');
@@ -56,43 +66,30 @@ describe('Test on <PositionField />', () => {
   });
 
   test('Should disable the decrement button when position is 1', () => {
-    render(<PositionField />, { wrapper: TestWrapper });
-
-    const [decrement] = screen.getAllByRole('button');
+    const { decrement } = renderComponent();
 
     expect(decrement).toBeDisabled();
   });
 
   test('Should increment the position when plus is clicked', async () => {
-    render(<PositionField />, { wrapper: TestWrapper });
+    const { user, increment } = renderComponent();
 
-    const user = userEvent.setup();
-    const buttons = screen.getAllByRole('button');
-    const incrementButton = buttons[1];
-    await user.click(incrementButton);
+    await user.click(increment);
 
     expect(screen.getByTestId('position-value')).toHaveTextContent('2');
   });
 
   test('Should decrement the position when minus is clicked', async () => {
-    render(
-      <TestWrapper position={3}>
-        <PositionField />
-      </TestWrapper>,
-    );
+    const { user, decrement } = renderComponent(3);
 
-    const user = userEvent.setup();
-    const [decrement] = screen.getAllByRole('button');
     await user.click(decrement);
 
     expect(screen.getByTestId('position-value')).toHaveTextContent('2');
   });
 
   test('Should allow typing a position value', async () => {
-    render(<PositionField />, { wrapper: TestWrapper });
+    const { user, input } = renderComponent();
 
-    const user = userEvent.setup();
-    const input = screen.getByLabelText(/posición/i);
     await user.clear(input);
     await user.type(input, '5');
 

@@ -4,29 +4,34 @@ import userEvent from '@testing-library/user-event';
 import { CreateCoach } from '@/app/admin/entrenadores/(components)/create-coach';
 
 describe('Test on <CreateCoach /> component', () => {
-  test('Should render correctly', () => {
+  const renderComponent = () => {
     render(<CreateCoach />, { wrapper: TooltipProvider });
 
-    const icon = screen.getByRole('img', { name: /icono de crear/i });
+    const user = userEvent.setup();
+    const link = screen.getByRole('link', { name: /crear entrenador/i });
+    const toolTip = () => screen.getByRole('tooltip');
 
-    expect(icon).toBeInTheDocument();
+    return { user, link, toolTip };
+  };
+
+  test('Should render correctly', () => {
+    const { link } = renderComponent();
+
+    expect(link).toBeInTheDocument();
+    expect(link.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should show tooltip on mouse over', async () => {
-    render(<CreateCoach />, { wrapper: TooltipProvider });
+    const { user, link, toolTip } = renderComponent();
 
-    const link = screen.getByRole('link', { name: /crear entrenador/i });
-    const user = userEvent.setup();
     await user.hover(link);
 
-    const toolTip = await screen.findByRole('tooltip');
-    expect(toolTip).toHaveTextContent(/crear/i);
+    expect(toolTip()).toHaveTextContent(/crear/i);
   });
 
   test('Should have a link with provided url', () => {
-    render(<CreateCoach />, { wrapper: TooltipProvider });
+    const { link } = renderComponent();
 
-    const link = screen.getByRole('link', { name: /crear entrenador/i });
     expect(link).toHaveAttribute('href', '/admin/entrenadores/crear');
   });
 });

@@ -20,32 +20,41 @@ describe('Test on <DeleteCoach /> component', () => {
     vi.clearAllMocks();
     mockDeleteCoachAction.mockResolvedValue({
       ok: true,
-      message: '¡ El entrenador ha sido eliminado correctamente 👍 !',
+      message: 'El entrenador ha sido eliminado correctamente',
     });
   });
 
-  test('Should render correctly', () => {
+  const renderComponent = (roles: ('user' | 'admin')[]) => {
     render(
-      <DeleteCoach coachId={coachId} roles={['admin']} />,
-      { wrapper: TooltipProvider },
-    );
-
-    const trigger = screen.getByRole('button');
-
-    expect(trigger).toBeInTheDocument();
-  });
-
-  test('Should call deleteCoachAction on confirm when user is admin', async () => {
-    render(
-      <DeleteCoach coachId={coachId} roles={['admin']} />,
+      <DeleteCoach coachId={coachId} roles={roles} />,
       { wrapper: TooltipProvider },
     );
 
     const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
+    const deleteButton = screen.getByRole('button', { name: /eliminar entrenador/i });
+    const confirmButton = () => screen.getByRole('button', { name: /^eliminar$/ });
+    const cancelButton = () => screen.getByRole('button', { name: /cancelar/i });
 
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    return {
+      user,
+      deleteButton,
+      confirmButton,
+      cancelButton,
+    };
+  };
+
+  test('Should render correctly', () => {
+    const { deleteButton } = renderComponent(['admin']);
+
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton.querySelector('svg')).toBeInTheDocument();
+  });
+
+  test('Should call deleteCoachAction on confirm when user is admin', async () => {
+    const { user, deleteButton, confirmButton } = renderComponent(['admin']);
+
+    await user.click(deleteButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(mockDeleteCoachAction).toHaveBeenCalledWith(coachId);
@@ -53,16 +62,10 @@ describe('Test on <DeleteCoach /> component', () => {
   });
 
   test('Should not call deleteCoachAction when cancel is clicked', async () => {
-    render(
-      <DeleteCoach coachId={coachId} roles={['admin']} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, cancelButton } = renderComponent(['admin']);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
-
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelButton);
+    await user.click(deleteButton);
+    await user.click(cancelButton());
 
     expect(mockDeleteCoachAction).not.toHaveBeenCalled();
   });
@@ -70,16 +73,10 @@ describe('Test on <DeleteCoach /> component', () => {
   test('Should show error toast and not call action when user is not admin', async () => {
     const { toast } = await import('sonner');
 
-    render(
-      <DeleteCoach coachId={coachId} roles={['user']} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, confirmButton } = renderComponent(['user']);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    await user.click(deleteButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(

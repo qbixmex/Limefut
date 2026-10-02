@@ -3,49 +3,41 @@ import { ShowTournamentDetails } from '@/app/admin/torneos/(components)/show-tou
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { userEvent } from '@testing-library/user-event';
 
+const tournamentId = '105756f4-2c81-4a43-88c4-f804358cfa9a';
+
 describe('Test on <ShowTournamentDetails /> component', () => {
-  test('Should render correctly', () => {
+  const renderComponent = () => {
     render(
-      <ShowTournamentDetails
-        tournamentId="105756f4-2c81-4a43-88c4-f804358cfa9a"
-      />,
+      <ShowTournamentDetails tournamentId={tournamentId} />,
       { wrapper: TooltipProvider },
     );
 
-    const icon = screen.getByRole('img', { name: /detalles/i });
+    const user = userEvent.setup();
+    const link = screen.getByRole('link', { name: /detalles/i });
 
-    expect(icon).toBeInTheDocument();
+    return { user, link };
+  };
+
+  test('Should render correctly', () => {
+    const { link } = renderComponent();
+
+    expect(link).toBeInTheDocument();
+    expect(link.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should show tooltip on mouse over', async () => {
-    render(
-      <ShowTournamentDetails
-        tournamentId="105756f4-2c81-4a43-88c4-f804358cfa9a"
-      />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, link } = renderComponent();
 
-    const link = screen.getByRole('link', { name: /detalles/i });
-    const user = userEvent.setup();
     await user.hover(link);
 
     await waitFor(() => {
-      const toolTip = screen.getByRole('tooltip');
-      expect(toolTip).toHaveTextContent(/detalles/i);
+      expect(screen.getByRole('tooltip')).toHaveTextContent(/detalles/i);
     });
   });
 
   test('Should have a link with provided url', () => {
-    const tournamentId = '105756f4-2c81-4a43-88c4-f804358cfa9a';
+    const { link } = renderComponent();
 
-    render(
-      <ShowTournamentDetails
-        tournamentId={tournamentId}
-      />,
-      { wrapper: TooltipProvider },
-    );
-
-    const link = screen.getByRole('link', { name: /detalles/i });
     expect(link).toHaveAttribute('href', `/admin/torneos/${tournamentId}`);
   });
 });

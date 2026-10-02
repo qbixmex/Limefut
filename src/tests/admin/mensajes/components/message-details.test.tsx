@@ -13,20 +13,23 @@ describe('Test on <MessageDetails /> component', () => {
     );
 
     const link = screen.getByRole('link');
+    const triggerButton = screen.getByRole('button', { name: /detalles del mensaje/i });
     const user = userEvent.setup();
     const toolTip = () => screen.findByRole('tooltip');
 
     return {
       link,
+      triggerButton,
       user,
       toolTip,
     };
   };
 
   test('Should render correctly', () => {
-    const { link } = renderComponent();
+    const { triggerButton } = renderComponent();
 
-    expect(link).toBeInTheDocument();
+    expect(triggerButton).toBeInTheDocument();
+    expect(triggerButton.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should show tooltip on mouse over', async () => {

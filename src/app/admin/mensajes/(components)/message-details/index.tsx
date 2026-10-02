@@ -12,8 +12,12 @@ export const MessageDetails: FC<Props> = ({ messageId }) => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Link href={ROUTES.ADMIN_MESSAGES_SHOW(messageId)}>
-          <Button variant="outline-info" size="icon">
-            <Info />
+          <Button
+            variant="outline-info"
+            size="icon"
+            aria-label="Mostrar detalles del mensaje"
+          >
+            <Info aria-hidden="true" />
           </Button>
         </Link>
       </TooltipTrigger>

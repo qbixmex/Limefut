@@ -22,31 +22,36 @@ describe('Test on <DeleteCoachImage /> component', () => {
     vi.clearAllMocks();
     mockDeleteCoachImageAction.mockResolvedValue({
       ok: true,
-      message: '¡ La imagen ha sido eliminada correctamente 👍 !',
+      message: 'La imagen ha sido eliminada correctamente',
     });
   });
 
-  test('Should render correctly', () => {
-    render(
-      <DeleteCoachImage coachId={coachId} />,
-      { wrapper: TooltipProvider },
-    );
-
-    const deleteButton = screen.getByRole('button');
-    expect(deleteButton).toBeInTheDocument();
-  });
-
-  test('Should call deleteCoachImageAction on confirm', async () => {
+  const renderComponent = () => {
     render(
       <DeleteCoachImage coachId={coachId} />,
       { wrapper: TooltipProvider },
     );
 
     const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
+    const deleteButton = screen.getByRole('button', { name: /eliminar imagen/i });
+    const cancelButton = () => screen.getByRole('button', { name: /cancelar/i });
+    const confirmButton = () => screen.getByRole('button', { name: /^eliminar$/ });
 
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    return { user, deleteButton, cancelButton, confirmButton };
+  };
+
+  test('Should render correctly', () => {
+    const { deleteButton } = renderComponent();
+
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton.querySelector('svg')).toBeInTheDocument();
+  });
+
+  test('Should call deleteCoachImageAction on confirm', async () => {
+    const { user, deleteButton, confirmButton } = renderComponent();
+
+    await user.click(deleteButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(mockDeleteCoachImageAction).toHaveBeenCalledWith(coachId);
@@ -60,16 +65,10 @@ describe('Test on <DeleteCoachImage /> component', () => {
       message: 'Error al eliminar la imagen',
     });
 
-    render(
-      <DeleteCoachImage coachId={coachId} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, confirmButton } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    await user.click(deleteButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Error al eliminar la imagen');
@@ -77,16 +76,10 @@ describe('Test on <DeleteCoachImage /> component', () => {
   });
 
   test('Should not call deleteCoachImageAction when cancel is clicked', async () => {
-    render(
-      <DeleteCoachImage coachId={coachId} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, cancelButton } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button'));
-
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelButton);
+    await user.click(deleteButton);
+    await user.click(cancelButton());
 
     expect(mockDeleteCoachImageAction).not.toHaveBeenCalled();
   });
