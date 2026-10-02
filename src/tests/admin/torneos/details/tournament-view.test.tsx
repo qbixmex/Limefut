@@ -72,9 +72,10 @@ describe('Test on <TournamentView />', () => {
     });
     render(ServerComponent);
 
-    const icon = screen.getByRole('img', { name: /trofeo/i });
+    const placeholder = screen.getByTestId('tournament-image-placeholder');
 
-    expect(icon).toBeInTheDocument();
+    expect(placeholder).toBeInTheDocument();
+    expect(placeholder.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should contains a delete tournament image', async () => {

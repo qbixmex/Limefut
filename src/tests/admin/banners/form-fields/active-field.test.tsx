@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { useForm, FormProvider, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ActiveField } from '@/app/admin/banners/(components)/form-fields/active-field';
@@ -39,52 +39,43 @@ function FormErrorIndicator() {
 }
 
 describe('Test on <ActiveField />', () => {
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode) => {
     render(
       <TestWrapper>
         <ActiveField />
+        {extra}
       </TestWrapper>,
     );
 
+    const user = userEvent.setup();
     const switchField = screen.getByRole('switch');
+
+    return { user, switchField };
+  };
+
+  test('Should render correctly', () => {
+    const { switchField } = renderComponent();
+
     expect(switchField).toBeInTheDocument();
   });
 
   test('Should be unchecked by default', () => {
-    render(
-      <TestWrapper>
-        <ActiveField />
-      </TestWrapper>,
-    );
+    const { switchField } = renderComponent();
 
-    const switchField = screen.getByRole('switch', { name: /desactivado/i });
     expect(switchField).toHaveAttribute('aria-checked', 'false');
   });
 
   test('Should toggle on when clicked', async () => {
-    render(
-      <TestWrapper>
-        <ActiveField />
-      </TestWrapper>,
-    );
+    const { user, switchField } = renderComponent();
 
-    const switchField = screen.getByRole('switch', { name: /desactivado/i });
-
-    const user = userEvent.setup();
     await user.click(switchField);
 
     expect(switchField).toHaveAttribute('aria-checked', 'true');
   });
 
   test('Should toggle off when clicked twice', async () => {
-    render(
-      <TestWrapper>
-        <ActiveField />
-      </TestWrapper>,
-    );
+    const { user, switchField } = renderComponent();
 
-    const switchField = screen.getByRole('switch');
-    const user = userEvent.setup();
     await user.click(switchField);
     await user.click(switchField);
 
@@ -92,12 +83,11 @@ describe('Test on <ActiveField />', () => {
   });
 
   test('Should show error when value is not a boolean', async () => {
-    render(
-      <TestWrapper>
-        <ActiveField />
+    renderComponent(
+      <>
         <FormErrorIndicator />
         <SetNonBooleanValue />
-      </TestWrapper>,
+      </>,
     );
 
     await screen.findByText(/valor boleano/i);

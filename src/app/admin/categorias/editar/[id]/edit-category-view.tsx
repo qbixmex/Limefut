@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { fetchCategoryAction } from '../../(actions)/fetch-category.action';
-import { EditCategoryForm } from '../../(components)/edit-category-form';
+import { EditCategoryForm } from './edit-category-form';
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
 

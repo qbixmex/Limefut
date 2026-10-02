@@ -21,52 +21,42 @@ function TestWrapper({ children }: { children: ReactNode }) {
 }
 
 describe('Test on <ActiveSwitch />', () => {
-  test('Should render correctly', () => {
+  const renderComponent = () => {
     render(
       <TestWrapper>
         <ActiveSwitch />
       </TestWrapper>,
     );
 
+    const user = userEvent.setup();
     const switchField = screen.getByRole('switch', { name: /activo/i });
+
+    return { user, switchField };
+  };
+
+  test('Should render correctly', () => {
+    const { switchField } = renderComponent();
+
     expect(switchField).toBeInTheDocument();
   });
 
   test('Should be unchecked by default', () => {
-    render(
-      <TestWrapper>
-        <ActiveSwitch />
-      </TestWrapper>,
-    );
+    const { switchField } = renderComponent();
 
-    const switchField = screen.getByRole('switch', { name: /activo/i });
     expect(switchField).toHaveAttribute('aria-checked', 'false');
   });
 
   test('Should toggle on when clicked', async () => {
-    render(
-      <TestWrapper>
-        <ActiveSwitch />
-      </TestWrapper>,
-    );
+    const { user, switchField } = renderComponent();
 
-    const switchField = screen.getByRole('switch', { name: /activo/i });
-
-    const user = userEvent.setup();
     await user.click(switchField);
 
     expect(switchField).toHaveAttribute('aria-checked', 'true');
   });
 
   test('Should toggle off when clicked twice', async () => {
-    render(
-      <TestWrapper>
-        <ActiveSwitch />
-      </TestWrapper>,
-    );
+    const { user, switchField } = renderComponent();
 
-    const user = userEvent.setup();
-    const switchField = screen.getByRole('switch', { name: /activo/i });
     await user.click(switchField);
     await user.click(switchField);
 

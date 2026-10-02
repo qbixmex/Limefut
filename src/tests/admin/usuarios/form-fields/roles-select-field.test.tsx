@@ -43,85 +43,68 @@ function TriggerValidation() {
 }
 
 describe('Test on <RolesSelectField />', () => {
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode, defaultRoles: string[] = []) => {
     render(
-      <TestWrapper>
+      <TestWrapper defaultRoles={defaultRoles}>
         <RolesSelectField />
-      </TestWrapper>,
-    );
-
-    expect(screen.getByRole('combobox')).toBeInTheDocument();
-    expect(screen.getByText(/seleccione un rol/i)).toBeInTheDocument();
-  });
-
-  test('Should keep the selected role when choosing one option', async () => {
-    render(
-      <TestWrapper>
-        <RolesSelectField />
-        <FormValueDisplay />
+        {extra}
       </TestWrapper>,
     );
 
     const user = userEvent.setup();
-    await user.click(screen.getByRole('combobox'));
-    await user.click(await screen.findByRole('option', { name: 'Usuario' }));
+    const combobox = screen.getByRole('combobox');
+    const getOption = (name: string) => screen.findByRole('option', { name });
+
+    return { user, combobox, getOption };
+  };
+
+  test('Should render correctly', () => {
+    const { combobox } = renderComponent();
+
+    expect(combobox).toBeInTheDocument();
+    expect(screen.getByText(/seleccione un rol/i)).toBeInTheDocument();
+  });
+
+  test('Should keep the selected role when choosing one option', async () => {
+    const { user, combobox, getOption } = renderComponent(<FormValueDisplay />);
+
+    await user.click(combobox);
+    await user.click(await getOption('Usuario'));
 
     expect(screen.getByTestId('field-value')).toHaveTextContent('user');
   });
 
   test('Should allow selecting both roles', async () => {
-    render(
-      <TestWrapper>
-        <RolesSelectField />
-        <FormValueDisplay />
-      </TestWrapper>,
-    );
+    const { user, combobox, getOption } = renderComponent(<FormValueDisplay />);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('combobox'));
-    await user.click(await screen.findByRole('option', { name: 'Usuario' }));
-    await user.click(await screen.findByRole('option', { name: 'Administrador' }));
+    await user.click(combobox);
+    await user.click(await getOption('Usuario'));
+    await user.click(await getOption('Administrador'));
 
     expect(screen.getByTestId('field-value')).toHaveTextContent('user,admin');
   });
 
   test('Should remove a role when toggling it off', async () => {
-    render(
-      <TestWrapper defaultRoles={['user']}>
-        <RolesSelectField />
-        <FormValueDisplay />
-      </TestWrapper>,
-    );
+    const { user, combobox, getOption } = renderComponent(<FormValueDisplay />, ['user']);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('combobox'));
-    await user.click(await screen.findByRole('option', { name: 'Usuario' }));
+    await user.click(combobox);
+    await user.click(await getOption('Usuario'));
 
     expect(screen.getByTestId('field-value')).toHaveTextContent('');
   });
 
   test('Should show error when no role is selected', async () => {
-    render(
-      <TestWrapper>
-        <RolesSelectField />
-        <TriggerValidation />
-      </TestWrapper>,
-    );
+    renderComponent(<TriggerValidation />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/al menos un rol/i);
   });
 
   test('Should not show error when at least one role is selected', async () => {
-    render(
-      <TestWrapper defaultRoles={['user']}>
-        <RolesSelectField />
-        <TriggerValidation />
-      </TestWrapper>,
-    );
+    const { combobox } = renderComponent(<TriggerValidation />, ['user']);
 
     await waitFor(() => {
-      expect(screen.getByRole('combobox')).toHaveTextContent('Usuario');
+      expect(combobox).toHaveTextContent('Usuario');
     });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });

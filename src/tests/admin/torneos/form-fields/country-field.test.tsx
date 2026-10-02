@@ -30,73 +30,59 @@ function SetNonStringValue() {
 }
 
 describe('Test on <CountryField />', () => {
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode) => {
     render(
       <TestWrapper>
         <CountryField />
+        {extra}
       </TestWrapper>,
     );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    const user = userEvent.setup();
+    const textbox = screen.getByRole('textbox');
+
+    return { user, textbox };
+  };
+
+  test('Should render correctly', () => {
+    const { textbox } = renderComponent();
+
+    expect(textbox).toBeInTheDocument();
   });
 
   test('Should not show error when country is empty string', async () => {
-    render(
-      <TestWrapper>
-        <CountryField />
-      </TestWrapper>,
-    );
+    const { textbox } = renderComponent();
 
-    expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'false');
+    expect(textbox).toHaveAttribute('aria-invalid', 'false');
   });
 
   test('Should show error when value is not a string', async () => {
-    render(
-      <TestWrapper>
-        <CountryField />
-        <SetNonStringValue />
-      </TestWrapper>,
-    );
+    renderComponent(<SetNonStringValue />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/invalid input/i);
   });
 
   test('Should show error when country is less than 3 characters', async () => {
-    render(
-      <TestWrapper>
-        <CountryField />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'ab');
+    await user.type(textbox, 'ab');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/mayor a 3 caracteres/i);
   });
 
   test('Should not show error when country has 3 or more valid characters', async () => {
-    render(
-      <TestWrapper>
-        <CountryField />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'México');
+    await user.type(textbox, 'México');
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   test('Should show error when country exceeds 100 characters', async () => {
-    render(
-      <TestWrapper>
-        <CountryField />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'x'.repeat(101));
+    await user.type(textbox, 'x'.repeat(101));
 
     const alert = await screen.findByRole('alert');
     expect(alert).toBeInTheDocument();

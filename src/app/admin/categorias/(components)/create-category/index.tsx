@@ -14,12 +14,9 @@ export const CreateCategory = () => {
             variant: 'outline-primary',
             size: 'icon',
           })}
+          aria-label="Ir a crear categoría"
         >
-          <Plus
-            strokeWidth={3}
-            role="img"
-            aria-label="Crear categoría"
-          />
+          <Plus strokeWidth={3} aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">crear</TooltipContent>

@@ -57,48 +57,48 @@ function SetLongDescription() {
 }
 
 describe('Test on <DescriptionField />', () => {
+  const renderComponent = (extra?: ReactNode) => {
+    render(
+      <TestWrapper>
+        <DescriptionField />
+        {extra}
+      </TestWrapper>,
+    );
+
+    const user = userEvent.setup();
+    const textbox = screen.getByRole('textbox');
+
+    return { user, textbox };
+  };
+
   test('Should render correctly', () => {
-    render(<DescriptionField />, { wrapper: TestWrapper });
-    const textAreaField = screen.getByRole('textbox');
-    expect(textAreaField).toBeInTheDocument();
+    const { textbox } = renderComponent();
+
+    expect(textbox).toBeInTheDocument();
   });
 
   test('Should not show error when description on mounted', () => {
-    render(<DescriptionField />, { wrapper: TestWrapper });
+    renderComponent();
+
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   test('Should show error when value is not a string', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionField />
-        <SetNonStringValue />
-      </TestWrapper>,
-    );
+    renderComponent(<SetNonStringValue />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/cadena de texto/i);
   });
 
   test('Should show error when description is less than 3 characters', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionField />
-        <SetShortDescription />
-      </TestWrapper>,
-    );
+    renderComponent(<SetShortDescription />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/mayor a 3 caracteres/i);
   });
 
   test('Should not show error when description is valid', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionField />
-        <SetValidDescription />
-      </TestWrapper>,
-    );
+    renderComponent(<SetValidDescription />);
 
     await waitFor(() => {
       const alert = screen.queryByRole('alert');
@@ -107,23 +107,17 @@ describe('Test on <DescriptionField />', () => {
   });
 
   test('Should show error when description exceeds 300 characters', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionField />
-        <SetLongDescription />
-      </TestWrapper>,
-    );
+    renderComponent(<SetLongDescription />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/menor a 300 caracteres/i);
   });
 
   test('Should show the characters counter when focused', async () => {
-    render(<DescriptionField />, { wrapper: TestWrapper });
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('textbox'));
-    await user.type(screen.getByRole('textbox'), 'Descripción');
+    await user.click(textbox);
+    await user.type(textbox, 'Descripción');
 
     expect(screen.getByText(/restan/i)).toBeInTheDocument();
   });

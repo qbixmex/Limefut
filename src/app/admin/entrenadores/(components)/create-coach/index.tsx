@@ -10,7 +10,7 @@ export const CreateCoach = () => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_COACHES_CREATE}
-          aria-label="Crear entrenador"
+          aria-label="Ir a crear entrenador"
           className={
             buttonVariants({
               variant: 'outline-primary',
@@ -18,11 +18,7 @@ export const CreateCoach = () => {
             })
           }
         >
-          <Plus
-            role="img"
-            aria-label="Icono de crear"
-            strokeWidth={3}
-          />
+          <Plus aria-hidden="true" strokeWidth={3} />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">

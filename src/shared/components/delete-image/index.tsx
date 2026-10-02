@@ -29,8 +29,13 @@ export const DeleteImage: FC<Props> = ({ onDeleteImage, className = '' }) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <AlertDialogTrigger asChild>
-              <Button type="button" variant="destructive" size="icon">
-                <Trash2 />
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon"
+                aria-label="Eliminar imagen"
+              >
+                <Trash2 aria-hidden="true" />
               </Button>
             </AlertDialogTrigger>
           </TooltipTrigger>

@@ -28,16 +28,21 @@ describe('Test on <EditCoachForm />', () => {
     vi.mocked(useEditCoach).mockReturnValue(defaultMockReturn as never);
   });
 
-  test('Should render correctly', () => {
-    render(<EditCoachForm {...defaultProps} />);
+  const renderComponent = (props = defaultProps) => {
+    render(<EditCoachForm {...props} />);
 
+    const user = userEvent.setup();
     const formFields = screen.getByTestId('form-fields');
-
-    expect(formFields).toBeInTheDocument();
-
     const cancelButton = screen.getByRole('button', { name: /cancelar/i });
     const submitButton = screen.getByRole('button', { name: /actualizar/i });
 
+    return { user, formFields, cancelButton, submitButton };
+  };
+
+  test('Should render correctly', () => {
+    const { formFields, cancelButton, submitButton } = renderComponent();
+
+    expect(formFields).toBeInTheDocument();
     expect(cancelButton).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).not.toBeDisabled();
@@ -50,11 +55,8 @@ describe('Test on <EditCoachForm />', () => {
       route: { back: mockBack },
     } as never);
 
-    render(<EditCoachForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const backButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(backButton);
+    const { user, cancelButton } = renderComponent();
+    await user.click(cancelButton);
 
     expect(mockBack).toHaveBeenCalled();
   });
@@ -73,10 +75,7 @@ describe('Test on <EditCoachForm />', () => {
       onSubmit: mockOnSubmit,
     } as never);
 
-    render(<EditCoachForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const submitButton = screen.getByRole('button', { name: /actualizar/i });
+    const { user, submitButton } = renderComponent();
     await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalled();

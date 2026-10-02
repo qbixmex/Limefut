@@ -46,8 +46,12 @@ export const DeleteMessage: FC<Props> = ({ id, roles }) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
-            <Button variant="outline-danger" size="icon">
-              <Trash2 role="status" aria-label="Icono para borrar mensaje" />
+            <Button
+              variant="outline-danger"
+              size="icon"
+              aria-label="Borrar mensaje"
+            >
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>

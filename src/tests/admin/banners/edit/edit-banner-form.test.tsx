@@ -28,27 +28,35 @@ describe('Test on <EditBannerForm />', () => {
     vi.mocked(useEditBanner).mockReturnValue(defaultMockReturn as never);
   });
 
-  test('Should render form correctly', () => {
-    render(<EditBannerForm {...defaultProps} />);
+  const renderComponent = (props = defaultProps) => {
+    render(<EditBannerForm {...props} />);
+
+    const user = userEvent.setup();
     const form = screen.getByRole('form', { name: /formulario para editar/i });
+    const formFields = screen.getByTestId('form-fields');
+    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const submitButton = screen.getByRole('button', { name: /guardar banner/i });
+
+    return { user, form, formFields, cancelButton, submitButton };
+  };
+
+  test('Should render form correctly', () => {
+    const { form } = renderComponent();
     expect(form).toBeInTheDocument();
   });
 
   test('Should render form fields correctly', () => {
-    render(<EditBannerForm {...defaultProps} />);
-    const formFields = screen.getByTestId('form-fields');
+    const { formFields } = renderComponent();
     expect(formFields).toBeInTheDocument();
   });
 
   test('Should render cancel button correctly', () => {
-    render(<EditBannerForm {...defaultProps} />);
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const { cancelButton } = renderComponent();
     expect(cancelButton).toBeInTheDocument();
   });
 
   test('Should render submit button correctly', () => {
-    render(<EditBannerForm {...defaultProps} />);
-    const submitButton = screen.getByRole('button', { name: /guardar banner/i });
+    const { submitButton } = renderComponent();
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).not.toBeDisabled();
   });
@@ -60,10 +68,7 @@ describe('Test on <EditBannerForm />', () => {
       handleNavigateBack: mockHandleNavigateBack,
     } as never);
 
-    render(<EditBannerForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const { user, cancelButton } = renderComponent();
     await user.click(cancelButton);
 
     expect(mockHandleNavigateBack).toHaveBeenCalled();
@@ -83,10 +88,7 @@ describe('Test on <EditBannerForm />', () => {
       onSubmit: mockOnSubmit,
     } as never);
 
-    render(<EditBannerForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const submitButton = screen.getByRole('button', { name: /guardar banner/i });
+    const { user, submitButton } = renderComponent();
     await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalled();

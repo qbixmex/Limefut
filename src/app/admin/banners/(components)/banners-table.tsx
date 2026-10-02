@@ -61,7 +61,7 @@ export const BannersTable: FC<Props> = ({ banners, pagination, roles }) => {
                         {
                           !banner.imageUrl ? (
                             <figure className="w-50 h-25 border border-gray-400 dark:border-0 dark:bg-gray-800 size-[60px] rounded-lg flex items-center justify-center">
-                              <BannerFlag size={50} className="text-gray-400" role="img" aria-label="Icono de banner" />
+                              <BannerFlag size={50} className="text-gray-400" aria-hidden="true" />
                             </figure>
                           ) : (
                             <Image

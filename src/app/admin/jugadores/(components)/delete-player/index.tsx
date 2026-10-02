@@ -40,8 +40,12 @@ export const DeletePlayer: FC<Props> = ({ playerId }) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
-            <Button variant="outline-danger" size="icon">
-              <Trash2 role="img" aria-label="Icono de basurero" />
+            <Button
+              variant="outline-danger"
+              size="icon"
+              aria-label="Eliminar jugador"
+            >
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>

@@ -1,40 +1,44 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { CreateCategory } from '@/app/admin/categorias/(components)/create-category';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import userEvent from '@testing-library/user-event';
 
 describe('Test on <CreateCategory /> component', () => {
-  test('Should render correctly', () => {
+  const renderComponent = () => {
     render(
       <CreateCategory />,
       { wrapper: TooltipProvider },
     );
-
-    const icon = screen.getByRole('img', { name: /crear categoría/i });
-
-    expect(icon).toBeInTheDocument();
-  });
-
-  test('Should show tooltip on mouse over', async () => {
-    render(
-      <CreateCategory />,
-      { wrapper: TooltipProvider },
-    );
-    const link = screen.getByRole('link', { name: /crear categoría/i });
     const user = userEvent.setup();
-    await user.hover(link);
+    const link = screen.getByRole('link', { name: /ir a crear categoría/i });
+    const toolTip = () => screen.getByRole('tooltip');
 
-    const toolTip = await screen.findByRole('tooltip');
-    expect(toolTip).toHaveTextContent(/crear/i);
+    return {
+      user,
+      link,
+      toolTip,
+    };
+  };
+
+  test('Should render correctly', () => {
+    const { link } = renderComponent();
+
+    expect(link).toBeInTheDocument();
+    expect(link.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should have a link with provided url', () => {
-    render(
-      <CreateCategory />,
-      { wrapper: TooltipProvider },
-    );
+    const { link } = renderComponent();
 
-    const link = screen.getByRole('link', { name: /crear categoría/i });
     expect(link).toHaveAttribute('href', '/admin/categorias/crear');
+  });
+
+  test('Should show tooltip on mouse over', async () => {
+    const { user, link, toolTip } = renderComponent();
+    await user.hover(link);
+
+    await waitFor(() => {
+      expect(toolTip()).toHaveTextContent(/crear/i);
+    });
   });
 });
