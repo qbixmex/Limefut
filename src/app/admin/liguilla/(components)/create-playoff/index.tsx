@@ -18,12 +18,13 @@ export const CreatePlayoff = () => {
               size: 'icon',
             })
           }
+          aria-label="Crear encuentro"
         >
-          <Plus strokeWidth={3} />
+          <Plus strokeWidth={3} aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">
-        <span>crear</span>
+        crear
       </TooltipContent>
     </Tooltip>
   );

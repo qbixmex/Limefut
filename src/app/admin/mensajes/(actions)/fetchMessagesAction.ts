@@ -69,7 +69,7 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
 
     return {
       ok: true,
-      message: '! Los mensajes fueron obtenidos correctamente 👍',
+      message: 'Los mensajes fueron obtenidos correctamente',
       messages,
       pagination: {
         currentPage: page,
@@ -79,6 +79,10 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
   } catch (error) {
     if (error instanceof Error) {
       console.log('Error al intentar obtener los mensajes');
+      console.log('Name:', error.name);
+      console.log('Message:', error.message);
+      console.log('Cause:', error.cause);
+
       return {
         ok: false,
         message: error.message,
@@ -86,7 +90,9 @@ export const fetchMessagesAction = async (options?: Options): ResponseFetchActio
         pagination: null,
       };
     }
+
     console.log(error);
+
     return {
       ok: false,
       message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',

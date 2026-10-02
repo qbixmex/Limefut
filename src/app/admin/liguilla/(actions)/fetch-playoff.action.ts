@@ -54,7 +54,7 @@ export const fetchPlayoffAction = async (
     if (!playoff) {
       return {
         ok: false,
-        message: '¡ No se pudo obtener detalles de la liguilla !',
+        message: 'No se pudo obtener detalles de la liguilla',
         playoff: null,
       };
     }
@@ -72,7 +72,7 @@ export const fetchPlayoffAction = async (
 
     return {
       ok: true,
-      message: '! La liguilla fue obtenida correctamente 👍 !',
+      message: 'La liguilla fue obtenida correctamente',
       playoff: {
         id: playoff.id,
         startingRound: playoff.startingRound,
@@ -83,7 +83,7 @@ export const fetchPlayoffAction = async (
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('¡ Error al intentar obtener la liguilla');
+      console.log('Error al intentar obtener la liguilla');
       return {
         ok: false,
         message: error.message,
@@ -93,7 +93,7 @@ export const fetchPlayoffAction = async (
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       playoff: null,
     };
   }

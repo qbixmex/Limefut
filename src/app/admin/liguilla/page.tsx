@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
-import { PlayoffsContent } from './playoffs-content';
+import { PlayoffsView } from './playoffs-view';
 import { CreatePlayoff } from './(components)/create-playoff';
 import { ClearFilters } from './(components)/clear-filters';
 import { PlayoffsTableSkeleton } from './(components)/playoffs-table-skeleton';
@@ -32,7 +32,7 @@ export const PlayoffsPage: FC<Props> = ({ searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense fallback={<PlayoffsTableSkeleton />}>
-                <PlayoffsContent searchParams={searchParams} />
+                <PlayoffsView searchParams={searchParams} />
               </Suspense>
             </CardContent>
           </Card>

@@ -3,18 +3,18 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type z from 'zod';
 import { CreatePlayoffsSchema } from '@/shared/schemas';
 import { createPlayoffAction } from '@/app/admin/liguilla/(actions)/create-playoff.action';
 import { ROUTES } from '@/shared/constants/routes';
 import { toast } from 'sonner';
+import type z from 'zod';
 
-const DEFAULT_FORM_VALUES = {
+const createFormDefaultValues = () => ({
   tournament: '',
   category: '',
   teamsIds: [],
   startingRound: '',
-};
+});
 
 export const useCreatePlayoffs = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ export const useCreatePlayoffs = () => {
   const form = useForm<z.infer<typeof CreatePlayoffsSchema>>({
     resolver: zodResolver(CreatePlayoffsSchema),
     defaultValues: {
-      ...DEFAULT_FORM_VALUES,
+      ...createFormDefaultValues(),
       tournament: searchParams.get('tournament') ?? '',
       category: searchParams.get('category') ?? '',
     },
@@ -38,9 +38,7 @@ export const useCreatePlayoffs = () => {
     formData.append('teamsIds', JSON.stringify(data.teamsIds));
     formData.append('startingRound', data.startingRound);
 
-    const { ok, message } = await createPlayoffAction({
-      formData,
-    });
+    const { ok, message } = await createPlayoffAction({ formData });
 
     if (!ok) {
       toast.error(message);
@@ -49,12 +47,12 @@ export const useCreatePlayoffs = () => {
 
     toast.success(message);
 
-    form.reset(DEFAULT_FORM_VALUES);
+    form.reset(createFormDefaultValues());
     router.replace(ROUTES.ADMIN_PLAYOFFS);
   };
 
   const handleNavigateBack = () => {
-    form.reset(DEFAULT_FORM_VALUES);
+    form.reset(createFormDefaultValues());
     router.replace(ROUTES.ADMIN_PLAYOFFS);
   };
 

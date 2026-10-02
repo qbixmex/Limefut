@@ -17,7 +17,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const PlayoffsMatchesContent: FC<Props> = async ({ playoffIdPromise, searchParams }) => {
+export const PlayoffsMatchesView: FC<Props> = async ({ playoffIdPromise, searchParams }) => {
   const playoffId = await playoffIdPromise;
   const {
     query,

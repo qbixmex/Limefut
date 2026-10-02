@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Search } from '@/shared/components/search';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
-import { PlayoffsMatchesContent } from './playoff-matches-content';
+import { PlayoffsMatchesView } from './playoff-matches-view';
 import { ClearFilters } from './(components)/clear-filters';
 import { CreateMatch } from './(components)/create-match';
 
@@ -41,7 +41,7 @@ export const PlayoffsMatchesPage: FC<Props> = ({ params, searchParams }) => {
             </CardHeader>
             <CardContent>
               <Suspense>
-                <PlayoffsMatchesContent
+                <PlayoffsMatchesView
                   playoffIdPromise={playoffIdPromise}
                   searchParams={searchParams}
                 />

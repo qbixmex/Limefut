@@ -40,13 +40,17 @@ export const DeletePlayoff: FC<Props> = ({
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
-            <Button variant="outline-danger" size="icon">
-              <Trash2 />
+            <Button
+              variant="outline-danger"
+              size="icon"
+              aria-label="Borrar encuentro"
+            >
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="top">
-          <p>eliminar</p>
+          eliminar
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
