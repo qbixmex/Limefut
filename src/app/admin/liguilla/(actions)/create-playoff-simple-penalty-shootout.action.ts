@@ -53,7 +53,7 @@ export const createPlayoffSimplePenaltyShootoutAction = async (
   if (data.localGoals === data.visitorGoals) {
     return {
       ok: false,
-      message: '¡ La tanda de penales no puede ser un empate !',
+      message: 'La tanda de penales no puede ser un empate',
       penaltyShootout: null,
     };
   }
@@ -68,7 +68,7 @@ export const createPlayoffSimplePenaltyShootoutAction = async (
       if (!playoffMatchExists) {
         return {
           ok: false,
-          message: '¡ El encuentro con el id subministrado no existe !',
+          message: 'El encuentro con el id subministrado no existe',
           penaltyShootout: null,
         };
       }
@@ -95,7 +95,7 @@ export const createPlayoffSimplePenaltyShootoutAction = async (
 
       return {
         ok: true,
-        message: '¡ Tanda de penales creada correctamente 👍 !',
+        message: 'Tanda de penales creada correctamente',
         penaltyShootout,
       };
     });
@@ -116,7 +116,7 @@ export const createPlayoffSimplePenaltyShootoutAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: '¡ Error al crear la tanda de penales, revise los logs del servidor !',
+        message: 'Error al crear la tanda de penales, revise los logs del servidor',
         penaltyShootout: null,
       };
     }
@@ -124,7 +124,7 @@ export const createPlayoffSimplePenaltyShootoutAction = async (
     console.log('Error Message:', (error as Error).message);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       penaltyShootout: null,
     };
   }

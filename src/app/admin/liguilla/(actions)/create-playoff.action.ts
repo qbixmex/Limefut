@@ -64,7 +64,7 @@ export const createPlayoffAction = async ({
       if (!tournament) {
         return {
           ok: false,
-          message: `¡ El torneo: "${tournamentPermalink}" no existe !`,
+          message: 'El torneo [' + tournamentPermalink + '] no existe',
           playoff: null,
         };
       }
@@ -77,7 +77,7 @@ export const createPlayoffAction = async ({
       if (!category) {
         return {
           ok: false,
-          message: `¡ La categoría con en enlace permanente "${categoryPermalink}" no existe !`,
+          message: 'La categoría con el enlace permanente [' + categoryPermalink + '] no existe',
           playoff: null,
         };
       }
@@ -99,7 +99,7 @@ export const createPlayoffAction = async ({
 
       return {
         ok: true,
-        message: '¡ Liguilla creada correctamente 👍 !',
+        message: 'Liguilla creada correctamente',
         playoff,
       };
     });
@@ -118,7 +118,7 @@ export const createPlayoffAction = async ({
 
         return {
           ok: false,
-          message: '¡ Hay campos duplicados, revise los logs del servidor !',
+          message: 'Hay campos duplicados, revise los logs del servidor',
           playoff: null,
         };
       }
@@ -130,7 +130,7 @@ export const createPlayoffAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al crear la liguilla, revise los logs del servidor !',
+        message: 'Error al crear la liguilla, revise los logs del servidor',
         playoff: null,
       };
     }
@@ -142,7 +142,7 @@ export const createPlayoffAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al crear la cancha, revise los logs del servidor !',
+        message: 'Error al crear la cancha, revise los logs del servidor',
         playoff: null,
       };
     }
@@ -153,7 +153,7 @@ export const createPlayoffAction = async ({
 
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       playoff: null,
     };
   }
