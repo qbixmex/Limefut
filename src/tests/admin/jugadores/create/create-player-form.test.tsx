@@ -27,17 +27,24 @@ describe('Test on <CreatePlayerForm />', () => {
     vi.mocked(useCreatePlayer).mockReturnValue(defaultMockReturn as never);
   });
 
+  const renderComponent = (props = defaultProps) => {
+    render(<CreatePlayerForm {...props} />);
+
+    const user = userEvent.setup();
+    const formFields = screen.getByTestId('form-fields');
+    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const submitButton = screen.getByRole('button', { name: /crear/i });
+
+    return { user, formFields, cancelButton, submitButton };
+  };
+
   test('Should render correctly', () => {
-    render(<CreatePlayerForm {...defaultProps} />);
+    const { formFields, cancelButton, submitButton } = renderComponent();
 
-    expect(screen.getByTestId('form-fields')).toBeInTheDocument();
-
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-    const submitBtn = screen.getByRole('button', { name: /crear/i });
-
-    expect(cancelBtn).toBeInTheDocument();
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).not.toBeDisabled();
+    expect(formFields).toBeInTheDocument();
+    expect(cancelButton).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton).not.toBeDisabled();
   });
 
   test('Should call handleNavigateBack when cancel is clicked', async () => {
@@ -47,11 +54,8 @@ describe('Test on <CreatePlayerForm />', () => {
       handleNavigateBack: mockHandleNavigateBack,
     } as never);
 
-    render(<CreatePlayerForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelBtn);
+    const { user, cancelButton } = renderComponent();
+    await user.click(cancelButton);
 
     expect(mockHandleNavigateBack).toHaveBeenCalled();
   });
@@ -70,11 +74,8 @@ describe('Test on <CreatePlayerForm />', () => {
       handleNavigateBack: vi.fn(),
     } as never);
 
-    render(<CreatePlayerForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const submitBtn = screen.getByRole('button', { name: /crear/i });
-    await user.click(submitBtn);
+    const { user, submitButton } = renderComponent();
+    await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalled();
   });

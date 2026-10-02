@@ -92,9 +92,11 @@ describe('Tests on <BannersTable /> component', () => {
       banners: [{ ...heroBannersMock[0], imageUrl: '' }],
     });
 
-    const icon = screen.getByRole('img', { name: /icono de banner/i });
+    const link = screen.getByRole('link', {
+      name: `Detalles del banner ${heroBannersMock[0].title}`,
+    });
 
-    expect(icon).toBeInTheDocument();
+    expect(link.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should render data visibility badges', () => {

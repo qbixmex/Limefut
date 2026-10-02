@@ -20,34 +20,41 @@ describe('Test on <DeleteBanner /> component', () => {
     vi.clearAllMocks();
     mockDeleteBannerAction.mockResolvedValue({
       ok: true,
-      message: '¡ El banner ha sido eliminado correctamente 👍 !',
+      message: 'El banner ha sido eliminado correctamente',
     });
   });
 
-  test('Should render correctly', () => {
+  const renderComponent = (roles: ('user' | 'admin')[]) => {
     render(
-      <DeleteBanner bannerId={bannerId} roles={['admin']} />,
+      <DeleteBanner bannerId={bannerId} roles={roles} />,
       { wrapper: TooltipProvider },
     );
 
-    const trigger = screen.getByRole('button', { name: /eliminar banner/i });
+    const user = userEvent.setup();
+    const deleteButton = screen.getByRole('button', { name: /eliminar banner/i });
+    const confirmButton = () => screen.getByRole('button', { name: /^eliminar$/ });
+    const cancelButton = () => screen.getByRole('button', { name: /cancelar/i });
 
-    expect(trigger).toBeInTheDocument();
+    return {
+      user,
+      deleteButton,
+      confirmButton,
+      cancelButton,
+    };
+  };
+
+  test('Should render correctly', () => {
+    const { deleteButton } = renderComponent(['user']);
+
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should call deleteHeroBannerAction on confirm when user is admin', async () => {
-    render(
-      <DeleteBanner bannerId={bannerId} roles={['admin']} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, confirmButton } = renderComponent(['admin']);
 
-    const deleteButton = screen.getByRole('button', { name: /eliminar banner/i });
-
-    const user = userEvent.setup();
     await user.click(deleteButton);
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(mockDeleteBannerAction).toHaveBeenCalledWith(bannerId);
@@ -55,35 +62,20 @@ describe('Test on <DeleteBanner /> component', () => {
   });
 
   test('Should not call deleteHeroBannerAction when cancel is clicked', async () => {
-    render(
-      <DeleteBanner bannerId={bannerId} roles={['admin']} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, cancelButton } = renderComponent(['admin']);
 
-    const deleteButton = screen.getByRole('button', { name: /eliminar banner/i });
-
-    const user = userEvent.setup();
     await user.click(deleteButton);
-
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelButton);
+    await user.click(cancelButton());
 
     expect(mockDeleteBannerAction).not.toHaveBeenCalled();
   });
 
   test('Should show error toast and not call action when user is not admin', async () => {
     const { toast } = await import('sonner');
+    const { user, deleteButton, confirmButton } = renderComponent(['user']);
 
-    render(
-      <DeleteBanner bannerId={bannerId} roles={['user']} />,
-      { wrapper: TooltipProvider },
-    );
-
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button', { name: /eliminar banner/i }));
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    await user.click(deleteButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(

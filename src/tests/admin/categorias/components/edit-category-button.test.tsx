@@ -3,42 +3,40 @@ import { EditCategory } from '@/app/admin/categorias/(components)/edit-category'
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { userEvent } from '@testing-library/user-event';
 
+const categoryId = '87554630-ca8c-4bab-826c-458ffbd02414';
+
 describe('Test on <EditCategory /> component', () => {
-  test('Should render correctly', () => {
-    const categoryId = '87554630-ca8c-4bab-826c-458ffbd02414';
+  const renderComponent = () => {
     render(
       <EditCategory categoryId={categoryId} />,
       { wrapper: TooltipProvider },
     );
 
-    const icon = screen.getByRole('img', { name: /icono de lápiz/i });
+    const user = userEvent.setup();
+    const link = screen.getByRole('link', { name: /editar categoría/i });
+    const toolTip = () => screen.getByRole('tooltip');
 
-    expect(icon).toBeInTheDocument();
+    return { user, link, toolTip };
+  };
+
+  test('Should render correctly', () => {
+    const { link } = renderComponent();
+
+    expect(link).toBeInTheDocument();
+    expect(link.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should show tooltip on mouse over', async () => {
-    const categoryId = '87554630-ca8c-4bab-826c-458ffbd02414';
-    render(
-      <EditCategory categoryId={categoryId} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, link, toolTip } = renderComponent();
 
-    const link = screen.getByRole('link', { name: /editar categoría/i });
-    const user = userEvent.setup();
     await user.hover(link);
 
-    const toolTip = await screen.findByRole('tooltip');
-    expect(toolTip).toHaveTextContent(/editar/i);
+    expect(toolTip()).toHaveTextContent(/editar/i);
   });
 
   test('Should have a link with provided url', () => {
-    const categoryId = '87554630-ca8c-4bab-826c-458ffbd02414';
-    render(
-      <EditCategory categoryId={categoryId} />,
-      { wrapper: TooltipProvider },
-    );
+    const { link } = renderComponent();
 
-    const link = screen.getByRole('link', { name: /editar categoría/i });
     expect(link).toHaveAttribute('href', `/admin/categorias/editar/${categoryId}`);
   });
 });

@@ -19,7 +19,7 @@ export const ShowTournamentDetails: FC<Props> = ({ tournamentId }) => {
           })}
           aria-label="Mostrar detalles"
         >
-          <InfoIcon role="img" aria-label="Icono de detalles" />
+          <InfoIcon aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

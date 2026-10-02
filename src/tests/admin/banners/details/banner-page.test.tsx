@@ -17,6 +17,7 @@ describe('Test on <BannerPage />', () => {
     const cardHeading = screen.getByRole('heading', { name: /título/i });
 
     expect(cardHeading).toHaveTextContent(/ajustes del banner/i);
+    expect(cardHeading.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should render <BannerView /> component', async () => {

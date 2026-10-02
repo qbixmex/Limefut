@@ -23,19 +23,24 @@ describe('Test on <CreateCoachForm />', () => {
     vi.mocked(useCreateCoach).mockReturnValue(defaultMockReturn as never);
   });
 
-  test('Should render correctly', () => {
+  const renderComponent = () => {
     render(<CreateCoachForm />);
 
+    const user = userEvent.setup();
     const formFields = screen.getByTestId('form-fields');
+    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const submitButton = screen.getByRole('button', { name: /crear/i });
+
+    return { user, formFields, cancelButton, submitButton };
+  };
+
+  test('Should render correctly', () => {
+    const { formFields, cancelButton, submitButton } = renderComponent();
 
     expect(formFields).toBeInTheDocument();
-
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-    const submitBtn = screen.getByRole('button', { name: /crear/i });
-
-    expect(cancelBtn).toBeInTheDocument();
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).not.toBeDisabled();
+    expect(cancelButton).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton).not.toBeDisabled();
   });
 
   test('Should call route.back when cancel is clicked', async () => {
@@ -45,11 +50,8 @@ describe('Test on <CreateCoachForm />', () => {
       route: { back: mockBack },
     } as never);
 
-    render(<CreateCoachForm />);
-
-    const user = userEvent.setup();
-    const backButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(backButton);
+    const { user, cancelButton } = renderComponent();
+    await user.click(cancelButton);
 
     expect(mockBack).toHaveBeenCalled();
   });
@@ -68,10 +70,7 @@ describe('Test on <CreateCoachForm />', () => {
       onSubmit: mockOnSubmit,
     } as never);
 
-    render(<CreateCoachForm />);
-
-    const user = userEvent.setup();
-    const submitButton = screen.getByRole('button', { name: /crear/i });
+    const { user, submitButton } = renderComponent();
     await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalled();

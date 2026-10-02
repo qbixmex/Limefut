@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { EditCategoryForm } from '@/app/admin/categorias/(components)/edit-category-form';
-import { useEditCategory } from '@/app/admin/categorias/(components)/use-edit-category';
 import { mockCategory } from './mocks/category.mock';
+import { useEditCategory } from '@/app/admin/categorias/editar/[id]/use-edit-category';
+import { EditCategoryForm } from '@/app/admin/categorias/editar/[id]/edit-category-form';
 
-vi.mock('@/app/admin/categorias/(components)/use-edit-category');
+vi.mock('@/app/admin/categorias/editar/[id]/use-edit-category.ts');
 
 vi.mock('@/app/admin/categorias/(components)/form-fields', () => ({
   FormFields: () => <div data-testid="form-fields" />,
@@ -28,17 +28,24 @@ describe('Test on <EditCategoryForm />', () => {
     vi.mocked(useEditCategory).mockReturnValue(defaultMockReturn as never);
   });
 
+  const renderComponent = (props = defaultProps) => {
+    render(<EditCategoryForm {...props} />);
+
+    const user = userEvent.setup();
+    const formFields = screen.getByTestId('form-fields');
+    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
+    const submitButton = screen.getByRole('button', { name: /actualizar/i });
+
+    return { user, formFields, cancelButton, submitButton };
+  };
+
   test('Should render correctly', () => {
-    render(<EditCategoryForm {...defaultProps} />);
+    const { formFields, cancelButton, submitButton } = renderComponent();
 
-    expect(screen.getByTestId('form-fields')).toBeInTheDocument();
-
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-    const submitBtn = screen.getByRole('button', { name: /actualizar/i });
-
-    expect(cancelBtn).toBeInTheDocument();
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).not.toBeDisabled();
+    expect(formFields).toBeInTheDocument();
+    expect(cancelButton).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton).not.toBeDisabled();
   });
 
   test('Should call handleNavigateBack when cancel is clicked', async () => {
@@ -48,11 +55,8 @@ describe('Test on <EditCategoryForm />', () => {
       handleNavigateBack: mockHandleNavigateBack,
     } as never);
 
-    render(<EditCategoryForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelBtn);
+    const { user, cancelButton } = renderComponent();
+    await user.click(cancelButton);
 
     expect(mockHandleNavigateBack).toHaveBeenCalled();
   });
@@ -71,11 +75,8 @@ describe('Test on <EditCategoryForm />', () => {
       handleNavigateBack: vi.fn(),
     } as never);
 
-    render(<EditCategoryForm {...defaultProps} />);
-
-    const user = userEvent.setup();
-    const submitBtn = screen.getByRole('button', { name: /actualizar/i });
-    await user.click(submitBtn);
+    const { user, submitButton } = renderComponent();
+    await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalled();
   });

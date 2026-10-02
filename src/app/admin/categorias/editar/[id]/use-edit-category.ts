@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { editCategorySchema } from '@/shared/schemas';
 import type { Category } from '@/shared/interfaces';
 import { ROUTES } from '@/shared/constants/routes';
-import { updateCategoryAction } from '../(actions)/update-category.action';
+import { updateCategoryAction } from '../../(actions)/update-category.action';
 import type z from 'zod';
 
 type Props = Readonly<{

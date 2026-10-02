@@ -54,7 +54,7 @@ export const DeleteBanner: FC<Props> = ({ bannerId, roles }) => {
               size="icon"
               aria-label="Eliminar banner"
             >
-              <Trash2 role="img" aria-label="Icono de basurero" />
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>

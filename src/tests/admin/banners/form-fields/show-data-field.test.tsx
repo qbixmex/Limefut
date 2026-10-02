@@ -30,42 +30,35 @@ function SetNonBooleanValue() {
 }
 
 describe('Test on <ShowDataField />', () => {
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode) => {
     render(
       <TestWrapper>
         <ShowDataField />
+        {extra}
       </TestWrapper>,
     );
 
-    const switchField = screen.getByRole('switch', {
-      name: /información/i,
-    });
+    const user = userEvent.setup();
+    const switchField = screen.getByRole('switch', { name: /información/i });
+
+    return { user, switchField };
+  };
+
+  test('Should render correctly', () => {
+    const { switchField } = renderComponent();
+
     expect(switchField).toBeInTheDocument();
   });
 
   test('Should be unchecked by default', () => {
-    render(
-      <TestWrapper>
-        <ShowDataField />
-      </TestWrapper>,
-    );
+    const { switchField } = renderComponent();
 
-    const switchField = screen.getByRole('switch', {
-      name: /información oculta/i,
-    });
     expect(switchField).toHaveAttribute('aria-checked', 'false');
   });
 
   test('Should toggle on when clicked', async () => {
-    render(
-      <TestWrapper>
-        <ShowDataField />
-      </TestWrapper>,
-    );
+    const { user, switchField } = renderComponent();
 
-    const switchField = screen.getByRole('switch', { name: /información/i });
-
-    const user = userEvent.setup();
     await user.click(switchField);
 
     expect(switchField).toHaveAttribute('aria-checked', 'true');
@@ -73,14 +66,8 @@ describe('Test on <ShowDataField />', () => {
   });
 
   test('Should toggle off when clicked twice', async () => {
-    render(
-      <TestWrapper>
-        <ShowDataField />
-      </TestWrapper>,
-    );
+    const { user, switchField } = renderComponent();
 
-    const user = userEvent.setup();
-    const switchField = screen.getByRole('switch', { name: /información/i });
     await user.click(switchField);
     await user.click(switchField);
 
@@ -88,12 +75,7 @@ describe('Test on <ShowDataField />', () => {
   });
 
   test('Should show error when value is not a boolean', async () => {
-    render(
-      <TestWrapper>
-        <ShowDataField />
-        <SetNonBooleanValue />
-      </TestWrapper>,
-    );
+    renderComponent(<SetNonBooleanValue />);
 
     await waitFor(() => {
       const alert = screen.queryByRole('alert');

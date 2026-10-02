@@ -4,27 +4,32 @@ import userEvent from '@testing-library/user-event';
 import { CreateBanner } from '@/app/admin/banners/(components)/create-banner';
 
 describe('Test on <CreateBanner /> component', () => {
-  test('Should render correctly', () => {
-    render(<CreateBanner />, { wrapper: TooltipProvider });
-    const icon = screen.getByRole('img', { name: /icono de crear/i });
-    expect(icon).toBeInTheDocument();
-  });
-
-  test('Should show tooltip on mouse over', async () => {
+  const renderComponent = () => {
     render(<CreateBanner />, { wrapper: TooltipProvider });
 
     const link = screen.getByRole('link', { name: /crear banner/i });
     const user = userEvent.setup();
+
+    return { user, link };
+  };
+
+  test('Should render correctly', () => {
+    const { link } = renderComponent();
+    expect(link).toBeInTheDocument();
+    expect(link.querySelector('svg')).toBeInTheDocument();
+  });
+
+  test('Should have a link with provided url', () => {
+    const { link } = renderComponent();
+
+    expect(link).toHaveAttribute('href', '/admin/banners/crear');
+  });
+
+  test('Should show tooltip on mouse over', async () => {
+    const { user, link } = renderComponent();
     await user.hover(link);
 
     const toolTip = await screen.findByRole('tooltip');
     expect(toolTip).toHaveTextContent(/crear/i);
-  });
-
-  test('Should have a link with provided url', () => {
-    render(<CreateBanner />, { wrapper: TooltipProvider });
-
-    const link = screen.getByRole('link', { name: /crear banner/i });
-    expect(link).toHaveAttribute('href', '/admin/banners/crear');
   });
 });

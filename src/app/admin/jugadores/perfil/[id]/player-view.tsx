@@ -45,12 +45,12 @@ export const PlayerView: FC<Props> = async ({ params }) => {
       </div>
       {
         !player.imageUrl ? (
-          <div className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
+          <div data-testid="player-image-placeholder" className="bg-gray-200 dark:bg-gray-800 size-[512px] rounded-xl flex items-center justify-center">
             <SoccerPlayer
               size={512}
               strokeWidth={2}
               className="text-gray-400"
-              aria-label="Icono de jugador"
+              aria-hidden="true"
             />
           </div>
         ) : (

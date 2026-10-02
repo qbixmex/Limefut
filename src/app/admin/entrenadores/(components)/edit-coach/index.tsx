@@ -13,15 +13,15 @@ export const EditCoach: FC<Props> = ({ coachId }) => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_COACHES_EDIT(coachId)}
-          aria-label="Editar entrenador"
           className={
             buttonVariants({
               variant: 'outline-warning',
               size: 'icon',
             })
           }
+          aria-label="Ir a editar entrenador"
         >
-          <Pencil role="img" aria-label="Icono de lápiz" />
+          <Pencil aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

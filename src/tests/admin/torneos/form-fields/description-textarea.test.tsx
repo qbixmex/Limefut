@@ -30,73 +30,59 @@ function SetNonStringValue() {
 }
 
 describe('Test on <DescriptionTextArea />', () => {
-  test('Should render correctly', () => {
+  const renderComponent = (extra?: ReactNode) => {
     render(
       <TestWrapper>
         <DescriptionTextArea />
+        {extra}
       </TestWrapper>,
     );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    const user = userEvent.setup();
+    const textbox = screen.getByRole('textbox');
+
+    return { user, textbox };
+  };
+
+  test('Should render correctly', () => {
+    const { textbox } = renderComponent();
+
+    expect(textbox).toBeInTheDocument();
   });
 
   test('Should not show error when description is empty string', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-      </TestWrapper>,
-    );
+    const { textbox } = renderComponent();
 
-    expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'false');
+    expect(textbox).toHaveAttribute('aria-invalid', 'false');
   });
 
   test('Should show error when value is not a string', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-        <SetNonStringValue />
-      </TestWrapper>,
-    );
+    renderComponent(<SetNonStringValue />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/invalid input/i);
   });
 
   test('Should show error when description is less than 3 characters', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'ab');
+    await user.type(textbox, 'ab');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/mayor a 3 caracteres/i);
   });
 
   test('Should not show error when description has 3 or more valid characters', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'Descripción válida');
+    await user.type(textbox, 'Descripción válida');
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   test('Should show error when description exceeds 500 characters', async () => {
-    render(
-      <TestWrapper>
-        <DescriptionTextArea />
-      </TestWrapper>,
-    );
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'x'.repeat(501));
+    await user.type(textbox, 'x'.repeat(501));
 
     expect(screen.getByRole('alert')).toHaveTextContent(/no debe ser mayor a 500 caracteres/i);
   });

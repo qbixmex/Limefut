@@ -33,19 +33,25 @@ function FormValueDisplay() {
 }
 
 describe('Test on <NamePermalinkFields />', () => {
-  test('Should render both fields', () => {
+  const renderComponent = () => {
     render(<NamePermalinkFields />, { wrapper: TestWrapper });
 
+    const user = userEvent.setup();
     const textboxes = screen.getAllByRole('textbox');
+
+    return { user, textboxes };
+  };
+
+  test('Should render both fields', () => {
+    const { textboxes } = renderComponent();
+
     expect(textboxes).toHaveLength(2);
   });
 
   test('Should auto-generate permalink from name initially', async () => {
     const fieldName = 'Unidad deportiva metropolitana';
-    render(<NamePermalinkFields />, { wrapper: TestWrapper });
-
-    const user = userEvent.setup();
-    const [nameInput] = screen.getAllByRole('textbox');
+    const { user, textboxes } = renderComponent();
+    const [nameInput] = textboxes;
 
     await user.type(nameInput, fieldName);
 
@@ -56,10 +62,8 @@ describe('Test on <NamePermalinkFields />', () => {
   test('Should NOT auto-generate permalink when permalink was manually edited', async () => {
     const fieldName = 'Soccer Stars';
     const customPermalink = 'soccer-stars';
-    render(<NamePermalinkFields />, { wrapper: TestWrapper });
-
-    const user = userEvent.setup();
-    const [nameInput, permalinkInput] = screen.getAllByRole('textbox');
+    const { user, textboxes } = renderComponent();
+    const [nameInput, permalinkInput] = textboxes;
 
     await user.type(permalinkInput, customPermalink);
     await user.type(nameInput, fieldName);

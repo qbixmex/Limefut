@@ -53,14 +53,30 @@ describe('Test on <TournamentFormSelect />', () => {
     vi.clearAllMocks();
   });
 
-  test('Should render the label and placeholder', () => {
+  const renderComponent = (
+    tournaments = tournamentsMock,
+    extra?: ReactNode,
+  ) => {
     render(
       <TestWrapper>
-        <TournamentFormSelect tournaments={tournamentsMock} />
+        <TournamentFormSelect tournaments={tournaments} />
+        {extra}
       </TestWrapper>,
     );
 
+    const user = userEvent.setup();
     const combobox = screen.getByRole('combobox');
+    const getOption = (name: string) => screen.findByRole('option', { name });
+    const getAllOptions = () => screen.getAllByRole('option');
+    const findAllOptions = () => screen.findAllByRole('option');
+    const findEmptyState = () => screen.findByText(/aún no hay torneos disponibles/i);
+
+    return { user, combobox, getOption, getAllOptions, findAllOptions, findEmptyState };
+  };
+
+  test('Should render the label and placeholder', () => {
+    const { combobox } = renderComponent();
+
     const label = screen.getByText('Torneo');
 
     expect(combobox).toBeInTheDocument();
@@ -69,19 +85,12 @@ describe('Test on <TournamentFormSelect />', () => {
   });
 
   test('Should render the tournament options', async () => {
-    render(
-      <TestWrapper>
-        <TournamentFormSelect tournaments={tournamentsMock} />
-      </TestWrapper>,
-    );
+    const { user, combobox, getOption, getAllOptions } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('combobox'));
+    await user.click(combobox);
 
-    const option = await screen.findByRole('option', {
-      name: tournamentsMock[0].name,
-    });
-    const options = screen.getAllByRole('option');
+    const option = await getOption(tournamentsMock[0].name);
+    const options = getAllOptions();
 
     expect(option).toBeInTheDocument();
     expect(options).toHaveLength(tournamentsMock.length);
@@ -94,46 +103,30 @@ describe('Test on <TournamentFormSelect />', () => {
       tournamentsMock[1],
     ];
 
-    render(
-      <TestWrapper>
-        <TournamentFormSelect tournaments={duplicated} />
-      </TestWrapper>,
-    );
+    const { user, combobox, findAllOptions } = renderComponent(duplicated);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('combobox'));
+    await user.click(combobox);
 
-    const options = await screen.findAllByRole('option');
+    const options = await findAllOptions();
 
     expect(options).toHaveLength(tournamentsMock.length);
   });
 
   test('Should render the empty state when there are no tournaments', async () => {
-    render(
-      <TestWrapper>
-        <TournamentFormSelect tournaments={[]} />
-      </TestWrapper>,
-    );
+    const { user, combobox, findEmptyState } = renderComponent([]);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('combobox'));
+    await user.click(combobox);
 
-    const emptyOption = await screen.findByText(/aún no hay torneos disponibles/i);
+    const emptyOption = await findEmptyState();
 
     expect(emptyOption).toBeInTheDocument();
   });
 
   test('Should set the tournament value and search param when selecting', async () => {
-    render(
-      <TestWrapper>
-        <TournamentFormSelect tournaments={tournamentsMock} />
-        <FormValueDisplay />
-      </TestWrapper>,
-    );
+    const { user, combobox, getOption } = renderComponent(tournamentsMock, <FormValueDisplay />);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('combobox'));
-    await user.click(await screen.findByRole('option', { name: tournamentsMock[0].name }));
+    await user.click(combobox);
+    await user.click(await getOption(tournamentsMock[0].name));
 
     expect(screen.getByTestId('tournament-value')).toHaveTextContent(
       tournamentsMock[0].permalink,

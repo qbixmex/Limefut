@@ -39,19 +39,34 @@ function SetNonStringValue() {
 }
 
 describe('Test on <NameField />', () => {
-  test('Should render correctly', () => {
-    render(<NameField isPermalinkEdited={false} />, { wrapper: TestWrapper });
+  const renderComponent = (isPermalinkEdited = false, extra?: ReactNode) => {
+    render(
+      <>
+        <NameField isPermalinkEdited={isPermalinkEdited} />
+        {extra}
+      </>,
+      { wrapper: TestWrapper },
+    );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    const user = userEvent.setup();
+    const textbox = screen.getByRole('textbox');
+
+    return { user, textbox };
+  };
+
+  test('Should render correctly', () => {
+    const { textbox } = renderComponent();
+
+    expect(textbox).toBeInTheDocument();
   });
 
   test('Should auto-generate permalink when typing name', async () => {
     const categoryName = 'Mi Categoría';
     const categoryNameSlug = slugify(categoryName);
-    render(<NameField isPermalinkEdited={false} />, { wrapper: TestWrapper });
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), categoryName);
+    const { user, textbox } = renderComponent();
+
+    await user.type(textbox, categoryName);
 
     expect(screen.getByTestId('name-value')).toHaveTextContent(categoryName);
     expect(screen.getByTestId('permalink-value')).toHaveTextContent(categoryNameSlug);
@@ -59,50 +74,42 @@ describe('Test on <NameField />', () => {
 
   test('Should NOT auto-generate permalink when isPermalinkEdited is true', async () => {
     const categoryName = 'Mi Categoría';
-    render(<NameField isPermalinkEdited />, { wrapper: TestWrapper });
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), categoryName);
+    const { user, textbox } = renderComponent(true);
+
+    await user.type(textbox, categoryName);
 
     expect(screen.getByTestId('name-value')).toHaveTextContent(categoryName);
     expect(screen.getByTestId('permalink-value')).toHaveTextContent('');
   });
 
   test('Should show error when value is not a string', async () => {
-    render(
-      <TestWrapper>
-        <NameField isPermalinkEdited={false} />
-        <SetNonStringValue />
-      </TestWrapper>,
-    );
+    renderComponent(false, <SetNonStringValue />);
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/cadena de texto/i);
   });
 
   test('Should show error when name is less than 3 characters', async () => {
-    render(<NameField isPermalinkEdited={false} />, { wrapper: TestWrapper });
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'ab');
+    await user.type(textbox, 'ab');
 
     expect(screen.getByRole('alert')).toHaveTextContent(/mayor a 3 caracteres/i);
   });
 
   test('Should not show error when name has 3 or more characters', async () => {
-    render(<NameField isPermalinkEdited={false} />, { wrapper: TestWrapper });
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'abc');
+    await user.type(textbox, 'abc');
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   test('Should show error when name exceeds 250 characters', async () => {
-    render(<NameField isPermalinkEdited={false} />, { wrapper: TestWrapper });
+    const { user, textbox } = renderComponent();
 
-    const user = userEvent.setup();
-    await user.type(screen.getByRole('textbox'), 'x'.repeat(251));
+    await user.type(textbox, 'x'.repeat(251));
 
     const alert = screen.getByRole('alert');
     expect(alert).toHaveTextContent(/menor a 250 caracteres/i);

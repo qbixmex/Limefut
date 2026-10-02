@@ -13,15 +13,15 @@ export const EditField: FC<Props> = ({ fieldId }) => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_FIELD_EDIT(fieldId)}
-          aria-label="Editar cancha"
           className={
             buttonVariants({
               variant: 'outline-warning',
               size: 'icon',
             })
           }
+          aria-label="Ir a editar cancha"
         >
-          <Pencil role="img" aria-label="Icono de lápiz" />
+          <Pencil aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

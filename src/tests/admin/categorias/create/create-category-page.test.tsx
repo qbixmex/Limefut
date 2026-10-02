@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import CreateCategoryPage from '@/app/admin/categorias/crear/page';
 
-vi.mock('@/app/admin/categorias/(components)/create-category-form', () => ({
+vi.mock('@/app/admin/categorias/crear/create-category-form.tsx', () => ({
   CreateCategoryForm: () => <div data-testid="create-category-form" />,
 }));
 

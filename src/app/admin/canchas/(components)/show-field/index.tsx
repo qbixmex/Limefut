@@ -13,18 +13,15 @@ export const ShowField: FC<Props> = ({ fieldId }) => {
       <TooltipTrigger>
         <Link
           href={ROUTES.ADMIN_FIELDS_SHOW(fieldId)}
-          aria-label="Detalles de la cancha"
           className={
             buttonVariants({
               variant: 'outline-info',
               size: 'icon',
             })
           }
+          aria-label="Detalles de la cancha"
         >
-          <InfoIcon
-            role="img"
-            aria-label="Icono de detalles"
-          />
+          <InfoIcon aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

@@ -36,7 +36,7 @@ export const DeleteTournament: FC<Props> = ({ tournamentId }) => {
               size="icon"
               aria-label="Eliminar torneo"
             >
-              <Trash2 role="img" aria-label="Icono de basurero" />
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>

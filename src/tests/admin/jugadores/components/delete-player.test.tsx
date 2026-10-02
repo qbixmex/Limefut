@@ -26,33 +26,36 @@ describe('Test on <DeletePlayer /> component', () => {
     vi.clearAllMocks();
     mockDeleteAction.mockResolvedValue({
       ok: true,
-      message: '¡ El jugador ha sido eliminado correctamente 👍 !',
+      message: 'El jugador ha sido eliminado correctamente',
     });
   });
 
-  test('Should render correctly', () => {
+  const renderComponent = () => {
     render(
       <DeletePlayer playerId={playerId} />,
       { wrapper: TooltipProvider },
     );
 
-    const icon = screen.getByRole('img', { name: /icono de basurero/i });
+    const user = userEvent.setup();
+    const deleteButton = screen.getByRole('button', { name: /eliminar jugador/i });
+    const confirmButton = () => screen.getByRole('button', { name: /^eliminar$/ });
+    const cancelButton = () => screen.getByRole('button', { name: /cancelar/i });
 
-    expect(icon).toBeInTheDocument();
+    return { user, deleteButton, confirmButton, cancelButton };
+  };
+
+  test('Should render correctly', () => {
+    const { deleteButton } = renderComponent();
+
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton.querySelector('svg')).toBeInTheDocument();
   });
 
   test('Should call deletePlayerAction on confirm', async () => {
-    render(
-      <DeletePlayer playerId={playerId} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, confirmButton } = renderComponent();
 
-    const deleteButton = screen.getByRole('button', { name: /icono de basurero/i });
-    const user = userEvent.setup();
     await user.click(deleteButton);
-
-    const confirmButton = screen.getByRole('button', { name: /^eliminar$/ });
-    await user.click(confirmButton);
+    await user.click(confirmButton());
 
     await waitFor(() => {
       expect(mockDeleteAction).toHaveBeenCalledWith({
@@ -62,17 +65,10 @@ describe('Test on <DeletePlayer /> component', () => {
   });
 
   test('Should not call deletePlayerAction when cancel is clicked', async () => {
-    render(
-      <DeletePlayer playerId={playerId} />,
-      { wrapper: TooltipProvider },
-    );
+    const { user, deleteButton, cancelButton } = renderComponent();
 
-    const deleteButton = screen.getByRole('button', { name: /icono de basurero/i });
-    const user = userEvent.setup();
     await user.click(deleteButton);
-
-    const cancelButton = screen.getByRole('button', { name: /cancelar/i });
-    await user.click(cancelButton);
+    await user.click(cancelButton());
 
     expect(mockDeleteAction).not.toHaveBeenCalled();
   });

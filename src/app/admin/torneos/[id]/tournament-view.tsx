@@ -32,13 +32,12 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
         <div className="w-full xl:max-w-lg flex justify-center">
           {
             !tournament.imageUrl ? (
-              <div className="bg-gray-200 dark:bg-gray-800 w-full max-w-[512px] h-auto rounded-xl flex items-center justify-center">
+              <div data-testid="tournament-image-placeholder" className="bg-gray-200 dark:bg-gray-800 w-full max-w-[512px] h-auto rounded-xl flex items-center justify-center">
                 <Trophy
                   size={512}
                   strokeWidth={1}
                   className="stroke-gray-400"
-                  role="img"
-                  aria-label="Icono de trofeo"
+                  aria-hidden="true"
                 />
               </div>
             ) : (

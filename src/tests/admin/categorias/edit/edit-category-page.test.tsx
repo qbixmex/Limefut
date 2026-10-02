@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import EditCategoryPage from '@/app/admin/categorias/editar/[id]/page';
 import { EditCategoryView } from '@/app/admin/categorias/editar/[id]/edit-category-view';
 
-vi.mock('@/app/admin/categorias/editar/[id]/edit-category-view', () => ({
+vi.mock('@/app/admin/categorias/editar/[id]/edit-category-view.tsx', () => ({
   EditCategoryView: () => <div data-testid="edit-category-view" />,
 }));
 
