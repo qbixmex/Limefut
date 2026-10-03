@@ -72,7 +72,7 @@ export const updatePlayoffMatchAction = async ({
         if (!isMatchExists) {
           return {
             ok: false,
-            message: '¡ El encuentro no existe o ha sido eliminado !',
+            message: 'El encuentro no existe o ha sido eliminado',
             match: null,
           };
         }
@@ -129,7 +129,7 @@ export const updatePlayoffMatchAction = async ({
 
         return {
           ok: true,
-          message: '¡ El encuentro fue actualizado correctamente 👍 !',
+          message: 'El encuentro fue actualizado correctamente',
           match: updatedMatch,
         };
       } catch (error) {
@@ -141,7 +141,7 @@ export const updatePlayoffMatchAction = async ({
 
             return {
               ok: false,
-              message: '¡ Hay campos duplicados, revise los logs del servidor !',
+              message: 'Hay campos duplicados, revise los logs del servidor',
               match: null,
             };
           }
@@ -153,7 +153,7 @@ export const updatePlayoffMatchAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al crear el encuentro, revise los logs del servidor !',
+            message: 'Error al crear el encuentro, revise los logs del servidor',
             match: null,
           };
         }
@@ -165,7 +165,7 @@ export const updatePlayoffMatchAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al crear la cancha, revise los logs del servidor !',
+            message: 'Error al crear la cancha, revise los logs del servidor',
             match: null,
           };
         }
@@ -176,7 +176,7 @@ export const updatePlayoffMatchAction = async ({
 
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs del servidor !',
+          message: 'Error inesperado, revise los logs del servidor',
           match: null,
         };
       }

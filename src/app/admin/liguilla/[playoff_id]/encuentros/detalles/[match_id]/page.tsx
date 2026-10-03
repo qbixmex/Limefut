@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
-import { PlayoffMatchContent } from './playoff-match-content';
+import { PlayoffMatchView } from './playoff-match-view';
 import { EditMatch } from '../../(components)/edit-match';
 
 type Props = Readonly<{
@@ -26,7 +26,7 @@ export const PlayoffMatchDetailsPage: FC<Props> = async ({ params }) => {
               <EditMatch playoffId={playoffId} matchId={matchId} />
             </CardHeader>
             <CardContent>
-              <PlayoffMatchContent params={params} />
+              <PlayoffMatchView params={params} />
             </CardContent>
           </Card>
         </div>

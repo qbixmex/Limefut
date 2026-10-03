@@ -15,7 +15,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const EditPlayoffMatchContent: FC<Props> = async ({ params }) => {
+export const EditPlayoffMatchView: FC<Props> = async ({ params }) => {
   const playoffId = (await params).playoff_id;
   const matchId = (await params).match_id;
 
@@ -48,14 +48,8 @@ export const EditPlayoffMatchContent: FC<Props> = async ({ params }) => {
     <>
       <EditPlayoffsMatchForm
         playoffId={playoffId}
-        teamsSlot={
-          <TeamsSlot
-            playoffId={playoffId}
-          />
-        }
-        fieldsSlot={
-          <FieldsSlot />
-        }
+        teamsSlot={<TeamsSlot playoffId={playoffId} />}
+        fieldsSlot={<FieldsSlot />}
         match={response.match as MATCH_TYPE}
       />
 

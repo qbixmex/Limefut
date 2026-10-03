@@ -22,11 +22,12 @@ export const MatchStatus: FC<Props> = ({ matchId, status }) => {
   const onUpdateStatus = async (newStatus: MATCH_STATUS_TYPE) => {
     const response = await updatePlayoffMatchStatusAction(matchId, newStatus);
 
-    if (response.ok) {
-      toast.success(response.message);
-    } else {
+    if (!response.ok) {
       toast.error(response.message);
+      return;
     }
+
+    toast.success(response.message);
   };
 
   return (
@@ -34,7 +35,7 @@ export const MatchStatus: FC<Props> = ({ matchId, status }) => {
       defaultValue={status}
       onValueChange={onUpdateStatus}
     >
-      <SelectTrigger className="w-[150px]">
+      <SelectTrigger className="w-[150px]" aria-label="Estado del encuentro">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

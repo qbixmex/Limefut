@@ -25,12 +25,13 @@ export const CreateMatch: FC<Props> = ({ playoffIdPromise }) => {
               size: 'icon',
             })
           }
+          aria-label="Ir a crear encuentro"
         >
-          <Plus strokeWidth={3} />
+          <Plus strokeWidth={3} aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">
-        <span>crear encuentro</span>
+        crear encuentro
       </TooltipContent>
     </Tooltip>
   );
