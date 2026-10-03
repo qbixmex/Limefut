@@ -25,6 +25,7 @@ import { EditMatch } from './edit-match';
 import { MatchStatus } from './match-status';
 import { FinishMatch } from './finish-match';
 import { MatchScoreInput } from './match-score-input';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
 
 type Props = Readonly<{
   playoffId: string;
@@ -39,7 +40,7 @@ export const MatchesTable: FC<Props> = ({
     <>
       <div className="flex-1 flex flex-col">
         <div className="flex-1">
-          <Table>
+          <Table aria-label="Lista de encuentros de liguilla">
             <TableHeader>
               <TableRow className="h-16">
                 <TableHead className="w-full md:w-1/2">Encuentro</TableHead>
@@ -60,16 +61,21 @@ export const MatchesTable: FC<Props> = ({
                       <div className="text-right">
                         <Link
                           href={ROUTES.ADMIN_TEAMS_SHOW(match.local.id)}
+                          title={`Ver detalles del equipo local ${match.local.name}`}
                           target="_blank"
                           rel="noreferrer"
                         >
                           <div className="space-x-2">
                             {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
-                              <Badge variant="outline-secondary">
+                              <Badge
+                                variant="outline-secondary"
+                                role="status"
+                                aria-label="Penales local"
+                              >
                                 {match.penaltyShootout.localGoals}
                               </Badge>
                             )}
-                            <span>{match.local.name}</span>
+                            <span aria-label="Equipo local">{match.local.name}</span>
                           </div>
                         </Link>
                       </div>
@@ -79,9 +85,16 @@ export const MatchesTable: FC<Props> = ({
                             matchId={match.id}
                             score={match.localScore as number}
                             local
+                            aria-label="Marcador local"
                           />
                         ) : (
-                          <Badge variant="outline">{match.localScore}</Badge>
+                          <Badge
+                            variant="outline"
+                            role="status"
+                            aria-label="Marcador local"
+                          >
+                            {match.localScore}
+                          </Badge>
                         )}
                         <Minus strokeWidth={2} />
                         {match.status !== MATCH_STATUS.COMPLETED ? (
@@ -89,21 +102,33 @@ export const MatchesTable: FC<Props> = ({
                             matchId={match.id}
                             score={match.visitorScore as number}
                             visitor
+                            aria-label="Marcador visitante"
                           />
                         ) : (
-                          <Badge variant="outline">{match.visitorScore}</Badge>
+                          <Badge
+                            variant="outline"
+                            role="status"
+                            aria-label="Marcador visitante"
+                          >
+                            {match.visitorScore}
+                          </Badge>
                         )}
                       </div>
                       <div className="text-left">
                         <Link
                           href={ROUTES.ADMIN_TEAMS_SHOW(match.visitor.id)}
+                          title={`Ver detalles del equipo visitante ${match.visitor.name}`}
                           target="_blank"
                           rel="noreferrer"
                         >
                           <div className="space-x-2">
-                            <span>{match.visitor.name}</span>
+                            <span aria-label="Equipo visitante">{match.visitor.name}</span>
                             {(match.penaltyShootout?.status === MATCH_STATUS.COMPLETED) && (
-                              <Badge variant="outline-secondary">
+                              <Badge
+                                variant="outline-secondary"
+                                role="status"
+                                aria-label="Penales visitante"
+                              >
                                 {match.penaltyShootout.visitorGoals}
                               </Badge>
                             )}
@@ -144,6 +169,7 @@ export const MatchesTable: FC<Props> = ({
                     {match.field ? (
                       <Link
                         href={ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}
+                        title={`Ver detalles de la cancha ${match.field.name}`}
                         className="text-balance"
                         target="_blank"
                         rel="noreferrer"
@@ -151,30 +177,57 @@ export const MatchesTable: FC<Props> = ({
                         {match.field.name}
                       </Link>
                     ) : (
-                      <Badge variant="outline-secondary">no disponible</Badge>
+                      <Badge
+                        variant="outline-secondary"
+                        data-testid={match.id}
+                      >
+                        no disponible
+                      </Badge>
                     )}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {match.matchDate ? (
-                      <span className="text-indigo-600 dark:text-indigo-400">
+                      <span
+                        className="text-indigo-600 dark:text-indigo-400"
+                        role="status"
+                        aria-label="Fecha del encuentro"
+                      >
                         {format(match.matchDate as Date, 'EEE dd MMM, y', { locale: es }).toUpperCase()}
                       </span>
                     ) : (
-                      <Badge variant="outline-secondary">No disponible</Badge>
+                      <Badge
+                        variant="outline-secondary"
+                        role="status"
+                        aria-label="Fecha del encuentro"
+                      >
+                        No disponible
+                      </Badge>
                     )}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     <p className="text-blue-600 dark:text-blue-500">
                       {match.matchDate ? (
-                        formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })
+                        <span role="status" aria-label="Hora del encuentro">
+                          {formatInTimeZone(match.matchDate as Date, 'America/Mexico_City', 'h:mm a', { locale: es })}
+                        </span>
                       ) : (
-                        <Badge variant="outline-secondary">No disponible</Badge>
+                        <Badge
+                          variant="outline-secondary"
+                          role="status"
+                          aria-label="Hora del encuentro"
+                        >
+                          No disponible
+                        </Badge>
                       )}
                     </p>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {match.status === MATCH_STATUS.COMPLETED ? (
-                      <div className="w-full max-w-[150px] border border-emerald-500 text-center rounded-lg py-2 px-4">
+                      <div
+                        className="w-full max-w-[150px] border border-emerald-500 text-center rounded-lg py-2 px-4"
+                        role="status"
+                        aria-label="Estado del encuentro"
+                      >
                         <span className="text-emerald-500 font-semibold">Finalizado</span>
                       </div>
                     ) : (
@@ -202,9 +255,9 @@ export const MatchesTable: FC<Props> = ({
               {matches.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={5}>
-                    <div className="text-blue-500 text-semibold text-2xl text-center py-5">
+                    <EmptyMessageResource>
                       No hay encuentros disponibles
-                    </div>
+                    </EmptyMessageResource>
                   </TableCell>
                 </TableRow>
               )}

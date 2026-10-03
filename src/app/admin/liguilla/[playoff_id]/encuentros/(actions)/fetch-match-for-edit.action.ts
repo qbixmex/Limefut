@@ -129,14 +129,14 @@ export const fetchMatchForEditAction = async ({
     if (!playoffMatch) {
       return {
         ok: false,
-        message: `¡ El encuentro no existe con el id [${matchId}] ❌ !`,
+        message: 'El encuentro no existe',
         match: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Encuentro obtenido correctamente 👍 !',
+      message: 'Encuentro obtenido correctamente',
       match: {
         id: playoffMatch.id,
         matchDate: playoffMatch.matchDate,

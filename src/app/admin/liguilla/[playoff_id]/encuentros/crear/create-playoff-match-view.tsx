@@ -9,20 +9,14 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const CreatePlayoffMatchContent: FC<Props> = async ({ params }) => {
+export const CreatePlayoffMatchView: FC<Props> = async ({ params }) => {
   const playoffId = (await params).playoff_id;
 
   return (
     <CreatePlayoffsMatchForm
       playoffId={playoffId}
-      teamsSlot={
-        <TeamsSlot
-          playoffId={playoffId}
-        />
-      }
-      fieldsSlot={
-        <FieldsSlot />
-      }
+      teamsSlot={<TeamsSlot playoffId={playoffId} />}
+      fieldsSlot={<FieldsSlot />}
     />
   );
 };

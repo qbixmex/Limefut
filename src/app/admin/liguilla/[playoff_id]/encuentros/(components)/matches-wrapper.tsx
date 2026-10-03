@@ -7,11 +7,6 @@ type Props = Readonly<{
   matches: PLAYOFF_MATCH[];
 }>;
 
-export const MatchesWrapper: FC<Props> = async ({ playoffId, matches }) => {
-  return (
-    <MatchesTable
-      playoffId={playoffId}
-      matches={matches}
-    />
-  );
+export const MatchesWrapper: FC<Props> = ({ playoffId, matches }) => {
+  return <MatchesTable playoffId={playoffId} matches={matches} />;
 };

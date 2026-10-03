@@ -20,8 +20,9 @@ export const EditMatch: FC<Props> = ({ playoffId, matchId }) => {
             variant: 'outline-warning',
             size: 'icon',
           })}
+          aria-label="Ir a editar encuentro"
         >
-          <PenIcon />
+          <PenIcon aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

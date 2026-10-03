@@ -9,16 +9,25 @@ import { toast } from 'sonner';
 import type z from 'zod';
 import { createPlayoffMatchAction } from '../../../[playoff_id]/encuentros/(actions)/create-playoff-match.action';
 
-export const useCreatePlayoffsMatch = ({
-  playoffId,
-}: {
-  playoffId: string;
-}) => {
+const createDefaultFormValues = () => ({
+  group: '',
+  localTeamScore: 0,
+  visitorTeamScore: 0,
+  matchDate: undefined,
+  status: undefined,
+  referee: '',
+  remarks: '',
+  localTeamId: '',
+  visitorTeamId: '',
+  fieldId: '',
+});
+
+export const useCreatePlayoffsMatch = ({ playoffId }: { playoffId: string; }) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof CreatePlayoffsMatchSchema>>({
     resolver: zodResolver(CreatePlayoffsMatchSchema),
-    defaultValues: DEFAULT_FORM_VALUES,
+    defaultValues: createDefaultFormValues(),
   });
 
   const onSubmit = async (data: z.infer<typeof CreatePlayoffsMatchSchema>) => {
@@ -48,12 +57,12 @@ export const useCreatePlayoffsMatch = ({
 
     toast.success(message);
 
-    form.reset(DEFAULT_FORM_VALUES);
+    form.reset(createDefaultFormValues());
     router.replace(ROUTES.ADMIN_PLAYOFFS_MATCHES(playoffId));
   };
 
   const handleNavigateBack = () => {
-    form.reset(DEFAULT_FORM_VALUES);
+    form.reset(createDefaultFormValues());
     router.replace(ROUTES.ADMIN_PLAYOFFS_MATCHES(playoffId));
   };
 
@@ -62,17 +71,4 @@ export const useCreatePlayoffsMatch = ({
     handleNavigateBack,
     onSubmit,
   };
-};
-
-const DEFAULT_FORM_VALUES = {
-  group: '',
-  localTeamScore: 0,
-  visitorTeamScore: 0,
-  matchDate: undefined,
-  status: undefined,
-  referee: '',
-  remarks: '',
-  localTeamId: '',
-  visitorTeamId: '',
-  fieldId: '',
 };

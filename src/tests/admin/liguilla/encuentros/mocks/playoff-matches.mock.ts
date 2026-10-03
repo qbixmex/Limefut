@@ -1,0 +1,62 @@
+import type { PLAYOFF_MATCH } from '@/app/admin/liguilla/[playoff_id]/encuentros/(actions)/fetch-playoff-matches.action';
+import { MATCH_STATUS, PLAYOFF_ROUND } from '@/shared/enums';
+
+export const playoffMatchesMock: PLAYOFF_MATCH[] = [
+  {
+    id: '6d7e8f9a-1b2c-4d3e-8f4a-5b6c7d8e9f0a',
+    status: MATCH_STATUS.SCHEDULED,
+    local: { id: '3a4b5c6d-7e8f-4a9b-8c1d-2e3f4a5b6c7d', name: 'Chivas' },
+    visitor: { id: '4b5c6d7e-8f9a-4b1c-9d2e-3f4a5b6c7d8e', name: 'Atlas' },
+    round: PLAYOFF_ROUND.QUARTER_FINAL,
+    group: 'gold',
+    position: 1,
+    localScore: 0,
+    visitorScore: 0,
+    matchDate: new Date(2026, 4, 16, 20, 30),
+    field: {
+      id: '9a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d',
+      name: 'Estadio Central',
+    },
+    penaltyShootout: null,
+    category: 'Secundaria Varonil',
+  },
+  {
+    id: '7e8f9a1b-2c3d-4e4f-8a5b-6c7d8e9f0a1b',
+    status: MATCH_STATUS.COMPLETED,
+    local: { id: '5c6d7e8f-9a1b-4c2d-8e3f-4a5b6c7d8e9f', name: 'América' },
+    visitor: { id: '1b2c3d4e-5f6a-4b7c-8d9e-0f1a2b3c4d5e', name: 'Cruz Azul' },
+    round: PLAYOFF_ROUND.SEMI_FINAL,
+    group: 'silver',
+    position: 2,
+    localScore: 2,
+    visitorScore: 1,
+    matchDate: new Date(2026, 4, 17, 18, 0),
+    field: {
+      id: '1b2c3d4e-5f6a-4b7c-8d9e-0f1a2b3c4d5e',
+      name: 'Cancha Norte',
+    },
+    penaltyShootout: {
+      id: 'ab12cd34-ef56-4a78-9b90-1c2d3e4f5a6b',
+      status: MATCH_STATUS.COMPLETED,
+      localGoals: 4,
+      visitorGoals: 3,
+      winnerTeamId: '5c6d7e8f-9a1b-4c2d-8e3f-4a5b6c7d8e9f',
+    },
+    category: 'Secundaria Varonil',
+  },
+  {
+    id: '8f9a1b2c-3d4e-4f5a-8b6c-7d8e9f0a1b2c',
+    status: MATCH_STATUS.IN_PROGRESS,
+    local: { id: '2c3d4e5f-6a7b-4c8d-9e0f-1a2b3c4d5e6f', name: 'Toluca' },
+    visitor: { id: '3d4e5f6a-7b8c-4d9e-8f0a-1b2c3d4e5f6a', name: 'Pumas' },
+    round: PLAYOFF_ROUND.FINAL,
+    group: 'gold',
+    position: 1,
+    localScore: 1,
+    visitorScore: 1,
+    matchDate: null,
+    field: null,
+    penaltyShootout: null,
+    category: undefined,
+  },
+];

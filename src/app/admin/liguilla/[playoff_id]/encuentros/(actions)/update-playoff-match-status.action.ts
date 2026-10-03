@@ -28,7 +28,7 @@ export const updatePlayoffMatchStatusAction = async (matchId: string, status: MA
   if (!updatedMatch) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el estado del partido !',
+      message: 'No se pudo actualizar el estado del partido',
     };
   }
 
@@ -39,6 +39,6 @@ export const updatePlayoffMatchStatusAction = async (matchId: string, status: MA
 
   return {
     ok: true,
-    message: '¡ El estado del partido fue actualizado correctamente 👍 !',
+    message: 'El estado del partido fue actualizado correctamente',
   };
 };

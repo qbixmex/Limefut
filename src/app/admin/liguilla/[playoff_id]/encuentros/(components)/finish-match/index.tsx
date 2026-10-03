@@ -30,15 +30,20 @@ export const FinishMatch: FC<Props> = (props) => {
 
     if (!response.ok) {
       toast.error(response.message);
-    } else {
-      toast.success(response.message);
+      return;
     }
+
+    toast.success(response.message);
   };
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline-primary" size="lg">
+        <Button
+          variant="outline-primary"
+          size="lg"
+          aria-label="Finalizar encuentro"
+        >
           Finalizar
         </Button>
       </AlertDialogTrigger>
@@ -55,7 +60,7 @@ export const FinishMatch: FC<Props> = (props) => {
             className="delete-btn"
             onClick={handleFinishMatch}
           >
-            Proceder
+            proceder
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

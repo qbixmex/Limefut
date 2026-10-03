@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PlayOffDetailsView } from './payoff-details-view';
+import { PlayOffDetailsView } from './playoff-details-view';
 
 type Props = Readonly<{
   params: Promise<{

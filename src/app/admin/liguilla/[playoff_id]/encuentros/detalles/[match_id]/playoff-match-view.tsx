@@ -28,7 +28,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
+export const PlayoffMatchView: FC<Props> = async ({ params }) => {
   const { playoff_id: playoffId, match_id: matchId } = await params;
 
   const response = await fetchPlayoffMatchAction({
@@ -37,7 +37,7 @@ export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
   });
 
   if (!response.ok) {
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(response.message)}`);
+    redirect(`${ROUTES.ADMIN_PLAYOFFS_MATCHES(playoffId)}?error=${encodeURIComponent(response.message)}`);
   }
 
   const match = response.match as MATCH_TYPE;
@@ -61,9 +61,21 @@ export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
                 >
                   {match.local.name}
                 </Link>
-                <Badge variant="outline-info">{match.localScore}</Badge>
+                <Badge
+                  variant="outline-info"
+                  role="status"
+                  aria-label="Anotaciones del equipo local"
+                >
+                  {match.localScore}
+                </Badge>
                 <Minus strokeWidth={2} />
-                <Badge variant="outline-info">{match.visitorScore}</Badge>
+                <Badge
+                  variant="outline-info"
+                  role="status"
+                  aria-label="Anotaciones del equipo visitante"
+                >
+                  {match.visitorScore}
+                </Badge>
                 <Link
                   href={ROUTES.ADMIN_TEAMS_SHOW(match.visitor.id)}
                   className="text-wrap"
@@ -77,51 +89,63 @@ export const PlayoffMatchContent: FC<Props> = async ({ params }) => {
             <TableRow>
               <TableHead className="font-semibold">Arbitro</TableHead>
               <TableCell>
-                {match.referee ?? (
-                  <span className="text-gray-500 italic">No definido</span>
-                )}
+                <span role="text" aria-label="Arbitro del encuentro">
+                  {match.referee ?? (
+                    <span className="text-gray-500 italic">No definido</span>
+                  )}
+                </span>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Cancha</TableHead>
               <TableCell>
-                {match.field ? (
-                  <Link
-                    href={`${ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {match.field.name}
-                  </Link>
-                ) : (
-                  <span className="text-gray-500 italic">No definida</span>
-                )}
+                <span role="text" aria-label="Sede del encuentro">
+                  {match.field ? (
+                    <Link
+                      href={`${ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {match.field.name}
+                    </Link>
+                  ) : (
+                    <span className="text-gray-500 italic">No definida</span>
+                  )}
+                </span>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Fecha del Encuentro</TableHead>
               <TableCell>
-                {
-                  match.matchDate
-                    ? format(match.matchDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                    : <span className="text-gray-500 italic">No Proporcionada</span>
-                }
+                <span role="text" aria-label="Fecha del encuentro">
+                  {
+                    match.matchDate
+                      ? format(match.matchDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                      : <span className="text-gray-500 italic">No Proporcionada</span>
+                  }
+                </span>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Hora</TableHead>
               <TableCell>
-                {
-                  match.matchDate
-                    ? formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm a', { locale: es })
-                    : <span className="text-gray-500 italic">No proporcionada</span>
-                }
+                <span role="text" aria-label="Hora del encuentro">
+                  {
+                    match.matchDate
+                      ? formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm a', { locale: es })
+                      : <span className="text-gray-500 italic">No proporcionada</span>
+                  }
+                </span>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className="font-semibold">Estado</TableHead>
               <TableCell>
-                <Badge variant={getMatchStatus(match.status).variant}>
+                <Badge
+                  variant={getMatchStatus(match.status).variant}
+                  role="status"
+                  aria-label="Estado del encuentro"
+                >
                   {getMatchStatus(match.status).label}
                 </Badge>
               </TableCell>
