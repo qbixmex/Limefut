@@ -80,7 +80,7 @@ export const fetchPlayoffMatchAction = async ({
 
     return {
       ok: true,
-      message: '! Las canchas fueron obtenidas correctamente 👍',
+      message: 'Las canchas fueron obtenidas correctamente',
       match,
     };
   } catch (error) {

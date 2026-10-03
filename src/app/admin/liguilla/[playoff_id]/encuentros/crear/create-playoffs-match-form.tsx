@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC, ReactNode } from 'react';
-import { Suspense } from 'react';
+import { Fragment, Suspense } from 'react';
 import { Form } from '@/components/ui/form';
 import { LoaderCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -85,10 +85,14 @@ export const CreatePlayoffsMatchForm: FC<Props> = ({
               {form.formState.isSubmitting ? (
                 <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
                   <span className="text-sm italic">Espere</span>
-                  <LoaderCircle className="size-4 animate-spin" />
+                  <LoaderCircle
+                    role="img"
+                    aria-label="Icono de carga"
+                    className="size-4 animate-spin"
+                  />
                 </span>
               ) : (
-                <span>crear</span>
+                <Fragment>crear</Fragment>
               )}
             </Button>
           </section>

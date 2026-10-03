@@ -28,7 +28,7 @@ export const fetchFieldsAction = async (): ResponseFetchAction => {
 
     return {
       ok: true,
-      message: '! Las canchas fueron obtenidas correctamente 👍',
+      message: 'Las canchas fueron obtenidas correctamente',
       fields,
     };
   } catch (error) {

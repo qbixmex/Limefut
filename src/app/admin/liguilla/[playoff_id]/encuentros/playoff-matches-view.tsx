@@ -36,7 +36,7 @@ export const PlayoffsMatchesView: FC<Props> = async ({ playoffIdPromise, searchP
   });
 
   if (!ok) {
-    redirect(`${ROUTES.ADMIN_PLAYOFFS_MATCHES}?error=${encodeURIComponent(message)}`);
+    redirect(`${ROUTES.ADMIN_PLAYOFFS_MATCHES(playoffId)}?error=${encodeURIComponent(message)}`);
   }
 
   return (
