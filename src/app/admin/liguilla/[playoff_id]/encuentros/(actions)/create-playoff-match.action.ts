@@ -69,7 +69,7 @@ export const createPlayoffMatchAction = async ({
   if (playoff === 0) {
     return {
       ok: false,
-      message: '¡ No se encontró la liguilla !',
+      message: 'No se encontró la liguilla',
       match: null,
     };
   }
@@ -110,7 +110,7 @@ export const createPlayoffMatchAction = async ({
 
       return {
         ok: true,
-        message: '¡ Encuentro creado correctamente 👍 !',
+        message: 'Encuentro creado correctamente',
         match,
       };
     });
@@ -131,7 +131,7 @@ export const createPlayoffMatchAction = async ({
 
         return {
           ok: false,
-          message: '¡ Hay campos duplicados, revise los logs del servidor !',
+          message: 'Hay campos duplicados, revise los logs del servidor',
           match: null,
         };
       }
@@ -143,7 +143,7 @@ export const createPlayoffMatchAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al crear el encuentro, revise los logs del servidor !',
+        message: 'Error al crear el encuentro, revise los logs del servidor',
         match: null,
       };
     }
@@ -155,7 +155,7 @@ export const createPlayoffMatchAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al crear la cancha, revise los logs del servidor !',
+        message: 'Error al crear la cancha, revise los logs del servidor',
         match: null,
       };
     }
@@ -166,7 +166,7 @@ export const createPlayoffMatchAction = async ({
 
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       match: null,
     };
   }

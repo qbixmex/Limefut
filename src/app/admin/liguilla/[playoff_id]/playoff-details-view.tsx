@@ -36,25 +36,25 @@ export const PlayOffDetailsView: FC<Props> = async ({ params }) => {
           Posiciones de equipos en la liguilla
         </h2>
 
-        {((playoff?.teams as PLAYOFF_TYPE['teams']).length === 0) && (
-          <Badge variant="outline-secondary">
-            no hay equipos disponibles
-          </Badge>
-        )}
-
         <div className="w-full flex flex-col gap-2">
-          {((playoff?.teams as PLAYOFF_TYPE['teams']).length > 0) && (
-            playoff.teams.map(({ id, name }, index) => (
-              <Link
-                key={id}
-                href={ROUTES.ADMIN_TEAMS_SHOW(id)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {`${index + 1}: ${name}`}
-              </Link>
-            ))
-          )}
+          {
+            ((playoff?.teams as PLAYOFF_TYPE['teams']).length > 0) ? (
+              playoff.teams.map(({ id, name }, index) => (
+                <Link
+                  key={id}
+                  href={ROUTES.ADMIN_TEAMS_SHOW(id)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {`${index + 1}: ${name}`}
+                </Link>
+              ))
+            ) : (
+              <Badge variant="outline-secondary">
+                no hay equipos disponibles
+              </Badge>
+            )
+          }
         </div>
       </div>
       <div className="w-full lg:w-1/2">

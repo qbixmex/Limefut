@@ -23,14 +23,13 @@ export const InvertTeams: FC = () => {
           variant="outline-primary"
           type="button"
           onClick={handleFlipTeams}
-          role="button"
           aria-label="Invertir equipos"
         >
-          <FlipHorizontal2 />
+          <FlipHorizontal2 aria-hidden="true" />
         </Button>
       </TooltipTrigger>
       <TooltipContent side="top">
-        <span>Invertir Equipos</span>
+        Invertir Equipos
       </TooltipContent>
     </Tooltip>
   );

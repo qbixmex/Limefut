@@ -145,7 +145,7 @@ export const fetchPlayoffMatchesAction = async ({
     if (!playoff) {
       return {
         ok: false,
-        message: '¡ No se pudo encontrar la liguilla con el id subministrado !',
+        message: 'No se pudo encontrar la liguilla con el id subministrado',
         matches: [],
         pagination: {
           currentPage: 0,
@@ -203,7 +203,7 @@ export const fetchPlayoffMatchesAction = async ({
 
     return {
       ok: true,
-      message: '! Los encuentros de liguilla fueron obtenidos correctamente 👍',
+      message: 'Los encuentros de liguilla fueron obtenidos correctamente',
       matches: matches.map(match => ({
         ...match,
         category: playoff.category?.name,

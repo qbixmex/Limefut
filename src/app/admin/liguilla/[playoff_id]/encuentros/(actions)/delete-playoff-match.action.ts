@@ -27,7 +27,7 @@ export const deletePlayoffMatchAction = async (id: string): ResponseDeleteAction
   if (!match) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el jugador, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar el jugador, quizás fue eliminado ó no existe',
     };
   }
 

@@ -33,7 +33,7 @@ export const fetchPlayoffTeamsAction = async ({
     if (!playoffs) {
       return {
         ok: false,
-        message: '¡ No se pudo encontrar la liguilla ❌ !',
+        message: 'No se pudo encontrar la liguilla',
         teams: [],
       };
     }
@@ -49,7 +49,7 @@ export const fetchPlayoffTeamsAction = async ({
 
     return {
       ok: true,
-      message: '! Los equipos de liguilla fueron obtenidos correctamente 👍',
+      message: 'Los equipos de liguilla fueron obtenidos correctamente',
       teams,
     };
   } catch (error) {
