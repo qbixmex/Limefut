@@ -1,36 +1,27 @@
-import type { FC } from 'react';
-import { Suspense } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { GalleryForm } from '../(components)/galleryForm';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { CreateGalleryForm } from './create-gallery-form';
 
-type Props = Readonly<{
-  searchParams: Promise<{
-    torneo?: string;
-  }>;
-}>;
-
-const CreateGalleryPage: FC<Props> = ({ searchParams }) => {
-  return (
-    <Suspense>
-      <CreateGalleryContent searchParams={searchParams} />
-    </Suspense>
-  );
-};
-
-const CreateGalleryContent: FC<Props> = async ({ searchParams }) => {
-  const { torneo: tournamentId } = await searchParams;
-
+const CreateGalleryPage = () => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Crear Galería</CardTitle>
+            <CardTitle
+              className="admin-page-card-title"
+              role="heading"
+              aria-label="Título de la página"
+            >
+              Crear Galería
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <GalleryForm
-              tournamentId={tournamentId}
-            />
+            <CreateGalleryForm />
           </CardContent>
         </Card>
       </div>

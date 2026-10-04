@@ -22,7 +22,7 @@ export const deleteGalleryAction = async (galleryId: string): ResponseDeleteActi
   if (imagesCount !== 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la galería por que contiene imágenes !',
+      message: 'No se puede eliminar la galería por que contiene imágenes',
     };
   }
 
@@ -33,7 +33,7 @@ export const deleteGalleryAction = async (galleryId: string): ResponseDeleteActi
   if (!galleryExists) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la galería, quizás fue eliminada ó no existe !',
+      message: 'No se puede eliminar la galería, quizás fue eliminada ó no existe',
     };
   }
 
@@ -54,6 +54,6 @@ export const deleteGalleryAction = async (galleryId: string): ResponseDeleteActi
 
   return {
     ok: true,
-    message: `¡ La galería "${galleryDeleted.title}" ha sido eliminada correctamente 👍 !`,
+    message: `La galería "${galleryDeleted.title}" ha sido eliminada correctamente`,
   };
 };
