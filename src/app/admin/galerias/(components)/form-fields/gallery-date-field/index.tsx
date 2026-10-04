@@ -18,9 +18,7 @@ export const GalleryDateField: FC = () => {
       control={control}
       render={({ field }) => (
         <Field>
-          <FieldLabel htmlFor="date-picker">
-            Fecha
-          </FieldLabel>
+          <FieldLabel htmlFor="date-picker">Fecha</FieldLabel>
           <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
             <PopoverTrigger asChild>
               <Button

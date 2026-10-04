@@ -59,7 +59,7 @@ export const updateGalleryAction = async ({
         if (!isGalleryExists) {
           return {
             ok: false,
-            message: '¡ La galería no existe o ha sido eliminada !',
+            message: 'La galería no existe o ha sido eliminada',
             gallery: null,
           };
         }
@@ -83,7 +83,7 @@ export const updateGalleryAction = async ({
 
         return {
           ok: true,
-          message: '¡ La galería fue actualizada correctamente 👍 !',
+          message: 'La galería fue actualizada correctamente',
           gallery: updatedGallery,
         };
       } catch (error) {
@@ -92,7 +92,7 @@ export const updateGalleryAction = async ({
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               gallery: null,
             };
           }
@@ -102,13 +102,13 @@ export const updateGalleryAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar la galería, revise los logs del servidor !',
+            message: 'Error al actualizar la galería, revise los logs del servidor',
             gallery: null,
           };
         }
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs',
           gallery: null,
         };
       }
@@ -119,7 +119,7 @@ export const updateGalleryAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       gallery: null,
     };
   }

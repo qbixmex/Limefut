@@ -24,7 +24,9 @@ export const EditGalleryPageView: FC<Props> = async ({ params }) => {
 
   if (!response.ok || !response.gallery) {
     redirect(
-      `${ROUTES.ADMIN_GALLERIES}?error=${encodeURIComponent(response.message)}`,
+      ROUTES.ADMIN_GALLERIES +
+      '?error=' +
+      encodeURIComponent(response.message),
     );
   }
 

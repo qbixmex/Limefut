@@ -38,7 +38,7 @@ export const GalleriesTable: FC<Props> = async ({
       {galleries.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de galerías">
               <TableHeader>
                 <TableRow>
                   <TableHead>Título</TableHead>
@@ -53,7 +53,11 @@ export const GalleriesTable: FC<Props> = async ({
                   <TableRow key={gallery.id}>
                     <TableCell>{gallery.title}</TableCell>
                     <TableCell className="text-center">
-                      <Badge variant="outline-info">
+                      <Badge
+                        variant="outline-info"
+                        role="status"
+                        aria-label="Cantidad de imágenes"
+                      >
                         {gallery.imagesCount}
                       </Badge>
                     </TableCell>

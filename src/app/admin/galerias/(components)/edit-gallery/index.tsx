@@ -22,9 +22,7 @@ export const EditGallery: FC<Props> = ({ galleryId }) => {
           <Pencil aria-hidden="true" />
         </Link>
       </TooltipTrigger>
-      <TooltipContent side="top">
-        editar
-      </TooltipContent>
+      <TooltipContent side="top">editar</TooltipContent>
     </Tooltip>
   );
 };
