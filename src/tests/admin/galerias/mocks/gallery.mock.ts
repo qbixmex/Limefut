@@ -1,4 +1,4 @@
-import type { GALLERY_TYPE } from '@/app/admin/galerias/(actions)/fetchGalleryAction';
+import type { GALLERY_TYPE } from '@/app/admin/galerias/(actions)/gallery/fetch-gallery.action';
 
 export const galleryMock: GALLERY_TYPE = {
   id: '1f0e2d3c-4b5a-4968-8776-655443322110',

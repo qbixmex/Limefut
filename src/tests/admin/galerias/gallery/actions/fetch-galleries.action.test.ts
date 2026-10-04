@@ -14,9 +14,9 @@ vi.mock('@/lib/prisma', () => ({
   },
 }));
 
-import { fetchGalleriesAction } from '@/app/admin/galerias/(actions)/fetchGalleriesAction';
+import { fetchGalleriesAction } from '@/app/admin/galerias/(actions)/gallery/fetch-galleries.action';
 import prisma from '@/lib/prisma';
-import { galleriesMock, prismaGalleriesMock } from '../mocks/galleries.mock';
+import { galleriesMock, prismaGalleriesMock } from '../../mocks/galleries.mock';
 
 describe('Tests on fetchGalleriesAction server action', () => {
   beforeEach(() => {

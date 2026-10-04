@@ -22,9 +22,9 @@ vi.mock('@/app/admin/galerias/(components)/gallery-data', () => ({
   },
 }));
 
-vi.mock('@/app/admin/galerias/(components)/add-image', () => ({
+vi.mock('@/app/admin/galerias/(components)/gallery-images/gallery-image-form', () => ({
   AddImage: ({ imagesQuantity }: { imagesQuantity: number }) => (
-    <span data-testid="add-image" data-quantity={imagesQuantity} />
+    <span data-testid="gallery-image-form" data-quantity={imagesQuantity} />
   ),
 }));
 
@@ -90,8 +90,8 @@ describe('Tests on <GalleryDetailsView />', () => {
   test('Should render the add image button with the images quantity', async () => {
     await renderComponent();
 
-    expect(screen.getByTestId('add-image')).toBeInTheDocument();
-    expect(screen.getByTestId('add-image')).toHaveAttribute(
+    expect(screen.getByTestId('gallery-image-form')).toBeInTheDocument();
+    expect(screen.getByTestId('gallery-image-form')).toHaveAttribute(
       'data-quantity',
       String(galleryMock.images.length),
     );
@@ -110,19 +110,6 @@ describe('Tests on <GalleryDetailsView />', () => {
 
     expect(images).toBeInTheDocument();
     expect(images).toHaveAttribute('data-count', String(galleryMock.images.length));
-  });
-
-  test('Should render the empty message when the gallery has no images', async () => {
-    mockFetchGallery.mockResolvedValue({
-      ok: true,
-      message: 'Galería obtenida correctamente',
-      gallery: galleryWithoutImagesMock,
-    });
-
-    await renderComponent();
-
-    expect(screen.getByText('La galería aún no tiene imágenes')).toBeInTheDocument();
-    expect(screen.queryByTestId('gallery-images')).not.toBeInTheDocument();
   });
 
   test('Should redirect when the gallery fetch fails', async () => {

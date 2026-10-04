@@ -1,5 +1,32 @@
 @reference 'tailwindcss';
 
+.title {
+  font-size: var(--text-xl);
+  font-weight: bold;
+  color: var(--color-sky-600);
+  margin-bottom: --spacing(5);
+}
+
+.galleryLayout {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr minmax(200px, 1fr);
+  gap: --spacing(5);
+
+  @variant md {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+
+  @variant lg {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+
+  @variant xl {
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+  }
+
+}
+
 .imageWrapper {
   position: relative;
   width: 100%;

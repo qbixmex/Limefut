@@ -12,9 +12,9 @@ vi.mock('@/lib/prisma', () => ({
   },
 }));
 
-import { fetchGalleryAction } from '@/app/admin/galerias/(actions)/fetchGalleryAction';
+import { fetchGalleryAction } from '@/app/admin/galerias/(actions)/gallery/fetch-gallery.action';
 import prisma from '@/lib/prisma';
-import { galleryMock } from '../mocks/gallery.mock';
+import { galleryMock } from '../../mocks/gallery.mock';
 
 const galleryId = galleryMock.id;
 
