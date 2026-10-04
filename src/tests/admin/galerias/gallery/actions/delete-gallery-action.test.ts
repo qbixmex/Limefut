@@ -47,7 +47,7 @@ vi.mock('@/lib/prisma', () => ({
   },
 }));
 
-import { deleteGalleryAction } from '@/app/admin/galerias/(actions)/deleteGalleryAction';
+import { deleteGalleryAction } from '@/app/admin/galerias/(actions)/gallery/delete-gallery.action';
 import { updateTag } from 'next/cache';
 
 const galleryId = '1f0e2d3c-4b5a-4968-8776-655443322110';

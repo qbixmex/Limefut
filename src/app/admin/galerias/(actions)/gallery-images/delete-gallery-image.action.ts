@@ -23,7 +23,7 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
   if (galleryImageExists === 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la imagen de la galería, quizás fue eliminada ó no existe !',
+      message: 'No se puede eliminar la imagen de la galería, quizás fue eliminada ó no existe',
     };
   }
 
@@ -67,6 +67,6 @@ export const deleteGalleryImageAction = async (galleryImageId: string): Response
 
   return {
     ok: true,
-    message: '¡ La imagen de la galería ha sido eliminada correctamente 👍 !',
+    message: 'La imagen de la galería ha sido eliminada correctamente',
   };
 };

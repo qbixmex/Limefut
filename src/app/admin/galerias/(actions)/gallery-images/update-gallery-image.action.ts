@@ -112,7 +112,7 @@ export const updateGalleryImageAction = async ({
 
         return {
           ok: true,
-          message: '¡ La imagen de la galería fue actualizada correctamente 👍 !',
+          message: 'La imagen de la galería fue actualizada correctamente',
           galleryImage: updatedGalleryImage,
         };
       }
@@ -177,7 +177,7 @@ export const updateGalleryImageAction = async ({
 
       return {
         ok: true,
-        message: '¡ La imagen de la galería fue actualizada correctamente 👍 !',
+        message: 'La imagen de la galería fue actualizada correctamente',
         galleryImage: updatedGalleryImage,
       };
     });
@@ -195,7 +195,7 @@ export const updateGalleryImageAction = async ({
           const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
           return {
             ok: false,
-            message: `¡ El campo "${fieldError}", está duplicado !`,
+            message: `El campo "${fieldError}", está duplicado`,
             galleryImage: null,
           };
         }
@@ -210,7 +210,7 @@ export const updateGalleryImageAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al actualizar la imagen de la galería, revise los logs del servidor !',
+        message: 'Error al actualizar la imagen de la galería, revise los logs del servidor',
         galleryImage: null,
       };
     }
@@ -224,7 +224,7 @@ export const updateGalleryImageAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al actualizar la imagen de la galería, revise los logs del servidor !',
+        message: 'Error al actualizar la imagen de la galería, revise los logs del servidor',
         galleryImage: null,
       };
     }
@@ -235,7 +235,7 @@ export const updateGalleryImageAction = async ({
 
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       galleryImage: null,
     };
   }
@@ -255,7 +255,7 @@ const updateImage = async ({
   if (imagePublicId) {
     const cloudinaryResponse = await deleteImage(imagePublicId);
     if (!cloudinaryResponse.ok) {
-      throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+      throw new Error('Error al intentar eliminar la imagen de cloudinary');
     }
   }
 
@@ -263,7 +263,7 @@ const updateImage = async ({
   const imageUploaded = await uploadImage(image as File, 'teams');
 
   if (!imageUploaded) {
-    throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+    throw new Error('Error al intentar subir la imagen a cloudinary');
   }
 
   return {

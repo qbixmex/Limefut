@@ -10,7 +10,7 @@ import styles from './styles.module.css';
 import { DeleteGalleryImage } from '../delete-gallery-image';
 
 type Props = Readonly<{
-  galleyImage: {
+  galleryImage: {
     id: string;
     title: string;
     imageUrl: string;
@@ -19,12 +19,12 @@ type Props = Readonly<{
   };
 }>;
 
-export const GalleryImage: FC<Props> = ({ galleyImage }) => {
-  const { id, title, imageUrl, active, position } = galleyImage;
+export const GalleryImage: FC<Props> = ({ galleryImage }) => {
+  const { id, title, imageUrl, active, position } = galleryImage;
   const { setGalleryImage } = useImageGallery();
 
   return (
-    <figure className={styles.imageContainer}>
+    <figure className={styles.imageContainer} aria-label={title}>
       <Image
         src={imageUrl}
         width={450}
@@ -35,13 +35,17 @@ export const GalleryImage: FC<Props> = ({ galleyImage }) => {
 
       {!active && (
         <>
-          <div className={styles.backgroundOverlay} />
+          <div className={styles.backgroundOverlay} aria-hidden="true" />
           <Tooltip>
             <TooltipTrigger asChild>
-              <EyeOff className={styles.hiddenIcon} />
+              <EyeOff
+                className={styles.hiddenIcon}
+                aria-hidden="true"
+              />
             </TooltipTrigger>
             <TooltipContent side="left">Oculta</TooltipContent>
           </Tooltip>
+          <span className="sr-only">Imagen oculta</span>
         </>
       )}
 
@@ -51,6 +55,7 @@ export const GalleryImage: FC<Props> = ({ galleyImage }) => {
             variant="warning"
             className={styles.editButton}
             size="icon"
+            aria-label={`Editar imagen: ${title}`}
             onClick={() => setGalleryImage({
               id,
               title,
@@ -58,7 +63,7 @@ export const GalleryImage: FC<Props> = ({ galleyImage }) => {
               position,
             })}
           >
-            <Pencil />
+            <Pencil aria-hidden="true" />
           </Button>
         </TooltipTrigger>
         <TooltipContent side="left">editar</TooltipContent>

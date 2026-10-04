@@ -38,7 +38,7 @@ vi.mock('@/lib/prisma', () => ({
   },
 }));
 
-import { updateGalleryStateAction } from '@/app/admin/galerias/(actions)/updateGalleryStateAction';
+import { updateGalleryStateAction } from '@/app/admin/galerias/(actions)/gallery/update-gallery-state.action';
 import { updateTag } from 'next/cache';
 
 const galleryId = '1f0e2d3c-4b5a-4968-8776-655443322110';
