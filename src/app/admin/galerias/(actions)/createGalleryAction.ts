@@ -49,7 +49,7 @@ export const createGalleryAction = async (
 
       return {
         ok: true,
-        message: '¡ Galería creada satisfactoriamente 👍 !',
+        message: 'Galería creada satisfactoriamente',
         gallery: createdGallery,
       };
     });
@@ -69,7 +69,7 @@ export const createGalleryAction = async (
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           gallery: null,
         };
       }
@@ -79,14 +79,14 @@ export const createGalleryAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear la galería, revise los logs del servidor !',
+        message: 'Error al crear la galería, revise los logs del servidor',
         gallery: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       gallery: null,
     };
   }

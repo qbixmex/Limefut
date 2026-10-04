@@ -1,19 +1,17 @@
 import type { FC } from 'react';
-import Link from 'next/link';
 import { getSession } from '@/lib/get-session';
 import { fetchGalleriesAction, updateGalleryStateAction } from '../(actions)';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ImagesIcon, Pencil } from 'lucide-react';
 import { format } from 'date-fns/format';
 import { ActiveSwitch } from '~/src/shared/components/active-switch';
 import { es } from 'date-fns/locale';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Pagination } from '@/shared/components/pagination';
 import { Badge } from '@/components/ui/badge';
 import { DeleteGallery } from './delete-gallery';
-import { ROUTES } from '@/shared/constants/routes';
+import { EditGallery } from './edit-gallery';
+import { ShowGalleryImages } from './show-gallery-images';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
 
 type Props = Readonly<{
   query: string | undefined;
@@ -40,7 +38,7 @@ export const GalleriesTable: FC<Props> = async ({
       {galleries.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de galerías">
               <TableHeader>
                 <TableRow>
                   <TableHead>Título</TableHead>
@@ -55,7 +53,11 @@ export const GalleriesTable: FC<Props> = async ({
                   <TableRow key={gallery.id}>
                     <TableCell>{gallery.title}</TableCell>
                     <TableCell className="text-center">
-                      <Badge variant="outline-info">
+                      <Badge
+                        variant="outline-info"
+                        role="status"
+                        aria-label="Cantidad de imágenes"
+                      >
                         {gallery.imagesCount}
                       </Badge>
                     </TableCell>
@@ -70,38 +72,8 @@ export const GalleriesTable: FC<Props> = async ({
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Link
-                              href={ROUTES.ADMIN_GALLERIES_SHOW(gallery.id)}
-                              className={buttonVariants({
-                                variant: 'outline-info',
-                                size: 'icon',
-                              })}
-                            >
-                              <ImagesIcon />
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            imágenes
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Link
-                              href={ROUTES.ADMIN_GALLERIES_EDIT(gallery.id)}
-                              className={buttonVariants({
-                                variant: 'outline-warning',
-                                size: 'icon',
-                              })}
-                            >
-                              <Pencil />
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <ShowGalleryImages galleryId={gallery.id} />
+                        <EditGallery galleryId={gallery.id} />
                         <DeleteGallery
                           galleryId={gallery.id}
                           roles={session?.user.roles as string[]}
@@ -122,14 +94,10 @@ export const GalleriesTable: FC<Props> = async ({
           </div>
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay galerías
-          </p>
-        </div>
+        <EmptyMessageResource>
+          No hay galerías
+        </EmptyMessageResource>
       )}
     </>
   );
 };
-
-export default GalleriesTable;
