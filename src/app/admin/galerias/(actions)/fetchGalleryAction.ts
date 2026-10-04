@@ -63,14 +63,14 @@ export const fetchGalleryAction = async (
     if (!gallery) {
       return {
         ok: false,
-        message: '¡ Galería no encontrada ❌ !',
+        message: 'Galería no encontrada',
         gallery: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Galería obtenida correctamente 👍 !',
+      message: 'Galería obtenida correctamente',
       gallery,
     };
   } catch (error) {
@@ -78,13 +78,13 @@ export const fetchGalleryAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener la galería,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener la galería,\n¡ Revise los logs del servidor',
         gallery: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor',
       gallery: null,
     };
   }

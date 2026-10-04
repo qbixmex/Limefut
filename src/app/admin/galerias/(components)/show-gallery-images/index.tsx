@@ -22,9 +22,7 @@ export const ShowGalleryImages: FC<Props> = ({ galleryId }) => {
           <ImagesIcon aria-hidden />
         </Link>
       </TooltipTrigger>
-      <TooltipContent side="top">
-        imágenes
-      </TooltipContent>
+      <TooltipContent side="top">imágenes</TooltipContent>
     </Tooltip>
   );
 };

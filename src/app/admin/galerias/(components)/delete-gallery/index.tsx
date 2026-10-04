@@ -27,14 +27,17 @@ type Props = Readonly<{
 export const DeleteGallery: FC<Props> = ({ galleryId, roles }) => {
   const onDeleteGallery = async (galleryId: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar galerías !');
+      toast.error('No tienes permisos administrativos para eliminar galerías');
       return;
     }
+
     const response = await deleteGalleryAction(galleryId);
+
     if (!response.ok) {
       toast.error(response.message);
       return;
     }
+
     toast.success(response.message);
   };
 
@@ -44,13 +47,11 @@ export const DeleteGallery: FC<Props> = ({ galleryId, roles }) => {
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
             <Button variant="outline-danger" size="icon">
-              <Trash2 />
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
-        <TooltipContent side="top">
-          <p>eliminar</p>
-        </TooltipContent>
+        <TooltipContent side="top">eliminar</TooltipContent>
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>

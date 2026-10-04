@@ -6,30 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Pencil } from 'lucide-react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import Link from 'next/link';
-import { buttonVariants } from '@/components/ui/button';
 import { AddImage } from '../../(components)/add-image';
 import { fetchGalleryAction } from '../../(actions)';
 import { GalleryImages } from '../../(components)/gallery-images';
 import { ROUTES } from '@/shared/constants/routes';
 import type { GALLERY_TYPE } from '../../(actions)/fetchGalleryAction';
 import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import { EditGallery } from '../../(components)/edit-gallery';
+import { GalleryData } from '../../(components)/gallery-data';
 
 type Props = Readonly<{
   params: Promise<{
@@ -59,73 +43,21 @@ export const GalleryDetailsView: FC<Props> = async ({ params }) => {
                 galleryId={gallery.id as string}
                 imagesQuantity={gallery.images.length}
               />
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link
-                    href={ROUTES.ADMIN_GALLERIES_EDIT(gallery.id)}
-                    className={buttonVariants({
-                      variant: 'outline-warning',
-                      size: 'icon',
-                    })}
-                  >
-                    <Pencil />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="left">editar</TooltipContent>
-              </Tooltip>
+              <EditGallery galleryId={gallery.id} />
             </div>
           </CardHeader>
           <CardContent>
-            <section className="flex flex-col lg:flex-row mb-10">
-              <div className="w-full lg:w-1/2">
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Título</TableHead>
-                      <TableCell>{gallery.title}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-semibold w-[180px]">Fecha</TableHead>
-                      <TableCell>
-                        {format(new Date(gallery?.galleryDate as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Enlace Permanente</TableHead>
-                      <TableCell>{gallery.permalink}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-              <div className="w-full lg:w-1/2">
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Fecha de Creación</TableHead>
-                      <TableCell>
-                        {format(new Date(gallery?.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="w-[180px] font-semibold">Última actualización</TableHead>
-                      <TableCell>
-                        {format(new Date(gallery?.updatedAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableHead className="font-medium w-[180px]">Estado</TableHead>
-                      <TableCell>
-                        {
-                          gallery.active
-                            ? <Badge variant="outline-info">Activa</Badge>
-                            : <Badge variant="outline-warning">No Activa</Badge>
-                        }
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            </section>
+            <GalleryData
+              gallery={{
+                id: gallery.id,
+                title: gallery.title,
+                permalink: gallery.permalink,
+                galleryDate: gallery.galleryDate,
+                active: gallery.active,
+                createdAt: gallery.createdAt,
+                updatedAt: gallery.updatedAt,
+              }}
+            />
 
             <section>
               <h2 className="text-xl font-bold text-sky-600 mb-5">Imágenes</h2>

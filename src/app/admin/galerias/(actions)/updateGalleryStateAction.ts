@@ -9,8 +9,10 @@ export type ResponseDeleteAction = Promise<{
   message: string;
 }>;
 
-export const updateGalleryStateAction = async (id: string, state: boolean)
-  : ResponseDeleteAction => {
+export const updateGalleryStateAction = async (
+  id: string,
+  state: boolean,
+) : ResponseDeleteAction => {
   const guard = await requireAdmin();
   if (!guard.ok) {
     return { ok: false, message: guard.message };
@@ -23,7 +25,7 @@ export const updateGalleryStateAction = async (id: string, state: boolean)
   if (galleryExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar la galería, quizás fue eliminada ó no existe !',
+      message: 'No se pudo actualizar la galería, quizás fue eliminada ó no existe',
     };
   }
 
@@ -45,6 +47,6 @@ export const updateGalleryStateAction = async (id: string, state: boolean)
 
   return {
     ok: true,
-    message: `¡ La galería fue ${updatedGallery.active ? 'activada' : 'desactivada'} correctamente 👍 !`,
+    message: `La galería fue ${updatedGallery.active ? 'activada' : 'desactivada'} correctamente`,
   };
 };
