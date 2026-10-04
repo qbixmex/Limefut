@@ -1,8 +1,14 @@
-export { fetchGalleriesAction } from './fetchGalleriesAction';
-export { fetchGalleryAction } from './fetchGalleryAction';
-export { createGalleryAction } from './createGalleryAction';
-export { updateGalleryAction } from './updateGalleryAction';
-export { updateGalleryStateAction } from './updateGalleryStateAction';
-export { deleteGalleryAction } from './deleteGalleryAction';
-export { createGalleryImageAction } from './createGalleryImageAction';
-export { updateGalleryImageAction } from './updateGalleryImageAction';
+export {
+  fetchGalleriesAction,
+  fetchGalleryAction,
+  createGalleryAction,
+  updateGalleryAction,
+  updateGalleryStateAction,
+  deleteGalleryAction,
+} from './gallery';
+
+export {
+  createGalleryImageAction,
+  updateGalleryImageAction,
+  deleteGalleryImageAction,
+} from './gallery-images';

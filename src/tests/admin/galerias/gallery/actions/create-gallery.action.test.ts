@@ -34,7 +34,7 @@ vi.mock('@/lib/prisma', () => ({
   },
 }));
 
-import { createGalleryAction } from '@/app/admin/galerias/(actions)/createGalleryAction';
+import { createGalleryAction } from '@/app/admin/galerias/(actions)/gallery/create-gallery.action';
 import { updateTag } from 'next/cache';
 
 const galleryDate = new Date('2026-01-15T12:00:00.000Z');

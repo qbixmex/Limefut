@@ -6,11 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { AddImage } from '../../(components)/add-image';
+import { AddImage } from '../../(components)/gallery-images/gallery-image-form';
 import { fetchGalleryAction } from '../../(actions)';
 import { GalleryImages } from '../../(components)/gallery-images';
 import { ROUTES } from '@/shared/constants/routes';
-import type { GALLERY_TYPE } from '../../(actions)/fetchGalleryAction';
+import type { GALLERY_TYPE } from '../../(actions)/gallery/fetch-gallery.action';
 import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
 import { EditGallery } from '../../(components)/edit-gallery';
 import { GalleryData } from '../../(components)/gallery-data';
@@ -59,20 +59,7 @@ export const GalleryDetailsView: FC<Props> = async ({ params }) => {
               }}
             />
 
-            <section>
-              <h2 className="text-xl font-bold text-sky-600 mb-5">Imágenes</h2>
-              {
-                gallery.images.length > 0 ? (
-                  <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    <GalleryImages images={gallery.images} />
-                  </div>
-                ) : (
-                  <EmptyMessageResource>
-                    La galería aún no tiene imágenes
-                  </EmptyMessageResource>
-                )
-              }
-            </section>
+            <GalleryImages images={gallery.images} />
           </CardContent>
         </Card>
       </div>
