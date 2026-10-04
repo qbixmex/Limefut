@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, type FC } from 'react';
-import { deleteGalleryImageAction } from '../../(actions)/deleteGalleryImageAction';
+import { Fragment, useState, type FC } from 'react';
+import { deleteGalleryImageAction } from '@/app/admin/galerias/(actions)/gallery-images/delete-gallery-image.action';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,9 +26,11 @@ export const DeleteGalleryImage: FC<{ imageId: string }> = ({ imageId }) => {
   const onDeleteImage = async (id: string) => {
     setIsDeleting(true);
     const response = await deleteGalleryImageAction(id);
-    if (response.ok) {
-      toast.success(response.message);
+    if (!response.ok) {
+      toast.error(response.message);
+      return;
     }
+    toast.success(response.message);
     setIsDeleting(false);
   };
 
@@ -41,13 +43,14 @@ export const DeleteGalleryImage: FC<{ imageId: string }> = ({ imageId }) => {
               variant="destructive"
               size="icon"
               className={styles.deleteButton}
+              aria-label="Eliminar imagen"
             >
-              <Trash2 />
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent side="left">
-          <p>eliminar</p>
+          eliminar
         </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
@@ -62,16 +65,17 @@ export const DeleteGalleryImage: FC<{ imageId: string }> = ({ imageId }) => {
           <AlertDialogCancel className={styles.cancelBtn}>cancelar</AlertDialogCancel>
           <AlertDialogAction
             className={cn(styles.deleteBtn, { 'animate-pulse': isDeleting })}
+            aria-busy={isDeleting}
             onClick={() => onDeleteImage(imageId)}
           >
             {
               isDeleting ? (
                 <>
                   <span>espere</span>
-                  <Loader2 className="animate-spin" />
+                  <Loader2 className="animate-spin" aria-hidden="true" />
                 </>
               ) : (
-                <span>eliminar</span>
+                <Fragment>eliminar</Fragment>
               )
             }
           </AlertDialogAction>

@@ -22,6 +22,7 @@ export const createGalleryImageAction = async ({
   formData: FormData,
 }): ResponseCreateAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return {
       ok: false,
@@ -41,7 +42,7 @@ export const createGalleryImageAction = async ({
   if (!gallery) {
     return {
       ok: false,
-      message: `¡ La galeria con el id "${galleryId}" no existe !`,
+      message: `La galeria con el id "${galleryId}" no existe`,
       galleryImage: null,
     };
   }
@@ -97,7 +98,7 @@ export const createGalleryImageAction = async ({
 
     return {
       ok: true,
-      message: '¡ La imagen su cargó correctamente 👍 !',
+      message: 'La imagen su cargó correctamente',
       galleryImage: createdImageGallery,
     };
   } catch (error) {
@@ -112,7 +113,7 @@ export const createGalleryImageAction = async ({
           const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
           return {
             ok: false,
-            message: `¡ El campo "${fieldError}", está duplicado !`,
+            message: `El campo "${fieldError}", está duplicado`,
             galleryImage: null,
           };
         }
@@ -127,7 +128,7 @@ export const createGalleryImageAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al subir la imagen, revise los logs del servidor !',
+        message: 'Error al subir la imagen, revise los logs del servidor',
         galleryImage: null,
       };
     }
@@ -141,7 +142,7 @@ export const createGalleryImageAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al subir la imagen, revise los logs del servidor !',
+        message: 'Error al subir la imagen, revise los logs del servidor',
         galleryImage: null,
       };
     }
@@ -152,7 +153,7 @@ export const createGalleryImageAction = async ({
 
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       galleryImage: null,
     };
   }
