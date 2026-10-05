@@ -41,10 +41,7 @@ vi.mock('@/app/admin/galerias/(components)/gallery-images', () => ({
 import { render, screen } from '@testing-library/react';
 import { GalleryDetailsView } from '@/app/admin/galerias/[id]/gallery-details-view';
 import { ROUTES } from '@/shared/constants/routes';
-import {
-  galleryMock,
-  galleryWithoutImagesMock,
-} from '../mocks/gallery.mock';
+import { galleryMock } from '../mocks/gallery.mock';
 
 describe('Tests on <GalleryDetailsView />', () => {
   beforeEach(() => {
