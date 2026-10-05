@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { ROUTES } from '@/shared/constants/routes';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const FORM_DEFAULT_VALUES = {
+const createFormDefaultValues = () => ({
   localTeamId: '',
   localScore: 0,
   visitorTeamId: '',
@@ -22,7 +22,7 @@ const FORM_DEFAULT_VALUES = {
   week: 0,
   tournament: undefined,
   category: undefined,
-};
+});
 
 export const useCreateMatch = () => {
   const searchParams = useSearchParams();
@@ -31,7 +31,7 @@ export const useCreateMatch = () => {
   const form = useForm<z.infer<typeof createMatchSchema>>({
     resolver: zodResolver(createMatchSchema),
     defaultValues: {
-      ...FORM_DEFAULT_VALUES,
+      ...createFormDefaultValues,
       tournament: searchParams.get('tournament') ?? undefined,
       category: searchParams.get('category') ?? undefined,
     },
@@ -62,7 +62,7 @@ export const useCreateMatch = () => {
       return;
     }
 
-    form.reset(FORM_DEFAULT_VALUES);
+    form.reset(createFormDefaultValues());
     toast.success(response.message);
 
     const match = response.match as MATCH_TYPE;
@@ -77,7 +77,7 @@ export const useCreateMatch = () => {
   const handleNavigateBack = () => {
     const params = new URLSearchParams(searchParams);
 
-    form.reset(FORM_DEFAULT_VALUES);
+    form.reset(createFormDefaultValues());
 
     if (params.has('selected-week')) params.delete('selected-week');
 
