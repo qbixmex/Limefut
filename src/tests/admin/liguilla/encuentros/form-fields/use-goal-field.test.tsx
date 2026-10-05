@@ -23,48 +23,48 @@ describe('Tests on useGoalField hook', () => {
     expect(result.current.formValue).toBe(3);
   });
 
-  test('Should increment the value', () => {
+  test('Should increment the value', async () => {
     const { result } = renderHook(() => useGoalField('localTeamScore'), {
       wrapper: createWrapper(0),
     });
 
-    act(() => {
+    await act(async () => {
       result.current.increment();
     });
 
     expect(result.current.formValue).toBe(1);
   });
 
-  test('Should decrement the value', () => {
+  test('Should decrement the value', async () => {
     const { result } = renderHook(() => useGoalField('localTeamScore'), {
       wrapper: createWrapper(2),
     });
 
-    act(() => {
+    await act(async () => {
       result.current.decrement();
     });
 
     expect(result.current.formValue).toBe(1);
   });
 
-  test('Should not decrement below zero', () => {
+  test('Should not decrement below zero', async () => {
     const { result } = renderHook(() => useGoalField('localTeamScore'), {
       wrapper: createWrapper(0),
     });
 
-    act(() => {
+    await act(async () => {
       result.current.decrement();
     });
 
     expect(result.current.formValue).toBe(0);
   });
 
-  test('Should keep only digits when typing', () => {
+  test('Should keep only digits when typing', async () => {
     const { result } = renderHook(() => useGoalField('localTeamScore'), {
       wrapper: createWrapper(0),
     });
 
-    act(() => {
+    await act(async () => {
       result.current.handleInputChange(changeEvent('a1b2'));
     });
 
@@ -72,17 +72,17 @@ describe('Tests on useGoalField hook', () => {
     expect(result.current.formValue).toBe(12);
   });
 
-  test('Should reset the display to zero on blur when empty', () => {
+  test('Should reset the display to zero on blur when empty', async () => {
     const { result } = renderHook(() => useGoalField('localTeamScore'), {
       wrapper: createWrapper(0),
     });
 
-    act(() => {
+    await act(async () => {
       result.current.handleInputChange(changeEvent(''));
     });
     expect(result.current.display).toBe('');
 
-    act(() => {
+    await act(async () => {
       result.current.handleBlur();
     });
 

@@ -11,7 +11,6 @@ import { fetchGalleryAction } from '../../(actions)';
 import { GalleryImages } from '../../(components)/gallery-images';
 import { ROUTES } from '@/shared/constants/routes';
 import type { GALLERY_TYPE } from '../../(actions)/gallery/fetch-gallery.action';
-import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
 import { EditGallery } from '../../(components)/edit-gallery';
 import { GalleryData } from '../../(components)/gallery-data';
 
