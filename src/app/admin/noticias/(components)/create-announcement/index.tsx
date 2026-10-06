@@ -1,6 +1,6 @@
 'use client';
 
-import type { FC } from 'react';
+import { Fragment, type FC } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
@@ -14,12 +14,13 @@ export const CreateAnnouncement: FC = () => {
         <Link
           href={ROUTES.ADMIN_ANNOUNCEMENTS_CREATE}
           className={buttonVariants({ variant: 'outline-primary', size: 'icon' })}
+          aria-label="Ir a crear noticia"
         >
-          <Plus strokeWidth={3} />
+          <Plus strokeWidth={3} aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">
-        <span>crear</span>
+        <Fragment>crear</Fragment>
       </TooltipContent>
     </Tooltip>
   );

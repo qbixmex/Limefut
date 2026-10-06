@@ -6,6 +6,7 @@ import type { Announcement, CloudinaryResponse } from '@/shared/interfaces';
 import { CreateAnnouncementSchema } from '@/shared/schemas';
 import { uploadImage } from '@/shared/actions';
 import { requireAdmin } from '@/lib/get-session';
+import { Prisma } from '@/generated/prisma/client';
 
 type ResponseCreateAction = Promise<{
   ok: boolean;
@@ -19,6 +20,7 @@ export const createAnnouncementAction = async ({
   formData: FormData,
 }): ResponseCreateAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
     return {
       ok: false,
@@ -71,7 +73,7 @@ export const createAnnouncementAction = async ({
 
       return {
         ok: true,
-        message: '¡ Noticia creada satisfactoriamente 👍 !',
+        message: 'Noticia creada satisfactoriamente',
         announcement: createdAnnouncement,
       };
     });
@@ -83,30 +85,35 @@ export const createAnnouncementAction = async ({
 
     return prismaTransaction;
   } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        if (error.meta) {
+          console.log('ERROR METADATA:', error.meta);
+        }
+
+        console.log(error);
+
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: 'Hay campos duplicados, revise los logs del servidor',
           announcement: null,
         };
       }
 
-      console.log('Name:', error.name);
-      console.log('Cause:', error.cause);
-      console.log('Message:', error.message);
+      console.log(error);
 
       return {
         ok: false,
-        message: '¡ Error al crear la noticia, revise los logs del servidor !',
+        message: 'Error al crear la noticia, revise los logs del servidor',
         announcement: null,
       };
     }
+
     console.log(error);
+
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       announcement: null,
     };
   }

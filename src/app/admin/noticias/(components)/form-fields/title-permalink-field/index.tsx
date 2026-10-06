@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { PermalinkField } from './permalink.field';
-import { TitleField } from './title.field';
+import { PermalinkField } from '../permalink-field';
+import { TitleField } from '../title-field';
 import styles from './title-permalink.module.css';
 
 export const TitlePermalinkFields = () => {

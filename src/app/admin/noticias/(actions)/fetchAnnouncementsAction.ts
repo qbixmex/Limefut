@@ -68,7 +68,7 @@ export const fetchAnnouncementsAction = async (options: Options): ResponseFetch 
 
     return {
       ok: true,
-      message: '! Los patrocinadores fueron obtenidos correctamente 👍',
+      message: 'Los patrocinadores fueron obtenidos correctamente',
       announcements,
       pagination: {
         currentPage: page,
@@ -77,20 +77,23 @@ export const fetchAnnouncementsAction = async (options: Options): ResponseFetch 
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('Error al intentar obtener las noticias');
-      console.log('NAME:', error.name);
-      console.log('MESSAGE:', error.message);
+      console.log('ERROR NAME:', error.name);
+      console.log('ERROR CAUSE:', error.cause);
+      console.log('ERROR MESSAGE:', error.message);
 
       return {
         ok: false,
-        message: error.message,
+        message: 'No se pudo obtener las noticias',
         announcements: [],
         pagination: null,
       };
     }
+
+    console.log(error);
+
     return {
       ok: false,
-      message: 'Error inesperado al obtener los patrocinadores, revise los logs del servidor',
+      message: 'Error inesperado, revise los logs del servidor',
       announcements: [],
       pagination: null,
     };
