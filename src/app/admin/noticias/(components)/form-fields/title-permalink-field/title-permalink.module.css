@@ -1,0 +1,12 @@
+@reference 'tailwindcss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 5);
+  @apply lg:flex-row;
+}
+
+.formGroup {
+  flex: 1;
+}

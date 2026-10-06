@@ -48,28 +48,34 @@ export const fetchAnnouncementAction = async (
     if (!announcement) {
       return {
         ok: false,
-        message: '¡ Noticia no encontrada ❌ !',
+        message: 'Noticia no encontrada',
         announcement: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡Noticia obtenida correctamente 👍 !',
+      message: 'Noticia obtenida correctamente',
       announcement,
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message);
+      console.log('ERROR NAME:', error.name);
+      console.log('ERROR CAUSE:', error.cause);
+      console.log('ERROR MESSAGE:', error.message);
+
       return {
         ok: false,
-        message: 'No se pudo obtener la noticia,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener la noticia,\n Revise los logs del servidor',
         announcement: null,
       };
     }
+
+    console.log(error);
+
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\n Revise los logs del servidor',
       announcement: null,
     };
   }

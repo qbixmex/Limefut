@@ -1,18 +1,16 @@
-import { type FC } from 'react';
-import { buttonVariants } from '@/components/ui/button';
+import type { FC } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { getSession } from '@/lib/get-session';
 import { cn } from '@/lib/utils';
 import { Pagination } from '@/shared/components/pagination';
-import { ROUTES } from '@/shared/constants/routes';
 import { format } from 'date-fns/format';
 import { es } from 'date-fns/locale';
-import { InfoIcon, Pencil } from 'lucide-react';
-import Link from 'next/link';
 import { fetchAnnouncementsAction, updateAnnouncementStateAction } from '../(actions)';
 import { DeleteAnnouncement } from '../(components)/delete-announcement';
 import { ActiveSwitch } from '@/shared/components/active-switch';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import { ShowAnnouncementDetails } from './show-announcement-details';
+import { EditAnnouncement } from './edit-announcement';
 
 type Props = Readonly<{
   query?: string;
@@ -39,7 +37,7 @@ export const AnnouncementsTable: FC<Props> = async ({
       {announcements.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de noticias">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[200px]">Título</TableHead>
@@ -67,32 +65,8 @@ export const AnnouncementsTable: FC<Props> = async ({
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-3">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Link
-                              href={ROUTES.ADMIN_ANNOUNCEMENTS_SHOW(announcement.id as string)}
-                              className={buttonVariants({ variant: 'outline-info', size: 'icon' })}
-                            >
-                              <InfoIcon />
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            detalles
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Link
-                              href={ROUTES.ADMIN_ANNOUNCEMENTS_EDIT(announcement.id as string)}
-                              className={buttonVariants({ variant: 'outline-warning', size: 'icon' })}
-                            >
-                              <Pencil />
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            <p>editar</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <ShowAnnouncementDetails announcementId={announcement.id} />
+                        <EditAnnouncement announcementId={announcement.id} />
                         <DeleteAnnouncement
                           announcementId={announcement.id as string}
                           roles={session?.user.roles as string[]}
@@ -113,11 +87,9 @@ export const AnnouncementsTable: FC<Props> = async ({
           </div>
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay noticias disponibles
-          </p>
-        </div>
+        <EmptyMessageResource>
+          No hay noticias disponibles
+        </EmptyMessageResource>
       )}
     </>
   );
