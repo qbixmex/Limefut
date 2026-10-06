@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Controller, useFormContext } from 'react-hook-form';
