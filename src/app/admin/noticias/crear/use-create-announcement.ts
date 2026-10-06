@@ -12,16 +12,18 @@ import type z from 'zod';
 export const useCreateAnnouncement = () => {
   const route = useRouter();
 
+  const createFormDefaultValues = () => ({
+    title: '',
+    permalink: '',
+    publishedDate: undefined,
+    description: '',
+    content: '',
+    active: false,
+  });
+
   const form = useForm<z.infer<typeof CreateAnnouncementSchema>>({
     resolver: zodResolver(CreateAnnouncementSchema),
-    defaultValues: {
-      title: '',
-      permalink: '',
-      publishedDate: undefined,
-      description: '',
-      content: '',
-      active: false,
-    },
+    defaultValues: createFormDefaultValues(),
   });
 
   const handleRedirectBack = () => {
@@ -31,6 +33,7 @@ export const useCreateAnnouncement = () => {
 
   const onSubmit = async (data: z.infer<typeof CreateAnnouncementSchema>) => {
     const formData = new FormData();
+
     formData.append('title', data.title as string);
     formData.append('permalink', data.permalink as string);
     formData.append('publishedDate', (data.publishedDate as Date).toString());
@@ -41,9 +44,7 @@ export const useCreateAnnouncement = () => {
     }
     formData.append('active', String(data.active ?? false));
 
-    const response = await createAnnouncementAction({
-      formData,
-    });
+    const response = await createAnnouncementAction({ formData });
 
     if (!response.ok) {
       toast.error(response.message);
@@ -51,7 +52,7 @@ export const useCreateAnnouncement = () => {
     }
 
     toast.success(response.message);
-    form.reset();
+    form.reset(createFormDefaultValues());
     route.replace(ROUTES.ADMIN_ANNOUNCEMENTS);
   };
 

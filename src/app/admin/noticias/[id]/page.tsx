@@ -3,11 +3,8 @@ import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import Link from 'next/link';
-import { buttonVariants } from '@/components/ui/button';
-import { Newspaper, Pencil } from 'lucide-react';
-import { fetchAnnouncementAction } from '../(actions)';
+import { Newspaper } from 'lucide-react';
+import { fetchAnnouncementAction, type ANNOUNCEMENT_TYPE } from '../(actions)';
 import { ROUTES } from '@/shared/constants/routes';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
@@ -17,6 +14,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeYoutube from '@/lib/rehype-youtube';
 import Image from 'next/image';
 import styles from './styles.module.css';
+import { EditAnnouncement } from '../(components)/edit-announcement';
 
 type Props = Readonly<{
   params: Promise<{
@@ -32,21 +30,23 @@ const AnnouncementPage: FC<Props> = ({ params }) => {
   );
 };
 
-const AnnouncementContent: FC<Props> = async ({ params }) => {
+export const AnnouncementContent: FC<Props> = async ({ params }) => {
   const sponsorId = (await params).id;
 
-  const { ok, message, announcement } = await fetchAnnouncementAction(sponsorId);
+  const response = await fetchAnnouncementAction(sponsorId);
 
-  if (!ok && !announcement) {
-    redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(message)}`);
+  if (!response.ok && !response.announcement) {
+    redirect(`${ROUTES.ADMIN_ANNOUNCEMENTS}?error=${encodeURIComponent(response.message)}`);
   }
+
+  const announcement = response.announcement as ANNOUNCEMENT_TYPE;
 
   return (
     <div className="admin-page">
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">
+            <CardTitle className="admin-page-card-title" role="heading" aria-level={1}>
               Detalles de la Noticia
             </CardTitle>
           </CardHeader>
@@ -54,12 +54,12 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
             <section className="flex flex-col lg:flex-row gap-5">
               <div className="w-full lg:w-1/2">
                 <div className="mb-10">
-                  {announcement?.imageUrl ? (
+                  {announcement.imageUrl ? (
                     <Image
-                      src={announcement?.imageUrl}
+                      src={announcement.imageUrl}
                       width={512}
                       height={512}
-                      alt={`${announcement?.title} imagen`}
+                      alt={`${announcement.title} imagen`}
                       className="w-full rounded max-w-[512px] h-auto"
                     />
                   ) : (
@@ -79,26 +79,26 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Título</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {announcement?.title}
+                        {announcement.title}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Enlace Permanente</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {announcement?.permalink}
+                        {announcement.permalink}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Descripción</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        <p className="text-balance">{announcement?.description}</p>
+                        <p className="text-balance">{announcement.description}</p>
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Fecha de publicación</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
                         {
-                          announcement?.publishedDate?.toLocaleDateString('es-MX', {
+                          announcement.publishedDate?.toLocaleDateString('es-MX', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
@@ -109,15 +109,15 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Estado</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        <Badge variant={announcement?.active ? 'outline-info' : 'outline-secondary'}>
-                          {announcement?.active ? 'activo' : 'desactivado'}
+                        <Badge variant={announcement.active ? 'outline-info' : 'outline-secondary'}>
+                          {announcement.active ? 'activo' : 'desactivado'}
                         </Badge>
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Fecha de creación</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {announcement?.updatedAt?.toLocaleDateString('es-MX', {
+                        {announcement.updatedAt?.toLocaleDateString('es-MX', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -127,7 +127,7 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                     <TableRow>
                       <TableHead className="font-semibold w-[180px]">Fecha de actualización</TableHead>
                       <TableCell className="dark:text-gray-400 italic">
-                        {announcement?.updatedAt?.toLocaleDateString('es-MX', {
+                        {announcement.updatedAt?.toLocaleDateString('es-MX', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -146,28 +146,13 @@ const AnnouncementContent: FC<Props> = async ({ params }) => {
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeYoutube]}
                 >
-                  {announcement?.content}
+                  {announcement.content}
                 </ReactMarkdown>
               </div>
             </section>
 
             <div className="absolute top-5 right-5">
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link
-                    href={ROUTES.ADMIN_ANNOUNCEMENTS_EDIT(announcement?.id as string)}
-                    className={buttonVariants({
-                      variant: 'outline-warning',
-                      size: 'icon',
-                    })}
-                  >
-                    <Pencil />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="left">
-                  <span>editar</span>
-                </TooltipContent>
-              </Tooltip>
+              <EditAnnouncement announcementId={announcement.id} />
             </div>
           </CardContent>
         </Card>

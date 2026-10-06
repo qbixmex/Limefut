@@ -5,6 +5,7 @@ import { updateTag } from 'next/cache';
 import { EditAnnouncementSchema } from '@/shared/schemas';
 import { deleteImage, uploadImage } from '@/shared/actions';
 import { requireAdmin } from '@/lib/get-session';
+import { Prisma } from '@/generated/prisma/client';
 
 type Options = {
   formData: FormData;
@@ -76,7 +77,7 @@ export const updateAnnouncementAction = async ({
         if (!announcementExists) {
           return {
             ok: false,
-            message: '¡ La noticia no existe o ha sido eliminado !',
+            message: 'La noticia no existe o ha sido eliminado',
             announcement: null,
           };
         }
@@ -91,7 +92,7 @@ export const updateAnnouncementAction = async ({
         if (titleDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe una noticia con ese título !',
+            message: 'Ya existe una noticia con ese título',
             announcement: null,
           };
         }
@@ -106,7 +107,7 @@ export const updateAnnouncementAction = async ({
         if (permalinkDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe una noticia con ese enlace permanente !',
+            message: 'Ya existe una noticia con ese enlace permanente',
             announcement: null,
           };
         }
@@ -133,7 +134,7 @@ export const updateAnnouncementAction = async ({
           if (updatedAnnouncement.imagePublicID) {
             const cloudinaryResponse = await deleteImage(updatedAnnouncement.imagePublicID);
             if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+              throw new Error('Error al intentar eliminar la imagen de cloudinary');
             }
           }
 
@@ -141,7 +142,7 @@ export const updateAnnouncementAction = async ({
           const imageUploaded = await uploadImage(image as File, 'announcements');
 
           if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+            throw new Error('Error al intentar subir la imagen a cloudinary');
           }
 
           // Update image data to database.
@@ -166,34 +167,41 @@ export const updateAnnouncementAction = async ({
 
         return {
           ok: true,
-          message: '¡ La noticia fue actualizada correctamente 👍 !',
+          message: 'La noticia fue actualizada correctamente',
           announcement: updatedAnnouncement,
         };
       } catch (error) {
-        if (error instanceof Error && 'meta' in error && error.meta) {
-          if ('code' in error && error.code as string === 'P2002') {
-            const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2001') {
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: 'No se encuentra la noticia en la bse de datos',
               announcement: null,
             };
           }
 
-          console.log('Name:', error.name);
-          console.log('Cause:', error.cause);
-          console.log('Message:', error.message);
+          if (error.code === 'P2002') {
+            if (error.meta) {
+              console.log('ERROR METADATA:', error.meta);
+            }
+
+            return {
+              ok: false,
+              message: 'Hay campos duplicados, revise los logs del servidor',
+              announcement: null,
+            };
+          }
 
           return {
             ok: false,
-            message: '¡ Error al actualizar la noticia, revise los logs del servidor !',
+            message: 'Error al actualizar la noticia, revise los logs del servidor',
             announcement: null,
           };
         }
-        console.log((error as Error).message);
+        console.log(error);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs del servidor',
           announcement: null,
         };
       }
@@ -209,7 +217,7 @@ export const updateAnnouncementAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       announcement: null,
     };
   }

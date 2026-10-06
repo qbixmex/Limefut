@@ -28,9 +28,11 @@ export const DescriptionField: FC = () => {
             onBlur={() => setFocused(false)}
             aria-invalid={fieldState.invalid}
           />
+
           {fieldState.invalid && (
             <FieldError errors={[fieldState.error]} />
           )}
+
           {focused && (
             <div className="mt-3 ml-2">
               <CharactersCounter
