@@ -64,4 +64,14 @@ describe('Test on <FormFields />', () => {
     render(<FormFields showMetaFields />);
     expect(screen.getByTestId('active-field')).toBeInTheDocument();
   });
+
+  test('Should render alignment field by default', () => {
+    render(<FormFields />);
+    expect(screen.getByTestId('alignment-field')).toBeInTheDocument();
+  });
+
+  test('Should render show data field by default', () => {
+    render(<FormFields />);
+    expect(screen.getByTestId('show-data-field')).toBeInTheDocument();
+  });
 });
