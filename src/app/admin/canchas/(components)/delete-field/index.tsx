@@ -27,7 +27,7 @@ type Props = Readonly<{
 export const DeleteField: FC<Props> = ({ fieldId, roles }) => {
   const onDeleteField = async (teamId: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar canchas !');
+      toast.error('No tienes permisos administrativos para eliminar canchas');
       return;
     }
     const { ok, message } = await deleteFieldAction(teamId);

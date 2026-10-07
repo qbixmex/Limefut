@@ -82,7 +82,7 @@ export const updateTournamentAction = async ({
         if (!isTournamentExists) {
           return {
             ok: false,
-            message: '¡ El torneo no existe o ha sido eliminado !',
+            message: 'El torneo no existe o ha sido eliminado',
             tournament: null,
           };
         }
@@ -127,7 +127,7 @@ export const updateTournamentAction = async ({
           if (updatedTournament.imagePublicID) {
             const cloudinaryResponse = await deleteImage(updatedTournament.imagePublicID);
             if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+              throw new Error('Error al intentar eliminar la imagen de cloudinary');
             }
           }
 
@@ -135,7 +135,7 @@ export const updateTournamentAction = async ({
           const imageUploaded = await uploadImage(image as File, 'tournaments');
 
           if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+            throw new Error('Error al intentar subir la imagen a cloudinary');
           }
 
           // Update image data to database.
@@ -171,7 +171,7 @@ export const updateTournamentAction = async ({
 
         return {
           ok: true,
-          message: '¡ El torneo fue actualizado correctamente 👍 !',
+          message: 'El torneo fue actualizado correctamente',
           tournament: updatedTournament,
         };
       } catch (error) {
@@ -183,21 +183,21 @@ export const updateTournamentAction = async ({
 
             return {
               ok: false,
-              message: '¡ Hay campos duplicados, revise los logs del servidor !',
+              message: 'Hay campos duplicados, revise los logs del servidor',
               tournament: null,
             };
           }
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el torneo, revise los logs del servidor !',
+            message: 'Error al actualizar el torneo, revise los logs del servidor',
             tournament: null,
           };
         }
         console.log(error);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs del servidor !',
+          message: 'Error inesperado, revise los logs del servidor',
           tournament: null,
         };
       }
@@ -208,7 +208,7 @@ export const updateTournamentAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       tournament: null,
     };
   }

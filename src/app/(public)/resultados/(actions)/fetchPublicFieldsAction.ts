@@ -31,12 +31,12 @@ export const fetchPublicFieldsAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Las canchas fueron obtenidas correctamente 👍 !',
+      message: 'Las canchas fueron obtenidas correctamente',
       fields,
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('¡ Error al intentar obtener las canchas !');
+      console.log('Error al intentar obtener las canchas');
       return {
         ok: false,
         message: error.message,
@@ -46,7 +46,7 @@ export const fetchPublicFieldsAction = async (): ResponseAction => {
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado al obtener las canchas, revise los logs del servidor !',
+      message: 'Error inesperado al obtener las canchas, revise los logs del servidor',
       fields: [],
     };
   }

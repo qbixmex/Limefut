@@ -54,7 +54,7 @@ export const createCategoryAction = async ({
       if (categoryPermalinkExists > 0) {
         return {
           ok: false,
-          message: '¡ El enlace permanente ya existe, elija otro !',
+          message: 'El enlace permanente ya existe, elija otro',
           category: null,
         };
       }
@@ -65,7 +65,7 @@ export const createCategoryAction = async ({
 
       return {
         ok: true,
-        message: '¡ Categoría creada satisfactoriamente 👍 !',
+        message: 'Categoría creada satisfactoriamente',
         category: createdCategory,
       };
     });
@@ -83,7 +83,7 @@ export const createCategoryAction = async ({
 
         return {
           ok: false,
-          message: '¡ Hay campos duplicados, revise los logs del servidor !',
+          message: 'Hay campos duplicados, revise los logs del servidor',
           category: null,
         };
       }
@@ -92,7 +92,7 @@ export const createCategoryAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al crear la categoría, revise los logs del servidor ❌ !',
+        message: 'Error al crear la categoría, revise los logs del servidor',
         category: null,
       };
     }
@@ -101,7 +101,7 @@ export const createCategoryAction = async ({
 
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor ❌ !',
+      message: 'Error inesperado, revise los logs del servidor',
       category: null,
     };
   }

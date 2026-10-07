@@ -27,7 +27,7 @@ type Props = Readonly<{
 export const DeleteBanner: FC<Props> = ({ bannerId, roles }) => {
   const onDeleteBanner = async (id: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar banners !');
+      toast.error('No tienes permisos administrativos para eliminar banners');
       return;
     }
 

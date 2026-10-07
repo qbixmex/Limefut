@@ -317,7 +317,7 @@ export const SettingsForm: FC<Props> = ({ globalSettings }) => {
                   </FormLabel>
                   <FormControl>
                     <Select
-                      value={field.value ?? undefined}
+                      value={field.value ?? ''}
                       onValueChange={(value) => {
                         field.onChange(value === 'none' ? '' : value);
                       }}

@@ -11,24 +11,24 @@ const ACCEPTED_FILE_TYPES = [
 
 export const createPlayerSchema = z.object({
   name: z.string()
-    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' }),
+    .min(3, { message: 'El nombre debe ser mayor a 3 caracteres' })
+    .max(50, { message: 'El nombre debe ser menor a 50 caracteres' }),
   email: z.union([
     z.literal(''),
-    z.email({ message: '¡ Formato de correo electrónico incorrecto !' }),
+    z.email({ message: 'Formato de correo electrónico incorrecto' }),
   ]).optional(),
   phone: z.union([
     z.literal(''),
     z.string()
-      .min(5, { message: '¡ El teléfono debe ser mayor a 5 caracteres !' })
-      .max(100, { message: '¡ El teléfono debe ser menor a 100 caracteres !' }),
+      .min(5, { message: 'El teléfono debe ser mayor a 5 caracteres' })
+      .max(100, { message: 'El teléfono debe ser menor a 100 caracteres' }),
   ]).optional(),
   birthday: z
     .date({ message: 'La fecha de nacimiento debe ser una fecha válida' })
     .optional(),
   nationality: z.string()
-    .min(3, { message: '¡ La nacionalidad debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ La nacionalidad debe ser menor a 100 caracteres !' })
+    .min(3, { message: 'La nacionalidad debe ser mayor a 3 caracteres' })
+    .max(100, { message: 'La nacionalidad debe ser menor a 100 caracteres' })
     .optional(),
   image: z
     .instanceof(File, { message: 'La imagen debe ser un archivo' })
@@ -40,7 +40,7 @@ export const createPlayerSchema = z.object({
     .string()
     .refine(
       (value) => value === '' || z.string().uuid().safeParse(value).success,
-      { message: '¡ El id del equipo debe ser un UUID válido o vacío !' },
+      { message: 'El id del equipo debe ser un UUID válido o vacío' },
     )
     .nullish(),
 });

@@ -37,14 +37,14 @@ export const deleteContentImageAction = async (
   if (!page) {
     return {
       ok: false,
-      message: '¡ La página no existe !',
+      message: 'La página no existe',
     };
   }
 
   if (page.images.length === 0) {
     return {
       ok: false,
-      message: '¡ No hay imágenes para eliminar !',
+      message: 'No hay imágenes para eliminar',
     };
   }
 
@@ -56,7 +56,7 @@ export const deleteContentImageAction = async (
   if (!imageToDelete) {
     return {
       ok: false,
-      message: `¡ La imagen con el ID ${publicId} no existe !`,
+      message: `La imagen con el ID ${publicId} no existe`,
     };
   }
 
@@ -87,7 +87,7 @@ export const deleteContentImageAction = async (
 
   return {
     ok: true,
-    message: 'La imagen del contenido ha sido eliminada 👍',
+    message: 'La imagen del contenido ha sido eliminada',
     customPageImages: updatedPage?.images.map(({ imageUrl, publicId }) => ({
       imageUrl,
       resourceId: publicId,

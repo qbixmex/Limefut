@@ -151,7 +151,7 @@ field: {
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: matches.map((match) => ({
         id: match.id,
         localScore: match.localScore ?? 0,

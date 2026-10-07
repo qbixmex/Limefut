@@ -26,14 +26,14 @@ export const fetchSponsorAction = async (
     if (!sponsor) {
       return {
         ok: false,
-        message: '¡ Patrocinador no encontrado ❌ !',
+        message: 'Patrocinador no encontrado',
         sponsor: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Patrocinador obtenido correctamente 👍 !',
+      message: 'Patrocinador obtenido correctamente',
       sponsor,
     };
   } catch (error) {
@@ -41,13 +41,13 @@ export const fetchSponsorAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el Patrocinador,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el Patrocinador,\nRevise los logs del servidor',
         sponsor: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       sponsor: null,
     };
   }

@@ -51,13 +51,13 @@ export const finishPlayoffMatchAction = async (props: Props): ResponseAction => 
   if (!updatedMatch) {
     return {
       ok: false,
-      message: '¡ No se pudo finalizar el partido !',
+      message: 'No se pudo finalizar el partido',
     };
   }
 
   return {
     ok: true,
-    message: '¡ El estado del partido finalizó correctamente ⚽️🎉 !',
+    message: 'El estado del partido finalizó correctamente',
   };
 };
 

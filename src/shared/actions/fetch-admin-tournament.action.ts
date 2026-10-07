@@ -28,14 +28,14 @@ export const fetchAdminTournamentAction = async (
     if (!tournament) {
       return {
         ok: false,
-        message: `¡ El torneo con el enlace permanente: "${tournamentPermalink}" no existe ❌ !`,
+        message: `El torneo con el enlace permanente: "${tournamentPermalink}" no existe`,
         tournament: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Torneo obtenido correctamente 👍 !',
+      message: 'Torneo obtenido correctamente',
       tournament: { id: tournament.id },
     };
   } catch (error) {
@@ -46,13 +46,13 @@ export const fetchAdminTournamentAction = async (
 
       return {
         ok: false,
-        message: 'No se pudo obtener el torneo,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el torneo,\nRevise los logs del servidor',
         tournament: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       tournament: null,
     };
   }

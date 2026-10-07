@@ -26,7 +26,7 @@ const TIME_ZONE = 'America/Mexico_City';
 
 const defaultResponse = {
   ok: true,
-  message: '! Las canchas fueron obtenidas correctamente 👍',
+  message: 'Las canchas fueron obtenidas correctamente',
   match: playoffMatchMock,
 };
 

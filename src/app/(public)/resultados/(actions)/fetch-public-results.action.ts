@@ -122,14 +122,14 @@ export const fetchPublicResultsAction = async ({
     if (!matches) {
       return {
         ok: false,
-        message: `! No se encontraron encuentros en el torneo [${tournamentPermalink}] ❌ ¡`,
+        message: `No se encontraron encuentros en el torneo [${tournamentPermalink}]`,
         matches: [],
       };
     }
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     };
   } catch (error) {

@@ -98,7 +98,7 @@ export const fetchNextMatchesAction = async ({
 
     return {
       ok: true,
-      message: '¡ Encuentros obtenidos correctamente 👍 !',
+      message: 'Encuentros obtenidos correctamente',
       matches: matches.map((match) => ({
         id: match.id,
         localTeam: {
@@ -122,13 +122,13 @@ export const fetchNextMatchesAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener los encuentros,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener los encuentros,\nRevise los logs del servidor',
         matches: [],
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       matches: [],
     };
   }

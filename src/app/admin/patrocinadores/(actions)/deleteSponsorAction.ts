@@ -27,7 +27,7 @@ export const deleteSponsorAction = async (sponsorId: string): ResponseDeleteActi
   if (!sponsor) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el patrocinador, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar el patrocinador, quizás fue eliminado ó no existe',
     };
   }
 
@@ -50,6 +50,6 @@ export const deleteSponsorAction = async (sponsorId: string): ResponseDeleteActi
 
   return {
     ok: true,
-    message: `¡ El patrocinador "${sponsor.name}", ha sido eliminado correctamente 👍 !`,
+    message: `El patrocinador "${sponsor.name}", ha sido eliminado correctamente`,
   };
 };

@@ -66,7 +66,7 @@ export const recalculateStandingsAction = async ({
       });
 
       if (newStandings.count === 0) {
-        throw new Error('¡ No se pudo crear las estadísticas !');
+        throw new Error('No se pudo crear las estadísticas');
       }
 
       // Get all completed matches

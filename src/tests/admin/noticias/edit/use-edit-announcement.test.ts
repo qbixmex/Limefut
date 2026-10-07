@@ -124,7 +124,7 @@ describe('Tests on useEditAnnouncement hook', () => {
   test('onSubmit should show error toast and not navigate on failure', async () => {
     mockUpdateAction.mockResolvedValue({
       ok: false,
-      message: '¡ Error al actualizar la noticia !',
+      message: 'Error al actualizar la noticia',
       announcement: null,
     });
     const { toast } = await import('sonner');
@@ -134,7 +134,7 @@ describe('Tests on useEditAnnouncement hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.error).toHaveBeenCalledWith('¡ Error al actualizar la noticia !');
+    expect(toast.error).toHaveBeenCalledWith('Error al actualizar la noticia');
     expect(mockReplace).not.toHaveBeenCalled();
   });
 });

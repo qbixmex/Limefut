@@ -206,14 +206,14 @@ export const fetchMatchAction = async (
     if (!match) {
       return {
         ok: false,
-        message: '¡ Encuentro no encontrado ❌ !',
+        message: 'Encuentro no encontrado',
         match: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Encuentro obtenido correctamente 👍 !',
+      message: 'Encuentro obtenido correctamente',
       match: {
         id: match.id,
         field: match.field,
@@ -246,13 +246,13 @@ export const fetchMatchAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el encuentro,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el encuentro,\nRevise los logs del servidor',
         match: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       match: null,
     };
   }

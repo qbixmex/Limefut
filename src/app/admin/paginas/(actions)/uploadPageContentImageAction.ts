@@ -24,7 +24,7 @@ export const uploadPageContentImageAction = async (
 
   if (!imageUploaded) {
     return {
-      message: '¡ No se pudo subir la imagen ❌ !',
+      message: 'No se pudo subir la imagen',
       cloudinaryResponse: null,
     };
   }
@@ -45,7 +45,7 @@ export const uploadPageContentImageAction = async (
   updateTag('admin-page');
 
   return {
-    message: '¡ Imagen cargada satisfactoriamente 👍 !',
+    message: 'Imagen cargada satisfactoriamente',
     cloudinaryResponse: imageUploaded,
   };
 };

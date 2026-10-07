@@ -253,7 +253,7 @@ describe('Tests on updateGalleryImageAction server action', () => {
     });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ La imagen de la galería no existe o ha sido eliminada !');
+    expect(response.message).toBe('La imagen de la galería no existe o ha sido eliminada');
     expect(response.galleryImage).toBe(null);
     expect(mockTx.galleryImage.findMany).not.toHaveBeenCalled();
     expect(mockTx.galleryImage.update).not.toHaveBeenCalled();

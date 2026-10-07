@@ -59,7 +59,7 @@ export const fetchCredentialsAction = async (options?: Options): ResponseFetchAc
 
     return {
       ok: true,
-      message: '! Las credenciales fueron obtenidos correctamente 👍',
+      message: 'Las credenciales fueron obtenidos correctamente',
       credentials,
       pagination: {
         currentPage: page,

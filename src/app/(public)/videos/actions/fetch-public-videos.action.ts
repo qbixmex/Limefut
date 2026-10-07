@@ -73,7 +73,7 @@ export const fetchPublicVideosAction = async (options: Options): ResponseAction 
 
     return {
       ok: true,
-      message: '! Los videos fueron obtenidos correctamente 👍',
+      message: 'Los videos fueron obtenidos correctamente',
       videos,
       pagination: {
         currentPage: page,

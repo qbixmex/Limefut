@@ -61,7 +61,7 @@ export const updateHeroBannerAction = async ({
         if (!heroBannerExists) {
           return {
             ok: false,
-            message: '¡ El banner no existe o ha sido eliminado !',
+            message: 'El banner no existe o ha sido eliminado',
             heroBanner: null,
           };
         }
@@ -76,7 +76,7 @@ export const updateHeroBannerAction = async ({
         if (heroBannerDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe ese título !',
+            message: 'Ya existe ese título',
             heroBanner: null,
           };
         }
@@ -129,7 +129,7 @@ export const updateHeroBannerAction = async ({
 
           return {
             ok: true,
-            message: '¡ El banner fue guardado correctamente 👍 !',
+            message: 'El banner fue guardado correctamente',
             heroBanner: updatedBanner,
           };
         }
@@ -196,7 +196,7 @@ export const updateHeroBannerAction = async ({
 
         return {
           ok: true,
-          message: '¡ El banner fue actualizado correctamente 👍 !',
+          message: 'El banner fue actualizado correctamente',
           heroBanner: updatedHeroBanner,
         };
       } catch (error) {

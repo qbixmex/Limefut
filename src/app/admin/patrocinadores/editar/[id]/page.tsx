@@ -23,7 +23,7 @@ const EditSponsorContent: FC<Props> = async ({ params }) => {
   const { ok, sponsor } = await fetchSponsorAction(sponsorId);
 
   if (!ok) {
-    const message = `¡ El patrocinador con el id: "${sponsorId}", no existe ❌ !`;
+    const message = `El patrocinador con el id: "${sponsorId}", no existe`;
     redirect(`${ROUTES.ADMIN_SPONSORS}?error=${encodeURIComponent(message)}`);
   }
 

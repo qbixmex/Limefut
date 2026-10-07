@@ -103,12 +103,12 @@ export const PageForm: FC<Props> = ({ page }) => {
         return imageUrl !== customPageImage.imageUrl;
       }));
       setIsDeletingImage(null);
-      toast.success('Imagen eliminada correctamente 👍');
+      toast.success('Imagen eliminada correctamente');
     }
 
     if (!response.ok) {
       setIsDeletingImage(null);
-      toast.error('¡ No se pudo eliminar la imagen !');
+      toast.error('No se pudo eliminar la imagen');
     }
   };
 
@@ -284,7 +284,7 @@ export const PageForm: FC<Props> = ({ page }) => {
                     <FormLabel>Robots SEO</FormLabel>
                     <FormControl>
                       <Select
-                        value={field.value ?? undefined}
+                        value={field.value ?? ''}
                         onValueChange={(value) => field.onChange(value)}
                       >
                         <SelectTrigger
@@ -366,7 +366,7 @@ export const PageForm: FC<Props> = ({ page }) => {
                       <FormLabel>Estado</FormLabel>
                       <FormControl>
                         <Select
-                          value={field.value ?? undefined}
+                          value={field.value ?? ''}
                           onValueChange={(value) => field.onChange(value)}
                         >
                           <SelectTrigger
@@ -443,7 +443,7 @@ export const PageForm: FC<Props> = ({ page }) => {
                           onClick={async () => {
                             const url = customPageImage.imageUrl;
                             const ok = await copyToClipboard(url);
-                            if (ok) toast.success('URL copiada al portapapeles 👍');
+                            if (ok) toast.success('URL copiada al portapapeles');
                             else toast('URL mostrada para copia manual');
                           }}
                         >

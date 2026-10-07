@@ -49,12 +49,12 @@ export const updateMatchInputScoreAction = async (params: Params): ResponseActio
   if (!updatedMatch) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el marcador del partido !',
+      message: 'No se pudo actualizar el marcador del partido',
     };
   }
 
   return {
     ok: true,
-    message: '¡ El marcador del partido fue actualizado correctamente 👍 !',
+    message: 'El marcador del partido fue actualizado correctamente',
   };
 };

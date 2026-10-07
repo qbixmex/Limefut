@@ -10,22 +10,22 @@ const ACCEPTED_FILE_TYPES = [
 ];
 
 export const editGalleryImageSchema = z.object({
-  title: z.string('¡ El título debe ser una cadena de texto !')
-    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' })
+  title: z.string('El título debe ser una cadena de texto')
+    .min(3, { message: 'El nombre debe ser mayor a 3 caracteres' })
+    .max(50, { message: 'El nombre debe ser menor a 50 caracteres' })
     .optional(),
   image: z.instanceof(File)
     .refine(
       (file) => file.size <= MAX_UPLOAD_SIZE,
-      '¡ El tamaño máximo de la imagen deber ser menor a 1MB !',
+      'El tamaño máximo de la imagen deber ser menor a 1MB',
     )
     .refine(
       (file) => ACCEPTED_FILE_TYPES.includes(file.type),
-      `¡ El tipo de archivo debe ser uno de los siguientes: ${ACCEPTED_FILE_TYPES.join(', ')} !`,
+      `El tipo de archivo debe ser uno de los siguientes: ${ACCEPTED_FILE_TYPES.join(', ')}`,
     )
     .nullish(),
   position: z
-    .number('¡ La posición debe ser un número válido !')
+    .number('La posición debe ser un número válido')
     .optional(),
   active: z.boolean().optional(),
 });

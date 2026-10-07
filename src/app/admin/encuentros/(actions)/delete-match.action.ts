@@ -27,7 +27,7 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
   if (!match) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el encuentro, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar el encuentro, quizás fue eliminado ó no existe',
     };
   }
 
@@ -49,6 +49,6 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
 
   return {
     ok: true,
-    message: '¡ El encuentro ha sido eliminado correctamente 👍 !',
+    message: 'El encuentro ha sido eliminado correctamente',
   };
 };

@@ -50,7 +50,7 @@ describe('Test on <EditTournamentView />', () => {
   test('Should redirect when fetch fails', async () => {
     mockFetchSuccess.mockResolvedValue({
       ok: false,
-      message: '¡ El torneo no existe con el id subministrado ❌ !',
+      message: 'El torneo no existe con el id subministrado',
       tournament: null,
     });
 

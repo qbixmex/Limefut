@@ -36,7 +36,7 @@ export const fetchTournamentsForMatchAction = async (): ResponseFetchAction => {
 
     return {
       ok: true,
-      message: '! Los torneos fueron obtenidos correctamente 👍',
+      message: 'Los torneos fueron obtenidos correctamente',
       tournaments,
     };
   } catch (error) {

@@ -29,7 +29,7 @@ export const deleteCategoryAction = async ({
   if (categoryExists === 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la categoría, quizás fue eliminada ó no existe !',
+      message: 'No se puede eliminar la categoría, quizás fue eliminada ó no existe',
     };
   }
 
@@ -45,7 +45,7 @@ export const deleteCategoryAction = async ({
 
     return {
       ok: true,
-      message: '¡ La categoría ha sido eliminada correctamente 👍 !',
+      message: 'La categoría ha sido eliminada correctamente',
     };
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {

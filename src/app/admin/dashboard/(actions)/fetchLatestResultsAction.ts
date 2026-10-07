@@ -61,7 +61,7 @@ export const fetchLatestResultsAction = async ({ quantity }: Options): Promise<R
 
     return {
       ok: true,
-      message: '! Los resultados fueron obtenidos correctamente 👍',
+      message: 'Los resultados fueron obtenidos correctamente',
       latestResults: matches.map((match) => ({
         ...match,
         localTeamName: match.local.name,

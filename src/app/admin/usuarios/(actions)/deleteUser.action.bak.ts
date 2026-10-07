@@ -30,7 +30,7 @@ export const deleteUserAction = async (userId: string): ResponseDeleteAction => 
   if (!userDeleted) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar por que el usuario no existe !',
+      message: 'No se puede eliminar por que el usuario no existe',
     };
   }
 
@@ -52,6 +52,6 @@ export const deleteUserAction = async (userId: string): ResponseDeleteAction => 
 
   return {
     ok: true,
-    message: `¡ Usuario "${userDeleted.name}" eliminado correctamente 👍 !`,
+    message: `Usuario "${userDeleted.name}" eliminado correctamente`,
   };
 };

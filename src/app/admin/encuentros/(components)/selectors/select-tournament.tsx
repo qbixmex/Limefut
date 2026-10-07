@@ -40,7 +40,7 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
       defaultValue={tournamentPermalink ?? ''}
     >
       <SelectTrigger className="w-full max-w-[400px]">
-        <SelectValue placeholder="¡ Selecciona un torneo !" />
+        <SelectValue placeholder="Selecciona un torneo" />
       </SelectTrigger>
       <SelectContent>
         {tournaments.map((tournament) => (

@@ -51,7 +51,7 @@ export const fetchTeamsForMatchEditAction = async (tournamentId: string): Respon
     if (!tournament) {
       return {
         ok: false,
-        message: `¡ No se encontró el torneo con id: [${tournamentId}] !`,
+        message: `No se encontró el torneo con id: [${tournamentId}]`,
         teams: [],
       };
     }
@@ -63,7 +63,7 @@ export const fetchTeamsForMatchEditAction = async (tournamentId: string): Respon
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams,
     };
   } catch (error) {

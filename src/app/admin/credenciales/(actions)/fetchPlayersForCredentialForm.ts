@@ -26,7 +26,7 @@ export const fetchPlayersForCredentialForm = async (): ResponseFetchAction => {
 
     return {
       ok: true,
-      message: '! Los jugadores fueron obtenidos correctamente 👍',
+      message: 'Los jugadores fueron obtenidos correctamente',
       players,
     };
   } catch (error) {

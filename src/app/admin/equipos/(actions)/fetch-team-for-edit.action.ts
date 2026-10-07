@@ -86,14 +86,14 @@ export const fetchTeamForEditAction = async ({
     if (!team) {
       return {
         ok: false,
-        message: '¡ El equipo no existe con el id subministrado ❌ !',
+        message: 'El equipo no existe con el id subministrado',
         team: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ El equipo fue obtenido correctamente 👍 !',
+      message: 'El equipo fue obtenido correctamente',
       team: {
         ...team,
         fieldsIds: team.fields.map(tf => tf.fieldId),
@@ -104,13 +104,13 @@ export const fetchTeamForEditAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el equipo,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el equipo,\nRevise los logs del servidor',
         team: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       team: null,
     };
   }

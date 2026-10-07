@@ -13,7 +13,7 @@ export const CoachSelectField: FC = async () => {
 
   if (ok && coaches?.length === 0) {
     redirect(`${ROUTES.ADMIN_TEAMS}?error=${
-      encodeURIComponent('¡ No puedes crear un equipo sin entrenadores activos !')
+      encodeURIComponent('No puedes crear un equipo sin entrenadores activos')
     }`);
   }
 

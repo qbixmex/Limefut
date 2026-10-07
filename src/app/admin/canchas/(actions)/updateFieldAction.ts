@@ -62,7 +62,7 @@ export const updateFieldAction = async ({
         if (!isFieldExists) {
           return {
             ok: false,
-            message: '¡ La cancha no existe o ha sido eliminada !',
+            message: 'La cancha no existe o ha sido eliminada',
             field: null,
           };
         }
@@ -77,7 +77,7 @@ export const updateFieldAction = async ({
         if (isPermalinkDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ El enlace permanente ya existe, elija otro !',
+            message: 'El enlace permanente ya existe, elija otro',
             field: null,
           };
         }
@@ -96,7 +96,7 @@ export const updateFieldAction = async ({
 
         return {
           ok: true,
-          message: '¡ La cancha fue actualizada correctamente 👍 !',
+          message: 'La cancha fue actualizada correctamente',
           field: updatedField,
         };
       } catch (error) {
@@ -108,14 +108,14 @@ export const updateFieldAction = async ({
 
             return {
               ok: false,
-              message: '¡ Hay campos duplicados, revise los logs del servidor !',
+              message: 'Hay campos duplicados, revise los logs del servidor',
               field: null,
             };
           }
 
           return {
             ok: false,
-            message: '¡ Error al crear la cancha, revise los logs del servidor !',
+            message: 'Error al crear la cancha, revise los logs del servidor',
             field: null,
           };
         }
@@ -127,14 +127,14 @@ export const updateFieldAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al crear la cancha, revise los logs del servidor !',
+            message: 'Error al crear la cancha, revise los logs del servidor',
             field: null,
           };
         }
 
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs del servidor !',
+          message: 'Error inesperado, revise los logs del servidor',
           field: null,
         };
       }
@@ -145,7 +145,7 @@ export const updateFieldAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       field: null,
     };
   }

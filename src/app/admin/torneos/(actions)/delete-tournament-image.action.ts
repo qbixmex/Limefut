@@ -35,7 +35,7 @@ export const deleteTournamentImageAction = async ({
   if (!tournament) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la imagen del torneo, quizás el torneo fue eliminado ó no existe !',
+      message: 'No se puede eliminar la imagen del torneo, quizás el torneo fue eliminado ó no existe',
     };
   }
 
@@ -95,6 +95,6 @@ export const deleteTournamentImageAction = async ({
 
   return {
     ok: true,
-    message: '¡ La imagen ha sido eliminada correctamente 👍 !',
+    message: 'La imagen ha sido eliminada correctamente',
   };
 };

@@ -35,7 +35,7 @@ export const fetchCategoriesForMatchAction = async (): ResponseFetchAction => {
 
     return {
       ok: true,
-      message: '! Las categorías fueron obtenidos correctamente 👍',
+      message: 'Las categorías fueron obtenidos correctamente',
       categories,
     };
   } catch (error) {

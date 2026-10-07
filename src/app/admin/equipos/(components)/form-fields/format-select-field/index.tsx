@@ -18,7 +18,7 @@ export const FormatSelectField: FC = () => {
             Formato <span className="text-orange-500">*</span>
           </FieldLabel>
           <Select
-            value={field.value ?? undefined}
+            value={field.value ?? ''}
             onValueChange={field.onChange}
           >
             <SelectTrigger>

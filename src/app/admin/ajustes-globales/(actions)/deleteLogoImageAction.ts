@@ -42,7 +42,7 @@ export const deleteLogoImageAction = async ({
   if (!settings) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la imagen, los ajustes globales no existen !',
+      message: 'No se puede eliminar la imagen, los ajustes globales no existen',
     };
   } else {
     if (deleteLogoImage) {
@@ -112,6 +112,6 @@ export const deleteLogoImageAction = async ({
 
   return {
     ok: true,
-    message: '¡ La imagen ha sido eliminada correctamente 👍 !',
+    message: 'La imagen ha sido eliminada correctamente',
   };
 };

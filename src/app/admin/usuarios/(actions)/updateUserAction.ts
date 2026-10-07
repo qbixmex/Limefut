@@ -63,7 +63,7 @@ export const updateUserAction = async (
   ) {
     return {
       ok: false,
-      message: '¡ La contraseña es insegura, elija otra por favor !',
+      message: 'La contraseña es insegura, elija otra por favor',
       user: null,
     };
   }

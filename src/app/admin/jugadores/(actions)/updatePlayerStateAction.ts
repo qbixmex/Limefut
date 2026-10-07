@@ -27,7 +27,7 @@ export const updatePlayerStateAction = async (
   if (playerExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el jugador, quizás fue eliminado ó no existe !',
+      message: 'No se pudo actualizar el jugador, quizás fue eliminado ó no existe',
     };
   }
 
@@ -46,6 +46,6 @@ export const updatePlayerStateAction = async (
 
   return {
     ok: true,
-    message: `¡ El jugador "${updatedPlayer.name}" fue ${updatedPlayer.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `El jugador "${updatedPlayer.name}" fue ${updatedPlayer.active ? 'activado' : 'desactivado'} correctamente`,
   };
 };

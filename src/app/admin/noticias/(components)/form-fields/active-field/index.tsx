@@ -15,7 +15,9 @@ export const ActiveField: FC = () => {
       render={({ field }) => (
         <Field className="w-auto">
           <div className="flex items-center gap-3">
-            <FieldLabel htmlFor="active">Activo</FieldLabel>
+            <FieldLabel htmlFor="active">
+              {field.value ? 'Activo' : 'No activo'}
+            </FieldLabel>
             <Switch
               id="active"
               checked={field.value ?? false}

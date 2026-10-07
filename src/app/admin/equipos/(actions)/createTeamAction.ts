@@ -165,7 +165,7 @@ export const createTeamAction = async ({
 
       return {
         ok: true,
-        message: '¡ Equipo creado satisfactoriamente 👍 !',
+        message: 'Equipo creado satisfactoriamente',
         team: createdTeam,
       };
     });
@@ -188,21 +188,21 @@ export const createTeamAction = async ({
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           team: null,
         };
       }
 
       return {
         ok: false,
-        message: '¡ Error al crear el equipo, revise los logs del servidor !',
+        message: 'Error al crear el equipo, revise los logs del servidor',
         team: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       team: null,
     };
   }

@@ -41,14 +41,14 @@ export const deletePlayerAction = async ({
   if (!player) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el jugador, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar el jugador, quizás fue eliminado ó no existe',
     };
   }
 
   if (player._count.penaltyKicks > 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el jugador porque tiene penales registrados !',
+      message: 'No se puede eliminar el jugador porque tiene penales registrados',
     };
   }
 
@@ -99,6 +99,6 @@ export const deletePlayerAction = async ({
 
   return {
     ok: true,
-    message: `¡ El jugador ["${player.name}"] ha sido eliminado correctamente 👍 !`,
+    message: `El jugador ["${player.name}"] ha sido eliminado correctamente`,
   };
 };

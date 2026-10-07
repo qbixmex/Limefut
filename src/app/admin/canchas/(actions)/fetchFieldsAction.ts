@@ -72,7 +72,7 @@ export const fetchFieldsAction = async (
 
     return {
       ok: true,
-      message: '! Las canchas fueron obtenidas correctamente 👍',
+      message: 'Las canchas fueron obtenidas correctamente',
       fields,
       pagination: {
         currentPage: page,

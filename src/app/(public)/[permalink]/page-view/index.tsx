@@ -41,7 +41,7 @@ export const PageView: FC<Props> = async ({ params }) => {
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeHighlight, rehypeRaw, rehypeYoutube]}
         >
-          {customPage.content ?? '¡ El contenido no esta disponible !'}
+          {customPage.content ?? 'El contenido no esta disponible'}
         </ReactMarkdown>
       </section>
     </>

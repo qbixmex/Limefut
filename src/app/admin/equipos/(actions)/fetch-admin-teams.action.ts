@@ -98,7 +98,7 @@ export const fetchAdminTeamsAction = async (
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams: teams.map((team) => ({
         ...team,
         playersCount: team._count.players,

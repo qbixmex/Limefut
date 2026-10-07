@@ -57,14 +57,14 @@ export const fetchPlayerAction = async ({
     if (!player) {
       return {
         ok: false,
-        message: '¡ Jugador no encontrado ❌ !',
+        message: 'Jugador no encontrado',
         player: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Se obtuvo el jugador correctamente 👍 !',
+      message: 'Se obtuvo el jugador correctamente',
       player: {
         ...player,
         team: player?.team ?? null,
@@ -75,13 +75,13 @@ export const fetchPlayerAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el jugador,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el jugador,\nRevise los logs del servidor',
         player: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       player: null,
     };
   }

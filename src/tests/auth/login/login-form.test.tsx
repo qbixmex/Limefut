@@ -20,7 +20,7 @@ describe('Tests on <LoginForm />', () => {
     vi.clearAllMocks();
     vi.mocked(signInAction).mockResolvedValue({
       ok: true,
-      message: '¡ Has accedido correctamente 👍 !',
+      message: 'Has accedido correctamente',
       roles: ['admin'],
     });
   });

@@ -43,6 +43,6 @@ export const deleteFieldAction = async (fieldId: string): ResponseDeleteAction =
 
   return {
     ok: true,
-    message: '¡ La cancha ha sido eliminada correctamente 👍 !',
+    message: 'La cancha ha sido eliminada correctamente',
   };
 };

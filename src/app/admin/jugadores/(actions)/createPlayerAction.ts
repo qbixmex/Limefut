@@ -76,7 +76,7 @@ export const createPlayerAction = async ({
 
       return {
         ok: true,
-        message: '¡ Jugador creado correctamente 👍 !',
+        message: 'Jugador creado correctamente',
         player: createdPlayer,
       };
     });
@@ -93,7 +93,7 @@ export const createPlayerAction = async ({
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           player: null,
         };
       }
@@ -101,14 +101,14 @@ export const createPlayerAction = async ({
       console.log('MESSAGE:', error.message);
       return {
         ok: false,
-        message: '¡ Error al crear el jugador, revise los logs del servidor !',
+        message: 'Error al crear el jugador, revise los logs del servidor',
         player: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       player: null,
     };
   }

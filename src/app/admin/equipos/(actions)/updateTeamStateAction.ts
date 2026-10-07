@@ -22,7 +22,7 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
   if (teamExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el equipo, quizás fue eliminado ó no existe !',
+      message: 'No se pudo actualizar el equipo, quizás fue eliminado ó no existe',
     };
   }
 
@@ -49,6 +49,6 @@ export const updateTeamStateAction = async (id: string, state: boolean): Respons
 
   return {
     ok: true,
-    message: `¡ El equipo "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `El equipo "${updatedTeam.name}" fue ${updatedTeam.active ? 'activado' : 'desactivado'} correctamente`,
   };
 };

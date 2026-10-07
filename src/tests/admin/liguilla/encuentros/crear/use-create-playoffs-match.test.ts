@@ -43,7 +43,7 @@ describe('Tests on useCreatePlayoffsMatch hook', () => {
     vi.clearAllMocks();
     mockCreateAction.mockResolvedValue({
       ok: true,
-      message: '¡ Encuentro creado correctamente 👍 !',
+      message: 'Encuentro creado correctamente',
       match: { id: '6d7e8f9a-1b2c-4d3e-8f4a-5b6c7d8e9f0a' },
     });
   });
@@ -92,7 +92,7 @@ describe('Tests on useCreatePlayoffsMatch hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ Encuentro creado correctamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('Encuentro creado correctamente');
     expect(mockReplace).toHaveBeenCalledWith(ROUTES.ADMIN_PLAYOFFS_MATCHES(playoffId));
 
     const values = result.current.form.getValues();

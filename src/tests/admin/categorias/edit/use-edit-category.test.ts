@@ -42,7 +42,7 @@ describe('Tests on useEditCategory hook', () => {
     vi.clearAllMocks();
     mockUpdateAction.mockResolvedValue({
       ok: true,
-      message: '¡ La categoría fue actualizada correctamente 👍 !',
+      message: 'La categoría fue actualizada correctamente',
     });
   });
 
@@ -90,7 +90,7 @@ describe('Tests on useEditCategory hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ La categoría fue actualizada correctamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('La categoría fue actualizada correctamente');
     expect(mockReplace).toHaveBeenCalledWith(ROUTES.ADMIN_CATEGORIES);
   });
 

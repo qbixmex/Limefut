@@ -37,7 +37,7 @@ vi.mock('@/shared/components/pagination', () => ({
 describe('Test on <MessagesTable /> component', () => {
   const defaultResponse = {
     ok: true,
-    message: '! Los mensajes fueron obtenidos correctamente 👍',
+    message: 'Los mensajes fueron obtenidos correctamente',
     messages: messagesMock,
     pagination: {
       currentPage: 1,

@@ -119,8 +119,8 @@ export const useEditTeam = ({
   };
 
 /*
-¡ El torneo con el enlace permanente: "torneo-febrero-junio-2026-edicion-copa-del-mundo"
-y categoría "null" no existe ❌ !
+El torneo con el enlace permanente: "torneo-febrero-junio-2026-edicion-copa-del-mundo"
+y categoría "null" no existe
 */
   return {
     form,

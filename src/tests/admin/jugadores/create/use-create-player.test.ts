@@ -42,7 +42,7 @@ describe('Tests on useCreatePlayer hook', () => {
     vi.clearAllMocks();
     mockCreateAction.mockResolvedValue({
       ok: true,
-      message: '¡ Jugador creado correctamente 👍 !',
+      message: 'Jugador creado correctamente',
       player: null,
     });
   });
@@ -101,7 +101,7 @@ describe('Tests on useCreatePlayer hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ Jugador creado correctamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('Jugador creado correctamente');
     expect(mockReplace).toHaveBeenCalledWith(`${ROUTES.ADMIN_PLAYERS}?`);
   });
 

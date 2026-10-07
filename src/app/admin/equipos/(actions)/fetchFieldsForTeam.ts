@@ -29,7 +29,7 @@ export const fetchFieldsForTeam = async (): ResponseFetchAction => {
 
     return {
       ok: true,
-      message: '! Las canchas fueron obtenidas correctamente 👍',
+      message: 'Las canchas fueron obtenidas correctamente',
       fields,
     };
   } catch (error) {
@@ -44,7 +44,7 @@ export const fetchFieldsForTeam = async (): ResponseFetchAction => {
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado al obtener las canchas ❌ !, revise los logs del servidor',
+      message: 'Error inesperado al obtener las canchas!, revise los logs del servidor',
       fields: [],
     };
   }

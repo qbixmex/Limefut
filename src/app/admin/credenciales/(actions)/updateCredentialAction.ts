@@ -64,7 +64,7 @@ export const updateCredentialAction = async (
         if (!player) {
           return {
             ok: false,
-            message: `¡ El jugador: "${data.fullName}" no existe !`,
+            message: `El jugador: "${data.fullName}" no existe`,
             credential: null,
           };
         }
@@ -76,7 +76,7 @@ export const updateCredentialAction = async (
         if (!countCredential) {
           return {
             ok: false,
-            message: `¡ La credencial con el jugador: "${data.fullName}" no existe !`,
+            message: `La credencial con el jugador: "${data.fullName}" no existe`,
             credential: null,
           };
         }
@@ -107,7 +107,7 @@ export const updateCredentialAction = async (
 
         return {
           ok: true,
-          message: '¡ La credencial fue actualizada correctamente 👍 !',
+          message: 'La credencial fue actualizada correctamente',
           credential: updatedCredential,
         };
       } catch (error) {
@@ -116,7 +116,7 @@ export const updateCredentialAction = async (
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               credential: null,
             };
           }
@@ -125,13 +125,13 @@ export const updateCredentialAction = async (
           console.log('Error:', error.message);
           return {
             ok: false,
-            message: '¡ Error al actualizar la credencial, revise los logs del servidor !',
+            message: 'Error al actualizar la credencial, revise los logs del servidor',
             credential: null,
           };
         }
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs',
           credential: null,
         };
       }
@@ -142,7 +142,7 @@ export const updateCredentialAction = async (
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       credential: null,
     };
   }

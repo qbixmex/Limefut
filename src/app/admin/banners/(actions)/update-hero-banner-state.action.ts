@@ -23,7 +23,7 @@ export const updateHeroBannerStateAction = async (id: string, state: boolean): R
   if (heroBannerExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el banner, quizás fue eliminado ó no existe !',
+      message: 'No se pudo actualizar el banner, quizás fue eliminado ó no existe',
     };
   }
 

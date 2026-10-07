@@ -102,7 +102,7 @@ export const createMatchAction = async ({
       if (!tournament) {
         return {
           ok: false,
-          message: `¡ El torneo con el enlace permanente: "${tournamentPermalink}" no existe !`,
+          message: `El torneo con el enlace permanente: "${tournamentPermalink}" no existe`,
           match: null,
         };
       }
@@ -117,7 +117,7 @@ export const createMatchAction = async ({
       if (!category) {
         return {
           ok: false,
-          message: `¡ La categoría con el enlace permanente: "${categoryPermalink}" no existe !`,
+          message: `La categoría con el enlace permanente: "${categoryPermalink}" no existe`,
           match: null,
         };
       }
@@ -131,7 +131,7 @@ export const createMatchAction = async ({
         if (!field) {
           return {
             ok: false,
-            message: `¡ La cancha con el id: "${matchToSave.fieldId}" no existe !`,
+            message: `La cancha con el id: "${matchToSave.fieldId}" no existe`,
             match: null,
           };
         }
@@ -202,7 +202,7 @@ export const createMatchAction = async ({
 
       return {
         ok: true,
-        message: '¡ Encuentro creado correctamente 👍 !',
+        message: 'Encuentro creado correctamente',
         match: {
           ...createdMatch,
           localTeam: createdMatch.local,
@@ -236,7 +236,7 @@ export const createMatchAction = async ({
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           match: null,
         };
       }
@@ -250,7 +250,7 @@ export const createMatchAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al crear el encuentro, revise los logs del servidor !',
+        message: 'Error al crear el encuentro, revise los logs del servidor',
         match: null,
       };
     }
@@ -261,7 +261,7 @@ export const createMatchAction = async ({
 
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       match: null,
     };
   }
