@@ -35,19 +35,19 @@ export const fetchCustomPageAction = async (permalink: string): ResponseAction =
     if (customPage?.status !== 'published') {
       return {
         ok: false,
-        message: '¡ La página personalizada no está disponible !',
+        message: 'La página personalizada no está disponible',
         customPage: null,
       };
     }
 
     return {
       ok: true,
-      message: '! La página personalizada fue obtenida correctamente 👍 !',
+      message: 'La página personalizada fue obtenida correctamente',
       customPage,
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('¡ Error al intentar obtener la página personalizada ❌ !');
+      console.log('Error al intentar obtener la página personalizada');
       return {
         ok: false,
         message: error.message,
@@ -57,7 +57,7 @@ export const fetchCustomPageAction = async (permalink: string): ResponseAction =
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado al obtener la página personalizada, revise los logs del servidor ❌ !',
+      message: 'Error inesperado al obtener la página personalizada, revise los logs del servidor',
       customPage: null,
     };
   }

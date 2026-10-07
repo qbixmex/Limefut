@@ -35,7 +35,7 @@ export const fetchCustomPageMetadataAction = async (permalink: string): Response
 
     return {
       ok: true,
-      message: '! La página personalizada fue obtenida correctamente 👍 !',
+      message: 'La página personalizada fue obtenida correctamente',
       pageMetadata,
     };
   } catch (error) {

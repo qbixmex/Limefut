@@ -11,12 +11,12 @@ const ACCEPTED_FILE_TYPES = [
 
 export const editGallerySchema = z.object({
   title: z.string()
-    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
-    .max(50, { message: '¡ El nombre debe ser menor a 50 caracteres !' })
+    .min(3, { message: 'El nombre debe ser mayor a 3 caracteres' })
+    .max(50, { message: 'El nombre debe ser menor a 50 caracteres' })
     .optional(),
   permalink: z.string()
-    .min(3, { message: '¡ El enlace permanente debe ser mayor a 3 caracteres !' })
-    .max(100, { message: '¡ El enlace permanente debe ser menor a 100 caracteres !' }),
+    .min(3, { message: 'El enlace permanente debe ser mayor a 3 caracteres' })
+    .max(100, { message: 'El enlace permanente debe ser menor a 100 caracteres' }),
   image: z
     .instanceof(File, { message: 'La imagen debe ser un archivo' })
     .refine((file) => { return !file || file.size <= MAX_UPLOAD_SIZE; }, 'El tamaño máximo de la imagen deber ser menor a 1MB')

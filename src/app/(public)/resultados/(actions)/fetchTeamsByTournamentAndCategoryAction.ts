@@ -43,14 +43,14 @@ export const fetchTeamsByTournamentAndCategoryAction = async ({
     if (!teams) {
       return {
         ok: false,
-        message: `! No se encontraron equipos con la categoría [${categoryPermalink}] ❌ ¡`,
+        message: `No se encontraron equipos con la categoría [${categoryPermalink}]`,
         teams: [],
       };
     }
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams: teams.filter((team) => !team.name.toLowerCase().includes('descanso')),
     };
   } catch (error) {

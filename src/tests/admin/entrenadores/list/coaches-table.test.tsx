@@ -40,7 +40,7 @@ vi.mock('@/shared/components/pagination', () => ({
 describe('Tests on <CoachesTable /> component', () => {
   const defaultResponse = {
     ok: true,
-    message: '! Los entrenadores fueron obtenidos correctamente 👍',
+    message: 'Los entrenadores fueron obtenidos correctamente',
     coaches: coachesMock,
     pagination: {
       currentPage: 1,

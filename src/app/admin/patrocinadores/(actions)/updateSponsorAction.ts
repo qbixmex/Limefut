@@ -65,7 +65,7 @@ export const updateSponsorAction = async ({
         if (!sponsorExists) {
           return {
             ok: false,
-            message: '¡ El patrocinador no existe o ha sido eliminado !',
+            message: 'El patrocinador no existe o ha sido eliminado',
             sponsor: null,
           };
         }
@@ -80,7 +80,7 @@ export const updateSponsorAction = async ({
         if (sponsorDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe un patrocinador con ese nombre !',
+            message: 'Ya existe un patrocinador con ese nombre',
             sponsor: null,
           };
         }
@@ -135,7 +135,7 @@ export const updateSponsorAction = async ({
 
           return {
             ok: true,
-            message: '¡ El patrocinador fue guardado correctamente 👍 !',
+            message: 'El patrocinador fue guardado correctamente',
             sponsor: updatedSponsor,
           };
         }
@@ -205,7 +205,7 @@ export const updateSponsorAction = async ({
 
         return {
           ok: true,
-          message: '¡ El patrocinador fue actualizado correctamente 👍 !',
+          message: 'El patrocinador fue actualizado correctamente',
           sponsor: updatedSponsor,
         };
       } catch (error) {
@@ -214,7 +214,7 @@ export const updateSponsorAction = async ({
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               sponsor: null,
             };
           }
@@ -225,14 +225,14 @@ export const updateSponsorAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el patrocinador, revise los logs del servidor !',
+            message: 'Error al actualizar el patrocinador, revise los logs del servidor',
             sponsor: null,
           };
         }
         console.log((error as Error).message);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs',
           sponsor: null,
         };
       }
@@ -248,7 +248,7 @@ export const updateSponsorAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       sponsor: null,
     };
   }
@@ -259,7 +259,7 @@ const updateSponsorImage = async (image: File, imagePublicId: string) => {
   if (imagePublicId) {
     const cloudinaryResponse = await deleteImage(imagePublicId);
     if (!cloudinaryResponse.ok) {
-      throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+      throw new Error('Error al intentar eliminar la imagen de cloudinary');
     }
   }
 
@@ -267,7 +267,7 @@ const updateSponsorImage = async (image: File, imagePublicId: string) => {
   const imageUploaded = await uploadImage(image as File, 'sponsors');
 
   if (!imageUploaded) {
-    throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+    throw new Error('Error al intentar subir la imagen a cloudinary');
   }
 
   return {

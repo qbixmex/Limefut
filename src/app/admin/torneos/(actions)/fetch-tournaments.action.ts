@@ -88,7 +88,7 @@ export const fetchTournamentsAction = async (options?: Options): ResponseFetch =
 
     return {
       ok: true,
-      message: '! Los torneos fueron obtenidos correctamente 👍',
+      message: 'Los torneos fueron obtenidos correctamente',
       tournaments: tournaments.map((tournament) => ({
         ...tournament,
         categoriesQuantity: tournament._count?.categories ?? 0,

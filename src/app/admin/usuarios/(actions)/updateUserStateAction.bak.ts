@@ -25,7 +25,7 @@ export const updateUserStateAction = async (id: string, state: boolean): Respons
   if (userExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el usuario, quizás fue eliminado ó no existe !',
+      message: 'No se pudo actualizar el usuario, quizás fue eliminado ó no existe',
     };
   }
 
@@ -44,6 +44,6 @@ export const updateUserStateAction = async (id: string, state: boolean): Respons
 
   return {
     ok: true,
-    message: `¡ El usuario "${updatedTeam.name}" fue ${updatedTeam.isActive ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `El usuario "${updatedTeam.name}" fue ${updatedTeam.isActive ? 'activado' : 'desactivado'} correctamente`,
   };
 };

@@ -28,7 +28,7 @@ export const deleteUserApi = async (
     const message =
       response.data?.message ??
       response.data?.error ??
-      '¡ No se pudo eliminar el usuario !';
+      'No se pudo eliminar el usuario';
 
     return {
       ok: false,
@@ -40,6 +40,6 @@ export const deleteUserApi = async (
   return {
     ok: true,
     statusCode: response.status,
-    message: response.data?.message ?? '¡ Usuario eliminado satisfactoriamente 👍 !',
+    message: response.data?.message ?? 'Usuario eliminado satisfactoriamente',
   };
 };

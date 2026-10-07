@@ -51,6 +51,6 @@ export const deleteHeroBannerAction = async (heroBannerId: string): ResponseDele
 
   return {
     ok: true,
-    message: `¡ El banner "${heroBanner.title}", ha sido eliminado correctamente 👍 !`,
+    message: `El banner "${heroBanner.title}", ha sido eliminado correctamente`,
   };
 };

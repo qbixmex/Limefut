@@ -84,7 +84,7 @@ export const fetchCoachesAction = async (options?: Options): ResponseFetchAction
 
     return {
       ok: true,
-      message: '! Los entrenadores fueron obtenidos correctamente 👍',
+      message: 'Los entrenadores fueron obtenidos correctamente',
       coaches: coaches.map((coach) => ({
         ...coach,
         teamsCount: coach._count.teams,

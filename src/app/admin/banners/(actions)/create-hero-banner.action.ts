@@ -96,7 +96,7 @@ export const createHeroBannerAction = async (
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           heroBanner: null,
         };
       }
@@ -107,14 +107,14 @@ export const createHeroBannerAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear el hero banner, revise los logs del servidor !',
+        message: 'Error al crear el hero banner, revise los logs del servidor',
         heroBanner: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       heroBanner: null,
     };
   }

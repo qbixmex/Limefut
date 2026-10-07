@@ -28,7 +28,7 @@ vi.mock('@/app/admin/jugadores/(components)/edit-player', () => ({
 describe('Tests on PlayerView', () => {
   const defaultResponse = {
     ok: true,
-    message: '¡ Se obtuvo el jugador correctamente 👍 !',
+    message: 'Se obtuvo el jugador correctamente',
     player: playerMock,
   };
 

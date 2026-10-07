@@ -28,7 +28,7 @@ vi.mock('@/app/admin/canchas/(components)/fields-table', () => ({
 describe('Tests on <FieldsWrapper />', () => {
   const defaultResponse = {
     ok: true,
-    message: '! Las canchas fueron obtenidas correctamente 👍',
+    message: 'Las canchas fueron obtenidas correctamente',
     fields: fieldsMock,
     pagination: {
       currentPage: 1,

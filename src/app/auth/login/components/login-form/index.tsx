@@ -19,13 +19,13 @@ import './styles.css';
 
 const loginSchema = z.object({
   email: z.string()
-    .min(1, { message: '¡ El correo electrónico es obligatorio !' })
+    .min(1, { message: 'El correo electrónico es obligatorio' })
     .refine(
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-      { message: '¡ Formato incorrecto del correo electrónico !' },
+      { message: 'Formato incorrecto del correo electrónico' },
     ),
   password: z.string().min(8, {
-    message: '¡ La contraseña debe ser por lo menos de 8 caracteres !',
+    message: 'La contraseña debe ser por lo menos de 8 caracteres',
   }),
   rememberMe: z.boolean(),
 });

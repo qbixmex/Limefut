@@ -42,7 +42,7 @@ describe('Tests on useEditBanner hook', () => {
     vi.clearAllMocks();
     mockUpdateAction.mockResolvedValue({
       ok: true,
-      message: '¡ El banner fue actualizado correctamente 👍 !',
+      message: 'El banner fue actualizado correctamente',
       heroBanner: null,
     });
   });
@@ -114,7 +114,7 @@ describe('Tests on useEditBanner hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ El banner fue actualizado correctamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('El banner fue actualizado correctamente');
     expect(mockReplace).toHaveBeenCalledWith(
       ROUTES.ADMIN_BANNERS_SHOW(heroBannerMock.id),
     );

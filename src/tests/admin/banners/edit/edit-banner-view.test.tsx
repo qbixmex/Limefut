@@ -21,7 +21,7 @@ vi.mock('@/app/admin/banners/editar/[id]/edit-banner-form', () => ({
 describe('Tests on EditBannerPageView', () => {
   const defaultResponse = {
     ok: true,
-    message: '¡ Banner obtenido correctamente 👍 !',
+    message: 'Banner obtenido correctamente',
     heroBanner: heroBannerMock,
   };
 

@@ -52,7 +52,7 @@ export const fetchGalleriesAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Las gallerias fueron obtenidas correctamente 👍',
+      message: 'Las gallerias fueron obtenidas correctamente',
       galleries: galleries.map((gallery) => ({
         id: gallery.id,
         title: gallery.title,

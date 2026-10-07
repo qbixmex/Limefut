@@ -57,13 +57,13 @@ export const loginWithNestApi = async (
         ok: false,
         message:
           data?.message ??
-          '¡ No se pudo autentificar con las credenciales proporcionadas !',
+          'No se pudo autentificar con las credenciales proporcionadas',
       };
     }
 
     return {
       ok: true,
-      message: data.message ?? '¡ Has accedido correctamente 👍 !',
+      message: data.message ?? 'Has accedido correctamente',
       user: data.user,
       token: data.token,
     };
@@ -103,7 +103,7 @@ export const checkNestTokenStatus = async (
         ok: false,
         message:
           body?.message ??
-          '¡ La sesión ha expirado, inicie sesión nuevamente !',
+          'La sesión ha expirado, inicie sesión nuevamente',
       };
     }
 
@@ -116,7 +116,7 @@ export const checkNestTokenStatus = async (
     console.error('NestJS check-status error:', error);
     return {
       ok: false,
-      message: '¡ No se pudo conectar con el servicio de autentificación ❌ !',
+      message: 'No se pudo conectar con el servicio de autentificación',
     };
   }
 };

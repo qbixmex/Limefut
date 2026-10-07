@@ -44,7 +44,7 @@ const renderMatchView = async ({
 } = {}) => {
   vi.mocked(fetchPublicPlayoffMatchAction).mockResolvedValue({
     ok: true,
-    message: '! Encuentro obtenido correctamente 👍 !',
+    message: 'Encuentro obtenido correctamente',
     match,
   });
 
@@ -324,7 +324,7 @@ describe('Tests on MatchView', () => {
   test('Should redirect to liguilla when fetch fails', async () => {
     vi.mocked(fetchPublicPlayoffMatchAction).mockResolvedValue({
       ok: false,
-      message: '! No se encontró el encuentro ¡',
+      message: 'No se encontró el encuentro ',
       match: null,
     });
 
@@ -333,7 +333,7 @@ describe('Tests on MatchView', () => {
     }).rejects.toThrow();
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      `/liguilla?error=${encodeURIComponent('! No se encontró el encuentro ¡')}`,
+      `/liguilla?error=${encodeURIComponent('No se encontró el encuentro ')}`,
     );
   });
 });

@@ -1,3 +1,5 @@
+'use client';
+
 import type { FC } from 'react';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import {
@@ -20,7 +22,7 @@ export const AlignmentField: FC = () => {
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel>Alineación</FieldLabel>
           <Select
-            value={field.value ?? undefined}
+            value={field.value ?? ''}
             onValueChange={(value) => field.onChange(value)}
           >
             <SelectTrigger

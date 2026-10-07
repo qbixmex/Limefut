@@ -38,7 +38,7 @@ const buildMatch = (id: string, week: number | null): MATCH_TYPE => ({
 describe('Tests on <MatchesWrapper /> component', () => {
   const defaultResponse = {
     ok: true,
-    message: '! Los encuentros fueron obtenidos correctamente 👍',
+    message: 'Los encuentros fueron obtenidos correctamente',
     matches: [] as MATCH_TYPE[],
     pagination: {
       currentPage: 1,

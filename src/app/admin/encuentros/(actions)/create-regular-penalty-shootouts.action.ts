@@ -59,7 +59,7 @@ export const createRegularPenaltyShootoutAction = async (
       if (!match) {
         return {
           ok: false,
-          message: `¡ El encuentro con el ID: "${matchId}" no existe !`,
+          message: `El encuentro con el ID: "${matchId}" no existe`,
           penaltyShootout: null,
         };
       }
@@ -216,7 +216,7 @@ export const createRegularPenaltyShootoutAction = async (
 
       return {
         ok: true,
-        message: '¡ Tanda de penales creada correctamente 👍 !',
+        message: 'Tanda de penales creada correctamente',
         penaltyShootout: updatedShootout,
       };
     });
@@ -239,7 +239,7 @@ export const createRegularPenaltyShootoutAction = async (
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           penaltyShootout: null,
         };
       }
@@ -250,7 +250,7 @@ export const createRegularPenaltyShootoutAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: '¡ Error al crear la tanda de penales, revise los logs del servidor !',
+        message: 'Error al crear la tanda de penales, revise los logs del servidor',
         penaltyShootout: null,
       };
     }
@@ -258,7 +258,7 @@ export const createRegularPenaltyShootoutAction = async (
     console.log('Error Message:', (error as Error).message);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       penaltyShootout: null,
     };
   }

@@ -1,9 +1,6 @@
-import type { FC } from 'react';
+import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { redirect } from 'next/navigation';
-import { fetchVideoAction } from '../../(actions)';
-import { VideoForm } from '../../(components)/video-form';
-import { ROUTES } from '@/shared/constants/routes';
+import { EditVideoView } from './edit-video-view';
 
 type Props = Readonly<{
   params: Promise<{
@@ -13,21 +10,6 @@ type Props = Readonly<{
 
 const EditVideoPage: FC<Props> = ({ params }) => {
   return (
-    <EditAnnouncementContent params={params} />
-  );
-};
-
-const EditAnnouncementContent: FC<Props> = async ({ params }) => {
-  const sponsorId = (await params).id;
-
-  const { ok, video } = await fetchVideoAction(sponsorId);
-
-  if (!ok) {
-    const message = `¡ El video con el id: "${sponsorId}", no existe ❌ !`;
-    redirect(`${ROUTES.ADMIN_VIDEOS}?error=${encodeURIComponent(message)}`);
-  }
-
-  return (
     <div className="admin-page">
       <div className="admin-page-container">
         <Card className="admin-page-card">
@@ -35,9 +17,9 @@ const EditAnnouncementContent: FC<Props> = async ({ params }) => {
             <CardTitle className="admin-page-card-title">Editar Video</CardTitle>
           </CardHeader>
           <CardContent>
-            <VideoForm
-              video={video!}
-            />
+            <Suspense>
+              <EditVideoView params={params} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>

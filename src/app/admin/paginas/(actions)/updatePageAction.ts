@@ -57,7 +57,7 @@ export const updatePageAction = async ({
         if (!isPageExists) {
           return {
             ok: false,
-            message: '¡ La página no existe o ha sido eliminada !',
+            message: 'La página no existe o ha sido eliminada',
             page: null,
           };
         }
@@ -72,7 +72,7 @@ export const updatePageAction = async ({
         if (pageDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe ese enlace permanente !',
+            message: 'Ya existe ese enlace permanente',
             page: null,
           };
         }
@@ -109,7 +109,7 @@ export const updatePageAction = async ({
 
           return {
             ok: true,
-            message: '¡ La página fue guardada correctamente 👍 !',
+            message: 'La página fue guardada correctamente',
             page: updatedPage,
           };
         }
@@ -160,7 +160,7 @@ export const updatePageAction = async ({
 
         return {
           ok: true,
-          message: '¡ La página fue guardada correctamente 👍 !',
+          message: 'La página fue guardada correctamente',
           page: updatedPage,
         };
       } catch (error) {
@@ -169,20 +169,20 @@ export const updatePageAction = async ({
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               page: null,
             };
           }
 
           return {
             ok: false,
-            message: '¡ Error al guardar la página, revise los logs del servidor !',
+            message: 'Error al guardar la página, revise los logs del servidor',
             page: null,
           };
         }
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs',
           page: null,
         };
       }
@@ -193,7 +193,7 @@ export const updatePageAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       page: null,
     };
   }

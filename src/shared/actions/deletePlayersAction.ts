@@ -38,8 +38,8 @@ export const deletePlayersAction = async (teamId: string): ResponseDeleteAction 
     if (player._count.penaltyKicks > 0) {
       return {
         ok: false,
-        message: '¡ No se pueden eliminar todos los jugadores, ' +
-          ` por que el jugador ( ${player.name} ) tiene tiro de penales !`,
+        message: 'No se pueden eliminar todos los jugadores, ' +
+          ` por que el jugador ( ${player.name} ) tiene tiro de penales`,
       };
     }
   }
@@ -67,6 +67,6 @@ export const deletePlayersAction = async (teamId: string): ResponseDeleteAction 
 
   return {
     ok: true,
-    message: '¡ Los jugadores fueron eliminados correctamente 👍 !',
+    message: 'Los jugadores fueron eliminados correctamente',
   };
 };

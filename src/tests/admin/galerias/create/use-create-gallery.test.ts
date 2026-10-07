@@ -42,7 +42,7 @@ describe('Tests on useCreateGallery hook', () => {
     vi.clearAllMocks();
     mockCreateAction.mockResolvedValue({
       ok: true,
-      message: '¡ Galería creada satisfactoriamente 👍 !',
+      message: 'Galería creada satisfactoriamente',
       gallery: { id: '1f0e2d3c-4b5a-4968-8776-655443322110' },
     });
   });
@@ -96,7 +96,7 @@ describe('Tests on useCreateGallery hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ Galería creada satisfactoriamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('Galería creada satisfactoriamente');
     expect(mockReplace).toHaveBeenCalledWith(
       ROUTES.ADMIN_GALLERIES_SHOW('1f0e2d3c-4b5a-4968-8776-655443322110'),
     );
@@ -124,7 +124,7 @@ describe('Tests on useCreateGallery hook', () => {
   test('onSubmit should show error toast and not navigate on failure', async () => {
     mockCreateAction.mockResolvedValue({
       ok: false,
-      message: '¡ Error al crear la galería !',
+      message: 'Error al crear la galería',
       gallery: null,
     });
     const { toast } = await import('sonner');
@@ -134,7 +134,7 @@ describe('Tests on useCreateGallery hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.error).toHaveBeenCalledWith('¡ Error al crear la galería !');
+    expect(toast.error).toHaveBeenCalledWith('Error al crear la galería');
     expect(mockReplace).not.toHaveBeenCalled();
   });
 });

@@ -54,14 +54,14 @@ export const fetchGalleryAction = async (galleryPermalink: string): ResponseActi
     if (!gallery) {
       return {
         ok: false,
-        message: '! No se pudo obtener la galería ❌',
+        message: 'No se pudo obtener la galería',
         gallery: null,
       };
     }
 
     return {
       ok: true,
-      message: '! La galería fue obtenida correctamente 👍',
+      message: 'La galería fue obtenida correctamente',
       gallery,
     };
   } catch (error) {

@@ -35,7 +35,7 @@ export const AuthNav: FC<Props> = ({ user }) => {
 
   const onLogout = async () => {
     await signOutAction();
-    toast.success('¡ Has cerrado sesión correctamente 👍 !');
+    toast.success('Has cerrado sesión correctamente');
     window.location.replace(ROUTES.AUTH_LOGIN);
   };
 

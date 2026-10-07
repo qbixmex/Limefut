@@ -24,14 +24,14 @@ export const fetchPublicGlobalSettingsAction = async (): FetchVideoResponse => {
     if (!globalSettings) {
       return {
         ok: false,
-        message: '¡ Ajustes globales no encontrados ❌ !',
+        message: 'Ajustes globales no encontrados',
         globalSettings: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Ajustes globales obtenidos correctamente 👍 !',
+      message: 'Ajustes globales obtenidos correctamente',
       globalSettings,
     };
   } catch (error) {
@@ -39,13 +39,13 @@ export const fetchPublicGlobalSettingsAction = async (): FetchVideoResponse => {
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener los ajustes globales,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener los ajustes globales,\nRevise los logs del servidor',
         globalSettings: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       globalSettings: null,
     };
   }

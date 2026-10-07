@@ -57,7 +57,7 @@ export const fetchTeamStandingsAction = async ({
     if (!teamStandings) {
       return {
         ok: false,
-        message: '¡ No hay estadísticas para este equipo ❌ !',
+        message: 'No hay estadísticas para este equipo',
         standings: null,
       };
     }
@@ -84,7 +84,7 @@ export const fetchTeamStandingsAction = async ({
 
     return {
       ok: true,
-      message: '¡ Las estadísticas fueron obtenidas correctamente 👍 !',
+      message: 'Las estadísticas fueron obtenidas correctamente',
       standings: {
         ...teamStandings,
         position,
@@ -95,13 +95,13 @@ export const fetchTeamStandingsAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener las estadísticas,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener las estadísticas,\nRevise los logs del servidor',
         standings: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       standings: null,
     };
   }

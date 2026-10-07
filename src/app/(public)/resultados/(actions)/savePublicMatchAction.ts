@@ -86,7 +86,7 @@ export const savePublicMatchAction = async (formData: FormData): ResponseAction 
     if (matchToSave.localPenaltyShoots === matchToSave.visitorPenaltyShoots) {
       return {
         ok: false,
-        message: '¡ El resultado de la tanda de penales no puede ser empate !',
+        message: 'El resultado de la tanda de penales no puede ser empate',
       };
     }
   }
@@ -142,7 +142,7 @@ export const savePublicMatchAction = async (formData: FormData): ResponseAction 
 
       return {
         ok: true,
-        message: 'El encuentro fue guardado satisfactoriamente ⚽️👍',
+        message: 'El encuentro fue guardado satisfactoriamente',
       };
     });
 
@@ -167,7 +167,7 @@ export const savePublicMatchAction = async (formData: FormData): ResponseAction 
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
         };
       }
       console.log('CAUSE:', error.cause);
@@ -177,13 +177,13 @@ export const savePublicMatchAction = async (formData: FormData): ResponseAction 
       console.log(error.message);
       return {
         ok: false,
-        message: '¡ Error al crear el encuentro, revise los logs del servidor !',
+        message: 'Error al crear el encuentro, revise los logs del servidor',
       };
     }
     console.log((error as Error).message);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
     };
   }
 };

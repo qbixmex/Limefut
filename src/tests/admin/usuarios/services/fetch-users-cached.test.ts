@@ -17,7 +17,7 @@ import { fetchUsersCached } from '@/app/admin/usuarios/(services)/fetch-users-ca
 
 const apiResult = {
   ok: true,
-  message: '! Los usuarios fueron obtenidos satisfactoriamente 👍',
+  message: 'Los usuarios fueron obtenidos satisfactoriamente',
   users: [
     {
       id: '0079fbf1-9e07-4b2a-9c29-d8bfb1a1e90f',

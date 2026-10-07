@@ -29,14 +29,14 @@ export const fetchCategoryAction = async (categoryId: string): FetchResponse => 
     if (!category) {
       return {
         ok: false,
-        message: '¡ La categoría no se encuentra en la base de datos ❌ !',
+        message: 'La categoría no se encuentra en la base de datos',
         category: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Categoría obtenida correctamente 👍 !',
+      message: 'Categoría obtenida correctamente',
       category,
     };
   } catch (error) {
@@ -46,13 +46,13 @@ export const fetchCategoryAction = async (categoryId: string): FetchResponse => 
 
       return {
         ok: false,
-        message: 'No se pudo obtener la categoría,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener la categoría,\nRevise los logs del servidor',
         category: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       category: null,
     };
   }

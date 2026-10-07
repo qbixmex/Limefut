@@ -28,14 +28,14 @@ export const fetchAdminCategoryAction = async (
     if (!category) {
       return {
         ok: false,
-        message: `¡ La categoría con el enlace permanente: "${categoryPermalink}" no existe ❌ !`,
+        message: `La categoría con el enlace permanente: "${categoryPermalink}" no existe`,
         category: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Categoría obtenida correctamente 👍 !',
+      message: 'Categoría obtenida correctamente',
       category: { id: category.id },
     };
   } catch (error) {
@@ -46,13 +46,13 @@ export const fetchAdminCategoryAction = async (
 
       return {
         ok: false,
-        message: 'No se pudo obtener la categoría,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener la categoría,\nRevise los logs del servidor',
         category: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       category: null,
     };
   }

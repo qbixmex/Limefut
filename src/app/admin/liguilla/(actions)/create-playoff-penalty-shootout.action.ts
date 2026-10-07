@@ -60,7 +60,7 @@ export const createPlayoffPenaltyShootoutAction = async (
       if (!playoffMatch) {
         return {
           ok: false,
-          message: '¡ El encuentro de liguilla con el id subministrado no existe !',
+          message: 'El encuentro de liguilla con el id subministrado no existe',
           penaltyShootout: null,
         };
       }

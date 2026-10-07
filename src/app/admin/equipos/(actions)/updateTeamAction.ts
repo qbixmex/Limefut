@@ -94,7 +94,7 @@ export const updateTeamAction = async ({
         if (!isTeamExists) {
           return {
             ok: false,
-            message: '¡ El equipo no existe o ha sido eliminado !',
+            message: 'El equipo no existe o ha sido eliminado',
             updatedTeam: null,
           };
         }
@@ -178,7 +178,7 @@ export const updateTeamAction = async ({
           if (updatedTeam.imagePublicID) {
             const cloudinaryResponse = await deleteImage(updatedTeam.imagePublicID);
             if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+              throw new Error('Error al intentar eliminar la imagen de cloudinary');
             }
           }
 
@@ -186,7 +186,7 @@ export const updateTeamAction = async ({
           const imageUploaded = await uploadImage(image as File, 'teams');
 
           if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+            throw new Error('Error al intentar subir la imagen a cloudinary');
           }
 
           // Update image data to database.
@@ -216,7 +216,7 @@ export const updateTeamAction = async ({
 
         return {
           ok: true,
-          message: '¡ El equipo fue actualizado correctamente 👍 !',
+          message: 'El equipo fue actualizado correctamente',
           updatedTeam,
         };
       } catch (error) {
@@ -225,20 +225,20 @@ export const updateTeamAction = async ({
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               updatedTeam: null,
             };
           }
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el equipo, revise los logs del servidor !',
+            message: 'Error al actualizar el equipo, revise los logs del servidor',
             updatedTeam: null,
           };
         }
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs',
           updatedTeam: null,
         };
       }
@@ -249,7 +249,7 @@ export const updateTeamAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       updatedTeam: null,
     };
   }

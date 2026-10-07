@@ -27,7 +27,7 @@ type Props = Readonly<{
 export const DeletePage: FC<Props> = ({ pageId, roles }) => {
   const onDeletePage = async () => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar páginas !');
+      toast.error('No tienes permisos administrativos para eliminar páginas');
       return;
     }
     const response = await deletePageAction(pageId);

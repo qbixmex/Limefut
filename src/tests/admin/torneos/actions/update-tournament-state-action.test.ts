@@ -18,14 +18,14 @@ vi.mock('@/lib/get-session', () => ({
     if (!session?.user) {
       return {
         ok: false,
-        message: '¡ Debes estar autentificado para realizar esta acción !',
+        message: 'Debes estar autentificado para realizar esta acción',
       };
     }
 
     if (!session.user.roles?.includes('admin')) {
       return {
         ok: false,
-        message: '¡ No tienes permisos administrativos para realizar esta acción !',
+        message: 'No tienes permisos administrativos para realizar esta acción',
       };
     }
 
@@ -58,7 +58,7 @@ describe('Tests on update tournament state server action', () => {
     const response = await updateTournamentStateAction('some-id', true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
+    expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -71,7 +71,7 @@ describe('Tests on update tournament state server action', () => {
     const response = await updateTournamentStateAction('some-id', true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -84,7 +84,7 @@ describe('Tests on update tournament state server action', () => {
     const response = await updateTournamentStateAction('some-id', true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });
@@ -97,7 +97,7 @@ describe('Tests on update tournament state server action', () => {
     const response = await updateTournamentStateAction('some-id', true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(mockCount).not.toHaveBeenCalled();
     expect(mockUpdate).not.toHaveBeenCalled();
   });

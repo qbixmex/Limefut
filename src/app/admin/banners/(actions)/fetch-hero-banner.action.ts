@@ -41,13 +41,13 @@ export const fetchHeroBannerAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el Banner,\n¡ Revise los logs del servidor',
+        message: 'No se pudo obtener el Banner,\nRevise los logs del servidor',
         heroBanner: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       heroBanner: null,
     };
   }

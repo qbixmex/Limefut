@@ -21,7 +21,7 @@ export const fetchTeamsForPlayer = async (tournamentPermalink: string): Response
   if (!tournamentPermalink) {
     return {
       ok: false,
-      message: '¡ El torneo y la categoría son obligatorios !',
+      message: 'El torneo y la categoría son obligatorios',
       teams: [],
     };
   }
@@ -35,7 +35,7 @@ export const fetchTeamsForPlayer = async (tournamentPermalink: string): Response
     if (!tournament) {
       return {
         ok: false,
-        message: '¡ No hay equipos registrados con el torneo y categoría subministrados !',
+        message: 'No hay equipos registrados con el torneo y categoría subministrados',
         teams: [],
       };
     }
@@ -53,7 +53,7 @@ export const fetchTeamsForPlayer = async (tournamentPermalink: string): Response
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams,
     };
   } catch (error) {

@@ -60,7 +60,7 @@ export const fetchPublicMatchesCountAction = async (options?: Options): Response
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matchesDates: matches.map((match) => {
         return {
           id: match.id,

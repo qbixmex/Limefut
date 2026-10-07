@@ -36,7 +36,7 @@ describe('Test on <FinishMatch /> component', () => {
     vi.clearAllMocks();
     mockFinishAction.mockResolvedValue({
       ok: true,
-      message: 'El estado del partido finalizó correctamente ⚽️🎉',
+      message: 'El estado del partido finalizó correctamente',
     });
   });
 
@@ -67,7 +67,7 @@ describe('Test on <FinishMatch /> component', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        'El estado del partido finalizó correctamente ⚽️🎉',
+        'El estado del partido finalizó correctamente',
       );
     });
   });

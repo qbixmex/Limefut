@@ -37,7 +37,7 @@ export const deletePenaltyShootoutAction = async ({
   if (!shootout) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el la tanda de penales, quizás fue eliminada ó no existe !',
+      message: 'No se puede eliminar el la tanda de penales, quizás fue eliminada ó no existe',
     };
   }
 
@@ -99,6 +99,6 @@ export const deletePenaltyShootoutAction = async ({
 
   return {
     ok: true,
-    message: '¡ La tanda de penales ha sido eliminada correctamente 👍 !',
+    message: 'La tanda de penales ha sido eliminada correctamente',
   };
 };

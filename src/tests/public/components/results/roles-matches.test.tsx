@@ -14,7 +14,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should render correctly', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: [],
     });
     const ServerComponent = await RolesMatches({
@@ -29,7 +29,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should show matches day date', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -51,7 +51,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should matches month date', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -73,7 +73,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should matches year date', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -95,7 +95,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should show not defined message if date is null', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: matchesWithoutDates,
     });
     const ServerComponent = await RolesMatches({
@@ -116,7 +116,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should matches hour date', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -139,7 +139,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should show not defined message if time is null', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: matchesWithoutDates,
     });
     const ServerComponent = await RolesMatches({
@@ -160,7 +160,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should show match place', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -181,7 +181,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should show not defined message if match place is null', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: matchesWithoutPlaces,
     });
     const ServerComponent = await RolesMatches({
@@ -202,7 +202,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should matches status', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -224,7 +224,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should show matches team names', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -251,7 +251,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should show the matches scores', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -278,7 +278,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should not show penalty kicks if no one was made', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({
@@ -300,7 +300,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should show penalties shoots', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: matchesWithPenalties,
     });
     const ServerComponent = await RolesMatches({
@@ -331,7 +331,7 @@ describe('Test on <RolesMatches /> component', () => {
   test('Should contains match link', async () => {
     vi.mocked(fetchPublicResultsAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches,
     });
     const ServerComponent = await RolesMatches({

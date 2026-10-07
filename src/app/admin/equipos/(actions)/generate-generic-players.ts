@@ -31,7 +31,7 @@ export const generatePlayersAction = async ({
   if (!team) {
     return {
       ok: false,
-      message: `¡ El equipo con el id "${teamId}" no existe ❌ !`,
+      message: `El equipo con el id "${teamId}" no existe`,
     };
   }
 
@@ -52,7 +52,7 @@ export const generatePlayersAction = async ({
 
       return {
         ok: true,
-        message: '¡ Los jugadores fueron generados ✨ !',
+        message: 'Los jugadores fueron generados',
       };
     });
 
@@ -72,19 +72,19 @@ export const generatePlayersAction = async ({
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
         };
       }
 
       return {
         ok: false,
-        message: '¡ Error al crear los jugadores, revise los logs del servidor !',
+        message: 'Error al crear los jugadores, revise los logs del servidor',
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
     };
   }
 };

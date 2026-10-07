@@ -40,7 +40,7 @@ export const fetchPublicSponsorsAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Los patrocinadores fueron obtenidos correctamente 👍',
+      message: 'Los patrocinadores fueron obtenidos correctamente',
       sponsors,
     };
   } catch (error) {

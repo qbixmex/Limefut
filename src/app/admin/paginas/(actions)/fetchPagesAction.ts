@@ -61,7 +61,7 @@ export const fetchPagesAction = async (options: Options): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Las páginas fueron obtenidas correctamente 👍',
+      message: 'Las páginas fueron obtenidas correctamente',
       customPages: pages,
       pagination: {
         currentPage: page,

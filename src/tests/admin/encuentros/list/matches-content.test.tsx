@@ -18,13 +18,13 @@ vi.mock('@/app/admin/encuentros/(components)/matches.wrapper', () => ({
 
 const mockFetchTournament = vi.fn().mockResolvedValue({
   ok: true,
-  message: '¡ Torneo obtenido correctamente 👍 !',
+  message: 'Torneo obtenido correctamente',
   tournament: { id: 'tournament-id' },
 });
 
 const mockFetchCategory = vi.fn().mockResolvedValue({
   ok: true,
-  message: '¡ Categoría obtenida correctamente 👍 !',
+  message: 'Categoría obtenida correctamente',
   category: { id: 'category-id' },
 });
 
@@ -58,13 +58,13 @@ describe('Tests on <MatchesContent />', () => {
 
     mockFetchTournament.mockResolvedValue({
       ok: true,
-      message: '¡ Torneo obtenido correctamente 👍 !',
+      message: 'Torneo obtenido correctamente',
       tournament: { id: 'tournament-id' },
     });
 
     mockFetchCategory.mockResolvedValue({
       ok: true,
-      message: '¡ Categoría obtenida correctamente 👍 !',
+      message: 'Categoría obtenida correctamente',
       category: { id: 'category-id' },
     });
   });
@@ -98,7 +98,7 @@ describe('Tests on <MatchesContent />', () => {
   test('Should redirect when tournament fetch fails', async () => {
     mockFetchTournament.mockResolvedValue({
       ok: false,
-      message: '¡ El torneo con el enlace permanente: "tournament-test" no existe ❌ !',
+      message: 'El torneo con el enlace permanente: "tournament-test" no existe',
       tournament: null,
     });
 
@@ -119,7 +119,7 @@ describe('Tests on <MatchesContent />', () => {
   test('Should redirect when category fetch fails', async () => {
     mockFetchCategory.mockResolvedValue({
       ok: false,
-      message: '¡ La categoría con el enlace permanente: "category-test" no existe ❌ !',
+      message: 'La categoría con el enlace permanente: "category-test" no existe',
       category: null,
     });
 

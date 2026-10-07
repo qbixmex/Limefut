@@ -202,7 +202,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: matches.map((match) => ({
         id: match.id,
         localTeam: match.local,

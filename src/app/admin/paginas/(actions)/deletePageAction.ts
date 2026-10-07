@@ -35,7 +35,7 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
       if (!page) {
         return {
           ok: false,
-          message: '¡ No se puede eliminar la página, quizás fue eliminada ó no existe !',
+          message: 'No se puede eliminar la página, quizás fue eliminada ó no existe',
         };
       }
 
@@ -67,7 +67,7 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
 
       return {
         ok: true,
-        message: `¡ La página "${page.title}" ha sido eliminada correctamente 👍 !`,
+        message: `La página "${page.title}" ha sido eliminada correctamente`,
       };
     });
 
@@ -76,7 +76,7 @@ export const deletePageAction = async (pageId: string): ResponseDeleteAction => 
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
     };
   }
 };

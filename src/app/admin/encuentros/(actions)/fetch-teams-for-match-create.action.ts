@@ -58,7 +58,7 @@ export const fetchTeamsForMatchCreateAction = async ({
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams: teams.map((team) => ({
         ...team,
         fields: team.fields.map((teamField) => teamField.field),

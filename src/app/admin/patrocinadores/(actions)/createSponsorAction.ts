@@ -57,7 +57,7 @@ export const createSponsorAction = async (
     if (!cloudinaryResponse) {
       return {
         ok: false,
-        message: '¡ No se pudo subir la imagen al servidor !',
+        message: 'No se pudo subir la imagen al servidor',
         sponsor: null,
       };
     }
@@ -90,7 +90,7 @@ export const createSponsorAction = async (
 
       return {
         ok: true,
-        message: '¡ Patrocinador creado satisfactoriamente 👍 !',
+        message: 'Patrocinador creado satisfactoriamente',
         sponsor: createdSponsor,
       };
     });
@@ -107,7 +107,7 @@ export const createSponsorAction = async (
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           sponsor: null,
         };
       }
@@ -118,14 +118,14 @@ export const createSponsorAction = async (
 
       return {
         ok: false,
-        message: '¡ Error al crear el patrocinador, revise los logs del servidor !',
+        message: 'Error al crear el patrocinador, revise los logs del servidor',
         sponsor: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       sponsor: null,
     };
   }

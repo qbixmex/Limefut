@@ -43,7 +43,7 @@ describe('Tests on useCreateField hook', () => {
     vi.clearAllMocks();
     mockCreateAction.mockResolvedValue({
       ok: true,
-      message: '¡ La cancha has sido creada satisfactoriamente 👍 !',
+      message: 'La cancha has sido creada satisfactoriamente',
       field: null,
     });
   });
@@ -112,7 +112,7 @@ describe('Tests on useCreateField hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ La cancha has sido creada satisfactoriamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('La cancha has sido creada satisfactoriamente');
     expect(mockReplace).toHaveBeenCalledWith(ROUTES.ADMIN_FIELDS);
   });
 

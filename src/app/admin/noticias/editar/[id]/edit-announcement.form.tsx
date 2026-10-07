@@ -13,9 +13,7 @@ type Props = Readonly<{
   announcement: ANNOUNCEMENT_TYPE;
 }>;
 
-export const EditAnnouncementForm: FC<Props> = ({
-  announcement,
-}) => {
+export const EditAnnouncementForm: FC<Props> = ({ announcement }) => {
   const {
     form,
     onSubmit,

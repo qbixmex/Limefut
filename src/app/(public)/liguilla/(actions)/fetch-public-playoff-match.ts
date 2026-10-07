@@ -101,7 +101,7 @@ export const fetchPublicPlayoffMatchAction = async (options: Options): ResponseA
     if (!playoff) {
       return {
         ok: false,
-        message: '! No se encentró el la liguilla con el torneo y categoría subministrados ¡',
+        message: 'No se encentró el la liguilla con el torneo y categoría subministrados ',
         match: null,
       };
     }
@@ -185,14 +185,14 @@ export const fetchPublicPlayoffMatchAction = async (options: Options): ResponseA
     if (!playoffMatch) {
       return {
         ok: false,
-        message: '! No se encentró el encuentro de liguilla con el torneo y categoría subministrados ¡',
+        message: 'No se encentró el encuentro de liguilla con el torneo y categoría subministrados ',
         match: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Encuentro de liguilla obtenido correctamente 👍 !',
+      message: 'Encuentro de liguilla obtenido correctamente',
       match: {
         ...playoffMatch,
         tournament: playoff.tournament,
@@ -213,7 +213,7 @@ export const fetchPublicPlayoffMatchAction = async (options: Options): ResponseA
       console.log('ERROR:', error);
       return {
         ok: false,
-        message: '! Unknown Error, check server logs for more details !',
+        message: 'Unknown Error, check server logs for more details',
         match: null,
       };
     }
@@ -222,7 +222,7 @@ export const fetchPublicPlayoffMatchAction = async (options: Options): ResponseA
 
     return {
       ok: false,
-      message: '! Unknown Error, check server logs for more details !',
+      message: 'Unknown Error, check server logs for more details',
       match: null,
     };
   }

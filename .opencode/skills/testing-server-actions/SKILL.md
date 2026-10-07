@@ -105,7 +105,7 @@ Always test these auth scenarios (in this order):
 
 Do NOT use `toContain()` for these — use exact strings like:
 ```typescript
-expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
+expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
 ```
 
 ## Validation Test Cases

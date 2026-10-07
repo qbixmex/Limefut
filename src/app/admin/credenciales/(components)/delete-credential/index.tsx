@@ -27,7 +27,7 @@ type Props = Readonly<{
 export const DeleteCredential: FC<Props> = ({ id, roles }) => {
   const onDeleteCredential = async (id: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar credenciales !');
+      toast.error('No tienes permisos administrativos para eliminar credenciales');
       return;
     }
     const response = await deleteCredentialAction(id);

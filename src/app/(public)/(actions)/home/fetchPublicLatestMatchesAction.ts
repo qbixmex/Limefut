@@ -163,7 +163,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: matches.map((match) => ({
         id: match.id,
         tournament: match.tournament,

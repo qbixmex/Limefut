@@ -39,7 +39,7 @@ describe('Tests on useCreateCategory hook', () => {
     vi.clearAllMocks();
     mockCreateAction.mockResolvedValue({
       ok: true,
-      message: '¡ La categoría fue creada correctamente 👍 !',
+      message: 'La categoría fue creada correctamente',
     });
   });
 
@@ -111,7 +111,7 @@ describe('Tests on useCreateCategory hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ La categoría fue creada correctamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('La categoría fue creada correctamente');
     expect(mockReplace).toHaveBeenCalledWith(ROUTES.ADMIN_CATEGORIES);
   });
 

@@ -20,7 +20,7 @@ vi.mock('@/app/admin/canchas/editar/[id]/edit-field-form', () => ({
 describe('Tests on EditFieldPageView', () => {
   const defaultResponse = {
     ok: true,
-    message: '¡ Cancha obtenida correctamente 👍 !',
+    message: 'Cancha obtenida correctamente',
     field: fieldMock,
   };
 

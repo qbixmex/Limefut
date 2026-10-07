@@ -69,7 +69,7 @@ export const updatePlayerAction = async ({
         if (!isPlayerExists) {
           return {
             ok: false,
-            message: '¡ El jugador no existe o ha sido eliminado !',
+            message: 'El jugador no existe o ha sido eliminado',
             player: null,
           };
         }
@@ -84,7 +84,7 @@ export const updatePlayerAction = async ({
           if (updatedPlayer.imagePublicID) {
             const cloudinaryResponse = await deleteImage(updatedPlayer.imagePublicID);
             if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+              throw new Error('Error al intentar eliminar la imagen de cloudinary');
             }
           }
 
@@ -92,7 +92,7 @@ export const updatePlayerAction = async ({
           const imageUploaded = await uploadImage(image as File, 'coaches');
 
           if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+            throw new Error('Error al intentar subir la imagen a cloudinary');
           }
 
           // Update image data to database.
@@ -117,7 +117,7 @@ export const updatePlayerAction = async ({
 
         return {
           ok: true,
-          message: '¡ El jugador fue actualizado correctamente 👍 !',
+          message: 'El jugador fue actualizado correctamente',
           player: updatedPlayer,
         };
       } catch (error) {
@@ -126,20 +126,20 @@ export const updatePlayerAction = async ({
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               player: null,
             };
           }
           console.log(error.message);
           return {
             ok: false,
-            message: '¡ Error al actualizar el jugador, revise los logs del servidor !',
+            message: 'Error al actualizar el jugador, revise los logs del servidor',
             player: null,
           };
         }
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs',
           player: null,
         };
       }
@@ -150,7 +150,7 @@ export const updatePlayerAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       player: null,
     };
   }

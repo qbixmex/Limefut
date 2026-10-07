@@ -32,7 +32,7 @@ export const fetchTeamsAction = async (tournamentId: string): ResponseAction => 
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams,
     };
   } catch (error) {

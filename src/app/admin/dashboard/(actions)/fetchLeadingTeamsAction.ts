@@ -65,7 +65,7 @@ export const fetchLeadingTeamsAction = async ({ quantity }: Options): Promise<Re
 
     return {
       ok: true,
-      message: '! Los resultados fueron obtenidos correctamente 👍',
+      message: 'Los resultados fueron obtenidos correctamente',
       leadingTeams: standings.map((standing) => ({
         team: {
           id: standing.team.id,

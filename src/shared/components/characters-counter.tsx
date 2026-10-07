@@ -24,8 +24,8 @@ export const CharactersCounter: FC<Props> = ({ charactersCount, limit }) => {
             {(charactersCount < limit)
               ? `Restan ${limit - charactersCount} caracteres.`
               : charactersCount === limit
-                ? '¡ Límite de caracteres alcanzado !'
-                : `¡ Excedido por ${charactersCount - limit} caracteres !`}
+                ? 'Límite de caracteres alcanzado'
+                : `Excedido por ${charactersCount - limit} caracteres`}
           </div>
         )
       }
