@@ -3,7 +3,7 @@ import { NotFoundIcon } from '@/shared/components/icons/not-found';
 import { Container, Footer, Header } from './(public)/components';
 
 export const metadata: Metadata = {
-  title: '¡ Página no encontrada !',
+  title: 'Página no encontrada',
   description: 'La página que estas buscando no existe',
   robots: 'noindex, nofollow',
 };

@@ -28,7 +28,7 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS_T
   if (!updatedMatch) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el estado del partido !',
+      message: 'No se pudo actualizar el estado del partido',
     };
   }
 
@@ -45,6 +45,6 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS_T
 
   return {
     ok: true,
-    message: '¡ El estado del partido fue actualizado correctamente 👍 !',
+    message: 'El estado del partido fue actualizado correctamente',
   };
 };

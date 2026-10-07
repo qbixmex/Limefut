@@ -54,13 +54,13 @@ const sendEmailAction = async (formData: FormData) => {
     });
     return {
       ok: true,
-      message: 'Mensaje enviado correctamente 👍',
+      message: 'Mensaje enviado correctamente',
     };
   } catch (error) {
     console.error('There was an error:', error);
     return {
       ok: false,
-      message: '¡ No se pudo enviar el mensaje 🚩 !',
+      message: 'No se pudo enviar el mensaje',
     };
   }
 };

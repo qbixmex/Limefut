@@ -43,14 +43,14 @@ export const fetchPageAction = async (
     if (!page) {
       return {
         ok: false,
-        message: '¡ Página no encontrada ❌ !',
+        message: 'Página no encontrada',
         page: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Página obtenida correctamente 👍 !',
+      message: 'Página obtenida correctamente',
       page: {
         ...page,
         images: page.images.map((item) => ({
@@ -65,13 +65,13 @@ export const fetchPageAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener la página,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener la página,\nRevise los logs del servidor',
         page: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       page: null,
     };
   }

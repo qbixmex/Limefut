@@ -47,7 +47,7 @@ vi.mock('@/app/admin/banners/(components)/edit-banner', () => ({
 describe('Tests on BannerView', () => {
   const defaultResponse = {
     ok: true,
-    message: '¡ Banner obtenido correctamente 👍 !',
+    message: 'Banner obtenido correctamente',
     heroBanner: heroBannerMock,
   };
 

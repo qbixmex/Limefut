@@ -42,7 +42,7 @@ export const fetchPublicHeroBannersAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       heroBanners: heroBanners.map((banner) => ({
         id: banner.id,
         title: banner.title,

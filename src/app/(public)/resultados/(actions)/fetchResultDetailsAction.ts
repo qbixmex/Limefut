@@ -183,14 +183,14 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
     if (!match) {
       return {
         ok: false,
-        message: `¡ El encuentro con el id: "${matchId}" no existe ❌ !`,
+        message: `El encuentro con el id: "${matchId}" no existe`,
         match: null,
       };
     }
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       match,
     };
   } catch (error) {

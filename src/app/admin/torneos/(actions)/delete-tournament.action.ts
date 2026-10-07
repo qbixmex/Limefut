@@ -31,7 +31,7 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
   if (!tournament) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el torneo, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar el torneo, quizás fue eliminado ó no existe',
     };
   }
 
@@ -42,7 +42,7 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
   if (teamsExists) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el torneo, por que contiene equipos !',
+      message: 'No se puede eliminar el torneo, por que contiene equipos',
     };
   }
 
@@ -53,7 +53,7 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
   if (playoffsExists) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el torneo, por que contiene partidos de liguilla !',
+      message: 'No se puede eliminar el torneo, por que contiene partidos de liguilla',
     };
   }
 
@@ -64,7 +64,7 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
   if (standingsExists) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el torneo, por que contiene estadísticas !',
+      message: 'No se puede eliminar el torneo, por que contiene estadísticas',
     };
   }
 
@@ -130,6 +130,6 @@ export const deleteTournamentAction = async (tournamentId: string): ResponseDele
 
   return {
     ok: true,
-    message: `¡ El torneo "${tournament.name}" ha sido eliminado correctamente 👍 !`,
+    message: `El torneo "${tournament.name}" ha sido eliminado correctamente`,
   };
 };

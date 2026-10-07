@@ -26,7 +26,7 @@ describe('Test on <FieldsSlot />', () => {
   test('Should fetch the fields and pass them to <FieldSelect />', async () => {
     vi.mocked(fetchFieldsAction).mockResolvedValue({
       ok: true,
-      message: '! Las canchas fueron obtenidas correctamente 👍',
+      message: 'Las canchas fueron obtenidas correctamente',
       fields: fieldsMock,
     });
 

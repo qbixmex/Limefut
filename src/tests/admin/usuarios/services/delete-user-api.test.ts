@@ -21,7 +21,7 @@ describe('Tests on deleteUserApi service', () => {
       status: 200,
       data: {
         statusCode: 200,
-        message: 'Usuario eliminado satisfactoriamente 👍',
+        message: 'Usuario eliminado satisfactoriamente',
       },
     });
 
@@ -113,7 +113,7 @@ describe('Tests on deleteUserApi service', () => {
       status: 200,
       data: {
         statusCode: 200,
-        message: 'Usuario eliminado satisfactoriamente 👍',
+        message: 'Usuario eliminado satisfactoriamente',
       },
     });
 

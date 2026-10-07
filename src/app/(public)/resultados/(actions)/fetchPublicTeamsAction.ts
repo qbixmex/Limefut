@@ -40,12 +40,12 @@ export const fetchPublicTeamsAction = async ({
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍 !',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams,
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('¡ Error al intentar obtener los equipos !');
+      console.log('Error al intentar obtener los equipos');
       return {
         ok: false,
         message: error.message,
@@ -55,7 +55,7 @@ export const fetchPublicTeamsAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado al obtener los equipos, revise los logs del servidor !',
+      message: 'Error inesperado al obtener los equipos, revise los logs del servidor',
       teams: [],
     };
   }

@@ -61,7 +61,7 @@ export const createUserAction = async (
   if (isPasswordInsecure(userVerified.data.password)) {
     return {
       ok: false,
-      message: '¡ La contraseña es insegura, elija otra por favor !',
+      message: 'La contraseña es insegura, elija otra por favor',
       user: null,
     };
   }
@@ -100,7 +100,7 @@ export const createUserAction = async (
 
       return {
         ok: true,
-        message: '¡ Usuario creado correctamente 👍 !',
+        message: 'Usuario creado correctamente',
         user: createdUser,
       };
     });
@@ -116,21 +116,21 @@ export const createUserAction = async (
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           user: null,
         };
       }
 
       return {
         ok: false,
-        message: '¡ Error al crear el usuario, revise los logs del servidor !',
+        message: 'Error al crear el usuario, revise los logs del servidor',
         user: null,
       };
     }
     console.log((error as Error).message);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       user: null,
     };
   }

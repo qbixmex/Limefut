@@ -99,7 +99,7 @@ export const fetchStandingsAction = async ({
     if (!tournament) {
       return {
         ok: false,
-        message: '¡ No se pudo obtener el torneo ❌ !',
+        message: 'No se pudo obtener el torneo',
         tournament: null,
         standings: [],
       };
@@ -153,7 +153,7 @@ export const fetchStandingsAction = async ({
 
     return {
       ok: true,
-      message: '! Las estadísticas fueron obtenidas correctamente 👍',
+      message: 'Las estadísticas fueron obtenidas correctamente',
       tournament,
       standings,
     };

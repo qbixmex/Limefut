@@ -81,14 +81,14 @@ export const fetchTournamentAction = async (
     if (!tournament) {
       return {
         ok: false,
-        message: '¡ Torneo no encontrado ❌ !',
+        message: 'Torneo no encontrado',
         tournament: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Torneo obtenido correctamente 👍 !',
+      message: 'Torneo obtenido correctamente',
       tournament: {
         ...tournament,
         teamsQuantity: tournament._count.teams ?? 0,
@@ -100,13 +100,13 @@ export const fetchTournamentAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el torneo,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el torneo,\nRevise los logs del servidor',
         tournament: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       tournament: null,
     };
   }

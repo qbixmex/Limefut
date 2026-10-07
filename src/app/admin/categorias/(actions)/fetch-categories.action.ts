@@ -60,7 +60,7 @@ export const fetchCategoriesAction = async (options?: Options): ResponseFetch =>
 
     return {
       ok: true,
-      message: '! Las categorías fueron obtenidas correctamente 👍',
+      message: 'Las categorías fueron obtenidas correctamente',
       categories,
       pagination: {
         currentPage: page,

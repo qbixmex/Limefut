@@ -41,7 +41,7 @@ export const fetchPublicAnnouncementsAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Las noticias fueron obtenidas correctamente 👍',
+      message: 'Las noticias fueron obtenidas correctamente',
       announcements,
     };
   } catch (error) {

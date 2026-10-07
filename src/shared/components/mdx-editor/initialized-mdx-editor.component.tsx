@@ -83,7 +83,7 @@ const spanishLocalization: Record<string, string> = {
   'linkPreview.open': 'Abrir {{url}} en una ventana nueva',
   'linkPreview.edit': 'Editar URL del enlace',
   'linkPreview.copyToClipboard': 'Copiar al portapapeles',
-  'linkPreview.copied': '¡Copiado!',
+  'linkPreview.copied': 'Copiado',
   'linkPreview.remove': 'Borrar enlace',
 
   // Tabla

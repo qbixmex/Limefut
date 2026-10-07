@@ -31,7 +31,7 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
 
   if (!tournamentPermalink || !categoryPermalink) {
     redirect(`${ROUTES.PUBLIC_TEAMS}/?error=${encodeURIComponent(
-      '¡ El torneo y categoría son obligatorios !',
+      'El torneo y categoría son obligatorios',
     )}`);
   }
 

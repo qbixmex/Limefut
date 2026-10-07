@@ -98,7 +98,7 @@ export const fetchPlayersAction = async (
 
     return {
       ok: true,
-      message: '! Los jugadores fueron obtenidos correctamente 👍',
+      message: 'Los jugadores fueron obtenidos correctamente',
       players,
       pagination: {
         currentPage: page,

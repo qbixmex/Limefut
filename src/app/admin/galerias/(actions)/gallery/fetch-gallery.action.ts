@@ -78,13 +78,13 @@ export const fetchGalleryAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener la galería,\n¡ Revise los logs del servidor',
+        message: 'No se pudo obtener la galería,\nRevise los logs del servidor',
         gallery: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       gallery: null,
     };
   }

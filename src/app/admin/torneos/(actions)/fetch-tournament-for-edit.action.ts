@@ -65,14 +65,14 @@ export const fetchTournamentForEditAction = async ({
     if (!tournament) {
       return {
         ok: false,
-        message: '¡ El torneo no existe con el id subministrado ❌ !',
+        message: 'El torneo no existe con el id subministrado',
         tournament: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ El torneo fue obtenido correctamente 👍 !',
+      message: 'El torneo fue obtenido correctamente',
       tournament: {
         id: tournament.id,
         name: tournament.name,
@@ -94,13 +94,13 @@ export const fetchTournamentForEditAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el torneo,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el torneo,\nRevise los logs del servidor',
         tournament: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       tournament: null,
     };
   }

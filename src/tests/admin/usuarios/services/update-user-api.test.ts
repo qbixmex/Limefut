@@ -43,7 +43,7 @@ describe('Tests on updateUserApi service', () => {
       status: 200,
       data: {
         statusCode: 200,
-        message: 'Usuario actualizado exitosamente 👍',
+        message: 'Usuario actualizado exitosamente',
         user: backendUser,
       },
     });
@@ -70,7 +70,7 @@ describe('Tests on updateUserApi service', () => {
       status: 404,
       data: {
         statusCode: 404,
-        message: `¡ El usuario con id: [${userId}], no existe en la base de datos !`,
+        message: `El usuario con id: [${userId}], no existe en la base de datos`,
         error: 'Not Found',
       },
     });
@@ -142,7 +142,7 @@ describe('Tests on updateUserApi service', () => {
       status: 200,
       data: {
         statusCode: 200,
-        message: 'Usuario actualizado exitosamente 👍',
+        message: 'Usuario actualizado exitosamente',
         user: backendUser,
       },
     });

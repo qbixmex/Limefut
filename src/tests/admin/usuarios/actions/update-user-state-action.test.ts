@@ -24,14 +24,14 @@ vi.mock('@/lib/get-session', () => ({
     if (!session?.user) {
       return {
         ok: false,
-        message: '¡ Debes estar autentificado para realizar esta acción !',
+        message: 'Debes estar autentificado para realizar esta acción',
       };
     }
 
     if (!session.user.roles?.includes('admin')) {
       return {
         ok: false,
-        message: '¡ No tienes permisos administrativos para realizar esta acción !',
+        message: 'No tienes permisos administrativos para realizar esta acción',
       };
     }
 
@@ -55,7 +55,7 @@ const userId = '5a6fad8a-e64d-4598-834c-800feff03e12';
 const successResponse = {
   ok: true,
   statusCode: 200,
-  message: '¡ Usuario actualizado exitosamente 👍 !',
+  message: 'Usuario actualizado exitosamente',
   user: {
     id: userId,
     name: 'Jackie Chan',
@@ -91,7 +91,7 @@ describe('Tests on update user state server action', () => {
     const response = await updateUserStateAction(userId, true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
+    expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
 
@@ -103,7 +103,7 @@ describe('Tests on update user state server action', () => {
     const response = await updateUserStateAction(userId, true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
 
@@ -115,7 +115,7 @@ describe('Tests on update user state server action', () => {
     const response = await updateUserStateAction(userId, true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
 
@@ -127,7 +127,7 @@ describe('Tests on update user state server action', () => {
     const response = await updateUserStateAction(userId, true);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
 

@@ -289,7 +289,7 @@ export const SponsorForm: FC<Props> = ({ sponsor }) => {
                   <FormItem>
                     <FormControl>
                       <Select
-                        value={field.value ?? undefined}
+                        value={field.value ?? ''}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger

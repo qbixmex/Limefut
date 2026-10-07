@@ -45,14 +45,14 @@ export const fetchPublicVideoAction = async (permalink: string): FetchVideosResp
     if (!video) {
       return {
         ok: false,
-        message: '¡ Video no encontrado ❌ !',
+        message: 'Video no encontrado',
         video: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Video obtenido correctamente 👍 !',
+      message: 'Video obtenido correctamente',
       video,
     };
   } catch (error) {
@@ -60,13 +60,13 @@ export const fetchPublicVideoAction = async (permalink: string): FetchVideosResp
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el video,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el video,\nRevise los logs del servidor',
         video: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       video: null,
     };
   }

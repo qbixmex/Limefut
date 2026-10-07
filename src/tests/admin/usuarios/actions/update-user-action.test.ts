@@ -24,14 +24,14 @@ vi.mock('@/lib/get-session', () => ({
     if (!session?.user) {
       return {
         ok: false,
-        message: '¡ Debes estar autentificado para realizar esta acción !',
+        message: 'Debes estar autentificado para realizar esta acción',
       };
     }
 
     if (!session.user.roles?.includes('admin')) {
       return {
         ok: false,
-        message: '¡ No tienes permisos administrativos para realizar esta acción !',
+        message: 'No tienes permisos administrativos para realizar esta acción',
       };
     }
 
@@ -79,7 +79,7 @@ const mockUpdatedUser = {
 const successResponse = {
   ok: true,
   statusCode: 200,
-  message: 'Usuario actualizado exitosamente 👍',
+  message: 'Usuario actualizado exitosamente',
   user: mockUpdatedUser,
 };
 
@@ -104,7 +104,7 @@ describe('Tests on update user server action', () => {
     const response = await updateUserAction(validFormData(), userId);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ Debes estar autentificado para realizar esta acción !');
+    expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
     expect(response.user).toBe(null);
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
@@ -117,7 +117,7 @@ describe('Tests on update user server action', () => {
     const response = await updateUserAction(validFormData(), userId);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(response.user).toBe(null);
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
@@ -130,7 +130,7 @@ describe('Tests on update user server action', () => {
     const response = await updateUserAction(validFormData(), userId);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(response.user).toBe(null);
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
@@ -143,7 +143,7 @@ describe('Tests on update user server action', () => {
     const response = await updateUserAction(validFormData(), userId);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ No tienes permisos administrativos para realizar esta acción !');
+    expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(response.user).toBe(null);
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
@@ -168,7 +168,7 @@ describe('Tests on update user server action', () => {
     const response = await updateUserAction(formData, userId);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('¡ La contraseña es insegura, elija otra por favor !');
+    expect(response.message).toBe('La contraseña es insegura, elija otra por favor');
     expect(response.user).toBe(null);
     expect(mockUpdateUserApi).not.toHaveBeenCalled();
   });
@@ -234,7 +234,7 @@ describe('Tests on update user server action', () => {
     mockUpdateUserApi.mockResolvedValue({
       ok: false,
       statusCode: 404,
-      message: `¡ El usuario con id: [${userId}], no existe en la base de datos !`,
+      message: `El usuario con id: [${userId}], no existe en la base de datos`,
       user: null,
     });
 

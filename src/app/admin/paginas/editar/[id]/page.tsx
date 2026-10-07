@@ -21,7 +21,7 @@ export const EditCustomPage: FC<Props> = async ({ params }) => {
   const response = await fetchPageAction(pageId);
 
   if (!response.page) {
-    const message = `¡ La página con el id: "${pageId}", no existe ❌ !`;
+    const message = `La página con el id: "${pageId}", no existe`;
     redirect(`/admin/paginas?error=${encodeURIComponent(message)}`);
   }
 

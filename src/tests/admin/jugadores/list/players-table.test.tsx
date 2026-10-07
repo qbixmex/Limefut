@@ -44,7 +44,7 @@ vi.mock('@/shared/components/delete-players', () => ({
 describe('Tests on <PlayersTable /> component', () => {
   const defaultResponse = {
     ok: true,
-    message: '! Los jugadores fueron obtenidos correctamente 👍',
+    message: 'Los jugadores fueron obtenidos correctamente',
     players: playersMock,
     pagination: {
       currentPage: 1,

@@ -130,14 +130,14 @@ export const fetchTeamAction = async (
     if (!team) {
       return {
         ok: false,
-        message: `¡ El equipo con el ID: "${teamId}" no existe ❌ !`,
+        message: `El equipo con el ID: "${teamId}" no existe`,
         team: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Equipo obtenido correctamente 👍 !',
+      message: 'Equipo obtenido correctamente',
       team: {
         ...team,
         fields: team.fields.map(tf => tf.field),
@@ -148,13 +148,13 @@ export const fetchTeamAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el equipo,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el equipo,\nRevise los logs del servidor',
         team: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       team: null,
     };
   }

@@ -34,7 +34,7 @@ export const saveMessageAction = async (
 
       return {
         ok: true,
-        message: '¡ El mensaje ha sido guardado correctamente 👍 !',
+        message: 'El mensaje ha sido guardado correctamente',
         contactMessage: savedMessage,
       };
     });
@@ -48,14 +48,14 @@ export const saveMessageAction = async (
     if (error instanceof Error && 'meta' in error && error.meta) {
       return {
         ok: false,
-        message: '¡ Error al guardar el mensaje, revise los logs del servidor !',
+        message: 'Error al guardar el mensaje, revise los logs del servidor',
         contactMessage: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       contactMessage: null,
     };
   }

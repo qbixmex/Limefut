@@ -27,7 +27,7 @@ type Props = Readonly<{
 export const DeleteSponsor: FC<Props> = ({ sponsorId, roles }) => {
   const onDeleteSponsor = async () => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar patrocinadores !');
+      toast.error('No tienes permisos administrativos para eliminar patrocinadores');
       return;
     }
     const { ok, message } = await deleteSponsorAction(sponsorId);

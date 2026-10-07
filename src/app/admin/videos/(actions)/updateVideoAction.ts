@@ -5,6 +5,7 @@ import { updateTag } from 'next/cache';
 import { requireAdmin } from '@/lib/get-session';
 import { editVideoSchema } from '@/shared/schemas';
 import type { Video } from '@/shared/interfaces';
+import { Prisma } from '@/generated/prisma/client';
 
 type Options = {
   formData: FormData;
@@ -57,7 +58,7 @@ export const updateVideoAction = async ({
         if (!videoExists) {
           return {
             ok: false,
-            message: '¡ El video no existe o ha sido eliminado !',
+            message: 'El video no existe o ha sido eliminado',
             video: null,
           };
         }
@@ -72,7 +73,7 @@ export const updateVideoAction = async ({
         if (titleDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe un video con ese título !',
+            message: 'Ya existe un video con ese título',
             video: null,
           };
         }
@@ -87,7 +88,7 @@ export const updateVideoAction = async ({
         if (permalinkDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ Ya existe un video con ese enlace permanente !',
+            message: 'Ya existe un video con ese enlace permanente',
             video: null,
           };
         }
@@ -105,16 +106,32 @@ export const updateVideoAction = async ({
 
         return {
           ok: true,
-          message: '¡ El video fue actualizado correctamente 👍 !',
+          message: 'El video fue actualizado correctamente',
           video: updatedVideo,
         };
       } catch (error) {
-        if (error instanceof Error && 'meta' in error && error.meta) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2001') {
+            if (error.meta) {
+              console.log('ERROR METADATA:', error.meta);
+            }
+
+            console.log('Error Name:', error.name);
+            console.log('Error Code:', error.code);
+            console.log('Error Cause:', error.cause ?? 'none');
+            console.log('Error Stack:', error.stack ?? 'none');
+
+            return {
+              ok: false,
+              message: 'No se encuentra el video, revise los logs del servidor para ver más detalles',
+              video: null,
+            };
+          }
           if ('code' in error && error.code as string === 'P2002') {
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               video: null,
             };
           }
@@ -125,14 +142,14 @@ export const updateVideoAction = async ({
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el video, revise los logs del servidor !',
+            message: 'Error al actualizar el video, revise los logs del servidor',
             video: null,
           };
         }
         console.log((error as Error).message);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs',
           video: null,
         };
       }
@@ -148,7 +165,7 @@ export const updateVideoAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       video: null,
     };
   }

@@ -182,7 +182,7 @@ export const fetchTeamAction = async ({
     if (!team) {
       return {
         ok: false,
-        message: '¡ El equipo no se encuentra en la base de datos ❌ !',
+        message: 'El equipo no se encuentra en la base de datos',
         team: null,
       };
     }
@@ -190,7 +190,7 @@ export const fetchTeamAction = async ({
     if (!team.active) {
       return {
         ok: false,
-        message: `¡ El equipo ${team.name} está desactivado ❌ !`,
+        message: `El equipo ${team.name} está desactivado`,
         team: null,
       };
     }
@@ -206,7 +206,7 @@ export const fetchTeamAction = async ({
 
     return {
       ok: true,
-      message: '¡ Equipo obtenido correctamente 👍 !',
+      message: 'Equipo obtenido correctamente',
       team: {
         id: team.id,
         name: team.name,
@@ -231,13 +231,13 @@ export const fetchTeamAction = async ({
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el equipo,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el equipo,\nRevise los logs del servidor',
         team: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       team: null,
     };
   }

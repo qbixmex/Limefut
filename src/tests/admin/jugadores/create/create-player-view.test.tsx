@@ -40,7 +40,7 @@ describe('Test on <CreatePlayerView />', () => {
   });
 
   test('Should redirect when fetchTeamsForPlayer fails', async () => {
-    const errorMessage = '¡ Error al obtener equipos !';
+    const errorMessage = 'Error al obtener equipos';
     mockFetchTeams.mockResolvedValue({
       ok: false,
       message: errorMessage,

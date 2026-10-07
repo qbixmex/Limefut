@@ -41,13 +41,13 @@ export const fetchFieldAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener la cancha,\n¡ Revise los logs del servidor',
+        message: 'No se pudo obtener la cancha,\nRevise los logs del servidor',
         field: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       field: null,
     };
   }

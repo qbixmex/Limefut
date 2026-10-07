@@ -43,7 +43,7 @@ export const updateUserApi = async (
     const message =
       result.data?.message ??
       result.data?.error ??
-      '¡ No se pudo actualizar el usuario !';
+      'No se pudo actualizar el usuario';
 
     return {
       ok: false,
@@ -56,7 +56,7 @@ export const updateUserApi = async (
   return {
     ok: true,
     statusCode: result.data.statusCode,
-    message: result.data.message ?? '¡ Usuario actualizado exitosamente 👍 !',
+    message: result.data.message ?? 'Usuario actualizado exitosamente',
     user: result.data.user,
   };
 };

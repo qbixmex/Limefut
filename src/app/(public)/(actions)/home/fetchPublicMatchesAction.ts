@@ -175,7 +175,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: (data.length > 0) ? data.map((match) => ({
         ...match,
         localTeam: match.local,

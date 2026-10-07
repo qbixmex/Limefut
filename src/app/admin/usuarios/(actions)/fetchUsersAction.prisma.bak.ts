@@ -85,7 +85,7 @@ export const fetchUsersAction = async (options?: Options): ResponseFetchAction =
 
     return {
       ok: true,
-      message: '! Los usuarios fueron obtenidos satisfactoriamente 👍',
+      message: 'Los usuarios fueron obtenidos satisfactoriamente',
       users: outputUsers,
       pagination: {
         currentPage: page,

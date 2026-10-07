@@ -36,7 +36,7 @@ describe('Test on <MatchScoreInput /> component', () => {
     vi.clearAllMocks();
     mockUpdateAction.mockResolvedValue({
       ok: true,
-      message: '¡ El marcador del partido fue actualizado correctamente 👍 !',
+      message: 'El marcador del partido fue actualizado correctamente',
     });
   });
 
@@ -89,7 +89,7 @@ describe('Test on <MatchScoreInput /> component', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        '¡ El marcador del partido fue actualizado correctamente 👍 !',
+        'El marcador del partido fue actualizado correctamente',
       );
     });
   });

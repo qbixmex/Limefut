@@ -34,7 +34,7 @@ export const createEmptyCustomPage = async (): CreateResponseAction => {
 
       return {
         ok: true,
-        message: '¡ Borrador creado correctamente 👍 !',
+        message: 'Borrador creado correctamente',
         pageId: newPage.id,
       };
     });
@@ -51,7 +51,7 @@ export const createEmptyCustomPage = async (): CreateResponseAction => {
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           pageId: null,
         };
       }
@@ -62,14 +62,14 @@ export const createEmptyCustomPage = async (): CreateResponseAction => {
 
       return {
         ok: false,
-        message: '¡ Error al crear la página, revise los logs del servidor !',
+        message: 'Error al crear la página, revise los logs del servidor',
         pageId: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       pageId: null,
     };
   }

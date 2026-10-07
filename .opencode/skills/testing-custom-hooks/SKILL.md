@@ -156,7 +156,7 @@ describe('Tests on useMyHook hook', () => {
     vi.clearAllMocks();
     mockAction.mockResolvedValue({
       ok: true,
-      message: '¡ Success message !',
+      message: 'Success message',
     });
   });
 ```

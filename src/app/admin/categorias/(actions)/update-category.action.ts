@@ -57,7 +57,7 @@ export const updateCategoryAction = async ({
         if (isCategoryExists === 0) {
           return {
             ok: false,
-            message: '¡ La categoría no existe o ha sido eliminada !',
+            message: 'La categoría no existe o ha sido eliminada',
             category: null,
           };
         }
@@ -72,7 +72,7 @@ export const updateCategoryAction = async ({
         if (isCategoryDuplicated > 0) {
           return {
             ok: false,
-            message: '¡ El enlace permanente ya existe, elija otro !',
+            message: 'El enlace permanente ya existe, elija otro',
             category: null,
           };
         }
@@ -94,7 +94,7 @@ export const updateCategoryAction = async ({
 
         return {
           ok: true,
-          message: '¡ La categoría fue actualizada correctamente 👍 !',
+          message: 'La categoría fue actualizada correctamente',
           category: updatedCategory,
         };
       } catch (error) {
@@ -106,21 +106,21 @@ export const updateCategoryAction = async ({
 
             return {
               ok: false,
-              message: '¡ Hay campos duplicados, revise los logs del servidor !',
+              message: 'Hay campos duplicados, revise los logs del servidor',
               category: null,
             };
           }
 
           return {
             ok: false,
-            message: '¡ Error al crear la categoría, revise los logs del servidor !',
+            message: 'Error al crear la categoría, revise los logs del servidor',
             category: null,
           };
         }
         console.log(error);
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs del servidor !',
+          message: 'Error inesperado, revise los logs del servidor',
           category: null,
         };
       }
@@ -131,7 +131,7 @@ export const updateCategoryAction = async ({
   console.log(error);
   return {
     ok: false,
-    message: '¡ Error inesperado, revise los logs del servidor !',
+    message: 'Error inesperado, revise los logs del servidor',
     category: null,
   };
 }

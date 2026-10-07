@@ -48,7 +48,7 @@ export const fetchLatestImagesAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Las imágenes fueron obtenidas correctamente 👍',
+      message: 'Las imágenes fueron obtenidas correctamente',
       latestImages: images.map((image) => ({
         id: image.id,
         title: image.title,

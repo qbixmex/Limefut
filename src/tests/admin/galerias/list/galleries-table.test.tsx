@@ -47,7 +47,7 @@ import { galleriesMock } from '../mocks/galleries.mock';
 
 const defaultResponse = {
   ok: true,
-  message: '! Las galerías fueron obtenidas correctamente 👍',
+  message: 'Las galerías fueron obtenidas correctamente',
   galleries: galleriesMock,
   pagination: {
     currentPage: 1,

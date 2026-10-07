@@ -9,6 +9,6 @@ export const signOutAction = async () => {
   cookieStore.delete(NEST_SESSION_MODE_COOKIE);
 
   return {
-    message: '¡ Has cerrado sesión correctamente 👍 !',
+    message: 'Has cerrado sesión correctamente',
   };
 };

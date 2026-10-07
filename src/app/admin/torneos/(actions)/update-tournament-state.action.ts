@@ -25,7 +25,7 @@ export const updateTournamentStateAction = async (id: string, state: boolean): R
   if (tournamentExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el torneo, quizás fue eliminado ó no existe !',
+      message: 'No se pudo actualizar el torneo, quizás fue eliminado ó no existe',
     };
   }
 
@@ -60,6 +60,6 @@ export const updateTournamentStateAction = async (id: string, state: boolean): R
 
   return {
     ok: true,
-    message: `¡ El torneo "${updatedTournament.name}" fue ${updatedTournament.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `El torneo "${updatedTournament.name}" fue ${updatedTournament.active ? 'activado' : 'desactivado'} correctamente`,
   };
 };

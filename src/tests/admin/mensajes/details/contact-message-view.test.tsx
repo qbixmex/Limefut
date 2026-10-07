@@ -27,7 +27,7 @@ import { ROUTES } from '@/shared/constants/routes';
 describe('Tests on ContactMessageView', () => {
   const defaultResponse = {
     ok: true,
-    message: '¡ Mensaje obtenido correctamente 👍 !',
+    message: 'Mensaje obtenido correctamente',
     contactMessage: messageMock,
   };
 

@@ -27,7 +27,7 @@ describe('Test on <EditPlayerView />', () => {
 
     mockFetchPlayer.mockResolvedValue({
       ok: true,
-      message: '¡ Jugador obtenido correctamente 👍 !',
+      message: 'Jugador obtenido correctamente',
       player: {
         ...playerMock,
         team: playerMock.team,
@@ -57,7 +57,7 @@ describe('Test on <EditPlayerView />', () => {
   test('Should redirect when fetchPlayerAction fails', async () => {
     mockFetchPlayer.mockResolvedValue({
       ok: false,
-      message: '¡ Jugador no encontrado !',
+      message: 'Jugador no encontrado',
       player: null,
     });
 
@@ -76,7 +76,7 @@ describe('Test on <EditPlayerView />', () => {
   test('Should redirect when fetchTeamsForPlayer fails', async () => {
     mockFetchTeams.mockResolvedValue({
       ok: false,
-      message: '¡ Error al obtener equipos !',
+      message: 'Error al obtener equipos',
       teams: [],
     });
 

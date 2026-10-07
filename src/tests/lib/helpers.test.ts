@@ -2,13 +2,13 @@ import { getTerminalColor, requiredUUID } from '@/lib/helpers';
 
 describe('Test on Helpers', () => {
   test('Should validates zod Schema', () => {
-    const schema = requiredUUID('¡ El id es requerido !', 'El id debe ser un UUID válido');
+    const schema = requiredUUID('El id es requerido', 'El id debe ser un UUID válido');
 
     expect(schema.safeParse('01aa10d4-aeab-4fe5-b5c3-dd46d1ac58fb').success).toBe(true);
 
     const emptyResult = schema.safeParse('');
     expect(emptyResult.success).toBe(false);
-    expect(emptyResult.error?.issues[0].message).toBe('¡ El id es requerido !');
+    expect(emptyResult.error?.issues[0].message).toBe('El id es requerido');
 
     const invalidResult = schema.safeParse('invalid-uuid');
     expect(invalidResult.success).toBe(false);
