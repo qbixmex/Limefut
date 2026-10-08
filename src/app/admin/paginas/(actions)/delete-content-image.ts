@@ -94,5 +94,3 @@ export const deleteContentImageAction = async (
     })) ?? [],
   };
 };
-
-export default deleteContentImageAction;

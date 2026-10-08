@@ -1,22 +1,33 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Page } from '@/shared/interfaces';
+import type { PAGE_STATUS_TYPE } from '@/shared/enums/page_status.enum';
 import { cacheLife, cacheTag } from 'next/cache';
-
-type Image = {
-  id: string;
-  imageUrl: string;
-  resourceId: string;
-};
-
-export type PageType = Page & { images: Image[] };
 
 type FetchResponse = Promise<{
   ok: boolean;
   message: string;
-  page: PageType | null;
+  page: CUSTOM_PAGE_TYPE | null;
 }>;
+
+export type CUSTOM_PAGE_TYPE = {
+  id: string;
+  title: string | null;
+  permalink: string | null;
+  status: PAGE_STATUS_TYPE;
+  content: string | null;
+  position: number | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoRobots: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  images: {
+    id: string;
+    imageUrl: string;
+    resourceId: string;
+  }[];
+};
 
 export const fetchPageAction = async (
   pageId: string,

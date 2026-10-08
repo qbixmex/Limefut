@@ -1,9 +1,5 @@
 import { type FC } from 'react';
-import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { InfoIcon, Pencil } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { getSession } from '@/lib/get-session';
 import { fetchPagesAction } from '../(actions)/fetchPagesAction';
 import { SeoRobots } from './seo-robots';
@@ -13,6 +9,9 @@ import { cn, getPageStatus } from '@/lib/utils';
 import { DeletePage } from './delete-page';
 import { Badge } from '@/components/ui/badge';
 import type { PAGE_STATUS } from '@/shared/interfaces/Page';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import { ShowCustomPageDetails } from './show-custom-page-details';
+import { EditCustomPage } from './edit-custom-page';
 
 type Props = Readonly<{
   query?: string;
@@ -56,10 +55,26 @@ export const PagesTable: FC<Props> = async ({
                   return (
                     <TableRow key={page.id}>
                       <TableCell>
-                        <p className="text-pretty">{page.title ?? 'No especificado'}</p>
+                        {
+                          page.title ? (
+                            <p className="text-pretty">{page.title}</p>
+                          ) : (
+                            <Badge variant="outline-secondary">
+                              No especificado
+                            </Badge>
+                          )
+                        }
                       </TableCell>
                       <TableCell>
-                        <p className="text-pretty">{page.permalink ?? 'No especificado'}</p>
+                        {
+                          page.permalink ? (
+                            <p className="text-pretty">{page.permalink}</p>
+                          ) : (
+                            <Badge variant="outline-secondary">
+                              No especificado
+                            </Badge>
+                          )
+                        }
                       </TableCell>
                       <TableCell>
                         <SeoRobots robots={page.seoRobots as ROBOTS} />
@@ -74,30 +89,8 @@ export const PagesTable: FC<Props> = async ({
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-3">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Link href={`/admin/paginas/${page.id}`}>
-                                <Button variant="outline-info" size="icon">
-                                  <InfoIcon />
-                                </Button>
-                              </Link>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">
-                              detalles
-                            </TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Link href={`/admin/paginas/editar/${page.id}`}>
-                                <Button variant="outline-warning" size="icon">
-                                  <Pencil />
-                                </Button>
-                              </Link>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">
-                              <p>editar</p>
-                            </TooltipContent>
-                          </Tooltip>
+                          <ShowCustomPageDetails pageId={page.id} />
+                          <EditCustomPage pageId={page.id} />
                           <DeletePage
                             pageId={page.id as string}
                             roles={session?.user.roles as string[]}
@@ -119,11 +112,9 @@ export const PagesTable: FC<Props> = async ({
           </div>
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            No hay páginas disponibles
-          </p>
-        </div>
+        <EmptyMessageResource>
+          No hay páginas disponibles
+        </EmptyMessageResource>
       )}
     </>
   );

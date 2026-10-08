@@ -13,14 +13,14 @@ export const TitlePermalinkFields = () => {
   };
 
   return (
-    <section className={styles.container}>
-      <div className={styles.formGroup}>
+    <section className={styles.group}>
+      <div className={styles.column}>
         <TitleField
           permalinkChanged={permalinkChanged}
           handlePermalinkChanged={handlePermalinkChanged}
         />
       </div>
-      <div className={styles.formGroup}>
+      <div className={styles.column}>
         <PermalinkField
           handlePermalinkChanged={handlePermalinkChanged}
         />

@@ -4,7 +4,7 @@ import type { FormEvent } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { createEmptyCustomPage } from '../(actions)/createEmptyCustomPage';
+import { createEmptyCustomPage } from '../../(actions)/createEmptyCustomPage';
 import { useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -29,8 +29,12 @@ export const CreatePage = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <form onSubmit={handleSubmit}>
-          <Button variant="outline-primary" size="icon">
-            <Plus strokeWidth={3} />
+          <Button
+            variant="outline-primary"
+            size="icon"
+            aria-label="Crear borrador"
+          >
+            <Plus strokeWidth={3} aria-hidden="true" />
           </Button>
         </form>
       </TooltipTrigger>

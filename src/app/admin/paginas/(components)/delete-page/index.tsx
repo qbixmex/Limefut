@@ -44,9 +44,7 @@ export const DeletePage: FC<Props> = ({ pageId, roles }) => {
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
-        <TooltipContent side="top">
-          <p>eliminar</p>
-        </TooltipContent>
+        <TooltipContent side="top">eliminar</TooltipContent>
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>

@@ -25,5 +25,3 @@ export const PagesTableSkeleton: FC = () => {
     </div>
   );
 };
-
-export default PagesTableSkeleton;

@@ -2,9 +2,8 @@ import { Suspense, type FC } from 'react';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search } from '@/shared/components/search';
-import { PagesTableSkeleton } from './(components)/pages-table-skeleton';
-import { PagesTable } from './(components)/pages-table';
 import { CreatePage } from './(components)/create-page';
+import { CustomPagesView } from './(components)/custom-pages.view';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -13,18 +12,7 @@ type Props = Readonly<{
   }>;
 }>;
 
-const CustomPagesPage: FC<Props> = ({ searchParams }) => {
-  return (
-    <Suspense>
-      <CustomPagesContent searchParams={searchParams} />
-    </Suspense>
-  );
-};
-
-const CustomPagesContent: FC<Props> = async ({ searchParams }) => {
-  const query = (await searchParams).query;
-  const currentPage = (await searchParams).page;
-
+export const EditCustomPage: FC<Props> = ({ searchParams }) => {
   return (
     <>
       <ErrorHandler />
@@ -39,11 +27,8 @@ const CustomPagesContent: FC<Props> = async ({ searchParams }) => {
               </section>
             </CardHeader>
             <CardContent>
-              <Suspense
-                key={`${query}-${currentPage}`}
-                fallback={<PagesTableSkeleton />}
-              >
-                <PagesTable query={query} currentPage={currentPage} />
+              <Suspense>
+                <CustomPagesView searchParams={searchParams} />
               </Suspense>
             </CardContent>
           </Card>
@@ -53,4 +38,4 @@ const CustomPagesContent: FC<Props> = async ({ searchParams }) => {
   );
 };
 
-export default CustomPagesPage;
+export default EditCustomPage;
