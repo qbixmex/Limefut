@@ -20,17 +20,20 @@ import {
 } from '@/components/ui/popover';
 import type { Category } from './form-types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 type Props = Readonly<{ categories: Category[] }>;
 
 export const CategorySelectField: FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
   const { control } = useFormContext();
+  const tournament = useWatch({ name: 'tournament' });
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const pathname = usePathname();
   const router = useRouter();
+
+  const isDisabled = !tournament;
 
   const setCategorySearchParam = (permalink: string) => {
     params.set('category', permalink);
@@ -53,12 +56,17 @@ export const CategorySelectField: FC<Props> = ({ categories }) => {
                   variant="outline-secondary"
                   role="combobox"
                   aria-expanded={open}
+                  disabled={isDisabled}
                   className={cn(
                     'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
                     { 'border-destructive!': fieldState.invalid },
                   )}
                 >
-                  {selectedCategory ? selectedCategory.name : 'Seleccione una categoría'}
+                  {selectedCategory
+                    ? selectedCategory.name
+                    : isDisabled
+                      ? 'Seleccione un torneo primero'
+                      : 'Seleccione una categoría'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                 </Button>
               </PopoverTrigger>

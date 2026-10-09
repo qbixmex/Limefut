@@ -4,8 +4,10 @@ import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.ac
 import { fetchMatchAction } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 import { fetchTournamentsForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
 import { fetchTeamsForMatchEditAction } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-edit.action';
+import type { TEAM_TYPE } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-edit.action';
 import { fetchFieldsAction } from '@/app/admin/encuentros/(actions)/fetch-fields.action';
 import { fetchCategoriesForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
+import type { CATEGORY_TYPE } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditMatchForm } from './edit-match-form';
 import { MATCH_STATUS } from '@/shared/enums';
@@ -15,10 +17,18 @@ type Props = Readonly<{
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{
+    tournament?: string;
+    category?: string;
+  }>;
 }>;
 
-export const EditMatchContent: FC<Props> = async ({ params }) => {
+export const EditMatchContent: FC<Props> = async ({ params, searchParams }) => {
   const matchId = (await params).id;
+  const {
+    tournament: tournamentParam,
+    category: categoryParam,
+  } = await searchParams;
 
   const responseMatch = await fetchMatchAction(matchId);
 
@@ -27,6 +37,13 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
   }
 
   const match = responseMatch.match as MATCH_TYPE;
+
+  const tournamentPermalink = tournamentParam ?? match.tournament.permalink;
+  // When the tournament is explicitly present in the URL the user has made a
+  // selection, so only trust the category in the URL (it's cleared on change).
+  const categoryPermalink = tournamentParam
+    ? categoryParam
+    : (categoryParam ?? match.category?.permalink);
 
   const usedShooterIds = match.penaltyShootout?.kicks
     ?.map(kick => kick.playerId) ?? [];
@@ -45,16 +62,27 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(tournamentsResponse.message)}`);
   }
 
-  const categoriesResponse = await fetchCategoriesForMatchAction();
+  const categoriesResponse = await fetchCategoriesForMatchAction(tournamentPermalink);
 
   if (!categoriesResponse.ok) {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(categoriesResponse.message)}`);
   }
 
-  const responseTeams = await fetchTeamsForMatchEditAction(responseMatch.match?.tournament.id as string);
+  const categories: CATEGORY_TYPE[] = categoriesResponse.categories;
 
-  if (!responseTeams.ok) {
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseTeams.message)}`);
+  let teams: TEAM_TYPE[] = [];
+
+  if (tournamentPermalink && categoryPermalink) {
+    const responseTeams = await fetchTeamsForMatchEditAction({
+      tournamentPermalink,
+      categoryPermalink,
+    });
+
+    if (!responseTeams.ok) {
+      redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseTeams.message)}`);
+    }
+
+    teams = responseTeams.teams;
   }
 
   const fieldsResponse = await fetchFieldsAction();
@@ -69,8 +97,8 @@ export const EditMatchContent: FC<Props> = async ({ params }) => {
         <EditMatchForm
           key={`${responseMatch.match?.tournament.id ?? 'tournament'}`}
           tournaments={tournamentsResponse.tournaments}
-          categories={categoriesResponse.categories}
-          teams={responseTeams.teams}
+          categories={categories}
+          teams={teams}
           fields={fieldsResponse.fields}
           match={responseMatch.match as MATCH_TYPE}
         />
