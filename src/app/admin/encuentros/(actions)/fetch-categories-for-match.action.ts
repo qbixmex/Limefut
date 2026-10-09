@@ -15,14 +15,25 @@ export type CATEGORY_TYPE = {
   permalink: string;
 };
 
-export const fetchCategoriesForMatchAction = async (): ResponseFetchAction => {
+export const fetchCategoriesForMatchAction = async (
+  tournamentPermalink: string,
+): ResponseFetchAction => {
   'use cache';
 
   cacheLife('days');
-  cacheTag('admin-categories-for-match');
+  cacheTag('admin-categories-for-match', 'categories-selector-list');
 
   try {
     const categories = await prisma.category.findMany({
+      where: {
+        tournaments: {
+          some: {
+            tournament: {
+              permalink: tournamentPermalink,
+            },
+          },
+        },
+      },
       orderBy: [
         { name: 'desc' },
       ],
