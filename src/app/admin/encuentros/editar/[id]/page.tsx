@@ -9,9 +9,13 @@ type Props = Readonly<{
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{
+    tournament?: string;
+    category?: string;
+  }>;
 }>;
 
-export const EditMatchPage: FC<Props> = ({ params }) => {
+export const EditMatchPage: FC<Props> = ({ params, searchParams }) => {
   return (
     <div className="admin-page">
       <div className="admin-page-container">
@@ -21,7 +25,7 @@ export const EditMatchPage: FC<Props> = ({ params }) => {
           </CardHeader>
           <CardContent>
             <Suspense fallback={<FormSkeleton />}>
-              <EditMatchContent params={params} />
+              <EditMatchContent params={params} searchParams={searchParams} />
             </Suspense>
           </CardContent>
         </Card>

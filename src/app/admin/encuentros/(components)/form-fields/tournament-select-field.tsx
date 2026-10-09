@@ -16,7 +16,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 type Props = Readonly<{ tournaments: Tournament[] }>;
 
 export const TournamentSelectField: FC<Props> = ({ tournaments }) => {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const router = useRouter();
@@ -30,6 +30,7 @@ export const TournamentSelectField: FC<Props> = ({ tournaments }) => {
 
   const setTournamentSearchParam = (permalink: string) => {
     params.set('tournament', permalink);
+    params.delete('category');
     router.replace(`${pathname}?${params}`);
   };
 
@@ -45,6 +46,7 @@ export const TournamentSelectField: FC<Props> = ({ tournaments }) => {
             onValueChange={(permalink) => {
               setTournamentSearchParam(permalink);
               field.onChange(permalink);
+              setValue('category', '');
             }}
           >
             <SelectTrigger className="w-full" aria-invalid={fieldState.invalid}>
