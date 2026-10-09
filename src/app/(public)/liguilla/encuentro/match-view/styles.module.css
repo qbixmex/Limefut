@@ -1,0 +1,207 @@
+@reference "#globals.css";
+
+.mainWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(5);
+
+  @variant lg {
+    flex-direction: row;
+  }
+}
+
+.team {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 250px;
+}
+
+.teamLocal {
+  background-color: var(--color-emerald-700);
+  border-top-left-radius: var(--radius-xl);
+  border-bottom-left-radius: var(--radius-xl);
+
+  @variant dark {
+    background-color: --alpha(var(--color-emerald-800) / 80%);
+  }
+}
+
+.fieldDot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: --spacing(2);
+  height: --spacing(2);
+  background-color: var(--color-white);
+  border-radius: calc(infinity * 1px);
+}
+
+.fieldDivider {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: calc(var(--spacing) * 0.5);
+  height: 100%;
+  background-color: var(--color-white);
+}
+
+.teamVisitor {
+  background-color: var(--color-emerald-700);
+  border-top-right-radius: var(--radius-xl);
+  border-bottom-right-radius: var(--radius-xl);
+
+  @variant dark {
+    background-color: --alpha(var(--color-emerald-800) / 80%);
+  }
+}
+
+.teamName {
+  position: absolute;
+  top: calc(50% + 70px);
+  translate: 0 -50%;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+}
+
+.shieldIconWrapper {
+  display: grid;
+  place-content: center;
+  width: --spacing(25);
+  height: --spacing(25);
+  background-color: --alpha(var(--color-emerald-200) / 50%);
+  border-radius: 0.25rem;
+
+  @variant dark {
+    background-color: var(--color-emerald-950);
+  }
+}
+
+.shieldIcon {
+  stroke: var(--color-emerald-900);
+
+  @variant dark {
+    stroke: var(--color-emerald-100);
+  }
+}
+
+.team .teamShield {
+  object-fit: cover;
+  object-position: center;
+  width: --spacing(25);
+  height: --spacing(25);
+  border-radius: var(--radius-lg);
+}
+
+.matchResults {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: --spacing(18);
+  height: --spacing(18);
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color-white);
+  border-radius: calc(infinity * 1px);
+  background-color: var(--color-emerald-950);
+  font-size: var(--text-xl);
+
+  @variant md {
+    width: --spacing(25);
+    height: --spacing(25);
+  }
+
+  @variant xl {
+    width: --spacing(26);
+    height: --spacing(26);
+  }
+
+  & p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: --spacing(4);
+    color: var(--color-green-50);
+    font-size: var(--text-xl);
+    font-weight: 700;
+
+    @variant lg {
+      gap: --spacing(5);
+      font-size: var(--text-2xl);
+    }
+  }
+}
+
+.halfColumn {
+  width: 100%;
+
+  @variant lg {
+    width: 50%;
+  }
+}
+
+.scoreboard {
+  position: relative;
+  display: flex;
+}
+
+.teamNameLink {
+  color: var(--color-gray-100);
+}
+
+.balancedText {
+  text-wrap: balance;
+}
+
+.responsiveRow {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(5);
+
+  @variant lg {
+    flex-direction: row;
+  }
+}
+
+.matchDate {
+  @variant dark {
+    color: var(--color-gray-200);
+  }
+}
+
+.capitalized {
+  text-transform: capitalize;
+}
+
+.remarksHeading {
+  margin-bottom: --spacing(2);
+  font-size: var(--text-xl);
+  color: var(--color-sky-500);
+}
+
+.mutedText {
+  color: var(--color-gray-500);
+}
+
+.divider {
+  width: 100%;
+  height: calc(var(--spacing) * 0.25);
+  margin-block: --spacing(5);
+  background-color: var(--color-gray-600);
+}
+
+.penaltyHeading {
+  margin-bottom: --spacing(5);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-sky-500);
+}

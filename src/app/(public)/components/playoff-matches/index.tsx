@@ -10,7 +10,6 @@ import { EditMatch } from '../edit-match';
 import { cn } from '@/lib/utils';
 import { GiSoccerBall } from 'react-icons/gi';
 import styles from './styles.module.css';
-import { SoccerPlayer } from '@/shared/components/icons';
 
 type Props = Readonly<{
   playoffsPromise: Promise<{ playoffsPage?: string }>;
@@ -23,6 +22,10 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
     take: 4,
     nextMatches: playoffsPage ? Number(playoffsPage) : 1,
   });
+
+  if (matches.length === 0) {
+    return null;
+  }
 
   return (
     <section>
@@ -42,133 +45,118 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
       </div>
 
       <div className={styles.content}>
-        {(matches.length > 0) && (
-          matches.map((match, index) => (
-            <div key={match.id} className="relative">
-              <Link
-                href={
-                  '/liguilla/encuentro' +
-                  `?tournament=${match.tournament.permalink}` +
-                  `&category=${match.category?.id}` +
-                  `&local_team=${match.localTeam.permalink}` +
-                  `&visitor_team=${match.visitorTeam.permalink}`
-                }
-              >
-                <div className={styles.results}>
-                  <div className={styles.resultsWrapper}>
-                    <div className={styles.metadata}>
-                      <MatchMetadata
-                        tournamentName={match.tournament.name}
-                        category={match.category}
-                        field={match.field}
-                        date={match.matchDate}
-                        status={match.status}
-                        round={match.round as ROUND_TYPE}
-                        group={match.group}
-                      />
-                    </div>
-                    <div className={styles.match}>
-                      <Team
-                        imageUrl={match.localTeam.imageUrl}
-                        name={match.localTeam.name}
-                      />
-                      <div className={styles.penaltyShoots}>
-                        {match.penaltyShoots && (
-                          <span className={styles.shoot}>
-                            ({match.penaltyShoots.localGoals})
-                          </span>
-                        )}
-                        <span
-                          className={cn(styles.matchGoals, {
-                            [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
-                            [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
-                          })}
-                          role="heading"
-                          aria-level={3}
-                          aria-label={`Goles del equipo local ${match.localTeam.name}`}
-                        >
-                          {
-                            (
-                              match.status === MATCH_STATUS.SCHEDULED ||
-                              match.status === MATCH_STATUS.POST_POSED ||
-                              match.status === MATCH_STATUS.IN_PROGRESS ||
-                              match.status === MATCH_STATUS.CANCELED
-                            ) && <Minus strokeWidth={5} width={15} />
-                          }
-
-                          {match.status === MATCH_STATUS.COMPLETED && match.localScore}
+        {matches.map((match, index) => (
+          <div key={match.id} className="relative">
+            <Link
+              href={
+                '/liguilla/encuentro' +
+                `?tournament=${match.tournament.permalink}` +
+                `&category=${match.category?.id}` +
+                `&local_team=${match.localTeam.permalink}` +
+                `&visitor_team=${match.visitorTeam.permalink}`
+              }
+            >
+              <div className={styles.results}>
+                <div className={styles.resultsWrapper}>
+                  <div className={styles.metadata}>
+                    <MatchMetadata
+                      tournamentName={match.tournament.name}
+                      category={match.category}
+                      field={match.field}
+                      date={match.matchDate}
+                      status={match.status}
+                      round={match.round as ROUND_TYPE}
+                      group={match.group}
+                    />
+                  </div>
+                  <div className={styles.match}>
+                    <Team
+                      imageUrl={match.localTeam.imageUrl}
+                      name={match.localTeam.name}
+                    />
+                    <div className={styles.penaltyShoots}>
+                      {match.penaltyShoots && (
+                        <span className={styles.shoot}>
+                          ({match.penaltyShoots.localGoals})
                         </span>
+                      )}
+                      <span
+                        className={cn(styles.matchGoals, {
+                          [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
+                          [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
+                        })}
+                        role="heading"
+                        aria-level={3}
+                        aria-label={`Goles del equipo local ${match.localTeam.name}`}
+                      >
+                        {
+                          (
+                            match.status === MATCH_STATUS.SCHEDULED ||
+                            match.status === MATCH_STATUS.POST_POSED ||
+                            match.status === MATCH_STATUS.IN_PROGRESS ||
+                            match.status === MATCH_STATUS.CANCELED
+                          ) && <Minus strokeWidth={5} width={15} />
+                        }
 
+                        {match.status === MATCH_STATUS.COMPLETED && match.localScore}
+                      </span>
+
+                      {
+                        (
+                          match.status === MATCH_STATUS.SCHEDULED ||
+                          match.status === MATCH_STATUS.IN_PROGRESS ||
+                          match.status === MATCH_STATUS.POST_POSED ||
+                          match.status === MATCH_STATUS.CANCELED
+                        )
+                          ? <div className="w-1 h-5 bg-gray-500 rounded" />
+                          : <div className="w-3 h-1 bg-gray-500 rounded" />
+                      }
+
+                      <span
+                        className={cn(styles.matchGoals, {
+                          [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
+                          [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
+                        })}
+                        role="heading"
+                        aria-level={3}
+                        aria-label={`Goles del equipo local ${match.localTeam.name}`}
+                      >
                         {
                           (
                             match.status === MATCH_STATUS.SCHEDULED ||
                             match.status === MATCH_STATUS.IN_PROGRESS ||
                             match.status === MATCH_STATUS.POST_POSED ||
                             match.status === MATCH_STATUS.CANCELED
-                          )
-                            ? <div className="w-1 h-5 bg-gray-500 rounded" />
-                            : <div className="w-3 h-1 bg-gray-500 rounded" />
+                          ) && <Minus strokeWidth={5} width={15} />
                         }
 
-                        <span
-                          className={cn(styles.matchGoals, {
-                            [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
-                            [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
-                          })}
-                          role="heading"
-                          aria-level={3}
-                          aria-label={`Goles del equipo local ${match.localTeam.name}`}
-                        >
-                          {
-                            (
-                              match.status === MATCH_STATUS.SCHEDULED ||
-                              match.status === MATCH_STATUS.IN_PROGRESS ||
-                              match.status === MATCH_STATUS.POST_POSED ||
-                              match.status === MATCH_STATUS.CANCELED
-                            ) && <Minus strokeWidth={5} width={15} />
-                          }
+                        {match.status === MATCH_STATUS.COMPLETED && match.visitorScore}
+                      </span>
 
-                          {match.status === MATCH_STATUS.COMPLETED && match.visitorScore}
+                      {match.penaltyShoots && (
+                        <span className={styles.shoot}>
+                          ({match.penaltyShoots.visitorGoals})
                         </span>
-
-                        {match.penaltyShoots && (
-                          <span className={styles.shoot}>
-                            ({match.penaltyShoots.visitorGoals})
-                          </span>
-                        )}
-                      </div>
-                      <Team
-                        imageUrl={match.visitorTeam.imageUrl}
-                        name={match.visitorTeam.name}
-                      />
+                      )}
                     </div>
+                    <Team
+                      imageUrl={match.visitorTeam.imageUrl}
+                      name={match.visitorTeam.name}
+                    />
                   </div>
                 </div>
-              </Link>
-              {((matches.length - 1) !== index) && (
-                <div className="w-full h-0.5 bg-gray-500/40 my-5" />
-              )}
-              <EditMatch
-                playoffId={match.playoffId}
-                matchId={match.id}
-                phase="playoff"
-              />
-            </div>
-          ))
-        )}
-        {(matches.length === 0) && (
-          <div className={styles.noMatchesContent}>
-            <SoccerPlayer
-              size={150}
-              strokeWidth={3}
-              className={styles.soccerPlayerIcon}
+              </div>
+            </Link>
+            {((matches.length - 1) !== index) && (
+              <div className="w-full h-0.5 bg-gray-500/40 my-5" />
+            )}
+            <EditMatch
+              playoffId={match.playoffId}
+              matchId={match.id}
+              phase="playoff"
             />
-
-            <p className={styles.message}>
-              Por el momento no hay encuentros de liguilla programados
-            </p>
           </div>
-        )}
+        ))}
       </div>
 
       {
