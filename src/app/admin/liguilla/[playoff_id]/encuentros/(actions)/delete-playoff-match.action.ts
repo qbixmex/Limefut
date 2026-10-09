@@ -40,6 +40,6 @@ export const deletePlayoffMatchAction = async (id: string): ResponseDeleteAction
 
   return {
     ok: true,
-    message: '¡ El encuentro ha sido eliminado correctamente 👍 !',
+    message: 'El encuentro ha sido eliminado correctamente',
   };
 };

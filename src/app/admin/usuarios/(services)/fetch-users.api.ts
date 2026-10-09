@@ -46,7 +46,7 @@ export const fetchUsersApi = async (
   if (!isPositiveInteger(page) || !isPositiveInteger(take)) {
     return {
       ok: false,
-      message: '¡ Los parámetros deben ser números válidos !',
+      message: 'Los parámetros deben ser números válidos',
       users: null,
       pagination: null,
     };
@@ -67,7 +67,7 @@ export const fetchUsersApi = async (
   if (!result.ok || !result.data?.users) {
     const message =
       result.data?.message ??
-      '¡ No se pudieron obtener los usuarios !';
+      'No se pudieron obtener los usuarios';
 
     return {
       ok: false,
@@ -85,7 +85,7 @@ export const fetchUsersApi = async (
 
   return {
     ok: true,
-    message: '! Los usuarios fueron obtenidos satisfactoriamente 👍',
+    message: 'Los usuarios fueron obtenidos satisfactoriamente',
     users: mappedUsers,
     pagination: pagination ?? null,
   };

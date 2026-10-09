@@ -52,7 +52,7 @@ export const fetchLatestMessagesAction = async ({ quantity }: Options): Promise<
 
     return {
       ok: true,
-      message: '! Los mensajes fueron obtenidos correctamente 👍',
+      message: 'Los mensajes fueron obtenidos correctamente',
       latestMessages,
     };
   } catch (error) {

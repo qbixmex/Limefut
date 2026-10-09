@@ -36,7 +36,7 @@ export const deletePlayerImageAction = async ({
   if (!player) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la imagen del jugador, quizás fue eliminada ó no existe !',
+      message: 'No se puede eliminar la imagen del jugador, quizás fue eliminada ó no existe',
     };
   }
 
@@ -74,7 +74,7 @@ export const deletePlayerImageAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado del servidor,\nrevise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nrevise los logs del servidor',
     };
   }
 
@@ -92,6 +92,6 @@ export const deletePlayerImageAction = async ({
 
   return {
     ok: true,
-    message: `¡ La imagen del jugador ["${player.name}"] ha sido eliminada correctamente 👍 !`,
+    message: `La imagen del jugador ["${player.name}"] ha sido eliminada correctamente`,
   };
 };

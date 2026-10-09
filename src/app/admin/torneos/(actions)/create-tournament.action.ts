@@ -99,7 +99,7 @@ export const createTournamentAction = async ({
 
       return {
         ok: true,
-        message: '¡ Torneo creado satisfactoriamente 👍 !',
+        message: 'Torneo creado satisfactoriamente',
         tournament: createdTournament,
       };
     });
@@ -134,7 +134,7 @@ export const createTournamentAction = async ({
 
         return {
           ok: false,
-          message: '¡ Hay campos duplicados, revise los logs del servidor !',
+          message: 'Hay campos duplicados, revise los logs del servidor',
           tournament: null,
         };
       }
@@ -143,14 +143,14 @@ export const createTournamentAction = async ({
 
       return {
         ok: false,
-        message: '¡ Error al crear el torneo, revise los logs del servidor !',
+        message: 'Error al crear el torneo, revise los logs del servidor',
         tournament: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       tournament: null,
     };
   }

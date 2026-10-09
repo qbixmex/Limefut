@@ -22,7 +22,7 @@ vi.mock('@/app/admin/canchas/(components)/edit-field', () => ({
 describe('Tests on FieldView', () => {
   const defaultResponse = {
     ok: true,
-    message: '¡ Cancha obtenida correctamente 👍 !',
+    message: 'Cancha obtenida correctamente',
     field: fieldMock,
   };
 

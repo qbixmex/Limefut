@@ -60,7 +60,7 @@ export const createCredentialAction = async (formData: FormData): CreateResponse
       if (!player) {
         return {
           ok: false,
-          message: `¡ El jugador: "${data.fullName}" no existe !`,
+          message: `El jugador: "${data.fullName}" no existe`,
           credential: null,
         };
       }
@@ -72,7 +72,7 @@ export const createCredentialAction = async (formData: FormData): CreateResponse
       if (countCredential) {
         return {
           ok: false,
-          message: `¡ La credencial con el jugador: "${data.fullName}" ya existe !`,
+          message: `La credencial con el jugador: "${data.fullName}" ya existe`,
           credential: null,
         };
       }
@@ -91,7 +91,7 @@ export const createCredentialAction = async (formData: FormData): CreateResponse
 
       return {
         ok: true,
-        message: '¡ Credencial creada correctamente 👍 !',
+        message: 'Credencial creada correctamente',
         credential: createdCredential,
       };
     });
@@ -106,21 +106,21 @@ export const createCredentialAction = async (formData: FormData): CreateResponse
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           credential: null,
         };
       }
       console.log(error.message);
       return {
         ok: false,
-        message: '¡ Error al crear la credencial, revise los logs del servidor !',
+        message: 'Error al crear la credencial, revise los logs del servidor',
         credential: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       credential: null,
     };
   }

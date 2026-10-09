@@ -30,7 +30,7 @@ export const fetchCoachesForTeam = async (): ResponseFetchAction => {
 
     return {
       ok: true,
-      message: '! Los entrenadores fueron obtenidos correctamente 👍',
+      message: 'Los entrenadores fueron obtenidos correctamente',
       coaches,
     };
   } catch (error) {
@@ -45,7 +45,7 @@ export const fetchCoachesForTeam = async (): ResponseFetchAction => {
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado al obtener los entrenadores ❌ !, revise los logs del servidor',
+      message: 'Error inesperado al obtener los entrenadores!, revise los logs del servidor',
       coaches: [],
     };
   }

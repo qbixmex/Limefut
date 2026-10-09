@@ -41,7 +41,7 @@ export const fetchPublicVideosAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Los videos fueron obtenidos correctamente 👍',
+      message: 'Los videos fueron obtenidos correctamente',
       videos,
     };
   } catch (error) {

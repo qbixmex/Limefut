@@ -66,7 +66,7 @@ export const updateUserAction = async ({
   ) {
     return {
       ok: false,
-      message: '¡ La contraseña es insegura, elija otra por favor !',
+      message: 'La contraseña es insegura, elija otra por favor',
       user: null,
     };
   }
@@ -83,7 +83,7 @@ export const updateUserAction = async ({
         if (!isUserExists) {
           return {
             ok: false,
-            message: '¡ El usuario no existe o ha sido eliminado !',
+            message: 'El usuario no existe o ha sido eliminado',
             user: null,
           };
         }
@@ -113,7 +113,7 @@ export const updateUserAction = async ({
           if (updatedUser.imagePublicID) {
             const cloudinaryResponse = await deleteImage(updatedUser.imagePublicID);
             if (!cloudinaryResponse.ok) {
-              throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+              throw new Error('Error al intentar eliminar la imagen de cloudinary');
             }
           }
 
@@ -121,7 +121,7 @@ export const updateUserAction = async ({
           const imageUploaded = await uploadImage(image, 'users');
 
           if (!imageUploaded) {
-            throw new Error('¡ Error al intentar subir la imagen a cloudinary !');
+            throw new Error('Error al intentar subir la imagen a cloudinary');
           }
 
           // Update image data to database.
@@ -155,7 +155,7 @@ export const updateUserAction = async ({
 
         return {
           ok: true,
-          message: '¡ Usuario actualizado satisfactoriamente 👍 !',
+          message: 'Usuario actualizado satisfactoriamente',
           user: updatedUser,
         };
       } catch (error) {
@@ -164,20 +164,20 @@ export const updateUserAction = async ({
             const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
             return {
               ok: false,
-              message: `¡ El campo "${fieldError}", está duplicado !`,
+              message: `El campo "${fieldError}", está duplicado`,
               user: null,
             };
           }
 
           return {
             ok: false,
-            message: '¡ Error al actualizar el usuario, revise los logs del servidor !',
+            message: 'Error al actualizar el usuario, revise los logs del servidor',
             user: null,
           };
         }
         return {
           ok: false,
-          message: '¡ Error inesperado, revise los logs !',
+          message: 'Error inesperado, revise los logs',
           user: null,
         };
       }
@@ -188,7 +188,7 @@ export const updateUserAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       user: null,
     };
   }

@@ -86,14 +86,14 @@ export const requireAdmin = async (): Promise<RequireAdminResult> => {
   if (!payload?.session.user) {
     return {
       ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
+      message: 'Debes estar autentificado para realizar esta acción',
     };
   }
 
   if (!payload.session.user.roles?.includes('admin')) {
     return {
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: 'No tienes permisos administrativos para realizar esta acción',
     };
   }
 

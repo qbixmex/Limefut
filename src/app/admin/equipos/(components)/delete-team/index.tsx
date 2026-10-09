@@ -27,7 +27,7 @@ type Props = Readonly<{
 export const DeleteTeam: FC<Props> = ({ teamId, roles }) => {
   const onDeleteTeam = async (teamId: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar equipos !');
+      toast.error('No tienes permisos administrativos para eliminar equipos');
       return;
     }
     const { ok, message } = await deleteTeamAction(teamId);

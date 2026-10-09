@@ -35,12 +35,12 @@ export const fetchPublicCategoriesAction = async (): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Las categorías obtenidas correctamente 👍 !',
+      message: 'Las categorías obtenidas correctamente',
       categories,
     };
   } catch (error) {
     if (error instanceof Error) {
-      console.log('¡ Error al intentar obtener las categorías !');
+      console.log('Error al intentar obtener las categorías');
       return {
         ok: false,
         message: error.message,
@@ -50,7 +50,7 @@ export const fetchPublicCategoriesAction = async (): ResponseAction => {
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado al obtener las categorías, revise los logs del servidor !',
+      message: 'Error inesperado al obtener las categorías, revise los logs del servidor',
       categories: [],
     };
   }

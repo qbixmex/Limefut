@@ -37,8 +37,8 @@ Partes que **escriben** cookies: `signInAction` (login), `signOutAction` (borra 
 - `NestAuthUser` con `isActive?`.
 - `loginWithNestApi(email, password)` → `{ ok, message, user, token }`.
 - `checkNestTokenStatus(token)` → `{ ok: true, user, token | ok: false, message }`.
-  - Red caída → `¡ No se pudo conectar con el servicio de autentificación ❌ !`.
-  - Token inválido/expirado → `¡ La sesión ha expirado, inicie sesión nuevamente !` (o mensaje del backend).
+  - Red caída → `No se pudo conectar con el servicio de autentificación`.
+  - Token inválido/expirado → `La sesión ha expirado, inicie sesión nuevamente` (o mensaje del backend).
 - `getNestBaseUrl()` simplificado: `process.env.AUTH_API_BASE_URL ?? ''` (sin switch por NODE_ENV).
 - `mapNestRoles`, `getNestAccessToken`, `callNestApi<T>`.
 

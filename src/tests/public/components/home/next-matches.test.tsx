@@ -24,7 +24,7 @@ describe('Test on <NextMatches /> component', () => {
   test('Should render correctly', async () => {
     vi.mocked(fetchPublicMatchesAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: [],
       pagination: {
         nextMatches: 0,
@@ -50,7 +50,7 @@ describe('Test on <NextMatches /> component', () => {
   test('Should show next matches', async () => {
     vi.mocked(fetchPublicMatchesAction).mockResolvedValue({
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente',
+      message: 'Los encuentros fueron obtenidos correctamente',
       matches: nextMatches,
       pagination: {
         nextMatches: 0,

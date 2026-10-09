@@ -1,0 +1,72 @@
+@reference "#globals.css";
+
+.heading {
+  margin-top: --spacing(8);
+  margin-bottom: --spacing(5);
+  font-size: var(--text-3xl);
+  font-weight: 600;
+}
+
+.imagesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: --spacing(5);
+}
+
+.imageWrapper {
+  position: relative;
+  width: fit-content;
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+
+.actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: --spacing(2);
+}
+
+.copyButton {
+  cursor: pointer;
+  background-color: --alpha(var(--color-cyan-600) / 70%) !important;
+}
+
+.copyButton:hover {
+  background-color: var(--color-cyan-600) !important;
+}
+
+.deleteButton {
+  cursor: pointer;
+  background-color: --alpha(var(--color-pink-600) / 70%) !important;
+}
+
+.deleteButton:hover {
+  background-color: var(--color-pink-600) !important;
+}
+
+.deleteButtonDisabled {
+  cursor: not-allowed;
+  background-color: var(--color-gray-500) !important;
+}
+
+.deleteButtonDisabled:hover {
+  background-color: var(--color-gray-500) !important;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+}
+
+.spinner {
+  @apply animate-spin;
+}

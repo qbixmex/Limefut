@@ -25,7 +25,7 @@ describe('Test on <TeamsSlot />', () => {
     teamsSlotProps.current = undefined;
     vi.mocked(fetchPlayoffTeamsAction).mockResolvedValue({
       ok: true,
-      message: '! Los equipos de liguilla fueron obtenidos correctamente 👍',
+      message: 'Los equipos de liguilla fueron obtenidos correctamente',
       teams: playoffTeamsForSelectMock,
     });
   });

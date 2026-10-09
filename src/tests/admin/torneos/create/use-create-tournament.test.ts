@@ -44,7 +44,7 @@ describe('Tests on useCreateTournament hook', () => {
     vi.clearAllMocks();
     mockCreateAction.mockResolvedValue({
       ok: true,
-      message: '¡ Torneo creado satisfactoriamente 👍 !',
+      message: 'Torneo creado satisfactoriamente',
       tournament: null,
     });
   });
@@ -98,7 +98,7 @@ describe('Tests on useCreateTournament hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ Torneo creado satisfactoriamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('Torneo creado satisfactoriamente');
     expect(mockReplace).toHaveBeenCalledWith(ROUTES.ADMIN_TOURNAMENTS);
   });
 

@@ -115,7 +115,7 @@ describe('Tests on useEditGallery hook', () => {
   test('onSubmit should show error toast and not navigate on failure', async () => {
     mockUpdateAction.mockResolvedValue({
       ok: false,
-      message: '¡ Error al actualizar la galería !',
+      message: 'Error al actualizar la galería',
       gallery: null,
     });
     const { toast } = await import('sonner');
@@ -125,7 +125,7 @@ describe('Tests on useEditGallery hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.error).toHaveBeenCalledWith('¡ Error al actualizar la galería !');
+    expect(toast.error).toHaveBeenCalledWith('Error al actualizar la galería');
     expect(mockReplace).not.toHaveBeenCalled();
   });
 });

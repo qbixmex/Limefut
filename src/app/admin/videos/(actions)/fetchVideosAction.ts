@@ -1,7 +1,7 @@
 'use server';
 
 import { cacheLife, cacheTag } from 'next/cache';
-import type { Prisma } from '@/generated/prisma/client';
+import { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
 import type { Pagination } from '@/shared/interfaces';
 
@@ -70,7 +70,7 @@ export const fetchVideosAction = async (options: Options): ResponseFetch => {
 
     return {
       ok: true,
-      message: '! Los videos fueron obtenidos correctamente 👍',
+      message: 'Los videos fueron obtenidos correctamente',
       videos,
       pagination: {
         currentPage: page,
@@ -78,21 +78,49 @@ export const fetchVideosAction = async (options: Options): ResponseFetch => {
       },
     };
   } catch (error) {
-    if (error instanceof Error) {
-      console.log('Error al intentar obtener los videos');
-      console.log('NAME:', error.name);
-      console.log('MESSAGE:', error.message);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log('Error Name:', error.name);
+      console.log('Error Code:', error.code);
+      console.log('Error cause:', error.cause ?? 'none');
+      console.log('Error Metadata:', error.meta ?? 'none');
+      console.log('Error Message:', error.message);
+
+      if (error.code === 'P2002') {
+        return {
+          ok: false,
+          message: 'Hay campos duplicados, revise los logs del servidor',
+          videos: [],
+          pagination: null,
+        };
+      }
 
       return {
         ok: false,
-        message: error.message,
+        message: 'Hubo errores de base de datos, revise los logs del servidor',
         videos: [],
         pagination: null,
       };
     }
+
+    if (error instanceof Error) {
+      console.log('Error Name:', error.name);
+      console.log('Error Message:', error.message);
+      console.log('Error Cause:', error.cause ?? 'none');
+      console.log('Error Stack:', error.stack ?? 'none');
+
+      return {
+        ok: false,
+        message: 'No se pudieron obtener los videos, revise los logs del servidor',
+        videos: [],
+        pagination: null,
+      };
+    }
+
+    console.log(error);
+
     return {
       ok: false,
-      message: 'Error inesperado al obtener los videos, revise los logs del servidor',
+      message: 'Error inesperado, revise los logs del servidor',
       videos: [],
       pagination: null,
     };

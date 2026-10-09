@@ -61,7 +61,7 @@ export const updateGalleryImageAction = async ({
       if (!existingImage) {
         return {
           ok: false,
-          message: '¡ La imagen de la galería no existe o ha sido eliminada !',
+          message: 'La imagen de la galería no existe o ha sido eliminada',
           galleryImage: null,
         };
       }

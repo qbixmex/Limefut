@@ -14,7 +14,7 @@ export const createHeroBannerSchema = z.object({
   title: z
     .string('El título debe ser una cadena de texto')
     .min(3, { message: 'El título debe ser mayor a 3 caracteres' })
-    .max(250, { message: '¡ El título debe ser menor a 250 caracteres !' }),
+    .max(250, { message: 'El título debe ser menor a 250 caracteres' }),
   description: z
     .string('La descripción debe ser una cadena de texto')
     .min(3, { message: 'La descripción debe ser mayor a 3 caracteres' })

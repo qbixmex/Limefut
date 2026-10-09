@@ -91,7 +91,7 @@ const fetchStandingsCached = async ({
     if (!tournament) {
       return {
         ok: false,
-        message: `¡ El torneo con el id [${tournamentId}] no existe !`,
+        message: `El torneo con el id [${tournamentId}] no existe`,
         teams: [],
         tournament: null,
         standings: null,

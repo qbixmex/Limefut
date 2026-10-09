@@ -67,14 +67,14 @@ export const fetchCredentialAction = async (
     if (!credential) {
       return {
         ok: false,
-        message: '¡ Credencial no encontrada ❌ !',
+        message: 'Credencial no encontrada',
         credential: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Credencial obtenida correctamente 👍 !',
+      message: 'Credencial obtenida correctamente',
       credential: {
         id: credential.id,
         fullName: credential.fullName,
@@ -102,13 +102,13 @@ export const fetchCredentialAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener la credencial,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener la credencial,\nRevise los logs del servidor',
         credential: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       credential: null,
     };
   }

@@ -2,13 +2,26 @@
 
 import { cacheLife, cacheTag } from 'next/cache';
 import prisma from '@/lib/prisma';
-import type { Video } from '@/shared/interfaces';
+import { Prisma } from '@/generated/prisma/client';
 
 type FetchVideoResponse = Promise<{
   ok: boolean;
   message: string;
-  video: Video | null;
+  video: VIDEO_TYPE | null;
 }>;
+
+export type VIDEO_TYPE = {
+  id: string;
+  title: string;
+  permalink: string;
+  publishedDate: Date;
+  description: string;
+  url: string;
+  platform: string;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export const fetchVideoAction = async (
   videoId: string,
@@ -26,28 +39,57 @@ export const fetchVideoAction = async (
     if (!video) {
       return {
         ok: false,
-        message: '¡ Video no encontrada ❌ !',
+        message: 'Video no encontrada',
         video: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Video obtenido correctamente 👍 !',
+      message: 'Video obtenido correctamente',
       video,
     };
   } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log('Error Name:', error.name);
+      console.log('Error Code:', error.code);
+      console.log('Error cause:', error.cause ?? 'none');
+      console.log('Error Metadata:', error.meta ?? 'none');
+      console.log('Error Message:', error.message);
+
+      if (error.code === 'P2002') {
+        return {
+          ok: false,
+          message: 'Hay campos duplicados, revise los logs del servidor',
+          video: null,
+        };
+      }
+
       return {
         ok: false,
-        message: 'No se pudo obtener el video,\n¡ Revise los logs del servidor !',
+        message: 'Hubo errores de base de datos, revise los logs del servidor',
         video: null,
       };
     }
+
+    if (error instanceof Error) {
+      console.log('Error Name:', error.name);
+      console.log('Error Message:', error.message);
+      console.log('Error Cause:', error.cause ?? 'none');
+      console.log('Error Stack:', error.stack ?? 'none');
+
+      return {
+        ok: false,
+        message: 'No se pudo obtener el video, revise los logs del servidor',
+        video: null,
+      };
+    }
+
+    console.log(error);
+
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       video: null,
     };
   }

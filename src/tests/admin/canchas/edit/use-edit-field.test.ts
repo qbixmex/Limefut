@@ -43,7 +43,7 @@ describe('Tests on useEditField hook', () => {
     vi.clearAllMocks();
     mockUpdateAction.mockResolvedValue({
       ok: true,
-      message: '¡ La cancha fue actualizada correctamente 👍 !',
+      message: 'La cancha fue actualizada correctamente',
       field: null,
     });
   });
@@ -117,7 +117,7 @@ describe('Tests on useEditField hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ La cancha fue actualizada correctamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('La cancha fue actualizada correctamente');
     expect(mockReplace).toHaveBeenCalledWith(ROUTES.ADMIN_FIELDS);
   });
 

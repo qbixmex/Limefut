@@ -32,7 +32,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   if (!team) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el equipo, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar el equipo, quizás fue eliminado ó no existe',
     };
   }
 
@@ -40,7 +40,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   if (team._count.players > 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el equipo porque tiene jugadores registrados !',
+      message: 'No se puede eliminar el equipo porque tiene jugadores registrados',
     };
   }
 
@@ -56,9 +56,9 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   if (matchesCount > 0) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar el equipo' +
+      message: 'No se puede eliminar el equipo' +
         ` porque aparece en ( ${matchesCount} )` +
-        ` encuentro${matchesCount > 0 ? 's' : ''} !`,
+        ` encuentro${matchesCount > 0 ? 's' : ''}`,
     };
   }
 
@@ -100,10 +100,10 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
 
     return {
       ok: false,
-      message: '¡ No se puede eliminar el equipo' +
+      message: 'No se puede eliminar el equipo' +
         ' porque tiene estadísticas en la tabla de posiciones' +
         ` ( ${played} partido${played === 1 ? '' : 's'}` +
-        ` jugado${played === 1 ? '' : 's'} ) !`,
+        ` jugado${played === 1 ? '' : 's'} )`,
     };
   }
 
@@ -125,7 +125,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
     console.error(`Error eliminando el equipo: ${(error as Error).message}`);
     return {
       ok: false,
-      message: '¡ No se pudo eliminar el equipo, revise los logs del servidor !',
+      message: 'No se pudo eliminar el equipo, revise los logs del servidor',
     };
   }
 
@@ -151,7 +151,7 @@ export const deleteTeamAction = async (teamId: string): ResponseDeleteAction => 
   return {
     ok: true,
     message: removedFromStandings
-      ? '¡ El equipo ha sido eliminado y fue retirado de la tabla de posiciones 👍 !'
-      : '¡ El equipo ha sido eliminado correctamente 👍 !',
+      ? 'El equipo ha sido eliminado y fue retirado de la tabla de posiciones'
+      : 'El equipo ha sido eliminado correctamente',
   };
 };

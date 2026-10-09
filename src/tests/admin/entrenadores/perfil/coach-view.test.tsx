@@ -27,7 +27,7 @@ vi.mock('@/app/admin/entrenadores/(components)/edit-coach', () => ({
 describe('Tests on CoachView', () => {
   const defaultResponse = {
     ok: true,
-    message: '¡ Entrenador obtenido correctamente 👍 !',
+    message: 'Entrenador obtenido correctamente',
     coach: coachProfileMock,
   };
 

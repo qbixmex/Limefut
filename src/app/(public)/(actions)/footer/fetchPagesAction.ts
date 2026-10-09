@@ -34,7 +34,7 @@ export const fetchPagesAction = async (): ResponseFetchPagesLink => {
 
     return {
       ok: true,
-      message: '! Los links de las páginas fueron obtenidos correctamente 👍',
+      message: 'Los links de las páginas fueron obtenidos correctamente',
       pageLinks: pages,
     };
   } catch (error) {

@@ -75,7 +75,7 @@ describe('Tests on fetchGalleryAction server action', () => {
     const response = await fetchGalleryAction(galleryId);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('No se pudo obtener la galería,\n¡ Revise los logs del servidor');
+    expect(response.message).toBe('No se pudo obtener la galería,\nRevise los logs del servidor');
     expect(response.gallery).toBe(null);
   });
 
@@ -85,7 +85,7 @@ describe('Tests on fetchGalleryAction server action', () => {
     const response = await fetchGalleryAction(galleryId);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toBe('Error inesperado del servidor,\n¡ Revise los logs del servidor');
+    expect(response.message).toBe('Error inesperado del servidor,\nRevise los logs del servidor');
     expect(response.gallery).toBe(null);
   });
 });

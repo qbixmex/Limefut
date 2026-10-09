@@ -1,4 +1,4 @@
-@reference "../../../globals.css";
+@reference "#globals.css";
 
 div[class*=dialogContent] {
   @apply flex-col p-5;

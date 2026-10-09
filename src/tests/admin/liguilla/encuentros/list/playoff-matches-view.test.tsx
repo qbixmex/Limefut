@@ -33,7 +33,7 @@ type SearchParams = {
 
 const defaultResponse = {
   ok: true,
-  message: '! Los encuentros de liguilla fueron obtenidos correctamente 👍',
+  message: 'Los encuentros de liguilla fueron obtenidos correctamente',
   matches: playoffMatchesMock,
   pagination: { currentPage: 0, totalPages: 1 },
 };

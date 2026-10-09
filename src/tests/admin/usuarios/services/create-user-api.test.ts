@@ -45,7 +45,7 @@ describe('Tests on createUserApi service', () => {
       status: 201,
       data: {
         statusCode: 201,
-        message: 'Usuario creado satisfactoriamente 👍',
+        message: 'Usuario creado satisfactoriamente',
         user: backendUser,
       },
     });
@@ -72,7 +72,7 @@ describe('Tests on createUserApi service', () => {
       status: 409,
       data: {
         statusCode: 409,
-        message: '¡ El usuario con el email [robert@thecure.com] ya existe, elija otro !',
+        message: 'El usuario con el email [robert@thecure.com] ya existe, elija otro',
         error: 'Conflict',
       },
     });
@@ -144,7 +144,7 @@ describe('Tests on createUserApi service', () => {
       status: 201,
       data: {
         statusCode: 201,
-        message: 'Usuario creado satisfactoriamente 👍',
+        message: 'Usuario creado satisfactoriamente',
         user: backendUser,
       },
     });

@@ -25,7 +25,7 @@ export const signInAction = async (
   if (!email || !password) {
     return {
       ok: false,
-      message: '¡ El correo y la contraseña son obligatorios !',
+      message: 'El correo y la contraseña son obligatorios',
     };
   }
 
@@ -63,7 +63,7 @@ export const signInAction = async (
     console.error('Login error:', error);
     return {
       ok: false,
-      message: '¡ Error desconocido, revise los logs del servidor ❌ !',
+      message: 'Error desconocido, revise los logs del servidor',
     };
   }
 };

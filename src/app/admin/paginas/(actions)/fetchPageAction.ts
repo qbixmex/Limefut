@@ -1,22 +1,33 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { Page } from '@/shared/interfaces';
+import type { PAGE_STATUS_TYPE } from '@/shared/enums/page_status.enum';
 import { cacheLife, cacheTag } from 'next/cache';
-
-type Image = {
-  id: string;
-  imageUrl: string;
-  resourceId: string;
-};
-
-export type PageType = Page & { images: Image[] };
 
 type FetchResponse = Promise<{
   ok: boolean;
   message: string;
-  page: PageType | null;
+  page: CUSTOM_PAGE_TYPE | null;
 }>;
+
+export type CUSTOM_PAGE_TYPE = {
+  id: string;
+  title: string | null;
+  permalink: string | null;
+  status: PAGE_STATUS_TYPE;
+  content: string | null;
+  position: number | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoRobots: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  images: {
+    id: string;
+    imageUrl: string;
+    resourceId: string;
+  }[];
+};
 
 export const fetchPageAction = async (
   pageId: string,
@@ -43,14 +54,14 @@ export const fetchPageAction = async (
     if (!page) {
       return {
         ok: false,
-        message: '¡ Página no encontrada ❌ !',
+        message: 'Página no encontrada',
         page: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ Página obtenida correctamente 👍 !',
+      message: 'Página obtenida correctamente',
       page: {
         ...page,
         images: page.images.map((item) => ({
@@ -65,13 +76,13 @@ export const fetchPageAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener la página,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener la página,\nRevise los logs del servidor',
         page: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       page: null,
     };
   }

@@ -9,10 +9,8 @@ type Props = Readonly<{
 
 export const SeoRobots: FC<Props> = ({ robots }) => {
   return (
-    <>
-      <Badge variant={getBadgeRobotsVariant(robots as ROBOTS)}>
-        {getRobots(robots)}
-      </Badge>
-    </>
+    <Badge variant={getBadgeRobotsVariant(robots as ROBOTS)}>
+      {getRobots(robots)}
+    </Badge>
   );
 };

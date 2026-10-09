@@ -27,7 +27,7 @@ type Props = Readonly<{
 export const DeleteUser: FC<Props> = ({ userId, roles }) => {
   const onDeleteUser = async (userId: string) => {
     if (!roles.includes('admin')) {
-      toast.error('¡ No tienes permisos administrativos para eliminar usuarios !');
+      toast.error('No tienes permisos administrativos para eliminar usuarios');
       return;
     }
     const response = await deleteUserAction(userId);

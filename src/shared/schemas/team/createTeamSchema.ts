@@ -11,26 +11,26 @@ const ACCEPTED_FILE_TYPES = [
 
 export const createTeamSchema = z.object({
   name: z.string()
-    .min(3, { message: '¡ El nombre debe ser mayor a 3 caracteres !' })
-    .max(250, { message: '¡ El nombre debe ser menor a 250 caracteres !' }),
+    .min(3, { message: 'El nombre debe ser mayor a 3 caracteres' })
+    .max(250, { message: 'El nombre debe ser menor a 250 caracteres' }),
   permalink: z.string()
-    .min(3, { message: '¡ El enlace permanente debe ser mayor a 3 caracteres !' })
-    .max(250, { message: '¡ El enlace permanente debe ser menor a 250 caracteres !' })
+    .min(3, { message: 'El enlace permanente debe ser mayor a 3 caracteres' })
+    .max(250, { message: 'El enlace permanente debe ser menor a 250 caracteres' })
     .refine(
       (value) => !/\s/.test(value),
-      { message: '¡ El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos !' },
+      { message: 'El enlace permanente no debe contener espacios,\nremplace espacios con guiones medios o bajos' },
     )
     .refine(
       (value) => !/[áéíóúÁÉÍÓÚ]/.test(value),
-      { message: '¡ El enlace permanente no debe contener acentos (á, é, í, ó, ú) !' },
+      { message: 'El enlace permanente no debe contener acentos (á, é, í, ó, ú)' },
     )
     .refine(
       (value) => !/[ñÑ]/.test(value),
-      { message: '¡ El enlace permanente no debe contener la letra ñ !' },
+      { message: 'El enlace permanente no debe contener la letra ñ' },
     )
     .refine(
       (value) => /^[a-zA-Z0-9_-]+$/.test(value),
-      { message: '¡ El enlace permanente solo puede contener letras, números, guiones y guiones bajos !' },
+      { message: 'El enlace permanente solo puede contener letras, números, guiones y guiones bajos' },
     ),
   image: z
     .instanceof(File, { message: 'La imagen debe ser un archivo' })
@@ -44,51 +44,51 @@ export const createTeamSchema = z.object({
   ]).optional(),
   categoryId: z.uuid('El id de la categoría debe ser un UUID válido'),
   format: z.string()
-    .min(1, { message: '¡ El formato debe ser mayor a 1 caracteres !' })
-    .max(100, { message: '¡ El formato debe ser menor a 100 caracteres !' }),
+    .min(1, { message: 'El formato debe ser mayor a 1 caracteres' })
+    .max(100, { message: 'El formato debe ser menor a 100 caracteres' }),
   gender: z.enum(['male', 'female'], {
-    error: '¡ Debes seleccionar al menos un género !',
+    error: 'Debes seleccionar al menos un género',
   }),
   country: z.union([
     z.literal(''),
     z.string()
-      .min(3, { message: '¡ El país debe ser mayor a 3 caracteres !' })
-      .max(100, { message: '¡ El país debe ser menor a 100 caracteres !' }),
+      .min(3, { message: 'El país debe ser mayor a 3 caracteres' })
+      .max(100, { message: 'El país debe ser menor a 100 caracteres' }),
     z.null(),
   ]).optional(),
   state: z.union([
     z.literal(''),
     z.string()
-      .min(3, { message: '¡ El estado debe ser mayor a 3 caracteres !' })
-      .max(100, { message: '¡ El estado debe ser menor a 100 caracteres !' }),
+      .min(3, { message: 'El estado debe ser mayor a 3 caracteres' })
+      .max(100, { message: 'El estado debe ser menor a 100 caracteres' }),
     z.null(),
   ]).optional(),
   city: z.union([
     z.literal(''),
     z.string()
-      .min(3, { message: '¡ La ciudad debe ser mayor a 3 caracteres !' })
-      .max(100, { message: '¡ La ciudad debe ser menor a 100 caracteres !' }),
+      .min(3, { message: 'La ciudad debe ser mayor a 3 caracteres' })
+      .max(100, { message: 'La ciudad debe ser menor a 100 caracteres' }),
     z.null(),
   ]).optional(),
   coachId: z.union([
-    z.string('¡ El entrenador debe ser una cadena de texto válida !')
-      .min(4, { message: '¡ El entrenador debe ser mayor a 4 caracteres !' }),
+    z.string('El entrenador debe ser una cadena de texto válida')
+      .min(4, { message: 'El entrenador debe ser mayor a 4 caracteres' }),
     z.literal(''),
     z.null(),
   ]).optional(),
   emails: z.array(z.string())
     .refine(
       (emails) => emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)),
-      { message: '¡ Todos los correos electrónicos deben tener un formato válido !' },
+      { message: 'Todos los correos electrónicos deben tener un formato válido' },
     )
     .optional(),
   address: z.union([
-    z.string('¡ La dirección debe ser una cadena de texto !')
-      .min(10, { message: '¡ La dirección debe ser mayor a 10 caracteres !' })
-      .max(250, { message: '¡ La dirección debe ser menor a 250 caracteres !' }),
+    z.string('La dirección debe ser una cadena de texto')
+      .min(10, { message: 'La dirección debe ser mayor a 10 caracteres' })
+      .max(250, { message: 'La dirección debe ser menor a 250 caracteres' }),
     z.literal(''),
     z.null(),
   ]).optional(),
-  fieldsIds: z.array(z.uuid('¡ El valor debe ser un UUID válido !')).optional(),
+  fieldsIds: z.array(z.uuid('El valor debe ser un UUID válido')).optional(),
   active: z.boolean().optional(),
 });

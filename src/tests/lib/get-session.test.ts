@@ -120,7 +120,7 @@ describe('Tests on get-session lib', () => {
 
     expect(response).toEqual({
       ok: false,
-      message: '¡ Debes estar autentificado para realizar esta acción !',
+      message: 'Debes estar autentificado para realizar esta acción',
     });
     expect(mockCookieSet).not.toHaveBeenCalled();
   });
@@ -138,7 +138,7 @@ describe('Tests on get-session lib', () => {
 
     expect(response).toEqual({
       ok: false,
-      message: '¡ No tienes permisos administrativos para realizar esta acción !',
+      message: 'No tienes permisos administrativos para realizar esta acción',
     });
     expect(mockCookieSet).not.toHaveBeenCalled();
   });

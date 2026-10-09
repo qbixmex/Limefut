@@ -27,7 +27,7 @@ describe('Tests on <AuthNav />', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(signOutAction).mockResolvedValue({
-      message: '¡ Has cerrado sesión correctamente 👍 !',
+      message: 'Has cerrado sesión correctamente',
     });
   });
 
@@ -74,7 +74,7 @@ describe('Tests on <AuthNav />', () => {
       expect(signOutAction).toHaveBeenCalledTimes(1);
     });
     expect(toast.success).toHaveBeenCalledWith(
-      '¡ Has cerrado sesión correctamente 👍 !',
+      'Has cerrado sesión correctamente',
     );
     expect(mockReplace).toHaveBeenCalledWith(ROUTES.AUTH_LOGIN);
   });

@@ -38,7 +38,7 @@ export const fetchTeamImagesAction = async (): FetchTeamResponse => {
 
     return {
       ok: true,
-      message: '¡ Imágenes obtenidas correctamente 👍 !',
+      message: 'Imágenes obtenidas correctamente',
       images,
     };
   } catch (error) {
@@ -46,13 +46,13 @@ export const fetchTeamImagesAction = async (): FetchTeamResponse => {
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener las imágenes,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener las imágenes,\nRevise los logs del servidor',
         images: [],
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       images: [],
     };
   }

@@ -70,7 +70,7 @@ export const ContactForm: FC = () => {
       {messageReceived && (
         <div className="flex flex-col items-center">
           <h2 className="text-4xl text-center text-amber-500 italic">
-            ¡ Tu mensaje ha sido enviado exitosamente !
+            Tu mensaje ha sido enviado exitosamente
           </h2>
           <Mail size={200} strokeWidth={1} className="stroke-sky-600" />
         </div>

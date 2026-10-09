@@ -78,7 +78,7 @@ export const fetchSponsorsAction = async (options: Options): ResponseFetch => {
 
     return {
       ok: true,
-      message: '! Los patrocinadores fueron obtenidos correctamente 👍',
+      message: 'Los patrocinadores fueron obtenidos correctamente',
       sponsors,
       pagination: {
         currentPage: page,

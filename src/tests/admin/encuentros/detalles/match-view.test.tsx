@@ -27,8 +27,8 @@ vi.mock('@/app/admin/encuentros/(components)/edit-match', () => ({
 
 const TIME_ZONE = 'America/Mexico_City';
 
-const FETCH_SUCCESS_MESSAGE = '¡ Encuentro obtenido correctamente 👍 !';
-const FETCH_ERROR_MESSAGE = '¡ Encuentro no encontrado ❌ !';
+const FETCH_SUCCESS_MESSAGE = 'Encuentro obtenido correctamente';
+const FETCH_ERROR_MESSAGE = 'Encuentro no encontrado';
 
 const renderMatchView = async ({ match = matchMock }: { match?: typeof matchMock | null } = {}) => {
   vi.mocked(fetchMatchAction).mockResolvedValue({

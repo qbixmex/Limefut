@@ -54,12 +54,12 @@ describe('Tests on <StandingsView />', () => {
     });
     mockFetchAdminTournament.mockResolvedValue({
       ok: true,
-      message: '¡ Torneo obtenido correctamente 👍 !',
+      message: 'Torneo obtenido correctamente',
       tournament: { id: TOURNAMENT_ID },
     });
     mockFetchAdminCategory.mockResolvedValue({
       ok: true,
-      message: '¡ Categoría obtenida correctamente 👍 !',
+      message: 'Categoría obtenida correctamente',
       category: { id: CATEGORY_ID },
     });
   });

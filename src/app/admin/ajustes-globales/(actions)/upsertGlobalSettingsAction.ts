@@ -177,7 +177,7 @@ export const upsertGlobalSettingsAction = async (formData: FormData): ResponseCr
 
       return {
         ok: true,
-        message: '¡ Ajustes Globales guardados satisfactoriamente 👍 !',
+        message: 'Ajustes Globales guardados satisfactoriamente',
         globalSettings,
       };
     });
@@ -193,7 +193,7 @@ export const upsertGlobalSettingsAction = async (formData: FormData): ResponseCr
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
         return {
           ok: false,
-          message: `¡ El campo "${fieldError}", está duplicado !`,
+          message: `El campo "${fieldError}", está duplicado`,
           globalSettings: null,
         };
       }
@@ -204,14 +204,14 @@ export const upsertGlobalSettingsAction = async (formData: FormData): ResponseCr
 
       return {
         ok: false,
-        message: '¡ Error al crear los ajustes globales, revise los logs del servidor !',
+        message: 'Error al crear los ajustes globales, revise los logs del servidor',
         globalSettings: null,
       };
     }
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       globalSettings: null,
     };
   }
@@ -230,7 +230,7 @@ export const handleUploadImage = async ({
   if (publicId) {
     const cloudinaryResponse = await deleteImage(publicId);
     if (!cloudinaryResponse.ok) {
-      throw new Error('¡ Error al intentar eliminar la imagen de cloudinary !');
+      throw new Error('Error al intentar eliminar la imagen de cloudinary');
     }
   }
 

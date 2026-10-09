@@ -23,7 +23,7 @@ export const deleteCredentialAction = async (id: string): ResponseDeleteAction =
   if (!credencial) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la credencial, quizás fue eliminado ó no existe !',
+      message: 'No se puede eliminar la credencial, quizás fue eliminado ó no existe',
     };
   }
 
@@ -34,6 +34,6 @@ export const deleteCredentialAction = async (id: string): ResponseDeleteAction =
 
   return {
     ok: true,
-    message: '¡ La credencial ha sido eliminada correctamente 👍 !',
+    message: 'La credencial ha sido eliminada correctamente',
   };
 };

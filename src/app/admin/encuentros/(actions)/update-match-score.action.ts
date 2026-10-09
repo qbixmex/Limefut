@@ -53,7 +53,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
     if (!currentMatch) {
       return {
         ok: false,
-        message: '¡ Partido no encontrado !',
+        message: 'Partido no encontrado',
         currentMatch: null,
       };
     }
@@ -110,7 +110,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       console.error(`Error al revertir estadísticas del equipo local: ${(error as Error).message}`);
       return {
         ok: false,
-        message: '¡ Error al revertir estadísticas del equipo local !',
+        message: 'Error al revertir estadísticas del equipo local',
         currentMatch: null,
       };
     }
@@ -137,7 +137,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       console.error(`Error al revertir estadísticas del equipo visitante: ${(error as Error).message}`);
       return {
         ok: false,
-        message: '¡ Error al revertir estadísticas del equipo visitante !',
+        message: 'Error al revertir estadísticas del equipo visitante',
         currentMatch: null,
       };
     }
@@ -164,7 +164,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       console.error(`Error updating local team stats: ${(error as Error).message}`);
       return {
         ok: false,
-        message: '¡ Error al actualizar estadísticas del equipo local !',
+        message: 'Error al actualizar estadísticas del equipo local',
         currentMatch: null,
       };
     }
@@ -191,7 +191,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       console.error(`Error updating visitor team stats: ${(error as Error).message}`);
       return {
         ok: false,
-        message: '¡ Error al actualizar estadísticas del equipo visitante !',
+        message: 'Error al actualizar estadísticas del equipo visitante',
         currentMatch: null,
       };
     }
@@ -236,14 +236,14 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
     if (!updatedMatch) {
       return {
         ok: false,
-        message: '¡ No se pudo actualizar el partido !',
+        message: 'No se pudo actualizar el partido',
         currentMatch: null,
       };
     }
 
     return {
       ok: true,
-      message: '¡ El marcador del partido se actualizó correctamente ⚽️🎉 !',
+      message: 'El marcador del partido se actualizó correctamente',
       currentMatch: {
         tournament: updatedMatch.tournament,
         category: updatedMatch.category,
@@ -253,7 +253,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
     console.error(`Error: ${(error as Error).message}`);
     return {
       ok: false,
-      message: '¡ Error inesperado al actualizar el partido !',
+      message: 'Error inesperado al actualizar el partido',
       currentMatch: null,
     };
   }

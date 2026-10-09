@@ -83,7 +83,7 @@ export const fetchResultsAction = async (
   if (!tournament) {
     return {
       ok: false,
-      message: `! No se encontró el torneo con el enlace permanente "${tournamentPermalink}" ❌ ¡`,
+      message: `No se encontró el torneo con el enlace permanente "${tournamentPermalink}"`,
       data: {
         tournament: null,
         results: [],
@@ -130,7 +130,7 @@ export const fetchResultsAction = async (
 
     return {
       ok: true,
-      message: '! Los encuentros fueron obtenidos correctamente 👍',
+      message: 'Los encuentros fueron obtenidos correctamente',
       data: {
         tournament: {
           id: tournament.id,

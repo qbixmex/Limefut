@@ -46,24 +46,3 @@ export const TitleField: FC<Props> = ({ permalinkChanged, handlePermalinkChanged
     />
   );
 };
-
-/*
-<FormField
-  name="title"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>
-        Título <span className="text-amber-500">*</span>
-      </FormLabel>
-      <FormControl>
-        <Input
-          {...field}
-          value={field.value ?? ''}
-          onChange={handleTitleChange}
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
-*/

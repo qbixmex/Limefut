@@ -47,7 +47,7 @@ describe('Tests on useEditPlayer hook', () => {
     vi.clearAllMocks();
     mockUpdateAction.mockResolvedValue({
       ok: true,
-      message: '¡ El jugador fue actualizado correctamente 👍 !',
+      message: 'El jugador fue actualizado correctamente',
     });
   });
 
@@ -101,7 +101,7 @@ describe('Tests on useEditPlayer hook', () => {
       await result.current.onSubmit(validData);
     });
 
-    expect(toast.success).toHaveBeenCalledWith('¡ El jugador fue actualizado correctamente 👍 !');
+    expect(toast.success).toHaveBeenCalledWith('El jugador fue actualizado correctamente');
     expect(mockReplace).toHaveBeenCalledWith(
       `/admin/jugadores?team=${playerMock.team.id}`,
     );

@@ -187,7 +187,7 @@ export const updatePlayoffMatchAction = async ({
     console.log(error);
     return {
       ok: false,
-      message: '¡ Error inesperado, revise los logs del servidor !',
+      message: 'Error inesperado, revise los logs del servidor',
       match: null,
     };
   }

@@ -70,13 +70,13 @@ export const fetchCoachDetailsAction = async (
       console.log(error.message);
       return {
         ok: false,
-        message: 'No se pudo obtener el entrenador,\n¡ Revise los logs del servidor !',
+        message: 'No se pudo obtener el entrenador,\nRevise los logs del servidor',
         coach: null,
       };
     }
     return {
       ok: false,
-      message: 'Error inesperado del servidor,\n¡ Revise los logs del servidor !',
+      message: 'Error inesperado del servidor,\nRevise los logs del servidor',
       coach: null,
     };
   }

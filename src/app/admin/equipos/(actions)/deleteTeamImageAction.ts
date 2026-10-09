@@ -27,7 +27,7 @@ export const deleteTeamImageAction = async (teamId: string): ResponseDeleteActio
   if (!team) {
     return {
       ok: false,
-      message: '¡ No se puede eliminar la imagen, quizás fue eliminada ó no existe !',
+      message: 'No se puede eliminar la imagen, quizás fue eliminada ó no existe',
     };
   }
 
@@ -55,6 +55,6 @@ export const deleteTeamImageAction = async (teamId: string): ResponseDeleteActio
 
   return {
     ok: true,
-    message: '¡ La imagen ha sido eliminada correctamente 👍 !',
+    message: 'La imagen ha sido eliminada correctamente',
   };
 };

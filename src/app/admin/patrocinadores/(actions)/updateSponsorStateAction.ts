@@ -22,7 +22,7 @@ export const updateSponsorStateAction = async (id: string, state: boolean): Resp
   if (sponsorExists === 0) {
     return {
       ok: false,
-      message: '¡ No se pudo actualizar el patrocinador, quizás fue eliminado ó no existe !',
+      message: 'No se pudo actualizar el patrocinador, quizás fue eliminado ó no existe',
     };
   }
 
@@ -39,6 +39,6 @@ export const updateSponsorStateAction = async (id: string, state: boolean): Resp
 
   return {
     ok: true,
-    message: `¡ El patrocinador fue ${updatedSponsor.active ? 'activado' : 'desactivado'} correctamente 👍 !`,
+    message: `El patrocinador fue ${updatedSponsor.active ? 'activado' : 'desactivado'} correctamente`,
   };
 };

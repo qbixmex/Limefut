@@ -40,7 +40,7 @@ export const fetchTeamsAction = async (
   if (!tournament) {
     return {
       ok: false,
-      message: `! No existe el torneo con el enlace permanente ${tournamentPermalink} ¡`,
+      message: `No existe el torneo con el enlace permanente ${tournamentPermalink} `,
       teams: [],
     };
   }
@@ -72,7 +72,7 @@ export const fetchTeamsAction = async (
 
     return {
       ok: true,
-      message: '! Los equipos fueron obtenidos correctamente 👍',
+      message: 'Los equipos fueron obtenidos correctamente',
       teams,
     };
   } catch (error) {

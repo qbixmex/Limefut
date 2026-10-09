@@ -2,7 +2,8 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { Page, Pagination } from '@/shared/interfaces';
+import { PAGE_STATUS_TYPE } from '@/shared/enums/page_status.enum';
+import type { Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
 type Options = Readonly<{
@@ -14,9 +15,18 @@ type Options = Readonly<{
 export type ResponseAction = Promise<{
   ok: boolean;
   message: string;
-  customPages: Partial<Page>[];
+  customPages: CUSTOM_PAGE_TYPE[];
   pagination: Pagination;
 }>;
+
+export type CUSTOM_PAGE_TYPE = {
+  id: string;
+  title: string | null;
+  permalink: string | null;
+  position: number | null;
+  status: PAGE_STATUS_TYPE;
+  seoRobots: string | null;
+};
 
 export const fetchPagesAction = async (options: Options): ResponseAction => {
   'use cache';
@@ -61,7 +71,7 @@ export const fetchPagesAction = async (options: Options): ResponseAction => {
 
     return {
       ok: true,
-      message: '! Las páginas fueron obtenidas correctamente 👍',
+      message: 'Las páginas fueron obtenidas correctamente',
       customPages: pages,
       pagination: {
         currentPage: page,

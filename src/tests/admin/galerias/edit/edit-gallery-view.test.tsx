@@ -27,7 +27,7 @@ describe('Tests on <EditGalleryPageView />', () => {
     vi.clearAllMocks();
     mockFetchGallery.mockResolvedValue({
       ok: true,
-      message: '¡ Galería obtenida correctamente 👍 !',
+      message: 'Galería obtenida correctamente',
       gallery: galleryMock,
     });
   });

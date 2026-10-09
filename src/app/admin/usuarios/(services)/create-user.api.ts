@@ -42,7 +42,7 @@ export const createUserApi = async (
     const message =
       response.data?.message ??
       response.data?.error ??
-      '¡ No se pudo crear el usuario !';
+      'No se pudo crear el usuario';
 
     return {
       ok: false,
@@ -55,7 +55,7 @@ export const createUserApi = async (
   return {
     ok: true,
     statusCode: response.data.statusCode,
-    message: response.data.message ?? '¡ Usuario creado correctamente 👍 !',
+    message: response.data.message ?? 'Usuario creado correctamente',
     user: response.data.user,
   };
 };
