@@ -2,7 +2,7 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import { PAGE_STATUS_TYPE } from '@/shared/enums/page_status.enum';
+import type { PAGE_STATUS_TYPE } from '@/shared/enums/page_status.enum';
 import type { Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
