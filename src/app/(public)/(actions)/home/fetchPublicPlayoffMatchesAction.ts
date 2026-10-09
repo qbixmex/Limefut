@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import type { Prisma } from '@/generated/prisma/client';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -76,14 +77,17 @@ export const fetchPublicPlayoffMatchesAction = async (options?: Options): Respon
   if (isNaN(take)) take = 12;
 
   try {
-    const matches = await prisma.playoffMatch.findMany({
-      where: {
-        OR: [
-          { status: 'scheduled' },
-          { status: 'completed' },
-          { status: 'canceled' },
-        ],
+    const where = {
+      playoff: {
+        tournament: {
+          active: true,
+        },
       },
+      status: { in: ['scheduled', 'completed', 'canceled'] },
+    } satisfies Prisma.PlayoffMatchWhereInput;
+
+    const matches = await prisma.playoffMatch.findMany({
+      where,
       orderBy: { matchDate: 'desc' },
       take,
       skip: (nextMatches - 1) * take,
@@ -95,12 +99,12 @@ export const fetchPublicPlayoffMatchesAction = async (options?: Options): Respon
         matchDate: true,
         round: true,
         group: true,
-field: {
-            select: {
-              id: true,
-              name: true,
-            },
+        field: {
+          select: {
+            id: true,
+            name: true,
           },
+        },
         playoff: {
           select: {
             id: true,
@@ -144,10 +148,7 @@ field: {
       },
     });
 
-    const totalCount = await prisma.playoffMatch.count({
-      orderBy: { matchDate: 'desc' },
-      take: 100,
-    });
+    const totalCount = await prisma.playoffMatch.count({ where });
 
     return {
       ok: true,
