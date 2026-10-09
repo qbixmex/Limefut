@@ -24,7 +24,7 @@ function TestWrapper({ children }: { children: ReactNode }) {
 
 function FormValueDisplay() {
   const position = useWatch({ name: 'position' });
-  return <span data-testid="position-value">{position}</span>;
+  return <span data-testid="position-value">{String(position)}</span>;
 }
 
 function SetInvalidPosition() {

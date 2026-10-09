@@ -17,7 +17,11 @@ export const PositionField = () => {
             type="number"
             min={1}
             {...field}
-            value={field.value ?? '0'}
+            value={
+              typeof field.value === 'number' && Number.isNaN(field.value)
+                ? ''
+                : field.value ?? '0'
+            }
             onChange={(e) => field.onChange(parseInt(e.target.value))}
             className="w-20"
           />
