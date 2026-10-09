@@ -3,6 +3,7 @@
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { requireAdmin } from '@/lib/get-session';
+import { Prisma } from '@/generated/prisma/client';
 
 type CreateResponseAction = Promise<{
   ok: boolean;
@@ -12,8 +13,13 @@ type CreateResponseAction = Promise<{
 
 export const createEmptyCustomPage = async (): CreateResponseAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
-    return { ok: false, message: guard.message, pageId: null };
+    return {
+      ok: false,
+      message: guard.message,
+      pageId: null,
+    };
   }
 
   try {
@@ -46,30 +52,34 @@ export const createEmptyCustomPage = async (): CreateResponseAction => {
 
     return prismaTransaction;
   } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      if ('code' in error && error.code as string === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
-        return {
-          ok: false,
-          message: `El campo "${fieldError}", está duplicado`,
-          pageId: null,
-        };
+    let errorMessage = 'Error inesperado';
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log('Error Name:', error.name);
+      console.log('Error Code:', error.code);
+      console.log('Error cause:', error.cause ?? 'none');
+      console.log('Error Metadata:', error.meta ?? 'none');
+      console.log('Error Message:', error.message);
+
+      if (error.code === 'P2001') {
+        errorMessage = 'No se encontró la página personalizada';
       }
 
-      console.log('Name:', error.name);
-      console.log('Cause:', error.cause);
-      console.log('Message:', error.message);
+      if (error.code === 'P2002') {
+        errorMessage = 'Hay campos duplicados';
+      }
+    } else if (error instanceof Error) {
+      console.log('Error Name:', error.name);
+      console.log('Error Message:', error.message);
+      console.log('Error Cause:', error.cause ?? 'none');
+      console.log('Error Stack:', error.stack ?? 'none');
 
-      return {
-        ok: false,
-        message: 'Error al crear la página, revise los logs del servidor',
-        pageId: null,
-      };
+      errorMessage = 'No se pudo actualizar la página personalizada';
     }
-    console.log(error);
+
     return {
       ok: false,
-      message: 'Error inesperado, revise los logs del servidor',
+      message: `${errorMessage}, revise los logs del servidor`,
       pageId: null,
     };
   }
