@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { createEmptyCustomPage } from '../../(actions)/createEmptyCustomPage';
 import { useRouter } from 'next/navigation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { ROUTES } from '@/shared/constants/routes';
 
 export const CreatePage = () => {
   const router = useRouter();
@@ -22,7 +23,7 @@ export const CreatePage = () => {
     }
 
     toast.success(message);
-    router.replace(`/admin/paginas/editar/${pageId}`);
+    router.replace(ROUTES.ADMIN_CUSTOM_PAGES_EDIT(pageId as string));
   };
 
   return (

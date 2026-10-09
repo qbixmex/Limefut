@@ -15,7 +15,7 @@ export const EditCustomPage: FC<Props> = ({ pageId }) => {
       <TooltipTrigger asChild>
         <Link
           href={ROUTES.ADMIN_CUSTOM_PAGES_EDIT(pageId)}
-          aria-label="Ir a editar página personalizada"
+          aria-label="Editar página personalizada"
         >
           <Button variant="outline-warning" size="icon">
             <Pencil aria-hidden="true" />

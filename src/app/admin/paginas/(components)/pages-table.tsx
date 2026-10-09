@@ -38,7 +38,7 @@ export const PagesTable: FC<Props> = async ({
       {customPages.length > 0 ? (
         <div className="flex-1 flex flex-col">
           <div className="flex-1">
-            <Table>
+            <Table aria-label="Lista de páginas">
               <TableHeader>
                 <TableRow>
                   <TableHead>Título</TableHead>
@@ -59,7 +59,11 @@ export const PagesTable: FC<Props> = async ({
                           page.title ? (
                             <p className="text-pretty">{page.title}</p>
                           ) : (
-                            <Badge variant="outline-secondary">
+                            <Badge
+                              variant="outline-secondary"
+                              role="status"
+                              aria-label="Título de la página"
+                            >
                               No especificado
                             </Badge>
                           )
@@ -70,7 +74,11 @@ export const PagesTable: FC<Props> = async ({
                           page.permalink ? (
                             <p className="text-pretty">{page.permalink}</p>
                           ) : (
-                            <Badge variant="outline-secondary">
+                            <Badge
+                              variant="outline-secondary"
+                              role="status"
+                              aria-label="Enlace permanente"
+                            >
                               No especificado
                             </Badge>
                           )

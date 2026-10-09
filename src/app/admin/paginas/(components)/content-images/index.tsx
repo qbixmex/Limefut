@@ -8,6 +8,7 @@ import { Copy, LoaderCircle, X } from 'lucide-react';
 import { useContentImage } from './use-content-image';
 import { cn } from '@/lib/utils';
 import type { CustomPageImage } from '@/shared/interfaces/Page';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   pageId: string;
@@ -26,24 +27,25 @@ export const ContentImages: FC<Props> = ({ pageId, contentImages, onImageDeleted
 
   return (
     <section>
-      <h2 className="text-3xl mt-8 font-semibold mb-5">
+      <h2 className={styles.heading}>
         Imágenes del contenido
       </h2>
-      <div className="flex flex-wrap gap-5">
+      <div className={styles.imagesList}>
         {contentImages.map((customPageImage) => (
-          <figure key={customPageImage.resourceId} className="relative w-fit">
+          <figure key={customPageImage.resourceId} className={styles.imageWrapper}>
             <Image
               src={customPageImage.imageUrl}
               alt="Imagen del contenido"
               width={200}
               height={200}
-              className="w-[150px] h-[150px] object-cover rounded-lg"
+              className={styles.image}
             />
-            <div className="absolute top-0 right-0 w-full flex justify-between gap-2">
+            <div className={styles.actions}>
               <Button
                 type="button"
                 size="icon"
-                className={cn('bg-cyan-600/70! hover:bg-cyan-600! cursor-pointer')}
+                aria-label="Copiar URL de la imagen"
+                className={styles.copyButton}
                 onClick={async () => {
                   const url = customPageImage.imageUrl;
                   const ok = await copyToClipboard(url);
@@ -51,23 +53,24 @@ export const ContentImages: FC<Props> = ({ pageId, contentImages, onImageDeleted
                   else toast('URL mostrada para copia manual');
                 }}
               >
-                <Copy className="size-[25px]" />
+                <Copy className={styles.icon} />
               </Button>
 
               <Button
                 type="button"
                 variant="destructive"
                 size="icon"
+                aria-label="Eliminar imagen"
                 disabled={isDeletingImage === customPageImage.imageUrl}
-                className={cn('bg-pink-600/70! hover:bg-pink-600! cursor-pointer', {
-                  'cursor-not-allowed bg-gray-500!': isDeletingImage === customPageImage.imageUrl,
+                className={cn(styles.deleteButton, {
+                  [styles.deleteButtonDisabled]: isDeletingImage === customPageImage.imageUrl,
                 })}
                 onClick={() => handleDeleteImage(customPageImage)}
               >
                 {
                   isDeletingImage === customPageImage.imageUrl
-                    ? <LoaderCircle className="animate-spin" />
-                    : <X className="size-[25px]" />
+                    ? <LoaderCircle className={styles.spinner} />
+                    : <X className={styles.icon} />
                 }
               </Button>
             </div>

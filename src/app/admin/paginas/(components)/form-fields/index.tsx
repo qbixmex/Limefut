@@ -16,7 +16,6 @@ type Props = Readonly<{
 export const FormFields: FC<Props> = ({ pageId, updateContentImage }) => {
   return (
     <>
-      {/* Title and Permalink */}
       <section className="flex flex-col gap-5 lg:flex-row">
         <TitlePermalinkFields />
       </section>
@@ -42,7 +41,6 @@ export const FormFields: FC<Props> = ({ pageId, updateContentImage }) => {
         </div>
       </section>
 
-      {/* Position and Status */}
       <div className="flex justify-end gap-5">
         <div>
           <StatusSelect />

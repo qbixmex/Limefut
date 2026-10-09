@@ -10,11 +10,6 @@ type Props = Readonly<{
   }>;
 }>;
 
-export type CountCharacters = {
-  count: number;
-  focused: boolean;
-};
-
 export const EditCustomPageView: FC<Props> = async ({ params }) => {
   const pageId = (await params).id;
 

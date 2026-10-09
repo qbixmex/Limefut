@@ -29,6 +29,7 @@ export const TitleField: FC<Props> = ({ isPermalinkEdited }) => {
             {...field}
             value={field.value ?? ''}
             onChange={handleTitle}
+            aria-invalid={fieldState.invalid}
           />
           {fieldState.invalid && (
             <FieldError errors={[fieldState.error]} />

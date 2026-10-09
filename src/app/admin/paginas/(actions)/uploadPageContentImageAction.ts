@@ -16,8 +16,12 @@ export const uploadPageContentImageAction = async (
   pageId?: string,
 ): UploadArticleImageResponse => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
-    return { message: guard.message, cloudinaryResponse: null };
+    return {
+      message: guard.message,
+      cloudinaryResponse: null,
+    };
   }
 
   const imageUploaded = await uploadImage(file, 'pages');

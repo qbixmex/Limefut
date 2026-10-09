@@ -22,7 +22,7 @@ export const ContentTextArea: FC<Props> = ({ pageId, updateContentImage }) => {
         <Field>
           <MdEditorField
             markdownString={field.value}
-            setContent={value => field.onChange(value)}
+            setContent={(value) => field.onChange(value)}
             resourceId={pageId}
             updateContentImage={updateContentImage}
           />

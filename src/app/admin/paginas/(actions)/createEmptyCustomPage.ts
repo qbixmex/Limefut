@@ -13,8 +13,13 @@ type CreateResponseAction = Promise<{
 
 export const createEmptyCustomPage = async (): CreateResponseAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
-    return { ok: false, message: guard.message, pageId: null };
+    return {
+      ok: false,
+      message: guard.message,
+      pageId: null,
+    };
   }
 
   try {
@@ -63,9 +68,7 @@ export const createEmptyCustomPage = async (): CreateResponseAction => {
       if (error.code === 'P2002') {
         errorMessage = 'Hay campos duplicados';
       }
-    }
-
-    if (error instanceof Error) {
+    } else if (error instanceof Error) {
       console.log('Error Name:', error.name);
       console.log('Error Message:', error.message);
       console.log('Error Cause:', error.cause ?? 'none');

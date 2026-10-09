@@ -14,7 +14,13 @@ export const PageDetails: FC<Props> = ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Detalles de la Página</CardTitle>
+            <CardTitle
+              className="admin-page-card-title"
+              role="heading"
+              aria-label="Título de la página"
+            >
+              Detalles de la página
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <CustomPageDetailsView params={params} />

@@ -17,8 +17,12 @@ export const deleteContentImageAction = async (
   publicId: string,
 ): Promise<DeleteContentImageResponse> => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
-    return { ok: false, message: guard.message };
+    return {
+      ok: false,
+      message: guard.message,
+    };
   }
 
   const page = await prisma.customPage.findUnique({

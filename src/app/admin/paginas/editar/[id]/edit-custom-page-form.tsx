@@ -15,12 +15,12 @@ type Props = Readonly<{ customPage: CUSTOM_PAGE_TYPE }>;
 export const EditCustomPageForm: FC<Props> = ({ customPage }) => {
   const {
     form,
-    route,
     onSaveDraft,
     isDraft,
     onSubmit,
     updateContentImage,
     contentImages,
+    handleNavigateBack,
     removeContentImage,
   } = useEditCustomPage(customPage);
 
@@ -47,7 +47,7 @@ export const EditCustomPageForm: FC<Props> = ({ customPage }) => {
             type="button"
             variant="outline-secondary"
             size="lg"
-            onClick={() => route.replace('/admin/paginas')}
+            onClick={handleNavigateBack}
           >
             cancelar
           </Button>
@@ -61,8 +61,18 @@ export const EditCustomPageForm: FC<Props> = ({ customPage }) => {
           >
             {form.formState.isSubmitting && isDraft ? (
               <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                <span className="text-sm italic">guardando</span>
-                <LoaderCircle className="size-4 animate-spin" />
+                <span
+                  className="text-sm italic"
+                  role="status"
+                  aria-label="Estado del formulario"
+                >
+                  guardando
+                </span>
+                <LoaderCircle
+                  className="size-4 animate-spin"
+                  role="img"
+                  aria-label="Icono de carga"
+                />
               </span>
             ) : (
               <span>guardar</span>
@@ -77,8 +87,18 @@ export const EditCustomPageForm: FC<Props> = ({ customPage }) => {
           >
             {form.formState.isSubmitting && !isDraft ? (
               <span className="flex items-center gap-2 text-secondary-foreground animate-pulse">
-                <span className="text-sm italic">publicando</span>
-                <LoaderCircle className="size-4 animate-spin" />
+                <span
+                  className="text-sm italic"
+                  role="status"
+                  aria-label="Estado del formulario"
+                >
+                  publicando
+                </span>
+                <LoaderCircle
+                  className="size-4 animate-spin"
+                  role="img"
+                  aria-label="Icono de carga"
+                />
               </span>
             ) : (
               <span>guardar y cerrar</span>

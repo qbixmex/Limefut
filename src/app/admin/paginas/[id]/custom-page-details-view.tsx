@@ -16,6 +16,7 @@ import { fetchPageAction, type CUSTOM_PAGE_TYPE } from '../(actions)/fetchPageAc
 import type { PAGE_STATUS } from '@/shared/interfaces/Page';
 import { getPageStatus } from '@/lib/utils';
 import 'highlight.js/styles/tokyo-night-dark.min.css';
+import { ROUTES } from '@/shared/constants/routes';
 
 type Props = Readonly<{
   params: Promise<{
@@ -29,7 +30,11 @@ export const CustomPageDetailsView: FC<Props> = async ({ params }) => {
   const response = await fetchPageAction(pageId);
 
   if (!response.ok) {
-    redirect(`/admin/paginas?error=${encodeURIComponent(response.message)}`);
+    redirect(
+      ROUTES.ADMIN_CUSTOM_PAGES +
+      '?error=' +
+      encodeURIComponent(response.message),
+    );
   }
 
   const page = response.page as CUSTOM_PAGE_TYPE;
@@ -39,7 +44,7 @@ export const CustomPageDetailsView: FC<Props> = async ({ params }) => {
     <>
       <section className="flex flex-col lg:flex-row mb-10">
         <div className="w-full lg:w-1/2">
-          <Table>
+          <Table aria-label="Detalles de la página">
             <TableBody>
               <TableRow>
                 <TableHead className="font-semibold w-[180px]">Título</TableHead>
@@ -80,7 +85,9 @@ export const CustomPageDetailsView: FC<Props> = async ({ params }) => {
               <TableRow>
                 <TableHead className="font-medium w-[180px]">Estado</TableHead>
                 <TableCell>
-                  <Badge variant={pageStatus.variant}>{pageStatus.label}</Badge>
+                  <Badge variant={pageStatus.variant}>
+                    {pageStatus.label}
+                  </Badge>
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -88,12 +95,20 @@ export const CustomPageDetailsView: FC<Props> = async ({ params }) => {
         </div>
         <div className="w-full lg:w-1/2">
           <h2 className="text-xl font-bold text-sky-600 mb-5">Seo</h2>
-          <Table>
+          <Table aria-label="Detalles SEO">
             <TableBody>
               <TableRow>
                 <TableHead className="font-semibold w-[180px]">Título SEO</TableHead>
                 <TableCell className="text-gray-300 italic">
-                  {page.seoTitle ?? 'No definido'}
+                  {
+                    page.seoTitle ? (
+                      <p className="text-pretty">{page.seoTitle}</p>
+                    ) : (
+                      <Badge variant="outline-secondary">
+                        No definido
+                      </Badge>
+                    )
+                  }
                 </TableCell>
               </TableRow>
               <TableRow>

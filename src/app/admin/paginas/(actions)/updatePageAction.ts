@@ -23,8 +23,13 @@ export const updatePageAction = async ({
   pageId,
 }: Options): EditResponseAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
-    return { ok: false, message: guard.message, page: null };
+    return {
+      ok: false,
+      message: guard.message,
+      page: null,
+    };
   }
 
   const rawData = {
@@ -181,9 +186,7 @@ export const updatePageAction = async ({
           if (error.code === 'P2002') {
             errorMessage = 'Hay campos duplicados';
           }
-        }
-
-        if (error instanceof Error) {
+        } else if (error instanceof Error) {
           console.log('Error Name:', error.name);
           console.log('Error Message:', error.message);
           console.log('Error Cause:', error.cause ?? 'none');

@@ -63,6 +63,10 @@ export const useEditCustomPage = (page: CUSTOM_PAGE_TYPE) => {
     setIsDraft(false);
   };
 
+  const handleNavigateBack = () => {
+    route.replace(ROUTES.ADMIN_CUSTOM_PAGES);
+  };
+
   const updateContentImage = useCallback((customPageImage: CustomPageImage) => {
     setContentImages((prev) => [...prev, customPageImage]);
   }, []);
@@ -78,6 +82,7 @@ export const useEditCustomPage = (page: CUSTOM_PAGE_TYPE) => {
     isDraft,
     route,
     contentImages,
+    handleNavigateBack,
     onSubmit,
     onSaveDraft,
     setContentImages,
