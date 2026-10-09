@@ -31,7 +31,7 @@ export const useCreateMatch = () => {
   const form = useForm<z.infer<typeof createMatchSchema>>({
     resolver: zodResolver(createMatchSchema),
     defaultValues: {
-      ...createFormDefaultValues,
+      ...createFormDefaultValues(),
       tournament: searchParams.get('tournament') ?? undefined,
       category: searchParams.get('category') ?? undefined,
     },
