@@ -1,0 +1,16 @@
+@reference "#globals.css";
+
+.goldBadge {
+  color: var(--color-amber-500);
+  border-color: var(--color-amber-500);
+}
+
+.silverBadge {
+  color: var(--color-zinc-500);
+  border-color: var(--color-zinc-500);
+
+  @variant dark {
+    color: var(--color-zinc-400);
+    border-color: var(--color-zinc-400);
+  }
+}

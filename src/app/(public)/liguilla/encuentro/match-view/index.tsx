@@ -4,19 +4,18 @@ import { ROUTES } from '@/shared/constants/routes';
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatInTimeZone } from 'date-fns-tz';
-import { fetchPublicPlayoffMatchAction, type Match } from '../(actions)/fetch-public-playoff-match';
+import { fetchPublicPlayoffMatchAction, type Match } from '../../(actions)/fetch-public-playoff-match';
 import { redirect } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { es } from 'date-fns/locale';
 import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
-import { MatchStatus } from '../../resultados/(components)/match-details/match-status';
+import { MatchStatus } from '../../../resultados/(components)/match-details/match-status';
 import { ShieldBan } from 'lucide-react';
-import styles from './styles.module.css';
 import { cn, getPlayoffRound } from '@/lib/utils';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
-import { WinnerTeam } from './winner-team';
-import type { MATCH_GROUP_TYPE } from '@/shared/enums/match-group.enum';
-import { MATCH_GROUP } from '@/shared/enums/match-group.enum';
+import { WinnerTeam } from '../winner-team';
+import { MatchGroup } from './match-group';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -53,8 +52,8 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
   return (
     <>
       <section className={styles.mainWrapper} aria-label="Información del encuentro">
-        <section className="w-full lg:w-1/2" aria-label="Cancha del encuentro">
-          <div className="flex relative" role="group" aria-label="Equipos y marcador del encuentro">
+        <section className={styles.halfColumn} aria-label="Cancha del encuentro">
+          <div className={styles.scoreboard} role="group" aria-label="Equipos y marcador del encuentro">
             <div className={cn(styles.team, styles.teamLocal)} role="group" aria-label="Equipo local">
               <Link
                 href={
@@ -90,7 +89,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
                     `?tournament=${tournament}` +
                     `&category=${local_team}`
                   }
-                  className="text-gray-100"
+                  className={styles.teamNameLink}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -134,7 +133,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
                     `?tournament=${tournament}` +
                     `&category=${category}`
                   }
-                  className="text-gray-100"
+                  className={styles.teamNameLink}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -153,7 +152,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
           </div>
         </section>
 
-        <section className="w-full lg:w-1/2" aria-label="Detalles del encuentro">
+        <section className={styles.halfColumn} aria-label="Detalles del encuentro">
           <Table>
             <TableBody>
               <TableRow>
@@ -167,7 +166,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <p className="text-balance">{match.tournament.name}</p>
+                    <p className={styles.balancedText}>{match.tournament.name}</p>
                   </Link>
                 </TableCell>
               </TableRow>
@@ -213,20 +212,20 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
         </section>
       </section>
 
-      <section className="flex flex-col lg:flex-row gap-5" aria-label="Fecha, hora y sede del encuentro">
-        <div className="w-full lg:w-1/2">
+      <section className={styles.responsiveRow} aria-label="Fecha, hora y sede del encuentro">
+        <div className={styles.halfColumn}>
           <Table>
             <TableBody>
               <TableRow>
                 <TableHead>Fecha</TableHead>
                 <TableCell>
                   {match.matchDate ? (
-                    <p className="dark:text-gray-200">
+                    <p className={styles.matchDate}>
                       <span>
                         {`${formatInTimeZone(match.matchDate, TIME_ZONE, 'dd', { locale: es })}`}
                       </span>
                       <span>{' de '}</span>
-                      <span className="capitalize">
+                      <span className={styles.capitalized}>
                         {formatInTimeZone(match.matchDate, TIME_ZONE, 'LLLL', { locale: es })}
                       </span>
                       <span>{' del '}</span>
@@ -260,7 +259,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
             </TableBody>
           </Table>
         </div>
-        <div className="w-full lg:w-1/2">
+        <div className={styles.halfColumn}>
           <Table>
             <TableBody>
               <TableRow>
@@ -283,13 +282,13 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
       </section>
 
       <section aria-label="Comentarios adicionales">
-        <h2 className="text-xl text-sky-500 mb-2">Comentarios Adicionales</h2>
+        <h2 className={styles.remarksHeading}>Comentarios Adicionales</h2>
 
         <p>{
           match.remarks
             ? <span>{match.remarks}</span>
-            : <span className="text-gray-500">Sin comentarios</span>
-          }
+            : <span className={styles.mutedText}>Sin comentarios</span>
+        }
         </p>
       </section>
 
@@ -300,10 +299,10 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
             (match.localScore === match.visitorScore)
           ) && (
             <>
-              <div className="w-full h-0.25 bg-gray-600 my-5" />
-              <h2 className="text-lg font-bold text-sky-500 mb-5">Tanda de Penales</h2>
-              <section className="flex flex-col lg:flex-row gap-5">
-                <div className="w-full lg:w-1/2">
+              <div className={styles.divider} />
+              <h2 className={styles.penaltyHeading}>Tanda de Penales</h2>
+              <section className={styles.responsiveRow}>
+                <div className={styles.halfColumn}>
                   <PenaltyShootout shootout={match.penaltyShootout} />
                 </div>
               </section>
@@ -313,33 +312,4 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
       </section>
     </>
   );
-};
-
-const MatchGroup: FC<{ group: MATCH_GROUP_TYPE | string }> = ({ group }) => {
-  switch (group) {
-    case MATCH_GROUP.GOLDER:
-      return (
-        <Badge
-          variant="outline-warning"
-          className="text-amber-500 border-amber-500"
-        >
-          oro
-        </Badge>
-      );
-    case MATCH_GROUP.SILVERED:
-      return (
-        <Badge
-          variant="outline-warning"
-          className="text-zinc-500 border-zinc-500 dark:text-zinc-400 dark:border-zinc-400"
-        >
-          plata
-        </Badge>
-      );
-    default:
-      return (
-        <Badge variant="outline-info">
-          general
-        </Badge>
-      );
-  }
 };
