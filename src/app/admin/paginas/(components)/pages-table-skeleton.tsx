@@ -2,7 +2,10 @@ import type { FC } from 'react';
 
 export const PagesTableSkeleton: FC = () => {
   return (
-    <div className="flex flex-col gap-5 animate-pulse">
+    <div
+      data-testid="pages-table-skeleton"
+      className="flex flex-col gap-5 animate-pulse"
+    >
       {/* Skeleton Header */}
       <div
         className="grid gap-5 grid-cols-[repeat(2,1fr)_200px_100px_200px]"
@@ -25,5 +28,3 @@ export const PagesTableSkeleton: FC = () => {
     </div>
   );
 };
-
-export default PagesTableSkeleton;

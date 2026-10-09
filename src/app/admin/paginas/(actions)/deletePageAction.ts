@@ -12,8 +12,12 @@ export type ResponseDeleteAction = Promise<{
 
 export const deletePageAction = async (pageId: string): ResponseDeleteAction => {
   const guard = await requireAdmin();
+
   if (!guard.ok) {
-    return { ok: false, message: guard.message };
+    return {
+      ok: false,
+      message: guard.message,
+    };
   }
 
   try {
