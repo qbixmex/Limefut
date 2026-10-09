@@ -18,29 +18,37 @@ export type TEAM_TYPE = {
   }[];
 };
 
-export const fetchTeamsForMatchEditAction = async (tournamentId: string): ResponseFetchTeams => {
+export const fetchTeamsForMatchEditAction = async ({
+  tournamentPermalink,
+  categoryPermalink,
+}: {
+  tournamentPermalink: string,
+  categoryPermalink: string,
+}): ResponseFetchTeams => {
   'use cache';
 
   cacheLife('days');
   cacheTag('admin-teams-for-match');
 
   try {
-    const tournament = await prisma.tournament.findFirst({
-      where: { id: tournamentId },
-      orderBy: { name: 'asc' },
+    const teams = await prisma.team.findMany({
+      where: {
+        tournament: {
+          permalink: tournamentPermalink,
+        },
+        category: {
+          permalink: categoryPermalink,
+        },
+      },
       select: {
-        teams: {
-          select: {
-            id: true,
-            name: true,
-            fields: {
-              include: {
-                field: {
-                  select: {
-                    id: true,
-                    name: true,
-                  },
-                },
+        id: true,
+        name: true,
+        fields: {
+          include: {
+            field: {
+              select: {
+                id: true,
+                name: true,
               },
             },
           },
@@ -48,23 +56,13 @@ export const fetchTeamsForMatchEditAction = async (tournamentId: string): Respon
       },
     });
 
-    if (!tournament) {
-      return {
-        ok: false,
-        message: `No se encontró el torneo con id: [${tournamentId}]`,
-        teams: [],
-      };
-    }
-
-    const teams = tournament.teams.map((team) => ({
-      ...team,
-      fields: team.fields.map((teamField) => teamField.field),
-    }));
-
     return {
       ok: true,
       message: 'Los equipos fueron obtenidos correctamente',
-      teams,
+      teams: teams.map((team) => ({
+        ...team,
+        fields: team.fields.map((teamField) => teamField.field),
+      })),
     };
   } catch (error) {
     if (error instanceof Error) {

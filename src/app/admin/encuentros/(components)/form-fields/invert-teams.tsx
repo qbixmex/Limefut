@@ -24,7 +24,7 @@ export const InvertTeams: FC = () => {
           role="button"
           aria-label="Invertir equipos"
         >
-          <FlipHorizontal2 />
+          <FlipHorizontal2 className="lg:rotate-90" />
         </Button>
       </TooltipTrigger>
       <TooltipContent side="top">

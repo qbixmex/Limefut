@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { CreateMatchForm } from '../(components)/create-match-form';
 import { fetchTournamentsForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-tournaments-for-match.action';
 import { fetchCategoriesForMatchAction } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
+import type { CATEGORY_TYPE } from '@/app/admin/encuentros/(actions)/fetch-categories-for-match.action';
 import type { TEAM_TYPE } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
 import { fetchTeamsForMatchCreateAction } from '@/app/admin/encuentros/(actions)/fetch-teams-for-match-create.action';
 import { fetchFieldsAction } from '@/app/admin/encuentros/(actions)/fetch-fields.action';
@@ -28,10 +29,16 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
     redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(tournamentsResponse.message)}`);
   }
 
-  const categoriesResponse = await fetchCategoriesForMatchAction();
+  let categories: CATEGORY_TYPE[] = [];
 
-  if (!categoriesResponse.ok) {
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(categoriesResponse.message)}`);
+  if (tournamentPermalink) {
+    const categoriesResponse = await fetchCategoriesForMatchAction(tournamentPermalink);
+
+    if (!categoriesResponse.ok) {
+      redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(categoriesResponse.message)}`);
+    }
+
+    categories = categoriesResponse.categories;
   }
 
   let teams: TEAM_TYPE[] = [];
@@ -58,7 +65,7 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
   return (
     <CreateMatchForm
       tournaments={tournamentsResponse.tournaments}
-      categories={categoriesResponse.categories}
+      categories={categories}
       teams={teams}
       fields={fieldsResponse.fields}
     />
