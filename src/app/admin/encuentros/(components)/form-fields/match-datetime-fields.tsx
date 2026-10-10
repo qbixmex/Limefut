@@ -13,45 +13,64 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
 
-type Props = {
-  match: MATCH_TYPE | null | undefined;
-};
-
-export const MatchDateTimeFields = ({ match }: Props) => {
-  const { control } = useFormContext();
-  const [enabledDate, setEnabledDate] = useState(false);
+export const MatchDateTimeFields = () => {
+  const { control, getValues } = useFormContext();
+  const [enabledDate, setEnabledDate] = useState<boolean>(!!getValues('matchDate'));
   const [openCalendar, setOpenCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    match?.matchDate ? new Date(match.matchDate) : undefined,
-  );
+  const defaultTime = getValues('matchDate') as Date | undefined;
   const [selectedTime, setSelectedTime] = useState<string>(
-    match?.matchDate ? format(new Date(match.matchDate), 'HH:mm:ss') : '00:00:00',
+    defaultTime ? format(new Date(defaultTime), 'HH:mm:ss') : '00:00:00',
   );
+
+  const matchDate = useWatch({ control, name: 'matchDate' }) as Date | undefined;
+  const [syncedMatchDate, setSyncedMatchDate] = useState(matchDate);
+
+  // Reset the local time input and the schedule switch whenever the form value
+  // changes (e.g. `form.reset()`), so the whole field clears. Adjusting state
+  // during render is the recommended pattern for syncing with a value.
+  if (matchDate !== syncedMatchDate) {
+    setSyncedMatchDate(matchDate);
+    setSelectedTime(
+      matchDate ? format(new Date(matchDate), 'HH:mm:ss') : '00:00:00',
+    );
+    setEnabledDate(Boolean(matchDate));
+  }
 
   return (
     <Controller
       name="matchDate"
       control={control}
       render={({ field, fieldState }) => {
-        const handleTimeChange = (date: Date | undefined) => {
-          setSelectedDate(date);
-          if (date) {
-            const [hours, minutes, seconds] = selectedTime.split(':').map(Number);
-            const combined = new Date(date);
+        const dateValue = matchDate;
+
+        const handleDateSelect = (date: Date | undefined) => {
+          if (!date) return;
+
+          const [hours, minutes, seconds] = selectedTime.split(':').map(Number);
+          const combined = new Date(date);
+          combined.setHours(hours, minutes, seconds, 0);
+          field.onChange(combined);
+          setOpenCalendar(false);
+        };
+
+        const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          const value = !e.target.value ? '00:00:00' : e.target.value;
+          setSelectedTime(value);
+          if (dateValue) {
+            const [hours, minutes, seconds] = value.split(':').map(Number);
+            const combined = new Date(dateValue);
             combined.setHours(hours, minutes, seconds);
             field.onChange(combined);
           }
-          setOpenCalendar(false);
         };
 
         return (
           <Field data-invalid={fieldState.invalid}>
-            {(!enabledDate && !field.value) && (
+            {(!enabledDate && !dateValue) && (
               <div className="flex items-center gap-5">
                 <Switch
                   id="set-date"
@@ -62,7 +81,7 @@ export const MatchDateTimeFields = ({ match }: Props) => {
               </div>
             )}
 
-            {(enabledDate || field.value) && (
+            {(enabledDate || dateValue) && (
               <div className="flex gap-5">
                 <div className="flex flex-col gap-3">
                   <FieldLabel htmlFor="date-picker" className="px-1">
@@ -77,8 +96,8 @@ export const MatchDateTimeFields = ({ match }: Props) => {
                         aria-invalid={fieldState.invalid}
                       >
                         {
-                          selectedDate
-                            ? format(selectedDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                          dateValue
+                            ? format(dateValue, "d 'de' MMMM 'del' yyyy", { locale: es })
                             : (
                               <span>
                                 Seleccione Fecha&nbsp;
@@ -94,10 +113,10 @@ export const MatchDateTimeFields = ({ match }: Props) => {
                         mode="single"
                         startMonth={new Date(2020, 0)}
                         endMonth={new Date(new Date().getFullYear() + 10, 11)}
-                        selected={selectedDate}
-                        defaultMonth={selectedDate}
+                        selected={dateValue}
+                        defaultMonth={dateValue}
                         captionLayout="dropdown"
-                        onSelect={handleTimeChange}
+                        onSelect={handleDateSelect}
                       />
                     </PopoverContent>
                   </Popover>
@@ -112,16 +131,7 @@ export const MatchDateTimeFields = ({ match }: Props) => {
                     step="1"
                     min="00:00:00"
                     value={selectedTime}
-                    onChange={(e) => {
-                      const value = !e.target.value ? '00:00:00' : e.target.value;
-                      setSelectedTime(value);
-                      if (selectedDate) {
-                        const [hours, minutes, seconds] = value.split(':').map(Number);
-                        const combined = new Date(selectedDate);
-                        combined.setHours(hours, minutes, seconds);
-                        field.onChange(combined);
-                      }
-                    }}
+                    onChange={handleTimeChange}
                     className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                     aria-invalid={fieldState.invalid}
                   />

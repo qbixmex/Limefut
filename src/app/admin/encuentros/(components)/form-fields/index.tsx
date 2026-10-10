@@ -76,7 +76,7 @@ export const FormFields: FC<Props> = ({
       {/* DateTime and Week */}
       <section className="flex flex-col items-center gap-5 lg:flex-row">
         <div className="w-full lg:w-1/2">
-          <MatchDateTimeFields match={match} />
+          <MatchDateTimeFields />
         </div>
 
         <div className="w-full lg:w-1/2 flex justify-end gap-5">
