@@ -69,7 +69,7 @@ export const MatchDateTimeFields = () => {
         };
 
         return (
-          <Field data-invalid={fieldState.invalid}>
+          <>
             {(!enabledDate && !dateValue) && (
               <div className="flex items-center gap-5">
                 <Switch
@@ -77,16 +77,14 @@ export const MatchDateTimeFields = () => {
                   checked={enabledDate}
                   onCheckedChange={() => setEnabledDate(prev => !prev)}
                 />
-                <FieldLabel htmlFor="set-date">Programar Fecha y Hora</FieldLabel>
+                <Label htmlFor="set-date">Programar Fecha y Hora</Label>
               </div>
             )}
 
             {(enabledDate || dateValue) && (
-              <div className="flex gap-5">
-                <div className="flex flex-col gap-3">
-                  <FieldLabel htmlFor="date-picker" className="px-1">
-                    Fecha
-                  </FieldLabel>
+              <section className="flex flex-row gap-5">
+                <Field className="flex-2" data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="date-picker">Fecha</FieldLabel>
                   <Popover open={openCalendar} onOpenChange={setOpenCalendar}>
                     <PopoverTrigger asChild>
                       <Button
@@ -120,11 +118,12 @@ export const MatchDateTimeFields = () => {
                       />
                     </PopoverContent>
                   </Popover>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <Label htmlFor="time-picker" className="px-1">
-                    Hora
-                  </Label>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+                <Field className="flex-1">
+                  <FieldLabel htmlFor="time-picker">Hora</FieldLabel>
                   <Input
                     id="time-picker"
                     type="time"
@@ -135,13 +134,10 @@ export const MatchDateTimeFields = () => {
                     className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                     aria-invalid={fieldState.invalid}
                   />
-                </div>
-              </div>
+                </Field>
+              </section>
             )}
-            {fieldState.invalid && (
-              <FieldError errors={[fieldState.error]} />
-            )}
-          </Field>
+          </>
         );
       }}
     />

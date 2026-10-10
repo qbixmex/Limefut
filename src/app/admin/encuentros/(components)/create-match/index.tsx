@@ -10,26 +10,32 @@ import Link from 'next/link';
 export const CreateMatch = () => {
   const searchParams = useSearchParams();
 
+  const params = new URLSearchParams();
+  const tournament = searchParams.get('tournament');
+  const category = searchParams.get('category');
+
+  if (tournament) params.set('tournament', tournament);
+  if (category) params.set('category', category);
+
+  const queryString = params.toString();
+  const href = queryString
+    ? `${ROUTES.ADMIN_MATCHES_CREATE}?${queryString}`
+    : ROUTES.ADMIN_MATCHES_CREATE;
+
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <Link
-          href={
-            (searchParams.has('tournament') && searchParams.has('category'))
-              ? (ROUTES.ADMIN_MATCHES_CREATE +
-                `?tournament=${searchParams.get('tournament')}` +
-                `&category=${searchParams.get('category')}`
-              )
-              : ROUTES.ADMIN_MATCHES_CREATE
-          }
+          href={href}
           className={
             buttonVariants({
               variant: 'outline-primary',
               size: 'icon',
             })
           }
+          aria-label="Crear encuentro"
         >
-          <Plus strokeWidth={3} />
+          <Plus strokeWidth={3} aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="left">

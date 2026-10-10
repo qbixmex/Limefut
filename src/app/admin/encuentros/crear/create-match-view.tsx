@@ -68,6 +68,8 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
       categories={categories}
       teams={teams}
       fields={fieldsResponse.fields}
+      defaultTournament={tournamentPermalink}
+      defaultCategory={categoryPermalink}
     />
   );
 };
