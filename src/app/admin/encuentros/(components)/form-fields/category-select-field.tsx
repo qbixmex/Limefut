@@ -27,13 +27,17 @@ type Props = Readonly<{ categories: Category[] }>;
 export const CategorySelectField: FC<Props> = ({ categories }) => {
   const [open, setOpen] = useState(false);
   const { control } = useFormContext();
-  const tournament = useWatch({ name: 'tournament' });
+  const tournament = useWatch({ control, name: 'tournament' });
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const pathname = usePathname();
   const router = useRouter();
 
-  const isDisabled = !tournament;
+  // The server only sends categories when the URL has a tournament, so a
+  // non-empty list means a tournament is selected even if the watcher lags
+  // behind the form value (e.g. after a client-side navigation).
+  const hasTournament = categories.length > 0 || Boolean(tournament);
+  const isDisabled = !hasTournament;
 
   const setCategorySearchParam = (permalink: string) => {
     params.set('category', permalink);

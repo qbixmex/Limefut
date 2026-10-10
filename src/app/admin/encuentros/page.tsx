@@ -8,6 +8,7 @@ import { TournamentsSelectorSkeleton } from '../../(public)/components';
 import { CreateMatch } from './(components)/create-match';
 import { Search } from './(components)/search';
 import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
+import { CreateMatchButtonSkeleton } from './(components)/create-match/create-match-skeleton';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -35,7 +36,9 @@ export const MatchesPage: FC<Props> = ({ searchParams }) => {
               <section className="flex gap-2.5">
                 <Search placeholder="ejemplo: chivas vs atlas" />
                 <ClearFilters />
-                <CreateMatch />
+                <Suspense fallback={<CreateMatchButtonSkeleton />}>
+                  <CreateMatch />
+                </Suspense>
               </section>
             </CardHeader>
             <CardContent>

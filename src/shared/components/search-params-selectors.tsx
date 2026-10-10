@@ -30,6 +30,7 @@ export const SearchParamsSelectors: FC<Props> = async ({
           (tournaments.length > 0 || includeNoTournament)
             ? (
               <TournamentsSelector
+                key={`tournament-${tournament ?? 'none'}`}
                 tournaments={tournaments}
                 includeNoTournament={includeNoTournament}
               />
@@ -40,7 +41,10 @@ export const SearchParamsSelectors: FC<Props> = async ({
               </div>
             )
         }
-        <CategoriesSelector tournament={tournament} />
+        <CategoriesSelector
+          key={`category-${tournament ?? 'none'}`}
+          tournament={tournament}
+        />
       </div>
     </section>
   );

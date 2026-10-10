@@ -24,7 +24,15 @@ const createFormDefaultValues = () => ({
   category: undefined,
 });
 
-export const useCreateMatch = () => {
+type Options = {
+  defaultTournament?: string;
+  defaultCategory?: string;
+};
+
+export const useCreateMatch = ({
+  defaultTournament,
+  defaultCategory,
+}: Options = {}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -32,8 +40,8 @@ export const useCreateMatch = () => {
     resolver: zodResolver(createMatchSchema),
     defaultValues: {
       ...createFormDefaultValues(),
-      tournament: searchParams.get('tournament') ?? undefined,
-      category: searchParams.get('category') ?? undefined,
+      tournament: defaultTournament ?? searchParams.get('tournament') ?? undefined,
+      category: defaultCategory ?? searchParams.get('category') ?? undefined,
     },
   });
 
