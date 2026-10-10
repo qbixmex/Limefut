@@ -16,6 +16,8 @@ type Props = Readonly<{
   categories: CATEGORY_TYPE[];
   teams: TEAM_TYPE[];
   fields: FIELD_TYPE[];
+  defaultTournament?: string;
+  defaultCategory?: string;
 }>;
 
 export const CreateMatchForm: FC<Props> = ({
@@ -23,8 +25,13 @@ export const CreateMatchForm: FC<Props> = ({
   categories,
   teams,
   fields,
+  defaultTournament,
+  defaultCategory,
 }) => {
-  const { form, onSubmit, handleNavigateBack } = useCreateMatch();
+  const { form, onSubmit, handleNavigateBack } = useCreateMatch({
+    defaultTournament,
+    defaultCategory,
+  });
 
   return (
     <section className="mt-10">
