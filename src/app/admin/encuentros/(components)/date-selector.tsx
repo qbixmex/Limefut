@@ -20,13 +20,27 @@ export const DateSelector: FC<Props> = ({ label }) => {
     router.push(`${pathname}?${params}`);
   };
 
+  const getPlaceholderLabel = (label: string) => {
+    switch (label) {
+      case 'date':
+        return 'Fecha';
+      case 'hour':
+        return 'Hora';
+      default:
+        return 'Ordenar';
+    }
+  };
+
   return (
     <Select
       onValueChange={setDate}
       value={sortDate ?? ''}
     >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder={label === 'date' ? 'Fecha' : label === 'hour' ? 'Hora' : 'Ordenar'} />
+      <SelectTrigger
+        className="w-full"
+        aria-label={`Ordenar por ${label === 'hour' ? 'hora' : 'fecha'}`}
+      >
+        <SelectValue placeholder={getPlaceholderLabel(label)} />
       </SelectTrigger>
       <SelectContent>
         {params.has('sort-match-date') && (

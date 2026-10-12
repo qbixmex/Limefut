@@ -40,6 +40,13 @@ type Team = {
   }[];
 };
 
+const createFormDefaultValues = () => ({
+  localPlayerId: '',
+  visitorPlayerId: '',
+  localIsGoal: '',
+  visitorIsGoal: '',
+});
+
 export const PenaltiesForm: FC<Props> = ({
   currentMatchId,
   localTeam,
@@ -49,12 +56,7 @@ export const PenaltiesForm: FC<Props> = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      localPlayerId: '',
-      visitorPlayerId: '',
-      localIsGoal: '',
-      visitorIsGoal: '',
-    },
+    defaultValues: createFormDefaultValues(),
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -80,10 +82,7 @@ export const PenaltiesForm: FC<Props> = ({
     formData.append('localIsGoal', data.localIsGoal);
     formData.append('visitorIsGoal', data.visitorIsGoal);
 
-    // Create match
-    const response = await createRegularPenaltyShootoutAction(
-      formData,
-    );
+    const response = await createRegularPenaltyShootoutAction(formData);
 
     if (!response.ok) {
       toast.error(response.message);
@@ -92,7 +91,7 @@ export const PenaltiesForm: FC<Props> = ({
 
     if (response.ok) {
       toast.success(response.message);
-      form.reset();
+      form.reset(createFormDefaultValues());
     }
   };
 

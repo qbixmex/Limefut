@@ -18,29 +18,28 @@ export const CreateMatch = () => {
   if (category) params.set('category', category);
 
   const queryString = params.toString();
-  const href = queryString
-    ? `${ROUTES.ADMIN_MATCHES_CREATE}?${queryString}`
-    : ROUTES.ADMIN_MATCHES_CREATE;
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <Link
-          href={href}
+          href={
+            queryString
+              ? `${ROUTES.ADMIN_MATCHES_CREATE}?${queryString}`
+              : ROUTES.ADMIN_MATCHES_CREATE
+          }
           className={
             buttonVariants({
               variant: 'outline-primary',
               size: 'icon',
             })
           }
-          aria-label="Crear encuentro"
+          aria-label="Ir a crear encuentro"
         >
           <Plus strokeWidth={3} aria-hidden="true" />
         </Link>
       </TooltipTrigger>
-      <TooltipContent side="left">
-        <span>crear</span>
-      </TooltipContent>
+      <TooltipContent side="left">crear</TooltipContent>
     </Tooltip>
   );
 };

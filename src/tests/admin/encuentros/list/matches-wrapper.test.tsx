@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MatchesWrapper } from '@/app/admin/encuentros/(components)/matches.wrapper';
 import { fetchMatchesAction, type MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
 import { ROUTES } from '@/shared/constants/routes';
+import { matchesMock } from '../mocks/matches.mock';
 
 vi.mock('@/app/admin/encuentros/(actions)/fetch-matches.action', () => ({
   fetchMatchesAction: vi.fn(),
@@ -22,18 +23,8 @@ vi.mock('@/app/admin/encuentros/(components)/matches-table', () => ({
   },
 }));
 
-const buildMatch = (id: string, week: number | null): MATCH_TYPE => ({
-  id,
-  localTeam: { id: 'local-1', name: 'Chivas', permalink: 'chivas' },
-  visitorTeam: { id: 'visitor-1', name: 'Atlas', permalink: 'atlas' },
-  localScore: 0,
-  visitorScore: 0,
-  status: 'scheduled',
-  week,
-  matchDate: null,
-  penaltyShootout: null,
-  field: null,
-});
+const tournamentId = '9c3eeaa6-8ea3-4198-a9b5-1ae5e351532e';
+const categoryId = '88a1c831-d5ac-44d3-8e15-005b469436b0';
 
 describe('Tests on <MatchesWrapper /> component', () => {
   const defaultResponse = {
@@ -47,8 +38,8 @@ describe('Tests on <MatchesWrapper /> component', () => {
   };
 
   const defaultProps = {
-    tournamentId: 'tournament-1',
-    categoryId: 'category-1',
+    tournamentId,
+    categoryId,
     currentPage: 1,
     query: '',
     sortMatchDate: 'asc' as const,
@@ -71,15 +62,17 @@ describe('Tests on <MatchesWrapper /> component', () => {
   test('Should render <MatchesTable /> when fetch succeeds', async () => {
     await renderComponent();
 
-    expect(screen.getByTestId('matches-table')).toBeInTheDocument();
+    const matchesTable = screen.getByTestId('matches-table');
+
+    expect(matchesTable).toBeInTheDocument();
   });
 
   test('Should call fetchMatchesAction with correct options', async () => {
     await renderComponent();
 
     expect(vi.mocked(fetchMatchesAction)).toHaveBeenCalledWith({
-      tournamentId: 'tournament-1',
-      categoryId: 'category-1',
+      tournamentId,
+      categoryId,
       page: 1,
       take: 12,
       searchTerm: '',
@@ -92,12 +85,7 @@ describe('Tests on <MatchesWrapper /> component', () => {
   test('Should compute unique non-null matchesWeeks', async () => {
     vi.mocked(fetchMatchesAction).mockResolvedValue({
       ...defaultResponse,
-      matches: [
-        buildMatch('match-1', 1),
-        buildMatch('match-2', null),
-        buildMatch('match-3', 2),
-        buildMatch('match-4', 1),
-      ],
+      matches: matchesMock,
     });
 
     await renderComponent();
@@ -105,6 +93,11 @@ describe('Tests on <MatchesWrapper /> component', () => {
     expect(matchesTableProps).toEqual(
       expect.objectContaining({
         matchesWeeks: [1, 2],
+        matches: matchesMock,
+        pagination: {
+          currentPage: 1,
+          totalPages: 1,
+        },
       }),
     );
   });
@@ -127,9 +120,9 @@ describe('Tests on <MatchesWrapper /> component', () => {
     }
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      `${ROUTES.ADMIN_MATCHES}?error=${
-        encodeURIComponent('Error al obtener los encuentros')
-      }`,
+      ROUTES.ADMIN_MATCHES +
+      '?error=' +
+      encodeURIComponent('Error al obtener los encuentros'),
     );
   });
 });

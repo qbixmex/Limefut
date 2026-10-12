@@ -32,10 +32,12 @@ export const DeletePenaltyShootouts: FC<Props> = ({ penaltyShootoutsId, winnerTe
       winnerTeamId,
       phase,
     });
+
     if (!response.ok) {
       toast.error(response.message);
       return;
     }
+
     toast.success(response.message);
   };
 
@@ -44,14 +46,12 @@ export const DeletePenaltyShootouts: FC<Props> = ({ penaltyShootoutsId, winnerTe
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
-            <Button variant="outline-danger" size="icon-sm">
-              <Trash2 />
+            <Button variant="outline-danger" size="icon-sm" aria-label="Eliminar tanda de penales">
+              <Trash2 aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
         </TooltipTrigger>
-        <TooltipContent side="left">
-          <span>eliminar tanda</span>
-        </TooltipContent>
+        <TooltipContent side="left">eliminar tanda</TooltipContent>
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>

@@ -52,13 +52,16 @@ export const fetchCategoriesForMatchAction = async (
   } catch (error) {
     if (error instanceof Error) {
       console.log('Error al intentar obtener las categorías para encuentros:');
+
       return {
         ok: false,
         message: error.message,
         categories: [],
       };
     }
+
     console.log(error);
+
     return {
       ok: false,
       message: 'Error inesperado, revise los logs del servidor',

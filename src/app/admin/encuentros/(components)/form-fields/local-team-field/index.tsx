@@ -1,0 +1,116 @@
+'use client';
+
+import { useState } from 'react';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { toast } from 'sonner';
+import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
+import type { Team } from '../form-types';
+
+type Props = {
+  teams: Team[];
+  match: MATCH_TYPE | null | undefined;
+};
+
+export const LocalTeamField = ({ teams, match }: Props) => {
+  const [open, setOpen] = useState(false);
+  const { control } = useFormContext();
+  const visitorTeamId = useWatch({ name: 'visitorTeamId' });
+
+  return (
+    <Controller
+      name="localTeamId"
+      control={control}
+      render={({ field, fieldState }) => {
+        const selectedTeam = teams.find((t) => t.id === field.value) ?? (
+          match
+            ? (field.value === match.visitorTeam.id ? match.visitorTeam : match.localTeam)
+            : undefined
+        );
+
+        return (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel>
+              Equipo Local <span className="text-amber-500">*</span>
+            </FieldLabel>
+
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline-secondary"
+                  role="combobox"
+                  aria-expanded={open}
+                  className={cn(
+                    'w-full justify-between border-input dark:text-gray-300! dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
+                    { 'border-destructive!': fieldState.invalid },
+                  )}
+                >
+                  {
+                    selectedTeam
+                      ? selectedTeam.name
+                      : 'Seleccione un equipo'
+                  }
+                  <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0">
+                <Command>
+                  <CommandInput placeholder="Buscar equipo" className="h-9" />
+                  <CommandList>
+                    <CommandEmpty>No se encontró el equipo.</CommandEmpty>
+                    <CommandGroup>
+                      {teams.map((team) => (
+                        <CommandItem
+                          key={team.id}
+                          value={team.name}
+                          onSelect={(currentValue) => {
+                            const selectedTeam = teams.find((t) => t.name === currentValue);
+
+                            if (selectedTeam?.id === visitorTeamId) {
+                              toast.error('Este equipo ya está seleccionado como visitante');
+                              return;
+                            }
+
+                            if (selectedTeam) field.onChange(selectedTeam.id);
+
+                            setOpen(false);
+                          }}
+                          disabled={team.id === visitorTeamId}
+                          className={cn({ 'opacity-50': team.id === visitorTeamId })}
+                        >
+                          {team.name}
+                          {field.value === team.id && (
+                            <Check className="ml-auto" aria-hidden="true" />
+                          )}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+            {fieldState.invalid && (
+              <FieldError errors={[fieldState.error]} />
+            )}
+          </Field>
+        );
+      }}
+    />
+  );
+};

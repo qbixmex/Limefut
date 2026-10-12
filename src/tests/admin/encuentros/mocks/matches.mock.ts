@@ -17,7 +17,7 @@ export const matchesMock: MATCH_TYPE[] = [
     localScore: 0,
     visitorScore: 0,
     status: MATCH_STATUS.SCHEDULED,
-    week: 7,
+    week: 1,
     matchDate: new Date(2026, 2, 15, 20, 30),
     penaltyShootout: null,
     field: {
@@ -41,7 +41,7 @@ export const matchesMock: MATCH_TYPE[] = [
     localScore: 2,
     visitorScore: 1,
     status: MATCH_STATUS.COMPLETED,
-    week: 9,
+    week: 2,
     matchDate: new Date(2026, 2, 16, 18, 0),
     penaltyShootout: {
       id: '26bf2586-6348-4e22-9a97-bb9bb3646084',
