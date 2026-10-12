@@ -1,13 +1,11 @@
 const {
   mockGetNestAccessToken,
   mockCheckNestTokenStatus,
-  mockCookieGet,
   mockCookieSet,
   mockCookies,
 } = vi.hoisted(() => ({
   mockGetNestAccessToken: vi.fn(),
   mockCheckNestTokenStatus: vi.fn(),
-  mockCookieGet: vi.fn(),
   mockCookieSet: vi.fn(),
   mockCookies: vi.fn(),
 }));
@@ -50,8 +48,7 @@ describe('Tests on get-session lib', () => {
     vi.clearAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
     mockGetNestAccessToken.mockResolvedValue('original-token');
-    mockCookieGet.mockReturnValue(null);
-    mockCookies.mockResolvedValue({ get: mockCookieGet, set: mockCookieSet });
+    mockCookies.mockResolvedValue({ get: vi.fn(), set: mockCookieSet });
   });
 
   afterEach(() => {
@@ -143,52 +140,7 @@ describe('Tests on get-session lib', () => {
     expect(mockCookieSet).not.toHaveBeenCalled();
   });
 
-  test('Should rotate the cookies in persistent mode', async () => {
-    mockCheckNestTokenStatus.mockResolvedValue({
-      ok: true,
-      user: adminUser,
-      token: 'fresh-token',
-    });
-    mockCookieGet.mockImplementation((name: string) =>
-      name === 'nest_session_mode' ? { value: 'persistent' } : null,
-    );
-
-    const { requireAdmin } = await importGetSession();
-
-    const response = await requireAdmin();
-
-    expect(response.ok).toBe(true);
-    expect(mockCookieSet).toHaveBeenCalledWith(
-      'nest_access_token',
-      'fresh-token',
-      expect.objectContaining({ httpOnly: true, path: '/', maxAge: 3600 }),
-    );
-    expect(mockCookieSet).toHaveBeenCalledWith(
-      'nest_session_mode',
-      'persistent',
-      expect.objectContaining({ maxAge: 3600 }),
-    );
-  });
-
-  test('Should not rotate the cookies in session mode', async () => {
-    mockCheckNestTokenStatus.mockResolvedValue({
-      ok: true,
-      user: adminUser,
-      token: 'fresh-token',
-    });
-    mockCookieGet.mockImplementation((name: string) =>
-      name === 'nest_session_mode' ? { value: 'session' } : null,
-    );
-
-    const { requireAdmin } = await importGetSession();
-
-    const response = await requireAdmin();
-
-    expect(response.ok).toBe(true);
-    expect(mockCookieSet).not.toHaveBeenCalled();
-  });
-
-  test('Should not rotate the cookies when there is no mode cookie', async () => {
+  test('Should return an authorized session without writing cookies', async () => {
     mockCheckNestTokenStatus.mockResolvedValue({
       ok: true,
       user: adminUser,
@@ -200,6 +152,7 @@ describe('Tests on get-session lib', () => {
     const response = await requireAdmin();
 
     expect(response.ok).toBe(true);
+    expect(mockCookies).not.toHaveBeenCalled();
     expect(mockCookieSet).not.toHaveBeenCalled();
   });
 });

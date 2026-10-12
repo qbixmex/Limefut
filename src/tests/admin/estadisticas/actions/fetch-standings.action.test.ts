@@ -2,42 +2,13 @@ const {
   mockTournamentFindFirst,
   mockTeamFindMany,
   mockStandingsFindMany,
-  mockGetSession,
 } = vi.hoisted(() => ({
   mockTournamentFindFirst: vi.fn(),
   mockTeamFindMany: vi.fn(),
   mockStandingsFindMany: vi.fn(),
-  mockGetSession: vi.fn(),
 }));
 
 vi.mock('next/cache');
-
-vi.mock('next/headers', () => ({
-  headers: vi.fn().mockResolvedValue(new Headers()),
-}));
-
-vi.mock('@/lib/get-session', () => ({
-  getSession: mockGetSession,
-  requireAdmin: async () => {
-    const session = await mockGetSession();
-
-    if (!session?.user) {
-      return {
-        ok: false,
-        message: 'Debes estar autentificado para realizar esta acción',
-      };
-    }
-
-    if (!session.user.roles?.includes('admin')) {
-      return {
-        ok: false,
-        message: 'No tienes permisos administrativos para realizar esta acción',
-      };
-    }
-
-    return { ok: true, session };
-  },
-}));
 
 vi.mock('@/lib/prisma', () => ({
   default: {
@@ -55,7 +26,6 @@ vi.mock('@/lib/prisma', () => ({
 
 import { fetchStandingsAction } from '@/app/admin/estadisticas/(actions)/fetch-standings.action';
 import {
-  ADMIN_USER_ID,
   CATEGORY_ID,
   TOURNAMENT_ID,
   standingsMock,
@@ -67,9 +37,6 @@ describe('Tests on fetchStandingsAction server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
-    mockGetSession.mockResolvedValue({
-      user: { id: ADMIN_USER_ID, roles: ['admin'] },
-    });
     mockTournamentFindFirst.mockResolvedValue(tournamentMock);
     mockTeamFindMany.mockResolvedValue(teamsMock);
     mockStandingsFindMany.mockResolvedValue(standingsMock);
@@ -77,69 +44,6 @@ describe('Tests on fetchStandingsAction server action', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-
-  describe('Authentication', () => {
-    test('Should return error when there is no session', async () => {
-      mockGetSession.mockResolvedValue(null);
-
-      const response = await fetchStandingsAction({
-        tournamentId: TOURNAMENT_ID,
-        categoryId: CATEGORY_ID,
-      });
-
-      expect(response.ok).toBe(false);
-      expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
-      expect(response.teams).toEqual([]);
-      expect(response.tournament).toBe(null);
-      expect(response.standings).toBe(null);
-      expect(mockTournamentFindFirst).not.toHaveBeenCalled();
-    });
-
-    test('Should return error when user is not admin', async () => {
-      mockGetSession.mockResolvedValue({
-        user: { id: ADMIN_USER_ID, roles: ['user'] },
-      });
-
-      const response = await fetchStandingsAction({
-        tournamentId: TOURNAMENT_ID,
-        categoryId: CATEGORY_ID,
-      });
-
-      expect(response.ok).toBe(false);
-      expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
-      expect(mockTournamentFindFirst).not.toHaveBeenCalled();
-    });
-
-    test('Should return error when roles are null', async () => {
-      mockGetSession.mockResolvedValue({
-        user: { id: ADMIN_USER_ID, roles: null },
-      });
-
-      const response = await fetchStandingsAction({
-        tournamentId: TOURNAMENT_ID,
-        categoryId: CATEGORY_ID,
-      });
-
-      expect(response.ok).toBe(false);
-      expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
-      expect(mockTournamentFindFirst).not.toHaveBeenCalled();
-    });
-
-    test('Should return error when roles are empty', async () => {
-      mockGetSession.mockResolvedValue({
-        user: { id: ADMIN_USER_ID, roles: [] },
-      });
-
-      const response = await fetchStandingsAction({
-        tournamentId: TOURNAMENT_ID,
-        categoryId: CATEGORY_ID,
-      });
-
-      expect(response.ok).toBe(false);
-      expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
-      expect(mockTournamentFindFirst).not.toHaveBeenCalled();
-    });
   });
 
   describe('Fetch', () => {

@@ -1,13 +1,10 @@
 'use server';
 
 import { cache } from 'react';
-import { cookies } from 'next/headers';
 import {
   checkNestTokenStatus,
   getNestAccessToken,
   mapNestRoles,
-  NEST_ACCESS_TOKEN_COOKIE,
-  NEST_SESSION_MODE_COOKIE,
   type NestAuthUser,
 } from './nest-api';
 
@@ -29,12 +26,7 @@ export type AuthSession = {
   };
 };
 
-type SessionPayload = {
-  session: AuthSession;
-  freshToken: string;
-};
-
-const toAuthSession = (user: NestAuthUser, freshToken: string): AuthSession => ({
+const toAuthSession = (user: NestAuthUser, token: string): AuthSession => ({
   user: {
     id: user.id,
     name: user.name,
@@ -45,14 +37,14 @@ const toAuthSession = (user: NestAuthUser, freshToken: string): AuthSession => (
     image: user.imageUrl,
   },
   session: {
-    token: freshToken,
+    token,
     createdAt: user.createdAt,
     expiresAt: null,
     userAgent: null,
   },
 });
 
-const getSessionPayload = cache(async (): Promise<SessionPayload | null> => {
+const getSessionPayload = cache(async (): Promise<AuthSession | null> => {
   const token = await getNestAccessToken();
 
   if (!token) {
@@ -65,15 +57,11 @@ const getSessionPayload = cache(async (): Promise<SessionPayload | null> => {
     return null;
   }
 
-  return {
-    session: toAuthSession(check.user, check.token),
-    freshToken: check.token,
-  };
+  return toAuthSession(check.user, check.token);
 });
 
 export const getSession = cache(async (): Promise<AuthSession | null> => {
-  const payload = await getSessionPayload();
-  return payload?.session ?? null;
+  return getSessionPayload();
 });
 
 export type RequireAdminResult =
@@ -81,48 +69,21 @@ export type RequireAdminResult =
   | { ok: false; message: string };
 
 export const requireAdmin = async (): Promise<RequireAdminResult> => {
-  const payload = await getSessionPayload();
+  const session = await getSessionPayload();
 
-  if (!payload?.session.user) {
+  if (!session?.user) {
     return {
       ok: false,
       message: 'Debes estar autentificado para realizar esta acción',
     };
   }
 
-  if (!payload.session.user.roles?.includes('admin')) {
+  if (!session.user.roles?.includes('admin')) {
     return {
       ok: false,
       message: 'No tienes permisos administrativos para realizar esta acción',
     };
   }
 
-  await rotateIfPersistent(payload.freshToken);
-
-  return { ok: true, session: payload.session };
-};
-
-const rotateIfPersistent = async (freshToken: string): Promise<void> => {
-  const cookieStore = await cookies();
-  const mode = cookieStore.get(NEST_SESSION_MODE_COOKIE)?.value;
-
-  if (mode !== 'persistent') {
-    return;
-  }
-
-  cookieStore.set(NEST_ACCESS_TOKEN_COOKIE, freshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60,
-  });
-
-  cookieStore.set(NEST_SESSION_MODE_COOKIE, 'persistent', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60,
-  });
+  return { ok: true, session };
 };
