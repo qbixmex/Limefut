@@ -19,7 +19,7 @@ describe('Test on <CreateMatch /> component', () => {
     render(<CreateMatch />, { wrapper: TooltipProvider });
 
     const user = userEvent.setup();
-    const link = screen.getByRole('link', { name: /crear encuentro/i });
+    const link = screen.getByRole('link', { name: /ir a crear encuentro/i });
 
     return { user, link };
   };

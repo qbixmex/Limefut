@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { Suspense } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { EditMatchContent } from './edit-match-content';
+import { EditMatchView } from './edit-match-view';
 import { FormSkeleton } from '../../(components)/form-skeleton';
 
 type Props = Readonly<{
@@ -21,11 +21,16 @@ export const EditMatchPage: FC<Props> = ({ params, searchParams }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader className="admin-page-card-header">
-            <CardTitle className="admin-page-card-title">Editar Encuentro</CardTitle>
+            <CardTitle className="admin-page-card-title">
+              Editar Encuentro
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Suspense fallback={<FormSkeleton />}>
-              <EditMatchContent params={params} searchParams={searchParams} />
+              <EditMatchView
+                params={params}
+                searchParams={searchParams}
+              />
             </Suspense>
           </CardContent>
         </Card>

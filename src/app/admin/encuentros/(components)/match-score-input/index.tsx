@@ -5,6 +5,7 @@ import type { ChangeEvent, ComponentProps, FC } from 'react';
 import { useEffect, useState } from 'react';
 import { updateMatchInputScoreAction } from '@/app/admin/encuentros/(actions)/update-match-input-score.action';
 import { toast } from 'sonner';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   matchId: string;
@@ -44,21 +45,22 @@ export const MatchScoreInput: FC<ComponentProps<'input'> & Props> = ({
 
     if (!response.ok) {
       toast.error(response.message);
-    } else {
-      toast.success(response.message);
+      return;
     }
+
+    toast.success(response.message);
   };
 
   return (
     <input
+      { ...props }
       name="score"
       type="number"
       min={0}
       value={scoreValue}
       onChange={onInputChange}
       onBlur={handleBlur}
-      className="w-[50px] border p-2 rounded-lg text-blue-500 border-blue-500"
-      { ...props }
+      className={styles.input}
     />
   );
 };

@@ -43,8 +43,6 @@ export const useEditMatch = (options: Options) => {
         case MATCH_STATUS.CANCELED: {
           return true;
         }
-        default:
-          return false;
       }
     }
     return false;

@@ -11,7 +11,12 @@ function TestWrapper({
   matchDate,
 }: Readonly<{ children: ReactNode; matchDate?: Date }>) {
   const form = useForm<FormValues>({ defaultValues: { matchDate } });
-  return <FormProvider {...form}>{children}</FormProvider>;
+
+  return (
+    <FormProvider {...form}>
+      {children}
+    </FormProvider>
+  );
 }
 
 function ResetWrapper() {
@@ -22,7 +27,10 @@ function ResetWrapper() {
   return (
     <FormProvider {...form}>
       <MatchDateTimeFields />
-      <button type="button" onClick={() => form.reset({ matchDate: undefined })}>
+      <button
+        type="button"
+        onClick={() => form.reset({ matchDate: undefined })}
+      >
         reset
       </button>
     </FormProvider>
@@ -53,39 +61,58 @@ describe('Test on <MatchDateTimeFields />', () => {
   test('Should reveal the date and time fields when toggling the switch', async () => {
     const { user } = renderComponent();
 
-    await user.click(screen.getByRole('switch'));
+    const switchComponent = screen.getByRole('switch');
+    await user.click(switchComponent);
 
-    expect(screen.getByText(/seleccione fecha/i)).toBeInTheDocument();
-    expect(screen.getByLabelText('Hora')).toBeInTheDocument();
+    const dateLabel = screen.getByText(/seleccione fecha/i);
+    const timeLabel = screen.getByLabelText('Hora');
+
+    expect(dateLabel).toBeInTheDocument();
+    expect(timeLabel).toBeInTheDocument();
   });
 
   test('Should render the date when the form has a matchDate', () => {
-    renderComponent(new Date(2026, 4, 16, 20, 30));
+    renderComponent(new Date('2026-05-16T20:30:00'));
 
-    expect(screen.getByText(/16 de mayo del 2026/i)).toBeInTheDocument();
-    expect(screen.getByLabelText('Hora')).toHaveValue('20:30:00');
+    const date = screen.getByText(/16 de mayo del 2026/i);
+    expect(date).toBeInTheDocument();
+
+    const time = screen.getByLabelText('Hora');
+    expect(time).toHaveValue('20:30:00');
+
     expect(screen.queryByRole('switch')).not.toBeInTheDocument();
   });
 
   test('Should update the hours when the time changes', () => {
-    renderComponent(new Date(2026, 4, 16, 20, 30));
+    renderComponent(new Date('2026-05-16T12:00'));
+    const newHour = '17:00:00';
 
-    fireEvent.change(screen.getByLabelText('Hora'), { target: { value: '10:15:00' } });
+    fireEvent.change(
+      screen.getByLabelText('Hora'),
+      { target: { value: newHour } },
+    );
 
-    expect(screen.getByLabelText('Hora')).toHaveValue('10:15:00');
+    const time = screen.getByLabelText('Hora');
+
+    expect(time).toHaveValue(newHour);
   });
 
   test('Should clear the date, hour and switch when the form is reset', async () => {
     const user = userEvent.setup();
     render(<ResetWrapper />);
 
-    expect(screen.getByText(/16 de mayo del 2026/i)).toBeInTheDocument();
-    expect(screen.getByLabelText('Hora')).toHaveValue('20:30:00');
+    const date = screen.getByText(/16 de mayo del 2026/i);
+    const hour = screen.getByLabelText('Hora');
 
-    await user.click(screen.getByRole('button', { name: /reset/i }));
+    expect(date).toBeInTheDocument();
+    expect(hour).toHaveValue('20:30:00');
+
+    const reset = screen.getByRole('button', { name: /reset/i });
+    await user.click(reset);
 
     await waitFor(() => {
-      expect(screen.getByText(/programar fecha y hora/i)).toBeInTheDocument();
+      const label = screen.getByText(/programar fecha y hora/i);
+      expect(label).toBeInTheDocument();
     });
     expect(screen.queryByLabelText('Hora')).not.toBeInTheDocument();
     expect(screen.queryByText(/16 de mayo del 2026/i)).not.toBeInTheDocument();

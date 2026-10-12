@@ -61,9 +61,7 @@ export const useCreateMatch = ({
     formData.append('tournament', data.tournament);
     formData.append('category', data.category);
 
-    const response = await createMatchAction({
-      formData,
-    });
+    const response = await createMatchAction({ formData });
 
     if (!response.ok) {
       toast.error(response.message);

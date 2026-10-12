@@ -39,7 +39,7 @@ export const SelectTournament: FC<Props> = ({ tournaments }) => {
       onValueChange={setTournamentPermalinkParam}
       defaultValue={tournamentPermalink ?? ''}
     >
-      <SelectTrigger className="w-full max-w-[400px]">
+      <SelectTrigger className="w-full max-w-[400px]" aria-label="Seleccionar torneo">
         <SelectValue placeholder="Selecciona un torneo" />
       </SelectTrigger>
       <SelectContent>

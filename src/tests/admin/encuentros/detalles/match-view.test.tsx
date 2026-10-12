@@ -64,7 +64,9 @@ describe('Tests on <MatchView />', () => {
     }).rejects.toThrow();
 
     expect(mockRedirect).toHaveBeenCalledWith(
-      `${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(FETCH_ERROR_MESSAGE)}`,
+      ROUTES.ADMIN_MATCHES +
+      '?error=' +
+      encodeURIComponent(FETCH_ERROR_MESSAGE),
     );
   });
 
@@ -78,6 +80,7 @@ describe('Tests on <MatchView />', () => {
       ROUTES.ADMIN_TEAMS_SHOW(matchMock.localTeam.id),
     );
     expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noreferrer');
   });
 
   test('Should render visitor team name link with correct href', async () => {
@@ -90,6 +93,7 @@ describe('Tests on <MatchView />', () => {
       ROUTES.ADMIN_TEAMS_SHOW(matchMock.visitorTeam.id),
     );
     expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noreferrer');
   });
 
   test('Should render match score', async () => {
@@ -196,6 +200,7 @@ describe('Tests on <MatchView />', () => {
       ROUTES.ADMIN_TOURNAMENTS_SHOW(matchMock.tournament.id),
     );
     expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noreferrer');
   });
 
   test('Should render formatted creation date', async () => {

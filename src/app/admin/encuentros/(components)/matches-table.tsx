@@ -18,7 +18,6 @@ import { MatchStatus } from '../(components)/match-status';
 import { FinishMatch } from '../(components)/finish-match';
 import { MatchScoreInput } from '../(components)/match-score-input';
 import { Pagination } from '@/shared/components/pagination';
-import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
@@ -29,6 +28,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 import { EditMatch } from './edit-match';
 import { ROUTES } from '@/shared/constants/routes';
 import { MatchDetails } from './match-details';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
 
 type Props = Readonly<{
   matches: MATCH_TYPE[];
@@ -177,13 +177,27 @@ export const MatchesTable: FC<Props> = ({
                   )}
                 </TableCell>
                 <TableCell className="text-center">
-                  <Badge
-                    variant="outline-info"
-                    role="status"
-                    aria-label="Número de la jornada"
-                  >
-                    {match.week ?? 'no definida'}
-                  </Badge>
+                  {
+                    match.week
+                      ? (
+                        <Badge
+                          variant="outline-info"
+                          role="status"
+                          aria-label="Numero de la jornada"
+                        >
+                          {match.week}
+                        </Badge>
+                      )
+                      : (
+                        <Badge
+                          variant="outline-secondary"
+                          role="status"
+                          aria-label="Numero de la jornada"
+                        >
+                          no disponible
+                        </Badge>
+                      )
+                  }
                 </TableCell>
                 <TableCell>
                   {match.matchDate ? (
@@ -200,7 +214,7 @@ export const MatchesTable: FC<Props> = ({
                       role="status"
                       aria-label="Fecha del encuentro"
                     >
-                      No asignada
+                      No definida
                     </Badge>
                   )}
                 </TableCell>
@@ -254,19 +268,19 @@ export const MatchesTable: FC<Props> = ({
         </Table>
         {
           (matches.length === 0) && (
-            <div className="mt-10 border border-blue-500 text-blue-500 text-semibold text-2xl text-center py-5 rounded">
+            <EmptyMessageResource>
               Aún no hay encuentros programados
-            </div>
+            </EmptyMessageResource>
           )
         }
       </div>
-      <div
-        className={cn('flex justify-center mt-10', {
-          hidden: matches.length === 0 || pagination!.totalPages === 1,
-        })}
-      >
-        <Pagination totalPages={pagination!.totalPages as number} />
-      </div>
+      {
+        (matches.length > 1) && (
+          <div className="flex justify-center mt-10">
+            <Pagination totalPages={pagination!.totalPages as number} />
+          </div>
+        )
+      }
     </div>
   );
 };

@@ -223,6 +223,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   } catch (error) {
     if (error instanceof Error) {
       console.log('Error al intentar obtener los encuentros');
+
       return {
         ok: false,
         message: error.message,
@@ -233,7 +234,9 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         },
       };
     }
+
     console.log(error);
+
     return {
       ok: false,
       message: 'Error inesperado al obtener los encuentros, revise los logs del servidor',
