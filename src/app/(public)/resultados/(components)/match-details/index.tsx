@@ -48,7 +48,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 href={
                   `${ROUTES.PUBLIC_TEAMS}/${localTeam.permalink}` +
                   `?tournament=${tournament.permalink}` +
-                  `&category=${localTeam.category}`
+                  `&category=${localTeam.category?.permalink}`
                 }
                 target="_blank"
                 rel="noreferrer"
@@ -66,7 +66,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   href={
                     `${ROUTES.PUBLIC_TEAMS}/${localTeam.permalink}` +
                     `?tournament=${tournament.permalink}` +
-                    `&category=${localTeam.category}`
+                    `&category=${localTeam.category?.permalink}`
                   }
                   className="text-gray-100"
                   target="_blank"
@@ -82,7 +82,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                 href={
                   `${ROUTES.PUBLIC_TEAMS}/${visitorTeam.permalink}` +
                   `?tournament=${tournament.permalink}` +
-                  `&category=${visitorTeam.category}`
+                  `&category=${visitorTeam.category?.permalink}`
                 }
                 target="_blank"
                 rel="noreferrer"
@@ -100,7 +100,7 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
                   href={
                     `${ROUTES.PUBLIC_TEAMS}/${visitorTeam.permalink}` +
                     `?tournament=${tournament.permalink}` +
-                    `&category=${visitorTeam.category}`
+                    `&category=${visitorTeam.category?.permalink}`
                   }
                   className="text-gray-100"
                   target="_blank"
