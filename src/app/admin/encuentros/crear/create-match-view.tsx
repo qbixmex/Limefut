@@ -26,7 +26,11 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
   const tournamentsResponse = await fetchTournamentsForMatchAction();
 
   if (!tournamentsResponse.ok) {
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(tournamentsResponse.message)}`);
+    redirect(
+      ROUTES.ADMIN_MATCHES +
+      '?error=' +
+      encodeURIComponent(tournamentsResponse.message),
+    );
   }
 
   let categories: CATEGORY_TYPE[] = [];
@@ -35,7 +39,11 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
     const categoriesResponse = await fetchCategoriesForMatchAction(tournamentPermalink);
 
     if (!categoriesResponse.ok) {
-      redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(categoriesResponse.message)}`);
+      redirect(
+        ROUTES.ADMIN_MATCHES +
+        '?error=' +
+        encodeURIComponent(categoriesResponse.message),
+      );
     }
 
     categories = categoriesResponse.categories;
@@ -50,7 +58,11 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
     });
 
     if (!responseTeams.ok) {
-      redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(responseTeams.message)}`);
+      redirect(
+        ROUTES.ADMIN_MATCHES +
+        '?error=' +
+        encodeURIComponent(responseTeams.message),
+      );
     }
 
     teams = responseTeams.teams;
@@ -59,7 +71,11 @@ export const MatchView: FC<Props> = async ({ searchParams }) => {
   const fieldsResponse = await fetchFieldsAction();
 
   if (!fieldsResponse.ok) {
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(fieldsResponse.message)}`);
+    redirect(
+      ROUTES.ADMIN_MATCHES +
+      '?error=' +
+      encodeURIComponent(fieldsResponse.message),
+    );
   }
 
   return (

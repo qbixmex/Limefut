@@ -28,8 +28,9 @@ export const ClearFilters = () => {
         <Button
           variant="outline-info" size="icon"
           onClick={onClearFilters}
+          aria-label="Borrar filtros"
         >
-          <FunnelX />
+          <FunnelX aria-hidden="true" />
         </Button>
       </TooltipTrigger>
       <TooltipContent side="left">Borrar Filtros</TooltipContent>

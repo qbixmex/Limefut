@@ -16,18 +16,23 @@ export const WeekField = () => {
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor="selected-week">Jornada</FieldLabel>
+
           <div className={styles.weekSelector}>
             <div className={styles.weekGroup}>
               <Button
                 variant="outline-primary"
                 type="button"
                 size="icon"
-                onClick={() => field.onChange(Math.max(0, (Number(field.value) || 0) - 1))}
+                onClick={() => {
+                  field.onChange(Math.max(0, (Number(field.value) || 0) - 1));
+                }}
                 className={styles.modifyQuantityButtons}
                 disabled={field.value === 0}
+                aria-label="Disminuir jornada"
               >
-                <MinusIcon className="size-6" strokeWidth={3} />
+                <MinusIcon className="size-6" strokeWidth={3} aria-hidden="true" />
               </Button>
+
               <input
                 id="selected-week"
                 name="week"
@@ -38,6 +43,7 @@ export const WeekField = () => {
                 className={styles.weekInput}
                 aria-invalid={fieldState.invalid}
               />
+
               <Button
                 variant="outline-primary"
                 type="button"
@@ -46,11 +52,13 @@ export const WeekField = () => {
                 onClick={() => {
                   field.onChange(Number(field.value || '0') + 1);
                 }}
+                aria-label="Aumentar jornada"
               >
-                <PlusIcon className="size-6" />
+                <PlusIcon className="size-6" aria-hidden="true" />
               </Button>
             </div>
           </div>
+
           {fieldState.invalid && (
             <FieldError errors={[fieldState.error]} />
           )}

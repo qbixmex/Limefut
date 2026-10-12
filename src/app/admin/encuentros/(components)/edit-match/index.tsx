@@ -35,13 +35,12 @@ export const EditMatch: FC<Props> = ({ matchId }) => {
             variant: 'outline-warning',
             size: 'icon',
           })}
+          aria-label="Ir a editar encuentro"
         >
-          <Pencil />
+          <Pencil aria-hidden="true" />
         </Link>
       </TooltipTrigger>
-      <TooltipContent side="top">
-        editar
-      </TooltipContent>
+      <TooltipContent side="top">editar</TooltipContent>
     </Tooltip>
   );
 };

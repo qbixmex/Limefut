@@ -1,6 +1,6 @@
 export const FormSkeleton = () => {
   return (
-    <div className="mt-10 space-y-5 animate-pulse">
+    <div className="mt-10 space-y-5 animate-pulse" role="status" aria-label="Cargando formulario">
       <div className="flex gap-5">
         <div className="w-1/2 space-y-5">
           <div className="w-full bg-gray-500 h-10 rounded-lg" />

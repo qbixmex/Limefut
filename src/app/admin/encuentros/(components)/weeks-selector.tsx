@@ -24,7 +24,7 @@ export const WeeksSelector: FC<Props> = ({ weeks }) => {
       value={sortWeek}
       onValueChange={setWeek}
     >
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="w-full" aria-label="Filtrar por jornada">
         <SelectValue placeholder="Jornada" />
       </SelectTrigger>
       <SelectContent>

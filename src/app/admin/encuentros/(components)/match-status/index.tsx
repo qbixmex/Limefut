@@ -22,11 +22,12 @@ export const MatchStatus: FC<Props> = ({ matchId, status }) => {
   const onUpdateStatus = async (newStatus: MATCH_STATUS_TYPE) => {
     const response = await updateStatusAction(matchId, newStatus);
 
-    if (response.ok) {
-      toast.success(response.message);
-    } else {
+    if (!response.ok) {
       toast.error(response.message);
+      return;
     }
+
+    toast.success(response.message);
   };
 
   return (
@@ -34,16 +35,19 @@ export const MatchStatus: FC<Props> = ({ matchId, status }) => {
       defaultValue={status}
       onValueChange={onUpdateStatus}
     >
-      <SelectTrigger className="w-[150px]">
+      <SelectTrigger
+        className="w-[150px]"
+        aria-label="Estado del encuentro"
+      >
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value={MATCH_STATUS.IN_REVIEW}>En revisión</SelectItem>
-          <SelectItem value={MATCH_STATUS.SCHEDULED}>Programado</SelectItem>
-          <SelectItem value={MATCH_STATUS.IN_PROGRESS}>En Progreso</SelectItem>
-          <SelectItem value={MATCH_STATUS.POST_POSED}>Pospuesto</SelectItem>
-          <SelectItem value={MATCH_STATUS.CANCELED}>Cancelado</SelectItem>
+          <SelectItem value={MATCH_STATUS.IN_REVIEW}>en revisión</SelectItem>
+          <SelectItem value={MATCH_STATUS.SCHEDULED}>programado</SelectItem>
+          <SelectItem value={MATCH_STATUS.IN_PROGRESS}>en progreso</SelectItem>
+          <SelectItem value={MATCH_STATUS.POST_POSED}>pospuesto</SelectItem>
+          <SelectItem value={MATCH_STATUS.CANCELED}>cancelado</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

@@ -29,7 +29,7 @@ export const StatusSelector = () => {
       onValueChange={setStatus}
       value={status ?? ''}
     >
-      <SelectTrigger>
+      <SelectTrigger aria-label="Filtrar por estado">
         <SelectValue placeholder="Estado" />
       </SelectTrigger>
       <SelectContent>

@@ -36,7 +36,11 @@ export const MatchesWrapper: FC<Props> = async ({
   });
 
   if (!ok) {
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(message)}`);
+    redirect(
+      ROUTES.ADMIN_MATCHES +
+      '?error=' +
+      encodeURIComponent(message),
+    );
   }
 
   const matchesWeeks = [...new Set(

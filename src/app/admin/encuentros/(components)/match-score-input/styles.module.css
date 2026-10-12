@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+.input {
+  width: 50px;
+  border: 1px solid var(--color-blue-500);
+  color: var(--color-blue-500);
+  padding: --spacing(2);
+  border-radius: var(--radius-lg);
+}

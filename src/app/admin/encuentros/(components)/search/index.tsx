@@ -31,11 +31,13 @@ export const Search: FC<Props> = ({ placeholder }) => {
     event.preventDefault();
     const params = new URLSearchParams(searchParams);
     params.set('page', '1');
+
     if (inputValue.length > 0) {
       params.set('query', inputValue);
     } else {
       params.delete('query');
     }
+
     router.replace(`${pathname}?${params.toString()}`);
   };
 
@@ -59,9 +61,7 @@ export const Search: FC<Props> = ({ placeholder }) => {
               name={`term-${searchMatchId}`}
               className={cn('peer', styles.searchInput)}
               placeholder={placeholder}
-              onChange={(event) => {
-                setInputValue(event.target.value);
-              }}
+              onChange={(event) => setInputValue(event.target.value)}
               value={inputValue}
             />
             <SearchIcon className={styles.searchIcon} />
@@ -69,8 +69,9 @@ export const Search: FC<Props> = ({ placeholder }) => {
               type="button"
               className={styles.closeButton}
               onClick={handleClearSearch}
+              aria-label="Limpiar búsqueda"
             >
-              <XIcon className={styles.closeIcon} />
+              <XIcon className={styles.closeIcon} aria-hidden="true" />
             </button>
           </div>
           <Button

@@ -17,13 +17,12 @@ export const MatchDetails: FC<Props> = ({ matchId }) => {
             variant: 'outline-info',
             size: 'icon',
           })}
+          aria-label="Ir a detalles del encuentro"
         >
-          <InfoIcon />
+          <InfoIcon aria-hidden="true" />
         </Link>
       </TooltipTrigger>
-      <TooltipContent side="left">
-        detalles
-      </TooltipContent>
+      <TooltipContent side="left">detalles</TooltipContent>
     </Tooltip>
   );
 };
