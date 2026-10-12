@@ -16,7 +16,9 @@ export const MatchPage: FC<Props> = async ({ params }) => {
       <div className="admin-page-container">
         <Card className="admin-page-card">
           <CardHeader>
-            <CardTitle className="admin-page-card-title">Información del Encuentro</CardTitle>
+            <CardTitle className="admin-page-card-title">
+              Información del Encuentro
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Suspense fallback={<MatchViewSkeleton />}>

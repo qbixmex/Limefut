@@ -7,7 +7,7 @@ type Props = Readonly<{
 
 export const MatchesTableSkeleton: FC<Props> = ({ colCount = 5, rowCount = 2 }) => {
   return (
-    <div className="flex flex-col gap-5 animate-pulse">
+    <div className="flex flex-col gap-5 animate-pulse" role="status" aria-label="Cargando encuentros">
       {Array.from({ length: rowCount }).map((_, row) => (
         <div
           key={`row-${row}`}

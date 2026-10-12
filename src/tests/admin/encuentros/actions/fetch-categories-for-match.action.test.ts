@@ -54,7 +54,7 @@ describe('Tests on fetchCategoriesForMatchAction server action', () => {
     expect(findManyArgs.orderBy).toEqual([{ name: 'desc' }]);
   });
 
-  test('Should return the categories obtained from the database', async () => {
+  test('Should return the categories fetched from the database', async () => {
     const response = await fetchCategoriesForMatchAction(tournamentPermalink);
 
     expect(response.ok).toBe(true);

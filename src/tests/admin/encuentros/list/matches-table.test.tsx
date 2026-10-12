@@ -115,7 +115,7 @@ describe('Tests on <MatchesTable /> component', () => {
     });
   });
 
-  test('Should render field link or fallback badge', () => {
+  test('Should render field link', () => {
     renderComponent();
 
     const matchesWithField = matchesMock.filter((match) => match.field);
@@ -140,9 +140,7 @@ describe('Tests on <MatchesTable /> component', () => {
   test('Should render week number', () => {
     renderComponent();
 
-    const weeksElements = screen.getAllByRole('status', {
-      name: /jornada/i,
-    });
+    const weeksElements = screen.getAllByRole('status', { name: /jornada/i });
 
     for (const index in matchesMock) {
       if (!matchesMock[index].week) continue;
@@ -150,25 +148,21 @@ describe('Tests on <MatchesTable /> component', () => {
     }
   });
 
-  test('Should render week "no definida" if week is not assigned', () => {
+  test('Should render week "no disponible" if week is not assigned', () => {
     renderComponent();
 
-    const weeks = screen.getAllByRole('status', {
-      name: /jornada/i,
-    });
+    const weeks = screen.getAllByRole('status', { name: /jornada/i });
 
     for (const index in matchesMock) {
       if (matchesMock[index].week) continue;
-      expect(weeks[index]).toHaveTextContent(/no definida/i);
+      expect(weeks[index]).toHaveTextContent(/no disponible/i);
     }
   });
 
   test('Should render formatted match date', () => {
     renderComponent();
 
-    const dateElements = screen.getAllByRole('status', {
-      name: /fecha/i,
-    });
+    const dateElements = screen.getAllByRole('status', { name: /fecha/i });
 
     expect(dateElements).toHaveLength(matchesMock.length);
 
@@ -189,7 +183,7 @@ describe('Tests on <MatchesTable /> component', () => {
     for (const index in matchesMock) {
       if (matchesMock[index].matchDate) continue;
 
-      expect(dateElements[index]).toHaveTextContent(/no asignada/i);
+      expect(dateElements[index]).toHaveTextContent(/no definida/i);
     }
   });
 
@@ -199,22 +193,24 @@ describe('Tests on <MatchesTable /> component', () => {
     const localScores = screen.getAllByRole('spinbutton', {
       name: /marcador local/i,
     });
-    const visitorScores = screen.getAllByRole('spinbutton', {
-      name: /marcador visitante/i,
-    });
-    const notCompletedMatches = matchesMock.filter((match) => {
+    const uncompletedMatches = matchesMock.filter((match) => {
       return match.status !== MATCH_STATUS.COMPLETED;
     });
 
-    expect(localScores).toHaveLength(notCompletedMatches.length);
-    expect(visitorScores).toHaveLength(notCompletedMatches.length);
-
     localScores.forEach((input, index) => {
-      expect(input).toHaveValue(notCompletedMatches[index].localScore);
+      expect(input).toHaveValue(uncompletedMatches[index].localScore);
     });
+
+    const visitorScores = screen.getAllByRole('spinbutton', {
+      name: /marcador visitante/i,
+    });
+
     visitorScores.forEach((input, index) => {
-      expect(input).toHaveValue(notCompletedMatches[index].visitorScore);
+      expect(input).toHaveValue(uncompletedMatches[index].visitorScore);
     });
+
+    expect(localScores).toHaveLength(uncompletedMatches.length);
+    expect(visitorScores).toHaveLength(uncompletedMatches.length);
   });
 
   test('Should render score badges where match status is completed', () => {
@@ -309,16 +305,24 @@ describe('Tests on <MatchesTable /> component', () => {
   test('Should render pagination when there are matches and multiple pages', () => {
     renderComponent();
 
-    expect(screen.getByTestId('pagination')).toBeInTheDocument();
+    const pagination = screen.getByTestId('pagination');
 
-    const wrapper = screen.getByTestId('pagination').closest('div');
-    expect(wrapper).not.toHaveClass('hidden');
+    expect(pagination).toBeInTheDocument();
   });
 
   test('Should hide pagination when no matches', () => {
     renderComponent({ ...defaultProps, matches: [] });
 
-    const wrapper = screen.getByTestId('pagination').closest('div');
-    expect(wrapper).toHaveClass('hidden');
+    const pagination = screen.queryByTestId('pagination');
+
+    expect(pagination).not.toBeInTheDocument();
+  });
+
+  test('Should hide pagination when matches there is only one', () => {
+    renderComponent({ ...defaultProps, matches: [matchesMock[0]] });
+
+    const pagination = screen.queryByTestId('pagination');
+
+    expect(pagination).not.toBeInTheDocument();
   });
 });

@@ -245,14 +245,17 @@ export const updateMatchAction = async ({
           },
         };
       } catch (error) {
+        let errorMessage = 'Error inesperado';
+
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          if (error.code === 'P2002') {
-            const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
-            return {
-              ok: false,
-              message: `El campo "${fieldError}", está duplicado`,
-              match: null,
-            };
+          const fieldError = (error.meta as { target?: string[] } | undefined)?.target?.[0];
+
+          if (error.code === 'P2001') {
+            errorMessage = `El campo "${fieldError}" no existe`;
+          } else if (error.code === 'P2002') {
+            errorMessage = `El campo "${fieldError}" está duplicado`;
+          } else {
+            errorMessage = 'Error al actualizar el encuentro';
           }
 
           console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
@@ -261,21 +264,17 @@ export const updateMatchAction = async ({
           console.log('META:', error.meta);
           console.log('MESSAGE:', error.message);
           console.log('='.repeat(54));
-
-          return {
-            ok: false,
-            message: 'Error al crear el encuentro, revise los logs del servidor',
-            match: null,
-          };
+        } else if (error instanceof Error) {
+          console.log('CAUSE:', error.cause);
+          console.log('NAME:', error.name);
+          console.log('MESSAGE:', error.message);
+        } else {
+          console.log(error);
         }
-
-        console.log('='.repeat(20) + ' UNKNOWN ERROR ' + '='.repeat(20));
-        console.log(error);
-        console.log('='.repeat(55));
 
         return {
           ok: false,
-          message: 'Error inesperado, revise los logs del servidor',
+          message: `${errorMessage}, revise los logs del servidor`,
           match: null,
         };
       }
@@ -283,10 +282,32 @@ export const updateMatchAction = async ({
 
     return prismaTransaction;
   } catch (error) {
-    console.log(error);
+    let errorMessage = 'Error inesperado';
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
+
+        errorMessage = `El campo "${fieldError}" está duplicado`;
+      } else {
+        errorMessage = 'Error al actualizar el encuentro';
+      }
+
+      console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
+      console.log('META:', error.meta);
+      console.log('MESSAGE:', error.message);
+    } else if (error instanceof Error) {
+      console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
+      console.log('MESSAGE:', error.message);
+    } else {
+      console.log(error);
+    }
+
     return {
       ok: false,
-      message: 'Error inesperado, revise los logs del servidor',
+      message: `${errorMessage}, revise los logs del servidor`,
       match: null,
     };
   }

@@ -108,9 +108,7 @@ export const createMatchAction = async ({
       }
 
       const category = await transaction.category.findFirst({
-        where: {
-          permalink: categoryPermalink,
-        },
+        where: { permalink: categoryPermalink },
         select: { id: true },
       });
 
@@ -231,14 +229,14 @@ export const createMatchAction = async ({
 
     return prismaTransaction;
   } catch (error) {
+    let errorMessage = 'Error inesperado';
+
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
         const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
-        return {
-          ok: false,
-          message: `El campo "${fieldError}", está duplicado`,
-          match: null,
-        };
+        errorMessage = `El campo "${fieldError}" está duplicado`;
+      } else {
+        errorMessage = 'Error al crear el encuentro';
       }
 
       console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
@@ -247,21 +245,17 @@ export const createMatchAction = async ({
       console.log('META:', error.meta);
       console.log('MESSAGE:', error.message);
       console.log('='.repeat(54));
-
-      return {
-        ok: false,
-        message: 'Error al crear el encuentro, revise los logs del servidor',
-        match: null,
-      };
+    } else if (error instanceof Error) {
+      console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
+      console.log('MESSAGE:', error.message);
+    } else {
+      console.log(error);
     }
-
-    console.log('='.repeat(20) + ' UNKNOWN ERROR ' + '='.repeat(20));
-    console.log(error);
-    console.log('='.repeat(55));
 
     return {
       ok: false,
-      message: 'Error inesperado, revise los logs del servidor',
+      message: `${errorMessage}, revise los logs del servidor`,
       match: null,
     };
   }

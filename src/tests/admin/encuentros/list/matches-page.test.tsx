@@ -30,8 +30,8 @@ vi.mock('@/shared/components/search-params-selectors', () => ({
   SearchParamsSelectors: () => <div data-testid="search-params-selectors" />,
 }));
 
-vi.mock('@/app/admin/encuentros/matches-content', () => ({
-  MatchesContent: () => <div data-testid="matches-content" />,
+vi.mock('@/app/admin/encuentros/matches-view', () => ({
+  MatchesView: () => <div data-testid="matches-view" />,
 }));
 
 vi.mock('@/app/(public)/components', () => ({
@@ -66,7 +66,9 @@ describe('Tests on MatchesPage', () => {
     });
     render(ServerComponent);
 
-    expect(screen.getByTestId('search-component')).toBeInTheDocument();
+    const search = screen.getByTestId('search-component');
+
+    expect(search).toBeInTheDocument();
   });
 
   test('Should render <ClearFilters /> component', async () => {
@@ -78,7 +80,9 @@ describe('Tests on MatchesPage', () => {
     });
     render(ServerComponent);
 
-    expect(screen.getByTestId('clear-filters')).toBeInTheDocument();
+    const clearFilters = screen.getByTestId('clear-filters');
+
+    expect(clearFilters).toBeInTheDocument();
   });
 
   test('Should render <CreateMatch /> component', async () => {
@@ -90,7 +94,9 @@ describe('Tests on MatchesPage', () => {
     });
     render(ServerComponent);
 
-    expect(screen.getByTestId('create-match')).toBeInTheDocument();
+    const createMatch = screen.getByTestId('create-match');
+
+    expect(createMatch).toBeInTheDocument();
   });
 
   test('Should render <SearchParamsSelectors /> component', async () => {
@@ -102,7 +108,9 @@ describe('Tests on MatchesPage', () => {
     });
     render(ServerComponent);
 
-    expect(screen.getByTestId('search-params-selectors')).toBeInTheDocument();
+    const searchParams = screen.getByTestId('search-params-selectors');
+
+    expect(searchParams).toBeInTheDocument();
   });
 
   test('Should render <MatchesContent /> component', async () => {
@@ -114,6 +122,8 @@ describe('Tests on MatchesPage', () => {
     });
     render(ServerComponent);
 
-    expect(screen.getByTestId('matches-content')).toBeInTheDocument();
+    const matchesView = screen.getByTestId('matches-view');
+
+    expect(matchesView).toBeInTheDocument();
   });
 });

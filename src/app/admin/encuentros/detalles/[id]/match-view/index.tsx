@@ -35,7 +35,11 @@ export const MatchView: FC<Props> = async ({ params }) => {
   const response = await fetchMatchAction(matchId);
 
   if (!response.ok) {
-    redirect(`${ROUTES.ADMIN_MATCHES}?error=${encodeURIComponent(response.message)}`);
+    redirect(
+      ROUTES.ADMIN_MATCHES +
+      '?error=' +
+      encodeURIComponent(response.message),
+    );
   }
 
   const match = response.match as MATCH_TYPE;

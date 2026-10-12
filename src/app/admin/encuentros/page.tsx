@@ -2,7 +2,7 @@ import { Suspense, type FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { ClearFilters } from './(components)/clear-filters';
-import { MatchesContent } from './matches-content';
+import { MatchesView } from './matches-view';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { TournamentsSelectorSkeleton } from '../../(public)/components';
 import { CreateMatch } from './(components)/create-match';
@@ -46,7 +46,7 @@ export const MatchesPage: FC<Props> = ({ searchParams }) => {
                 <SearchParamsSelectors tournamentPromise={tournamentPromise} />
               </Suspense>
               <Suspense>
-                <MatchesContent searchParams={searchParams} />
+                <MatchesView searchParams={searchParams} />
               </Suspense>
             </CardContent>
           </Card>
