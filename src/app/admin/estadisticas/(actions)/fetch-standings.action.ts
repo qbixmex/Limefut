@@ -2,7 +2,6 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import { requireAdmin } from '@/lib/get-session';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type StandingPromise = Promise<{
@@ -198,17 +197,5 @@ export const fetchStandingsAction = async (params: {
   tournamentId: string,
   categoryId: string,
 }): StandingPromise => {
-  const guard = await requireAdmin();
-
-  if (!guard.ok) {
-    return {
-      ok: false,
-      message: guard.message,
-      teams: [],
-      tournament: null,
-      standings: null,
-    };
-  }
-
   return fetchStandingsCached(params);
 };
