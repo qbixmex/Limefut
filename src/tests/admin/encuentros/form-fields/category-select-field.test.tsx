@@ -57,9 +57,9 @@ const categories: Category[] = [
     permalink: 'secundaria-femenil',
   },
   {
-    id: '0cf7028c-1c43-4515-8f38-f5b604876335',
-    name: 'Secundaria Femenil',
-    permalink: 'secundaria-femenil',
+    id: '1d2e3f4a-5b6c-7d8e-9f0a-1b2c3d4e5f6a',
+    name: 'Secundaria Varonil',
+    permalink: 'secundaria-varonil',
   },
 ];
 
