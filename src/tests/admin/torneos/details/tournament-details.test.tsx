@@ -14,7 +14,7 @@ vi.mock('@/app/admin/torneos/(components)/edit-tournament-wrapper', () => ({
   EditTournamentWrapper: (...args: unknown[]) => mockedEditTournamentWrapper(...args),
 }));
 
-vi.mock('@/app/admin/torneos/[id]/tournament-view.tsx', () => ({
+vi.mock('@/app/admin/torneos/[id]/tournament-view', () => ({
   TournamentView: () => <span>Tournament Details</span>,
 }));
 

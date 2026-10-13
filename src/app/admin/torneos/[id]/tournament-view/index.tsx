@@ -4,11 +4,12 @@ import { redirect } from 'next/navigation';
 import { Table, TableBody, TableHead, TableCell, TableRow } from '@/components/ui/table';
 import { Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { fetchTournamentAction, type TOURNAMENT_TYPE } from '../(actions)';
+import { fetchTournamentAction, type TOURNAMENT_TYPE } from '../../(actions)';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { DeleteTournamentImage } from '../(components)/delete-tournament-image';
+import { DeleteTournamentImage } from '../../(components)/delete-tournament-image';
 import { ROUTES } from '@/shared/constants/routes';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   paramsPromise: Promise<{
@@ -21,39 +22,46 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
   const response = await fetchTournamentAction(tournamentId);
 
   if (!response.ok) {
-    redirect(`${ROUTES.ADMIN_TOURNAMENTS}?error=${encodeURIComponent(response.message)}`);
+    redirect(
+      ROUTES.ADMIN_TOURNAMENTS +
+      '?error=' +
+      encodeURIComponent(response.message),
+    );
   }
 
   const tournament = response.tournament as TOURNAMENT_TYPE;
 
   return (
     <div data-testid="tournament-details">
-      <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
-        <div className="w-full xl:max-w-lg flex justify-center">
+      <section className={styles.detailsSection}>
+        <div className={styles.imageColumn}>
           {
             !tournament.imageUrl ? (
-              <div data-testid="tournament-image-placeholder" className="bg-gray-200 dark:bg-gray-800 w-full max-w-[512px] h-auto rounded-xl flex items-center justify-center">
+              <div
+                data-testid="tournament-image-placeholder"
+                className={styles.imagePlaceholder}
+              >
                 <Trophy
                   size={512}
                   strokeWidth={1}
-                  className="stroke-gray-400"
+                  className={styles.placeholderIcon}
                   aria-hidden="true"
                 />
               </div>
             ) : (
-              <div className="w-full">
-                <div className="w-full max-w-[512px] h-auto relative">
+              <div className={styles.imageWrapper}>
+                <div className={styles.imageFrame}>
                   <Image
                     src={tournament.imageUrl}
                     width={512}
                     height={512}
                     alt={tournament.name}
-                    className="w-full max-w-[512px] h-auto rounded-lg object-cover"
+                    className={styles.image}
                     aria-label="Imagen del torneo"
                   />
                   <DeleteTournamentImage
                     teamId={tournament.id}
-                    className="absolute top-2 right-2"
+                    className={styles.imageActions}
                   />
                 </div>
               </div>
@@ -61,26 +69,26 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
           }
         </div>
 
-        <div className="w-full">
-          <div className="w-full flex flex-col gap-0 lg:flex-row lg:gap-5 mb-5">
+        <div className={styles.infoColumn}>
+          <div className={styles.infoTableWrapper}>
             <Table>
               <TableBody>
                 <TableRow>
-                  <TableHead className="w-auto md:w-28 font-semibold">Nombre</TableHead>
+                  <TableHead className={styles.sizedLabelHead}>Nombre</TableHead>
                   <TableCell>
-                    <p className="text-wrap">{tournament.name}</p>
+                    <p className={styles.wrappedText}>{tournament.name}</p>
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableHead className="font-semibold">
-                    <p className="text-wrap">Enlace Permanente</p>
+                  <TableHead className={styles.labelHead}>
+                    <p className={styles.wrappedText}>Enlace Permanente</p>
                   </TableHead>
                   <TableCell>
-                    <p className="whitespace-break-spaces">{tournament.permalink}</p>
+                    <p className={styles.permalink}>{tournament.permalink}</p>
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableHead className="w-auto md:w-28 font-semibold">País</TableHead>
+                  <TableHead className={styles.sizedLabelHead}>País</TableHead>
                   <TableCell>
                     <span role="text" aria-label="País del torneo">
                       {tournament.country ?? 'No disponible'}
@@ -88,7 +96,7 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableHead className="font-semibold">Temporada</TableHead>
+                  <TableHead className={styles.labelHead}>Temporada</TableHead>
                   <TableCell>
                     <span role="text" aria-label="Temporada del torneo">
                       {tournament.season ?? 'No disponible'}
@@ -96,12 +104,12 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableHead className="font-semibold">
+                  <TableHead className={styles.labelHead}>
                     Ciudades
                   </TableHead>
                   <TableCell>
                     <p
-                      className="text-wrap"
+                      className={styles.wrappedText}
                       role="text"
                       aria-label="Ciudades del torneo"
                     >
@@ -114,12 +122,12 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableHead className="font-semibold">
-                    <p className="text-wrap">Fecha Inicial</p>
+                  <TableHead className={styles.labelHead}>
+                    <p className={styles.wrappedText}>Fecha Inicial</p>
                   </TableHead>
                   <TableCell>
                     <span
-                      className="text-pretty"
+                      className={styles.prettyText}
                       role="text"
                       aria-label="Fecha inicial"
                     >
@@ -128,10 +136,10 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableHead className="font-semibold">Fecha Final</TableHead>
+                  <TableHead className={styles.labelHead}>Fecha Final</TableHead>
                   <TableCell>
                     <span
-                      className="text-pretty"
+                      className={styles.prettyText}
                       role="text"
                       aria-label="Fecha final"
                     >
@@ -140,7 +148,7 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableHead className="font-medium">Activo</TableHead>
+                  <TableHead className={styles.labelHeadMedium}>Activo</TableHead>
                   <TableCell>
                     {
                       tournament.active
@@ -171,11 +179,11 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
         </div>
       </section>
 
-      <section className="mb-5">
-        <p className="text-lg font-semibold text-emerald-600 dark:text-emerald-500 mb-2">Descripción</p>
+      <section className={styles.contentSection}>
+        <p className={`${styles.sectionTitle} ${styles.descriptionTitle}`}>Descripción</p>
         {tournament.description ? (
           <p
-            className="text-pretty"
+            className={styles.prettyText}
             aria-label="Descripción del torneo"
           >
             {tournament.description}
@@ -191,17 +199,17 @@ export const TournamentView: FC<Props> = async ({ paramsPromise }) => {
         )}
       </section>
 
-      <section className="mb-5">
-        <h2 className="text-lg font-semibold text-emerald-600 dark:text-emerald-500 mb-5">
+      <section className={styles.contentSection}>
+        <h2 className={`${styles.sectionTitle} ${styles.categoriesTitle}`}>
           Categorías{' '}
           <span
-            className="text-gray-500 text-base font-semibold"
+            className={styles.categoryCount}
           >
             ({tournament.categories.length})
           </span>
         </h2>
 
-        <div className="flex flex-wrap gap-2">
+        <div className={styles.categoriesList}>
           {(tournament.categories.length > 0) && (
             tournament.categories.map((category) => (
               <Badge

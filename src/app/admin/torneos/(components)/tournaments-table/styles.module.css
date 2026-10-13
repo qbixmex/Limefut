@@ -1,0 +1,172 @@
+@reference "#globals.css";
+
+.errorContainer {
+  border: 1px solid var(--color-red-500);
+  padding: --spacing(5);
+  border-radius: 0.25rem;
+}
+
+.errorMessage {
+  color: var(--color-red-500);
+  text-align: center;
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.tableContainer {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tableWrapper {
+  flex: 1 1 0%;
+}
+
+.imageColumnHead {
+  display: none;
+  width: 100px;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.seasonColumnHead {
+  display: none;
+  width: --spacing(25);
+  text-align: center;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.categoriesColumnHead {
+  display: none;
+  width: --spacing(25);
+  text-align: center;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.startDateColumnHead {
+  display: none;
+  width: --spacing(25);
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.endDateColumnHead {
+  display: none;
+  width: --spacing(25);
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.activeColumnHead {
+  display: none;
+  text-align: center;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.imageColumnCell {
+  display: none;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.placeholderFigure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border: 1px solid var(--color-gray-400);
+  border-radius: var(--radius-lg);
+
+  @variant dark {
+    border: 0;
+    background-color: var(--color-gray-800);
+  }
+}
+
+.placeholderIcon {
+  stroke: var(--color-gray-400);
+}
+
+.tournamentImage {
+  width: --spacing(18);
+  height: --spacing(18);
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+}
+
+.seasonColumnCell {
+  display: none;
+  text-align: center;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.categoriesColumnCell {
+  display: none;
+  text-align: center;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.startDateColumnCell {
+  display: none;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.endDateColumnCell {
+  display: none;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.activeColumnCell {
+  display: none;
+  text-align: center;
+
+  @variant lg {
+    display: table-cell;
+  }
+}
+
+.rowActions {
+  display: flex;
+  gap: --spacing(3);
+}
+
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: --spacing(10);
+}
+
+.paginationHidden {
+  display: none;
+}
