@@ -10,17 +10,19 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Trophy } from 'lucide-react';
-import { fetchTournamentsAction, updateTournamentStateAction } from '../(actions)';
-import { DeleteTournament } from './delete-tournament';
+import { fetchTournamentsAction, updateTournamentStateAction } from '../../(actions)';
+import { DeleteTournament } from '../delete-tournament';
 import { Pagination } from '@/shared/components/pagination';
 import { cn } from '@/lib/utils';
 import { ActiveSwitch } from '@/shared/components/active-switch';
 import { Badge } from '@/components/ui/badge';
-import { ShowTournamentDetails } from './show-tournament-details';
-import { EditTournament } from './edit-tournament';
+import { ShowTournamentDetails } from '../show-tournament-details';
+import { EditTournament } from '../edit-tournament';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ROUTES } from '@/shared/constants/routes';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import styles from './styles.module.css';
 
 type Props = Readonly<{
   query: string;
@@ -44,8 +46,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
 
   if (!ok) {
     return (
-      <div className="border border-red-500 p-5 rounded">
-        <p className="text-red-500 text-center text-xl font-semibold">
+      <div className={styles.errorContainer}>
+        <p className={styles.errorMessage}>
           {message}
         </p>
       </div>
@@ -55,25 +57,25 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
   return (
     <>
       {tournaments && tournaments.length > 0 ? (
-        <div className="flex-1 flex flex-col">
-          <div className="flex-1">
+        <div className={styles.tableContainer}>
+          <div className={styles.tableWrapper}>
             <Table aria-label="Tabla de datos">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px] hidden lg:table-cell">Imagen</TableHead>
+                  <TableHead className={styles.imageColumnHead}>Imagen</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead className="hidden lg:table-cell w-25 text-center">Temporada</TableHead>
-                  <TableHead className="hidden lg:table-cell w-25 text-center">Categorías</TableHead>
-                  <TableHead className="hidden lg:table-cell w-25">Fecha Inicial</TableHead>
-                  <TableHead className="hidden lg:table-cell w-25">Fecha Final</TableHead>
-                  <TableHead className="hidden lg:table-cell text-center">Activo</TableHead>
+                  <TableHead className={styles.seasonColumnHead}>Temporada</TableHead>
+                  <TableHead className={styles.categoriesColumnHead}>Categorías</TableHead>
+                  <TableHead className={styles.startDateColumnHead}>Fecha Inicial</TableHead>
+                  <TableHead className={styles.endDateColumnHead}>Fecha Final</TableHead>
+                  <TableHead className={styles.activeColumnHead}>Activo</TableHead>
                   <TableHead>&nbsp;</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {tournaments.map((tournament) => (
                   <TableRow key={tournament.id}>
-                    <TableCell className="hidden lg:table-cell">
+                    <TableCell className={styles.imageColumnCell}>
                       <Link
                         href={ROUTES.ADMIN_TOURNAMENTS_SHOW(tournament.id)}
                         aria-label={`Enlace a ${tournament.name}`}
@@ -81,8 +83,8 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                       >
                         {
                           !tournament.imageUrl ? (
-                            <figure className="border border-gray-400 dark:border-0 dark:bg-gray-800 size-[60px] rounded-lg flex items-center justify-center">
-                              <Trophy size={35} className="stroke-gray-400" />
+                            <figure className={styles.placeholderFigure}>
+                              <Trophy size={35} className={styles.placeholderIcon} />
                             </figure>
                           ) : (
                             <Image
@@ -90,7 +92,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                               alt={`${tournament.name} picture`}
                               width={75}
                               height={75}
-                              className="size-18 rounded-xl object-cover"
+                              className={styles.tournamentImage}
                             />
                           )
                         }
@@ -99,10 +101,10 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                     <TableCell aria-label="Nombre del torneo">
                       {tournament.name}
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell text-center">
+                    <TableCell className={styles.seasonColumnCell}>
                       {tournament.season}
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell text-center">
+                    <TableCell className={styles.categoriesColumnCell}>
                       <Badge
                         variant={
                           (tournament.categoriesQuantity > 0)
@@ -115,13 +117,13 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                         {tournament.categoriesQuantity}
                       </Badge>
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell">
+                    <TableCell className={styles.startDateColumnCell}>
                       {format(tournament.startDate, "EEE d MMM',' y", { locale: es })}
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell">
+                    <TableCell className={styles.endDateColumnCell}>
                       {format(tournament.endDate, "EEE d MMM',' y", { locale: es })}
                     </TableCell>
-                    <TableCell className="hidden lg:table-cell text-center">
+                    <TableCell className={styles.activeColumnCell}>
                       <ActiveSwitch
                         resource={{
                           id: tournament.id,
@@ -131,7 +133,7 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
                       />
                     </TableCell>
                     <TableCell>
-                      <div className="flex gap-3">
+                      <div className={styles.rowActions}>
                         <ShowTournamentDetails tournamentId={tournament.id} />
                         <EditTournament tournamentId={tournament.id } />
                         <DeleteTournament tournamentId={tournament.id} />
@@ -143,19 +145,17 @@ export const TournamentsTable: FC<Props> = async ({ query, currentPage }) => {
             </Table>
           </div>
           <div
-            className={cn('flex justify-center mt-10', {
-              hidden: pagination!.totalPages === 1,
+            className={cn(styles.paginationWrapper, {
+              [styles.paginationHidden]: pagination!.totalPages === 1,
             })}
           >
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            Aún no hay torneos creados
-          </p>
-        </div>
+        <EmptyMessageResource>
+          Aún no hay torneos creados
+        </EmptyMessageResource>
       )}
     </>
   );
