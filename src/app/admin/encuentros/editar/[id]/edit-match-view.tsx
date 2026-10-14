@@ -111,7 +111,7 @@ export const EditMatchView: FC<Props> = async ({ params, searchParams }) => {
     <>
       <section>
         <EditMatchForm
-          key={`${responseMatch.match?.tournament.id ?? 'tournament'}`}
+          key={`${match.id}-${match.updatedAt}`}
           tournaments={tournamentsResponse.tournaments}
           categories={categories}
           teams={teams}
