@@ -2,7 +2,7 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
 import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -35,6 +35,7 @@ export type MatchResponse = {
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
+  mode: MATCH_MODE_TYPE;
   week: number | null;
   field: {
     id: string;
@@ -129,6 +130,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
       localScore: true,
       visitorScore: true,
       status: true,
+      mode: true,
       week: true,
       field: {
         select: {
@@ -149,6 +151,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
     const data = await prisma.match.findMany({
       where: {
         OR: [
+          { status: 'inProgress' },
           { status: 'scheduled' },
           { status: 'completed' },
           { status: 'canceled' },

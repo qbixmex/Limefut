@@ -2,6 +2,7 @@ import { LatestResults } from '@/app/(public)/components/latest-results';
 import { render, screen } from '@testing-library/react';
 import { fetchPublicLatestMatchesAction } from '@/app/(public)/(actions)/home/fetchPublicLatestMatchesAction';
 import { latestMatches } from '@/tests/mocks/latest_matches';
+import { getMatchMode } from '@/lib/utils';
 
 vi.mock('@/app/(public)/(actions)/home/fetchPublicLatestMatchesAction');
 
@@ -191,6 +192,32 @@ describe('Test on <LatestResults /> component', () => {
       expect(
         screen.getByLabelText(`Goles del equipo visitante ${match.visitorTeam.name}`),
       ).toBeInTheDocument();
+    });
+  });
+
+  test('Should show match mode', async () => {
+    vi.mocked(fetchPublicLatestMatchesAction).mockResolvedValue({
+      ok: true,
+      message: 'Encuentros obtenidos exitosamente',
+      matches: latestMatches,
+      pagination: {
+        nextMatches: 5,
+        totalPages: 16,
+      },
+    });
+
+    const serverComponent = await LatestResults({
+      resultsPromise: Promise.resolve({
+        latestResultsPage: '1',
+        page: '1',
+      }),
+    });
+    render(serverComponent);
+
+    latestMatches.forEach((match) => {
+      expect(
+        screen.getAllByText(getMatchMode(match.mode)),
+      ).toHaveLength(1);
     });
   });
 });

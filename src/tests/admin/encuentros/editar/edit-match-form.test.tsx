@@ -62,7 +62,7 @@ describe('Test on <EditMatchForm />', () => {
   test('Should pass the match to the hook', () => {
     render(<EditMatchForm {...props} />);
 
-    expect(vi.mocked(useEditMatch)).toHaveBeenCalledWith({ match: matchForEditMock });
+    expect(vi.mocked(useEditMatch)).toHaveBeenCalledWith(matchForEditMock);
   });
 
   test('Should pass the match and hidden scores to the form fields', () => {

@@ -2,7 +2,8 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_STATUS } from '@/shared/enums';
 import type { Pagination } from '@/shared/interfaces';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -15,6 +16,7 @@ type Options = Readonly<{
   sortMatchDate?: 'asc' | 'desc';
   sortWeek?: `${number}` | 'asc' | 'desc' | 'unassigned' | undefined;
   status?: MATCH_STATUS_TYPE;
+  mode?: MATCH_MODE_TYPE;
 }>;
 
 export type MATCH_TYPE = {
@@ -24,19 +26,13 @@ export type MATCH_TYPE = {
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
+  mode: MATCH_MODE_TYPE;
   week: number | null;
   matchDate: Date | null;
   penaltyShootout: PenaltyShootout | null;
-  field: FIELD_TYPE | null;
 };
 
 type TEAM_TYPE = {
-  id: string;
-  name: string;
-  permalink: string;
-};
-
-type FIELD_TYPE = {
   id: string;
   name: string;
   permalink: string;
@@ -69,6 +65,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   const sortMatchDate = options?.sortMatchDate;
   const sortWeek = options?.sortWeek;
   const status = options?.status;
+  const mode = options?.mode;
 
   // In case is an invalid number like (lorem)
   if (isNaN(page)) page = 1;
@@ -91,6 +88,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         ? Number(sortWeek)
         : undefined,
     status,
+    mode,
   };
 
   if (options?.searchTerm) {
@@ -146,16 +144,10 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
       localScore: true,
       visitorScore: true,
       status: true,
+      mode: true,
       week: true,
       matchDate: true,
       category: {
-        select: {
-          id: true,
-          name: true,
-          permalink: true,
-        },
-      },
-      field: {
         select: {
           id: true,
           name: true,
@@ -190,7 +182,15 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
     const matches = await prisma.match.findMany({
       where: whereCondition,
       orderBy: [
-        { week: sortWeek === 'unassigned' ? undefined : (isNaN(parseInt(sortWeek as string)) ? sortWeek as 'asc' | 'desc' : undefined) },
+        {
+          week: sortWeek === 'unassigned'
+            ? undefined
+            : (
+              isNaN(parseInt(sortWeek as string))
+                ? sortWeek as 'asc' | 'desc'
+                : undefined
+            ),
+        },
         { matchDate: sortMatchDate },
       ],
       take,
@@ -210,8 +210,8 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS_TYPE,
+        mode: match.mode,
         week: match.week,
-        field: match.field,
         matchDate: match.matchDate,
         penaltyShootout: match.penaltyShootout,
       })),

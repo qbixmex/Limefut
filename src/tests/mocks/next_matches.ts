@@ -1,4 +1,4 @@
-import { MATCH_STATUS, STAGE } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS, STAGE } from '@/shared/enums';
 
 export const nextMatches = [
   {
@@ -25,6 +25,7 @@ export const nextMatches = [
     localScore: 0,
     visitorScore: 0,
     status: MATCH_STATUS.SCHEDULED,
+    mode: MATCH_MODE.FRIENDLY,
     week: 1,
     field: {
       id: 'field-soccer',

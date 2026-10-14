@@ -16,10 +16,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { MatchStatus } from './match-status';
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_STATUS } from '@/shared/enums';
+import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { PenaltyShootout } from '@/shared/components/penalty-shootouts';
 import { ROUTES } from '@/shared/constants/routes';
 import './styles.css';
+import { getMatchMode } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 const TIME_ZONE = 'America/Mexico_City';
 
@@ -153,6 +156,21 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
               <TableRow>
                 <TableHead>Temporada</TableHead>
                 <TableCell>{tournament.season}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead>Modalidad</TableHead>
+                <TableCell>
+                  <Badge
+                    variant={
+                      ((match as MatchType).mode === 'league')
+                        ? 'outline-primary'
+                        : 'outline-special'
+                    }
+                    className="uppercase font-semibold w-25"
+                  >
+                    {getMatchMode((match as MatchType).mode)}
+                  </Badge>
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>

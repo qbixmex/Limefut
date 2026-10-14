@@ -58,6 +58,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                       field={match.field}
                       date={match.matchDate}
                       status={match.status}
+                      mode={match.mode}
                     />
                   </div>
                   <div className={styles.match}>
@@ -74,6 +75,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                       <span
                         className={cn(styles.matchGoals, {
                           [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
+                          [styles.matchInProgress]: match.status === MATCH_STATUS.IN_PROGRESS,
                           [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
                         })}
                         role="heading"
@@ -86,7 +88,12 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                             match.status === MATCH_STATUS.CANCELED
                           ) && <Minus strokeWidth={5} width={15} />
                         }
-                        {match.status === MATCH_STATUS.COMPLETED && match.localScore}
+                        {
+                          (
+                            match.status === MATCH_STATUS.COMPLETED ||
+                            match.status === MATCH_STATUS.IN_PROGRESS
+                          ) && match.localScore
+                        }
                       </span>
                       {
                         (
@@ -99,6 +106,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                       <span
                         className={cn(styles.matchGoals, {
                           [styles.matchPending]: match.status !== MATCH_STATUS.COMPLETED,
+                          [styles.matchInProgress]: match.status === MATCH_STATUS.IN_PROGRESS,
                           [styles.matchCompleted]: match.status === MATCH_STATUS.COMPLETED,
                         })}
                         role="heading"
@@ -111,7 +119,12 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                             match.status === MATCH_STATUS.CANCELED
                           ) && <Minus strokeWidth={5} width={15} />
                         }
-                        {match.status === MATCH_STATUS.COMPLETED && match.visitorScore}
+                        {
+                          (
+                            match.status === MATCH_STATUS.COMPLETED ||
+                            match.status === MATCH_STATUS.IN_PROGRESS
+                          ) && match.visitorScore
+                        }
                       </span>
                       {match.penaltyShoots && (
                         <span className={styles.shoot}>

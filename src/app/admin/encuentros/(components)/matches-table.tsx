@@ -24,11 +24,13 @@ import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-matches.
 import { WeeksSelector } from './weeks-selector';
 import { DateSelector } from './date-selector';
 import { StatusSelector } from './status-selector';
+import { ModeSelector } from './mode-selector';
 import { formatInTimeZone } from 'date-fns-tz';
 import { EditMatch } from './edit-match';
 import { ROUTES } from '@/shared/constants/routes';
 import { MatchDetails } from './match-details';
 import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import { getMatchMode } from '@/lib/utils';
 
 type Props = Readonly<{
   matches: MATCH_TYPE[];
@@ -51,7 +53,9 @@ export const MatchesTable: FC<Props> = ({
           <TableHeader>
             <TableRow className="h-16">
               <TableHead className="w-full md:w-1/2">Encuentro</TableHead>
-              <TableHead className="hidden md:table-cell md:min-w-[150px]">Sede</TableHead>
+              <TableHead className="w-25 text-center">
+                <ModeSelector />
+              </TableHead>
               <TableHead className="w-25 text-center">
                 <WeeksSelector weeks={matchesWeeks} />
               </TableHead>
@@ -61,7 +65,7 @@ export const MatchesTable: FC<Props> = ({
               <TableHead className="w-25">
                 <DateSelector label="hour" />
               </TableHead>
-              <TableHead className="w-[120px]" colSpan={2}>
+              <TableHead className="w-[120px]">
                 <StatusSelector />
               </TableHead>
             </TableRow>
@@ -155,26 +159,19 @@ export const MatchesTable: FC<Props> = ({
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {match.field ? (
-                    <Link
-                      href={ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}
-                      title={`Ver detalles de la cancha ${match.field.name}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <span className="font-semibold text-gray-600 dark:text-gray-500 text-balance">
-                        {match.field.name}
-                      </span>
-                    </Link>
-                  ) : (
-                    <Badge
-                      variant="outline-secondary"
-                      data-testid={match.id}
-                    >
-                      no disponible
-                    </Badge>
-                  )}
+                <TableCell>
+                  <Badge
+                    variant={
+                      match.mode === 'league'
+                        ? 'outline-primary'
+                        : 'outline-special'
+                    }
+                    className="w-25 uppercase"
+                    role="status"
+                    aria-label="Modo del encuentro"
+                  >
+                    {getMatchMode(match.mode)}
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-center">
                   {
@@ -275,7 +272,7 @@ export const MatchesTable: FC<Props> = ({
         }
       </div>
       {
-        (matches.length > 1) && (
+        (matches.length > 0 && pagination.totalPages > 1) && (
           <div className="flex justify-center mt-10">
             <Pagination totalPages={pagination!.totalPages as number} />
           </div>

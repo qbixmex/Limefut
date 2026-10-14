@@ -7,6 +7,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { getMatchStatus } from '@/app/(public)/resultados/(helpers)/status';
 import { fetchPublicResultsAction } from '@/app/(public)/resultados/(actions)/fetch-public-results.action';
+import { getMatchMode } from '@/lib/utils';
 
 vi.mock('@/app/(public)/resultados/(actions)/fetch-public-results.action');
 
@@ -218,6 +219,31 @@ describe('Test on <RolesMatches /> component', () => {
     matchStatuses.forEach((element, index) => {
       const expectedStatus = getMatchStatus(matches[index].status as MATCH_STATUS_TYPE).label;
       expect(element).toHaveTextContent(expectedStatus!);
+    });
+  });
+
+  test('Should matches mode', async () => {
+    vi.mocked(fetchPublicResultsAction).mockResolvedValue({
+      ok: true,
+      message: 'Los encuentros fueron obtenidos correctamente',
+      matches,
+    });
+    const ServerComponent = await RolesMatches({
+      tournamentPermalink: 'jóvenes-promesas',
+      categoryPermalink: 'secundaria-varonil',
+      teamPermalink: 'club-country',
+      roles: 'complete',
+    });
+    render(ServerComponent, { wrapper: TooltipProvider });
+
+    const matchModes = screen.getAllByRole('status', {
+      name: /modalidad del encuentro/i,
+    });
+
+    expect(matchModes).toHaveLength(matches.length);
+
+    matchModes.forEach((element, index) => {
+      expect(element).toHaveTextContent(getMatchMode(matches[index].mode));
     });
   });
 

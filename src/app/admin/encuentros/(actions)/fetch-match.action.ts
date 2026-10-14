@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type MATCH_TYPE = {
@@ -11,12 +11,12 @@ export type MATCH_TYPE = {
     name: string;
   } | null;
   matchDate: Date | null;
+  mode: MATCH_MODE_TYPE;
   week: number | null;
   referee: string | null;
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
-  createdAt: Date;
   localTeam: TEAM_TYPE
     & { players: PLAYER_TYPE[]; }
     & { fields: FIELD_TYPE[]; };
@@ -26,6 +26,8 @@ export type MATCH_TYPE = {
   tournament: TOURNAMENT_TYPE;
   category: CATEGORY_TYPE | null;
   penaltyShootout: PENALTY_SHOOTOUT_TYPE | null;
+  updatedAt: Date;
+  createdAt: Date;
 };
 
 type TEAM_TYPE = {
@@ -80,13 +82,11 @@ type FetchResponse = Promise<{
   match: MATCH_TYPE | null,
 }>;
 
-export const fetchMatchAction = async (
-  id: string,
-): FetchResponse => {
+export const fetchMatchAction = async (id: string): FetchResponse => {
   'use cache';
 
-  cacheLife('days');
-  cacheTag('admin-match');
+  cacheLife('max');
+  cacheTag(`admin-match-${id}`);
 
   try {
     const match = await prisma.match.findUnique({
@@ -100,11 +100,13 @@ export const fetchMatchAction = async (
           },
         },
         matchDate: true,
+        mode: true,
         week: true,
         referee: true,
         localScore: true,
         visitorScore: true,
         status: true,
+        updatedAt: true,
         createdAt: true,
         local: {
           select: {
@@ -218,9 +220,9 @@ export const fetchMatchAction = async (
         id: match.id,
         field: match.field,
         matchDate: match.matchDate,
+        mode: match.mode,
         week: match.week,
         referee: match.referee,
-        createdAt: match.createdAt,
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS_TYPE,
@@ -239,6 +241,8 @@ export const fetchMatchAction = async (
         },
         category: match.category,
         penaltyShootout: match.penaltyShootout,
+        createdAt: match.createdAt,
+        updatedAt: match.updatedAt,
       },
     };
   } catch (error) {

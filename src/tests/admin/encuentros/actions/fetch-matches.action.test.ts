@@ -15,7 +15,7 @@ vi.mock('@/lib/prisma', () => ({
 }));
 
 import { fetchMatchesAction } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 
 const tournamentId = 'f641c5b8-0bcb-4b2c-ab90-27210ba17dac';
 const categoryId = '1ff58d74-2761-42f2-8250-2e009937921f';
@@ -32,6 +32,7 @@ const rawMatches = [
     matchDate: new Date(2026, 2, 15, 20, 30),
     penaltyShootout: null,
     field: { id: 'b9c2b88d-7bd5-4a76-ae77-579917e5b57f', name: 'Estadio Azteca', permalink: 'estadio-azteca' },
+    mode: MATCH_MODE.LEAGUE,
   },
   {
     id: '9aef9ace-ee7e-4d73-8f8e-105da715844e',
@@ -44,6 +45,7 @@ const rawMatches = [
     matchDate: new Date(2026, 2, 15, 20, 30),
     penaltyShootout: null,
     field: { id: 'b9c2b88d-7bd5-4a76-ae77-579917e5b57f', name: 'Estadio Azteca', permalink: 'estadio-azteca' },
+    mode: MATCH_MODE.FRIENDLY,
   },
 ];
 
@@ -77,6 +79,24 @@ describe('Tests on fetchMatchesAction server action', () => {
     );
   });
 
+  test('Should map the match mode of every match', async () => {
+    const response = await fetchMatchesAction({
+      tournamentId,
+      categoryId,
+      searchTerm: '',
+    });
+
+    expect(response.matches.map((match) => match.mode)).toEqual([
+      MATCH_MODE.LEAGUE,
+      MATCH_MODE.FRIENDLY,
+    ]);
+    expect(mockMatchFindMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        select: expect.objectContaining({ mode: true }),
+      }),
+    );
+  });
+
   test('Should map null scores to zero', async () => {
     mockMatchFindMany.mockResolvedValue([
       { ...rawMatches[0], localScore: null, visitorScore: null },
@@ -107,6 +127,20 @@ describe('Tests on fetchMatchesAction server action', () => {
         categoryId,
         status: MATCH_STATUS.COMPLETED,
       }),
+    );
+  });
+
+  test('Should filter by mode', async () => {
+    await fetchMatchesAction({
+      tournamentId,
+      categoryId,
+      searchTerm: '',
+      mode: MATCH_MODE.FRIENDLY,
+    });
+
+    const findManyArgs = mockMatchFindMany.mock.calls[0][0];
+    expect(findManyArgs.where).toEqual(
+      expect.objectContaining({ mode: MATCH_MODE.FRIENDLY }),
     );
   });
 

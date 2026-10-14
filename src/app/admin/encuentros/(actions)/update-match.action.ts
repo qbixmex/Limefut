@@ -3,7 +3,8 @@
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
 import { editMatchSchema } from '@/shared/schemas';
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_STATUS } from '@/shared/enums';
 import { Prisma } from '@/generated/prisma/client';
 import { requireAdmin } from '@/lib/get-session';
 
@@ -41,10 +42,7 @@ export type MATCH_TYPE = {
   };
 };
 
-export const updateMatchAction = async ({
-  formData,
-  matchId,
-}: {
+export const updateMatchAction = async ({ formData, matchId }: {
   formData: FormData;
   matchId: string;
 }): EditResponseAction => {
@@ -71,6 +69,7 @@ export const updateMatchAction = async ({
     status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
     tournament: formData.get('tournament') ?? '',
     category: formData.get('category') ?? '',
+    mode: formData.get('mode') ?? undefined,
     week: formData.get('week') ? Number(formData.get('week')) : 0,
   };
 
@@ -91,212 +90,174 @@ export const updateMatchAction = async ({
   } = matchVerified.data;
 
   try {
-    const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      try {
-        const match = await transaction.match.findFirst({
-          where: { id: matchId },
+    const match = await prisma.match.findFirst({
+      where: { id: matchId },
+      select: {
+        id: true,
+        tournament: {
           select: {
             id: true,
-            tournament: {
-              select: {
-                id: true,
-                permalink: true,
-              },
-            },
-            category: {
-              select: {
-                id: true,
-                permalink: true,
-              },
-            },
+            permalink: true,
           },
-        });
-
-        if (!match) {
-          return {
-            ok: false,
-            message: 'El encuentro no existe o ha sido eliminado',
-            match: null,
-          };
-        }
-
-        let tournamentId: string | undefined;
-
-        if (match.tournament.permalink !== tournamentPermalink) {
-          const tournament = await transaction.tournament.findFirst({
-            where: { permalink: tournamentPermalink },
-            select: { id: true },
-          });
-
-          if (!tournament) {
-            return {
-              ok: false,
-              message: `El torneo con el enlace permanente: [${tournamentPermalink}] no existe`,
-              match: null,
-            };
-          }
-
-          tournamentId = tournament.id;
-        }
-
-        let categoryId: string | undefined;
-
-        if (match.category?.permalink !== categoryPermalink) {
-          const category = await transaction.category.findFirst({
-            where: { permalink: categoryPermalink },
-            select: { id: true },
-          });
-
-          if (!category) {
-            return {
-              ok: false,
-              message: `La categoría con el enlace permanente: [${categoryPermalink}] no existe`,
-              match: null,
-            };
-          }
-
-          categoryId = category.id;
-        }
-
-        const updatedMatch = await transaction.match.update({
-          where: { id: matchId },
-          data: {
-            localId: matchToSave.localTeamId,
-            visitorId: matchToSave.visitorTeamId,
-            fieldId: matchToSave.fieldId ?? null,
-            referee: matchToSave.referee,
-            localScore: matchToSave.localScore,
-            visitorScore: matchToSave.visitorScore,
-            matchDate: matchToSave.matchDate,
-            status: matchToSave.status as MATCH_STATUS_TYPE,
-            tournamentId,
-            categoryId,
-            week: matchToSave.week !== 0
-              ? matchToSave.week
-              : null,
-          },
+        },
+        category: {
           select: {
             id: true,
-            localScore: true,
-            visitorScore: true,
-            matchDate: true,
-            week: true,
-            referee: true,
-            status: true,
-            local: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            visitor: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
-            tournament: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
-            },
-            category: {
-              select: {
-                id: true,
-                name: true,
-                permalink: true,
-              },
-            },
+            permalink: true,
           },
-        });
+        },
+      },
+    });
 
-        // Update Cache
-        updateTag('admin-matches');
-        updateTag('admin-match');
-        updateTag('admin-tournament-for-match');
-        updateTag('admin-teams-for-match');
-        updateTag('matches');
-        updateTag('dashboard-results');
-        updateTag('public-matches');
-        updateTag('public-results-roles');
-        updateTag('public-result-details');
-        updateTag('public-matches-count');
-        updateTag('public-team-matches');
-        updateTag('public-team-standings');
+    if (!match) {
+      return {
+        ok: false,
+        message: 'El encuentro no existe o ha sido eliminado',
+        match: null,
+      };
+    }
 
-        return {
-          ok: true,
-          message: 'El encuentro fue actualizado correctamente',
-          match: {
-            ...updatedMatch,
-            localTeam: updatedMatch.local,
-            visitorTeam: updatedMatch.visitor,
-            localScore: updatedMatch.localScore as number,
-            visitorScore: updatedMatch.visitorScore as number,
-            status: updatedMatch.status as MATCH_STATUS_TYPE,
-            tournament: {
-              id: updatedMatch.tournament.id,
-              name: updatedMatch.tournament.name,
-              permalink: updatedMatch.tournament.permalink,
-            },
-            category: updatedMatch.category,
-          },
-        };
-      } catch (error) {
-        let errorMessage = 'Error inesperado';
+    let tournamentId: string | undefined;
 
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          const fieldError = (error.meta as { target?: string[] } | undefined)?.target?.[0];
+    if (match.tournament.permalink !== tournamentPermalink) {
+      const tournament = await prisma.tournament.findFirst({
+        where: { permalink: tournamentPermalink },
+        select: { id: true },
+      });
 
-          if (error.code === 'P2001') {
-            errorMessage = `El campo "${fieldError}" no existe`;
-          } else if (error.code === 'P2002') {
-            errorMessage = `El campo "${fieldError}" está duplicado`;
-          } else {
-            errorMessage = 'Error al actualizar el encuentro';
-          }
-
-          console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
-          console.log('CAUSE:', error.cause);
-          console.log('NAME:', error.name);
-          console.log('META:', error.meta);
-          console.log('MESSAGE:', error.message);
-          console.log('='.repeat(54));
-        } else if (error instanceof Error) {
-          console.log('CAUSE:', error.cause);
-          console.log('NAME:', error.name);
-          console.log('MESSAGE:', error.message);
-        } else {
-          console.log(error);
-        }
-
+      if (!tournament) {
         return {
           ok: false,
-          message: `${errorMessage}, revise los logs del servidor`,
+          message: `El torneo con el enlace permanente: [${tournamentPermalink}] no existe`,
           match: null,
         };
       }
+
+      tournamentId = tournament.id;
+    }
+
+    let categoryId: string | undefined;
+
+    if (match.category?.permalink !== categoryPermalink) {
+      const category = await prisma.category.findFirst({
+        where: { permalink: categoryPermalink },
+        select: { id: true },
+      });
+
+      if (!category) {
+        return {
+          ok: false,
+          message: `La categoría con el enlace permanente: [${categoryPermalink}] no existe`,
+          match: null,
+        };
+      }
+
+      categoryId = category.id;
+    }
+
+    const updatedMatch = await prisma.match.update({
+      where: { id: matchId },
+      data: {
+        localId: matchToSave.localTeamId,
+        visitorId: matchToSave.visitorTeamId,
+        fieldId: matchToSave.fieldId ?? null,
+        referee: matchToSave.referee,
+        localScore: matchToSave.localScore,
+        visitorScore: matchToSave.visitorScore,
+        matchDate: matchToSave.matchDate,
+        status: matchToSave.status as MATCH_STATUS_TYPE,
+        tournamentId,
+        categoryId,
+        mode: matchToSave.mode as MATCH_MODE_TYPE | undefined,
+        week: matchToSave.week !== 0
+          ? matchToSave.week
+          : null,
+      },
+      select: {
+        id: true,
+        localScore: true,
+        visitorScore: true,
+        matchDate: true,
+        week: true,
+        referee: true,
+        status: true,
+        local: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        visitor: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        tournament: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            permalink: true,
+          },
+        },
+      },
     });
 
-    return prismaTransaction;
+    // Update Cache
+    updateTag('admin-matches');
+    updateTag(`admin-match-${matchId}`);
+    updateTag('admin-tournament-for-match');
+    updateTag('admin-teams-for-match');
+    updateTag('matches');
+    updateTag('dashboard-results');
+    updateTag('public-matches');
+    updateTag('public-results-roles');
+    updateTag('public-result-details');
+    updateTag('public-matches-count');
+    updateTag('public-team-matches');
+    updateTag('public-team-standings');
+
+    return {
+      ok: true,
+      message: 'El encuentro fue actualizado correctamente',
+      match: {
+        ...updatedMatch,
+        localScore: updatedMatch.localScore as number,
+        visitorScore: updatedMatch.visitorScore as number,
+        status: updatedMatch.status as MATCH_STATUS_TYPE,
+        tournament: {
+          id: updatedMatch.tournament.id,
+          name: updatedMatch.tournament.name,
+          permalink: updatedMatch.tournament.permalink,
+        },
+        category: updatedMatch.category,
+      },
+    };
   } catch (error) {
     let errorMessage = 'Error inesperado';
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
-
-        errorMessage = `El campo "${fieldError}" está duplicado`;
+      if (error.code === 'P2001') {
+        errorMessage = 'El encuentro no existe';
+      } else if (error.code === 'P2002') {
+        errorMessage = 'Hay campos duplicados';
       } else {
         errorMessage = 'Error al actualizar el encuentro';
       }
 
+      console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
       console.log('CAUSE:', error.cause);
       console.log('NAME:', error.name);
       console.log('META:', error.meta);
       console.log('MESSAGE:', error.message);
+      console.log('='.repeat(54));
     } else if (error instanceof Error) {
       console.log('CAUSE:', error.cause);
       console.log('NAME:', error.name);

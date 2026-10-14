@@ -11,7 +11,7 @@ vi.mock('@/lib/prisma', () => ({
 }));
 
 import { fetchMatchAction } from '@/app/admin/encuentros/(actions)/fetch-match.action';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 import { AMERICA, CHIVAS } from '../mocks/teams.mock';
 import { LIGA_MX } from '../mocks/tournaments.mock';
 import { SUB_15 } from '../mocks/categories.mock';
@@ -24,6 +24,7 @@ const rawMatch = {
   id: matchId,
   field: { id: ESTADIO_AZTECA.id, name: ESTADIO_AZTECA.name },
   matchDate: new Date('2026-05-16T17:00:00.000Z'),
+  mode: MATCH_MODE.LEAGUE,
   week: 12,
   referee: 'Fernando García',
   localScore: 2,
@@ -71,10 +72,14 @@ describe('Tests on fetchMatchAction server action', () => {
         visitorTeam: expect.objectContaining(CHIVAS),
         tournament: LIGA_MX,
         category: SUB_15,
+        mode: MATCH_MODE.LEAGUE,
       }),
     );
     expect(mockMatchFindUnique).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { id: matchId } }),
+      expect.objectContaining({
+        where: { id: matchId },
+        select: expect.objectContaining({ mode: true }),
+      }),
     );
   });
 

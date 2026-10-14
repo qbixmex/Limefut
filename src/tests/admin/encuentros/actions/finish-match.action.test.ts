@@ -76,6 +76,7 @@ describe('Tests on finishMatchAction server action', () => {
     mockMatchFindUnique.mockResolvedValue({
       tournamentId: 'f641c5b8-0bcb-4b2c-ab90-27210ba17dac',
       categoryId: '1ff58d74-2761-42f2-8250-2e009937921f',
+      mode: 'league',
     });
     mockStandingsFindFirst.mockResolvedValue({ id: 'standings-id' });
     mockStandingsUpdate.mockResolvedValue({ id: 'standings-id' });
@@ -188,6 +189,21 @@ describe('Tests on finishMatchAction server action', () => {
 
     expect(mockStandingsFindFirst).not.toHaveBeenCalled();
     expect(response.ok).toBe(true);
+  });
+
+  test('Should not touch the standings when the match is friendly', async () => {
+    mockMatchFindUnique.mockResolvedValue({
+      tournamentId: 'f641c5b8-0bcb-4b2c-ab90-27210ba17dac',
+      categoryId: '1ff58d74-2761-42f2-8250-2e009937921f',
+      mode: 'friendly',
+    });
+
+    const response = await finishMatchAction(baseProps);
+
+    expect(response.ok).toBe(true);
+    expect(mockStandingsFindFirst).not.toHaveBeenCalled();
+    expect(mockStandingsUpdate).not.toHaveBeenCalled();
+    expect(mockMatchUpdate).toHaveBeenCalledTimes(1);
   });
 
   test('Should keep going when updating standings throws', async () => {

@@ -13,17 +13,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import type z from 'zod';
 import { MATCH_STATUS } from '@/shared/enums';
 
-type Options = {
-  match: MATCH_TYPE;
-};
-
-export const useEditMatch = (options: Options) => {
+export const useEditMatch = (match: MATCH_TYPE) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const {
-    match,
-  } = options;
 
   const [hiddenScores, setHiddenScores] = useState(() => {
     if (match) {
@@ -62,6 +54,7 @@ export const useEditMatch = (options: Options) => {
       referee: match.referee ?? '',
       matchDate: match.matchDate ?? undefined,
       status: match.status,
+      mode: match.mode,
       week: match.week ?? 0,
       tournament:
         match.tournament.permalink ??
@@ -85,6 +78,7 @@ export const useEditMatch = (options: Options) => {
     if (data.referee) formData.append('referee', data.referee as string);
     if (data.matchDate) formData.append('matchDate', (data.matchDate as Date).toISOString());
     formData.append('status', data.status as string);
+    if (data.mode) formData.append('mode', data.mode);
     formData.append('week', String(data.week ?? '0'));
     formData.append('tournament', data.tournament as string);
     formData.append('category', data.category as string);

@@ -1,6 +1,6 @@
 const {
   MockPrismaClientKnownRequestError,
-  mockTransaction,
+  mockPrisma,
   mockGetSession,
 } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
@@ -19,7 +19,11 @@ const {
 
   return {
     MockPrismaClientKnownRequestError,
-    mockTransaction: vi.fn(),
+    mockPrisma: {
+      match: { findFirst: vi.fn(), update: vi.fn() },
+      tournament: { findFirst: vi.fn() },
+      category: { findFirst: vi.fn() },
+    },
     mockGetSession: vi.fn(),
   };
 });
@@ -50,9 +54,7 @@ vi.mock('@/lib/get-session', () => ({
 }));
 
 vi.mock('@/lib/prisma', () => ({
-  default: {
-    $transaction: mockTransaction,
-  },
+  default: mockPrisma,
 }));
 
 vi.mock('@/generated/prisma/client', () => ({
@@ -104,12 +106,6 @@ const updatedMatch = {
   category: SUB_15,
 };
 
-const mockTx = {
-  match: { findFirst: vi.fn(), update: vi.fn() },
-  tournament: { findFirst: vi.fn() },
-  category: { findFirst: vi.fn() },
-};
-
 describe('Tests on updateMatchAction server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -117,11 +113,10 @@ describe('Tests on updateMatchAction server action', () => {
     mockGetSession.mockResolvedValue({
       user: { id: 'b7e2ca32-af95-4750-bf63-6a338b236097', roles: ['admin'] },
     });
-    mockTx.match.findFirst.mockResolvedValue(existingMatch);
-    mockTx.tournament.findFirst.mockResolvedValue({ id: COPA_POR_MEXICO.id });
-    mockTx.category.findFirst.mockResolvedValue({ id: SUB_17.id });
-    mockTx.match.update.mockResolvedValue(updatedMatch);
-    mockTransaction.mockImplementation((cb: (tx: typeof mockTx) => unknown) => cb(mockTx));
+    mockPrisma.match.findFirst.mockResolvedValue(existingMatch);
+    mockPrisma.tournament.findFirst.mockResolvedValue({ id: COPA_POR_MEXICO.id });
+    mockPrisma.category.findFirst.mockResolvedValue({ id: SUB_17.id });
+    mockPrisma.match.update.mockResolvedValue(updatedMatch);
   });
 
   afterEach(() => {
@@ -135,7 +130,7 @@ describe('Tests on updateMatchAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockPrisma.match.update).not.toHaveBeenCalled();
   });
 
   test('Should return a validation error when the local team is not a UUID', async () => {
@@ -146,17 +141,17 @@ describe('Tests on updateMatchAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.match).toBe(null);
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockPrisma.match.update).not.toHaveBeenCalled();
   });
 
   test('Should return error when the match does not exist', async () => {
-    mockTx.match.findFirst.mockResolvedValue(null);
+    mockPrisma.match.findFirst.mockResolvedValue(null);
 
     const response = await updateMatchAction({ matchId, formData: validFormData() });
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe o ha sido eliminado/i);
-    expect(mockTx.match.update).not.toHaveBeenCalled();
+    expect(mockPrisma.match.update).not.toHaveBeenCalled();
   });
 
   test('Should update the match keeping the same tournament and category', async () => {
@@ -164,9 +159,9 @@ describe('Tests on updateMatchAction server action', () => {
 
     expect(response.ok).toBe(true);
     expect(response.message).toMatch(/actualizado correctamente/i);
-    expect(mockTx.tournament.findFirst).not.toHaveBeenCalled();
-    expect(mockTx.category.findFirst).not.toHaveBeenCalled();
-    expect(mockTx.match.update).toHaveBeenCalledWith(
+    expect(mockPrisma.tournament.findFirst).not.toHaveBeenCalled();
+    expect(mockPrisma.category.findFirst).not.toHaveBeenCalled();
+    expect(mockPrisma.match.update).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: matchId },
         data: expect.objectContaining({ tournamentId: undefined, categoryId: undefined }),
@@ -181,15 +176,15 @@ describe('Tests on updateMatchAction server action', () => {
 
     await updateMatchAction({ matchId, formData });
 
-    expect(mockTx.tournament.findFirst).toHaveBeenCalledWith({
+    expect(mockPrisma.tournament.findFirst).toHaveBeenCalledWith({
       where: { permalink: COPA_POR_MEXICO.permalink },
       select: { id: true },
     });
-    expect(mockTx.category.findFirst).toHaveBeenCalledWith({
+    expect(mockPrisma.category.findFirst).toHaveBeenCalledWith({
       where: { permalink: SUB_17.permalink },
       select: { id: true },
     });
-    expect(mockTx.match.update).toHaveBeenCalledWith(
+    expect(mockPrisma.match.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           tournamentId: COPA_POR_MEXICO.id,
@@ -200,7 +195,7 @@ describe('Tests on updateMatchAction server action', () => {
   });
 
   test('Should return error when the new tournament does not exist', async () => {
-    mockTx.tournament.findFirst.mockResolvedValue(null);
+    mockPrisma.tournament.findFirst.mockResolvedValue(null);
     const formData = validFormData();
     formData.set('tournament', COPA_POR_MEXICO.permalink);
 
@@ -208,11 +203,11 @@ describe('Tests on updateMatchAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe/i);
-    expect(mockTx.match.update).not.toHaveBeenCalled();
+    expect(mockPrisma.match.update).not.toHaveBeenCalled();
   });
 
   test('Should return error when the new category does not exist', async () => {
-    mockTx.category.findFirst.mockResolvedValue(null);
+    mockPrisma.category.findFirst.mockResolvedValue(null);
     const formData = validFormData();
     formData.set('category', SUB_17.permalink);
 
@@ -220,11 +215,11 @@ describe('Tests on updateMatchAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe/i);
-    expect(mockTx.match.update).not.toHaveBeenCalled();
+    expect(mockPrisma.match.update).not.toHaveBeenCalled();
   });
 
   test('Should return a "not found" error on missing records (P2001)', async () => {
-    mockTx.match.update.mockRejectedValue(
+    mockPrisma.match.update.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Record not found', {
         code: 'P2001',
         meta: { modelName: 'Match', target: ['localId'] },
@@ -234,12 +229,12 @@ describe('Tests on updateMatchAction server action', () => {
     const response = await updateMatchAction({ matchId, formData: validFormData() });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/el campo "localid" no existe/i);
+    expect(response.message).toMatch(/el encuentro no existe/i);
     expect(response.match).toBe(null);
   });
 
   test('Should return error on duplicate fields (P2002)', async () => {
-    mockTx.match.update.mockRejectedValue(
+    mockPrisma.match.update.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Unique constraint failed', {
         code: 'P2002',
         meta: { modelName: 'Match', target: ['localId'] },
@@ -249,11 +244,11 @@ describe('Tests on updateMatchAction server action', () => {
     const response = await updateMatchAction({ matchId, formData: validFormData() });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/el campo "localid" está duplicado/i);
+    expect(response.message).toMatch(/hay campos duplicados/i);
   });
 
   test('Should return a generic prisma error for non-P2002 codes', async () => {
-    mockTx.match.update.mockRejectedValue(
+    mockPrisma.match.update.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Foreign key constraint failed', {
         code: 'P2003',
         meta: { modelName: 'Match' },
@@ -267,7 +262,7 @@ describe('Tests on updateMatchAction server action', () => {
   });
 
   test('Should return an error on unexpected Error instance', async () => {
-    mockTransaction.mockRejectedValue(new Error('Something went wrong'));
+    mockPrisma.match.update.mockRejectedValue(new Error('Something went wrong'));
 
     const response = await updateMatchAction({ matchId, formData: validFormData() });
 
@@ -276,7 +271,7 @@ describe('Tests on updateMatchAction server action', () => {
   });
 
   test('Should return an error on unknown error', async () => {
-    mockTransaction.mockRejectedValue('Something unexpected');
+    mockPrisma.match.update.mockRejectedValue('Something unexpected');
 
     const response = await updateMatchAction({ matchId, formData: validFormData() });
 

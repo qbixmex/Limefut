@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 import { updateTag } from 'next/cache';
 import { requireAdmin } from '@/lib/get-session';
 
@@ -42,18 +42,21 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
     visitorPoints = 1;
   }
 
-  let match: { tournamentId: string; categoryId: string | null } | null = null;
+  let match: { tournamentId: string; categoryId: string | null; mode: string } | null = null;
   try {
     match = await prisma.match.findUnique({
       where: { id: matchId },
-      select: { tournamentId: true, categoryId: true },
+      select: { tournamentId: true, categoryId: true, mode: true },
     });
   } catch {
     // ignore
   }
 
+  // Friendly matches must never affect the standings table
+  const isLeague = match?.mode === MATCH_MODE.LEAGUE;
+
   try {
-    const localStandings = match
+    const localStandings = isLeague && match
       ? await prisma.standings.findFirst({
           where: {
             teamId: localId,
@@ -85,7 +88,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
   }
 
   try {
-    const visitorStandings = match
+    const visitorStandings = isLeague && match
       ? await prisma.standings.findFirst({
           where: {
             teamId: visitorId,
@@ -127,7 +130,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
 
   // Refresh Match
   updateTag('admin-matches');
-  updateTag('admin-match');
+  updateTag(`admin-match-${matchId}`);
   updateTag('matches');
   updateTag('public-standings');
   updateTag('dashboard-results');

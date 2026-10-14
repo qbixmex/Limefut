@@ -1,5 +1,6 @@
 export { USER_ROLES, type USER_ROLES_TYPE } from './user-roles.enum';
 export { MATCH_STATUS, type MATCH_STATUS_TYPE } from './match.enum';
+export { MATCH_MODE, type MATCH_MODE_TYPE } from './match-mode.enum';
 export { SHOOTOUT_STATUS } from './shoutout-status.enum';
 export { GENDER, type GENDER_TYPE } from './gender.enum';
 export { ROUND, type ROUND_TYPE } from './round.enum';

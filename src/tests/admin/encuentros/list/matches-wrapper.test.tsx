@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import type { ComponentProps } from 'react';
 import { MatchesWrapper } from '@/app/admin/encuentros/(components)/matches.wrapper';
 import { fetchMatchesAction, type MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
 import { ROUTES } from '@/shared/constants/routes';
@@ -37,7 +38,7 @@ describe('Tests on <MatchesWrapper /> component', () => {
     },
   };
 
-  const defaultProps = {
+  const defaultProps: ComponentProps<typeof MatchesWrapper> = {
     tournamentId,
     categoryId,
     currentPage: 1,
@@ -45,6 +46,7 @@ describe('Tests on <MatchesWrapper /> component', () => {
     sortMatchDate: 'asc' as const,
     sortWeek: undefined,
     status: 'scheduled' as const,
+    mode: undefined,
   };
 
   const renderComponent = async (props = defaultProps) => {
@@ -79,7 +81,16 @@ describe('Tests on <MatchesWrapper /> component', () => {
       sortMatchDate: 'asc',
       sortWeek: undefined,
       status: 'scheduled',
+      mode: undefined,
     });
+  });
+
+  test('Should forward the mode filter to fetchMatchesAction', async () => {
+    await renderComponent({ ...defaultProps, mode: 'friendly' });
+
+    expect(vi.mocked(fetchMatchesAction)).toHaveBeenCalledWith(
+      expect.objectContaining({ mode: 'friendly' }),
+    );
   });
 
   test('Should compute unique non-null matchesWeeks', async () => {

@@ -37,7 +37,7 @@ export const EditMatchForm: FC<Props> = ({
     setHiddenScores,
     isModifyingScores,
     setIsModifyingScores,
-  } = useEditMatch({ match });
+  } = useEditMatch(match);
 
   return (
     <Form {...form}>

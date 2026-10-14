@@ -23,6 +23,7 @@ export const MatchesTable: FC<Props> = ({ matches, roles, teamPermalink }) => (
             <span className="text-left">Equipo Visitante</span>
           </div>
         </TableHead>
+        <TableHead className="hidden md:table-cell text-left">Modalidad</TableHead>
         <TableHead className="hidden md:table-cell text-left">Estado</TableHead>
         <TableHead className="hidden lg:table-cell">&nbsp;</TableHead>
       </TableRow>

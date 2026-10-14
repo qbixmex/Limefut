@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ErrorHandler } from '@/shared/components/errorHandler';
 import { ClearFilters } from './(components)/clear-filters';
 import { MatchesView } from './matches-view';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
 import { TournamentsSelectorSkeleton } from '../../(public)/components';
 import { CreateMatch } from './(components)/create-match';
 import { Search } from './(components)/search';
@@ -17,6 +17,7 @@ type Props = Readonly<{
     tournament?: string;
     category?: string;
     status?: MATCH_STATUS_TYPE;
+    mode?: MATCH_MODE_TYPE;
     'sort-week'?: 'asc' | 'desc';
     'sort-match-date'?: 'asc' | 'desc';
   }>;

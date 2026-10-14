@@ -2,7 +2,7 @@ import type {
   MATCH_TYPE,
   PENALTY_SHOOTOUT_TYPE,
 } from '@/app/admin/encuentros/(actions)/fetch-match.action';
-import { MATCH_STATUS, SHOOTOUT_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS, SHOOTOUT_STATUS } from '@/shared/enums';
 
 export const MATCH_ID = '24620ff5-cd48-4385-9ab8-b6320d69947f';
 
@@ -13,12 +13,14 @@ export const matchMock: MATCH_TYPE = {
     name: 'Estadio Central',
   },
   matchDate: new Date('2026-05-16T17:00:00.000Z'),
+  mode: MATCH_MODE.LEAGUE,
   week: 12,
   referee: 'John Doe',
   localScore: 2,
   visitorScore: 1,
   status: MATCH_STATUS.COMPLETED,
   createdAt: new Date('2026-04-01T15:30:00.000Z'),
+  updatedAt: new Date('2026-05-16T17:30:00.000Z'),
   localTeam: {
     id: '96f99393-cfd5-4703-b043-57764aa09e39',
     name: 'Club América',

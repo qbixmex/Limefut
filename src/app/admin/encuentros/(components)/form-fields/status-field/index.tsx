@@ -12,6 +12,7 @@ import {
 import { Controller, useFormContext } from 'react-hook-form';
 import { MATCH_STATUS } from '@/shared/enums';
 import { getStatusTranslation } from '@/lib/utils';
+import { SelectGroup } from '@radix-ui/react-select';
 
 export const StatusField: FC = () => {
   const { control } = useFormContext();
@@ -31,21 +32,23 @@ export const StatusField: FC = () => {
               <SelectValue placeholder="Seleccione estado" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={MATCH_STATUS.IN_REVIEW}>
-                {getStatusTranslation(MATCH_STATUS.IN_REVIEW)}
-              </SelectItem>
-              <SelectItem value={MATCH_STATUS.SCHEDULED}>
-                {getStatusTranslation(MATCH_STATUS.SCHEDULED)}
-              </SelectItem>
-              <SelectItem value={MATCH_STATUS.IN_PROGRESS}>
-                {getStatusTranslation(MATCH_STATUS.IN_PROGRESS)}
-              </SelectItem>
-              <SelectItem value={MATCH_STATUS.POST_POSED}>
-                {getStatusTranslation(MATCH_STATUS.POST_POSED)}
-              </SelectItem>
-              <SelectItem value={MATCH_STATUS.CANCELED}>
-                {getStatusTranslation(MATCH_STATUS.CANCELED)}
-              </SelectItem>
+              <SelectGroup>
+                <SelectItem value={MATCH_STATUS.IN_REVIEW}>
+                  {getStatusTranslation(MATCH_STATUS.IN_REVIEW)}
+                </SelectItem>
+                <SelectItem value={MATCH_STATUS.SCHEDULED}>
+                  {getStatusTranslation(MATCH_STATUS.SCHEDULED)}
+                </SelectItem>
+                <SelectItem value={MATCH_STATUS.IN_PROGRESS}>
+                  {getStatusTranslation(MATCH_STATUS.IN_PROGRESS)}
+                </SelectItem>
+                <SelectItem value={MATCH_STATUS.POST_POSED}>
+                  {getStatusTranslation(MATCH_STATUS.POST_POSED)}
+                </SelectItem>
+                <SelectItem value={MATCH_STATUS.CANCELED}>
+                  {getStatusTranslation(MATCH_STATUS.CANCELED)}
+                </SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
           {fieldState.invalid && (
