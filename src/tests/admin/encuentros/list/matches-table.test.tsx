@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ROUTES } from '@/shared/constants/routes';
 import { MATCH_STATUS } from '@/shared/enums';
+import { getMatchMode } from '@/lib/utils';
 
 vi.mock('@/app/admin/encuentros/(components)/weeks-selector', () => ({
   WeeksSelector: () => <span data-testid="weeks-selector" />,
@@ -115,26 +116,26 @@ describe('Tests on <MatchesTable /> component', () => {
     });
   });
 
-  test('Should render field link', () => {
+  test('Should render mode column header', () => {
     renderComponent();
 
-    const matchesWithField = matchesMock.filter((match) => match.field);
+    const header = screen.getByRole('columnheader', { name: /modo/i });
 
-    matchesWithField.forEach((match) => {
-      const fieldLink = screen.getByTitle(`Ver detalles de la cancha ${match.field?.name}`);
-
-      expect(fieldLink).toHaveAttribute(
-        'href',
-        ROUTES.ADMIN_FIELDS_SHOW(match.field?.id as string),
-      );
-    });
+    expect(header).toBeInTheDocument();
   });
 
-  test('Should render fallback badge when there is no field assigned', () => {
+  test('Should render the mode badge per match', () => {
     renderComponent();
 
-    const fieldStatus = screen.getByTestId(matchesMock[2].id);
-    expect(fieldStatus).toHaveTextContent(/no disponible/i);
+    const modes = screen.getAllByRole('status', {
+      name: /modo del encuentro/i,
+    });
+
+    expect(modes).toHaveLength(matchesMock.length);
+
+    modes.forEach((mode, index) => {
+      expect(mode).toHaveTextContent(getMatchMode(matchesMock[index].mode));
+    });
   });
 
   test('Should render week number', () => {
@@ -318,11 +319,22 @@ describe('Tests on <MatchesTable /> component', () => {
     expect(pagination).not.toBeInTheDocument();
   });
 
-  test('Should hide pagination when matches there is only one', () => {
-    renderComponent({ ...defaultProps, matches: [matchesMock[0]] });
+  test('Should hide pagination when there is only one page', () => {
+    renderComponent({
+      ...defaultProps,
+      pagination: { currentPage: 1, totalPages: 1 },
+    });
 
     const pagination = screen.queryByTestId('pagination');
 
     expect(pagination).not.toBeInTheDocument();
+  });
+
+  test('Should render pagination even with a single match when there are multiple pages', () => {
+    renderComponent({ ...defaultProps, matches: [matchesMock[0]] });
+
+    const pagination = screen.queryByTestId('pagination');
+
+    expect(pagination).toBeInTheDocument();
   });
 });
