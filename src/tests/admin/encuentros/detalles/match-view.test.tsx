@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ROUTES } from '@/shared/constants/routes';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 import { MATCH_ID, matchMock, penaltyShootoutMock } from '../mocks/match.mock';
 
 vi.mock('@/app/admin/encuentros/(actions)/fetch-match.action');
@@ -122,20 +122,43 @@ describe('Tests on <MatchView />', () => {
     expect(referee).toHaveTextContent(/no definido/i);
   });
 
-  test('Should render field name', async () => {
+  test('Should render field name link with correct href', async () => {
     await renderMatchView();
 
-    const field = screen.getByRole('text', { name: /sede del encuentro/i });
+    const field = screen.getByTitle('Ir a sede del encuentro');
 
     expect(field).toHaveTextContent(matchMock.field!.name);
+    expect(field).toHaveAttribute(
+      'href',
+      ROUTES.ADMIN_FIELDS_SHOW(matchMock.field!.id),
+    );
+    expect(field).toHaveAttribute('target', '_blank');
+    expect(field).toHaveAttribute('rel', 'noreferrer');
   });
 
   test('Should render field fallback when match has no field', async () => {
     await renderMatchView({ match: { ...matchMock, field: null } });
 
-    const field = screen.getByRole('text', { name: /sede del encuentro/i });
+    expect(
+      screen.queryByTitle('Ir a sede del encuentro'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(/no definida/i)).toBeInTheDocument();
+  });
 
-    expect(field).toHaveTextContent(/no definida/i);
+  test('Should render the league mode badge', async () => {
+    await renderMatchView();
+
+    const mode = screen.getByRole('status', { name: /modo del encuentro/i });
+
+    expect(mode).toHaveTextContent(/liga/i);
+  });
+
+  test('Should render the friendly mode badge', async () => {
+    await renderMatchView({ match: { ...matchMock, mode: MATCH_MODE.FRIENDLY } });
+
+    const mode = screen.getByRole('status', { name: /modo del encuentro/i });
+
+    expect(mode).toHaveTextContent(/amistoso/i);
   });
 
   test('Should render formatted match date', async () => {
