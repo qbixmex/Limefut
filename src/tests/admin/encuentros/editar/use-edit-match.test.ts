@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useEditMatch } from '@/app/admin/encuentros/editar/[id]/use-edit-match';
 import { ROUTES } from '@/shared/constants/routes';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 import { matchForEditMock, MATCH_ID } from '../mocks/match-for-edit.mock';
 import { AMERICA, CHIVAS } from '../mocks/teams.mock';
 
@@ -36,6 +36,7 @@ const validData = {
   referee: 'Fernando García',
   matchDate: new Date('2026-05-16T17:00:00.000Z'),
   status: MATCH_STATUS.SCHEDULED,
+  mode: MATCH_MODE.FRIENDLY,
   week: 12,
   tournament: 'liga-mx',
   category: 'sub-15',
@@ -140,6 +141,7 @@ describe('Tests on useEditMatch hook', () => {
     const formData = mockUpdateAction.mock.calls[0][0].formData;
     expect(formData.get('localTeamId')).toBe(AMERICA.id);
     expect(formData.get('visitorTeamId')).toBe(CHIVAS.id);
+    expect(formData.get('mode')).toBe(MATCH_MODE.FRIENDLY);
     expect(formData.get('week')).toBe('12');
     expect(formData.get('tournament')).toBe('liga-mx');
   });

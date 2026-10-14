@@ -54,6 +54,7 @@ export const useEditMatch = (options: Options) => {
   const form = useForm<z.infer<typeof editMatchSchema>>({
     resolver: zodResolver(editMatchSchema),
     defaultValues: {
+      mode: match.mode,
       localTeamId: match.localTeam.id,
       localScore: match.localScore,
       visitorTeamId: match.visitorTeam.id,
@@ -77,6 +78,7 @@ export const useEditMatch = (options: Options) => {
   const onSubmit = async (data: z.infer<typeof editMatchSchema>) => {
     const formData = new FormData();
 
+    if (data.mode) formData.append('mode', data.mode);
     formData.append('localTeamId', data.localTeamId as string);
     formData.append('localScore', (data.localScore as number).toString());
     formData.append('visitorTeamId', data.visitorTeamId as string);
