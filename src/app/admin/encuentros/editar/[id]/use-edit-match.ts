@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { MATCH_TYPE as MATCH_UPDATED_TYPE } from '@/app/admin/encuentros/(actions)/update-match.action';
 import { updateMatchAction } from '@/app/admin/encuentros/(actions)/update-match.action';
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
