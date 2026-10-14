@@ -5,6 +5,7 @@ import { PAGE_STATUS } from '../shared/interfaces/Page';
 import type { LANGUAGE_TYPE, MATCH_STATUS_TYPE, ROUND_TYPE } from '../shared/enums';
 import { GENDER, LANGUAGE, MATCH_STATUS, ROUND } from '../shared/enums';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
+import { MATCH_MODE_TYPE } from '@/shared/enums/match-mode.enum';
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -409,5 +410,19 @@ export const getPlayoffGroup = (group: string) => {
       return 'Oro';
     case 'silver':
       return 'Plata';
+  }
+};
+
+/**
+ * Translate from english to spanish match mode.
+ * @param mode The group to evaluate: 'league', 'friendly'.
+ * @returns The translated mode in spanish
+ */
+export const getMatchMode = (mode: MATCH_MODE_TYPE) => {
+  switch (mode) {
+    case 'league':
+      return 'liga';
+    case 'friendly':
+      return 'amistoso';
   }
 };
