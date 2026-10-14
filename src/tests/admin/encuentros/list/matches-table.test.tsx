@@ -19,6 +19,10 @@ vi.mock('@/app/admin/encuentros/(components)/status-selector', () => ({
   StatusSelector: () => <span data-testid="status-selector" />,
 }));
 
+vi.mock('@/app/admin/encuentros/(components)/mode-selector', () => ({
+  ModeSelector: () => <span data-testid="mode-selector" />,
+}));
+
 vi.mock('@/app/admin/encuentros/(actions)/update-match-input-score.action');
 
 vi.mock('@/app/admin/encuentros/(components)/match-status', () => ({
@@ -119,9 +123,9 @@ describe('Tests on <MatchesTable /> component', () => {
   test('Should render mode column header', () => {
     renderComponent();
 
-    const header = screen.getByRole('columnheader', { name: /modo/i });
+    const selector = screen.getByTestId('mode-selector');
 
-    expect(header).toBeInTheDocument();
+    expect(selector).toBeInTheDocument();
   });
 
   test('Should render the mode badge per match', () => {

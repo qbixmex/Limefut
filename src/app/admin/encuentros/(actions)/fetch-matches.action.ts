@@ -16,6 +16,7 @@ type Options = Readonly<{
   sortMatchDate?: 'asc' | 'desc';
   sortWeek?: `${number}` | 'asc' | 'desc' | 'unassigned' | undefined;
   status?: MATCH_STATUS_TYPE;
+  mode?: MATCH_MODE_TYPE;
 }>;
 
 export type MATCH_TYPE = {
@@ -64,6 +65,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
   const sortMatchDate = options?.sortMatchDate;
   const sortWeek = options?.sortWeek;
   const status = options?.status;
+  const mode = options?.mode;
 
   // In case is an invalid number like (lorem)
   if (isNaN(page)) page = 1;
@@ -86,6 +88,7 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
         ? Number(sortWeek)
         : undefined,
     status,
+    mode,
   };
 
   if (options?.searchTerm) {
@@ -179,7 +182,15 @@ export const fetchMatchesAction = async (options?: Options): ResponseFetchAction
     const matches = await prisma.match.findMany({
       where: whereCondition,
       orderBy: [
-        { week: sortWeek === 'unassigned' ? undefined : (isNaN(parseInt(sortWeek as string)) ? sortWeek as 'asc' | 'desc' : undefined) },
+        {
+          week: sortWeek === 'unassigned'
+            ? undefined
+            : (
+              isNaN(parseInt(sortWeek as string))
+                ? sortWeek as 'asc' | 'desc'
+                : undefined
+            ),
+        },
         { matchDate: sortMatchDate },
       ],
       take,

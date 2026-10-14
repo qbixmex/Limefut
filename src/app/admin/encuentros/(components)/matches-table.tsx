@@ -24,6 +24,7 @@ import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-matches.
 import { WeeksSelector } from './weeks-selector';
 import { DateSelector } from './date-selector';
 import { StatusSelector } from './status-selector';
+import { ModeSelector } from './mode-selector';
 import { formatInTimeZone } from 'date-fns-tz';
 import { EditMatch } from './edit-match';
 import { ROUTES } from '@/shared/constants/routes';
@@ -52,7 +53,9 @@ export const MatchesTable: FC<Props> = ({
           <TableHeader>
             <TableRow className="h-16">
               <TableHead className="w-full md:w-1/2">Encuentro</TableHead>
-              <TableHead className="text-center">Modo</TableHead>
+              <TableHead className="w-25 text-center">
+                <ModeSelector />
+              </TableHead>
               <TableHead className="w-25 text-center">
                 <WeeksSelector weeks={matchesWeeks} />
               </TableHead>

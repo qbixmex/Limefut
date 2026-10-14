@@ -130,6 +130,20 @@ describe('Tests on fetchMatchesAction server action', () => {
     );
   });
 
+  test('Should filter by mode', async () => {
+    await fetchMatchesAction({
+      tournamentId,
+      categoryId,
+      searchTerm: '',
+      mode: MATCH_MODE.FRIENDLY,
+    });
+
+    const findManyArgs = mockMatchFindMany.mock.calls[0][0];
+    expect(findManyArgs.where).toEqual(
+      expect.objectContaining({ mode: MATCH_MODE.FRIENDLY }),
+    );
+  });
+
   test('Should filter by week when sortWeek is a number', async () => {
     await fetchMatchesAction({
       tournamentId,

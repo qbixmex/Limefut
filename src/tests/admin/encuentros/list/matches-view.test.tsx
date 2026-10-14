@@ -1,15 +1,19 @@
 import { render, screen } from '@testing-library/react';
 import { MatchesView } from '@/app/admin/encuentros/matches-view';
 import { ROUTES } from '@/shared/constants/routes';
+import { MATCH_MODE, type MATCH_MODE_TYPE, type MATCH_STATUS_TYPE } from '@/shared/enums';
 
 const shouldSuspend = vi.hoisted(() => ({ value: true }));
+
+let matchesWrapperProps: Record<string, unknown> | undefined;
 
 vi.mock('@/app/admin/encuentros/(components)/matches-table-skeleton', () => ({
   MatchesTableSkeleton: () => <div data-testid="matches-table-skeleton" />,
 }));
 
 vi.mock('@/app/admin/encuentros/(components)/matches.wrapper', () => ({
-  MatchesWrapper: () => {
+  MatchesWrapper: (props: Record<string, unknown>) => {
+    matchesWrapperProps = props;
     if (shouldSuspend.value) {
       throw new Promise(() => {});
     }
@@ -53,12 +57,15 @@ type SearchParams = {
   category?: string;
   'sort-week'?: 'asc' | 'desc';
   'sort-match-date'?: 'asc' | 'desc';
+  status?: MATCH_STATUS_TYPE;
+  mode?: MATCH_MODE_TYPE;
 };
 
 describe('Tests on <MatchesContent />', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     shouldSuspend.value = true;
+    matchesWrapperProps = undefined;
 
     mockFetchTournament.mockResolvedValue({
       ok: true,
@@ -102,6 +109,23 @@ describe('Tests on <MatchesContent />', () => {
     const matchesWrapper = screen.queryByTestId('matches-wrapper');
 
     expect(matchesWrapper).toBeInTheDocument();
+  });
+
+  test('Should forward the mode filter to <MatchesWrapper />', async () => {
+    shouldSuspend.value = false;
+
+    const ServerComponent = await MatchesView({
+      searchParams: Promise.resolve<SearchParams>({
+        tournament: 'tournament-test',
+        category: 'category-test',
+        mode: MATCH_MODE.FRIENDLY,
+      }),
+    });
+    render(ServerComponent);
+
+    expect(matchesWrapperProps).toEqual(
+      expect.objectContaining({ mode: MATCH_MODE.FRIENDLY }),
+    );
   });
 
   test('Should redirect when tournament fetch fails', async () => {
