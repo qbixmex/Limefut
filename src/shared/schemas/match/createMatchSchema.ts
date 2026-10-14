@@ -1,5 +1,5 @@
 import z from 'zod';
-import { MATCH_STATUS } from '../../enums';
+import { MATCH_MODE, MATCH_STATUS } from '../../enums';
 
 export const createMatchSchema = z.object({
   localTeamId: z.uuid({
@@ -33,12 +33,23 @@ export const createMatchSchema = z.object({
       .max(50, 'El arbitro debe ser menor a 50 caracteres'),
   ]).optional(),
   status: z.enum(
-    Object.values(MATCH_STATUS) as [string, ...string[]],
-    { message: 'El estado del partido debe ser válido' },
+    [
+      MATCH_STATUS.SCHEDULED,
+      MATCH_STATUS.IN_PROGRESS,
+      MATCH_STATUS.IN_REVIEW,
+      MATCH_STATUS.COMPLETED,
+      MATCH_STATUS.POST_POSED,
+      MATCH_STATUS.CANCELED,
+    ],
+    { message: 'Debes seleccionar un estado' },
   ),
   matchDate: z
     .date('La fecha del encuentro debe ser una fecha válida')
     .optional(),
+  mode: z.enum(
+    [MATCH_MODE.LEAGUE, MATCH_MODE.FRIENDLY],
+    { error: 'Debes seleccionar un tipo de encuentro válido' },
+  ),
   week: z
     .int()
     .min(0, 'La sede debe ser mínimo 1'),

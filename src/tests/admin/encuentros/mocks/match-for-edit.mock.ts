@@ -1,5 +1,5 @@
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-match.action';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 import { AMERICA, CHIVAS } from './teams.mock';
 import { LIGA_MX } from './tournaments.mock';
 import { SUB_15 } from './categories.mock';
@@ -14,12 +14,14 @@ export const matchForEditMock: MATCH_TYPE = {
     name: ESTADIO_AZTECA.name,
   },
   matchDate: new Date('2026-05-16T17:00:00.000Z'),
+  mode: MATCH_MODE.FRIENDLY,
   week: 12,
   referee: 'Fernando García',
   localScore: 2,
   visitorScore: 1,
   status: MATCH_STATUS.SCHEDULED,
   createdAt: new Date('2026-04-01T15:30:00.000Z'),
+  updatedAt: new Date('2026-05-16T17:30:00.000Z'),
   localTeam: {
     ...AMERICA,
     players: [

@@ -337,6 +337,7 @@ describe('Tests on recalculateStandingsAction server action', () => {
           tournamentId: TOURNAMENT_ID,
           categoryId: CATEGORY_ID,
           status: 'completed',
+          mode: 'league',
         },
         select: {
           localId: true,

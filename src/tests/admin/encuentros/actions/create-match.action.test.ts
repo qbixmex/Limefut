@@ -62,6 +62,7 @@ vi.mock('@/generated/prisma/client', () => ({
 }));
 
 import { createMatchAction } from '@/app/admin/encuentros/(actions)/create-match.action';
+import { MATCH_MODE } from '@/shared/enums';
 import { AMERICA, CHIVAS } from '../mocks/teams.mock';
 import { LIGA_MX } from '../mocks/tournaments.mock';
 import { SUB_15 } from '../mocks/categories.mock';
@@ -78,6 +79,7 @@ const validFormData = (): FormData => {
   formData.append('visitorScore', '1');
   formData.append('referee', 'Fernando García');
   formData.append('status', 'scheduled');
+  formData.append('mode', MATCH_MODE.LEAGUE);
   formData.append('tournament', LIGA_MX.permalink);
   formData.append('category', SUB_15.permalink);
   formData.append('week', '5');
@@ -209,9 +211,45 @@ describe('Tests on createMatchAction server action', () => {
           tournamentId: mockTournament.id,
           categoryId: mockCategory.id,
           week: 5,
+          mode: MATCH_MODE.LEAGUE,
         }),
       }),
     );
+  });
+
+  test('Should create a friendly match when the mode is friendly', async () => {
+    const formData = validFormData();
+    formData.set('mode', MATCH_MODE.FRIENDLY);
+
+    await createMatchAction({ formData });
+
+    expect(mockTx.match.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ mode: MATCH_MODE.FRIENDLY }),
+      }),
+    );
+  });
+
+  test('Should return a validation error when the mode is missing', async () => {
+    const formData = validFormData();
+    formData.delete('mode');
+
+    const response = await createMatchAction({ formData });
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toMatch(/tipo de encuentro/i);
+    expect(mockTx.match.create).not.toHaveBeenCalled();
+  });
+
+  test('Should return a validation error when the mode is invalid', async () => {
+    const formData = validFormData();
+    formData.set('mode', 'lorem');
+
+    const response = await createMatchAction({ formData });
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toMatch(/tipo de encuentro/i);
+    expect(mockTx.match.create).not.toHaveBeenCalled();
   });
 
   test('Should set week to null when week is not provided', async () => {
