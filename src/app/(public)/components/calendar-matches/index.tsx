@@ -58,6 +58,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
                       field={match.field}
                       date={match.matchDate}
                       status={match.status}
+                      mode={match.mode}
                     />
                   </div>
                   <div className={styles.match}>

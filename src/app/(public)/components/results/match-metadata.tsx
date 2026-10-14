@@ -1,8 +1,19 @@
 import type { FC } from 'react';
 import { es } from 'date-fns/locale';
 import { formatInTimeZone } from 'date-fns-tz';
-import { getPlayoffGroup, getPlayoffRound, getStageTranslation, getStatusTranslation } from '@/lib/utils';
-import type { MATCH_STATUS_TYPE, ROUND_TYPE, STAGE_TYPE } from '@/shared/enums';
+import {
+  getMatchMode,
+  getPlayoffGroup,
+  getPlayoffRound,
+  getStageTranslation,
+  getStatusTranslation,
+} from '@/lib/utils';
+import type {
+  MATCH_MODE_TYPE,
+  MATCH_STATUS_TYPE,
+  ROUND_TYPE,
+  STAGE_TYPE,
+} from '@/shared/enums';
 
 const TIME_ZONE = 'America/Mexico_City';
 
@@ -19,6 +30,7 @@ type Props = Readonly<{
   } | null;
   date: Date | null;
   status: string;
+  mode: MATCH_MODE_TYPE;
   stage?: STAGE_TYPE;
   week?: number | null;
   round?: ROUND_TYPE;
@@ -35,11 +47,12 @@ export const MatchMetadata: FC<Props> = ({
   date,
   status,
   stage,
+  mode,
 }) => {
   return (
     <div className="h-full flex flex-col justify-center gap-2">
       <h3 className="text-lg font-semibold text-emerald-700 dark:text-primary">{tournamentName}</h3>
-      <section className="flex flex-col md:flex-row text-gray-500 dark:text-gray-300">
+      <section className="flex flex-col md:flex-row">
         <div className="w-full md:1/2">
           <p><b>Categoría:</b> {category ? category.name : <span>No especificada</span>}</p>
           <p><b>Sede:</b> {field?.name ?? <span>No especificado</span>}</p>
@@ -50,25 +63,32 @@ export const MatchMetadata: FC<Props> = ({
               <span>{getStageTranslation(stage).label}</span>
             </p>
           )}
+          <p>
+            <b>Modalidad:</b>{' '}
+            <i>{getMatchMode(mode)}</i>
+          </p>
           {round && (<p><b>Ronda:</b> {getPlayoffRound(round)}</p>)}
           {group && (<p><b>Grupo:</b> {getPlayoffGroup(group)}</p>)}
         </div>
         <div className="w-full md:1/2">
           {round && group && <MatchStatus status={status} />}
 
-          <p aria-label="Fecha del partido">
-            <b>Fecha:</b>{' '}
-            <span className="text-gray-500">
+          <p
+            aria-label="Fecha del partido"
+            className="flex flex-col"
+          >
+            <b>Fecha:</b>
+            <i className="text-gray-500 dark:text-gray-300">
               {
                 date
                   ? formatInTimeZone(date as Date, TIME_ZONE, "EEEE dd 'de' LLLL, yyyy", { locale: es })
                   : 'No disponible'
               }
-            </span>
+            </i>
           </p>
           <p aria-label="Hora del partido">
             <b>Hora:</b>{' '}
-            <span className="text-gray-500">
+            <span className="text-gray-500 dark:text-gray-300">
               {
                 date
                   ? formatInTimeZone(date as Date, TIME_ZONE, 'h:mm a', { locale: es })
@@ -78,7 +98,10 @@ export const MatchMetadata: FC<Props> = ({
           </p>
           {
             week && (
-              <p aria-label="Jornada del partido">
+              <p
+                aria-label="Jornada del partido"
+                className="text-gray-500 dark:text-gray-300"
+              >
                 <b>Jornada:</b> {week ?? 0}
               </p>
             )

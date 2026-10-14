@@ -1,8 +1,11 @@
+import { MATCH_MODE, type MATCH_MODE_TYPE } from '@/shared/enums';
+
 type MATCH_TYPE = {
   id: string;
   localScore: number;
   visitorScore: number;
   matchDate: Date | null;
+  mode: MATCH_MODE_TYPE;
   week: number;
   status: string;
   field: {
@@ -38,6 +41,7 @@ export const matches: MATCH_TYPE[] = [
     localScore: 2,
     visitorScore: 0,
     matchDate: new Date('2025-06-08T20:00:00.000Z'),
+    mode: MATCH_MODE.LEAGUE,
     week: 10,
     status: 'completed',
     field: {
@@ -68,6 +72,7 @@ export const matches: MATCH_TYPE[] = [
     localScore: 0,
     visitorScore: 0,
     matchDate: new Date('2025-06-08T21:00:00.000Z'),
+    mode: MATCH_MODE.FRIENDLY,
     week: 10,
     status: 'scheduled',
     field: {
@@ -101,6 +106,7 @@ export const matchesWithoutPlaces: MATCH_TYPE[] = [
     localScore: 0,
     visitorScore: 0,
     matchDate: null,
+    mode: MATCH_MODE.FRIENDLY,
     week: 0,
     status: 'scheduled',
     field: null,
@@ -128,6 +134,7 @@ export const matchesWithoutPlaces: MATCH_TYPE[] = [
     localScore: 0,
     visitorScore: 0,
     matchDate: null,
+    mode: MATCH_MODE.LEAGUE,
     week: 0,
     status: 'scheduled',
     field: {
@@ -161,6 +168,7 @@ export const matchesWithoutDates: MATCH_TYPE[] = [
     localScore: 0,
     visitorScore: 0,
     matchDate: null,
+    mode: MATCH_MODE.LEAGUE,
     week: 0,
     status: 'scheduled',
     field: {
@@ -191,6 +199,7 @@ export const matchesWithoutDates: MATCH_TYPE[] = [
     localScore: 0,
     visitorScore: 0,
     matchDate: null,
+    mode: MATCH_MODE.FRIENDLY,
     week: 0,
     status: 'scheduled',
     field: {
@@ -224,6 +233,7 @@ export const matchesWithPenalties: MATCH_TYPE[] = [
     localScore: 2,
     visitorScore: 2,
     matchDate: new Date('2025-06-08T20:00:00.000Z'),
+    mode: MATCH_MODE.FRIENDLY,
     week: 10,
     status: 'completed',
     field: {
@@ -257,6 +267,7 @@ export const matchesWithPenalties: MATCH_TYPE[] = [
     localScore: 1,
     visitorScore: 1,
     matchDate: new Date('2025-06-08T20:00:00.000Z'),
+    mode: MATCH_MODE.LEAGUE,
     week: 10,
     status: 'scheduled',
     field: {
