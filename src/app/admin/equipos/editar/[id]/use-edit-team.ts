@@ -10,11 +10,7 @@ import { ROUTES } from '@/shared/constants/routes';
 import type { TEAM_TYPE } from '../../(actions)/fetch-team-for-edit.action';
 import type z from 'zod';
 
-export const useEditTeam = ({
-  team,
-}: {
-  team: TEAM_TYPE;
-}) => {
+export const useEditTeam = ({ team }: { team: TEAM_TYPE; }) => {
   const route = useRouter();
 
   const form = useForm<z.infer<typeof editTeamSchema>>({
