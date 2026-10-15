@@ -6,7 +6,7 @@ import { TournamentsSelectorSkeleton } from '../equipos/(components)/Tournaments
 import { CreatePlayer } from './(components)/create-player';
 import { SearchParamsSelectors } from '@/shared/components/search-params-selectors';
 import { PlayersView } from './(components)/players-view';
-import { TeamsContent } from './(components)/teams-content';
+import { TeamsView } from './(components)/teams-view';
 
 type Props = Readonly<{
   searchParams: Promise<{
@@ -40,7 +40,7 @@ export const PlayersPage: FC<Props> = ({ searchParams }) => {
                   <SearchParamsSelectors tournamentPromise={tournamentPromise} />
                 </Suspense>
                 <Suspense>
-                  <TeamsContent searchParams={searchParams} />
+                  <TeamsView searchParams={searchParams} />
                 </Suspense>
               </div>
               <Suspense>
