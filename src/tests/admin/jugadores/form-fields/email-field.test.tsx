@@ -36,6 +36,14 @@ function SetValidEmail() {
   return null;
 }
 
+function SetNullEmail() {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    setValue('email', null, { shouldValidate: true });
+  }, [setValue]);
+  return null;
+}
+
 describe('Test on <EmailField />', () => {
   test('Should render correctly', () => {
     render(<EmailField />, { wrapper: TestWrapper });
@@ -72,5 +80,17 @@ describe('Test on <EmailField />', () => {
     await waitFor(() => {
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
+  });
+
+  test('Should render an empty input and show error when value is null', async () => {
+    render(
+      <TestWrapper>
+        <EmailField />
+        <SetNullEmail />
+      </TestWrapper>,
+    );
+
+    await screen.findByRole('alert');
+    expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });

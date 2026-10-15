@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { useForm, FormProvider, useFormContext } from 'react-hook-form';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { useForm, FormProvider, useFormContext, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageField } from '@/app/admin/jugadores/(components)/form-fields/image-field';
 import { createPlayerSchema } from '@/shared/schemas';
@@ -52,6 +52,16 @@ function SetInvalidTypeFile() {
   }, [setValue]);
   return null;
 }
+
+function FormValueDisplay() {
+  const image = useWatch<{ image: File | null }>({ name: 'image' });
+  const name = image instanceof File ? image.name : '';
+
+  return <span data-testid="field-value">{name}</span>;
+}
+
+const getFileInput = (container: HTMLElement) =>
+  container.querySelector('input[type="file"]') as HTMLInputElement;
 
 describe('Test on <ImageField />', () => {
   test('Should render correctly', () => {
@@ -123,5 +133,36 @@ describe('Test on <ImageField />', () => {
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/tipo de archivo/i);
+  });
+
+  test('Should push the selected file into the form state', async () => {
+    const { container } = render(
+      <TestWrapper>
+        <ImageField />
+        <FormValueDisplay />
+      </TestWrapper>,
+    );
+
+    const file = new File(['abc'], 'selected.png', { type: 'image/png' });
+    fireEvent.change(getFileInput(container), { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('field-value')).toHaveTextContent('selected.png');
+    });
+  });
+
+  test('Should not show error after selecting a valid image file', async () => {
+    const { container } = render(
+      <TestWrapper>
+        <ImageField />
+      </TestWrapper>,
+    );
+
+    const file = new File(['abc'], 'selected.png', { type: 'image/png' });
+    fireEvent.change(getFileInput(container), { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    });
   });
 });

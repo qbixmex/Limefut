@@ -72,4 +72,37 @@ describe('Test on <DeletePlayerImage /> component', () => {
 
     expect(mockDeleteImageAction).not.toHaveBeenCalled();
   });
+
+  test('Should show a success toast when the action resolves ok', async () => {
+    const { toast } = await import('sonner');
+    const { user, deleteButton, confirmButton } = renderComponent();
+
+    await user.click(deleteButton);
+    await user.click(confirmButton());
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'La imagen ha sido eliminada correctamente',
+      );
+    });
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  test('Should show an error toast when the action fails', async () => {
+    const { toast } = await import('sonner');
+    mockDeleteImageAction.mockResolvedValue({
+      ok: false,
+      message: 'No se pudo eliminar la imagen',
+    });
+
+    const { user, deleteButton, confirmButton } = renderComponent();
+
+    await user.click(deleteButton);
+    await user.click(confirmButton());
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('No se pudo eliminar la imagen');
+    });
+    expect(toast.success).not.toHaveBeenCalled();
+  });
 });

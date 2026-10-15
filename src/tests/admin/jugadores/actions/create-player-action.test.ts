@@ -194,6 +194,33 @@ describe('Tests on createPlayerAction server action', () => {
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
+  test('Should fall back to defaults when the form data is empty', async () => {
+    const response = await createPlayerAction({
+      formData: new FormData(),
+    });
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toMatch(/nombre/i);
+    expect(response.player).toBe(null);
+    expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
+  test('Should send a null teamId when the team is empty', async () => {
+    const formData = validFormData();
+    formData.set('teamId', '');
+
+    const response = await createPlayerAction({
+      formData,
+    });
+
+    expect(response.ok).toBe(true);
+    expect(mockTx.player.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ teamId: null }),
+      }),
+    );
+  });
+
   test('Should create a player without image', async () => {
     const response = await createPlayerAction({
       formData: validFormData(),
