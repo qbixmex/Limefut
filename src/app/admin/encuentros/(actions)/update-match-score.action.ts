@@ -1,9 +1,27 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 import { updateTag } from 'next/cache';
 import { requireAdmin } from '@/lib/get-session';
+import { Prisma } from '@/generated/prisma/client';
+
+export type ResponseAction = Promise<{
+  ok: boolean;
+  message: string;
+  currentMatch: MATCH_TYPE | null;
+}>;
+
+type MATCH_TYPE = {
+  tournament: {
+    permalink: string;
+  };
+  category: {
+    id: string;
+    name: string;
+    permalink: string;
+  } | null;
+};
 
 type Props = {
   matchId: string;
@@ -28,13 +46,14 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
 
   try {
     // Fetch the current match to get old scores
-    const currentMatch = await prisma.match.findUnique({
+    const currentMatch = await prisma.match.findFirst({
       where: { id: matchId },
       select: {
         localScore: true,
         visitorScore: true,
         tournamentId: true,
         categoryId: true,
+        mode: true,
         tournament: {
           select: {
             permalink: true,
@@ -58,7 +77,9 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       };
     }
 
-    const { tournamentId, categoryId } = currentMatch;
+    const { tournamentId, categoryId, mode } = currentMatch;
+    // Friendly matches must never affect the standings table
+    const isLeague = mode === MATCH_MODE.LEAGUE;
     const oldLocalScore = currentMatch.localScore ?? 0;
     const oldVisitorScore = currentMatch.visitorScore ?? 0;
 
@@ -70,7 +91,7 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       oldLocalPoints = 3;
     } else if (oldLocalScore < oldVisitorScore) {
       oldVisitorPoints = 3;
-    } else if (oldLocalScore === oldVisitorScore && oldLocalScore !== 0) {
+    } else {
       oldLocalPoints = 1;
       oldVisitorPoints = 1;
     }
@@ -88,142 +109,133 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       newVisitorPoints = 1;
     }
 
-    // Revert old standings for local team
-    try {
-      await updateTeamStandings({
-        teamId: localId,
-        tournamentId,
-        categoryId,
-        data: {
-          matchesPlayed: { decrement: 1 },
-          wins: { decrement: oldLocalPoints === 3 ? 1 : 0 },
-          losses: { decrement: oldLocalPoints === 0 ? 1 : 0 },
-          draws: { decrement: oldLocalPoints === 1 ? 1 : 0 },
-          goalsFor: { decrement: oldLocalScore },
-          goalsAgainst: { decrement: oldVisitorScore },
-          goalsDifference: { decrement: oldLocalScore - oldVisitorScore },
-          points: { decrement: oldLocalPoints },
-          totalPoints: { decrement: oldLocalPoints },
-        },
-      });
-    } catch (error) {
-      console.error(`Error al revertir estadísticas del equipo local: ${(error as Error).message}`);
+    // Both standings rows are resolved before opening the transaction so it can
+    // never commit a half applied update when one of them is missing.
+    const standings = isLeague
+      ? await prisma.standings.findMany({
+          where: {
+            tournamentId,
+            categoryId,
+            teamId: { in: [localId, visitorId] },
+          },
+          select: { id: true, teamId: true },
+        })
+      : [];
+
+    const localStandingsId = standings.find((s) => s.teamId === localId)?.id ?? '';
+    const visitorStandingsId = standings.find((s) => s.teamId === visitorId)?.id ?? '';
+
+    // Empty ids only happen on friendly matches, which return early below.
+    if (isLeague && (!localStandingsId || !visitorStandingsId)) {
       return {
         ok: false,
-        message: 'Error al revertir estadísticas del equipo local',
+        message: `No se encontraron las estadísticas del equipo ${!localStandingsId ? 'local' : 'visitante'} en la tabla de posiciones`,
         currentMatch: null,
       };
     }
 
-    // Revert old standings for visitor team
-    try {
-      await updateTeamStandings({
-        teamId: visitorId,
-        tournamentId,
-        categoryId,
-        data: {
-          matchesPlayed: { decrement: 1 },
-          wins: { decrement: oldVisitorPoints === 3 ? 1 : 0 },
-          losses: { decrement: oldVisitorPoints === 0 ? 1 : 0 },
-          draws: { decrement: oldVisitorPoints === 1 ? 1 : 0 },
-          goalsFor: { decrement: oldVisitorScore },
-          goalsAgainst: { decrement: oldLocalScore },
-          goalsDifference: { decrement: oldVisitorScore - oldLocalScore },
-          points: { decrement: oldVisitorPoints },
-          totalPoints: { decrement: oldVisitorPoints },
-        },
-      });
-    } catch (error) {
-      console.error(`Error al revertir estadísticas del equipo visitante: ${(error as Error).message}`);
-      return {
-        ok: false,
-        message: 'Error al revertir estadísticas del equipo visitante',
-        currentMatch: null,
-      };
-    }
+    const updatedMatch = await prisma.$transaction(async (transaction) => {
+      if (isLeague) {
+        // Revert old standings for local team
+        await transaction.standings.update({
+          where: { id: localStandingsId },
+          data: {
+            matchesPlayed: { decrement: 1 },
+            wins: { decrement: oldLocalPoints === 3 ? 1 : 0 },
+            losses: { decrement: oldLocalPoints === 0 ? 1 : 0 },
+            draws: { decrement: oldLocalPoints === 1 ? 1 : 0 },
+            goalsFor: { decrement: oldLocalScore },
+            goalsAgainst: { decrement: oldVisitorScore },
+            goalsDifference: { decrement: oldLocalScore - oldVisitorScore },
+            points: { decrement: oldLocalPoints },
+            totalPoints: { decrement: oldLocalPoints },
+          },
+        });
 
-    // Apply new standings for local team
-    try {
-      await updateTeamStandings({
-        teamId: localId,
-        tournamentId,
-        categoryId,
-        data: {
-          matchesPlayed: { increment: 1 },
-          wins: { increment: newLocalPoints === 3 ? 1 : 0 },
-          losses: { increment: newLocalPoints === 0 ? 1 : 0 },
-          draws: { increment: newLocalPoints === 1 ? 1 : 0 },
-          goalsFor: { increment: localScore },
-          goalsAgainst: { increment: visitorScore },
-          goalsDifference: { increment: localScore - visitorScore },
-          points: { increment: newLocalPoints },
-          totalPoints: { increment: newLocalPoints },
-        },
-      });
-    } catch (error) {
-      console.error(`Error updating local team stats: ${(error as Error).message}`);
-      return {
-        ok: false,
-        message: 'Error al actualizar estadísticas del equipo local',
-        currentMatch: null,
-      };
-    }
+        // Revert old standings for visitor team
+        await transaction.standings.update({
+          where: { id: visitorStandingsId },
+          data: {
+            matchesPlayed: { decrement: 1 },
+            wins: { decrement: oldVisitorPoints === 3 ? 1 : 0 },
+            losses: { decrement: oldVisitorPoints === 0 ? 1 : 0 },
+            draws: { decrement: oldVisitorPoints === 1 ? 1 : 0 },
+            goalsFor: { decrement: oldVisitorScore },
+            goalsAgainst: { decrement: oldLocalScore },
+            goalsDifference: { decrement: oldVisitorScore - oldLocalScore },
+            points: { decrement: oldVisitorPoints },
+            totalPoints: { decrement: oldVisitorPoints },
+          },
+        });
 
-    // Apply new standings for visitor team
-    try {
-      await updateTeamStandings({
-        teamId: visitorId,
-        tournamentId,
-        categoryId,
-        data: {
-          matchesPlayed: { increment: 1 },
-          wins: { increment: newVisitorPoints === 3 ? 1 : 0 },
-          losses: { increment: newVisitorPoints === 0 ? 1 : 0 },
-          draws: { increment: newVisitorPoints === 1 ? 1 : 0 },
-          goalsFor: { increment: visitorScore },
-          goalsAgainst: { increment: localScore },
-          goalsDifference: { increment: visitorScore - localScore },
-          points: { increment: newVisitorPoints },
-          totalPoints: { increment: newVisitorPoints },
-        },
-      });
-    } catch (error) {
-      console.error(`Error updating visitor team stats: ${(error as Error).message}`);
-      return {
-        ok: false,
-        message: 'Error al actualizar estadísticas del equipo visitante',
-        currentMatch: null,
-      };
-    }
+        // Apply new standings for local team
+        await transaction.standings.update({
+          where: { id: localStandingsId },
+          data: {
+            matchesPlayed: { increment: 1 },
+            wins: { increment: newLocalPoints === 3 ? 1 : 0 },
+            losses: { increment: newLocalPoints === 0 ? 1 : 0 },
+            draws: { increment: newLocalPoints === 1 ? 1 : 0 },
+            goalsFor: { increment: localScore },
+            goalsAgainst: { increment: visitorScore },
+            goalsDifference: { increment: localScore - visitorScore },
+            points: { increment: newLocalPoints },
+            totalPoints: { increment: newLocalPoints },
+          },
+        });
 
-    // Update match
-    const updatedMatch = await prisma.match.update({
-      where: { id: matchId },
-      data: {
-        localScore,
-        visitorScore,
-        status: MATCH_STATUS.COMPLETED,
-      },
-      select: {
-        tournament: {
-          select: {
-            id: true,
-            permalink: true,
+        // Apply new standings for visitor team
+        await transaction.standings.update({
+          where: { id: visitorStandingsId },
+          data: {
+            matchesPlayed: { increment: 1 },
+            wins: { increment: newVisitorPoints === 3 ? 1 : 0 },
+            losses: { increment: newVisitorPoints === 0 ? 1 : 0 },
+            draws: { increment: newVisitorPoints === 1 ? 1 : 0 },
+            goalsFor: { increment: visitorScore },
+            goalsAgainst: { increment: localScore },
+            goalsDifference: { increment: visitorScore - localScore },
+            points: { increment: newVisitorPoints },
+            totalPoints: { increment: newVisitorPoints },
+          },
+        });
+      }
+
+      const updated = await transaction.match.update({
+        where: { id: matchId },
+        data: {
+          localScore,
+          visitorScore,
+          status: MATCH_STATUS.COMPLETED,
+        },
+        select: {
+          id: true,
+          tournament: {
+            select: {
+              id: true,
+              permalink: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+              permalink: true,
+            },
           },
         },
-        category: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-      },
+      });
+
+      if (!updated) {
+        throw new Error(`No se pudo actualizar el partido ${matchId}`);
+      }
+
+      return updated;
     });
 
     // Refresh caches
     updateTag('admin-matches');
-    updateTag('admin-match');
+    updateTag(`admin-match-${updatedMatch.id}`);
     updateTag('matches');
     updateTag('public-standings');
     updateTag('dashboard-results');
@@ -232,14 +244,6 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
     updateTag('public-result-details');
     updateTag('public-matches-count');
     updateTag('public-team-standings');
-
-    if (!updatedMatch) {
-      return {
-        ok: false,
-        message: 'No se pudo actualizar el partido',
-        currentMatch: null,
-      };
-    }
 
     return {
       ok: true,
@@ -250,66 +254,37 @@ export const updateMatchScoreAction = async (props: Props): ResponseAction => {
       },
     };
   } catch (error) {
-    console.error(`Error: ${(error as Error).message}`);
+    let errorMessage = 'Error inesperado';
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      // The standings rows are validated before the transaction, so a P2001 here
+      // means one of them was deleted in between.
+      if (error.code === 'P2001') {
+        errorMessage = 'El partido o las estadísticas de los equipos no existen';
+      } else if (error.code === 'P2002') {
+        errorMessage = 'Hay campos duplicados';
+      } else {
+        errorMessage = 'Error al actualizar el marcador del partido';
+      }
+
+      console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
+      console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
+      console.log('META:', error.meta);
+      console.log('MESSAGE:', error.message);
+      console.log('='.repeat(54));
+    } else if (error instanceof Error) {
+      console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
+      console.log('MESSAGE:', error.message);
+    } else {
+      console.log(error);
+    }
+
     return {
       ok: false,
-      message: 'Error inesperado al actualizar el partido',
+      message: `${errorMessage}, revise los logs del servidor`,
       currentMatch: null,
     };
   }
-};
-
-type StandingsFieldMutation = { increment: number } | { decrement: number };
-
-const updateTeamStandings = async ({
-  teamId,
-  tournamentId,
-  categoryId,
-  data,
-}: {
-  teamId: string,
-  tournamentId: string,
-  categoryId: string | null,
-  data: {
-    matchesPlayed: StandingsFieldMutation;
-    wins: StandingsFieldMutation;
-    losses: StandingsFieldMutation;
-    draws: StandingsFieldMutation;
-    goalsFor: StandingsFieldMutation;
-    goalsAgainst: StandingsFieldMutation;
-    goalsDifference: StandingsFieldMutation;
-    points: StandingsFieldMutation;
-    totalPoints: StandingsFieldMutation;
-  },
-}): Promise<void> => {
-  const standings = await prisma.standings.findFirst({
-    where: { teamId, tournamentId, categoryId },
-    select: { id: true },
-  });
-
-  if (!standings) {
-    throw new Error(`Standings record not found for team ${teamId} in tournament ${tournamentId}`);
-  }
-
-  await prisma.standings.update({
-    where: { id: standings.id },
-    data,
-  });
-};
-
-export type ResponseAction = Promise<{
-  ok: boolean;
-  message: string;
-  currentMatch: MATCH_TYPE | null;
-}>;
-
-type MATCH_TYPE = {
-  tournament: {
-    permalink: string;
-  };
-  category: {
-    id: string;
-    name: string;
-    permalink: string;
-  } | null;
 };

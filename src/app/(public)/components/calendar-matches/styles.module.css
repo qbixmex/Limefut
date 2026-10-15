@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "#globals.css";
 
 .head {
   display: flex;
@@ -8,6 +8,7 @@
   color: var(--color-emerald-50);
   padding-inline: --spacing(6);
   padding-block: --spacing(3);
+
   @apply rounded-t-lg;
 
   p {
@@ -25,6 +26,10 @@
   border: 1px solid var(--color-green-900);
   padding: --spacing(5);
 
+  @variant dark {
+    background-color: --alpha(var(--color-green-800) / 20%);
+  }
+
   @apply rounded-b-lg;
 }
 
@@ -33,6 +38,10 @@
   flex-direction: column;
   gap: --spacing(3);
   color: var(--color-gray-800);
+
+  @variant dark {
+    color: var(--color-gray-200);
+  }
 }
 
 .resultsWrapper {
@@ -92,10 +101,22 @@
 
 .matchPending {
   color: var(--color-gray-700);
+
+  @variant dark {
+    color: var(--color-gray-500);
+  }
 }
 
 .matchCompleted {
   color: var(--color-blue-500);
+
+  @variant dark {
+    color: var(--color-blue-500);
+  }
+}
+
+.matchInProgress {
+  color: var(--color-amber-500);
 }
 
 .noMatchesContent {
@@ -108,43 +129,23 @@
   .message {
     color: --alpha(var(--color-green-800) / 90%);
     @apply text-2xl font-semibold italic text-center text-balance;
+
+    @variant dark {
+      color: var(--color-green-500);
+    }
   }
 }
 
 .soccerPlayerIcon {
   color: color-mix(in oklab, var(--color-emerald-500) 70%, #000 30%) !important;
+
+  @variant dark {
+    color: var(--color-green-500) !important;
+  }
 }
 
 .pagination {
   display: flex;
   justify-content: center;
   margin-top: --spacing(5);
-}
-
-:global(.dark) {
-  .content {
-    background-color: --alpha(var(--color-green-800) / 20%);
-  }
-
-  .results {
-    color: var(--color-gray-200);
-  }
-
-  .matchCompleted {
-    color: var(--color-blue-500);
-  }
-
-  .matchPending {
-    color: var(--color-gray-500);
-  }
-
-  .soccerPlayerIcon {
-    color: var(--color-green-500) !important;
-  }
-
-  .noMatchesContent {
-    .message {
-      color: var(--color-green-500);
-    }
-  }
 }

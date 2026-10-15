@@ -19,6 +19,7 @@ const createFormDefaultValues = () => ({
   referee: undefined,
   matchDate: undefined,
   status: undefined,
+  mode: undefined,
   week: 0,
   tournament: undefined,
   category: undefined,
@@ -57,6 +58,7 @@ export const useCreateMatch = ({
     if (data.referee) formData.append('referee', data.referee);
     if (data.matchDate) formData.append('matchDate', data.matchDate.toISOString());
     formData.append('status', data.status);
+    if (data.mode) formData.append('mode', data.mode);
     formData.append('week', data.week.toString());
     formData.append('tournament', data.tournament);
     formData.append('category', data.category);

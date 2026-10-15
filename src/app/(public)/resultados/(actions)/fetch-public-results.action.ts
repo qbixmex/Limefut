@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import type { MATCH_MODE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type MATCH_TYPE = {
@@ -8,6 +9,7 @@ export type MATCH_TYPE = {
   localScore: number | null;
   visitorScore: number | null;
   matchDate: Date | null;
+  mode: MATCH_MODE_TYPE;
   week: number | null;
   status: string;
   field: {
@@ -76,6 +78,7 @@ export const fetchPublicResultsAction = async ({
         localScore: true,
         visitorScore: true,
         matchDate: true,
+        mode: true,
         week: true,
         status: true,
         field: {

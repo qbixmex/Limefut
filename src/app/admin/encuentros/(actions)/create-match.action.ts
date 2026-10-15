@@ -3,7 +3,8 @@
 import prisma from '@/lib/prisma';
 import { createMatchSchema } from '@/shared/schemas';
 import { updateTag } from 'next/cache';
-import { MATCH_STATUS, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_STATUS } from '@/shared/enums';
 import { Prisma } from '@/generated/prisma/client';
 import { requireAdmin } from '@/lib/get-session';
 
@@ -23,6 +24,7 @@ export type MATCH_TYPE = {
   matchDate: Date | null;
   localId: string;
   visitorId: string;
+  mode: MATCH_MODE_TYPE;
   tournament: {
     id: string;
     name: string;
@@ -59,6 +61,7 @@ export const createMatchAction = async ({
   }
 
   const rawData = {
+    id: '',
     localTeamId: formData.get('localTeamId') ?? '',
     localScore: parseInt(formData.get('localScore') as string ?? '0'),
     visitorTeamId: formData.get('visitorTeamId') ?? '',
@@ -71,6 +74,7 @@ export const createMatchAction = async ({
     status: formData.get('status') ?? MATCH_STATUS.SCHEDULED,
     tournament: formData.get('tournament') ?? '',
     category: formData.get('category') ?? '',
+    mode: formData.get('mode') ?? undefined,
     week: formData.get('week') ? Number(formData.get('week')) : 0,
   };
 
@@ -146,6 +150,7 @@ export const createMatchAction = async ({
           },
         },
         matchDate: true,
+        mode: true,
         week: true,
         referee: true,
         localScore: true,
@@ -191,12 +196,15 @@ export const createMatchAction = async ({
           status: matchToSave.status as MATCH_STATUS_TYPE,
           tournamentId: tournament.id,
           categoryId: category.id,
+          mode: matchToSave.mode as MATCH_MODE_TYPE,
           week: matchToSave.week !== 0
             ? matchToSave.week as number
             : null,
         },
         select: selectMatch,
       });
+
+      rawData.id = createdMatch.id;
 
       return {
         ok: true,
@@ -215,7 +223,7 @@ export const createMatchAction = async ({
 
     // Update Cache
     updateTag('admin-matches');
-    updateTag('admin-match');
+    updateTag(`admin-match-${rawData.id}`);
     updateTag('matches');
     updateTag('dashboard-results');
     updateTag('admin-tournament-for-match');

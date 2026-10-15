@@ -2,6 +2,7 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
+import type { MATCH_MODE_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export type MatchType = {
@@ -9,6 +10,7 @@ export type MatchType = {
   localScore: number | null;
   visitorScore: number | null;
   matchDate: Date | null;
+  mode: MATCH_MODE_TYPE;
   week: number | null;
   status: string;
   field: {
@@ -86,6 +88,7 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
       localScore: true,
       visitorScore: true,
       matchDate: true,
+      mode: true,
       week: true,
       status: true,
       field: {

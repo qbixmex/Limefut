@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useEditMatch } from '@/app/admin/encuentros/editar/[id]/use-edit-match';
 import { ROUTES } from '@/shared/constants/routes';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 import { matchForEditMock, MATCH_ID } from '../mocks/match-for-edit.mock';
 import { AMERICA, CHIVAS } from '../mocks/teams.mock';
 
@@ -36,6 +36,7 @@ const validData = {
   referee: 'Fernando García',
   matchDate: new Date('2026-05-16T17:00:00.000Z'),
   status: MATCH_STATUS.SCHEDULED,
+  mode: MATCH_MODE.FRIENDLY,
   week: 12,
   tournament: 'liga-mx',
   category: 'sub-15',
@@ -58,7 +59,7 @@ describe('Tests on useEditMatch hook', () => {
   });
 
   test('Should initialize the form with the match values', () => {
-    const { result } = renderHook(() => useEditMatch({ match: matchForEditMock }));
+    const { result } = renderHook(() => useEditMatch(matchForEditMock));
 
     const values = result.current.form.getValues();
 
@@ -71,18 +72,22 @@ describe('Tests on useEditMatch hook', () => {
     expect(values.category).toBe('sub-15');
   });
 
+  test('Should initialize the form with the match mode', () => {
+    const { result } = renderHook(() => useEditMatch(matchForEditMock));
+
+    expect(result.current.form.getValues().mode).toBe(MATCH_MODE.FRIENDLY);
+  });
+
   test('Should not hide the scores for a scheduled match', () => {
-    const { result } = renderHook(() => useEditMatch({ match: matchForEditMock }));
+    const { result } = renderHook(() => useEditMatch(matchForEditMock));
 
     expect(result.current.hiddenScores).toBe(false);
   });
 
   test('Should not hide the scores for in progress match', () => {
     const { result } = renderHook(() => useEditMatch({
-      match: {
-        ...matchForEditMock,
-        status: MATCH_STATUS.IN_PROGRESS,
-      },
+      ...matchForEditMock,
+      status: MATCH_STATUS.IN_PROGRESS,
     }));
 
     expect(result.current.hiddenScores).toBe(false);
@@ -90,10 +95,8 @@ describe('Tests on useEditMatch hook', () => {
 
   test('Should hide the scores for post posted match', () => {
     const { result } = renderHook(() => useEditMatch({
-      match: {
-        ...matchForEditMock,
-        status: MATCH_STATUS.POST_POSED,
-      },
+      ...matchForEditMock,
+      status: MATCH_STATUS.POST_POSED,
     }));
 
     expect(result.current.hiddenScores).toBe(true);
@@ -102,10 +105,8 @@ describe('Tests on useEditMatch hook', () => {
   test('Should hide the scores for a completed match', () => {
     const { result } = renderHook(() =>
       useEditMatch({
-        match: {
-          ...matchForEditMock,
-          status: MATCH_STATUS.COMPLETED,
-        },
+        ...matchForEditMock,
+        status: MATCH_STATUS.COMPLETED,
       }),
     );
 
@@ -115,10 +116,8 @@ describe('Tests on useEditMatch hook', () => {
   test('Should hide the scores for a canceled match', () => {
     const { result } = renderHook(() =>
       useEditMatch({
-        match: {
-          ...matchForEditMock,
-          status: MATCH_STATUS.CANCELED,
-        },
+        ...matchForEditMock,
+        status: MATCH_STATUS.CANCELED,
       }),
     );
 
@@ -126,7 +125,7 @@ describe('Tests on useEditMatch hook', () => {
   });
 
   test('onSubmit should call updateMatchAction with the correct FormData', async () => {
-    const { result } = renderHook(() => useEditMatch({ match: matchForEditMock }));
+    const { result } = renderHook(() => useEditMatch(matchForEditMock));
 
     await act(async () => {
       await result.current.onSubmit(validData);
@@ -142,11 +141,12 @@ describe('Tests on useEditMatch hook', () => {
     expect(formData.get('visitorTeamId')).toBe(CHIVAS.id);
     expect(formData.get('week')).toBe('12');
     expect(formData.get('tournament')).toBe('liga-mx');
+    expect(formData.get('mode')).toBe(MATCH_MODE.FRIENDLY);
   });
 
   test('onSubmit should show a success toast and navigate on success', async () => {
     const { toast } = await import('sonner');
-    const { result } = renderHook(() => useEditMatch({ match: matchForEditMock }));
+    const { result } = renderHook(() => useEditMatch(matchForEditMock));
 
     await act(async () => {
       await result.current.onSubmit(validData);
@@ -169,7 +169,7 @@ describe('Tests on useEditMatch hook', () => {
         week: 12,
       },
     });
-    const { result } = renderHook(() => useEditMatch({ match: matchForEditMock }));
+    const { result } = renderHook(() => useEditMatch(matchForEditMock));
 
     await act(async () => {
       await result.current.onSubmit(validData);
@@ -185,7 +185,7 @@ describe('Tests on useEditMatch hook', () => {
       match: null,
     });
     const { toast } = await import('sonner');
-    const { result } = renderHook(() => useEditMatch({ match: matchForEditMock }));
+    const { result } = renderHook(() => useEditMatch(matchForEditMock));
 
     await act(async () => {
       await result.current.onSubmit(validData);
@@ -197,7 +197,7 @@ describe('Tests on useEditMatch hook', () => {
 
   test('handleNavigateBack should navigate back keeping the search params', () => {
     mockUseSearchParams.mockReturnValue(new URLSearchParams('page=2'));
-    const { result } = renderHook(() => useEditMatch({ match: matchForEditMock }));
+    const { result } = renderHook(() => useEditMatch(matchForEditMock));
 
     act(() => {
       result.current.handleNavigateBack();

@@ -1,5 +1,5 @@
 import type { MATCH_TYPE } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 
 export const matchesMock: MATCH_TYPE[] = [
   {
@@ -17,14 +17,10 @@ export const matchesMock: MATCH_TYPE[] = [
     localScore: 0,
     visitorScore: 0,
     status: MATCH_STATUS.SCHEDULED,
+    mode: MATCH_MODE.LEAGUE,
     week: 1,
     matchDate: new Date(2026, 2, 15, 20, 30),
     penaltyShootout: null,
-    field: {
-      id: 'c049cf7f-0587-4b6c-873e-52af2e2f9a24',
-      name: 'Estadio Central',
-      permalink: 'estadio-central',
-    },
   },
   {
     id: '3a2f47e5-6bcc-44fb-acac-00f7a4335915',
@@ -41,6 +37,7 @@ export const matchesMock: MATCH_TYPE[] = [
     localScore: 2,
     visitorScore: 1,
     status: MATCH_STATUS.COMPLETED,
+    mode: MATCH_MODE.FRIENDLY,
     week: 2,
     matchDate: new Date(2026, 2, 16, 18, 0),
     penaltyShootout: {
@@ -49,11 +46,6 @@ export const matchesMock: MATCH_TYPE[] = [
       localGoals: 4,
       visitorGoals: 3,
       winnerTeamId: null,
-    },
-    field: {
-      id: '9861ccf6-8f28-4ad4-88fb-9d3e465c804b',
-      name: 'Cancha Norte',
-      permalink: 'cancha-norte',
     },
   },
   {
@@ -71,9 +63,9 @@ export const matchesMock: MATCH_TYPE[] = [
     localScore: 2,
     visitorScore: 1,
     status: MATCH_STATUS.IN_PROGRESS,
+    mode: MATCH_MODE.LEAGUE,
     week: null,
     matchDate: null,
     penaltyShootout: null,
-    field: null,
   },
 ];

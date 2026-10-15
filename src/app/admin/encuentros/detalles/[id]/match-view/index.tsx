@@ -23,6 +23,7 @@ import { ROUTES } from '@/shared/constants/routes';
 import { EditMatch } from '../../../(components)/edit-match';
 const TIME_ZONE = 'America/Mexico_City';
 import styles from './styles.module.css';
+import { getMatchMode } from '@/lib/utils';
 
 type Props = Readonly<{
   params: Promise<{
@@ -90,23 +91,36 @@ export const MatchView: FC<Props> = async ({ params }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className={styles.tableHead}>Arbitro</TableHead>
+              <TableHead className={styles.tableHead}>Torneo</TableHead>
               <TableCell>
-                <span role="text" aria-label="Arbitro del encuentro">
-                  {match.referee ?? (
-                    <span className={styles.undefinedText}>No definido</span>
-                  )}
-                </span>
+                <Link
+                  href={ROUTES.ADMIN_TOURNAMENTS_SHOW(match.tournament.id)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {match.tournament.name}
+                </Link>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableHead className={styles.tableHead}>Sede</TableHead>
               <TableCell>
-                <span role="text" aria-label="Sede del encuentro">
-                  {match.field?.name ?? (
-                    <span className={styles.undefinedText}>No definida</span>
-                  )}
-                </span>
+                {
+                  match.field ? (
+                    <Link
+                      href={ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}
+                      title="Ir a sede del encuentro"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      { match.field.name }
+                    </Link>
+                  ) : (
+                    <Badge variant="outline-secondary">
+                      no definida
+                    </Badge>
+                  )
+                }
               </TableCell>
             </TableRow>
             <TableRow>
@@ -142,10 +156,21 @@ export const MatchView: FC<Props> = async ({ params }) => {
               </TableCell>
             </TableRow>
             <TableRow>
+              <TableHead className={styles.tableHead}>Arbitro</TableHead>
+              <TableCell>
+                <span role="text" aria-label="Arbitro del encuentro">
+                  {match.referee ?? (
+                    <span className={styles.undefinedText}>No definido</span>
+                  )}
+                </span>
+              </TableCell>
+            </TableRow>
+            <TableRow>
               <TableHead className={styles.tableHead}>Estado</TableHead>
               <TableCell>
                 <Badge
                   variant={getMatchStatus(match.status).variant}
+                  className="uppercase"
                   role="status"
                   aria-label="Estado del encuentro"
                 >
@@ -154,15 +179,20 @@ export const MatchView: FC<Props> = async ({ params }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableHead className={styles.tableHead}>Torneo</TableHead>
+              <TableHead className={styles.tableHead}>Modo</TableHead>
               <TableCell>
-                <Link
-                  href={ROUTES.ADMIN_TOURNAMENTS_SHOW(match.tournament.id)}
-                  target="_blank"
-                  rel="noreferrer"
+                <Badge
+                  variant={
+                    match.mode === 'league'
+                      ? 'outline-primary'
+                      : 'outline-special'
+                  }
+                  className="uppercase"
+                  role="status"
+                  aria-label="Modo del encuentro"
                 >
-                  {match.tournament.name}
-                </Link>
+                  {getMatchMode(match.mode)}
+                </Badge>
               </TableCell>
             </TableRow>
             <TableRow>
