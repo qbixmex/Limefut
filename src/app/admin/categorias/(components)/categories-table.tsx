@@ -8,7 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Pagination } from '@/shared/components/pagination';
-import { Pagination as PAGINATION_TYPE } from '@/shared/interfaces';
+import type { Pagination as PAGINATION_TYPE } from '@/shared/interfaces';
 import { EditCategory } from './edit-category';
 import { fetchCategoriesAction, type CATEGORY_TYPE } from '../(actions)/fetch-categories.action';
 import { DeleteCategory } from './delete-category';
