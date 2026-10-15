@@ -38,7 +38,7 @@ export const TeamsSelector: FC<Props> = ({ teams }) => {
   const setTeamIdParam = (id: string) => {
     const params = new URLSearchParams(searchParams);
     params.set('team', id);
-    router.push(`${pathname}?${params}`);
+    router.push(`${pathname}${params.size > 0 ? ('?' + params) : ''}`);
     setOpen(false);
   };
 
@@ -71,8 +71,11 @@ export const TeamsSelector: FC<Props> = ({ teams }) => {
                 <CommandItem
                   value="none"
                   onSelect={() => setTeamIdParam('none')}
+                  aria-label="Opción sin equipo asignado"
                 >
-                  <span className="text-gray-400 italic">Jugadores sin equipo asignado</span>
+                  <span className="text-gray-400 italic">
+                    Jugadores sin equipo asignado
+                  </span>
                   <Check
                     className={cn('ml-auto size-4', {
                         'opacity-100': teamId === 'none',
@@ -85,14 +88,15 @@ export const TeamsSelector: FC<Props> = ({ teams }) => {
                     key={team.id}
                     value={team.name}
                     onSelect={() => setTeamIdParam(team.id)}
+                    aria-label={`Equipo ${team.name}`}
                   >
                     {team.name}
-                    <Check
-                      className={cn('ml-auto size-4', {
-                        'opacity-100': teamId === team.id,
-                        'opacity-0': teamId !== team.id,
-                      })}
-                    />
+                    {(teamId === team.id) && (
+                      <Check
+                        className="ml-auto size-4"
+                        aria-hidden="true"
+                      />
+                    )}
                   </CommandItem>
                 ))}
               </CommandGroup>
