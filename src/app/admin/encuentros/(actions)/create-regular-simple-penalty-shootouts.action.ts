@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { updateTag } from 'next/cache';
+import { Prisma } from '@/generated/prisma/client';
 import type { PenaltyShootout } from '@/shared/interfaces';
 import { SimplePenaltyShootoutsSchema } from '~/src/shared/schemas';
 import { requireAdmin } from '@/lib/get-session';
@@ -113,23 +114,34 @@ export const createRegularSimplePenaltyShootoutAction = async (
 
     return prismaTransaction;
   } catch (error) {
-    if (error instanceof Error && 'meta' in error && error.meta) {
-      console.log('NAME:', error.name);
+    let errorMessage = 'Error inesperado';
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2001') {
+        errorMessage = 'La tanda de penales no existe';
+      } else if (error.code === 'P2002') {
+        errorMessage = 'Hay campos duplicados';
+      } else {
+        errorMessage = 'Error al crear la tanda de penales';
+      }
+
+      console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
       console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
       console.log('META:', error.meta);
       console.log('MESSAGE:', error.message);
-      console.log(error.message);
-      return {
-        ok: false,
-        message: 'Error al crear la tanda de penales, revise los logs del servidor',
-        penaltyShootout: null,
-      };
+      console.log('='.repeat(54));
+    } else if (error instanceof Error) {
+      console.log('CAUSE:', error.cause);
+      console.log('NAME:', error.name);
+      console.log('MESSAGE:', error.message);
+    } else {
+      console.log(error);
     }
-    console.log('Error Cause:', (error as Error).cause);
-    console.log('Error Message:', (error as Error).message);
+
     return {
       ok: false,
-      message: 'Error inesperado, revise los logs del servidor',
+      message: `${errorMessage}, revise los logs del servidor`,
       penaltyShootout: null,
     };
   }

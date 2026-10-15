@@ -4,7 +4,7 @@ import { Pagination } from '@/shared/components/pagination';
 import { Team } from '../results/team';
 import { MatchMetadata } from '../results/match-metadata';
 import { Medal, Minus } from 'lucide-react';
-import { MATCH_STATUS, type ROUND_TYPE } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS, type ROUND_TYPE } from '@/shared/enums';
 import { fetchPublicPlayoffMatchesAction } from '../../(actions)/home/fetchPublicPlayoffMatchesAction';
 import { EditMatch } from '../edit-match';
 import { cn } from '@/lib/utils';
@@ -65,6 +65,7 @@ export const PlayoffMatches: FC<Props> = async ({ playoffsPromise }) => {
                       field={match.field}
                       date={match.matchDate}
                       status={match.status}
+                      mode={MATCH_MODE.LEAGUE}
                       round={match.round as ROUND_TYPE}
                       group={match.group}
                     />

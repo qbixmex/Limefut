@@ -51,11 +51,6 @@
   text-wrap: wrap;
 }
 
-.undefinedText {
-  font-style: italic;
-  color: var(--color-gray-500);
-}
-
 .penaltyShootsHeading {
   font-weight: 700;
   color: var(--color-sky-500);

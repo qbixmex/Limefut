@@ -1,7 +1,7 @@
 import { Suspense, type FC } from 'react';
 import { MatchesTableSkeleton } from './(components)/matches-table-skeleton';
 import { MatchesWrapper } from './(components)/matches.wrapper';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
 import { ROUTES } from '@/shared/constants/routes';
 import { redirect } from 'next/navigation';
 import { fetchAdminTournamentAction } from '@/shared/actions/fetch-admin-tournament.action';
@@ -16,6 +16,7 @@ type Props = Readonly<{
     'sort-match-date'?: 'asc' | 'desc';
     'sort-week'?: 'asc' | 'desc';
     status?: MATCH_STATUS_TYPE;
+    mode?: MATCH_MODE_TYPE;
   }>;
 }>;
 
@@ -28,6 +29,7 @@ export const MatchesView: FC<Props> = async ({ searchParams }) => {
     'sort-week': sortWeek = 'asc',
     'sort-match-date': sortMatchDate = 'asc',
     status,
+    mode,
   } = await searchParams;
 
   if (!tournamentPermalink || !categoryPermalink) {
@@ -80,6 +82,7 @@ export const MatchesView: FC<Props> = async ({ searchParams }) => {
           sortMatchDate={sortMatchDate}
           sortWeek={sortWeek}
           status={status as MATCH_STATUS_TYPE}
+          mode={mode as MATCH_MODE_TYPE}
         />
       </Suspense>
     </section>

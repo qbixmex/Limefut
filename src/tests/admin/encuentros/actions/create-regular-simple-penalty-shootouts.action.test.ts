@@ -1,7 +1,24 @@
-const { mockTransaction, mockGetSession } = vi.hoisted(() => ({
-  mockTransaction: vi.fn(),
-  mockGetSession: vi.fn(),
-}));
+const { MockPrismaClientKnownRequestError, mockTransaction, mockGetSession } = vi.hoisted(() => {
+  class MockPrismaClientKnownRequestError extends Error {
+    code: string;
+    meta?: Record<string, unknown>;
+    constructor(
+      message: string,
+      options: { code: string; meta?: Record<string, unknown> },
+    ) {
+      super(message);
+      this.name = 'PrismaClientKnownRequestError';
+      this.code = options.code;
+      this.meta = options.meta;
+    }
+  }
+
+  return {
+    MockPrismaClientKnownRequestError,
+    mockTransaction: vi.fn(),
+    mockGetSession: vi.fn(),
+  };
+});
 
 vi.mock('next/cache');
 
@@ -31,6 +48,12 @@ vi.mock('@/lib/get-session', () => ({
 vi.mock('@/lib/prisma', () => ({
   default: {
     $transaction: mockTransaction,
+  },
+}));
+
+vi.mock('@/generated/prisma/client', () => ({
+  Prisma: {
+    PrismaClientKnownRequestError: MockPrismaClientKnownRequestError,
   },
 }));
 
@@ -145,6 +168,51 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
         data: expect.objectContaining({ winnerTeamId: CHIVAS.id }),
       }),
     );
+  });
+
+  test('Should return a "not found" error on missing records (P2001)', async () => {
+    mockTransaction.mockRejectedValue(
+      new MockPrismaClientKnownRequestError('Record not found', {
+        code: 'P2001',
+        meta: { modelName: 'PenaltyShootout', target: ['matchId'] },
+      }),
+    );
+
+    const response = await createRegularSimplePenaltyShootoutAction(validFormData());
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toMatch(/la tanda de penales no existe/i);
+    expect(response.penaltyShootout).toBe(null);
+  });
+
+  test('Should return error on duplicate fields (P2002)', async () => {
+    mockTransaction.mockRejectedValue(
+      new MockPrismaClientKnownRequestError('Unique constraint failed', {
+        code: 'P2002',
+        meta: { modelName: 'PenaltyShootout', target: ['matchId'] },
+      }),
+    );
+
+    const response = await createRegularSimplePenaltyShootoutAction(validFormData());
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toMatch(/hay campos duplicados/i);
+    expect(response.message).not.toMatch(/matchId/i);
+    expect(response.penaltyShootout).toBe(null);
+  });
+
+  test('Should return a generic error on other prisma codes', async () => {
+    mockTransaction.mockRejectedValue(
+      new MockPrismaClientKnownRequestError('Foreign key constraint failed', {
+        code: 'P2003',
+        meta: { modelName: 'PenaltyShootout' },
+      }),
+    );
+
+    const response = await createRegularSimplePenaltyShootoutAction(validFormData());
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toMatch(/error al crear la tanda de penales/i);
   });
 
   test('Should return an error on unexpected failures', async () => {

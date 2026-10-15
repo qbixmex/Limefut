@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 import type { Prisma } from '@/generated/prisma/client';
 
@@ -32,6 +32,7 @@ export type MatchResponse = {
   localScore: number;
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
+  mode: MATCH_MODE_TYPE;
   week: number | null;
   field: {
     id: string;
@@ -89,6 +90,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
       visitorScore: true,
       status: true,
       week: true,
+      mode: true,
       field: {
         select: {
           id: true,
@@ -172,6 +174,7 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         localScore: match.localScore ?? 0,
         visitorScore: match.visitorScore ?? 0,
         status: match.status as MATCH_STATUS_TYPE,
+        mode: match.mode,
         week: match.week,
         field: match.field,
         category: match.category,

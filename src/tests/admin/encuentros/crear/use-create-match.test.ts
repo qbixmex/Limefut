@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useCreateMatch } from '@/app/admin/encuentros/crear/use-create-match';
 import { ROUTES } from '@/shared/constants/routes';
+import { MATCH_MODE } from '@/shared/enums';
 import { AMERICA, CHIVAS } from '../mocks/teams.mock';
 import { LIGA_MX } from '../mocks/tournaments.mock';
 import { SUB_15 } from '../mocks/categories.mock';
@@ -36,6 +37,7 @@ const validData = {
   referee: 'Fernando García',
   matchDate: new Date('2026-05-16T17:00:00.000Z'),
   status: 'scheduled' as const,
+  mode: MATCH_MODE.LEAGUE,
   week: 5,
   tournament: LIGA_MX.permalink,
   category: SUB_15.permalink,
@@ -66,6 +68,7 @@ describe('Tests on useCreateMatch hook', () => {
     expect(values.visitorTeamId).toBe('');
     expect(values.visitorScore).toBe(0);
     expect(values.week).toBe(0);
+    expect(values.mode).toBeUndefined();
     expect(values.tournament).toBeUndefined();
     expect(values.category).toBeUndefined();
   });
@@ -98,6 +101,7 @@ describe('Tests on useCreateMatch hook', () => {
     expect(formData.get('localScore')).toBe('2');
     expect(formData.get('visitorScore')).toBe('1');
     expect(formData.get('status')).toBe('scheduled');
+    expect(formData.get('mode')).toBe(MATCH_MODE.LEAGUE);
     expect(formData.get('week')).toBe('5');
     expect(formData.get('tournament')).toBe(LIGA_MX.permalink);
     expect(formData.get('category')).toBe(SUB_15.permalink);
@@ -119,6 +123,7 @@ describe('Tests on useCreateMatch hook', () => {
       localScore: 0,
       localTeamId: '',
       matchDate: undefined,
+      mode: undefined,
       referee: undefined,
       status: undefined,
       tournament: undefined,

@@ -49,6 +49,7 @@ export const LatestResults: FC<Props> = async ({ resultsPromise }) => {
                       field={match.field}
                       date={match.matchDate}
                       status={match.status}
+                      mode={match.mode}
                     />
                   </div>
                   <div className={styles.match}>

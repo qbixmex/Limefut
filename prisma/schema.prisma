@@ -63,6 +63,11 @@ enum PlayoffRound {
   final
 }
 
+enum Mode {
+  league
+  friendly
+}
+
 model User {
   id            String   @id @default(uuid())
   name          String?
@@ -274,6 +279,7 @@ model Match {
   referee      String?
 
   status Status @default(scheduled)
+  mode Mode @default(league)
 
   // Relations
   tournamentId    String           @map("tournament_id")

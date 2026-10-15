@@ -3,7 +3,7 @@
 import prisma from '@/lib/prisma';
 import { requireAdmin } from '@/lib/get-session';
 import { updateTag } from 'next/cache';
-import { MATCH_STATUS } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS } from '@/shared/enums';
 
 export type ResponseRecalculateAction = Promise<{
   ok: boolean;
@@ -75,6 +75,8 @@ export const recalculateStandingsAction = async ({
           tournamentId,
           categoryId,
           status: MATCH_STATUS.COMPLETED,
+          // Friendly matches never count towards the standings table
+          mode: MATCH_MODE.LEAGUE,
         },
         select: {
           localId: true,

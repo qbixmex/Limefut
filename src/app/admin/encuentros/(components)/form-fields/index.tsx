@@ -15,6 +15,7 @@ import { TournamentSelectField } from './tournament-select-field';
 import { CategorySelectField } from './category-select-field';
 import { MATCH_STATUS } from '@/shared/enums';
 import styles from './match-form.module.css';
+import { MatchModeSelectField } from './match-mode-select-field';
 
 export const FormFields: FC<Props> = ({
   tournaments,
@@ -84,6 +85,9 @@ export const FormFields: FC<Props> = ({
             {((!match) || (match?.status !== MATCH_STATUS.COMPLETED)) && (
               <StatusField />
             )}
+          </div>
+          <div>
+            <MatchModeSelectField />
           </div>
           <div>
             <WeekField />

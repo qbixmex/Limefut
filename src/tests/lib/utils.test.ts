@@ -3,6 +3,7 @@ import {
   getAlignmentTranslation,
   getBadgeRobotsVariant,
   getGenderTranslation,
+  getMatchMode,
   getPageStatus,
   getPlayoffGroup,
   getPlayoffRound,
@@ -15,7 +16,7 @@ import {
   slugify,
 } from '@/lib/utils';
 import { PAGE_STATUS, ROBOTS } from '@/shared/interfaces';
-import { MATCH_STATUS, ROUND, type MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS, ROUND, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { SPONSOR_ALIGNMENT } from '@/shared/enums/sponsor-alignment';
 import { LANGUAGE } from '../../shared/enums/language.enum';
 
@@ -165,5 +166,10 @@ describe('Test on Utils', () => {
   test('Should get playoff group translation to spanish.', () => {
     expect(getPlayoffGroup('gold')).toBe('Oro');
     expect(getPlayoffGroup('silver')).toBe('Plata');
+  });
+
+  test('Should get match mode translation to spanish', () => {
+    expect(getMatchMode(MATCH_MODE.LEAGUE)).toBe('liga');
+    expect(getMatchMode(MATCH_MODE.FRIENDLY)).toBe('amistoso');
   });
 });

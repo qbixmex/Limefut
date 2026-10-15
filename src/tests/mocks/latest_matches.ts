@@ -1,4 +1,4 @@
-import { MATCH_STATUS, STAGE } from '@/shared/enums';
+import { MATCH_MODE, MATCH_STATUS, STAGE } from '@/shared/enums';
 
 export const latestMatches = [
   {
@@ -25,6 +25,7 @@ export const latestMatches = [
     localScore: 2,
     visitorScore: 3,
     status: MATCH_STATUS.COMPLETED,
+    mode: MATCH_MODE.LEAGUE,
     week: 1,
     field: {
       id: 'field-estadio-akron',
@@ -63,6 +64,7 @@ export const latestMatches = [
     localScore: 2,
     visitorScore: 1,
     status: MATCH_STATUS.COMPLETED,
+    mode: MATCH_MODE.FRIENDLY,
     week: 1,
     field: {
       id: 'field-estadio-azteca',

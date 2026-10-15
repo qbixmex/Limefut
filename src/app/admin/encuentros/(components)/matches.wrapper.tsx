@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { MatchesTable } from './matches-table';
-import type { MATCH_STATUS_TYPE } from '@/shared/enums';
+import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
 import { fetchMatchesAction } from '@/app/admin/encuentros/(actions)/fetch-matches.action';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/shared/constants/routes';
@@ -13,6 +13,7 @@ type Props = Readonly<{
   sortMatchDate: 'asc' | 'desc';
   sortWeek: `${number}` | 'asc' | 'desc' | undefined;
   status: MATCH_STATUS_TYPE;
+  mode?: MATCH_MODE_TYPE;
 }>;
 
 export const MatchesWrapper: FC<Props> = async ({
@@ -23,6 +24,7 @@ export const MatchesWrapper: FC<Props> = async ({
   sortMatchDate,
   sortWeek,
   status,
+  mode,
 }) => {
   const { ok, message, matches, pagination } = await fetchMatchesAction({
     tournamentId,
@@ -33,6 +35,7 @@ export const MatchesWrapper: FC<Props> = async ({
     sortMatchDate,
     sortWeek,
     status,
+    mode,
   });
 
   if (!ok) {

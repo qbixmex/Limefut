@@ -46,7 +46,7 @@ export const updateMatchInputScoreAction = async (params: Params): ResponseActio
     }
 
     updateTag('admin-matches');
-    updateTag('admin-match');
+    updateTag(`admin-match-${updatedMatch.id}`);
     updateTag('matches');
     updateTag('dashboard-results');
     updateTag('public-matches');

@@ -11,7 +11,7 @@ import type { MATCH_STATUS_TYPE } from '@/shared/enums';
 import { getMatchStatus } from '@/app/(public)/resultados/(helpers)/status';
 import type { MATCH_TYPE } from '@/app/(public)/resultados/(actions)/fetch-public-results.action';
 import { ROUTES } from '@/shared/constants/routes';
-import { cn } from '@/lib/utils';
+import { cn, getMatchMode } from '@/lib/utils';
 
 const TIME_ZONE = 'America/Mexico_City';
 
@@ -199,6 +199,20 @@ export const MatchRow: FC<Props> = ({ match, roles, teamPermalink }) => (
           </Link>
         </span>
       </div>
+    </TableCell>
+    <TableCell className="hidden md:table-cell w-30">
+      <Badge
+        variant={
+          (match.mode === 'league')
+            ? 'outline-primary'
+            : 'outline-special'
+        }
+        className="w-25 uppercase font-semibold"
+        role="status"
+        aria-label="Modalidad del encuentro"
+      >
+        {getMatchMode(match.mode)}
+      </Badge>
     </TableCell>
     <TableCell className="hidden md:table-cell">
       <Badge
