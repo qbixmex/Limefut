@@ -44,6 +44,14 @@ function SetLongNationality() {
   return null;
 }
 
+function SetNullNationality() {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    setValue('nationality', null, { shouldValidate: true });
+  }, [setValue]);
+  return null;
+}
+
 describe('Test on <NationalityField />', () => {
   test('Should render correctly', () => {
     render(<NationalityField />, { wrapper: TestWrapper });
@@ -92,5 +100,17 @@ describe('Test on <NationalityField />', () => {
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/menor a 100 caracteres/i);
+  });
+
+  test('Should render an empty input and show error when value is null', async () => {
+    render(
+      <TestWrapper>
+        <NationalityField />
+        <SetNullNationality />
+      </TestWrapper>,
+    );
+
+    await screen.findByRole('alert');
+    expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });

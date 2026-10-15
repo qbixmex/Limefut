@@ -2,18 +2,19 @@ import { renderHook, act } from '@testing-library/react';
 import { useCreatePlayer } from '@/app/admin/jugadores/(components)/use-create-player';
 import { ROUTES } from '@/shared/constants/routes';
 
-const { mockReplace, mockCreateAction } = vi.hoisted(() => ({
+const { mockReplace, mockCreateAction, searchParamsMock } = vi.hoisted(() => ({
   mockReplace: vi.fn(),
   mockCreateAction: vi.fn<
     (params: {
       formData: FormData;
     }) => Promise<{ ok: boolean; message: string; player: null }>
   >(),
+  searchParamsMock: { value: new URLSearchParams() },
 }));
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: mockReplace }),
-  useSearchParams: () => new URLSearchParams(),
+  useSearchParams: () => searchParamsMock.value,
 }));
 
 vi.mock('sonner', () => ({
@@ -40,6 +41,7 @@ const validData = {
 describe('Tests on useCreatePlayer hook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    searchParamsMock.value = new URLSearchParams();
     mockCreateAction.mockResolvedValue({
       ok: true,
       message: 'Jugador creado correctamente',
@@ -120,5 +122,97 @@ describe('Tests on useCreatePlayer hook', () => {
 
     expect(toast.error).toHaveBeenCalledWith('Error al crear el jugador');
     expect(mockReplace).not.toHaveBeenCalled();
+  });
+
+  test('onSubmit should append the image to the form data', async () => {
+    const { result } = renderHook(() => useCreatePlayer());
+    const file = new File(['abc'], 'player.png', { type: 'image/png' });
+
+    await act(async () => {
+      await result.current.onSubmit({ ...validData, image: file });
+    });
+
+    const { formData } = mockCreateAction.mock.calls[0][0];
+    expect(formData.get('image')).toBe(file);
+  });
+
+  test('onSubmit should skip the image when no file is provided', async () => {
+    const { result } = renderHook(() => useCreatePlayer());
+
+    await act(async () => {
+      await result.current.onSubmit({ ...validData, image: undefined });
+    });
+
+    const { formData } = mockCreateAction.mock.calls[0][0];
+    expect(formData.get('image')).toBeNull();
+  });
+
+  test('onSubmit should append the birthday as an ISO string', async () => {
+    const { result } = renderHook(() => useCreatePlayer());
+
+    await act(async () => {
+      await result.current.onSubmit(validData);
+    });
+
+    const { formData } = mockCreateAction.mock.calls[0][0];
+    expect(formData.get('birthday')).toBe(validData.birthday.toISOString());
+  });
+
+  test('onSubmit should omit the optional fields when they are empty', async () => {
+    const { result } = renderHook(() => useCreatePlayer());
+
+    await act(async () => {
+      await result.current.onSubmit({
+        name: 'Test Player',
+        active: false,
+        teamId: '',
+      });
+    });
+
+    const { formData } = mockCreateAction.mock.calls[0][0];
+    expect(formData.get('name')).toBe('Test Player');
+    expect(formData.get('email')).toBeNull();
+    expect(formData.get('phone')).toBeNull();
+    expect(formData.get('nationality')).toBeNull();
+    expect(formData.get('birthday')).toBeNull();
+    expect(formData.get('active')).toBe('false');
+    expect(formData.get('teamId')).toBe('');
+  });
+
+  test('onSubmit should forward the tournament param on success', async () => {
+    searchParamsMock.value = new URLSearchParams('tournament=torneo-a&other=x');
+
+    const { result } = renderHook(() => useCreatePlayer());
+
+    await act(async () => {
+      await result.current.onSubmit(validData);
+    });
+
+    expect(mockReplace).toHaveBeenCalledWith(
+      `${ROUTES.ADMIN_PLAYERS}?tournament=torneo-a`,
+    );
+  });
+
+  test('handleNavigateBack should forward the tournament param', () => {
+    searchParamsMock.value = new URLSearchParams('tournament=torneo-a');
+
+    const { result } = renderHook(() => useCreatePlayer());
+
+    act(() => result.current.handleNavigateBack());
+
+    expect(mockReplace).toHaveBeenCalledWith(
+      `${ROUTES.ADMIN_PLAYERS}?tournament=torneo-a`,
+    );
+  });
+
+  test('onSubmit should default the active flag to false when it is undefined', async () => {
+    const { result } = renderHook(() => useCreatePlayer());
+
+    await act(async () => {
+      await result.current.onSubmit({ ...validData, active: undefined });
+    });
+
+    const { formData } = mockCreateAction.mock.calls[0][0];
+    expect(formData.get('active')).toBe('false');
   });
 });

@@ -121,7 +121,8 @@ describe('Tests on update player action server action', () => {
       user: { id: 'user-1', roles: ['admin'] },
     });
     mockTx.player.count.mockResolvedValue(1);
-    mockTx.player.update.mockResolvedValue(mockUpdatedPlayer);
+    // Spread so the action cannot mutate the shared fixture across tests.
+    mockTx.player.update.mockResolvedValue({ ...mockUpdatedPlayer });
     mockTransaction.mockImplementation(
       (cb: (tx: typeof mockTx) => unknown) => cb(mockTx),
     );
@@ -191,6 +192,35 @@ describe('Tests on update player action server action', () => {
     expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
     expect(response.player).toBe(null);
     expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
+  test('Should fall back to defaults when the form data is empty', async () => {
+    const response = await updatePlayerAction({
+      playerId,
+      formData: new FormData(),
+    });
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toMatch(/nombre/i);
+    expect(response.player).toBe(null);
+    expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
+  test('Should send a null teamId when the team is empty', async () => {
+    const formData = validFormData();
+    formData.set('teamId', '');
+
+    const response = await updatePlayerAction({
+      playerId,
+      formData,
+    });
+
+    expect(response.ok).toBe(true);
+    expect(mockTx.player.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ teamId: null }),
+      }),
+    );
   });
 
   test('Should return error when zod validation fails (short name)', async () => {
@@ -283,7 +313,7 @@ describe('Tests on update player action server action', () => {
   });
 
   test('Should update a player with image when no previous image exists', async () => {
-    mockTx.player.update.mockResolvedValue(mockUpdatedPlayer);
+    mockTx.player.update.mockResolvedValue({ ...mockUpdatedPlayer });
     mockUploadImage.mockResolvedValue({
       secureUrl: 'https://res.cloudinary.com/new/image.jpg',
       publicId: 'new-public-id',
@@ -304,6 +334,25 @@ describe('Tests on update player action server action', () => {
     expect(mockDeleteImage).not.toHaveBeenCalled();
     expect(mockUploadImage).toHaveBeenCalledWith(imageFile, 'coaches');
     expect(mockTx.player.update).toHaveBeenCalledTimes(2);
+  });
+
+  test('Should return error when the image upload fails', async () => {
+    mockTx.player.update.mockResolvedValue({ ...mockUpdatedPlayer });
+    mockUploadImage.mockResolvedValue(null);
+
+    const formData = validFormData();
+    const imageFile = new File([''], 'test.png', { type: 'image/png' });
+    formData.append('image', imageFile);
+
+    const response = await updatePlayerAction({
+      playerId,
+      formData,
+    });
+
+    expect(response.ok).toBe(false);
+    expect(response.message).toMatch(/Error inesperado, revise los logs/i);
+    expect(response.player).toBe(null);
+    expect(mockUploadImage).toHaveBeenCalledWith(imageFile, 'coaches');
   });
 
   test('Should return error when deleteImage fails', async () => {

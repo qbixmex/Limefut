@@ -14,8 +14,9 @@ export const PlayerDetails: FC<Props> = ({ playerId }) => {
         <Link
           href={ROUTES.ADMIN_PLAYER(playerId)}
           className={buttonVariants({ variant: 'outline-info', size: 'icon' })}
+          aria-label="Ir a ver detalles"
         >
-          <InfoIcon />
+          <InfoIcon aria-hidden="true" />
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top">

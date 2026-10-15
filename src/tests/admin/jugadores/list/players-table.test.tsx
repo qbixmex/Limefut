@@ -41,6 +41,9 @@ vi.mock('@/shared/components/delete-players', () => ({
   DeletePlayers: () => <span data-testid="delete-players" />,
 }));
 
+const getProfileLink = (container: HTMLElement, playerId: string) =>
+  container.querySelector(`a[href="/admin/jugadores/perfil/${playerId}"]`) as HTMLAnchorElement;
+
 describe('Tests on <PlayersTable /> component', () => {
   const defaultResponse = {
     ok: true,
@@ -145,5 +148,43 @@ describe('Tests on <PlayersTable /> component', () => {
 
     const table = screen.queryByRole('table', { name: /jugadores/i });
     expect(table).not.toBeInTheDocument();
+  });
+
+  test('Should render the placeholder figure when the player has no image', async () => {
+    const { container } = await renderComponent();
+
+    playersMock.forEach((player) => {
+      const link = getProfileLink(container, player.id);
+      expect(link.querySelector('figure')).toBeInTheDocument();
+      expect(link.querySelector('img')).not.toBeInTheDocument();
+    });
+  });
+
+  test('Should render the image when the player has an imageUrl', async () => {
+    vi.mocked(fetchPlayersAction).mockResolvedValue({
+      ...defaultResponse,
+      players: [
+        {
+          ...playersMock[0],
+          imageUrl: 'https://res.cloudinary.com/test/image.jpg',
+        },
+      ],
+    });
+
+    await renderComponent();
+
+    const image = screen.getByAltText(`${playersMock[0].name} picture`);
+    expect(image).toBeInTheDocument();
+    expect(image.getAttribute('src')).toContain(
+      encodeURIComponent('https://res.cloudinary.com/test/image.jpg'),
+    );
+  });
+
+  test('Should link each player to its profile', async () => {
+    const { container } = await renderComponent();
+
+    playersMock.forEach((player) => {
+      expect(getProfileLink(container, player.id)).toBeInTheDocument();
+    });
   });
 });

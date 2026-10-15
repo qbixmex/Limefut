@@ -52,7 +52,9 @@ describe('Tests on categories page', () => {
   test('Should render correctly', async () => {
     await renderComponent();
 
-    expect(screen.getByRole('table', { name: /tabla/i })).toBeInTheDocument();
+    const table = screen.getByRole('table', { name: /tabla/i });
+
+    expect(table).toBeInTheDocument();
   });
 
   test('Should render empty state when no tournaments', async () => {
@@ -63,7 +65,9 @@ describe('Tests on categories page', () => {
 
     await renderComponent();
 
-    expect(screen.getByText('Aún no hay categorías creadas')).toBeInTheDocument();
+    const emptyMessage = screen.getByText('Aún no hay categorías creadas');
+
+    expect(emptyMessage).toBeInTheDocument();
   });
 
   test('Should render category name', async () => {
@@ -85,14 +89,20 @@ describe('Tests on categories page', () => {
   test('Should render action buttons', async () => {
     await renderComponent();
 
-    expect(screen.getAllByTestId('edit-category')).toHaveLength(categoriesMock.length);
-    expect(screen.getAllByTestId('delete-category')).toHaveLength(categoriesMock.length);
+    const editCategory = screen.getAllByTestId('edit-category');
+    const deleteCategory = screen.getAllByTestId('delete-category');
+
+    expect(editCategory).toHaveLength(categoriesMock.length);
+    expect(deleteCategory).toHaveLength(categoriesMock.length);
   });
 
   test('Should render pagination when totalPages is greater than 1', async () => {
+    defaultResponse.pagination.totalPages = 2;
     await renderComponent();
 
-    expect(screen.getByTestId('pagination')).toBeInTheDocument();
+    const pagination = screen.getByTestId('pagination');
+
+    expect(pagination).toBeInTheDocument();
   });
 
   test('Should render error message when fetch fails', async () => {
@@ -105,7 +115,10 @@ describe('Tests on categories page', () => {
 
     await renderComponent();
 
-    expect(screen.getByText('Error al obtener las categorías')).toBeInTheDocument();
-    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    const errorMessage = screen.getByText('Error al obtener las categorías');
+    const table = screen.queryByRole('table');
+
+    expect(errorMessage).toBeInTheDocument();
+    expect(table).not.toBeInTheDocument();
   });
 });

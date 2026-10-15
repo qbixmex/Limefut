@@ -72,4 +72,39 @@ describe('Test on <DeletePlayer /> component', () => {
 
     expect(mockDeleteAction).not.toHaveBeenCalled();
   });
+
+  test('Should show a success toast when the action resolves ok', async () => {
+    const { toast } = await import('sonner');
+    const { user, deleteButton, confirmButton } = renderComponent();
+
+    await user.click(deleteButton);
+    await user.click(confirmButton());
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'El jugador ha sido eliminado correctamente',
+      );
+    });
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  test('Should show an error toast when the action fails', async () => {
+    const { toast } = await import('sonner');
+    mockDeleteAction.mockResolvedValue({
+      ok: false,
+      message: 'El jugador tiene penalizaciones registradas',
+    });
+
+    const { user, deleteButton, confirmButton } = renderComponent();
+
+    await user.click(deleteButton);
+    await user.click(confirmButton());
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'El jugador tiene penalizaciones registradas',
+      );
+    });
+    expect(toast.success).not.toHaveBeenCalled();
+  });
 });
