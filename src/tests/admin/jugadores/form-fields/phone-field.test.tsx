@@ -44,6 +44,14 @@ function SetLongPhone() {
   return null;
 }
 
+function SetNullPhone() {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    setValue('phone', null, { shouldValidate: true });
+  }, [setValue]);
+  return null;
+}
+
 describe('Test on <PhoneField />', () => {
   test('Should render correctly', () => {
     render(<PhoneField />, { wrapper: TestWrapper });
@@ -92,5 +100,17 @@ describe('Test on <PhoneField />', () => {
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/menor a 100 caracteres/i);
+  });
+
+  test('Should render an empty input and show error when value is null', async () => {
+    render(
+      <TestWrapper>
+        <PhoneField />
+        <SetNullPhone />
+      </TestWrapper>,
+    );
+
+    await screen.findByRole('alert');
+    expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });

@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
+import { useEffect } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ActiveSwitch } from '@/app/admin/jugadores/(components)/form-fields/active-switch';
 import { createPlayerSchema } from '@/shared/schemas';
@@ -18,6 +19,14 @@ function TestWrapper({ children }: { children: ReactNode }) {
       {children}
     </FormProvider>
   );
+}
+
+function SetNullActive() {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    setValue('active', null, { shouldValidate: true });
+  }, [setValue]);
+  return null;
 }
 
 describe('Test on <ActiveSwitch />', () => {
@@ -61,5 +70,19 @@ describe('Test on <ActiveSwitch />', () => {
     await user.click(switchField);
 
     expect(switchField).toHaveAttribute('aria-checked', 'false');
+  });
+
+  test('Should stay unchecked when the value is null', () => {
+    render(
+      <TestWrapper>
+        <ActiveSwitch />
+        <SetNullActive />
+      </TestWrapper>,
+    );
+
+    expect(screen.getByRole('switch', { name: /activo/i })).toHaveAttribute(
+      'aria-checked',
+      'false',
+    );
   });
 });
