@@ -11,7 +11,10 @@ export type ResponseAction = Promise<{
   message: string;
 }>;
 
-export const updateStatusAction = async (matchId: string, status: MATCH_STATUS_TYPE): ResponseAction => {
+export const updateStatusAction = async (
+  matchId: string,
+  status: MATCH_STATUS_TYPE,
+): ResponseAction => {
   const guard = await requireAdmin();
 
   if (!guard.ok) {
@@ -39,6 +42,7 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS_T
     updateTag('matches');
     updateTag('dashboard-results');
     updateTag('public-matches');
+    updateTag('public-results');
     updateTag('public-results-roles');
     updateTag('public-result-details');
     updateTag('public-matches-count');
@@ -53,22 +57,18 @@ export const updateStatusAction = async (matchId: string, status: MATCH_STATUS_T
     let errorMessage = 'Error inesperado';
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      const fieldError = (error.meta as { target?: string[] } | undefined)?.target?.[0];
-
       if (error.code === 'P2001') {
-        errorMessage = `El campo "${fieldError}" no existe`;
+        errorMessage = 'No existe el encuentro';
       } else if (error.code === 'P2002') {
-        errorMessage = `El campo "${fieldError}" está duplicado`;
+        errorMessage = 'Error de campos duplicados';
       } else {
         errorMessage = 'Error al actualizar el estado del partido';
       }
 
-      console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
       console.log('CAUSE:', error.cause);
       console.log('NAME:', error.name);
       console.log('META:', error.meta);
       console.log('MESSAGE:', error.message);
-      console.log('='.repeat(54));
     } else if (error instanceof Error) {
       console.log('CAUSE:', error.cause);
       console.log('NAME:', error.name);

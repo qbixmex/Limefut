@@ -129,7 +129,7 @@ describe('Tests on updateStatusAction server action', () => {
     const response = await updateStatusAction(matchId, MATCH_STATUS.IN_PROGRESS);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/el campo "id" no existe/i);
+    expect(response.message).toMatch(/no existe el encuentro/i);
   });
 
   test('Should return error on duplicate fields (P2002)', async () => {
@@ -143,7 +143,7 @@ describe('Tests on updateStatusAction server action', () => {
     const response = await updateStatusAction(matchId, MATCH_STATUS.IN_PROGRESS);
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/el campo "id" está duplicado/i);
+    expect(response.message).toMatch(/error de campos duplicados/i);
   });
 
   test('Should return a generic prisma error for other codes', async () => {

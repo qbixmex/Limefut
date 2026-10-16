@@ -132,11 +132,12 @@ export const LoginForm = () => {
             <Field>
               <div className="flex items-center gap-3">
                 <Switch
+                  id="remember"
                   checked={field.value}
                   onCheckedChange={field.onChange}
                   aria-label="Recordarme"
                 />
-                <FieldLabel className="label mb-0">Recordarme</FieldLabel>
+                <FieldLabel htmlFor="remember" className="label mb-0">Recordarme</FieldLabel>
               </div>
               <p className="text-sm text-muted-foreground">
                 mantener la sesión activa

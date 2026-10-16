@@ -57,22 +57,23 @@ export const fetchPublicResultsAction = async ({
 }): ResponseAction => {
   'use cache';
 
-  cacheLife('days');
-  cacheTag(`public-results-roles-${teamPermalink ?? 'all'}`);
+  cacheLife('max');
+  cacheTag('public-results');
 
   try {
     const matches = await prisma.match.findMany({
-      where: (roles === 'team' && teamPermalink)
-        ? {
-          OR: [
-            { local: { permalink: teamPermalink } },
-            { visitor: { permalink: teamPermalink } },
-          ],
-        }
-        : {
-          tournament: { permalink: tournamentPermalink },
-          category: { permalink: categoryPermalink },
-        },
+      where: {
+        tournament: { permalink: tournamentPermalink },
+        category: { permalink: categoryPermalink },
+        ...(roles === 'team' && teamPermalink
+          ? {
+            OR: [
+              { local: { permalink: teamPermalink } },
+              { visitor: { permalink: teamPermalink } },
+            ],
+          }
+          : {}),
+      },
       select: {
         id: true,
         localScore: true,
