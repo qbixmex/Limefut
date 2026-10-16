@@ -7,11 +7,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
 import { Pagination } from '@/shared/components/pagination';
+import type { Pagination as PAGINATION_TYPE } from '@/shared/interfaces';
 import { EditCategory } from './edit-category';
-import { fetchCategoriesAction } from '../(actions)/fetch-categories.action';
+import { fetchCategoriesAction, type CATEGORY_TYPE } from '../(actions)/fetch-categories.action';
 import { DeleteCategory } from './delete-category';
+import { EmptyMessageResource } from '@/shared/components/empty-message-resource';
+import { ErrorMessageResource } from '@/shared/components/error-message-resource';
 
 type Props = Readonly<{
   query: string;
@@ -19,29 +21,22 @@ type Props = Readonly<{
 }>;
 
 export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
-  const {
-    ok,
-    message,
-    categories = [],
-    pagination = {
-      currentPage: 1,
-      totalPages: 1,
-    },
-  } = await fetchCategoriesAction({
+  const response = await fetchCategoriesAction({
     page: Number(currentPage),
     take: 12,
     searchTerm: query,
   });
 
-  if (!ok) {
+  if (!response.ok) {
     return (
-      <div className="border border-red-500 p-5 rounded">
-        <p className="text-red-500 text-center text-xl font-semibold">
-          {message}
-        </p>
-      </div>
+      <ErrorMessageResource>
+        {response.message}
+      </ErrorMessageResource>
     );
   }
+
+  const categories = response.categories as CATEGORY_TYPE[];
+  const pagination = response.pagination as PAGINATION_TYPE;
 
   return (
     <>
@@ -76,20 +71,17 @@ export const CategoriesTable: FC<Props> = async ({ query, currentPage }) => {
               </TableBody>
             </Table>
           </div>
-          <div
-            className={cn('flex justify-center mt-10', {
-              hidden: pagination!.totalPages === 1,
-            })}
-          >
-            <Pagination totalPages={pagination!.totalPages as number} />
-          </div>
+
+          {(pagination.totalPages > 1) && (
+            <div className="flex justify-center mt-10">
+              <Pagination totalPages={pagination.totalPages as number} />
+            </div>
+          )}
         </div>
       ) : (
-        <div className="border border-sky-600 p-5 rounded">
-          <p className="text-sky-500 text-center text-xl font-semibold">
-            Aún no hay categorías creadas
-          </p>
-        </div>
+        <EmptyMessageResource>
+          Aún no hay categorías creadas
+        </EmptyMessageResource>
       )}
     </>
   );

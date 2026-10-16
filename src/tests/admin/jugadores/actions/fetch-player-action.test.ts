@@ -75,4 +75,15 @@ describe('Tests on fetchPlayerAction server action', () => {
     expect(response.message).toMatch(/error inesperado/i);
     expect(response.player).toBe(null);
   });
+
+  test('Should return a null team when the player has no team', async () => {
+    mockFindUnique.mockResolvedValue({ ...playerMock, team: null });
+
+    const response = await fetchPlayerAction({
+      playerId,
+    });
+
+    expect(response.ok).toBe(true);
+    expect(response.player?.team).toBe(null);
+  });
 });

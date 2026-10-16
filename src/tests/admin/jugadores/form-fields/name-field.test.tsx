@@ -52,6 +52,14 @@ function SetLongName() {
   return null;
 }
 
+function SetNullName() {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    setValue('name', null, { shouldValidate: true });
+  }, [setValue]);
+  return null;
+}
+
 describe('Test on <NameField />', () => {
   test('Should render correctly', () => {
     render(<NameField />, { wrapper: TestWrapper });
@@ -106,5 +114,17 @@ describe('Test on <NameField />', () => {
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(/menor a 50 caracteres/i);
+  });
+
+  test('Should render an empty input and show error when value is null', async () => {
+    render(
+      <TestWrapper>
+        <NameField />
+        <SetNullName />
+      </TestWrapper>,
+    );
+
+    await screen.findByRole('alert');
+    expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });

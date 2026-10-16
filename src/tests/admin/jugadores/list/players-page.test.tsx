@@ -30,8 +30,8 @@ vi.mock('@/shared/components/search-params-selectors', () => ({
   SearchParamsSelectors: () => <div data-testid="search-params-selectors" />,
 }));
 
-vi.mock('@/app/admin/jugadores/(components)/teams-content', () => ({
-  TeamsContent: () => <div data-testid="teams-content" />,
+vi.mock('@/app/admin/jugadores/(components)/teams-view', () => ({
+  TeamsView: () => <div data-testid="teams-view" />,
 }));
 
 vi.mock('@/app/admin/jugadores/(components)/players-view', () => ({
@@ -78,7 +78,7 @@ describe('Tests on PlayersPage', () => {
     expect(screen.getByTestId('search-component')).toBeInTheDocument();
     expect(screen.getByTestId('create-player-button')).toBeInTheDocument();
     expect(screen.getByTestId('search-params-selectors')).toBeInTheDocument();
-    expect(screen.getByTestId('teams-content')).toBeInTheDocument();
+    expect(screen.getByTestId('teams-view')).toBeInTheDocument();
     expect(screen.getByTestId('players-view')).toBeInTheDocument();
   });
 });

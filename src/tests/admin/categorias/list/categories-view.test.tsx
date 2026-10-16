@@ -22,29 +22,28 @@ describe('Tests on categories page', () => {
     shouldSuspend.value = true;
   });
 
-  test('Should render correctly', async () => {
-    shouldSuspend.value = false;
-
-    const ServerComponent = await CategoriesView({
+  const renderComponent = async () => {
+    return await CategoriesView({
       searchParams: Promise.resolve<SearchParams>({
         query: undefined,
         page: undefined,
       }),
     });
-    render(ServerComponent);
+  };
+
+  test('Should render correctly', async () => {
+    shouldSuspend.value = false;
+    const serverComponent = await renderComponent();
+
+    render(serverComponent);
 
     expect(screen.getByTestId('categories-table')).toBeInTheDocument();
   });
 
   test('Should render categories skeleton while fetching categories', async () => {
-    const ServerComponent = await CategoriesView({
-      searchParams: Promise.resolve<SearchParams>({
-        query: undefined,
-        page: undefined,
-      }),
-    });
+    const serverComponent = await renderComponent();
 
-    await act(() => render(ServerComponent));
+    await act(() => render(serverComponent));
 
     expect(screen.getByTestId('categories-table-skeleton')).toBeInTheDocument();
   });
