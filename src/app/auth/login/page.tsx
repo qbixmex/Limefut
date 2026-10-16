@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { LoginSkeleton } from './components/login-skeleton';
 import { LoginView } from './login-view';
 
-export const Login = () => {
+const LoginPage = () => {
   return (
     <Suspense fallback={<LoginSkeleton />}>
       <LoginView />
@@ -10,4 +10,4 @@ export const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
