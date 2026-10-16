@@ -1,6 +1,9 @@
 const {
   MockPrismaClientKnownRequestError,
-  mockTransaction,
+  mockTournamentFindFirst,
+  mockCategoryFindFirst,
+  mockFieldFindFirst,
+  mockMatchCreate,
   mockGetSession,
 } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
@@ -19,7 +22,10 @@ const {
 
   return {
     MockPrismaClientKnownRequestError,
-    mockTransaction: vi.fn(),
+    mockTournamentFindFirst: vi.fn(),
+    mockCategoryFindFirst: vi.fn(),
+    mockFieldFindFirst: vi.fn(),
+    mockMatchCreate: vi.fn(),
     mockGetSession: vi.fn(),
   };
 });
@@ -51,7 +57,10 @@ vi.mock('@/lib/get-session', () => ({
 
 vi.mock('@/lib/prisma', () => ({
   default: {
-    $transaction: mockTransaction,
+    tournament: { findFirst: mockTournamentFindFirst },
+    category: { findFirst: mockCategoryFindFirst },
+    field: { findFirst: mockFieldFindFirst },
+    match: { create: mockMatchCreate },
   },
 }));
 
@@ -95,13 +104,6 @@ const createdMatch = {
   visitor: CHIVAS,
 };
 
-const mockTx = {
-  tournament: { findFirst: vi.fn() },
-  category: { findFirst: vi.fn() },
-  field: { findFirst: vi.fn() },
-  match: { create: vi.fn() },
-};
-
 const mockTournament = { id: 'f641c5b8-0bcb-4b2c-ab90-27210ba17dac' };
 const mockCategory = { id: '1ff58d74-2761-42f2-8250-2e009937921f' };
 
@@ -112,11 +114,10 @@ describe('Tests on createMatchAction server action', () => {
     mockGetSession.mockResolvedValue({
       user: { id: 'b7e2ca32-af95-4750-bf63-6a338b236097', roles: ['admin'] },
     });
-    mockTx.tournament.findFirst.mockResolvedValue(mockTournament);
-    mockTx.category.findFirst.mockResolvedValue(mockCategory);
-    mockTx.field.findFirst.mockResolvedValue({ id: ESTADIO_AZTECA.id });
-    mockTx.match.create.mockResolvedValue(createdMatch);
-    mockTransaction.mockImplementation((cb: (tx: typeof mockTx) => unknown) => cb(mockTx));
+    mockTournamentFindFirst.mockResolvedValue(mockTournament);
+    mockCategoryFindFirst.mockResolvedValue(mockCategory);
+    mockFieldFindFirst.mockResolvedValue({ id: ESTADIO_AZTECA.id });
+    mockMatchCreate.mockResolvedValue(createdMatch);
   });
 
   afterEach(() => {
@@ -131,7 +132,7 @@ describe('Tests on createMatchAction server action', () => {
     expect(response.ok).toBe(false);
     expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
     expect(response.match).toBe(null);
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockMatchCreate).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
@@ -143,7 +144,8 @@ describe('Tests on createMatchAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(response.match).toBe(null);
+    expect(mockMatchCreate).not.toHaveBeenCalled();
   });
 
   test('Should return a validation error when the local team is missing', async () => {
@@ -154,38 +156,40 @@ describe('Tests on createMatchAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.match).toBe(null);
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockMatchCreate).not.toHaveBeenCalled();
   });
 
   test('Should return error when the tournament does not exist', async () => {
-    mockTx.tournament.findFirst.mockResolvedValue(null);
+    mockTournamentFindFirst.mockResolvedValue(null);
 
     const response = await createMatchAction({ formData: validFormData() });
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe/i);
     expect(response.match).toBe(null);
-    expect(mockTx.match.create).not.toHaveBeenCalled();
+    expect(mockMatchCreate).not.toHaveBeenCalled();
   });
 
   test('Should return error when the category does not exist', async () => {
-    mockTx.category.findFirst.mockResolvedValue(null);
+    mockCategoryFindFirst.mockResolvedValue(null);
 
     const response = await createMatchAction({ formData: validFormData() });
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe/i);
-    expect(mockTx.match.create).not.toHaveBeenCalled();
+    expect(response.match).toBe(null);
+    expect(mockMatchCreate).not.toHaveBeenCalled();
   });
 
   test('Should return error when the field does not exist', async () => {
-    mockTx.field.findFirst.mockResolvedValue(null);
+    mockFieldFindFirst.mockResolvedValue(null);
 
     const response = await createMatchAction({ formData: validFormData() });
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe/i);
-    expect(mockTx.match.create).not.toHaveBeenCalled();
+    expect(response.match).toBe(null);
+    expect(mockMatchCreate).not.toHaveBeenCalled();
   });
 
   test('Should create the match and map the returned data', async () => {
@@ -196,13 +200,13 @@ describe('Tests on createMatchAction server action', () => {
     expect(response.match).toEqual(
       expect.objectContaining({
         id: matchId,
-        localTeam: AMERICA,
-        visitorTeam: CHIVAS,
+        localId: AMERICA.id,
+        visitorId: CHIVAS.id,
         localScore: 2,
         visitorScore: 1,
       }),
     );
-    expect(mockTx.match.create).toHaveBeenCalledWith(
+    expect(mockMatchCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           localId: AMERICA.id,
@@ -223,7 +227,7 @@ describe('Tests on createMatchAction server action', () => {
 
     await createMatchAction({ formData });
 
-    expect(mockTx.match.create).toHaveBeenCalledWith(
+    expect(mockMatchCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ mode: MATCH_MODE.FRIENDLY }),
       }),
@@ -238,7 +242,7 @@ describe('Tests on createMatchAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/tipo de encuentro/i);
-    expect(mockTx.match.create).not.toHaveBeenCalled();
+    expect(mockMatchCreate).not.toHaveBeenCalled();
   });
 
   test('Should return a validation error when the mode is invalid', async () => {
@@ -249,7 +253,7 @@ describe('Tests on createMatchAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/tipo de encuentro/i);
-    expect(mockTx.match.create).not.toHaveBeenCalled();
+    expect(mockMatchCreate).not.toHaveBeenCalled();
   });
 
   test('Should set week to null when week is not provided', async () => {
@@ -258,7 +262,7 @@ describe('Tests on createMatchAction server action', () => {
 
     await createMatchAction({ formData });
 
-    expect(mockTx.match.create).toHaveBeenCalledWith(
+    expect(mockMatchCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ week: null }),
       }),
@@ -266,7 +270,7 @@ describe('Tests on createMatchAction server action', () => {
   });
 
   test('Should return error on duplicate fields (P2002)', async () => {
-    mockTransaction.mockRejectedValue(
+    mockMatchCreate.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Unique constraint failed', {
         code: 'P2002',
         meta: {
@@ -279,12 +283,12 @@ describe('Tests on createMatchAction server action', () => {
     const response = await createMatchAction({ formData: validFormData() });
 
     expect(response.ok).toBe(false);
-    expect(response.message).toMatch(/el campo "localid" está duplicado/i);
+    expect(response.message).toMatch(/error de campos duplicados/i);
     expect(response.match).toBe(null);
   });
 
   test('Should return a generic prisma error for non-P2002 codes', async () => {
-    mockTransaction.mockRejectedValue(
+    mockMatchCreate.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Foreign key constraint failed', {
         code: 'P2003',
         meta: { modelName: 'Match' },
@@ -299,7 +303,7 @@ describe('Tests on createMatchAction server action', () => {
   });
 
   test('Should return an error on unexpected Error instance', async () => {
-    mockTransaction.mockRejectedValue(new Error('Something went wrong'));
+    mockMatchCreate.mockRejectedValue(new Error('Something went wrong'));
 
     const response = await createMatchAction({ formData: validFormData() });
 
@@ -309,7 +313,7 @@ describe('Tests on createMatchAction server action', () => {
   });
 
   test('Should return an error on unknown error', async () => {
-    mockTransaction.mockRejectedValue('Something unexpected');
+    mockMatchCreate.mockRejectedValue('Something unexpected');
 
     const response = await createMatchAction({ formData: validFormData() });
 

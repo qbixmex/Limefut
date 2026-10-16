@@ -1,4 +1,9 @@
-const { MockPrismaClientKnownRequestError, mockTransaction, mockGetSession } = vi.hoisted(() => {
+const {
+  MockPrismaClientKnownRequestError,
+  mockMatchFindFirst,
+  mockShootoutCreate,
+  mockGetSession,
+} = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
     code: string;
     meta?: Record<string, unknown>;
@@ -15,7 +20,8 @@ const { MockPrismaClientKnownRequestError, mockTransaction, mockGetSession } = v
 
   return {
     MockPrismaClientKnownRequestError,
-    mockTransaction: vi.fn(),
+    mockMatchFindFirst: vi.fn(),
+    mockShootoutCreate: vi.fn(),
     mockGetSession: vi.fn(),
   };
 });
@@ -47,7 +53,8 @@ vi.mock('@/lib/get-session', () => ({
 
 vi.mock('@/lib/prisma', () => ({
   default: {
-    $transaction: mockTransaction,
+    match: { findFirst: mockMatchFindFirst },
+    penaltyShootout: { create: mockShootoutCreate },
   },
 }));
 
@@ -73,11 +80,6 @@ const validFormData = (localGoals = '4', visitorGoals = '3'): FormData => {
   return formData;
 };
 
-const mockTx = {
-  match: { count: vi.fn() },
-  penaltyShootout: { create: vi.fn() },
-};
-
 describe('Tests on createRegularSimplePenaltyShootoutAction server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -85,8 +87,8 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
     mockGetSession.mockResolvedValue({
       user: { id: 'b7e2ca32-af95-4750-bf63-6a338b236097', roles: ['admin'] },
     });
-    mockTx.match.count.mockResolvedValue(1);
-    mockTx.penaltyShootout.create.mockResolvedValue({
+    mockMatchFindFirst.mockResolvedValue({ id: matchId });
+    mockShootoutCreate.mockResolvedValue({
       id: shootoutId,
       matchId,
       localTeamId: AMERICA.id,
@@ -96,7 +98,6 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
       winnerTeamId: AMERICA.id,
       status: 'completed',
     });
-    mockTransaction.mockImplementation((cb: (tx: typeof mockTx) => unknown) => cb(mockTx));
   });
 
   afterEach(() => {
@@ -110,7 +111,7 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockMatchFindFirst).not.toHaveBeenCalled();
   });
 
   test('Should return a validation error when goals are missing', async () => {
@@ -121,7 +122,7 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
 
     expect(response.ok).toBe(false);
     expect(response.penaltyShootout).toBe(null);
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockMatchFindFirst).not.toHaveBeenCalled();
   });
 
   test('Should reject a draw shootout', async () => {
@@ -129,17 +130,17 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no puede ser un empate/i);
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockMatchFindFirst).not.toHaveBeenCalled();
   });
 
   test('Should return error when the match does not exist', async () => {
-    mockTx.match.count.mockResolvedValue(0);
+    mockMatchFindFirst.mockResolvedValue(null);
 
     const response = await createRegularSimplePenaltyShootoutAction(validFormData());
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe/i);
-    expect(mockTx.penaltyShootout.create).not.toHaveBeenCalled();
+    expect(mockShootoutCreate).not.toHaveBeenCalled();
   });
 
   test('Should create the shootout with the local team as winner', async () => {
@@ -147,7 +148,7 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
 
     expect(response.ok).toBe(true);
     expect(response.message).toMatch(/tanda de penales creada correctamente/i);
-    expect(mockTx.penaltyShootout.create).toHaveBeenCalledWith({
+    expect(mockShootoutCreate).toHaveBeenCalledWith({
       data: {
         matchId,
         localTeamId: AMERICA.id,
@@ -163,7 +164,7 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
   test('Should set the visitor team as winner when it scores more', async () => {
     await createRegularSimplePenaltyShootoutAction(validFormData('2', '5'));
 
-    expect(mockTx.penaltyShootout.create).toHaveBeenCalledWith(
+    expect(mockShootoutCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ winnerTeamId: CHIVAS.id }),
       }),
@@ -171,7 +172,7 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
   });
 
   test('Should return a "not found" error on missing records (P2001)', async () => {
-    mockTransaction.mockRejectedValue(
+    mockShootoutCreate.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Record not found', {
         code: 'P2001',
         meta: { modelName: 'PenaltyShootout', target: ['matchId'] },
@@ -186,7 +187,7 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
   });
 
   test('Should return error on duplicate fields (P2002)', async () => {
-    mockTransaction.mockRejectedValue(
+    mockShootoutCreate.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Unique constraint failed', {
         code: 'P2002',
         meta: { modelName: 'PenaltyShootout', target: ['matchId'] },
@@ -202,7 +203,7 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
   });
 
   test('Should return a generic error on other prisma codes', async () => {
-    mockTransaction.mockRejectedValue(
+    mockShootoutCreate.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Foreign key constraint failed', {
         code: 'P2003',
         meta: { modelName: 'PenaltyShootout' },
@@ -216,7 +217,7 @@ describe('Tests on createRegularSimplePenaltyShootoutAction server action', () =
   });
 
   test('Should return an error on unexpected failures', async () => {
-    mockTransaction.mockRejectedValue(new Error('Something went wrong'));
+    mockShootoutCreate.mockRejectedValue(new Error('Something went wrong'));
 
     const response = await createRegularSimplePenaltyShootoutAction(validFormData());
 
