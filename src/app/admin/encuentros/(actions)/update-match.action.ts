@@ -218,6 +218,7 @@ export const updateMatchAction = async ({ formData, matchId }: {
     updateTag('matches');
     updateTag('dashboard-results');
     updateTag('public-matches');
+    updateTag('public-results');
     updateTag('public-results-roles');
     updateTag('public-result-details');
     updateTag('public-matches-count');

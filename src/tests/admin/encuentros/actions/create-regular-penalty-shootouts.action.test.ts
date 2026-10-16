@@ -1,6 +1,10 @@
 const {
   MockPrismaClientKnownRequestError,
-  mockTransaction,
+  mockMatchFindFirst,
+  mockShootoutFindFirst,
+  mockShootoutCreate,
+  mockShootoutUpdate,
+  mockStandingsUpsert,
   mockGetSession,
 } = vi.hoisted(() => {
   class MockPrismaClientKnownRequestError extends Error {
@@ -19,7 +23,11 @@ const {
 
   return {
     MockPrismaClientKnownRequestError,
-    mockTransaction: vi.fn(),
+    mockMatchFindFirst: vi.fn(),
+    mockShootoutFindFirst: vi.fn(),
+    mockShootoutCreate: vi.fn(),
+    mockShootoutUpdate: vi.fn(),
+    mockStandingsUpsert: vi.fn(),
     mockGetSession: vi.fn(),
   };
 });
@@ -51,7 +59,13 @@ vi.mock('@/lib/get-session', () => ({
 
 vi.mock('@/lib/prisma', () => ({
   default: {
-    $transaction: mockTransaction,
+    match: { findFirst: mockMatchFindFirst },
+    penaltyShootout: {
+      findFirst: mockShootoutFindFirst,
+      create: mockShootoutCreate,
+      update: mockShootoutUpdate,
+    },
+    standings: { upsert: mockStandingsUpsert },
   },
 }));
 
@@ -103,16 +117,6 @@ const completedShootout = {
   status: 'completed',
 };
 
-const mockTx = {
-  match: { findFirst: vi.fn() },
-  penaltyShootout: {
-    findFirst: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-  },
-  standings: { upsert: vi.fn() },
-};
-
 describe('Tests on createRegularPenaltyShootoutAction server action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -120,17 +124,16 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
     mockGetSession.mockResolvedValue({
       user: { id: 'b7e2ca32-af95-4750-bf63-6a338b236097', roles: ['admin'] },
     });
-    mockTx.match.findFirst.mockResolvedValue({
+    mockMatchFindFirst.mockResolvedValue({
       id: matchId,
       tournamentId: 'f641c5b8-0bcb-4b2c-ab90-27210ba17dac',
       categoryId: '1ff58d74-2761-42f2-8250-2e009937921f',
       mode: 'league',
     });
-    mockTx.penaltyShootout.findFirst.mockResolvedValue(null);
-    mockTx.penaltyShootout.create.mockResolvedValue(emptyShootout);
-    mockTx.penaltyShootout.update.mockResolvedValue(emptyShootout);
-    mockTx.standings.upsert.mockResolvedValue({ id: 'standings-id' });
-    mockTransaction.mockImplementation((cb: (tx: typeof mockTx) => unknown) => cb(mockTx));
+    mockShootoutFindFirst.mockResolvedValue(null);
+    mockShootoutCreate.mockResolvedValue(emptyShootout);
+    mockShootoutUpdate.mockResolvedValue(emptyShootout);
+    mockStandingsUpsert.mockResolvedValue({ id: 'standings-id' });
   });
 
   afterEach(() => {
@@ -144,7 +147,7 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('Debes estar autentificado para realizar esta acción');
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockMatchFindFirst).not.toHaveBeenCalled();
   });
 
   test('Should return error when user does not have admin role', async () => {
@@ -156,7 +159,7 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.message).toBe('No tienes permisos administrativos para realizar esta acción');
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockMatchFindFirst).not.toHaveBeenCalled();
   });
 
   test('Should return a validation error when the local shooter is missing', async () => {
@@ -167,17 +170,17 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
 
     expect(response.ok).toBe(false);
     expect(response.penaltyShootout).toBe(null);
-    expect(mockTransaction).not.toHaveBeenCalled();
+    expect(mockMatchFindFirst).not.toHaveBeenCalled();
   });
 
   test('Should return error when the match does not exist', async () => {
-    mockTx.match.findFirst.mockResolvedValue(null);
+    mockMatchFindFirst.mockResolvedValue(null);
 
     const response = await createRegularPenaltyShootoutAction(validFormData());
 
     expect(response.ok).toBe(false);
     expect(response.message).toMatch(/no existe/i);
-    expect(mockTx.penaltyShootout.update).not.toHaveBeenCalled();
+    expect(mockShootoutUpdate).not.toHaveBeenCalled();
   });
 
   test('Should create a shootout and add the first kicks', async () => {
@@ -185,7 +188,7 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
 
     expect(response.ok).toBe(true);
     expect(response.message).toMatch(/tanda de penales creada correctamente/i);
-    expect(mockTx.penaltyShootout.create).toHaveBeenCalledWith({
+    expect(mockShootoutCreate).toHaveBeenCalledWith({
       data: {
         matchId,
         localTeamId: AMERICA.id,
@@ -193,7 +196,7 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
       },
       include: { kicks: true },
     });
-    expect(mockTx.penaltyShootout.update).toHaveBeenCalledWith(
+    expect(mockShootoutUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: shootoutId },
         data: expect.objectContaining({
@@ -209,7 +212,7 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
   });
 
   test('Should complete the shootout and award a standings point to the winner', async () => {
-    mockTx.penaltyShootout.findFirst.mockResolvedValue({
+    mockShootoutFindFirst.mockResolvedValue({
       ...emptyShootout,
       localGoals: 2,
       visitorGoals: 1,
@@ -220,12 +223,12 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
         { teamId: CHIVAS.id, order: 1 },
       ],
     });
-    mockTx.penaltyShootout.update.mockResolvedValue(completedShootout);
+    mockShootoutUpdate.mockResolvedValue(completedShootout);
 
     const response = await createRegularPenaltyShootoutAction(validFormData());
 
     expect(response.ok).toBe(true);
-    expect(mockTx.standings.upsert).toHaveBeenCalledWith(
+    expect(mockStandingsUpsert).toHaveBeenCalledWith(
       expect.objectContaining({
         update: expect.objectContaining({ totalPoints: { increment: 1 } }),
       }),
@@ -233,13 +236,13 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
   });
 
   test('Should not award standings points when the match is friendly', async () => {
-    mockTx.match.findFirst.mockResolvedValue({
+    mockMatchFindFirst.mockResolvedValue({
       id: matchId,
       tournamentId: 'f641c5b8-0bcb-4b2c-ab90-27210ba17dac',
       categoryId: '1ff58d74-2761-42f2-8250-2e009937921f',
       mode: 'friendly',
     });
-    mockTx.penaltyShootout.findFirst.mockResolvedValue({
+    mockShootoutFindFirst.mockResolvedValue({
       ...emptyShootout,
       localGoals: 2,
       visitorGoals: 1,
@@ -250,16 +253,16 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
         { teamId: CHIVAS.id, order: 1 },
       ],
     });
-    mockTx.penaltyShootout.update.mockResolvedValue(completedShootout);
+    mockShootoutUpdate.mockResolvedValue(completedShootout);
 
     const response = await createRegularPenaltyShootoutAction(validFormData());
 
     expect(response.ok).toBe(true);
-    expect(mockTx.standings.upsert).not.toHaveBeenCalled();
+    expect(mockStandingsUpsert).not.toHaveBeenCalled();
   });
 
   test('Should return a "not found" error on missing records (P2001)', async () => {
-    mockTransaction.mockRejectedValue(
+    mockShootoutUpdate.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Record not found', {
         code: 'P2001',
         meta: { modelName: 'PenaltyShootout', target: ['matchId'] },
@@ -274,7 +277,7 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
   });
 
   test('Should return error on duplicate fields (P2002)', async () => {
-    mockTransaction.mockRejectedValue(
+    mockShootoutUpdate.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Unique constraint failed', {
         code: 'P2002',
         meta: { modelName: 'PenaltyShootout', target: ['matchId'] },
@@ -290,7 +293,7 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
   });
 
   test('Should return a generic error for prisma errors', async () => {
-    mockTransaction.mockRejectedValue(
+    mockShootoutUpdate.mockRejectedValue(
       new MockPrismaClientKnownRequestError('Foreign key constraint failed', {
         code: 'P2003',
         meta: { modelName: 'PenaltyShootout' },
@@ -305,7 +308,7 @@ describe('Tests on createRegularPenaltyShootoutAction server action', () => {
   });
 
   test('Should return an error on unexpected Error instance', async () => {
-    mockTransaction.mockRejectedValue(new Error('Something went wrong'));
+    mockShootoutUpdate.mockRejectedValue(new Error('Something went wrong'));
 
     const response = await createRegularPenaltyShootoutAction(validFormData());
 
