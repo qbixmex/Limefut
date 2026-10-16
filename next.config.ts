@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
   reactCompiler: true,
   cacheComponents: true,
+  partialPrefetching: true,
   experimental: {
     serverActions: {
       bodySizeLimit: '4mb',

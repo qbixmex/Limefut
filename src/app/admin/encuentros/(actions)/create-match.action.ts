@@ -45,9 +45,7 @@ export type MATCH_TYPE = {
   };
 };
 
-export const createMatchAction = async ({
-  formData,
-}: {
+export const createMatchAction = async ({ formData }: {
   formData: FormData;
 }): CreateResponseAction => {
   const guard = await requireAdmin();
@@ -61,7 +59,6 @@ export const createMatchAction = async ({
   }
 
   const rawData = {
-    id: '',
     localTeamId: formData.get('localTeamId') ?? '',
     localScore: parseInt(formData.get('localScore') as string ?? '0'),
     visitorTeamId: formData.get('visitorTeamId') ?? '',
@@ -94,165 +91,157 @@ export const createMatchAction = async ({
     ...matchToSave
   } = matchVerified.data;
 
-  try {
-    const prismaTransaction = await prisma.$transaction(async (transaction) => {
-      const tournament = await transaction.tournament.findFirst({
-        where: {
-          permalink: tournamentPermalink,
-        },
-        select: { id: true },
-      });
+  const tournament = await prisma.tournament.findFirst({
+    where: {
+      permalink: tournamentPermalink,
+    },
+    select: { id: true },
+  });
 
-      if (!tournament) {
-        return {
-          ok: false,
-          message: `El torneo con el enlace permanente: "${tournamentPermalink}" no existe`,
-          match: null,
-        };
-      }
+  if (!tournament) {
+    return {
+      ok: false,
+      message: `El torneo con el enlace permanente: "${tournamentPermalink}" no existe`,
+      match: null,
+    };
+  }
 
-      const category = await transaction.category.findFirst({
-        where: { permalink: categoryPermalink },
-        select: { id: true },
-      });
+  const category = await prisma.category.findFirst({
+    where: { permalink: categoryPermalink },
+    select: { id: true },
+  });
 
-      if (!category) {
-        return {
-          ok: false,
-          message: `La categoría con el enlace permanente: "${categoryPermalink}" no existe`,
-          match: null,
-        };
-      }
+  if (!category) {
+    return {
+      ok: false,
+      message: `La categoría con el enlace permanente: "${categoryPermalink}" no existe`,
+      match: null,
+    };
+  }
 
-      if (matchToSave.fieldId) {
-        const field = await transaction.field.findFirst({
-          where: { id: matchToSave.fieldId },
-          select: { id: true },
-        });
+  if (matchToSave.fieldId) {
+    const field = await prisma.field.findFirst({
+      where: { id: matchToSave.fieldId },
+      select: { id: true },
+    });
 
-        if (!field) {
-          return {
-            ok: false,
-            message: `La cancha con el id: "${matchToSave.fieldId}" no existe`,
-            match: null,
-          };
-        }
-      }
-
-      const selectMatch = {
-        id: true,
-        localId: true,
-        visitorId: true,
-        field: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        matchDate: true,
-        mode: true,
-        week: true,
-        referee: true,
-        localScore: true,
-        visitorScore: true,
-        status: true,
-        local: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        visitor: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        tournament: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-            permalink: true,
-          },
-        },
-      } satisfies Prisma.MatchSelect;
-
-      const createdMatch = await transaction.match.create({
-        data: {
-          localId: matchToSave.localTeamId,
-          localScore: matchToSave.localScore,
-          visitorId: matchToSave.visitorTeamId,
-          visitorScore: matchToSave.visitorScore,
-          fieldId: matchToSave.fieldId ?? undefined,
-          referee: matchToSave.referee,
-          matchDate: matchToSave.matchDate,
-          status: matchToSave.status as MATCH_STATUS_TYPE,
-          tournamentId: tournament.id,
-          categoryId: category.id,
-          mode: matchToSave.mode as MATCH_MODE_TYPE,
-          week: matchToSave.week !== 0
-            ? matchToSave.week as number
-            : null,
-        },
-        select: selectMatch,
-      });
-
-      rawData.id = createdMatch.id;
-
+    if (!field) {
       return {
-        ok: true,
-        message: 'Encuentro creado correctamente',
-        match: {
-          ...createdMatch,
-          localTeam: createdMatch.local,
-          visitorTeam: createdMatch.visitor,
-          localScore: createdMatch.localScore as number,
-          visitorScore: createdMatch.visitorScore as number,
-          status: createdMatch.status as MATCH_STATUS_TYPE,
-          category: createdMatch.category,
-        },
+        ok: false,
+        message: `La cancha con el id: "${matchToSave.fieldId}" no existe`,
+        match: null,
       };
+    }
+  }
+
+  try {
+    const selectMatch = {
+      id: true,
+      localId: true,
+      visitorId: true,
+      field: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      matchDate: true,
+      mode: true,
+      week: true,
+      referee: true,
+      localScore: true,
+      visitorScore: true,
+      status: true,
+      local: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      visitor: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      tournament: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          permalink: true,
+        },
+      },
+    } satisfies Prisma.MatchSelect;
+
+    const createdMatch = await prisma.match.create({
+      data: {
+        localId: matchToSave.localTeamId,
+        localScore: matchToSave.localScore,
+        visitorId: matchToSave.visitorTeamId,
+        visitorScore: matchToSave.visitorScore,
+        fieldId: matchToSave.fieldId ?? undefined,
+        referee: matchToSave.referee,
+        matchDate: matchToSave.matchDate,
+        status: matchToSave.status as MATCH_STATUS_TYPE,
+        tournamentId: tournament.id,
+        categoryId: category.id,
+        mode: matchToSave.mode as MATCH_MODE_TYPE,
+        week: matchToSave.week !== 0
+          ? matchToSave.week as number
+          : null,
+      },
+      select: selectMatch,
     });
 
     // Update Cache
     updateTag('admin-matches');
-    updateTag(`admin-match-${rawData.id}`);
+    updateTag(`admin-match-${createdMatch.id}`);
     updateTag('matches');
     updateTag('dashboard-results');
     updateTag('admin-tournament-for-match');
     updateTag('admin-teams-for-match');
     updateTag('public-matches');
+    updateTag('public-results');
     updateTag('public-results-roles');
     updateTag('public-result-details');
     updateTag('public-matches-count');
     updateTag('public-team-matches');
     updateTag('public-team-standings');
 
-    return prismaTransaction;
+    return {
+      ok: true,
+      message: 'Encuentro creado correctamente',
+      match: {
+        ...createdMatch,
+        localId: createdMatch.local.id,
+        visitorId: createdMatch.visitor.id,
+        localScore: createdMatch.localScore as number,
+        visitorScore: createdMatch.visitorScore as number,
+        status: createdMatch.status as MATCH_STATUS_TYPE,
+        category: createdMatch.category,
+      },
+    };
   } catch (error) {
     let errorMessage = 'Error inesperado';
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
-        const fieldError = (error.meta as { modelName: string; target: string[] }).target[0];
-        errorMessage = `El campo "${fieldError}" está duplicado`;
+        errorMessage = 'Error de campos duplicados';
       } else {
         errorMessage = 'Error al crear el encuentro';
       }
 
-      console.log('='.repeat(20) + ' PRISMA ERROR ' + '='.repeat(20));
       console.log('CAUSE:', error.cause);
       console.log('NAME:', error.name);
       console.log('META:', error.meta);
       console.log('MESSAGE:', error.message);
-      console.log('='.repeat(54));
     } else if (error instanceof Error) {
       console.log('CAUSE:', error.cause);
       console.log('NAME:', error.name);

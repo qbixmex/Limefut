@@ -1,4 +1,4 @@
-const { MockPrismaClientKnownRequestError, mockFindUnique, mockDelete, mockGetSession } =
+const { MockPrismaClientKnownRequestError, mockFindFirst, mockDelete, mockGetSession } =
   vi.hoisted(() => {
     class MockPrismaClientKnownRequestError extends Error {
       code: string;
@@ -16,7 +16,7 @@ const { MockPrismaClientKnownRequestError, mockFindUnique, mockDelete, mockGetSe
 
     return {
       MockPrismaClientKnownRequestError,
-      mockFindUnique: vi.fn(),
+      mockFindFirst: vi.fn(),
       mockDelete: vi.fn(),
       mockGetSession: vi.fn(),
     };
@@ -50,7 +50,7 @@ vi.mock('@/lib/get-session', () => ({
 vi.mock('@/lib/prisma', () => ({
   default: {
     match: {
-      findUnique: mockFindUnique,
+      findFirst: mockFindFirst,
       delete: mockDelete,
     },
   },
@@ -73,7 +73,7 @@ describe('Tests on deleteMatchAction server action', () => {
     mockGetSession.mockResolvedValue({
       user: { id: 'b7e2ca32-af95-4750-bf63-6a338b236097', roles: ['admin'] },
     });
-    mockFindUnique.mockResolvedValue({ id: matchId });
+    mockFindFirst.mockResolvedValue({ id: matchId });
     mockDelete.mockResolvedValue({ id: matchId });
   });
 
@@ -104,7 +104,7 @@ describe('Tests on deleteMatchAction server action', () => {
   });
 
   test('Should return error when the match does not exist', async () => {
-    mockFindUnique.mockResolvedValue(null);
+    mockFindFirst.mockResolvedValue(null);
 
     const response = await deleteMatchAction(matchId);
 
@@ -116,9 +116,8 @@ describe('Tests on deleteMatchAction server action', () => {
   test('Should delete the match successfully', async () => {
     const response = await deleteMatchAction(matchId);
 
-    expect(mockFindUnique).toHaveBeenCalledWith({
+    expect(mockFindFirst).toHaveBeenCalledWith({
       where: { id: matchId },
-      select: { id: true },
     });
     expect(mockDelete).toHaveBeenCalledWith({ where: { id: matchId } });
     expect(response.ok).toBe(true);

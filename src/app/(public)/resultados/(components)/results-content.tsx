@@ -34,7 +34,11 @@ export const ResultsContent: FC<Props> = async ({ searchParams }) => {
   });
 
   if (!ok) {
-    redirect(`${ROUTES.PUBLIC_RESULTS}?error=${encodeURIComponent(message)}`);
+    redirect(
+      ROUTES.PUBLIC_RESULTS +
+      '?error=' +
+      encodeURIComponent(message),
+    );
   }
 
   return (
@@ -42,7 +46,8 @@ export const ResultsContent: FC<Props> = async ({ searchParams }) => {
       key={
         `${tournament ?? 'tournament'}` +
         `-${category ?? 'category'}` +
-        `-${roles ?? 'roles'}`
+        `-${roles ?? 'roles'}` +
+        `-${team ?? 'team'}`
       }
     >
       <ResultsList
