@@ -58,13 +58,13 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
   try {
     const localStandings = isLeague && match
       ? await prisma.standings.findFirst({
-          where: {
-            teamId: localId,
-            tournamentId: match.tournamentId,
-            categoryId: match.categoryId,
-          },
-          select: { id: true },
-        })
+        where: {
+          teamId: localId,
+          tournamentId: match.tournamentId,
+          categoryId: match.categoryId,
+        },
+        select: { id: true },
+      })
       : null;
 
     if (localStandings) {
@@ -90,13 +90,13 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
   try {
     const visitorStandings = isLeague && match
       ? await prisma.standings.findFirst({
-          where: {
-            teamId: visitorId,
-            tournamentId: match.tournamentId,
-            categoryId: match.categoryId,
-          },
-          select: { id: true },
-        })
+        where: {
+          teamId: visitorId,
+          tournamentId: match.tournamentId,
+          categoryId: match.categoryId,
+        },
+        select: { id: true },
+      })
       : null;
 
     if (visitorStandings) {
@@ -135,6 +135,7 @@ export const finishMatchAction = async (props: Props): ResponseAction => {
   updateTag('public-standings');
   updateTag('dashboard-results');
   updateTag('public-matches');
+  updateTag('public-results');
   updateTag('public-matches-count');
   updateTag('public-team-matches');
   updateTag('public-team-standings');

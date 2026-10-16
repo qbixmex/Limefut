@@ -21,10 +21,7 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
   }
 
   try {
-    const match = await prisma.match.findUnique({
-      where: { id },
-      select: { id: true },
-    });
+    const match = await prisma.match.findFirst({ where: { id } });
 
     if (!match) {
       return {
@@ -40,6 +37,7 @@ export const deleteMatchAction = async (id: string): ResponseDeleteAction => {
     updateTag('matches');
     updateTag('dashboard-results');
     updateTag('public-matches');
+    updateTag('public-results');
     updateTag('public-results-roles');
     updateTag('public-result-details');
     updateTag('public-matches-count');
