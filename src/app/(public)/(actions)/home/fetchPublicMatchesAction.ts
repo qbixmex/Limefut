@@ -2,7 +2,7 @@
 
 import type { Prisma } from '@/generated/prisma/client';
 import prisma from '@/lib/prisma';
-import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_STATUS, type MATCH_MODE_TYPE, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 import { cacheLife, cacheTag } from 'next/cache';
 
@@ -68,7 +68,7 @@ type Pagination = {
 export const fetchPublicMatchesAction = async (options?: Options): ResponseFetchAction => {
   'use cache';
 
-  cacheLife('days');
+  cacheLife('hours');
   cacheTag('matches');
 
   let { nextMatches = 1, take = 12 } = options ?? {};
@@ -80,7 +80,7 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
 
   if (selectedDay) {
     startOfDate = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
-    endOfDate = fromZonedTime(new Date(selectedDay + 'T23:59:59'), timeZone);
+    endOfDate = fromZonedTime(new Date(selectedDay + 'T23:59:59.999'), timeZone);
   } else {
     const nowInZone = toZonedTime(new Date(), timeZone);
     const todayInZone = new Date(nowInZone);
@@ -148,32 +148,33 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
       },
     } satisfies Prisma.MatchSelect;
 
-    const data = await prisma.match.findMany({
-      where: {
-        OR: [
-          { status: 'inProgress' },
-          { status: 'scheduled' },
-          { status: 'completed' },
-          { status: 'canceled' },
+    const where = {
+      status: {
+        in: [
+          MATCH_STATUS.IN_PROGRESS,
+          MATCH_STATUS.SCHEDULED,
+          MATCH_STATUS.COMPLETED,
+          MATCH_STATUS.CANCELED,
         ],
-        matchDate: {
-          gte: startOfDate,
-          lte: endOfDate,
-        },
       },
+      matchDate: {
+        gte: startOfDate,
+        lte: endOfDate,
+      },
+    } satisfies Prisma.MatchWhereInput;
+
+    const totalCount = await prisma.match.count({ where });
+    const totalPages = Math.ceil(totalCount / take);
+    const currentPage = totalPages > 0
+      ? Math.min(Math.max(nextMatches, 1), totalPages)
+      : 1;
+
+    const data = await prisma.match.findMany({
+      where,
       orderBy: { matchDate: 'asc' },
       take,
-      skip: (nextMatches - 1) * take,
+      skip: (currentPage - 1) * take,
       select: matchSelect,
-    });
-
-    const totalCount = await prisma.match.count({
-      where: {
-        matchDate: {
-          gte: startOfDate,
-          lte: endOfDate,
-        },
-      },
     });
 
     return {
@@ -188,8 +189,8 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
         penaltyShoots: match.penaltyShootout,
       })) : [],
       pagination: {
-        nextMatches,
-        totalPages: Math.ceil(totalCount / take),
+        nextMatches: currentPage,
+        totalPages,
       },
     };
   } catch (error) {

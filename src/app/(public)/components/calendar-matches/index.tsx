@@ -25,7 +25,7 @@ export const CalendarMatches: FC<Props> = async ({ matchesPromise, selectedDayPr
   const { selectedDay } = await selectedDayPromise;
   const { matches, pagination } = await fetchPublicMatchesAction({
     take: 4,
-    nextMatches: Number(matchesPage) ?? undefined,
+    nextMatches: Number(matchesPage) || undefined,
     selectedDay: selectedDay ?? undefined,
     timeZone,
   });
