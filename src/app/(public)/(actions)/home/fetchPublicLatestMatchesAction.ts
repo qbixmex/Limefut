@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import type { MATCH_MODE_TYPE, MATCH_STATUS_TYPE } from '@/shared/enums';
+import { MATCH_STATUS, type MATCH_MODE_TYPE, type MATCH_STATUS_TYPE } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 import type { Prisma } from '@/generated/prisma/client';
 
@@ -65,7 +65,7 @@ type Pagination = {
 export const fetchPublicLatestMatchesAction = async (options?: Options): ResponseFetchAction => {
   'use cache';
 
-  cacheLife('days');
+  cacheLife('hours');
   cacheTag('matches');
 
   let { nextMatches = 1, take = 12 } = options ?? {};
@@ -136,31 +136,28 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
       },
     } satisfies Prisma.MatchSelect;
 
-    const matches = await prisma.match.findMany({
-      where: {
-        OR: [
-          { status: 'completed' },
-          { status: 'canceled' },
-        ],
-        matchDate: {
-          gte: startDate,
-          lte: endDate,
-        },
+    const where = {
+      status: {
+        in: [MATCH_STATUS.COMPLETED, MATCH_STATUS.CANCELED],
       },
+      matchDate: {
+        gte: startDate,
+        lte: endDate,
+      },
+    } satisfies Prisma.MatchWhereInput;
+
+    const totalCount = await prisma.match.count({ where });
+    const totalPages = Math.ceil(totalCount / take);
+    const currentPage = totalPages > 0
+      ? Math.min(Math.max(nextMatches, 1), totalPages)
+      : 1;
+
+    const matches = await prisma.match.findMany({
+      where,
       orderBy: { matchDate: 'desc' },
       take,
-      skip: (nextMatches - 1) * take,
+      skip: (currentPage - 1) * take,
       select: matchSelect,
-    });
-
-    const totalCount = await prisma.match.count({
-      where: {
-        status: 'completed',
-        matchDate: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
     });
 
     return {
@@ -182,8 +179,8 @@ export const fetchPublicLatestMatchesAction = async (options?: Options): Respons
         penaltyShoots: match.penaltyShootout,
       })),
       pagination: {
-        nextMatches,
-        totalPages: Math.ceil(totalCount / take),
+        nextMatches: currentPage,
+        totalPages,
       },
     };
   } catch (error) {
