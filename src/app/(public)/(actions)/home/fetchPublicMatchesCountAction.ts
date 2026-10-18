@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { MATCH_STATUS } from '@/shared/enums';
 import { cacheLife, cacheTag } from 'next/cache';
 import { fromZonedTime, toZonedTime } from 'date-fns-tz';
 
@@ -20,7 +21,7 @@ export type ResponseFetchAction = Promise<{
 export const fetchPublicMatchesCountAction = async (options?: Options): ResponseFetchAction => {
   'use cache';
 
-  cacheLife('days');
+  cacheLife('hours');
   cacheTag('public-matches-count');
 
   const timeZone = options?.timeZone ?? 'America/Mexico_City';
@@ -42,11 +43,14 @@ export const fetchPublicMatchesCountAction = async (options?: Options): Response
   try {
     const matches = await prisma.match.findMany({
       where: {
-        OR: [
-          { status: 'scheduled' },
-          { status: 'completed' },
-          { status: 'canceled' },
-        ],
+        status: {
+          in: [
+            MATCH_STATUS.IN_PROGRESS,
+            MATCH_STATUS.SCHEDULED,
+            MATCH_STATUS.COMPLETED,
+            MATCH_STATUS.CANCELED,
+          ],
+        },
         matchDate: {
           gte: startDateUTC,
           lte: endDateUTC,
