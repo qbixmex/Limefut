@@ -79,16 +79,18 @@ export const fetchPublicMatchesAction = async (options?: Options): ResponseFetch
   let endOfDate: Date;
 
   if (selectedDay) {
-    startOfDate = fromZonedTime(new Date(selectedDay + 'T00:00:00'), timeZone);
-    endOfDate = fromZonedTime(new Date(selectedDay + 'T23:59:59.999'), timeZone);
+    startOfDate = fromZonedTime(`${selectedDay}T00:00:00.000`, timeZone);
+    endOfDate = fromZonedTime(`${selectedDay}T23:59:59.999`, timeZone);
   } else {
     const nowInZone = toZonedTime(new Date(), timeZone);
-    const todayInZone = new Date(nowInZone);
-    todayInZone.setHours(0, 0, 0, 0);
 
-    startOfDate = fromZonedTime(todayInZone, timeZone);
-    endOfDate = fromZonedTime(todayInZone, timeZone);
-    endOfDate.setHours(23, 59, 59, 999);
+    const startInZone = new Date(nowInZone);
+    startInZone.setHours(0, 0, 0, 0);
+    startOfDate = fromZonedTime(startInZone, timeZone);
+
+    const endInZone = new Date(nowInZone);
+    endInZone.setHours(23, 59, 59, 999);
+    endOfDate = fromZonedTime(endInZone, timeZone);
   }
 
   // In case is an invalid number like (lorem)
