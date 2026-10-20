@@ -152,6 +152,18 @@ describe('Tests on fetchPublicMatchesAction server action', () => {
       .toBe('2024-06-01 23:59:59.999');
   });
 
+  test('Should use the whole current day in the given time zone as the date range', async () => {
+    await fetchPublicMatchesAction({ timeZone: TIME_ZONE });
+
+    const { matchDate } = getWhere();
+    const start = formatInTimeZone(matchDate.gte, TIME_ZONE, 'yyyy-MM-dd HH:mm:ss.SSS');
+    const end = formatInTimeZone(matchDate.lte, TIME_ZONE, 'yyyy-MM-dd HH:mm:ss.SSS');
+
+    expect(start).toMatch(/ 00:00:00\.000$/);
+    expect(end).toMatch(/ 23:59:59\.999$/);
+    expect(start.slice(0, 10)).toBe(end.slice(0, 10));
+  });
+
   test('Should map the matches to the response shape', async () => {
     const response = await fetchPublicMatchesAction({ timeZone: TIME_ZONE });
 
