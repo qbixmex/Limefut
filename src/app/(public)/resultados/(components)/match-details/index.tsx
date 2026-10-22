@@ -23,6 +23,8 @@ import { ROUTES } from '@/shared/constants/routes';
 import './styles.css';
 import { getMatchMode } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { FieldsMap } from '@/shared/components/fields-map';
+import { resolveFieldMaps } from '@/lib/maps';
 
 const TIME_ZONE = 'America/Mexico_City';
 
@@ -40,6 +42,8 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
   const tournament = (match as MatchType).tournament;
   const localTeam = (match as MatchType).local;
   const visitorTeam = (match as MatchType).visitor;
+  const matchField = (match as MatchType).field;
+  const fieldMaps = matchField ? await resolveFieldMaps([matchField]) : [];
 
   return (
     <>
@@ -176,6 +180,12 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
           </Table>
         </section>
       </section>
+
+      {fieldMaps.length > 0 && (
+        <FieldsMap maps={fieldMaps} className="my-10" />
+      )}
+
+      <h2 className="text-lg font-bold text-sky-500">Información Adicional</h2>
 
       <section className="flex flex-col lg:flex-row gap-5">
         <div className="w-full lg:w-1/2">
