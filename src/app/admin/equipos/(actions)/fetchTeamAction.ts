@@ -57,6 +57,11 @@ type PLAYER_TYPE = {
 type FIELD_TYPE = {
   id: string;
   name: string;
+  map: string | null;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
 };
 
 export const fetchTeamAction = async (
@@ -116,6 +121,11 @@ export const fetchTeamAction = async (
             select: {
               id: true,
               name: true,
+              map: true,
+              address: true,
+              city: true,
+              state: true,
+              country: true,
             },
           },
         },

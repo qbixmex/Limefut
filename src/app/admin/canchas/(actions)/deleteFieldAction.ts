@@ -40,6 +40,8 @@ export const deleteFieldAction = async (fieldId: string): ResponseDeleteAction =
   updateTag('admin-field');
   updateTag('public-fields');
   updateTag('public-field');
+  updateTag('admin-team');
+  updateTag('public-team');
 
   return {
     ok: true,

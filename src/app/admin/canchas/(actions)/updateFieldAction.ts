@@ -93,6 +93,8 @@ export const updateFieldAction = async ({
         updateTag('admin-field');
         updateTag('public-fields');
         updateTag('public-field');
+        updateTag('admin-team');
+        updateTag('public-team');
 
         return {
           ok: true,
