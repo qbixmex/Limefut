@@ -11,6 +11,8 @@ import { ROUTES } from '@/shared/constants/routes';
 import { TeamStandings } from './teams-standings';
 import { LastResults } from './last-results';
 import { NextMatches } from './next-matches';
+import { FieldsMap } from '@/shared/components/fields-map';
+import { resolveFieldMaps } from '@/lib/maps';
 
 type Props = Readonly<{
   params: Promise<{
@@ -48,6 +50,13 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
   }
 
   const team = responseTeam.team as TEAM_TYPE;
+
+  const fieldMaps = await resolveFieldMaps(team.fields, {
+    address: team.address,
+    city: team.city,
+    state: team.state,
+    country: team.country,
+  });
 
   return (
     <div className="flex flex-1 flex-col gap-5 p-0 lg:p-5">
@@ -203,6 +212,8 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
         </section>
       </section>
 
+      <FieldsMap maps={fieldMaps} />
+
       <TeamStandings
         teamId={team.id}
         tournamentId={team.tournament?.id as string}
@@ -211,14 +222,12 @@ export const TeamDetails: FC<Props> = async ({ params, searchParams }) => {
         categoryPermalink={team.category!.permalink}
       />
 
-      {
-        (team.matches.length > 0) && (
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            <LastResults matches={team.matches} />
-            <NextMatches matches={team.matches} />
-          </section>
-        )
-      }
+      {(team.matches.length > 0) && (
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <LastResults matches={team.matches} />
+          <NextMatches matches={team.matches} />
+        </section>
+      )}
     </div>
   );
 };
