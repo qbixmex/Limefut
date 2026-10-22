@@ -1,6 +1,5 @@
 import type { FC } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { formatInTimeZone } from 'date-fns-tz';
 import { es } from 'date-fns/locale';
@@ -24,6 +23,7 @@ import './styles.css';
 import { getMatchMode } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { FieldsMap } from '@/shared/components/fields-map';
+import { MatchResults } from '@/shared/components/match-results';
 import { resolveFieldMaps } from '@/lib/maps';
 
 const TIME_ZONE = 'America/Mexico_City';
@@ -49,83 +49,26 @@ export const MatchDetails: FC<Props> = async ({ matchId }) => {
     <>
       <section className="main-wrapper">
         <section className="w-full lg:w-1/2">
-          <div className="flex relative">
-            <div className="team team-local">
-              <Link
-                href={
-                  `${ROUTES.PUBLIC_TEAMS}/${localTeam.permalink}` +
-                  `?tournament=${tournament.permalink}` +
-                  `&category=${localTeam.category?.permalink}`
-                }
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Image
-                  src={localTeam.imageUrl as string}
-                  width={100}
-                  height={100}
-                  alt={`${localTeam.name} escudo`}
-                  className="team-shield"
-                />
-              </Link>
-              <div className="team-name">
-                <Link
-                  href={
-                    `${ROUTES.PUBLIC_TEAMS}/${localTeam.permalink}` +
-                    `?tournament=${tournament.permalink}` +
-                    `&category=${localTeam.category?.permalink}`
-                  }
-                  className="text-gray-100"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {localTeam.name}
-                </Link>
-              </div>
-            </div>
-
-            <div className="team team-visitor">
-              <Link
-                href={
-                  `${ROUTES.PUBLIC_TEAMS}/${visitorTeam.permalink}` +
-                  `?tournament=${tournament.permalink}` +
-                  `&category=${visitorTeam.category?.permalink}`
-                }
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Image
-                  src={visitorTeam.imageUrl as string}
-                  width={100}
-                  height={100}
-                  alt={`${visitorTeam.name} escudo`}
-                  className="team-shield"
-                />
-              </Link>
-              <div className="team-name">
-                <Link
-                  href={
-                    `${ROUTES.PUBLIC_TEAMS}/${visitorTeam.permalink}` +
-                    `?tournament=${tournament.permalink}` +
-                    `&category=${visitorTeam.category?.permalink}`
-                  }
-                  className="text-gray-100"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {visitorTeam.name}
-                </Link>
-              </div>
-            </div>
-            <div className="match-results">
-              <p>
-                <span>{match?.localScore}</span>
-                <span>{match?.visitorScore}</span>
-              </p>
-            </div>
-            <span className="field-divider" />
-            <span className="field-dot" />
-          </div>
+          <MatchResults
+            local={{
+              name: localTeam.name,
+              href:
+                `${ROUTES.PUBLIC_TEAMS}/${localTeam.permalink}` +
+                `?tournament=${tournament.permalink}` +
+                `&category=${localTeam.category?.permalink}`,
+              imageUrl: localTeam.imageUrl,
+            }}
+            visitor={{
+              name: visitorTeam.name,
+              href:
+                `${ROUTES.PUBLIC_TEAMS}/${visitorTeam.permalink}` +
+                `?tournament=${tournament.permalink}` +
+                `&category=${visitorTeam.category?.permalink}`,
+              imageUrl: visitorTeam.imageUrl,
+            }}
+            localScore={match?.localScore}
+            visitorScore={match?.visitorScore}
+          />
         </section>
 
         <section className="w-full lg:w-1/2">
