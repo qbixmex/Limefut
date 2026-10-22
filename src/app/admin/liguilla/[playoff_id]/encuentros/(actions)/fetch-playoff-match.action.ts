@@ -27,7 +27,7 @@ export type MATCH_TYPE = {
   updatedAt: Date;
 };
 
-type TEAM_TYPE = { id: string; name: string; };
+type TEAM_TYPE = { id: string; name: string; imageUrl: string | null; };
 type FIELD_TYPE = { id: string; name: string; };
 
 export const fetchPlayoffMatchAction = async ({
@@ -59,12 +59,14 @@ export const fetchPlayoffMatchAction = async ({
           select: {
             id: true,
             name: true,
+            imageUrl: true,
           },
         },
         visitor: {
           select: {
             id: true,
             name: true,
+            imageUrl: true,
           },
         },
         field: {

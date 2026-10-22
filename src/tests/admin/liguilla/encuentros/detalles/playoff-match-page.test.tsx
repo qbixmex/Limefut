@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { PlayoffMatchDetailsPage } from '@/app/admin/liguilla/[playoff_id]/encuentros/detalles/[match_id]/page';
 
-const editMatchProps = vi.hoisted(() => ({ current: undefined as unknown }));
+const editMatchSlotProps = vi.hoisted(() => ({ current: undefined as unknown }));
 
 vi.mock('@/shared/components/errorHandler', () => ({
   ErrorHandler: () => null,
@@ -11,9 +11,9 @@ vi.mock('@/app/admin/liguilla/[playoff_id]/encuentros/detalles/[match_id]/playof
   PlayoffMatchView: () => <div data-testid="playoff-match-view" />,
 }));
 
-vi.mock('@/app/admin/liguilla/[playoff_id]/encuentros/(components)/edit-match', () => ({
-  EditMatch: (props: unknown) => {
-    editMatchProps.current = props;
+vi.mock('@/app/admin/liguilla/[playoff_id]/encuentros/detalles/[match_id]/edit-match-slot', () => ({
+  EditMatchSlot: (props: unknown) => {
+    editMatchSlotProps.current = props;
     return <span data-testid="edit-match" />;
   },
 }));
@@ -23,11 +23,11 @@ const matchId = '24620ff5-cd48-4385-9ab8-b6320d69947f';
 
 describe('Test on <PlayoffMatchDetailsPage />', () => {
   beforeEach(() => {
-    editMatchProps.current = undefined;
+    editMatchSlotProps.current = undefined;
   });
 
-  const renderPage = async () => {
-    const ServerComponent = await PlayoffMatchDetailsPage({
+  const renderPage = () => {
+    const ServerComponent = PlayoffMatchDetailsPage({
       params: Promise.resolve({ playoff_id: playoffId, match_id: matchId }),
     });
     return render(ServerComponent);
@@ -39,11 +39,23 @@ describe('Test on <PlayoffMatchDetailsPage />', () => {
     expect(screen.getByText(/^encuentro$/i)).toBeInTheDocument();
   });
 
-  test('Should render <EditMatch /> with the ids', async () => {
+  test('Should render <EditMatchSlot />', async () => {
     await renderPage();
 
     expect(screen.getByTestId('edit-match')).toBeInTheDocument();
-    expect(editMatchProps.current).toEqual({ playoffId, matchId });
+  });
+
+  test('Should pass params to <EditMatchSlot />', async () => {
+    await renderPage();
+
+    const props = editMatchSlotProps.current as {
+      params: Promise<{ playoff_id: string; match_id: string }>;
+    };
+
+    await expect(props.params).resolves.toEqual({
+      playoff_id: playoffId,
+      match_id: matchId,
+    });
   });
 
   test('Should render <PlayoffMatchView />', async () => {
