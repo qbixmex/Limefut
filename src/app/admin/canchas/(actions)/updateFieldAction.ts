@@ -96,6 +96,7 @@ export const updateFieldAction = async ({
         updateTag('admin-team');
         updateTag('public-team');
         updateTag('public-result-details');
+        updateTag('admin-match');
 
         return {
           ok: true,

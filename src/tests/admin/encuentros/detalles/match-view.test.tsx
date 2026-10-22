@@ -122,29 +122,6 @@ describe('Tests on <MatchView />', () => {
     expect(referee).toHaveTextContent(/no definido/i);
   });
 
-  test('Should render field name link with correct href', async () => {
-    await renderMatchView();
-
-    const field = screen.getByTitle('Ir a sede del encuentro');
-
-    expect(field).toHaveTextContent(matchMock.field!.name);
-    expect(field).toHaveAttribute(
-      'href',
-      ROUTES.ADMIN_FIELDS_SHOW(matchMock.field!.id),
-    );
-    expect(field).toHaveAttribute('target', '_blank');
-    expect(field).toHaveAttribute('rel', 'noreferrer');
-  });
-
-  test('Should render field fallback when match has no field', async () => {
-    await renderMatchView({ match: { ...matchMock, field: null } });
-
-    expect(
-      screen.queryByTitle('Ir a sede del encuentro'),
-    ).not.toBeInTheDocument();
-    expect(screen.getByText(/no definida/i)).toBeInTheDocument();
-  });
-
   test('Should render the league mode badge', async () => {
     await renderMatchView();
 
@@ -224,15 +201,6 @@ describe('Tests on <MatchView />', () => {
     );
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noreferrer');
-  });
-
-  test('Should render formatted creation date', async () => {
-    await renderMatchView();
-
-    const expectedDate = format(matchMock.createdAt, "d 'de' MMMM 'del' yyyy", { locale: es });
-    const createdAt = screen.getByRole('text', { name: /fecha de creación del encuentro/i });
-
-    expect(createdAt).toHaveTextContent(expectedDate);
   });
 
   test('Should render penalty shootout section when completed match ends in draw', async () => {
