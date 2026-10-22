@@ -78,6 +78,10 @@ export const createFieldAction = async (
     updateTag('admin-field');
     updateTag('public-fields');
     updateTag('public-field');
+    updateTag('admin-team');
+    updateTag('public-team');
+    updateTag('public-result-details');
+    updateTag('admin-match');
 
     return prismaTransaction;
   } catch (error) {

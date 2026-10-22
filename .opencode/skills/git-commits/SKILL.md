@@ -10,8 +10,8 @@ description: >
 - Title in English, past tense, capitalized, no period
 - Max 72 characters for title
 - No emojis, no prefix tags (feat/fix/chore)
-- Body: optional. Title alone is correct for an atomic commit about a single
-  topic; add bullet points only when the commit spans several distinct changes
+- Body: required. Add past tense bullet points describing what changed, even
+  for an atomic commit about a single topic
 - Atomic commits per feature/change
 
 ## Branch Naming

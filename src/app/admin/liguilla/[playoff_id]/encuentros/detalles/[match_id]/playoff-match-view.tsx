@@ -7,15 +7,14 @@ import {
   TableCell,
   TableRow,
 } from '@/components/ui/table';
-import { Minus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { TbSoccerField } from 'react-icons/tb';
 import { getMatchStatus } from '@/app/admin/encuentros/(helpers)/place';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ROUTES } from '@/shared/constants/routes';
+import { MatchResults } from '@/shared/components/match-results';
 import type { MATCH_TYPE } from '../../(actions)/fetch-playoff-match.action';
 import { fetchPlayoffMatchAction } from '../../(actions)/fetch-playoff-match.action';
 
@@ -44,138 +43,117 @@ export const PlayoffMatchView: FC<Props> = async ({ params }) => {
 
   return (
     <>
-      <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
-        <div className="bg-gray-200 dark:bg-green-900/40 size-[512px] rounded-xl flex items-center justify-center">
-          <TbSoccerField size={480} strokeWidth={1} className="text-gray-400" />
+      <section className="flex flex-col gap-5 xl:flex-row mb-5 lg:mb-10">
+        <div className="w-full xl:w-1/2">
+          <MatchResults
+            local={{
+              name: match.local.name,
+              href: ROUTES.ADMIN_TEAMS_SHOW(match.local.id),
+              imageUrl: match.local.imageUrl,
+            }}
+            visitor={{
+              name: match.visitor.name,
+              href: ROUTES.ADMIN_TEAMS_SHOW(match.visitor.id),
+              imageUrl: match.visitor.imageUrl,
+            }}
+            localScore={match.localScore}
+            visitorScore={match.visitorScore}
+          />
         </div>
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableHead className="font-semibold w-[180px]">Encuentro</TableHead>
-              <TableCell className="flex items-center gap-3 font-semibold text-gray-200">
-                <Link
-                  href={ROUTES.ADMIN_TEAMS_SHOW(match.local.id)}
-                  className="text-wrap"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {match.local.name}
-                </Link>
-                <Badge
-                  variant="outline-info"
-                  role="status"
-                  aria-label="Anotaciones del equipo local"
-                >
-                  {match.localScore}
-                </Badge>
-                <Minus strokeWidth={2} />
-                <Badge
-                  variant="outline-info"
-                  role="status"
-                  aria-label="Anotaciones del equipo visitante"
-                >
-                  {match.visitorScore}
-                </Badge>
-                <Link
-                  href={ROUTES.ADMIN_TEAMS_SHOW(match.visitor.id)}
-                  className="text-wrap"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {match.visitor.name}
-                </Link>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableHead className="font-semibold">Arbitro</TableHead>
-              <TableCell>
-                <span role="text" aria-label="Arbitro del encuentro">
-                  {match.referee ?? (
-                    <span className="text-gray-500 italic">No definido</span>
-                  )}
-                </span>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableHead className="font-semibold">Cancha</TableHead>
-              <TableCell>
-                <span role="text" aria-label="Sede del encuentro">
-                  {match.field ? (
-                    <Link
-                      href={`${ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {match.field.name}
-                    </Link>
-                  ) : (
-                    <span className="text-gray-500 italic">No definida</span>
-                  )}
-                </span>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableHead className="font-semibold">Fecha del Encuentro</TableHead>
-              <TableCell>
-                <span role="text" aria-label="Fecha del encuentro">
+        <div className="w-full xl:w-1/2">
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableHead className="font-semibold">Arbitro</TableHead>
+                <TableCell>
+                  <span role="text" aria-label="Arbitro del encuentro">
+                    {match.referee ?? (
+                      <span className="text-gray-500 italic">No definido</span>
+                    )}
+                  </span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="font-semibold">Cancha</TableHead>
+                <TableCell>
+                  <span role="text" aria-label="Sede del encuentro">
+                    {match.field ? (
+                      <Link
+                        href={`${ROUTES.ADMIN_FIELDS_SHOW(match.field.id)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {match.field.name}
+                      </Link>
+                    ) : (
+                      <span className="text-gray-500 italic">No definida</span>
+                    )}
+                  </span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="font-semibold">Fecha del Encuentro</TableHead>
+                <TableCell>
+                  <span role="text" aria-label="Fecha del encuentro">
+                    {
+                      match.matchDate
+                        ? format(match.matchDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
+                        : <span className="text-gray-500 italic">No Proporcionada</span>
+                    }
+                  </span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="font-semibold">Hora</TableHead>
+                <TableCell>
+                  <span role="text" aria-label="Hora del encuentro">
+                    {
+                      match.matchDate
+                        ? formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm a', { locale: es })
+                        : <span className="text-gray-500 italic">No proporcionada</span>
+                    }
+                  </span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="font-semibold">Estado</TableHead>
+                <TableCell>
+                  <Badge
+                    variant={getMatchStatus(match.status).variant}
+                    role="status"
+                    aria-label="Estado del encuentro"
+                  >
+                    {getMatchStatus(match.status).label}
+                  </Badge>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="font-semibold">Comentarios</TableHead>
+                <TableCell>
                   {
-                    match.matchDate
-                      ? format(match.matchDate as Date, "d 'de' MMMM 'del' yyyy", { locale: es })
-                      : <span className="text-gray-500 italic">No Proporcionada</span>
+                    match.remarks ? (
+                      <p className="text-gray-500 text-wrap">{match.remarks}</p>
+                    ) : (
+                      <p className="text-gray-500 text-wrap">sin comentarios</p>
+                    )
                   }
-                </span>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableHead className="font-semibold">Hora</TableHead>
-              <TableCell>
-                <span role="text" aria-label="Hora del encuentro">
-                  {
-                    match.matchDate
-                      ? formatInTimeZone(match.matchDate, TIME_ZONE, 'h:mm a', { locale: es })
-                      : <span className="text-gray-500 italic">No proporcionada</span>
-                  }
-                </span>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableHead className="font-semibold">Estado</TableHead>
-              <TableCell>
-                <Badge
-                  variant={getMatchStatus(match.status).variant}
-                  role="status"
-                  aria-label="Estado del encuentro"
-                >
-                  {getMatchStatus(match.status).label}
-                </Badge>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableHead className="font-semibold">Comentarios</TableHead>
-              <TableCell>
-                {
-                  match.remarks ? (
-                    <p className="text-gray-500 text-wrap">{match.remarks}</p>
-                  ) : (
-                    <p className="text-gray-500 text-wrap">sin comentarios</p>
-                  )
-                }
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableHead className="w-[180px] font-semibold">Creado en:</TableHead>
-              <TableCell>
-                {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableHead className="w-[180px] font-semibold">Actualizado en:</TableHead>
-              <TableCell>
-                {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="w-[180px] font-semibold">Creado en:</TableHead>
+                <TableCell>
+                  {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableHead className="w-[180px] font-semibold">Actualizado en:</TableHead>
+                <TableCell>
+                  {format(new Date(match.createdAt as Date), "d 'de' MMMM 'del' yyyy", { locale: es })}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
       </section>
 
       {/* {(

@@ -72,6 +72,11 @@ export const fetchTeamAction = async ({
               select: {
                 id: true,
                 name: true,
+                map: true,
+                address: true,
+                city: true,
+                state: true,
+                country: true,
               },
             },
           },
@@ -279,7 +284,15 @@ export type TEAM_TYPE = {
 
 type CoachType = { id: string; name: string; };
 type PlayerType = { id: string; name: string; };
-type FieldType = { id: string; name: string; };
+type FieldType = {
+  id: string;
+  name: string;
+  map: string | null;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+};
 
 export type MATCH_TYPE = {
   id: string;

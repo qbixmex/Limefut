@@ -16,6 +16,11 @@ export type MatchType = {
   field: {
     id: string;
     name: string;
+    map: string | null;
+    address: string | null;
+    city: string | null;
+    state: string | null;
+    country: string | null;
   } | null;
   referee: string | null;
   tournament: {
@@ -95,6 +100,11 @@ export const fetchResultDetailsAction = async (matchId: string): ResponseAction 
         select: {
           id: true,
           name: true,
+          map: true,
+          address: true,
+          city: true,
+          state: true,
+          country: true,
         },
       },
       referee: true,

@@ -14,6 +14,8 @@ import { SoccerFieldIcon } from '@/shared/components/icons/soccer-field.icon';
 import { redirect } from 'next/navigation';
 import { EditField } from '../(components)/edit-field';
 import { Badge } from '@/components/ui/badge';
+import { FieldMap } from '@/shared/components/field-map';
+import { getMapEmbedUrl } from '@/lib/maps';
 
 type Props = Readonly<{
   params: Promise<{
@@ -32,13 +34,23 @@ export const FieldView: FC<Props> = async ({ params }) => {
 
   const field = response.field!;
 
+  const embedUrl = await getMapEmbedUrl(field.map);
+
   return (
     <>
       <section className="flex flex-col gap-5 xl:flex-row lg:gap-10 mb-5 lg:mb-10">
         <div className="w-full max-w-[512px] h-auto relative">
-          <div className="bg-gray-200 dark:bg-gray-800 p-5 w-full max-w-[512px] h-auto rounded-xl flex items-center justify-center">
-            <SoccerFieldIcon size={512} strokeWidth={0.5} className="stroke-gray-400" />
-          </div>
+          {embedUrl ? (
+            <FieldMap
+              link={field.map ?? ''}
+              embedUrl={embedUrl}
+              title={field.name}
+            />
+          ) : (
+            <div className="bg-gray-200 dark:bg-gray-800 p-5 w-full max-w-[512px] h-auto rounded-xl flex items-center justify-center">
+              <SoccerFieldIcon size={512} strokeWidth={0.5} className="stroke-gray-400" />
+            </div>
+          )}
         </div>
 
         <Table aria-label="Detalles de la cancha">
