@@ -12,6 +12,11 @@ export const matchForEditMock: MATCH_TYPE = {
   field: {
     id: ESTADIO_AZTECA.id,
     name: ESTADIO_AZTECA.name,
+    map: null,
+    address: null,
+    city: null,
+    state: null,
+    country: null,
   },
   matchDate: new Date('2026-05-16T17:00:00.000Z'),
   mode: MATCH_MODE.FRIENDLY,
@@ -24,6 +29,7 @@ export const matchForEditMock: MATCH_TYPE = {
   updatedAt: new Date('2026-05-16T17:30:00.000Z'),
   localTeam: {
     ...AMERICA,
+    imageUrl: null,
     players: [
       { id: '49b70abe-9944-4a33-94a9-b12cb0003719', name: 'Luis García' },
       { id: '6944f902-618a-498b-880d-86f70ad534c2', name: 'Carlos Ruiz' },
@@ -32,6 +38,7 @@ export const matchForEditMock: MATCH_TYPE = {
   },
   visitorTeam: {
     ...CHIVAS,
+    imageUrl: null,
     players: [
       { id: '19a2d573-6bd4-41ec-b8be-507456e67400', name: 'Diego López' },
     ],

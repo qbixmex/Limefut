@@ -20,6 +20,8 @@ import { DeletePlayers } from '@/shared/components/delete-players';
 import { DeleteTeamImage } from '../(components)/delete-team-image';
 import { ROUTES } from '@/shared/constants/routes';
 import { EditTeam } from '../(components)/edit-team';
+import { FieldsMap } from '@/shared/components/fields-map';
+import { resolveFieldMaps } from '@/lib/maps';
 
 type Props = Readonly<{
   params: Promise<{
@@ -37,6 +39,13 @@ export const TeamPageView: FC<Props> = async ({ params }) => {
   }
 
   const team = response.team!;
+
+  const fieldMaps = await resolveFieldMaps(team.fields, {
+    address: team.address,
+    city: team.city,
+    state: team.state,
+    country: team.country,
+  });
 
   return (
     <div className="admin-page">
@@ -145,6 +154,12 @@ export const TeamPageView: FC<Props> = async ({ params }) => {
                 </TableBody>
               </Table>
             </section>
+
+            <FieldsMap
+              maps={fieldMaps}
+              variant="admin"
+              className="mt-10 mb-10"
+            />
 
             <section>
               <div className="flex flex-col lg:flex-row gap-10">

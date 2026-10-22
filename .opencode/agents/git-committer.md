@@ -70,10 +70,9 @@ Load the `git-commits` skill with the `skill` tool. It is the source of truth
 for title format and branch naming. If the skill tool is unavailable, read
 `.opencode/skills/git-commits/SKILL.md` instead.
 
-One rule below overrides the skill: **the body is optional**. Write a bullet
-body only when a commit spans several distinct changes. For an atomic commit
-about a single topic, the title alone is the correct form. That is how this
-repo actually commits.
+Every commit gets a short bullet body describing what changed, even when the
+commit covers a single topic. Keep the bullets past tense and specific so the
+history is readable without opening the diff.
 
 The calling agent's prompt may describe the task. Use it to judge which files
 belong together. When it is ambiguous, treat the file as unrelated and let the
@@ -99,8 +98,8 @@ user decide rather than guessing.
    user can correct your grouping instead of accepting it.
 
 5. **Show the messages.** Before committing anything, present every proposed
-   commit as title plus the files it stages. The user must be able to correct a
-   title before it is recorded.
+   commit as title, bullet body, and the files it stages. The user must be able
+   to correct a message before it is recorded.
 
 6. **Verify.** Run, and report each result:
    - `npm run type-check`
@@ -130,7 +129,7 @@ user decide rather than guessing.
   the user must stay in control of that.
 - Never edit a file. `edit` is denied for you on purpose.
 - Never commit without the answer to step 4.
-- When a commit covers one topic, do not pad it with a body.
+- When a commit covers one topic, still include its bullet body; never commit a title alone.
 
 ## Report format
 

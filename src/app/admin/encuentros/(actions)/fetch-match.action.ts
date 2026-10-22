@@ -9,6 +9,11 @@ export type MATCH_TYPE = {
   field: {
     id: string;
     name: string;
+    map: string | null;
+    address: string | null;
+    city: string | null;
+    state: string | null;
+    country: string | null;
   } | null;
   matchDate: Date | null;
   mode: MATCH_MODE_TYPE;
@@ -18,10 +23,10 @@ export type MATCH_TYPE = {
   visitorScore: number;
   status: MATCH_STATUS_TYPE;
   localTeam: TEAM_TYPE
-    & { players: PLAYER_TYPE[]; }
+    & { imageUrl: string | null; players: PLAYER_TYPE[]; }
     & { fields: FIELD_TYPE[]; };
   visitorTeam: TEAM_TYPE
-    & { players: PLAYER_TYPE[]; }
+    & { imageUrl: string | null; players: PLAYER_TYPE[]; }
     & { fields: FIELD_TYPE[]; };
   tournament: TOURNAMENT_TYPE;
   category: CATEGORY_TYPE | null;
@@ -86,6 +91,7 @@ export const fetchMatchAction = async (id: string): FetchResponse => {
   'use cache';
 
   cacheLife('max');
+  cacheTag('admin-match');
   cacheTag(`admin-match-${id}`);
 
   try {
@@ -97,6 +103,11 @@ export const fetchMatchAction = async (id: string): FetchResponse => {
           select: {
             id: true,
             name: true,
+            map: true,
+            address: true,
+            city: true,
+            state: true,
+            country: true,
           },
         },
         matchDate: true,
@@ -113,6 +124,7 @@ export const fetchMatchAction = async (id: string): FetchResponse => {
             id: true,
             name: true,
             permalink: true,
+            imageUrl: true,
             players: {
               select: {
                 id: true,
@@ -136,6 +148,7 @@ export const fetchMatchAction = async (id: string): FetchResponse => {
             id: true,
             name: true,
             permalink: true,
+            imageUrl: true,
             players: {
               select: {
                 id: true,
